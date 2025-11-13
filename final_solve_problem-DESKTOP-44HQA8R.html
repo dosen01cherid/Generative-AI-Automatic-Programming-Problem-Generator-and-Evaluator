@@ -7825,14 +7825,29 @@ class ProblemSolverApp:
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
                 window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
 
-            # Show feedback if div exists
+            # ✅ ALWAYS show feedback - find or create feedback div
             feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if not feedback_div:
+                # Try to find step container
+                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                    container = self.solve_states[current_prob_idx][step_idx].get("container")
+                    if container:
+                        # Create feedback div
+                        feedback_div = document.createElement("div")
+                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.className = "step-feedback"
+                        container.appendChild(feedback_div)
+                        window.console.log(f"✅ Created feedback div for step {step_idx}")
+
             if feedback_div:
                 feedback_div.innerHTML = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
+                window.console.log("✅ Displayed requireCorrect error message to user")
+            else:
+                window.console.warn("⚠️ Could not display feedback - no container found")
 
             self.save_to_storage()
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
@@ -7929,14 +7944,29 @@ class ProblemSolverApp:
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
                 window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
 
-            # Show feedback if div exists
+            # ✅ ALWAYS show feedback - find or create feedback div
             feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if not feedback_div:
+                # Try to find step container
+                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                    container = self.solve_states[current_prob_idx][step_idx].get("container")
+                    if container:
+                        # Create feedback div
+                        feedback_div = document.createElement("div")
+                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.className = "step-feedback"
+                        container.appendChild(feedback_div)
+                        window.console.log(f"✅ Created feedback div for step {step_idx}")
+
             if feedback_div:
                 feedback_div.innerHTML = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
+                window.console.log("✅ Displayed requireCorrect error message to user")
+            else:
+                window.console.warn("⚠️ Could not display feedback - no container found")
 
             self.save_to_storage()
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
@@ -8031,14 +8061,29 @@ class ProblemSolverApp:
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
                 window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
 
-            # Show feedback if div exists
+            # ✅ ALWAYS show feedback - find or create feedback div
             feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if not feedback_div:
+                # Try to find step container
+                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                    container = self.solve_states[current_prob_idx][step_idx].get("container")
+                    if container:
+                        # Create feedback div
+                        feedback_div = document.createElement("div")
+                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.className = "step-feedback"
+                        container.appendChild(feedback_div)
+                        window.console.log(f"✅ Created feedback div for step {step_idx}")
+
             if feedback_div:
                 feedback_div.innerHTML = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
+                window.console.log("✅ Displayed requireCorrect error message to user")
+            else:
+                window.console.warn("⚠️ Could not display feedback - no container found")
 
             self.save_to_storage()
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
@@ -8162,14 +8207,29 @@ class ProblemSolverApp:
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
                 window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
 
-            # Show feedback if div exists
+            # ✅ ALWAYS show feedback - find or create feedback div
             feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if not feedback_div:
+                # Try to find step container
+                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                    container = self.solve_states[current_prob_idx][step_idx].get("container")
+                    if container:
+                        # Create feedback div
+                        feedback_div = document.createElement("div")
+                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.className = "step-feedback"
+                        container.appendChild(feedback_div)
+                        window.console.log(f"✅ Created feedback div for step {step_idx}")
+
             if feedback_div:
                 feedback_div.innerHTML = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
+                window.console.log("✅ Displayed requireCorrect error message to user")
+            else:
+                window.console.warn("⚠️ Could not display feedback - no container found")
 
             self.save_to_storage()
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
