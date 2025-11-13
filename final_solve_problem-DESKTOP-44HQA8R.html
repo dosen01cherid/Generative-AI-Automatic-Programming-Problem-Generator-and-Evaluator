@@ -2750,12 +2750,18 @@ class ScoreRecalculationTracker:
             window.console.log("✅ At least 2 first-time edits detected (global) - triggering immediate recalculation")
             self.trigger_recalculation("2_edits")
         else:
-            window.console.log(f"⏱️ Only {len(self.first_time_edits_in_session)} first-time edit(s) - starting 5-minute timer")
-            # ✅ Always start a fresh 5-minute timer on each edit
-            def timer_callback():
-                self.trigger_recalculation("5_minutes")
-            self.timer_handle = window.setTimeout(create_proxy(timer_callback), 5 * 60 * 1000)
-            self.update_ui_message()
+            window.console.log(f"⏱️ Only {len(self.first_time_edits_in_session)} first-time edit(s)")
+            # ✅ Only start timer if in review mode (review section exists)
+            # Otherwise, score_display_manager timer handles it
+            msg_el = document.querySelector("#reviewScoreMessage")
+            if msg_el:
+                window.console.log("⏱️ In review mode - starting 5-minute timer")
+                def timer_callback():
+                    self.trigger_recalculation("5_minutes")
+                self.timer_handle = window.setTimeout(create_proxy(timer_callback), 5 * 60 * 1000)
+                self.update_ui_message()
+            else:
+                window.console.log("⏱️ In solving mode - score_display_manager will handle timer")
     
     def trigger_recalculation(self, reason):
         """Recalculate score and reset"""
@@ -3430,20 +3436,20 @@ class ProblemSolverApp:
             import js
             self.score_display_manager["last_edit_time"] = js.Date.now()
 
-            # Determine if score should be displayed NOW
-            edited_count = len(self.score_display_manager["edited_problems"])
-            should_display_now = edited_count >= 2
+            # ✅ Use score_tracker's first-time step edit count (not problem count)
+            first_time_step_edits = len(self.score_tracker.first_time_edits_in_session)
+            should_display_now = first_time_step_edits >= 2
 
-            window.console.log(f"📊 Score display check: {edited_count} problems edited")
+            window.console.log(f"📊 Score display check: {first_time_step_edits} first-time step edits")
 
             if should_display_now:
-                window.console.log("✅ Displaying score NOW (2+ problems edited)")
+                window.console.log("✅ Displaying score NOW (2+ first-time step edits)")
                 score_to_display = percentage
                 should_show_update = True
                 # Clear pending update
                 self.score_display_manager["pending_score_update"] = False
             else:
-                window.console.log("⏳ Score display deferred (need 2+ problems or 5 minutes)")
+                window.console.log(f"⏳ Score display deferred (need {2 - first_time_step_edits} more first-time step edit(s) or 5 minutes)")
                 # Store as pending
                 self.score_display_manager["pending_score_update"] = True
                 self.score_display_manager["pending_percentage"] = percentage
@@ -3484,12 +3490,14 @@ class ProblemSolverApp:
                     # Update score display if conditions are met
                     if should_show_update:
                         self.update_score_display_in_review(score_to_display)
+                        self.score_tracker.reset()  # ✅ Reset edit tracking after score update
                         self.show_notification("✨ Score Updated!", "success")
                         window.console.log("✅ Score display updated immediately")
                     else:
                         # Show deferred message
-                        self.show_score_deferred_message(edited_count)
-                        window.console.log(f"⏳ Score display deferred (need {2 - edited_count} more edit(s))")
+                        first_time_step_edits = len(self.score_tracker.first_time_edits_in_session)
+                        self.show_score_deferred_message(first_time_step_edits)
+                        window.console.log(f"⏳ Score display deferred (need {2 - first_time_step_edits} more first-time step edit(s))")
 
                     # Refresh the step review with updated answer
                     self._refresh_step_review(problem_idx, step_idx)
@@ -3614,7 +3622,7 @@ class ProblemSolverApp:
                 Score Update Pending
             </div>
             <div style="font-size: 14px; color: #78350f;">
-                Score will display after editing <strong>{needed} more problem(s)</strong> or in <strong>5 minutes</strong>.
+                Score will display after editing <strong>{needed} more first-time step(s)</strong> or in <strong>5 minutes</strong>.
             </div>
         """
 
@@ -3717,6 +3725,7 @@ class ProblemSolverApp:
                         percentage = self.score_display_manager["pending_percentage"]
                         self.update_score_display_in_review(percentage)
                         self.score_display_manager["pending_score_update"] = False
+                        self.score_tracker.reset()  # ✅ Reset edit tracking after 5-minute timer
                         self.show_score_update_notification("⏰ Score Updated (5 minutes elapsed)")
 
             # Check again in 10 seconds
