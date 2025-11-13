@@ -8428,6 +8428,7 @@ class ProblemSolverApp:
       """
       Calculate score for a step based on its type and user's answer.
       Returns a score between 0 and 100.
+      ✅ FIXED: Re-checks answer correctness instead of using cached value
       """
       step_type = step_state.get("step_type", "math-expression")
 
@@ -8442,14 +8443,16 @@ class ProblemSolverApp:
 
       # Math expression and other simple types
       if step_type == "math-expression":
-          score = 100.0 if step_state.get("correct", False) else 0.0
-          window.console.log(f"   Score: {score} (math-expression)")
+          is_correct = self._check_math_expression_correctness(step_data, step_state)
+          score = 100.0 if is_correct else 0.0
+          window.console.log(f"   Score: {score} (math-expression, re-checked: {is_correct})")
           return score
 
       # Multiple choice - single answer
       elif step_type == "multiple-choice-single":
-          score = 100.0 if step_state.get("correct", False) else 0.0
-          window.console.log(f"   Score: {score} (mc-single)")
+          is_correct = self._check_mc_single_correctness(step_data, step_state)
+          score = 100.0 if is_correct else 0.0
+          window.console.log(f"   Score: {score} (mc-single, re-checked: {is_correct})")
           return score
 
       # Multiple choice - multiple answers (with negative scoring)
@@ -8460,8 +8463,9 @@ class ProblemSolverApp:
 
       # True/False
       elif step_type == "true-false":
-          score = 100.0 if step_state.get("correct", False) else 0.0
-          window.console.log(f"   Score: {score} (true-false)")
+          is_correct = self._check_true_false_correctness(step_data, step_state)
+          score = 100.0 if is_correct else 0.0
+          window.console.log(f"   Score: {score} (true-false, re-checked: {is_correct})")
           return score
 
       # Fill in the blank (proportional scoring)
@@ -8628,7 +8632,74 @@ class ProblemSolverApp:
 
       window.console.log(f"Fill-Blank Score: 0% (no match found)")
       return 0.0
-    
+
+
+    def _check_math_expression_correctness(self, step_data, step_state):
+      """
+      Re-check if a math expression answer is correct by comparing with expected answer.
+      Returns True if correct, False otherwise.
+      """
+      user_answers = step_state.get("user_answers", [])
+      if not user_answers:
+          return False
+
+      user_latex = user_answers[0] if len(user_answers) > 0 else ""
+      expected_latex = step_data.get("expected", "")
+
+      if not user_latex or not expected_latex:
+          return False
+
+      try:
+          # Parse both answers
+          user_expr = self.math_parser.parse_latex(user_latex)
+          expected_expr = self.math_parser.parse_latex(expected_latex)
+
+          if user_expr is None or expected_expr is None:
+              return False
+
+          # Normalize both
+          user_normalized = self.math_parser.normalize_expr(user_expr)
+          expected_normalized = self.math_parser.normalize_expr(expected_expr)
+
+          # Check equality
+          is_correct = self.math_parser.final_eq(user_normalized, expected_normalized)
+          return is_correct
+
+      except Exception as e:
+          window.console.error(f"❌ Error checking math expression: {e}")
+          return False
+
+
+    def _check_mc_single_correctness(self, step_data, step_state):
+      """
+      Re-check if a multiple-choice-single answer is correct.
+      Returns True if correct, False otherwise.
+      """
+      user_answers = step_state.get("user_answers", [])
+      if not user_answers:
+          return False
+
+      user_answer = user_answers[0] if len(user_answers) > 0 else ""
+      correct_answer = step_data.get("correct_answer", "")
+
+      return user_answer == correct_answer
+
+
+    def _check_true_false_correctness(self, step_data, step_state):
+      """
+      Re-check if a true/false answer is correct.
+      Returns True if correct, False otherwise.
+      """
+      user_answers = step_state.get("user_answers", [])
+      if not user_answers:
+          return False
+
+      user_answer = user_answers[0] if len(user_answers) > 0 else ""
+      correct_answer = str(step_data.get("correct_answer", "true")).lower()
+
+      return user_answer.lower() == correct_answer
+
+
     def submit_math_expression(self, step_idx):
       """Handle submission for math expression problems - checks correctness only"""
       if step_idx >= len(self.solve_state):
