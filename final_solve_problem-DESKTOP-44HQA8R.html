@@ -7813,6 +7813,31 @@ class ProblemSolverApp:
             window.console.log(f"  Step {i}: {status}")
         window.console.log("==================================================")
 
+        # ✅ CRITICAL: Check requireCorrect BEFORE showing feedback
+        # This ensures blocking happens even if feedback_div is not found
+        if not is_correct and must_correct:
+            window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
+            # Reset finished status if must be correct
+            if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+            if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+                self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+            # Show feedback if div exists
+            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if feedback_div:
+                feedback_div.innerHTML = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. This step requires the correct answer. Please try again.
+                    </div>
+                """
+
+            self.save_to_storage()
+            window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
+            return
+
         # Show feedback
         feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
         if feedback_div:
@@ -7823,29 +7848,11 @@ class ProblemSolverApp:
                     </div>
                 """
             else:
-                if must_correct:
-                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
-                    feedback_div.innerHTML = """
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. This step requires the correct answer. Please try again.
-                        </div>
-                    """
-                    # Reset finished status if must be correct
-                    if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
-                        self.solve_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
-                        self.problem_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    self.save_to_storage()
-                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
-                    return
-                else:
-                    feedback_div.innerHTML = f"""
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. The correct answer was: {correct_answer}
-                        </div>
-                    """
+                feedback_div.innerHTML = f"""
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. The correct answer was: {correct_answer}
+                    </div>
+                """
 
         # Save and check completion
         self.save_to_storage()
@@ -7910,6 +7917,31 @@ class ProblemSolverApp:
             window.console.log(f"  Step {i}: {status}")
         window.console.log("==================================================")
 
+        # ✅ CRITICAL: Check requireCorrect BEFORE showing feedback
+        # This ensures blocking happens even if feedback_div is not found
+        if not is_correct and must_correct:
+            window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
+            # Reset finished status if must be correct
+            if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+            if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+                self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+            # Show feedback if div exists
+            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if feedback_div:
+                feedback_div.innerHTML = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. This step requires the correct answer. Please try again.
+                    </div>
+                """
+
+            self.save_to_storage()
+            window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
+            return
+
         # Show feedback
         feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
         if feedback_div:
@@ -7920,30 +7952,12 @@ class ProblemSolverApp:
                     </div>
                 """
             else:
-                if must_correct:
-                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
-                    feedback_div.innerHTML = """
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. This step requires the correct answer. Please try again.
-                        </div>
-                    """
-                    # Reset finished status if must be correct
-                    if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
-                        self.solve_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
-                        self.problem_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    self.save_to_storage()
-                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
-                    return
-                else:
-                    correct_list = ", ".join(sorted(correct_answers))
-                    feedback_div.innerHTML = f"""
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. The correct answers were: {correct_list}
-                        </div>
-                    """
+                correct_list = ", ".join(sorted(correct_answers))
+                feedback_div.innerHTML = f"""
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. The correct answers were: {correct_list}
+                    </div>
+                """
 
         # Save and check completion
         self.save_to_storage()
@@ -8005,6 +8019,31 @@ class ProblemSolverApp:
             window.console.log(f"  Step {i}: {status}")
         window.console.log("==================================================")
 
+        # ✅ CRITICAL: Check requireCorrect BEFORE showing feedback
+        # This ensures blocking happens even if feedback_div is not found
+        if not is_correct and must_correct:
+            window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
+            # Reset finished status if must be correct
+            if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+            if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+                self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+            # Show feedback if div exists
+            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if feedback_div:
+                feedback_div.innerHTML = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. This step requires the correct answer. Please try again.
+                    </div>
+                """
+
+            self.save_to_storage()
+            window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
+            return
+
         # Show feedback
         feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
         if feedback_div:
@@ -8015,30 +8054,12 @@ class ProblemSolverApp:
                     </div>
                 """
             else:
-                if must_correct:
-                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
-                    feedback_div.innerHTML = """
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. This step requires the correct answer. Please try again.
-                        </div>
-                    """
-                    # Reset finished status if must be correct
-                    if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
-                        self.solve_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
-                        self.problem_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    self.save_to_storage()
-                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
-                    return
-                else:
-                    correct_display = "True" if correct_answer == "true" else "False"
-                    feedback_div.innerHTML = f"""
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. The correct answer was: {correct_display}
-                        </div>
-                    """
+                correct_display = "True" if correct_answer == "true" else "False"
+                feedback_div.innerHTML = f"""
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. The correct answer was: {correct_display}
+                    </div>
+                """
 
         # Save and check completion
         self.save_to_storage()
@@ -8129,6 +8150,31 @@ class ProblemSolverApp:
             window.console.log(f"  Step {i}: {status}")
         window.console.log("==================================================")
 
+        # ✅ CRITICAL: Check requireCorrect BEFORE showing feedback
+        # This ensures blocking happens even if feedback_div is not found
+        if not is_correct and must_correct:
+            window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
+            # Reset finished status if must be correct
+            if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+            if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+                self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+            # Show feedback if div exists
+            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if feedback_div:
+                feedback_div.innerHTML = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. This step requires the correct answer. Please try again.
+                    </div>
+                """
+
+            self.save_to_storage()
+            window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
+            return
+
         # Show feedback
         feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
         if feedback_div:
@@ -8139,31 +8185,13 @@ class ProblemSolverApp:
                     </div>
                 """
             else:
-                if must_correct:
-                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
-                    feedback_div.innerHTML = """
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. This step requires the correct answer. Please try again.
-                        </div>
-                    """
-                    # Reset finished status if must be correct
-                    if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
-                        self.solve_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
-                        self.problem_states[current_prob_idx][step_idx]["finished"] = False
-                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
-                    self.save_to_storage()
-                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
-                    return
-                else:
-                    # ✅ FIX: Use correct_answers instead of accepted_answers
-                    correct_displays = ", ".join([a.get("display", a.get("value", "")) if isinstance(a, dict) else str(a) for a in correct_answers])
-                    feedback_div.innerHTML = f"""
-                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                            ❌ Incorrect. Accepted answers: {correct_displays}
-                        </div>
-                    """
+                # ✅ FIX: Use correct_answers instead of accepted_answers
+                correct_displays = ", ".join([a.get("display", a.get("value", "")) if isinstance(a, dict) else str(a) for a in correct_answers])
+                feedback_div.innerHTML = f"""
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ Incorrect. Accepted answers: {correct_displays}
+                    </div>
+                """
 
         # Disable input
         input_elem.disabled = True
