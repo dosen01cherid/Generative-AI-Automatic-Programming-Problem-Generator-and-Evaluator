@@ -3438,11 +3438,26 @@ class ProblemSolverApp:
 
             # ✅ Update last edit timestamp ONLY on first edit (don't restart timer)
             import js
+
+            # Log current timer state for debugging
+            window.console.log(f"🔍 Timer state check: pending_score_update={self.score_display_manager['pending_score_update']}, last_edit_time={self.score_display_manager['last_edit_time']}")
+
             if not self.score_display_manager["pending_score_update"]:
+                # No timer running - start a new one
                 self.score_display_manager["last_edit_time"] = js.Date.now()
-                window.console.log("⏱️ Started 5-minute timer (first edit)")
+                window.console.log("⏱️ Started 5-minute timer (first edit in session)")
             else:
-                window.console.log("⏱️ Timer already running - not restarting")
+                # Timer already running - preserve the original start time
+                if self.score_display_manager["last_edit_time"]:
+                    current_time = js.Date.now()
+                    elapsed_ms = current_time - self.score_display_manager["last_edit_time"]
+                    elapsed_minutes = elapsed_ms / 60000
+                    remaining_minutes = 5 - elapsed_minutes
+                    window.console.log(f"⏱️ Timer already running - NOT restarting (elapsed: {elapsed_minutes:.1f}m, remaining: {remaining_minutes:.1f}m)")
+                else:
+                    # Fallback: pending_score_update is true but no timestamp (shouldn't happen)
+                    window.console.warn("⚠️ pending_score_update=True but no last_edit_time - starting new timer")
+                    self.score_display_manager["last_edit_time"] = js.Date.now()
 
             # ✅ Use score_tracker's first-time step edit count (not problem count)
             first_time_step_edits = len(self.score_tracker.first_time_edits_in_session)
@@ -5991,10 +6006,14 @@ class ProblemSolverApp:
                         window.console.log(f"⏱️ Restarting timer with {remaining_minutes:.1f} minutes remaining")
 
                         # Timer will be handled by start_score_display_timer() which runs automatically
-                        # No need to manually start it here
+                        # Display UI message showing pending timer
+                        self.show_pending_timer_message_after_load(remaining_minutes)
                 else:
                     window.console.log("⚠️ Pending score update but no last_edit_time - clearing pending state")
                     self.score_display_manager["pending_score_update"] = False
+            else:
+                # No pending timer, clear any stale UI messages
+                window.console.log("ℹ️ No pending timer to restore")
 
             # ============================================
             # PART 2: Check score_tracker timer (review mode)
@@ -6030,6 +6049,79 @@ class ProblemSolverApp:
 
         except Exception as e:
             window.console.error(f"⚠️ Error restoring timers: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+
+    def show_pending_timer_message_after_load(self, remaining_minutes):
+        """Show UI message about pending timer after app load/refresh"""
+        try:
+            import js
+
+            # Get first-time edits count
+            first_time_count = len(self.score_tracker.first_time_edits_in_session)
+            total_edits = len(self.score_tracker.edited_steps)
+            needed = 2 - first_time_count
+
+            remaining_seconds = remaining_minutes * 60
+            if remaining_seconds > 60:
+                time_str = f"{int(remaining_minutes)}:{int(remaining_seconds%60):02d}"
+            else:
+                time_str = f"{int(remaining_seconds)} seconds"
+
+            window.console.log(f"📋 Showing pending timer message: {first_time_count}/2 first-time edits, {time_str} remaining")
+
+            # Try to find review section to display message
+            review_section = document.querySelector("[id^='reviewSection_']")
+            if review_section:
+                existing_msg = review_section.querySelector(".timer-restored-msg")
+                if existing_msg:
+                    existing_msg.remove()
+
+                msg = document.createElement("div")
+                msg.className = "timer-restored-msg"
+                msg.style.cssText = """
+                    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+                    border: 2px solid #3b82f6;
+                    border-radius: 12px;
+                    padding: 16px 20px;
+                    margin: 16px 0;
+                    animation: fadeIn 0.3s ease;
+                """
+
+                msg.innerHTML = f"""
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 8px;">
+                        ⏱️ Timer Restored from Previous Session
+                    </div>
+                    <div style="font-size: 14px; color: #1e3a8a; margin-bottom: 6px;">
+                        <strong>{first_time_count}/2</strong> first-time edits made
+                        (Total: {total_edits} edits this session)
+                    </div>
+                    <div style="font-size: 14px; color: #1e3a8a;">
+                        Score will update after <strong>{needed} more first-time edit(s)</strong>
+                        or in <strong>{time_str}</strong>
+                    </div>
+                """
+
+                review_section.insertBefore(msg, review_section.firstChild)
+
+                # Auto-remove after 10 seconds
+                def remove_msg():
+                    if msg and msg.parentNode:
+                        msg.style.opacity = "0"
+                        msg.style.transition = "opacity 0.5s"
+                        def final_remove():
+                            if msg and msg.parentNode:
+                                msg.remove()
+                        window.setTimeout(create_proxy(final_remove), 500)
+
+                window.setTimeout(create_proxy(remove_msg), 10000)
+
+                window.console.log("✅ Timer restored message displayed")
+            else:
+                window.console.log("ℹ️ Review section not found - message not displayed")
+
+        except Exception as e:
+            window.console.error(f"⚠️ Error showing timer message: {e}")
             import traceback
             window.console.error(traceback.format_exc())
 
