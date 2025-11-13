@@ -2745,12 +2745,12 @@ class ScoreRecalculationTracker:
             self.timer_handle = None
             window.console.log("⏱️ Timer restarted due to new edit")
 
-        # ✅ Check if we have at least 2 edits in current session
-        if len(self.edited_steps) >= 2:
-            window.console.log("✅ At least 2 edits detected in current session - triggering immediate recalculation")
+        # ✅ Check if we have at least 2 first-time edits in current session
+        if len(self.first_time_edits_in_session) >= 2:
+            window.console.log("✅ At least 2 first-time edits detected (global) - triggering immediate recalculation")
             self.trigger_recalculation("2_edits")
         else:
-            window.console.log(f"⏱️ Only {len(self.edited_steps)} edit(s) in current session - starting 5-minute timer")
+            window.console.log(f"⏱️ Only {len(self.first_time_edits_in_session)} first-time edit(s) - starting 5-minute timer")
             # ✅ Always start a fresh 5-minute timer on each edit
             def timer_callback():
                 self.trigger_recalculation("5_minutes")
@@ -2821,18 +2821,18 @@ class ScoreRecalculationTracker:
             else:
                 time_str = f"{int(remaining)} seconds"
             
-            if count < 2:
+            if first_time_count < 2:
                 msg_el.innerHTML = f"""
                 <div style='background:#fef3c7;color:#92400e;padding:12px;border-radius:6px;text-align:center;'>
-                    <div style='font-weight:600;margin-bottom:4px;'>📝 {count}/2 edits made</div>
-                    <div style='font-size:14px;'>Edit another step to update score immediately</div>
+                    <div style='font-weight:600;margin-bottom:4px;'>📝 {first_time_count}/2 first-time edits made</div>
+                    <div style='font-size:14px;'>Edit another <strong>first-time</strong> step to update score immediately</div>
                     <div style='font-size:13px;margin-top:4px;'>or wait {time_str} for automatic update</div>
-                    <div style='font-size:12px;margin-top:6px;color:#78350f;'>({first_time_count} first-time, {count - first_time_count} re-edit)</div>
+                    <div style='font-size:12px;margin-top:6px;color:#78350f;'>Total edits this session: {count} ({first_time_count} first-time, {count - first_time_count} re-edit)</div>
                 </div>
                 """
 
                 def update_countdown():
-                    if len(self.edited_steps) < 2:
+                    if len(self.first_time_edits_in_session) < 2:
                         self.update_ui_message()
                 window.setTimeout(create_proxy(update_countdown), 1000)
                 
