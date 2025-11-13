@@ -1,0 +1,3076 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Analytics — Student Progress Analyzer</title>
+  
+  <script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['$$', '$$']],
+    processEscapes: true
+  },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+  <!-- PyScript core -->
+  <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+  <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+  <style>
+/* =========================================
+   GLOBAL RESET
+   ========================================= */
+/* =========================================
+   STARTUP MODAL
+   ========================================= */
+.startup-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+.startup-modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.startup-modal h2 {
+    margin: 0 0 20px 0;
+    color: #0f172a;
+    font-size: 24px;
+}
+
+.startup-modal p {
+    margin: 0 0 20px 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.saved-sessions-list {
+    margin: 20px 0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.session-item {
+    padding: 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #f8fafc;
+}
+
+.session-item:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    transform: translateX(4px);
+}
+
+.session-item.selected {
+    border-color: #3b82f6;
+    background: #dbeafe;
+}
+
+.session-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.session-info {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.modal-btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.modal-btn-primary:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.modal-btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.modal-btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #94a3b8;
+}
+
+.empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+}
+
+.empty-state-text {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #64748b;
+}
+
+.empty-state-subtext {
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    margin: 0;
+    padding: 0;
+}
+
+#analyticsResults {
+    padding: 16px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* =========================================
+   PANEL STYLING
+   ========================================= */
+.panel {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s ease;
+}
+
+.panel:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================
+   STATISTIC CARDS
+   ========================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.stats-card {
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px 6px;
+}
+
+.stats-number {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #111827;
+}
+
+.stats-label {
+    font-size: 0.8em;
+    color: #6b7280;
+}
+
+/* =========================================
+   SCORE BADGES
+   ========================================= */
+.score-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #fff;
+}
+
+.score-high { background-color: #16a34a; }           /* green */
+.score-medium { background-color: #facc15; color:#111827; } /* yellow */
+.score-low { background-color: #dc2626; }            /* red */
+
+/* =========================================
+   TABLE STYLING
+   ========================================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px;
+    vertical-align: middle;
+}
+
+th {
+    background: #f3f4f6;
+    text-align: left;
+    font-weight: 600;
+}
+
+tr.detail-row td {
+    background: #f9fafb;
+}
+
+/* zebra stripes for readability */
+tbody tr:nth-child(even):not(.detail-row) {
+    background: #fcfcfc;
+}
+
+/* =========================================
+   BUTTONS (Details Toggle)
+   ========================================= */
+button.detail-toggle {
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    color: #0369a1;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+button.detail-toggle:hover {
+    background: #0369a1;
+    color: #ffffff;
+}
+
+/* =========================================
+   PROBLEM CARD STYLING
+   ========================================= */
+.problem-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.problem-header {
+    background: #f9fafb;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.problem-header:hover {
+    background: #f3f4f6;
+}
+
+.problem-body {
+    padding: 10px 12px;
+    background: #fcfcfc;
+}
+
+.badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-radius: 8px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* =========================================
+   ATTEMPTS DISPLAY (Horizontal Layout)
+   ========================================= */
+.problem-body .attempts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.problem-body .attempt-box {
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border-radius: 6px;
+    padding: 8px 10px;
+    min-width: 120px;
+    text-align: center;
+    transition: box-shadow 0.2s ease;
+}
+
+.problem-body .attempt-box:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+}
+
+/* flag labels */
+.attempt-flag {
+    font-size: 12px;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.flag-correct { color: #15803d; }         /* ✅ Correct */
+.flag-finalized { color: #166534; }       /* 🔒 Finalized */
+.flag-false { color: #991b1b; }           /* ❌ False */
+.flag-false-finalized { color: #b45309; } /* ⚠️ False Finalized */
+
+/* =========================================
+   MATHJAX OUTPUT AREA
+   ========================================= */
+.mathjax-latex {
+    display: block;
+    font-size: 14px;
+    margin: 4px 0;
+    color: #111827;
+    line-height: 1.4;
+}
+
+.mathjax-latex mjx-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* =========================================
+   RESPONSIVE TABLE
+   ========================================= */
+@media (max-width: 768px) {
+    th, td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .problem-body .attempt-box {
+        min-width: 90px;
+        padding: 6px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+}
+</style>
+
+</head>
+<body>
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Initializing Analytics...</div>
+    <div id="loadingStatus"><div>⏳ Starting up...</div></div>
+  </div>
+
+  <header>
+    <h1>📊 Analytics Dashboard (IndexedDB)</h1>
+  </header>
+
+  <div class="panel">
+    <label>Student Roster Setup</label>
+    <div class="small" style="margin-bottom:8px;">
+      Paste WhatsApp messages containing student info. Format: <code>+62...</code> followed by name and registration number.
+    </div>
+    <textarea id="pasteRosterData" style="width:100%; min-height:120px; padding:8px; border-radius:8px; border:1px solid #e6eef8; font-family:monospace; font-size:12px;" placeholder="Example:&#10;+628123456789: John Doe 12345&#10;[4/10 19.16] +62 858-9375-4880: Abima Ardiansah 41524110006"></textarea>
+    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+      <button id="parseRosterReplaceBtn" class="btn danger">Parse & Replace</button>
+      <button id="parseRosterMergeBtn" class="btn success">Parse & Merge</button>
+      <button id="clearRosterBtn" class="btn ghost">Clear Roster</button>
+      <button id="viewRosterBtn" class="btn ghost">View Roster</button>
+    </div>
+    <div id="rosterStatus" class="small" style="margin-top:8px; color:#059669;"></div>
+  </div>
+
+  <div class="panel">
+    <label>Paste Student Progress Data</label>
+    <div class="small" style="margin-bottom:8px;">
+      Paste one or multiple base64-encoded progress exports. <strong>✈️ Telegram multi-part messages supported!</strong>
+    </div>
+    <textarea id="pasteProgressData" style="width:100%; min-height:200px; padding:8px; border-radius:8px; border:1px solid #e6eef8; font-family:monospace; font-size:12px;"></textarea>
+    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+      <button id="analyzeBtn" class="btn">Analyze & Add Submissions</button>
+      <button id="clearAnalyticsBtn" class="btn ghost">Clear All</button>
+      <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
+    </div>
+  </div>
+
+  <div id="analyticsResults"></div>
+
+  <py-config>
+    packages = ["brotli"]
+  </py-config>
+
+  <script type="py">
+from pyscript import document, window
+from pyodide.ffi import create_proxy
+import re, json, base64, brotli, html, hashlib
+from collections import defaultdict
+
+# ================================================================
+# INDEXEDDB MANAGER
+# ================================================================
+from js import Function, window
+
+class IndexedDBManager:
+    """Hybrid IndexedDB manager with automatic localStorage fallback and progress pop-up — fully Pyodide-safe"""
+
+    def __init__(self):
+        self.db_name = "AnalyticsDB"
+        self.db_version = 1
+        self.initialized = False
+        self.fallback_mode = False  # Enabled automatically if IndexedDB fails
+
+        # --- Progress Pop-up Elements ---
+        self.progress_popup = None
+        self.progress_status = None
+        self.progress_container_id = "pyodide-progress-container"
+
+    # ============================================================
+    # PROGRESS POP-UP HELPERS
+    # ============================================================
+    def _create_progress_elements(self):
+        """Create the progress pop-up elements and add them to the DOM."""
+        from js import document
+
+        container = document.createElement("div")
+        container.id = self.progress_container_id
+
+        popup = document.createElement("div")
+        popup.id = "progress-popup"
+        popup.style.display = "none"
+
+        content = document.createElement("div")
+        content.className = "progress-content"
+
+        spinner = document.createElement("div")
+        spinner.className = "spinner"
+
+        status = document.createElement("p")
+        status.id = "progress-status"
+        status.textContent = "Processing..."
+
+        content.appendChild(spinner)
+        content.appendChild(status)
+        popup.appendChild(content)
+        container.appendChild(popup)
+
+        style = document.createElement("style")
+        style.textContent = """
+        #pyodide-progress-container #progress-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+        }
+
+        #pyodide-progress-container .progress-content {
+            background-color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        #pyodide-progress-container .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #pyodide-progress-container #progress-status {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+        """
+
+        container.appendChild(style)
+        document.body.appendChild(container)
+
+        self.progress_popup = popup
+        self.progress_status = status
+
+    def _find_progress_elements(self):
+        """Find or create the DOM elements for the progress pop-up."""
+        from js import window
+        if not self.progress_popup:
+            self.progress_popup = window.document.querySelector("#progress-popup")
+            self.progress_status = window.document.querySelector("#progress-status")
+
+            if not self.progress_popup or not self.progress_status:
+                window.console.log("Creating progress pop-up elements...")
+                self._create_progress_elements()
+
+    def _show_progress(self, message):
+        """Display the progress pop-up with a custom message."""
+        self._find_progress_elements()
+        if self.progress_popup and self.progress_status:
+            self.progress_status.textContent = message
+            self.progress_popup.style.display = "flex"
+
+    def _hide_progress(self):
+        """Hide the progress pop-up."""
+        if self.progress_popup:
+            self.progress_popup.style.display = "none"
+
+    # ============================================================
+    # INITIALIZE
+    # ============================================================
+    async def initialize(self):
+        from js import window, Function
+
+        if self.initialized:
+            return True
+
+        self._show_progress("Initializing database...")
+
+        try:
+            if not hasattr(window, "indexedDB"):
+                window.console.warn("⚠️ IndexedDB not supported, switching to localStorage")
+                self.fallback_mode = True
+                self.initialized = True
+                return True
+
+            create_bridge = Function(
+                """
+                return (function() {
+                    const delayClose = db => setTimeout(() => db.close(), 0);
+                    const bridge = {
+                        openDB: function(name, version) {
+                            return new Promise((resolve, reject) => {
+                                const request = indexedDB.open(name, version);
+                                request.onupgradeneeded = e => {
+                                    const db = e.target.result;
+                                    if (!db.objectStoreNames.contains("analytics")) {
+                                        db.createObjectStore("analytics", { keyPath: "id" });
+                                    }
+                                    if (!db.objectStoreNames.contains("hashes")) {
+                                        db.createObjectStore("hashes", { keyPath: "id" });
+                                    }
+                                };
+                                request.onsuccess = e => resolve(e.target.result);
+                                request.onerror = e => reject(e.target.error);
+                            });
+                        },
+
+                        async save(dbName, version, store, key, jsonString) {
+                            const db = await bridge.openDB(dbName, version);
+                            return new Promise((resolve, reject) => {
+                                try {
+                                    const tx = db.transaction(store, "readwrite");
+                                    const st = tx.objectStore(store);
+                                    const keyStr = String(key);
+                                    const dataStr = String(jsonString);
+                                    const record = { id: keyStr, data: dataStr };
+                                    const req = st.put(record); // ✅ no key argument (keyPath used)
+                                    req.onsuccess = () => { delayClose(db); resolve(true); };
+                                    req.onerror = e => { delayClose(db); reject(e.target.error); };
+                                } catch (err) {
+                                    delayClose(db);
+                                    reject(err);
+                                }
+                            });
+                        },
+
+                        async load(dbName, version, store, key) {
+                            const db = await bridge.openDB(dbName, version);
+                            return new Promise((resolve, reject) => {
+                                try {
+                                    const tx = db.transaction(store, "readonly");
+                                    const st = tx.objectStore(store);
+                                    const req = st.get(String(key));
+                                    req.onsuccess = () => {
+                                        const val = req.result ? String(req.result.data) : null;
+                                        delayClose(db);
+                                        resolve(val);
+                                    };
+                                    req.onerror = e => { delayClose(db); reject(e.target.error); };
+                                } catch (err) {
+                                    delayClose(db);
+                                    reject(err);
+                                }
+                            });
+                        },
+
+                        async delete(dbName, version, store, key) {
+                            const db = await bridge.openDB(dbName, version);
+                            return new Promise((resolve, reject) => {
+                                try {
+                                    const tx = db.transaction(store, "readwrite");
+                                    const st = tx.objectStore(store);
+                                    const req = st.delete(String(key));
+                                    req.onsuccess = () => { delayClose(db); resolve(true); };
+                                    req.onerror = e => { delayClose(db); reject(e.target.error); };
+                                } catch (err) {
+                                    delayClose(db);
+                                    reject(err);
+                                }
+                            });
+                        }
+                    };
+                    return bridge;
+                })();
+                """
+            )
+
+            window.PyIndexedDBBridge = create_bridge()
+            self.initialized = True
+            window.console.log("✅ IndexedDB Bridge initialized successfully")
+
+        except Exception as e:
+            window.console.warn(f"⚠️ IndexedDB initialization failed ({e}), using localStorage fallback")
+            self.fallback_mode = True
+            self.initialized = True
+        finally:
+            self._hide_progress()
+
+        return True
+
+    # ============================================================
+    # SAVE
+    # ============================================================
+    async def save_data(self, store_name, key, data):
+        from js import window, JSON
+        from pyodide.ffi import to_js
+        import json
+
+        if not self.initialized:
+            await self.initialize()
+
+        self._show_progress("Saving data...")
+
+        try:
+            if not isinstance(data, (dict, list, str, int, float, bool, type(None))):
+                data = str(data)
+
+            json_text = json.dumps(data)
+            if self.fallback_mode:
+                window.localStorage.setItem(f"{store_name}_{key}", json_text)
+                window.console.log("💾 Saved to localStorage (fallback mode)")
+                self._hide_progress()
+                return True
+
+            js_db_name = to_js(self.db_name)
+            js_version = to_js(self.db_version)
+            js_store = to_js(store_name)
+            js_key = to_js(key)
+            js_json = to_js(json_text)
+
+            result = await window.PyIndexedDBBridge.save(js_db_name, js_version, js_store, js_key, js_json)
+            window.console.log("✅ Saved to IndexedDB successfully")
+
+            return result
+
+        except Exception as e:
+            window.console.error(f"❌ Error saving data: {e}")
+            try:
+                window.localStorage.setItem(f"{store_name}_{key}", json.dumps(data))
+                window.console.warn("⚠️ Saved to localStorage (fallback after error)")
+                return True
+            except Exception as e2:
+                window.console.error(f"❌ Fallback save failed: {e2}")
+                return False
+        finally:
+            self._hide_progress()
+
+    # ============================================================
+    # LOAD
+    # ============================================================
+    async def load_data(self, store_name, key):
+        from js import window
+        from pyodide.ffi import to_js
+        import json
+
+        if not self.initialized:
+            await self.initialize()
+
+        self._show_progress("Loading data...")
+
+        try:
+            if self.fallback_mode:
+                raw = window.localStorage.getItem(f"{store_name}_{key}")
+                return json.loads(raw) if raw else None
+
+            js_db_name = to_js(self.db_name)
+            js_version = to_js(self.db_version)
+            js_store = to_js(store_name)
+            js_key = to_js(key)
+
+            result = await window.PyIndexedDBBridge.load(js_db_name, js_version, js_store, js_key)
+            if result is None:
+                return None
+
+            result = result.to_py() if hasattr(result, "to_py") else str(result)
+            return json.loads(result)
+
+        except Exception as e:
+            window.console.error(f"❌ Error loading data: {e}")
+            try:
+                raw = window.localStorage.getItem(f"{store_name}_{key}")
+                return json.loads(raw) if raw else None
+            except Exception as e2:
+                window.console.error(f"❌ Fallback load failed: {e2}")
+                return None
+        finally:
+            self._hide_progress()
+
+    # ============================================================
+    # DELETE
+    # ============================================================
+    async def delete_data(self, store_name, key):
+        from js import window
+        from pyodide.ffi import to_js
+
+        if not self.initialized:
+            await self.initialize()
+
+        self._show_progress("Deleting data...")
+
+        try:
+            if self.fallback_mode:
+                window.localStorage.removeItem(f"{store_name}_{key}")
+                return True
+
+            js_db_name = to_js(self.db_name)
+            js_version = to_js(self.db_version)
+            js_store = to_js(store_name)
+            js_key = to_js(key)
+
+            result = await window.PyIndexedDBBridge.delete(js_db_name, js_version, js_store, js_key)
+            return result
+
+        except Exception as e:
+            window.console.error(f"❌ Error deleting data: {e}")
+            try:
+                window.localStorage.removeItem(f"{store_name}_{key}")
+                window.console.warn("⚠️ Deleted from localStorage (fallback after error)")
+                return True
+            except:
+                return False
+        finally:
+            self._hide_progress()
+
+class RosterManager:
+    """Manages student roster operations"""
+    
+    def __init__(self):
+        self.app = None
+        self.student_roster = {}
+    
+    def initialize(self):
+        """Initialize roster management"""
+        self.bind_events()
+    
+    def bind_events(self):
+        """Bind roster-related events"""
+        bindings = [
+            ("#parseRosterReplaceBtn", self.parse_and_replace),
+            ("#parseRosterMergeBtn", self.parse_and_merge),
+            ("#clearRosterBtn", self.clear_roster),
+            ("#viewRosterBtn", self.view_roster),
+        ]
+        
+        for selector, handler in bindings:
+            element = document.querySelector(selector)
+            if element:
+                element.addEventListener("click", create_proxy(handler))
+            else:
+                window.console.warn(f"⚠️ Missing element: {selector}")
+    
+    def normalize_phone(self, p):
+        """Normalize Indonesian phone numbers"""
+        if not p:
+            return ""
+        p = re.sub(r"[^\d+]", "", p)
+        if p.startswith("0"):
+            p = "+62" + p[1:]
+        elif p.startswith("62") and not p.startswith("+"):
+            p = "+" + p
+        elif not p.startswith("+") and len(p) > 8:
+            p = "+" + p
+        return p
+    
+    def parse_entry(self, entry):
+        """Parse a single roster entry"""
+        entry = entry.replace("\n", " ")
+        m = re.search(r"(\+?\d[\d\s\-]+)\s*:\s*([A-Za-z\s.'()\-]+)\s*(\d{8,15})", entry)
+        return m.groups() if m else None
+    
+    def combine_multiline_entries(self, text):
+        """Combine multi-line roster entries"""
+        lines = text.splitlines()
+        combined, buf = [], ""
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            if re.match(r"^\[\d{1,2}", line):
+                if buf:
+                    combined.append(buf.strip())
+                buf = line
+            else:
+                buf += " " + line
+        if buf:
+            combined.append(buf.strip())
+        return combined
+    
+    def parse_and_replace(self, e=None):
+        """Parse and replace roster"""
+        text = document.querySelector("#pasteRosterData").value.strip()
+        if not text:
+            window.alert("Paste roster data first.")
+            return
+        
+        combined = self.combine_multiline_entries(text)
+        parsed = {}
+        
+        for entry in combined:
+            parts = self.parse_entry(entry)
+            if not parts:
+                continue
+            phone, name, reg = parts
+            phone = self.normalize_phone(phone)
+            parsed[phone] = {
+                "phone": phone,
+                "name": name.title().strip(),
+                "registration_number": reg.strip()
+            }
+        
+        if not parsed:
+            window.alert("❌ No valid entries found.")
+            return
+        
+        self.student_roster = parsed
+        self.app.student_roster = parsed  # Update global reference
+        
+        document.querySelector("#rosterStatus").innerHTML = (
+            f"✅ Replace complete — Total: {len(parsed)}"
+        )
+        window.alert(f"✅ Roster replaced!\nTotal: {len(parsed)}")
+        
+        # CRITICAL: Refresh analytics display with new roster data
+        if self.app.analytics_data:
+            self.app.progress_analyzer.refresh_analytics_with_roster()
+    
+    def parse_and_merge(self, e=None):
+        """Parse and merge roster"""
+        text = document.querySelector("#pasteRosterData").value.strip()
+        if not text:
+            window.alert("Paste roster data first.")
+            return
+        
+        combined = self.combine_multiline_entries(text)
+        added, updated = 0, 0
+        
+        for entry in combined:
+            parts = self.parse_entry(entry)
+            if not parts:
+                continue
+            phone, name, reg = parts
+            phone = self.normalize_phone(phone)
+            
+            if phone not in self.student_roster:
+                self.student_roster[phone] = {
+                    "phone": phone,
+                    "name": name.title().strip(),
+                    "registration_number": reg.strip()
+                }
+                added += 1
+            else:
+                prev = self.student_roster[phone]
+                if name != prev["name"] or reg != prev["registration_number"]:
+                    self.student_roster[phone].update({
+                        "name": name.title().strip(),
+                        "registration_number": reg.strip()
+                    })
+                    updated += 1
+        
+        self.app.student_roster = self.student_roster  # Update global reference
+        
+        document.querySelector("#rosterStatus").innerHTML = (
+            f"✅ Merge complete — Total: {len(self.student_roster)} • Added: {added} • Updated: {updated}"
+        )
+        window.alert(f"✅ Roster merged!\nTotal: {len(self.student_roster)}\nAdded: {added}\nUpdated: {updated}")
+        
+        # CRITICAL: Refresh analytics display with new roster data
+        if self.app.analytics_data:
+            self.app.progress_analyzer.refresh_analytics_with_roster()
+    
+    def clear_roster(self, e=None):
+        """Clear the roster"""
+        self.student_roster = {}
+        self.app.student_roster = {}  # Update global reference
+        document.querySelector("#pasteRosterData").value = ""
+        document.querySelector("#rosterStatus").innerHTML = ""
+        window.alert("Roster cleared.")
+        
+        # Refresh analytics display
+        if self.app.analytics_data:
+            self.app.display_manager.display_analytics(self.app.analytics_data, [])
+    
+    def view_roster(self, e=None):
+        """Display roster in a modal"""
+        if not self.student_roster:
+            window.alert("No roster loaded.")
+            return
+        
+        # Sort by registration number, then name
+        def sort_key(item):
+            reg = item[1].get("registration_number", "")
+            try:
+                return int(re.sub(r"\D", "", reg) or 0)
+            except:
+                return 0
+        
+        sorted_roster = sorted(
+            self.student_roster.items(),
+            key=lambda x: (sort_key(x), x[1]["name"].lower())
+        )
+        
+        html_content = """
+            <table style='width:100%;font-size:13px;border-collapse:collapse;'>
+            <thead><tr style='background:#f3f4f6;'>
+            <th style='padding:6px;'>#</th>
+            <th style='padding:6px;text-align:left;'>Reg No</th>
+            <th style='padding:6px;text-align:left;'>Name</th>
+            <th style='padding:6px;text-align:left;'>Phone</th>
+            </tr></thead><tbody>
+        """
+        
+        for i, (phone, info) in enumerate(sorted_roster, 1):
+            html_content += f"""
+                <tr>
+                    <td style='padding:6px;color:#6b7280;'>{i}</td>
+                    <td style='padding:6px;font-weight:600;'>{self._escape(info['registration_number'])}</td>
+                    <td style='padding:6px;'>{self._escape(info['name'])}</td>
+                    <td style='padding:6px;font-size:12px;'>📱 {self._escape(phone)}</td>
+                </tr>
+            """
+        
+        html_content += "</tbody></table>"
+        
+        self.app.create_modal("Student Roster", html_content)
+    
+    def _escape(self, text):
+        """Escape HTML text"""
+        import html
+        return html.escape(str(text or ""))
+                       
+class ProgressAnalyzer:
+    def hash_problem_data(self, submission):
+        """Create hash for individual problem submission content"""
+        import json, hashlib
+
+        try:
+            steps = submission.get("steps_progress", []) or []
+            problem_data = {
+                "problem_number": submission.get("problem", {}).get("number"),
+                "problem_id": submission.get("problem", {}).get("id"),
+                "steps": []
+            }
+
+            for step in steps:
+                if isinstance(step, dict):
+                    step_info = {
+                        "step_number": step.get("step_number"),
+                        "finalized": step.get("finalized", False),
+                        "attempts": []
+                    }
+                    for att in step.get("attempts", []) or []:
+                        if isinstance(att, dict):
+                            step_info["attempts"].append({
+                                "answer": att.get("answer_latex", ""),
+                                "correct": att.get("correct", False)
+                            })
+                    problem_data["steps"].append(step_info)
+
+            json_str = json.dumps(problem_data, sort_keys=True, separators=(',', ':'))
+            return hashlib.sha256(json_str.encode()).hexdigest()
+        except Exception as e:
+            window.console.error(f"Error hashing problem data: {e}")
+            return None
+
+    # ============================================================
+    # PARSE SUBMISSIONS
+    # ============================================================
+    def parse_submissions(self, text):
+        """Parse submissions with detailed debugging"""
+        import re, json
+        from js import window
+
+        window.console.log("\n" + "=" * 80)
+        window.console.log("🔍 PARSE_SUBMISSIONS CALLED")
+        window.console.log("=" * 80)
+
+        subs, invalid = [], []
+        if not text or not text.strip():
+            return {"submissions": [], "invalid": [{"error": "Empty input"}], "total": 0}
+
+        window.console.log(f"📝 Input text length: {len(text)} characters")
+
+        # 1️⃣ Find all header/footer export blocks
+        export_blocks = list(re.finditer(
+            r"===\s*STUDENT\s+PROGRESS\s+EXPORT\s*===\s*(.*?)\s*===\s*END\s+EXPORT\s*===",
+            text, re.DOTALL | re.IGNORECASE
+        ))
+
+        window.console.log(f"🔍 Found {len(export_blocks)} export blocks")
+
+        # 2️⃣ Process each header/footer export block
+        for block_idx, block in enumerate(export_blocks):
+            window.console.log(f"\n--- Processing block {block_idx + 1}/{len(export_blocks)} ---")
+
+            b64 = re.sub(r"[\s\r\n]+", "", block.group(1))
+            window.console.log(f"📦 Base64 length: {len(b64)}")
+
+            start_idx = block.start()
+            phone = self.extract_phone_from_context(text, start_idx)
+            window.console.log(f"📱 Extracted phone: {phone}")
+
+            data, fmt = self.decode_base64_data(b64)
+            window.console.log(f"📊 Decode result: {fmt}")
+
+            if data:
+                window.console.log(f"✅ Successfully decoded data")
+                window.console.log(f"📋 Data type: {type(data)}")
+
+                if isinstance(data, dict):
+                    window.console.log(f"🔑 Data keys: {list(data.keys())}")
+
+                    # ✅ Detect format version
+                    if "problem_states" in data:
+                        window.console.log("🆕 Detected NEW export format (v2.0)")
+                        try:
+                            new_subs = self.process_export_data(data, "new_format", phone)
+                            window.console.log(f"✅ Created {len(new_subs)} submissions from NEW format")
+                            subs.extend(new_subs)
+                        except Exception as e:
+                            window.console.error(f"❌ Error processing NEW format: {e}")
+                            import traceback
+                            window.console.error(traceback.format_exc())
+                            invalid.append({
+                                "error": f"NEW format processing error: {e}",
+                                "student_phone": phone,
+                                "source": "header_block"
+                            })
+
+                    elif "problems" in data:
+                        window.console.log("📦 Detected OLD export format (v1.0)")
+                        try:
+                            old_subs = self.process_export_data_old(data, fmt, phone)
+                            window.console.log(f"✅ Created {len(old_subs)} submissions from OLD format")
+                            subs.extend(old_subs)
+                        except Exception as e:
+                            window.console.error(f"❌ Error processing OLD format: {e}")
+                            invalid.append({
+                                "error": f"OLD format processing error: {e}",
+                                "student_phone": phone,
+                                "source": "header_block"
+                            })
+                    else:
+                        window.console.error("❌ Unknown export format - no 'problem_states' or 'problems' key")
+                        invalid.append({
+                            "error": f"Unknown export format. Keys: {list(data.keys())}",
+                            "student_phone": phone,
+                            "source": "header_block"
+                        })
+                else:
+                    window.console.error(f"❌ Data is not a dictionary: {type(data)}")
+                    invalid.append({
+                        "error": f"Invalid data type: {type(data)}",
+                        "student_phone": phone,
+                        "source": "header_block"
+                    })
+            else:
+                window.console.error(f"❌ Failed to decode data: {fmt}")
+                snippet = text[max(0, start_idx - 200):start_idx + 200]
+                invalid.append({
+                    "error": fmt,
+                    "student_phone": phone,
+                    "source": "header_block",
+                    "raw_excerpt": snippet.strip()
+                })
+
+        # 3️⃣ Handle stray base64 chunks
+        stray_matches = list(re.finditer(r"\b[A-Za-z0-9+/=]{80,}\b", text))
+        window.console.log(f"\n🔍 Found {len(stray_matches)} potential stray base64 chunks")
+
+        for match in stray_matches:
+            # Skip base64 inside already processed blocks
+            if any(b.start() <= match.start() <= b.end() for b in export_blocks):
+                continue
+
+            window.console.log(f"📦 Processing stray chunk at position {match.start()}")
+            clean = re.sub(r"[\s\r\n]+", "", match.group(0))
+            phone = self.extract_phone_from_context(text, match.start())
+            data, fmt = self.decode_base64_data(clean)
+
+            if data:
+                if "problem_states" in data:
+                    window.console.log("🆕 Stray chunk is NEW format")
+                    subs.extend(self.process_export_data(data, "new_format", phone))
+                elif "problems" in data:
+                    window.console.log("📦 Stray chunk is OLD format")
+                    subs.extend(self.process_export_data_old(data, fmt, phone))
+
+        total = len(subs) + len(invalid)
+        window.console.log(f"\n" + "=" * 80)
+        window.console.log(f"🎉 PARSING COMPLETE")
+        window.console.log(f"✅ Valid submissions: {len(subs)}")
+        window.console.log(f"❌ Invalid entries: {len(invalid)}")
+        window.console.log(f"📊 Total: {total}")
+        window.console.log("=" * 80 + "\n")
+
+        return {"submissions": subs, "invalid": invalid, "total": total}
+
+    def __init__(self):
+        self.app = None
+        self.analytics_data = []
+        self.debug_mode = False
+        self.ignored_duplicates = []  # stores same-student duplicate exports (ignored)
+
+    # ============================================================
+    # INITIALIZATION / EVENTS
+    # ============================================================
+    def initialize(self):
+        self.bind_events()
+
+    def bind_events(self):
+        from pyodide.ffi import create_proxy
+        from js import document
+        bindings = [
+            ("#analyzeBtn", self.analyze_submissions),
+            ("#clearAnalyticsBtn", self.clear_analytics),
+            ("#exportAnalyticsBtn", self.export_analytics),
+        ]
+        for selector, handler in bindings:
+            element = document.querySelector(selector)
+            if element:
+                element.addEventListener("click", create_proxy(handler))
+
+    # ============================================================
+    # LATEX / MATRIX HANDLER
+    # ============================================================
+    def detect_and_convert_matrix(self, latex_str):
+        import re
+        if not latex_str or not isinstance(latex_str, str):
+            return ""
+
+        latex_str = latex_str.strip()
+
+        # Auto-wrap if it's plain numbers separated by spaces or commas
+        if re.match(r"^\s*[\d\s,;.-]+\s*$", latex_str):
+            # Convert comma/semicolon-separated into rows
+            parts = re.split(r"[;,]", latex_str.strip())
+            if len(parts) > 1:
+                try:
+                    rows = [" ".join(p.strip().split()) for p in parts if p.strip()]
+                    return "\\begin{bmatrix}" + r"\\ ".join(rows) + "\\end{bmatrix}"
+                except:
+                    return latex_str
+
+        # Normalize matrix forms
+        latex_str = latex_str.replace("\\begin{matrix}", "\\begin{bmatrix}")
+        latex_str = latex_str.replace("\\end{matrix}", "\\end{bmatrix}")
+
+        # Fix unbalanced delimiters (extra safety)
+        if "\\begin{bmatrix}" in latex_str and "\\end{bmatrix}" not in latex_str:
+            latex_str += "\\end{bmatrix}"
+        if "\\end{bmatrix}" in latex_str and "\\begin{bmatrix}" not in latex_str:
+            latex_str = "\\begin{bmatrix}" + latex_str
+
+        return latex_str
+
+    # ============================================================
+    # PHONE NORMALIZATION & CONTEXT EXTRACTION
+    # ============================================================
+    def normalize_phone(self, p):
+        import re
+        if not p:
+            return ""
+        p = re.sub(r"[^\d+]", "", str(p))
+        if p.startswith("0"):
+            p = "+62" + p[1:]
+        elif p.startswith("62") and not p.startswith("+"):
+            p = "+" + p
+        elif not p.startswith("+") and len(p) > 8:
+            p = "+" + p
+        return p
+
+    def extract_phone_from_context(self, text, base64_start_pos):
+        import re
+        # guard
+        if text is None:
+            return None
+
+        context_start = max(0, base64_start_pos - 1000)
+        context = text[context_start:base64_start_pos] if base64_start_pos < len(text) else text
+
+        lines = context.split("\n")
+        lines.reverse()
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+
+            if "[" in line and "]" in line and ":" in line:
+                try:
+                    bracket_end = line.find("]")
+                    colon_pos = line.find(":", bracket_end)
+                    if bracket_end != -1 and colon_pos != -1 and colon_pos > bracket_end:
+                        phone_part = line[bracket_end + 1 : colon_pos].strip()
+                        if phone_part and ("+62" in phone_part or phone_part.startswith("0") or phone_part.startswith("62")):
+                            normalized = self.normalize_phone(phone_part)
+                            if normalized:
+                                return normalized
+                except:
+                    pass
+
+            phone_match = re.search(r"(\+62[\s\-\d()]+):", line)
+            if phone_match:
+                normalized = self.normalize_phone(phone_match.group(1).strip())
+                if normalized:
+                    return normalized
+
+            zero_match = re.search(r"(0[\s\-\d()]+):", line)
+            if zero_match:
+                normalized = self.normalize_phone(zero_match.group(1).strip())
+                if normalized:
+                    return normalized
+
+        return None
+
+    # ============================================================
+    # ROSTER LOOKUP
+    # ============================================================
+    def find_student_in_roster(self, phone):
+        if not phone or not getattr(self.app, "student_roster", None):
+            return None
+
+        normalized_input = self.normalize_phone(phone)
+        if not normalized_input:
+            return None
+
+        # Direct match
+        roster = self.app.student_roster
+        if normalized_input in roster:
+            return roster[normalized_input]
+
+        # Try normalizing roster keys
+        for roster_phone, info in roster.items():
+            if self.normalize_phone(roster_phone) == normalized_input:
+                return info
+
+        # Suffix match fallback (last 9-10 digits)
+        if len(normalized_input) >= 9:
+            input_suffix = normalized_input[-10:]
+            for roster_phone, info in roster.items():
+                normalized_roster = self.normalize_phone(roster_phone)
+                if len(normalized_roster) >= 9 and normalized_roster[-10:] == input_suffix:
+                    return info
+
+        return None
+
+    # ============================================================
+    # BASE64 / BROTLI / JSON DECODING
+    # ============================================================
+    def decode_base64_data(self, b64_data):
+        import base64, brotli, json
+        try:
+            decoded = base64.b64decode(b64_data)
+        except Exception as e:
+            return (None, f"base64 decode error: {e}")
+
+        try:
+            out = brotli.decompress(decoded).decode("utf-8")
+            return (json.loads(out), "brotli")
+        except:
+            try:
+                out = decoded.decode("utf-8")
+                return (json.loads(out), "json")
+            except Exception as e:
+                return (None, f"json decode error: {e}")
+
+    # ============================================================
+    # TELEGRAM PARTS RECONSTRUCTION
+    # ============================================================
+    def reconstruct_telegram_parts(self, text):
+        import re
+        if "=== STUDENT PROGRESS EXPORT (Part" not in text:
+            return (None, 0)
+
+        pattern = r"===\s*STUDENT PROGRESS EXPORT\s*\(Part\s*(\d+)\s*/\s*(\d+)\)\s*===\s*(.*?)\s*===\s*END PART\s*\1\s*==="
+        matches = list(re.finditer(pattern, text, re.DOTALL | re.IGNORECASE))
+        if not matches:
+            return (None, 0)
+
+        parts = {}
+        total_parts = 0
+        for m in matches:
+            pnum = int(m.group(1))
+            total = int(m.group(2))
+            content = re.sub(r"[\s\r\n]+", "", m.group(3).strip())
+            parts[pnum] = content
+            total_parts = max(total_parts, total)
+
+        reconstructed = "".join(parts.get(i, "") for i in range(1, total_parts + 1))
+        return (reconstructed if reconstructed else None, len(parts))
+
+    # ============================================================
+    # PROCESS EXPORT DATA
+    # ============================================================
+    def process_export_data(self, data, format_type, phone_from_message=None, telegram_parts=0):
+        """Process the NEW export format from Problem Solver app with extensive debugging"""
+        import json, hashlib
+        from js import window
+
+        window.console.log("=" * 60)
+        window.console.log("🔍 PROCESS_EXPORT_DATA CALLED")
+        window.console.log("=" * 60)
+
+        # Log the raw data structure
+        window.console.log(f"📦 Data type: {type(data)}")
+        window.console.log(f"📦 Data keys: {list(data.keys()) if isinstance(data, dict) else 'NOT A DICT'}")
+
+        # Check for key fields
+        has_problem_states = "problem_states" in data if isinstance(data, dict) else False
+        has_problem_set = "problem_set" in data if isinstance(data, dict) else False
+        has_problems = "problems" in data if isinstance(data, dict) else False
+
+        window.console.log(f"✓ Has problem_states: {has_problem_states}")
+        window.console.log(f"✓ Has problem_set: {has_problem_set}")
+        window.console.log(f"✓ Has problems (old format): {has_problems}")
+
+        # If it's the NEW format
+        if has_problem_states and has_problem_set:
+            window.console.log("🆕 Processing NEW format (v2.0)")
+
+            subs = []
+            export_timestamp = str(window.Date.new().getTime())
+
+            # Generate export ID
+            export_id_source = f"{data.get('problem_set_id', '')}_{data.get('export_date', '')}_{export_timestamp}"
+            export_id = hashlib.md5(export_id_source.encode()).hexdigest()
+            window.console.log(f"🆔 Export ID: {export_id}")
+
+            # Extract metadata
+            problem_set_id = data.get("problem_set_id", "unknown")
+            export_date = data.get("export_date", window.Date.new().toISOString())
+            problem_set = data.get("problem_set", [])
+            problem_states = data.get("problem_states", {})
+
+            window.console.log(f"📋 Problem set ID: {problem_set_id}")
+            window.console.log(f"📅 Export date: {export_date}")
+            window.console.log(f"📚 Problem set length: {len(problem_set)}")
+            window.console.log(f"📊 Problem states keys: {list(problem_states.keys())}")
+
+            # Determine phone number
+            phone = phone_from_message if phone_from_message else "anonymous"
+            window.console.log(f"📱 Phone: {phone}")
+
+            # Process each problem
+            for prob_idx_str, step_states in problem_states.items():
+                window.console.log(f"\n--- Processing problem index: {prob_idx_str} ---")
+
+                prob_idx = int(prob_idx_str)
+                window.console.log(f"📍 Problem index (int): {prob_idx}")
+                window.console.log(f"📍 Number of steps: {len(step_states)}")
+
+                # Get problem definition
+                if prob_idx >= len(problem_set):
+                    window.console.warn(f"⚠️ Problem index {prob_idx} out of range (problem_set length: {len(problem_set)})")
+                    continue
+
+                problem_def = problem_set[prob_idx]
+                window.console.log(f"📖 Problem definition keys: {list(problem_def.keys())}")
+
+                problem_title = problem_def.get("title", f"Problem {prob_idx + 1}")
+                window.console.log(f"📝 Problem title: {problem_title}")
+
+                # Calculate summary statistics
+                total_steps = len(step_states)
+                finalized_steps = sum(1 for s in step_states if s.get("finalized", False))
+                correct_steps = sum(1 for s in step_states if s.get("correct", False))
+                total_attempts = sum(s.get("attempts", 0) for s in step_states)
+                total_finalize_attempts = sum(s.get("finalize_attempts", 0) for s in step_states)
+
+                window.console.log(f"📊 Statistics:")
+                window.console.log(f"  - Total steps: {total_steps}")
+                window.console.log(f"  - Finalized: {finalized_steps}")
+                window.console.log(f"  - Correct: {correct_steps}")
+                window.console.log(f"  - Total attempts: {total_attempts}")
+                window.console.log(f"  - Total finalize attempts: {total_finalize_attempts}")
+
+                # Build steps progress array
+                steps_progress = []
+                for step_idx, step_state in enumerate(step_states):
+                    window.console.log(f"  📌 Step {step_idx + 1}:")
+                    window.console.log(f"    - Keys: {list(step_state.keys())}")
+                    window.console.log(f"    - Finalized: {step_state.get('finalized', False)}")
+                    window.console.log(f"    - Correct: {step_state.get('correct', False)}")
+                    window.console.log(f"    - Attempts: {len(step_state.get('attempt_history', []))}")
+
+                    step_progress = {
+                        "step_number": step_idx + 1,
+                        "finalized": step_state.get("finalized", False),
+                        "correct": step_state.get("correct", False),
+                        "structure_correct": step_state.get("structure_correct", False),
+                        "attempts": []
+                    }
+
+                    # Add attempt history
+                    attempt_history = step_state.get("attempt_history", [])
+                    for att_idx, attempt in enumerate(attempt_history):
+                        window.console.log(f"      ✏️ Attempt {att_idx + 1}: {attempt.get('correct', False)}")
+                        step_progress["attempts"].append({
+                            "answer_latex": attempt.get("answer_latex", ""),
+                            "expression": step_state.get("step", {}).get("expression", ""),
+                            "correct": attempt.get("correct", False),
+                            "time_taken_seconds": attempt.get("time_taken_seconds", 0)
+                        })
+
+                    steps_progress.append(step_progress)
+
+                # Build submission object
+                sub = {
+                    "export_id": export_id,
+                    "export_metadata": {
+                        "problem_set_id": problem_set_id,
+                        "export_date": export_date,
+                        "format_version": "2.0",
+                        "student_phone": phone,
+                        "student_name": "Unknown"
+                    },
+                    "student_phone": phone,
+                    "student_name": "Unknown",
+                    "problem": {
+                        "number": prob_idx + 1,
+                        "title": problem_title,
+                        "id": problem_set_id + "_" + str(prob_idx)
+                    },
+                    "summary": {
+                        "total_steps": total_steps,
+                        "finalized_steps": finalized_steps,
+                        "correct_steps": correct_steps,
+                        "total_attempts": total_attempts,
+                        "total_finalize_attempts": total_finalize_attempts,
+                        "completion_rate": round((finalized_steps / total_steps * 100) if total_steps > 0 else 0, 2)
+                    },
+                    "steps_progress": steps_progress,
+                    "total_time_seconds": 0,
+                    "analysis_timestamp": window.Date.new().toISOString()
+                }
+
+                window.console.log(f"✅ Created submission for problem {prob_idx + 1}")
+                subs.append(sub)
+
+            window.console.log(f"\n🎉 Total submissions created: {len(subs)}")
+            window.console.log("=" * 60)
+            return subs
+
+        # If it's the OLD format
+        elif has_problems:
+            window.console.log("📦 Processing OLD format (v1.0)")
+            return self.process_export_data_old(data, format_type, phone_from_message)
+
+        # Unknown format
+        else:
+            window.console.error("❌ Unknown export format!")
+            window.console.error(f"Data structure: {json.dumps(data, indent=2)[:500]}")
+            return []
+                       # ============================================================
+    # MERGE ROSTER DATA
+    # ============================================================
+    def merge_roster_data(self, submissions):
+        if not submissions:
+            return submissions
+
+        for sub in submissions:
+            phone = sub.get("student_phone", "")
+            roster_info = self.find_student_in_roster(phone)
+
+            if roster_info:
+                sub["student_name"] = roster_info.get("name", sub.get("student_name", "Unknown"))
+                sub["registration_number"] = roster_info.get("registration_number", "")
+                if "export_metadata" not in sub:
+                    sub["export_metadata"] = {}
+                sub["export_metadata"]["student_name"] = sub["student_name"]
+                sub["export_metadata"]["registration_number"] = sub["registration_number"]
+
+        return submissions
+
+    # ============================================================
+    # SCORE HELPERS
+    # ============================================================
+    def calculate_student_score(self, student_subs):
+        total_steps = sum(s.get("summary", {}).get("total_steps", 0) for s in student_subs)
+        finalized = sum(s.get("summary", {}).get("finalized_steps", 0) for s in student_subs)
+
+        if total_steps == 0:
+            return 0.0
+
+        try:
+            return round((finalized / total_steps) * 100, 2)
+        except:
+            return 0.0
+
+    def get_score_class(self, score):
+        if score >= 80:
+            return "score-high"
+        elif score >= 50:
+            return "score-medium"
+        else:
+            return "score-low"
+
+    # ============================================================
+    # HASH EXPORT DATA
+    # ============================================================
+    def hash_export_data(self, export_id, submissions):
+        import json, hashlib
+        export_subs = [s for s in submissions if s.get("export_id") == export_id]
+        if not export_subs:
+            return None
+
+        export_subs.sort(key=lambda x: x.get("problem", {}).get("number", 0))
+        export_data = []
+
+        for sub in export_subs:
+            steps = sub.get("steps_progress", []) or []
+            problem_data = {
+                "problem_number": sub.get("problem", {}).get("number"),
+                "steps": []
+            }
+
+            for step in steps:
+                if isinstance(step, dict):
+                    step_info = {
+                        "step_number": step.get("step_number"),
+                        "finalized": step.get("finalized", False),
+                        "attempts": []
+                    }
+                    for att in step.get("attempts", []) or []:
+                        if isinstance(att, dict):
+                            step_info["attempts"].append({
+                                "answer": att.get("answer_latex", ""),
+                                "correct": att.get("correct", False)
+                            })
+                    problem_data["steps"].append(step_info)
+
+            export_data.append(problem_data)
+
+        json_str = json.dumps(export_data, sort_keys=True, separators=(',', ':'))
+        return hashlib.sha256(json_str.encode()).hexdigest()
+
+    # ============================================================
+    # CHEATING DETECTION (ignores same-student duplicates)
+    # ============================================================
+    def is_unworked_submission(self, sub):
+        """Check if a submission represents an unworked problem"""
+        summary = sub.get("summary", {})
+        steps_progress = sub.get("steps_progress", [])
+
+        # Check summary statistics
+        finalized_steps = summary.get("finalized_steps", 0)
+        total_attempts = summary.get("total_attempts", 0)
+        correct_steps = summary.get("correct_steps", 0)
+
+        # If there are finalized steps, attempts, or correct steps, it's worked
+        if finalized_steps > 0 or total_attempts > 0 or correct_steps > 0:
+            return False
+
+        # Check step-level details
+        for step in steps_progress:
+            if isinstance(step, dict):
+                step_finalized = step.get("finalized", False)
+                step_attempts = step.get("attempts", [])
+                step_correct = step.get("correct", False)
+
+                # If any step has attempts, is finalized, or is correct, it's worked
+                if step_finalized or step_correct or (step_attempts and len(step_attempts) > 0):
+                    return False
+
+        # If we get here, no work was done
+        return True
+
+    def detect_cheating(self, submissions):
+        from collections import defaultdict
+        # reset ignored list
+        ignored_duplicates = []
+
+        if len(submissions) < 2:
+            self.ignored_duplicates = []
+            return []
+
+        # Group submissions by (student, problem_number) first - ignore content hash for now
+        student_problem_groups = defaultdict(list)
+
+        for sub in submissions:
+            # Create student identifier
+            student_key = (
+                sub.get("registration_number")
+                or self.normalize_phone(sub.get("student_phone", ""))
+                or sub.get("student_name", "").strip().lower()
+            )
+
+            problem_number = sub.get("problem", {}).get("number", 0)
+            group_key = (student_key, problem_number)
+            student_problem_groups[group_key].append(sub)
+
+        # Process each student-problem group to keep only the most complete submission
+        kept_submissions = []
+
+        for group_key, group_submissions in student_problem_groups.items():
+            student_key, problem_number = group_key
+
+            if len(group_submissions) == 1:
+                # Only one submission for this student-problem, keep it
+                kept_submissions.extend(group_submissions)
+            else:
+                # Multiple submissions for same student-problem, keep the most complete
+                def get_completion_score(sub):
+                    """Calculate how complete a submission is"""
+                    summary = sub.get("summary", {})
+                    finalized_steps = summary.get("finalized_steps", 0)
+                    total_attempts = summary.get("total_attempts", 0)
+                    correct_steps = summary.get("correct_steps", 0)
+                    total_steps = summary.get("total_steps", 1)  # avoid division by zero
+
+                    # Score based on: finalized steps (most important), then attempts, then timestamp
+                    completion_rate = finalized_steps / total_steps if total_steps > 0 else 0
+                    return (
+                        completion_rate,  # Primary: completion rate
+                        finalized_steps,  # Secondary: absolute finalized steps
+                        total_attempts,   # Tertiary: total attempts made
+                        correct_steps,    # Fourth: correct steps
+                        sub.get("analysis_timestamp", "")  # Tiebreaker: later timestamp
+                    )
+
+                # Sort by completion score (descending) to get most complete first
+                group_submissions.sort(key=get_completion_score, reverse=True)
+
+                # Keep the most complete submission
+                best_submission = group_submissions[0]
+                kept_submissions.append(best_submission)
+
+                # Mark the rest as duplicates
+                for duplicate_sub in group_submissions[1:]:
+                    best_summary = best_submission.get("summary", {})
+                    dup_summary = duplicate_sub.get("summary", {})
+
+                    reason = f"Less complete submission of Problem {problem_number} (kept: {best_summary.get('finalized_steps', 0)}/{best_summary.get('total_steps', 0)} finalized, discarded: {dup_summary.get('finalized_steps', 0)}/{dup_summary.get('total_steps', 0)} finalized)"
+
+                    ignored_duplicates.append({
+                        "student_phone": duplicate_sub.get("student_phone", ""),
+                        "student_name": duplicate_sub.get("student_name", "Unknown"),
+                        "registration_number": duplicate_sub.get("registration_number", ""),
+                        "export_id": duplicate_sub.get("export_id", ""),
+                        "problem_number": duplicate_sub.get("problem", {}).get("number", 0),
+                        "problem_title": duplicate_sub.get("problem", {}).get("title", ""),
+                        "export_timestamp": duplicate_sub.get("analysis_timestamp", ""),
+                        "reason": reason
+                    })
+
+        # Now create problem-level content hashes for the kept submissions only
+        problem_hashes = {}
+        for sub in kept_submissions:
+            problem_hash = self.hash_problem_data(sub)
+            if problem_hash:
+                problem_hashes[f"{sub.get('export_id', '')}_{sub.get('problem', {}).get('number', 0)}"] = problem_hash
+
+        # Now detect cheating (different students with identical content) using kept submissions
+        # Group by (problem_number, content_hash) to find different students with same content
+        content_groups = defaultdict(list)
+
+        # Group kept submissions by content hash
+        for sub in kept_submissions:
+            problem_number = sub.get("problem", {}).get("number", 0)
+            submission_key = f"{sub.get('export_id', '')}_{problem_number}"
+            problem_hash = problem_hashes.get(submission_key)
+
+            if problem_hash:
+                content_key = (problem_number, problem_hash)
+                content_groups[content_key].append(sub)
+
+            # Build cheating groups
+            cheating_groups = []
+            group_number = 1
+
+            for content_key, group_submissions in content_groups.items():
+                problem_number, problem_hash = content_key
+
+                if len(group_submissions) <= 1:
+                    continue
+
+                # Check if all submissions in this group are unworked
+                all_unworked = all(self.is_unworked_submission(sub) for sub in group_submissions)
+                if all_unworked:
+                    # Skip this group - multiple students with same unworked problem is not cheating
+                    continue
+
+                # Group by student to ensure we're looking at different students
+                students_map = {}
+                for sub in group_submissions:
+                    student_key = (
+                        sub.get("registration_number")
+                        or self.normalize_phone(sub.get("student_phone", ""))
+                        or sub.get("student_name", "").strip().lower()
+                    )
+                    if student_key not in students_map:
+                        students_map[student_key] = sub
+
+                # If multiple different students have identical content, it's cheating
+                if len(students_map) > 1:
+                    unique_students = list(students_map.values())
+
+                    cheating_groups.append({
+                        "group_number": group_number,
+                        "problems": [f"Problem {problem_number}: {unique_students[0].get('problem', {}).get('title', 'Unknown')}"],
+                        "problem_count": 1,
+                        "hash": problem_hash[:16] + "...",
+                        "students": [{
+                            "name": sub.get("student_name", "Unknown"),
+                            "reg_no": sub.get("registration_number", ""),
+                            "phone": sub.get("student_phone", ""),
+                            "export_timestamp": sub.get("analysis_timestamp", ""),
+                            "export_id": sub.get("export_id", "")
+                        } for sub in unique_students],
+                        "count": len(unique_students)
+                    })
+                    group_number += 1
+
+        # Persist the ignored duplicates list for DisplayManager to use
+        self.ignored_duplicates = ignored_duplicates
+        return cheating_groups
+
+    # ============================================================
+    # UI ACTIONS: analyze / clear / export
+    # ============================================================
+    def analyze_submissions(self, e=None):
+        from js import document, window
+        import asyncio
+
+        text = document.querySelector("#pasteProgressData").value
+        parsed = self.parse_submissions(text)
+        submissions = parsed["submissions"]
+        invalid = parsed["invalid"]
+
+        if not submissions and not invalid:
+            window.alert("No valid submissions found.")
+            return
+
+        submissions = self.merge_roster_data(submissions)
+
+        self.analytics_data.extend(submissions)
+        self.app.analytics_data = self.analytics_data
+        document.querySelector("#pasteProgressData").value = ""
+
+        # Update UI
+        self.app.display_manager.display_analytics(self.analytics_data, invalid)
+
+        # Persist asynchronously
+        asyncio.ensure_future(self.app.persistence_manager.save_analytics_data())
+
+        window.alert(f"✅ Added {len(submissions)} submissions.\nInvalid: {len(invalid)}")
+
+    def clear_analytics(self, e=None):
+        from js import document
+        import asyncio
+
+        self.analytics_data = []
+        self.app.analytics_data = []
+        document.querySelector("#analyticsResults").innerHTML = ""
+
+        asyncio.ensure_future(self.app.persistence_manager.clear_stored_analytics())
+
+        from js import window
+        window.alert("Analytics cleared.")
+
+    def export_analytics(self, e=None):
+        from js import window
+        import json
+
+        if not self.analytics_data:
+            window.alert("No analytics data to export.")
+            return
+
+        cheating_groups = self.detect_cheating(self.analytics_data)
+        ignored = getattr(self, "ignored_duplicates", [])
+
+        report = {
+            "metadata": {
+                "generated": window.Date.new().toISOString(),
+                "total": len(self.analytics_data),
+                "cheating_groups": len(cheating_groups),
+                "ignored_duplicates": len(ignored)
+            },
+            "data": self.analytics_data,
+            "ignored": ignored,
+            "cheating_report": cheating_groups
+        }
+
+        js_text = json.dumps(report, indent=2)
+        blob = window.Blob.new([js_text], {"type": "application/json"})
+        url = window.URL.createObjectURL(blob)
+
+        a = window.document.createElement("a")
+        a.href = url
+        a.download = f"analytics_{window.Date.new().toISOString().replace(':','-')}.json"
+        window.document.body.appendChild(a)
+        a.click()
+        a.remove()
+        window.URL.revokeObjectURL(url)
+
+        msg = f"✅ Exported {len(self.analytics_data)} submissions."
+        if cheating_groups:
+            msg += f"\n\n🚨 Found {len(cheating_groups)} cheating groups."
+        if ignored:
+            msg += f"\n🕓 Ignored {len(ignored)} duplicate submissions."
+        window.alert(msg)
+
+    # ============================================================
+    # UTILITY: refresh with roster then persist
+    # ============================================================
+    def refresh_analytics_with_roster(self):
+        if self.analytics_data and getattr(self.app, "student_roster", None):
+            self.analytics_data = self.merge_roster_data(list(self.analytics_data))
+            self.app.analytics_data = self.analytics_data
+            self.app.display_manager.display_analytics(self.analytics_data, [])
+
+            import asyncio
+            asyncio.ensure_future(self.app.persistence_manager.save_analytics_data())
+
+class DisplayManager:
+    def display_cheating_panel(self, cheating_groups, results):
+        """Display cheating detection results"""
+        if not cheating_groups:
+            return
+
+        panel = document.createElement("div")
+        panel.className = "panel"
+        panel.style.background = "#fef2f2"
+        panel.style.border = "2px solid #dc2626"
+
+        panel.innerHTML = f"""
+            <h3 style='margin-top:0;color:#dc2626;'>🚨 Cheating Detection Results</h3>
+            <div style='margin-bottom:16px;color:#991b1b;font-weight:600;'>
+                Found {len(cheating_groups)} group(s) with identical submissions from different students:
+            </div>
+        """
+
+        for group in cheating_groups:
+            group_div = document.createElement("div")
+            group_div.style.cssText = "background:#fff;border:1px solid #dc2626;border-radius:8px;padding:12px;margin-bottom:12px;"
+
+            students_html = ""
+            for student in group["students"]:
+                students_html += f"""
+                    <div style='padding:6px;border-bottom:1px solid #e5e7eb;'>
+                        <strong>{html.escape(student['name'])}</strong> - {html.escape(student['reg_no'])} - {html.escape(student['phone'])}
+                        <div style='font-size:12px;color:#6b7280;'>Export ID: {student['export_id'][:16]}...</div>
+                    </div>
+                """
+
+            problems_list = "<br>".join(f"• {html.escape(p)}" for p in group["problems"])
+
+            group_div.innerHTML = f"""
+                <div style='font-weight:700;color:#dc2626;margin-bottom:8px;'>
+                    Group #{group['group_number']} - {group['count']} students with identical content
+                </div>
+                <div style='margin-bottom:8px;'>
+                    <strong>Problems:</strong><br>{problems_list}
+                </div>
+                <div style='margin-bottom:8px;'>
+                    <strong>Content Hash:</strong> <code>{group['hash']}</code>
+                </div>
+                <div style='background:#f9fafb;border-radius:6px;padding:8px;'>
+                    <strong>Students involved:</strong>
+                    {students_html}
+                </div>
+            """
+
+            panel.appendChild(group_div)
+
+        results.appendChild(panel)
+
+    def __init__(self):
+        self.app = None
+        self.debug_mode = False
+        self.cheating_groups = []
+        self.current_sort = {"column": "name", "direction": "asc"}
+        self.status_sort = {"column": "reg", "direction": "asc"}
+
+    # =====================================================
+    # INITIALIZE
+    # =====================================================
+    def initialize(self):
+        pass
+
+    # =====================================================
+    # MAIN DISPLAY ENTRY
+    # =====================================================
+    def display_analytics(self, submissions, invalid):
+        results = document.querySelector("#analyticsResults")
+        if not results:
+            return
+        results.innerHTML = ""
+
+        # Run duplicate detection first to get ignored list
+        self.cheating_groups = self.app.progress_analyzer.detect_cheating(submissions)
+        self.ignored_list = getattr(self.app.progress_analyzer, "ignored_duplicates", [])
+
+        # Filter out ignored duplicates from submissions (now works at problem level)
+        ignored_submission_keys = set()
+        for ignored in self.ignored_list:
+            key = f"{ignored.get('export_id', '')}_{ignored.get('problem_number', 0)}"
+            ignored_submission_keys.add(key)
+
+        # Filter submissions to exclude ignored duplicates
+        filtered_submissions = []
+        for sub in submissions:
+            key = f"{sub.get('export_id', '')}_{sub.get('problem', {}).get('number', 0)}"
+            if key not in ignored_submission_keys:
+                filtered_submissions.append(sub)
+
+        window.console.log(f"Original submissions: {len(submissions)}, After filtering problem-level duplicates: {len(filtered_submissions)}")
+
+        # Use filtered submissions for all processing
+        groups = self.group_by_student(filtered_submissions)
+        self.invalid_list = invalid or []
+
+        cheating_phones = set()
+        phone_to_cheat_group = {}
+        for group in self.cheating_groups:
+            for student in group["students"]:
+                cheating_phones.add(student["phone"])
+                phone_to_cheat_group[student["phone"]] = group["group_number"]
+
+        # Use filtered_submissions for summary and tables
+        summary_panel = self.create_summary_panel(groups, filtered_submissions)
+        results.appendChild(summary_panel)
+
+        if self.cheating_groups:
+            self.display_cheating_panel(self.cheating_groups, results)
+
+        table_panel = self.create_student_table(groups, filtered_submissions, cheating_phones)
+        results.appendChild(table_panel)
+
+        status_panel = self.create_status_table(groups, cheating_phones, phone_to_cheat_group)
+        results.appendChild(status_panel)
+
+        if invalid:
+            invalid_panel = self.create_invalid_panel(invalid)
+            results.appendChild(invalid_panel)
+
+        self.attach_table_event_handlers()
+
+        try:
+            if hasattr(window, "MathJax"):
+                window.MathJax.typesetPromise()
+        except:
+            pass
+
+    # =====================================================
+    # SUMMARY PANEL
+    # =====================================================
+    def create_summary_panel(self, groups, submissions):
+        panel = document.createElement("div")
+        panel.className = "panel"
+
+        total_students = len(self.app.student_roster) if self.app.student_roster else 0
+        submitted = len(groups)
+        matched = sum(1 for phone in groups.keys() if phone in self.app.student_roster)
+        cheating = sum(g["count"] for g in self.cheating_groups if g["count"] > 1)
+        invalid = len(self.invalid_list) if hasattr(self, "invalid_list") else 0
+        ignored = len(self.ignored_list) if hasattr(self, "ignored_list") else 0
+
+        panel.innerHTML = f"""
+            <h3 style='margin-top:0;'>📊 Summary</h3>
+            <div class='stats-grid'>
+                <div class='stats-card' style='background:#e0f2fe;'>
+                    <div class='stats-number'>{total_students}</div>
+                    <div class='stats-label'>Total Students</div>
+                </div>
+                <div class='stats-card' style='background:#fef3c7;'>
+                    <div class='stats-number'>{submitted}</div>
+                    <div class='stats-label'>Unique Submissions</div>
+                </div>
+                <div class='stats-card' style='background:#dcfce7;'>
+                    <div class='stats-number'>{matched}</div>
+                    <div class='stats-label'>Matched</div>
+                </div>
+                <div class='stats-card' style='background:#fee2e2;'>
+                    <div class='stats-number'>{cheating}</div>
+                    <div class='stats-label'>Cheating</div>
+                </div>
+                <div class='stats-card' style='background:#fef2f2;'>
+                    <div class='stats-number'>{invalid}</div>
+                    <div class='stats-label'>Invalid</div>
+                </div>
+                <div class='stats-card' style='background:#f3f4f6;'>
+                    <div class='stats-number'>{ignored}</div>
+                    <div class='stats-label'>Duplicates Filtered</div>
+                </div>
+            </div>
+        """
+        return panel
+
+    # =====================================================
+    # STUDENT TABLE
+    # =====================================================
+    def create_student_table(self, groups, submissions, cheating_phones):
+        panel = document.createElement("div")
+        panel.className = "panel"
+        panel.innerHTML = """
+            <h3 style='margin-top:0;'>🏫 Student Progress</h3>
+            <div style='overflow-x:auto;'>
+            <table id='scoreTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
+                <thead>
+                    <tr style='background:#f3f4f6;'>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Reg No</th>
+                        <th>Score</th>
+                        <th>Phone</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id='scoreTableBody'></tbody>
+            </table>
+            </div>
+        """
+        tbody = panel.querySelector("#scoreTableBody")
+        student_data = []
+
+        for phone, subs in groups.items():
+            name = subs[0].get("student_name", "Unknown")
+            reg = subs[0].get("registration_number", "")
+            if name == "Unknown" and phone in self.app.student_roster:
+                name = self.app.student_roster[phone].get("name", "Unknown")
+                reg = self.app.student_roster[phone].get("registration_number", "")
+            is_cheating = phone in cheating_phones
+            score = -1 if is_cheating else self.app.progress_analyzer.calculate_student_score(subs)
+            student_data.append({
+                "phone": phone, "name": name, "reg": reg,
+                "score": score, "is_cheating": is_cheating, "subs": subs
+            })
+
+        sorted_data = self.sort_student_data(student_data)
+
+        for idx, student in enumerate(sorted_data, 1):
+            score_display = "—" if student["is_cheating"] else f"{student['score']}%"
+            cls = "score-low" if student["is_cheating"] else self.app.progress_analyzer.get_score_class(student["score"])
+            tr = document.createElement("tr")
+            tr.innerHTML = f"""
+                <td>{idx}</td>
+                <td>{html.escape(student['name'])}</td>
+                <td>{html.escape(str(student['reg']))}</td>
+                <td style='text-align:center;'><span class='score-badge {cls}'>{score_display}</span></td>
+                <td>{html.escape(student['phone'])}</td>
+                <td><button class='detail-toggle' data-phone='{html.escape(student['phone'])}'>🔽 Details</button></td>
+            """
+            tbody.appendChild(tr)
+            tbody.appendChild(self.create_detail_row(student["subs"]))
+        return panel
+
+    # =====================================================
+    # DETAIL ROW
+    # =====================================================
+    def create_detail_row(self, submissions):
+        tr = document.createElement("tr")
+        tr.className = "detail-row"
+        tr.style.display = "none"
+        td = document.createElement("td")
+        td.colSpan = 6
+
+        html_content = "<div style='padding:12px;background:#f8fafc;'>"
+        for s in submissions:
+            problem = s.get("problem", {})
+            title = problem.get("title", "")
+            steps = s.get("steps_progress", [])
+            summary = s.get("summary", {})
+            total = summary.get("total_steps", len(steps))
+            finalized = summary.get("finalized_steps", 0)
+            html_content += f"""
+            <div class='problem-card'>
+                <div class='problem-header'>
+                    <strong>Problem {problem.get('number', '?')}: {html.escape(title)}</strong>
+                    <span class='badge'>Steps: {finalized}/{total}</span>
+                </div>
+                <div class='problem-body' style='display:none;'>
+                    {self.create_steps_table_html(steps)}
+                </div>
+            </div>
+            """
+        html_content += "</div>"
+        td.innerHTML = html_content
+        tr.appendChild(td)
+        try:
+            if hasattr(window, "MathJax"):
+                window.MathJax.typesetPromise([td])
+        except:
+            pass
+        return tr
+
+    # =====================================================
+    # STEP TABLE (Flags)
+    # =====================================================
+    def create_steps_table_html(self, steps):
+        """Enhanced step display with finalize attempts"""
+        html_content = """
+        <table style='width:100%;border-collapse:collapse;font-size:13px;'>
+            <thead>
+                <tr style='background:#fafafa;'>
+                    <th style='padding:6px;text-align:left;'>Step</th>
+                    <th style='padding:6px;text-align:center;'>Status</th>
+                    <th style='padding:6px;text-align:left;'>Attempts</th>
+                </tr>
+            </thead>
+            <tbody>
+        """
+
+        for step in steps:
+            step_no = step.get("step_number", "?")
+            finalized = step.get("finalized", False)
+            correct = step.get("correct", False)
+            structure_correct = step.get("structure_correct", False)
+
+            # Status badge
+            if finalized and structure_correct:
+                status = "<span style='color:#059669;font-weight:600;'>✅ Finalized</span>"
+            elif correct:
+                status = "<span style='color:#d97706;font-weight:600;'>⚠️ Correct but not finalized</span>"
+            else:
+                status = "<span style='color:#dc2626;font-weight:600;'>❌ Incomplete</span>"
+
+            # Attempts display
+            attempts_html = "<div style='display:flex;flex-wrap:wrap;gap:8px;align-items:center;'>"
+            for att in step.get("attempts", []):
+                raw = att.get("answer_latex") or att.get("expression") or ""
+                latex_fixed = self.app.progress_analyzer.detect_and_convert_matrix(raw)
+                is_correct = att.get("correct", False)
+
+                if is_correct and finalized:
+                    flag_text, flag_color = "🔒 Finalized", "#166534"
+                elif is_correct and not finalized:
+                    flag_text, flag_color = "✅ Correct", "#15803d"
+                elif not is_correct and finalized:
+                    flag_text, flag_color = "⚠️ False Finalized", "#b45309"
+                else:
+                    flag_text, flag_color = "❌ False", "#991b1b"
+
+                attempts_html += f"""
+                    <div style='border:1px solid #e5e7eb;padding:6px 10px;border-radius:6px;background:#fff;
+                                 min-width:110px;text-align:center;'>
+                        <div style='font-size:12px;color:{flag_color};margin-bottom:4px;'>{flag_text}</div>
+                        <div class='mathjax-latex'>\({latex_fixed}\)</div>
+                    </div>
+                """
+            attempts_html += "</div>"
+
+            if not step.get("attempts"):
+                attempts_html = "<em style='color:#9ca3af;'>No attempts</em>"
+
+            html_content += f"""
+                <tr>
+                    <td style='padding:8px;vertical-align:top;font-weight:600;'>{step_no}</td>
+                    <td style='padding:8px;vertical-align:top;text-align:center;'>{status}</td>
+                    <td style='padding:8px;vertical-align:top;'>{attempts_html}</td>
+                </tr>
+            """
+
+        html_content += "</tbody></table>"
+        return html_content
+    # =====================================================
+    # STATUS TABLE (🆕 includes Ignored column)
+    # =====================================================
+    def create_status_table(self, groups, cheating_phones, phone_to_cheat_group):
+        panel = document.createElement("div")
+        panel.className = "panel"
+        panel.innerHTML = """
+            <h3 style='margin-top:0;'>📋 Submission Status (Extended)</h3>
+            <div style='overflow-x:auto;'>
+            <table id='statusTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
+                <thead>
+                    <tr style='background:#f3f4f6;'>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Reg No</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>✅ Success</th>
+                        <th>🕓 Ignored</th>
+                        <th>⚠️ Invalid</th>
+                        <th>🚨 Cheating</th>
+                    </tr>
+                </thead>
+                <tbody id='statusTableBody'></tbody>
+            </table>
+            </div>
+        """
+
+        tbody = panel.querySelector("#statusTableBody")
+        all_phones = set()
+        if self.app.student_roster:
+            all_phones.update(self.app.student_roster.keys())
+        all_phones.update(groups.keys())
+        for inv in self.invalid_list:
+            all_phones.add(inv.get("student_phone", "unknown"))
+        for group in self.cheating_groups:
+            for student in group["students"]:
+                all_phones.add(student["phone"])
+
+        invalid_counts = defaultdict(int)
+        for inv in self.invalid_list:
+            invalid_counts[inv.get("student_phone", "unknown")] += 1
+
+        plagiat_counts = defaultdict(int)
+        for group in self.cheating_groups:
+            for student in group["students"]:
+                plagiat_counts[student["phone"]] += 1
+
+        ignored_counts = defaultdict(int)
+        for dup in self.ignored_list:
+            ignored_counts[dup.get("student_phone", "unknown")] += 1
+
+        student_status_data = []
+        for phone in all_phones:
+            roster_info = self.app.student_roster.get(phone, {}) if self.app.student_roster else {}
+            name = roster_info.get("name", "Unknown")
+            reg = roster_info.get("registration_number", "")
+
+            success_exports = {sub.get("export_id") for sub in groups.get(phone, []) if sub.get("export_id")}
+            success_count = len(success_exports)
+            ignored_count = ignored_counts.get(phone, 0)
+            invalid_count = invalid_counts.get(phone, 0)
+            plagiat_count = plagiat_counts.get(phone, 0)
+
+            if plagiat_count > 0:
+                status, status_class, status_priority = f"Cheat #{phone_to_cheat_group.get(phone, '?')}", "score-low", 1
+            elif success_count > 0:
+                status, status_class, status_priority = "Submitted", "score-high", 3
+            elif invalid_count > 0:
+                status, status_class, status_priority = "Submitted", "score-medium", 4
+            else:
+                status, status_class, status_priority = "Not Submitted", "score-low", 5
+
+            student_status_data.append({
+                "phone": phone,
+                "name": name,
+                "reg": reg,
+                "status": status,
+                "status_class": status_class,
+                "status_priority": status_priority,
+                "success_count": success_count,
+                "ignored_count": ignored_count,
+                "invalid_count": invalid_count,
+                "plagiat_count": plagiat_count
+            })
+
+        sorted_status_data = self.sort_status_data(student_status_data)
+        for idx, s in enumerate(sorted_status_data, 1):
+            tr = document.createElement("tr")
+            tr.innerHTML = f"""
+                <td>{idx}</td>
+                <td>{html.escape(s['name'])}</td>
+                <td>{html.escape(str(s['reg']))}</td>
+                <td>{html.escape(s['phone'])}</td>
+                <td style='text-align:center;'><span class='score-badge {s['status_class']}'>{s['status']}</span></td>
+                <td style='text-align:center;'>{s['success_count']}</td>
+                <td style='text-align:center;'>{s['ignored_count']}</td>
+                <td style='text-align:center;'>{s['invalid_count']}</td>
+                <td style='text-align:center;'>{s['plagiat_count']}</td>
+            """
+            tbody.appendChild(tr)
+        return panel
+
+    # =====================================================
+    # INVALID PANEL
+    # =====================================================
+    def create_invalid_panel(self, invalid):
+        panel = document.createElement("div")
+        panel.className = "panel"
+        panel.innerHTML = "<h3 style='margin-top:0;'>⚠️ Invalid Entries (Details)</h3>"
+        for item in invalid:
+            phone = item.get("student_phone", "Unknown")
+            name = self.app.student_roster.get(phone, {}).get("name", "Unknown") if self.app.student_roster else "Unknown"
+            err = item.get("error", "Unknown error")
+            div = document.createElement("div")
+            div.className = "small"
+            div.style.color = "#b45309"
+            div.textContent = f"📱 {phone} — {name}: {err}"
+            panel.appendChild(div)
+        return panel
+
+    # =====================================================
+    # EVENT HANDLERS
+    # =====================================================
+    def attach_table_event_handlers(self):
+        from pyodide.ffi import create_proxy
+        tbody = document.querySelector("#scoreTableBody")
+        if not tbody:
+            return
+
+        def on_click(ev):
+            target = ev.target
+            if target.tagName == "BUTTON" and target.classList.contains("detail-toggle"):
+                tr = target.closest("tr")
+                detail_row = tr.nextElementSibling
+                if detail_row and "detail-row" in detail_row.className:
+                    if detail_row.style.display == "none":
+                        detail_row.style.display = "table-row"
+                        target.textContent = "🔼 Hide"
+                        try:
+                            if hasattr(window, "MathJax"):
+                                window.MathJax.typesetPromise([detail_row])
+                        except:
+                            pass
+                    else:
+                        detail_row.style.display = "none"
+                        target.textContent = "🔽 Details"
+            if target.classList.contains("problem-header"):
+                body = target.nextElementSibling
+                if body:
+                    if body.style.display in ("none", ""):
+                        body.style.display = "block"
+                        def delayed():
+                            try:
+                                if hasattr(window, "MathJax"):
+                                    window.MathJax.typesetPromise([body])
+                            except:
+                                pass
+                        window.setTimeout(create_proxy(delayed), 50)
+                    else:
+                        body.style.display = "none"
+
+        tbody.addEventListener("click", create_proxy(on_click))
+
+    # =====================================================
+    # SORT HELPERS
+    # =====================================================
+    def group_by_student(self, submissions):
+        from collections import defaultdict
+        groups = defaultdict(list)
+        for s in submissions:
+            groups[s.get("student_phone", "unknown")].append(s)
+        return groups
+
+    def sort_student_data(self, data):
+        import re
+        col, direction = self.current_sort["column"], self.current_sort["direction"]
+        def key(s):
+            if col == "name": return s["name"].lower()
+            elif col == "reg":
+                try: return int(re.sub(r"\D","",s["reg"]) or 0)
+                except: return 0
+            elif col == "score": return s["score"]
+            return s["name"].lower()
+        data = sorted(data, key=key, reverse=(direction == "desc"))
+        non_cheating = [d for d in data if not d["is_cheating"]]
+        cheating = [d for d in data if d["is_cheating"]]
+        return non_cheating + cheating
+
+    def sort_status_data(self, data):
+        import re
+        col, direction = self.status_sort["column"], self.status_sort["direction"]
+        def key(s):
+            if col == "name":
+                return s["name"].lower()
+            elif col == "reg":
+                try:
+                    return int(re.sub(r"\D", "", s["reg"]) or 0)
+                except:
+                    return 0
+            elif col == "status":
+                # status_priority first (lower is higher priority), then name
+                return (s.get("status_priority", 99), s.get("status", "").lower())
+            return s["name"].lower()
+        return sorted(data, key=key, reverse=(direction == "desc"))
+
+
+class PersistenceManager:
+    """Manages analytics data persistence with IndexedDB + interactive save popup (overwrite-safe)."""
+    # Add this helper method to PersistenceManager
+    def _show_loading_in_modal(self, modal, message):
+        """Show loading state in modal"""
+        modal.innerHTML = f'''
+            <div style="text-align: center; padding: 40px;">
+                <div class="spinner" style="margin: 0 auto 20px auto;"></div>
+                <div style="font-size: 16px; color: #64748b;">{message}</div>
+            </div>
+        '''
+    # =========================================================
+    # STARTUP MODAL
+    # =========================================================
+    async def show_startup_modal(self):
+        """Show modal on startup to load saved analytics"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        window.console.log("🚀 Showing startup modal...")
+
+        # Remove any existing modal
+        old_modal = document.querySelector("#startup-modal-overlay")
+        if old_modal:
+            old_modal.remove()
+
+        # Get list of saved sessions
+        saved_keys = await self.list_saved_keys("analytics")
+        window.console.log(f"📋 Found {len(saved_keys)} saved sessions")
+
+        # Create modal overlay
+        overlay = document.createElement("div")
+        overlay.id = "startup-modal-overlay"
+        overlay.className = "startup-modal-overlay"
+
+        # Create modal content
+        modal = document.createElement("div")
+        modal.className = "startup-modal"
+
+        # Build modal HTML based on whether there are saved sessions
+        if saved_keys:
+            # ✅ HAS SAVED SESSIONS
+            sessions_html = '<div class="saved-sessions-list">'
+            for key in saved_keys:
+                sessions_html += f'''
+                    <div class="session-item" data-key="{self._escape(key)}">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div class="session-name">📊 {self._escape(key)}</div>
+                                <div class="session-info">Saved analytics session</div>
+                            </div>
+                            <button class="delete-session-btn" data-key="{self._escape(key)}" 
+                                    style="background: transparent; border: none; color: #dc2626; 
+                                           cursor: pointer; font-size: 20px; padding: 4px 8px;"
+                                    title="Delete this session">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                '''
+            sessions_html += '</div>'
+
+            modal.innerHTML = f'''
+                <h2>📂 Load Saved Analytics</h2>
+                <p>Select a saved analytics session to continue, or start fresh.</p>
+                {sessions_html}
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-primary" id="load-selected-btn" disabled>
+                        📂 Load Selected
+                    </button>
+                    <button class="modal-btn modal-btn-secondary" id="start-fresh-btn">
+                        🆕 Start Fresh
+                    </button>
+                </div>
+            '''
+        else:
+            # ❌ NO SAVED SESSIONS
+            modal.innerHTML = '''
+                <h2>📂 Welcome to Analytics</h2>
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <div class="empty-state-text">No saved sessions found</div>
+                    <div class="empty-state-subtext">Start by analyzing student progress data</div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn modal-btn-primary" id="start-fresh-btn">
+                        ✨ Get Started
+                    </button>
+                </div>
+            '''
+
+        overlay.appendChild(modal)
+        document.body.appendChild(overlay)
+
+        # Create future for async waiting
+        future = asyncio.get_event_loop().create_future()
+
+        # Track selected session
+        selected_key = [None]  # Use list for mutable closure
+
+        def close_modal(result=None):
+            if not future.done():
+                future.set_result(result)
+            overlay.remove()
+
+        # ✅ HANDLE SAVED SESSIONS LOGIC
+        if saved_keys:
+            session_items = modal.querySelectorAll(".session-item")
+            load_btn = modal.querySelector("#load-selected-btn")
+
+            # Handle session item clicks
+            def handle_session_click(event):
+                # Remove previous selection
+                for i in range(session_items.length):
+                    session_items[i].classList.remove("selected")
+
+                # Add selection to clicked item
+                target = event.currentTarget
+                target.classList.add("selected")
+                selected_key[0] = target.getAttribute("data-key")
+
+                # Enable load button
+                if load_btn:
+                    load_btn.disabled = False
+
+            # Add click handlers to all session items
+            for i in range(session_items.length):
+                session_items[i].addEventListener("click", create_proxy(handle_session_click))
+
+            # Handle load button click
+            def handle_load(event):
+                if selected_key[0]:
+                    close_modal(selected_key[0])
+
+            if load_btn:
+                load_btn.addEventListener("click", create_proxy(handle_load))
+
+            # After setting up session item clicks, add delete button handlers:
+            delete_btns = modal.querySelectorAll(".delete-session-btn")
+
+            async def handle_delete(event):
+                event.stopPropagation()  # Don't trigger session selection
+                btn = event.currentTarget
+                key_to_delete = btn.getAttribute("data-key")
+
+                if window.confirm(f"Delete session '{key_to_delete}'?"):
+                    try:
+                        await self.db_manager.delete_data("analytics", key_to_delete)
+                        window.console.log(f"🗑️ Deleted session: {key_to_delete}")
+
+                        # Remove from UI
+                        session_item = btn.closest(".session-item")
+                        if session_item:
+                            session_item.remove()
+
+                        # If no more sessions, update modal
+                        remaining = modal.querySelectorAll(".session-item")
+                        if remaining.length == 0:
+                            close_modal(None)  # Close and start fresh
+
+                    except Exception as e:
+                        window.console.error(f"❌ Delete failed: {e}")
+                        window.alert(f"Failed to delete: {e}")
+
+            for i in range(delete_btns.length):
+                delete_btns[i].addEventListener("click", create_proxy(handle_delete))
+                       
+        # ✅ HANDLE START FRESH BUTTON (always present)
+        start_fresh_btn = modal.querySelector("#start-fresh-btn")
+        if start_fresh_btn:
+            start_fresh_btn.addEventListener("click", create_proxy(lambda e: close_modal(None)))
+
+        # Wait for user choice
+        chosen_key = await future
+        window.console.log(f"👤 User chose: {chosen_key if chosen_key else 'start fresh'}")
+
+        return chosen_key
+
+    # =========================================================
+    # LOAD SPECIFIC SESSION
+    # =========================================================
+    async def load_specific_session(self, key):
+        """Load a specific analytics session by key"""
+        from js import window
+        import json
+
+        try:
+            window.console.log(f"📂 Loading session: {key}")
+            data = await self.load_analytics_data(key)
+
+            if data and isinstance(data, list):
+                window.console.log(f"✅ Loaded {len(data)} entries from '{key}'")
+                return data
+            else:
+                window.console.warn(f"⚠️ No data found for key '{key}'")
+                return []
+
+        except Exception as e:
+            window.console.error(f"❌ Failed to load session '{key}': {e}")
+            return []
+
+    def _escape(self, text):
+        """Escape HTML text"""
+        import html
+        return html.escape(str(text or ""))
+
+    def __init__(self):
+        self.app = None
+        self.db_manager = IndexedDBManager()
+
+    # =========================================================
+    # INITIALIZE
+    # =========================================================
+    async def initialize(self):
+        await self.db_manager.initialize()
+        await self.restore_saved_analytics()
+
+    # =========================================================
+    # POPUP: Ask user for save name or existing entry
+    # =========================================================
+    async def prompt_save_choice(self):
+        """
+        Show popup allowing user to:
+        - enter new save name,
+        - choose an existing one (with overwrite confirmation),
+        - or cancel saving.
+        Returns chosen key (str) or None.
+        """
+        from js import document, window
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        # Remove any previous popup
+        old_popup = document.querySelector("#save-popup-container")
+        if old_popup:
+            old_popup.remove()
+
+        # Fetch existing saved entries
+        try:
+            existing_keys = await self.list_saved_keys("analytics")
+        except Exception:
+            existing_keys = []
+
+        # --- UI Container ---
+        container = document.createElement("div")
+        container.id = "save-popup-container"
+        container.style.cssText = """
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 3000; font-family: sans-serif;
+        """
+
+        popup = document.createElement("div")
+        popup.style.cssText = """
+            background: white; padding: 20px 30px; border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            min-width: 350px; display: flex; flex-direction: column; gap: 10px;
+        """
+
+        title = document.createElement("h3")
+        title.textContent = "💾 Save Analytics Data"
+        title.style.margin = "0 0 10px 0"
+
+        label_new = document.createElement("label")
+        label_new.textContent = "Enter new name:"
+
+        input_name = document.createElement("input")
+        input_name.type = "text"
+        input_name.placeholder = "e.g., session_2025_10_13"
+        input_name.style.padding = "6px"
+        input_name.style.fontSize = "14px"
+
+        label_existing = document.createElement("label")
+        label_existing.textContent = "Or choose existing:"
+
+        select_existing = document.createElement("select")
+        select_existing.style.padding = "6px"
+        select_existing.style.fontSize = "14px"
+        option_blank = document.createElement("option")
+        option_blank.value = ""
+        option_blank.textContent = "(none)"
+        select_existing.appendChild(option_blank)
+        for key in existing_keys:
+            opt = document.createElement("option")
+            opt.value = key
+            opt.textContent = key
+            select_existing.appendChild(opt)
+
+        # Buttons
+        btn_row = document.createElement("div")
+        btn_row.style.textAlign = "right"
+        btn_row.style.marginTop = "10px"
+
+        btn_save = document.createElement("button")
+        btn_save.textContent = "Save"
+        btn_save.style.marginRight = "10px"
+        btn_save.style.padding = "6px 12px"
+
+        btn_cancel = document.createElement("button")
+        btn_cancel.textContent = "Cancel"
+        btn_cancel.style.padding = "6px 12px"
+
+        btn_row.appendChild(btn_save)
+        btn_row.appendChild(btn_cancel)
+
+        popup.appendChild(title)
+        popup.appendChild(label_new)
+        popup.appendChild(input_name)
+        popup.appendChild(label_existing)
+        popup.appendChild(select_existing)
+        popup.appendChild(btn_row)
+        container.appendChild(popup)
+        document.body.appendChild(container)
+
+        # --- Async waiting mechanism ---
+        future = asyncio.get_event_loop().create_future()
+
+        # Function to close popup safely
+        def close_popup(result=None):
+            if not future.done():
+                future.set_result(result)
+            try:
+                save_proxy.destroy()
+                cancel_proxy.destroy()
+            except Exception:
+                pass
+            container.remove()
+
+        # --- Event Handlers ---
+        async def handle_save(event=None):
+            name = input_name.value.strip() or select_existing.value.strip()
+            if not name:
+                window.alert("Please enter or choose a name.")
+                return
+
+            # Confirm overwrite if exists
+            if name in existing_keys:
+                confirm = window.confirm(f"Data named '{name}' already exists. Overwrite?")
+                if not confirm:
+                    return
+
+            close_popup(name)
+
+        def handle_cancel(event=None):
+            close_popup(None)
+
+        # Wrap in JS-safe proxies
+        save_proxy = create_proxy(handle_save)
+        cancel_proxy = create_proxy(handle_cancel)
+
+        btn_save.addEventListener("click", save_proxy)
+        btn_cancel.addEventListener("click", cancel_proxy)
+
+        # Wait for user response
+        return await future
+
+    # =========================================================
+    # LIST ALL SAVED KEYS
+    # =========================================================
+    async def list_saved_keys(self, store_name):
+        """Return list of all saved keys from IndexedDB."""
+        from js import Function, window
+        from pyodide.ffi import to_js
+
+        if not self.db_manager.initialized:
+            await self.db_manager.initialize()
+
+        try:
+            list_keys_fn = Function(
+                """
+                return async function(dbName, version, store) {
+                    const dbReq = indexedDB.open(dbName, version);
+                    return new Promise((resolve, reject) => {
+                        dbReq.onsuccess = e => {
+                            const db = e.target.result;
+                            const tx = db.transaction(store, "readonly");
+                            const st = tx.objectStore(store);
+                            const keysReq = st.getAllKeys();
+                            keysReq.onsuccess = () => {
+                                const keys = keysReq.result.map(k => String(k));
+                                db.close();
+                                resolve(keys);
+                            };
+                            keysReq.onerror = e => { db.close(); reject(e.target.error); };
+                        };
+                        dbReq.onerror = e => reject(e.target.error);
+                    });
+                }
+                """
+            )
+
+            js_fn = list_keys_fn()
+            result = await js_fn(
+                to_js(self.db_manager.db_name),
+                to_js(self.db_manager.db_version),
+                to_js(store_name),
+            )
+
+            return [r.to_py() if hasattr(r, "to_py") else str(r) for r in result]
+
+        except Exception as e:
+            window.console.warn(f"⚠️ list_saved_keys failed: {e}")
+            return []
+
+    # =========================================================
+    # SANITIZE
+    # =========================================================
+    def sanitize_for_storage(self, data):
+        import js, datetime
+        from js import window
+
+        def safe_convert(obj):
+            if obj is None or isinstance(obj, (int, float, str, bool)):
+                return obj
+            if isinstance(obj, dict):
+                return {str(k): safe_convert(v) for k, v in obj.items()}
+            if isinstance(obj, (list, tuple, set)):
+                return [safe_convert(v) for v in obj]
+            if hasattr(obj, "to_py"):
+                try:
+                    return safe_convert(obj.to_py())
+                except Exception:
+                    return str(obj)
+            if isinstance(obj, datetime.datetime):
+                return obj.isoformat()
+            try:
+                if hasattr(js, "Date") and isinstance(obj, js.Date):
+                    return js.Date(obj).toISOString()
+            except Exception:
+                pass
+            return str(obj)
+
+        try:
+            return safe_convert(data)
+        except Exception as e:
+            window.console.warn(f"⚠️ sanitize_for_storage failed: {e}")
+            return []                       
+                       
+    # =========================================================
+    # SAVE ANALYTICS (Interactive)
+    # =========================================================
+    async def save_analytics_data(self):
+        """Save analytics data with interactive prompt"""
+        from js import window
+        import json
+
+        # Show the existing save prompt
+        chosen_key = await self.prompt_save_choice()
+        if not chosen_key:
+            window.console.log("💡 Save cancelled by user")
+            return
+
+        try:
+            safe_data = self.sanitize_for_storage(self.app.analytics_data)
+            json_text = json.dumps(safe_data)
+            js_text = window.String.new(json_text)
+
+            await self.db_manager.save_data("analytics", chosen_key, js_text)
+            window.console.log(f"💾 Saved {len(safe_data)} entries under key '{chosen_key}'")
+
+            # Show success message
+            window.alert(f"✅ Analytics saved successfully!\n\nSession name: {chosen_key}")
+
+        except Exception as e:
+            window.console.warn(f"⚠️ Could not save: {e}")
+            window.alert(f"❌ Save failed: {e}")
+    # =========================================================
+    # LOAD ANALYTICS
+    # =========================================================
+    async def load_analytics_data(self, key="analytics_data"):
+        from js import window
+        import json
+        try:
+            data = await self.db_manager.load_data("analytics", key)
+            if isinstance(data, str):
+                data = json.loads(data)
+            elif hasattr(data, "to_py"):
+                data = json.loads(data.to_py())
+            if data and isinstance(data, list):
+                window.console.log(f"📦 Restored {len(data)} entries from '{key}'")
+                return data
+        except Exception as e:
+            window.console.warn(f"⚠️ Could not load: {e}")
+        return []
+
+    # =========================================================
+    # CLEAR DATA
+    # =========================================================
+    async def clear_stored_analytics(self, key="analytics_data"):
+        from js import window
+        try:
+            await self.db_manager.delete_data("analytics", key)
+            window.console.log(f"🧹 Cleared data '{key}' from IndexedDB")
+        except Exception as e:
+            window.console.warn(f"⚠️ Could not clear: {e}")
+
+    # =========================================================
+    # RESTORE ON STARTUP
+    # =========================================================
+    async def restore_saved_analytics(self):
+        """Show startup modal and restore selected session"""
+        from js import window
+
+        # Show modal and get user choice
+        chosen_key = await self.show_startup_modal()
+
+        if chosen_key:
+            # User selected a saved session
+            window.console.log(f"📂 User selected: {chosen_key}")
+            loaded_data = await self.load_specific_session(chosen_key)
+
+            if loaded_data:
+                self.app.analytics_data = loaded_data
+                self.app.progress_analyzer.analytics_data = loaded_data
+                self.app.display_manager.display_analytics(loaded_data, [])
+                window.console.log(f"✅ Restored {len(loaded_data)} analytics entries")
+            else:
+                window.console.log("⚠️ No data loaded, starting fresh")
+        else:
+            # User chose to start fresh
+            window.console.log("🆕 User chose to start fresh")
+            self.app.analytics_data = []
+            self.app.progress_analyzer.analytics_data = []
+            self.app.display_manager.display_analytics([], [])
+class AnalyticsApp:
+    def __init__(self):
+        self.roster_manager = RosterManager()
+        self.progress_analyzer = ProgressAnalyzer()
+        self.display_manager = DisplayManager()
+        self.persistence_manager = PersistenceManager()
+        
+        self.student_roster = {}
+        self.analytics_data = []
+        self.debug_mode = False
+        
+        self.roster_manager.app = self
+        self.progress_analyzer.app = self
+        self.display_manager.app = self
+        self.persistence_manager.app = self
+    
+    async def initialize(self):
+        self.update_status("⏳ Initializing...")
+        
+        self.roster_manager.initialize()
+        self.progress_analyzer.initialize()
+        self.display_manager.initialize()
+        await self.persistence_manager.initialize()
+        
+        overlay = document.querySelector("#loadingOverlay")
+        if overlay:
+            overlay.style.opacity = "0"
+            window.setTimeout(create_proxy(lambda: overlay.remove()), 600)
+        
+        self.update_status("✅ Ready!")
+    
+    def update_status(self, msg):
+        box = document.querySelector("#loadingStatus")
+        if box:
+            d = document.createElement("div")
+            d.textContent = msg
+            box.appendChild(d)
+        window.console.log(msg)
+    
+    def create_modal(self, title, content, on_close=None):
+        modal = document.createElement("div")
+        modal.className = "modal"
+        
+        modal_content = document.createElement("div")
+        modal_content.className = "modal-content"
+        
+        modal_header = document.createElement("div")
+        modal_header.className = "modal-header"
+        modal_header.innerHTML = f"""
+            <div class="modal-title">{title}</div>
+            <button class="modal-close">Close</button>
+        """
+        
+        modal_body = document.createElement("div")
+        modal_body.innerHTML = content
+        
+        modal_content.appendChild(modal_header)
+        modal_content.appendChild(modal_body)
+        modal.appendChild(modal_content)
+        
+        def close_modal(e=None):
+            modal.remove()
+            if on_close:
+                on_close()
+        
+        modal_header.querySelector(".modal-close").addEventListener("click", create_proxy(close_modal))
+        modal.addEventListener("click", lambda e: close_modal() if e.target == modal else None)
+        
+        document.body.appendChild(modal)
+        return modal
+
+# ================================================================
+# INITIALIZATION
+# ================================================================
+async def init_app():
+    global app
+    app = AnalyticsApp()
+    await app.initialize()
+    window.app = app
+
+def start_init():
+    import asyncio
+    asyncio.ensure_future(init_app())
+
+window.setTimeout(create_proxy(start_init), 800)
+  </script>
+
+</body>
+</html>
