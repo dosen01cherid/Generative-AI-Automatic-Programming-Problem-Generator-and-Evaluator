@@ -5989,14 +5989,34 @@ class ProblemSolverApp:
 
                     if elapsed_minutes >= 5:
                         # 5 minutes already elapsed during downtime - update now!
-                        window.console.log("✅ 5+ minutes elapsed during downtime - updating score now")
-                        percentage = self.score_display_manager["pending_percentage"]
+                        window.console.log("✅ 5+ minutes elapsed during downtime - recalculating and updating score now")
+
+                        # ✅ Recalculate score fresh from problem_states (don't use cached pending_percentage)
+                        total_score, max_score, problem_scores = self.calculate_total_score()
+                        if max_score > 0:
+                            percentage = (total_score / max_score) * 100
+                        else:
+                            percentage = 0
+
+                        window.console.log(f"📊 Recalculated score: {percentage:.1f}% ({total_score:.1f}/{max_score:.1f})")
 
                         def delayed_update():
                             self.update_score_display_in_review(percentage)
                             self.score_display_manager["pending_score_update"] = False
+                            self.score_display_manager["pending_percentage"] = percentage  # Update cached value
                             self.score_tracker.reset()
-                            self.show_score_update_notification("⏰ Score Updated (timer completed during app restart)")
+
+                            # Save the updated state to localStorage
+                            self.save_to_storage()
+
+                            # Show notification with score details
+                            notification_text = f"⏰ Score Updated: {percentage:.1f}% (Timer completed during app restart)"
+                            self.show_score_update_notification(notification_text)
+
+                            # Show banner message
+                            self.show_score_updated_after_load_banner(percentage, elapsed_minutes)
+
+                            window.console.log(f"✅ Score display updated in overall banner: {percentage:.1f}%")
 
                         window.setTimeout(create_proxy(delayed_update), 1000)
                     else:
@@ -6122,6 +6142,68 @@ class ProblemSolverApp:
 
         except Exception as e:
             window.console.error(f"⚠️ Error showing timer message: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+
+    def show_score_updated_after_load_banner(self, percentage, elapsed_minutes):
+        """Show banner message when score was updated after 5+ minutes on load"""
+        try:
+            window.console.log(f"📢 Showing score updated banner: {percentage:.1f}% after {elapsed_minutes:.1f}m")
+
+            # Try to find review section to display message
+            review_section = document.querySelector("[id^='reviewSection_']")
+            if review_section:
+                existing_msg = review_section.querySelector(".score-updated-after-load-msg")
+                if existing_msg:
+                    existing_msg.remove()
+
+                msg = document.createElement("div")
+                msg.className = "score-updated-after-load-msg"
+                msg.style.cssText = """
+                    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+                    border: 2px solid #10b981;
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin: 16px 0;
+                    animation: fadeIn 0.5s ease;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                """
+
+                elapsed_str = f"{int(elapsed_minutes)} minutes" if elapsed_minutes > 1 else f"{int(elapsed_minutes * 60)} seconds"
+
+                msg.innerHTML = f"""
+                    <div style="font-weight: 700; color: #065f46; font-size: 18px; margin-bottom: 10px;">
+                        ✅ Score Automatically Updated!
+                    </div>
+                    <div style="font-size: 16px; color: #047857; margin-bottom: 8px;">
+                        <strong>Your Score: {percentage:.1f}%</strong>
+                    </div>
+                    <div style="font-size: 14px; color: #059669;">
+                        Timer completed while app was closed ({elapsed_str} elapsed).
+                        Your score has been recalculated and is now displayed in the banner above.
+                    </div>
+                """
+
+                review_section.insertBefore(msg, review_section.firstChild)
+
+                # Auto-remove after 15 seconds
+                def remove_msg():
+                    if msg and msg.parentNode:
+                        msg.style.opacity = "0"
+                        msg.style.transition = "opacity 0.5s"
+                        def final_remove():
+                            if msg and msg.parentNode:
+                                msg.remove()
+                        window.setTimeout(create_proxy(final_remove), 500)
+
+                window.setTimeout(create_proxy(remove_msg), 15000)
+
+                window.console.log("✅ Score updated banner displayed")
+            else:
+                window.console.log("ℹ️ Review section not found - banner not displayed")
+
+        except Exception as e:
+            window.console.error(f"⚠️ Error showing score updated banner: {e}")
             import traceback
             window.console.error(traceback.format_exc())
 
