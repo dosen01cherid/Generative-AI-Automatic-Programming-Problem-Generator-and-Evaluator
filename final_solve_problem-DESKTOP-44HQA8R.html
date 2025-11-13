@@ -5823,8 +5823,16 @@ class ProblemSolverApp:
                                     # Add step_type if it doesn't exist
                                     if "step_type" not in saved_steps[step_idx]:
                                         step_type = step_data.get("step_type", "math-expression")
+                                        # Normalize step-by-step to math-expression
+                                        if step_type == "step-by-step":
+                                            step_type = "math-expression"
                                         saved_steps[step_idx]["step_type"] = step_type
                                         window.console.log(f"🔧 Added step_type '{step_type}' to problem {prob_idx}, step {step_idx}")
+                                    else:
+                                        # Normalize existing step-by-step to math-expression
+                                        if saved_steps[step_idx]["step_type"] == "step-by-step":
+                                            saved_steps[step_idx]["step_type"] = "math-expression"
+                                            window.console.log(f"🔧 Normalized step_type 'step-by-step' to 'math-expression' for problem {prob_idx}, step {step_idx}")
 
                 # ✅ DEBUG: Log completion data
                 window.console.log("=" * 50)
@@ -6461,6 +6469,10 @@ class ProblemSolverApp:
       if index not in self.problem_states:
           self.problem_states[index] = []
           for step in steps:
+              step_type = step.get("step_type", "math-expression")
+              # Normalize step-by-step to math-expression
+              if step_type == "step-by-step":
+                  step_type = "math-expression"
               self.problem_states[index].append({
                   "finished": False,
                   "correct": False,
@@ -6469,7 +6481,7 @@ class ProblemSolverApp:
                   "structure_correct": False,
                   "points": step.get("points", 100),
                   "score": 0,
-                  "step_type": step.get("step_type", "math-expression")
+                  "step_type": step_type
               })
           window.console.log(f"✅ Initialized problem_states for problem {index} with {len(steps)} steps")
           # Save immediately
@@ -6479,6 +6491,10 @@ class ProblemSolverApp:
           window.console.warn(f"⚠️ Problem {index} has {len(self.problem_states[index])} saved steps but {len(steps)} actual steps - reinitializing")
           self.problem_states[index] = []
           for step in steps:
+              step_type = step.get("step_type", "math-expression")
+              # Normalize step-by-step to math-expression
+              if step_type == "step-by-step":
+                  step_type = "math-expression"
               self.problem_states[index].append({
                   "finished": False,
                   "correct": False,
@@ -6487,7 +6503,7 @@ class ProblemSolverApp:
                   "structure_correct": False,
                   "points": step.get("points", 100),
                   "score": 0,
-                  "step_type": step.get("step_type", "math-expression")
+                  "step_type": step_type
               })
           self.save_problem_to_storage(index)
 
@@ -8458,7 +8474,7 @@ class ProblemSolverApp:
           return 0.0
 
       # Math expression and other simple types
-      if step_type == "math-expression":
+      if step_type == "math-expression" or step_type == "step-by-step":
           is_correct = self._check_math_expression_correctness(step_data, step_state)
           score = 100.0 if is_correct else 0.0
           window.console.log(f"   Score: {score} (math-expression, re-checked: {is_correct})")
