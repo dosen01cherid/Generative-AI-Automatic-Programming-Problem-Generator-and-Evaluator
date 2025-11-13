@@ -2739,23 +2739,33 @@ class ScoreRecalculationTracker:
         window.console.log(f"   Current session: {len(self.edited_steps)} edits, {len(self.first_time_edits_in_session)} first-time")
         window.console.log(f"   Ever edited (global): {len(self.ever_edited_steps)}")
 
-        # ✅ ALWAYS cancel existing timer and start a new one (restart on each edit)
-        if self.timer_handle:
-            window.clearTimeout(self.timer_handle)
-            self.timer_handle = None
-            window.console.log("⏱️ Timer restarted due to new edit")
-
         # ✅ Check if we have at least 2 first-time edits in current session
         if len(self.first_time_edits_in_session) >= 2:
             window.console.log("✅ At least 2 first-time edits detected (global) - triggering immediate recalculation")
+            # Cancel timer if running (no longer needed)
+            if self.timer_handle:
+                window.clearTimeout(self.timer_handle)
+                self.timer_handle = None
+                window.console.log("⏱️ Timer cancelled (2 edits reached)")
             self.trigger_recalculation("2_edits")
         else:
-            window.console.log(f"⏱️ Only {len(self.first_time_edits_in_session)} first-time edit(s) - starting 5-minute timer")
-            # ✅ Always start a fresh 5-minute timer on each edit
-            def timer_callback():
-                self.trigger_recalculation("5_minutes")
-            self.timer_handle = window.setTimeout(create_proxy(timer_callback), 5 * 60 * 1000)
-            self.update_ui_message()
+            window.console.log(f"⏱️ Only {len(self.first_time_edits_in_session)} first-time edit(s)")
+            # ✅ Only start timer if NOT already running
+            if not self.timer_handle:
+                # ✅ Only start timer if in review mode (review section exists)
+                # Otherwise, score_display_manager timer handles it
+                msg_el = document.querySelector("#reviewScoreMessage")
+                if msg_el:
+                    window.console.log("⏱️ In review mode - starting 5-minute timer")
+                    def timer_callback():
+                        self.trigger_recalculation("5_minutes")
+                    self.timer_handle = window.setTimeout(create_proxy(timer_callback), 5 * 60 * 1000)
+                    self.update_ui_message()
+                else:
+                    window.console.log("⏱️ In solving mode - score_display_manager will handle timer")
+            else:
+                window.console.log("⏱️ Timer already running - not restarting")
+                self.update_ui_message()  # Update countdown display
     
     def trigger_recalculation(self, reason):
         """Recalculate score and reset"""
@@ -3426,24 +3436,28 @@ class ProblemSolverApp:
                 self.score_display_manager["edited_problems"].add(problem_idx)
                 window.console.log(f"✅ First edit for problem {problem_idx}")
 
-            # Update last edit timestamp
+            # ✅ Update last edit timestamp ONLY on first edit (don't restart timer)
             import js
-            self.score_display_manager["last_edit_time"] = js.Date.now()
+            if not self.score_display_manager["pending_score_update"]:
+                self.score_display_manager["last_edit_time"] = js.Date.now()
+                window.console.log("⏱️ Started 5-minute timer (first edit)")
+            else:
+                window.console.log("⏱️ Timer already running - not restarting")
 
-            # Determine if score should be displayed NOW
-            edited_count = len(self.score_display_manager["edited_problems"])
-            should_display_now = edited_count >= 2
+            # ✅ Use score_tracker's first-time step edit count (not problem count)
+            first_time_step_edits = len(self.score_tracker.first_time_edits_in_session)
+            should_display_now = first_time_step_edits >= 2
 
-            window.console.log(f"📊 Score display check: {edited_count} problems edited")
+            window.console.log(f"📊 Score display check: {first_time_step_edits} first-time step edits")
 
             if should_display_now:
-                window.console.log("✅ Displaying score NOW (2+ problems edited)")
+                window.console.log("✅ Displaying score NOW (2+ first-time step edits)")
                 score_to_display = percentage
                 should_show_update = True
                 # Clear pending update
                 self.score_display_manager["pending_score_update"] = False
             else:
-                window.console.log("⏳ Score display deferred (need 2+ problems or 5 minutes)")
+                window.console.log(f"⏳ Score display deferred (need {2 - first_time_step_edits} more first-time step edit(s) or 5 minutes)")
                 # Store as pending
                 self.score_display_manager["pending_score_update"] = True
                 self.score_display_manager["pending_percentage"] = percentage
@@ -3484,12 +3498,14 @@ class ProblemSolverApp:
                     # Update score display if conditions are met
                     if should_show_update:
                         self.update_score_display_in_review(score_to_display)
+                        self.score_tracker.reset()  # ✅ Reset edit tracking after score update
                         self.show_notification("✨ Score Updated!", "success")
                         window.console.log("✅ Score display updated immediately")
                     else:
                         # Show deferred message
-                        self.show_score_deferred_message(edited_count)
-                        window.console.log(f"⏳ Score display deferred (need {2 - edited_count} more edit(s))")
+                        first_time_step_edits = len(self.score_tracker.first_time_edits_in_session)
+                        self.show_score_deferred_message(first_time_step_edits)
+                        window.console.log(f"⏳ Score display deferred (need {2 - first_time_step_edits} more first-time step edit(s))")
 
                     # Refresh the step review with updated answer
                     self._refresh_step_review(problem_idx, step_idx)
@@ -3614,7 +3630,7 @@ class ProblemSolverApp:
                 Score Update Pending
             </div>
             <div style="font-size: 14px; color: #78350f;">
-                Score will display after editing <strong>{needed} more problem(s)</strong> or in <strong>5 minutes</strong>.
+                Score will display after editing <strong>{needed} more first-time step(s)</strong> or in <strong>5 minutes</strong>.
             </div>
         """
 
@@ -3717,6 +3733,7 @@ class ProblemSolverApp:
                         percentage = self.score_display_manager["pending_percentage"]
                         self.update_score_display_in_review(percentage)
                         self.score_display_manager["pending_score_update"] = False
+                        self.score_tracker.reset()  # ✅ Reset edit tracking after 5-minute timer
                         self.show_score_update_notification("⏰ Score Updated (5 minutes elapsed)")
 
             # Check again in 10 seconds
@@ -5052,7 +5069,8 @@ class ProblemSolverApp:
 
             # ✅ Clear edit history from localStorage (new session starts)
             window.localStorage.removeItem("score_edits")
-            window.console.log("✅ Edit history cleared from localStorage (new session)")
+            window.localStorage.removeItem("score_tracker_state")
+            window.console.log("✅ Edit history and timer state cleared from localStorage (new session)")
 
             # ✅ Reset score display manager for new problem set
             if hasattr(self, 'score_display_manager'):
@@ -5697,6 +5715,17 @@ class ProblemSolverApp:
                 window.localStorage.setItem("score_edits", json.dumps(edits_to_save))
                 window.console.log(f"✅ Saved {len(self.score_tracker.ever_edited_steps)} edit records")
 
+            # Save score tracker session state (for timer restoration)
+            if hasattr(self.score_tracker, 'edited_steps'):
+                tracker_state = {
+                    "edited_steps": list([list(key) for key in self.score_tracker.edited_steps]),
+                    "first_time_edits_in_session": list([list(key) for key in self.score_tracker.first_time_edits_in_session]),
+                    "last_edit_time": self.score_tracker.last_edit_time.isoformat() if self.score_tracker.last_edit_time else None,
+                    "pending_edits": {f"{k[0]}_{k[1]}": v for k, v in self.score_tracker.pending_edits.items()}
+                }
+                window.localStorage.setItem("score_tracker_state", json.dumps(tracker_state))
+                window.console.log(f"✅ Saved score tracker session state ({len(self.score_tracker.edited_steps)} current edits)")
+
             # Save credit data
             if hasattr(self, 'credit_balance'):
                 credit_data = {
@@ -5839,6 +5868,35 @@ class ProblemSolverApp:
                 except Exception as e:
                     window.console.error(f"⚠️ Error loading edit tracking: {e}")
 
+            # Load score tracker session state (for timer restoration)
+            tracker_data = window.localStorage.getItem("score_tracker_state")
+            if tracker_data:
+                try:
+                    import datetime
+                    tracker = json.loads(tracker_data)
+
+                    # Restore session edit sets
+                    for key in tracker.get("edited_steps", []):
+                        self.score_tracker.edited_steps.add((key[0], key[1]))
+
+                    for key in tracker.get("first_time_edits_in_session", []):
+                        self.score_tracker.first_time_edits_in_session.add((key[0], key[1]))
+
+                    # Restore last edit time
+                    if tracker.get("last_edit_time"):
+                        self.score_tracker.last_edit_time = datetime.datetime.fromisoformat(tracker["last_edit_time"])
+
+                    # Restore pending edits
+                    for key_str, value in tracker.get("pending_edits", {}).items():
+                        parts = key_str.split("_")
+                        prob_idx = int(parts[0])
+                        step_idx = int(parts[1])
+                        self.score_tracker.pending_edits[(prob_idx, step_idx)] = value
+
+                    window.console.log(f"✅ Restored score tracker session: {len(self.score_tracker.edited_steps)} edits, {len(self.score_tracker.first_time_edits_in_session)} first-time")
+                except Exception as e:
+                    window.console.error(f"⚠️ Error loading score tracker state: {e}")
+
             # Load credit data
             credit_data = window.localStorage.getItem("credit_data")
             if credit_data:
@@ -5879,6 +5937,12 @@ class ProblemSolverApp:
                         self.toggle_problem(first_incomplete)
                     window.setTimeout(create_proxy(open_problem), 500)
 
+            # ============================================
+            # PART 5: Restore timers if pending
+            # ============================================
+
+            self.restore_timers_after_load()
+
             window.console.log("✅ Load complete")
 
         except Exception as e:
@@ -5886,6 +5950,88 @@ class ProblemSolverApp:
             import traceback
             window.console.error(traceback.format_exc())
 
+    def restore_timers_after_load(self):
+        """Restore 5-minute timers after app load/refresh"""
+        try:
+            import js
+            import datetime
+
+            window.console.log("🔄 Checking for pending timers to restore...")
+
+            # ============================================
+            # PART 1: Check score_display_manager timer (solving mode)
+            # ============================================
+
+            if self.score_display_manager["pending_score_update"]:
+                last_edit = self.score_display_manager["last_edit_time"]
+
+                if last_edit:
+                    current_time = js.Date.now()
+                    elapsed_ms = current_time - last_edit
+                    elapsed_minutes = elapsed_ms / 60000
+
+                    window.console.log(f"⏱️ Found pending score update - {elapsed_minutes:.1f} minutes elapsed")
+
+                    if elapsed_minutes >= 5:
+                        # 5 minutes already elapsed during downtime - update now!
+                        window.console.log("✅ 5+ minutes elapsed during downtime - updating score now")
+                        percentage = self.score_display_manager["pending_percentage"]
+
+                        def delayed_update():
+                            self.update_score_display_in_review(percentage)
+                            self.score_display_manager["pending_score_update"] = False
+                            self.score_tracker.reset()
+                            self.show_score_update_notification("⏰ Score Updated (timer completed during app restart)")
+
+                        window.setTimeout(create_proxy(delayed_update), 1000)
+                    else:
+                        # Less than 5 minutes - restart timer with remaining time
+                        remaining_ms = (5 * 60 * 1000) - elapsed_ms
+                        remaining_minutes = remaining_ms / 60000
+                        window.console.log(f"⏱️ Restarting timer with {remaining_minutes:.1f} minutes remaining")
+
+                        # Timer will be handled by start_score_display_timer() which runs automatically
+                        # No need to manually start it here
+                else:
+                    window.console.log("⚠️ Pending score update but no last_edit_time - clearing pending state")
+                    self.score_display_manager["pending_score_update"] = False
+
+            # ============================================
+            # PART 2: Check score_tracker timer (review mode)
+            # ============================================
+
+            if self.score_tracker.last_edit_time and len(self.score_tracker.first_time_edits_in_session) < 2:
+                # Check if in review mode
+                msg_el = document.querySelector("#reviewScoreMessage")
+                if msg_el:
+                    current_time = datetime.datetime.now()
+                    elapsed = (current_time - self.score_tracker.last_edit_time).total_seconds()
+                    elapsed_minutes = elapsed / 60
+
+                    window.console.log(f"⏱️ Found score_tracker timer - {elapsed_minutes:.1f} minutes elapsed")
+
+                    if elapsed_minutes >= 5:
+                        # 5 minutes already elapsed - trigger now
+                        window.console.log("✅ 5+ minutes elapsed in review mode - triggering recalculation")
+                        self.score_tracker.trigger_recalculation("5_minutes")
+                    else:
+                        # Restart timer with remaining time
+                        remaining_seconds = (5 * 60) - elapsed
+                        remaining_ms = remaining_seconds * 1000
+                        window.console.log(f"⏱️ Restarting review timer with {remaining_seconds/60:.1f} minutes remaining")
+
+                        def timer_callback():
+                            self.score_tracker.trigger_recalculation("5_minutes")
+
+                        self.score_tracker.timer_handle = window.setTimeout(create_proxy(timer_callback), int(remaining_ms))
+                        self.score_tracker.update_ui_message()
+
+            window.console.log("✅ Timer restoration complete")
+
+        except Exception as e:
+            window.console.error(f"⚠️ Error restoring timers: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
 
     def _try_load_legacy_compressed_format(self):
       """Try loading from old format where everything was compressed together"""
