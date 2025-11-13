@@ -5812,6 +5812,20 @@ class ProblemSolverApp:
 
                 window.console.log(f"✅ Loaded problem states: {len(self.problem_states)} problems")
 
+                # ✅ MIGRATION: Add step_type to loaded states if missing
+                if self.problem_set:
+                    for prob_idx, problem in enumerate(self.problem_set):
+                        if prob_idx in self.problem_states:
+                            steps = problem.get("steps", [])
+                            saved_steps = self.problem_states[prob_idx]
+                            for step_idx, step_data in enumerate(steps):
+                                if step_idx < len(saved_steps):
+                                    # Add step_type if it doesn't exist
+                                    if "step_type" not in saved_steps[step_idx]:
+                                        step_type = step_data.get("step_type", "math-expression")
+                                        saved_steps[step_idx]["step_type"] = step_type
+                                        window.console.log(f"🔧 Added step_type '{step_type}' to problem {prob_idx}, step {step_idx}")
+
                 # ✅ DEBUG: Log completion data
                 window.console.log("=" * 50)
                 window.console.log("📊 LOADED COMPLETION DATA:")
@@ -6454,7 +6468,8 @@ class ProblemSolverApp:
                   "attempts": 0,
                   "structure_correct": False,
                   "points": step.get("points", 100),
-                  "score": 0
+                  "score": 0,
+                  "step_type": step.get("step_type", "math-expression")
               })
           window.console.log(f"✅ Initialized problem_states for problem {index} with {len(steps)} steps")
           # Save immediately
@@ -6471,7 +6486,8 @@ class ProblemSolverApp:
                   "attempts": 0,
                   "structure_correct": False,
                   "points": step.get("points", 100),
-                  "score": 0
+                  "score": 0,
+                  "step_type": step.get("step_type", "math-expression")
               })
           self.save_problem_to_storage(index)
 
