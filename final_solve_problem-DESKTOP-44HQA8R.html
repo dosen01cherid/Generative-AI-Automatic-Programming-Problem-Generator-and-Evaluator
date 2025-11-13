@@ -7246,8 +7246,13 @@ class ProblemSolverApp:
       step_data = step.get("step_data") or step.get("step", {})
       container = step["container"]
 
+      # ✅ Check if answer is correct before allowing finalization
       if not step.get("correct"):
-          self.show_feedback(step_idx, "❌ Submit correct answer first", "#b91c1c")
+          must_correct = step_data.get("requireCorrect", False)
+          if must_correct:
+              self.show_feedback(step_idx, "❌ Submit correct answer first. This step requires the correct answer to proceed.", "#b91c1c")
+          else:
+              self.show_feedback(step_idx, "❌ Submit correct answer first", "#b91c1c")
           return
 
       # Get stored parsed expressions from submit
@@ -8949,6 +8954,9 @@ class ProblemSolverApp:
       else:
           time_taken = 0
 
+      # ✅ Check if this step requires correct answer
+      must_correct = step_data.get("requireCorrect", False)
+
       if is_correct:
           step["correct"] = True
 
@@ -8984,7 +8992,11 @@ class ProblemSolverApp:
                   self.problem_states[current_prob_idx][step_idx]["attempts"] = step["attempts"]
                   window.console.log(f"✅ Updated problem_states: correct=False")
 
-          self.show_feedback(step_idx, "❌ Incorrect. Try again!", "#b91c1c")
+          # ✅ Show different message for requireCorrect steps
+          if must_correct:
+              self.show_feedback(step_idx, "❌ Incorrect. This step requires the correct answer. Please try again.", "#b91c1c")
+          else:
+              self.show_feedback(step_idx, "❌ Incorrect. Try again!", "#b91c1c")
           self.add_to_global_history(step_idx, user_latex, False, time_taken, "submit")
 
       self.save_to_storage()
