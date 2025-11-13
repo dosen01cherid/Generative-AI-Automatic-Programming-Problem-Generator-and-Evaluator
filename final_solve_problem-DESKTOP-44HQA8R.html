@@ -8853,9 +8853,11 @@ class ProblemSolverApp:
           return False
 
       user_answer = user_answers[0] if len(user_answers) > 0 else ""
+      # ✅ Convert to string first (could be boolean or string)
+      user_answer_str = str(user_answer).lower()
       correct_answer = str(step_data.get("correct_answer", "true")).lower()
 
-      return user_answer.lower() == correct_answer
+      return user_answer_str == correct_answer
 
 
     def submit_math_expression(self, step_idx):
