@@ -3042,10 +3042,21 @@ class ProblemSolverApp:
             margin-bottom: 12px;
         """
 
-        # Check if this is a math-expression step (read-only in review)
+        # Check if this is a read-only step (math-expression or requireCorrect)
         step_type = step_data.get("step_type", "math-expression")
         is_math_expr = step_type == "math-expression" or step_type == "step-by-step"
-        button_label = "👁️ Review" if is_math_expr else "✏️ Edit"
+
+        # ✅ Check requireCorrect from original problem data
+        is_require_correct = False
+        if prob_idx < len(self.problem_set):
+            problem = self.problem_set[prob_idx]
+            original_steps = problem.get("steps", [])
+            if step_idx < len(original_steps):
+                is_require_correct = original_steps[step_idx].get("requireCorrect", False)
+
+        # Read-only if math-expression OR requireCorrect
+        is_readonly = is_math_expr or is_require_correct
+        button_label = "👁️ Review" if is_readonly else "✏️ Edit"
 
         step_header.innerHTML = f"""
             <div style="font-weight: 600; color: #475569;">
@@ -4161,22 +4172,31 @@ class ProblemSolverApp:
                     window.console.log(f"✅ Retrieved step_type from original data: {step_type}")
 
         window.console.log(f"📝 Step type for editing: {step_type}")
-        
+
+        # ✅ Check requireCorrect from original problem data
+        is_require_correct = False
+        if problem_idx < len(self.problem_set):
+            problem = self.problem_set[problem_idx]
+            original_steps = problem.get("steps", [])
+            if step_idx < len(original_steps):
+                is_require_correct = original_steps[step_idx].get("requireCorrect", False)
+                window.console.log(f"✅ requireCorrect: {is_require_correct}")
+
         # ✅ Show only this step
         container.style.display = "block"
         window.console.log(f"✅ Step container displayed: {step_idx}")
-        
+
         # ✅ Remove any existing edit wrapper to prevent stacking
         existing_wrapper = container.querySelector(".edit-mode-wrapper")
         if existing_wrapper:
             existing_wrapper.remove()
             window.console.log("🗑️ Removed existing edit wrapper")
-        
+
         # ✅ Hide original Submit/Finalize buttons and feedback
         submit_btn = container.querySelector(f"#submitBtn{step_idx}")
         finalize_btn = container.querySelector(f"#finalizeBtn{step_idx}")
         feedback_div = container.querySelector(f"#stepFeedback{step_idx}")
-        
+
         if submit_btn:
             submit_btn.style.display = "none"
             window.console.log(f"✅ Hidden submit button for step {step_idx}")
@@ -4186,27 +4206,28 @@ class ProblemSolverApp:
         if feedback_div:
             feedback_div.style.display = "none"
             window.console.log(f"✅ Hidden feedback for step {step_idx}")
-        
+
         # ✅ Remove any "correct/incorrect" styling that might be present
         container.classList.remove("correct-answer", "incorrect-answer")
-        
+
         # Scroll to it smoothly
         container.scrollIntoView({'behavior': 'smooth', 'block': 'center'})
-        
-        # ✅ Check if this is a math-expression (read-only in review mode)
-        is_math_expr_readonly = step_type in ["freestyle", "math-expression"]
+
+        # ✅ Check if this is read-only (math-expression OR requireCorrect)
+        is_math_expr = step_type in ["freestyle", "math-expression"]
+        is_readonly = is_math_expr or is_require_correct
 
         # Create edit wrapper
         edit_wrapper = document.createElement("div")
         edit_wrapper.className = "edit-mode-wrapper"
-        if is_math_expr_readonly:
+        if is_readonly:
             edit_wrapper.style.cssText = "background:#e0f2fe;border:3px solid#0284c7;padding:20px;border-radius:12px;margin-top:16px;animation:slideIn 0.3s ease-out;"
         else:
             edit_wrapper.style.cssText = "background:#fef3c7;border:3px solid #f59e0b;padding:20px;border-radius:12px;margin-top:16px;animation:slideIn 0.3s ease-out;"
 
         edit_header = document.createElement("div")
         edit_header.style.cssText = "font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;"
-        if is_math_expr_readonly:
+        if is_readonly:
             edit_header.style.color = "#0c4a6e"
             edit_header.innerHTML = "👁️ Review Mode - View Only"
         else:
@@ -4216,52 +4237,115 @@ class ProblemSolverApp:
 
         # ✅ Handle different step types
         if step_type in ["multiple-choice-single", "multiple-choice-multiple"]:
-            window.console.log(f"📝 Enabling {step_type} editing")
-            
-            # Re-enable radio buttons or checkboxes
-            inputs = container.querySelectorAll("input")
-            for i in range(inputs.length):
-                inp = inputs[i]
-                inp.disabled = False
-                inp.style.pointerEvents = "auto"
-                window.console.log(f"✅ Enabled input {i}")
-            
-            # Re-enable option containers
-            options = container.querySelectorAll(".mc-option")
-            for i in range(options.length):
-                opt = options[i]
-                opt.style.pointerEvents = "auto"
-                opt.style.opacity = "1"
-                opt.style.cursor = "pointer"
-                # Remove any disabled styling
-                opt.classList.remove("disabled")
+            if is_require_correct:
+                window.console.log(f"👁️ Showing {step_type} in read-only mode (requireCorrect)")
+
+                # Keep radio buttons/checkboxes disabled
+                inputs = container.querySelectorAll("input")
+                for i in range(inputs.length):
+                    inp = inputs[i]
+                    inp.disabled = True
+                    inp.style.pointerEvents = "none"
+                    window.console.log(f"✅ Kept input {i} disabled")
+
+                # Keep option containers disabled
+                options = container.querySelectorAll(".mc-option")
+                for i in range(options.length):
+                    opt = options[i]
+                    opt.style.pointerEvents = "none"
+                    opt.style.opacity = "0.7"
+                    opt.style.cursor = "not-allowed"
+
+                # Show read-only notice
+                readonly_notice = document.createElement("div")
+                readonly_notice.style.cssText = "background:#dbeafe;border:1px solid #3b82f6;padding:12px;border-radius:6px;margin-bottom:12px;font-size:14px;color:#1e3a8a;"
+                readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> This step requires a correct answer and cannot be edited in review mode. This is a view-only display of your answer."
+                edit_wrapper.appendChild(readonly_notice)
+            else:
+                window.console.log(f"📝 Enabling {step_type} editing")
+
+                # Re-enable radio buttons or checkboxes
+                inputs = container.querySelectorAll("input")
+                for i in range(inputs.length):
+                    inp = inputs[i]
+                    inp.disabled = False
+                    inp.style.pointerEvents = "auto"
+                    window.console.log(f"✅ Enabled input {i}")
+
+                # Re-enable option containers
+                options = container.querySelectorAll(".mc-option")
+                for i in range(options.length):
+                    opt = options[i]
+                    opt.style.pointerEvents = "auto"
+                    opt.style.opacity = "1"
+                    opt.style.cursor = "pointer"
+                    # Remove any disabled styling
+                    opt.classList.remove("disabled")
         
         elif step_type == "true-false":
-            window.console.log("📝 Enabling true-false editing")
-            
-            # Re-enable true/false buttons
-            tf_buttons = container.querySelectorAll(".tf-btn")
-            for i in range(tf_buttons.length):
-                btn = tf_buttons[i]
-                btn.style.pointerEvents = "auto"
-                btn.style.opacity = "1"
-                btn.style.cursor = "pointer"
-                btn.disabled = False
-                window.console.log(f"✅ Enabled TF button {i}")
+            if is_require_correct:
+                window.console.log("👁️ Showing true-false in read-only mode (requireCorrect)")
+
+                # Keep true/false buttons disabled
+                tf_buttons = container.querySelectorAll(".tf-btn")
+                for i in range(tf_buttons.length):
+                    btn = tf_buttons[i]
+                    btn.style.pointerEvents = "none"
+                    btn.style.opacity = "0.7"
+                    btn.style.cursor = "not-allowed"
+                    btn.disabled = True
+                    window.console.log(f"✅ Kept TF button {i} disabled")
+
+                # Show read-only notice
+                readonly_notice = document.createElement("div")
+                readonly_notice.style.cssText = "background:#dbeafe;border:1px solid #3b82f6;padding:12px;border-radius:6px;margin-bottom:12px;font-size:14px;color:#1e3a8a;"
+                readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> This step requires a correct answer and cannot be edited in review mode. This is a view-only display of your answer."
+                edit_wrapper.appendChild(readonly_notice)
+            else:
+                window.console.log("📝 Enabling true-false editing")
+
+                # Re-enable true/false buttons
+                tf_buttons = container.querySelectorAll(".tf-btn")
+                for i in range(tf_buttons.length):
+                    btn = tf_buttons[i]
+                    btn.style.pointerEvents = "auto"
+                    btn.style.opacity = "1"
+                    btn.style.cursor = "pointer"
+                    btn.disabled = False
+                    window.console.log(f"✅ Enabled TF button {i}")
         
         elif step_type == "fill-blank":
-            window.console.log("📝 Enabling fill-blank editing")
-            
-            # Re-enable text input
-            input_field = container.querySelector(".fill-blank-input")
-            if input_field:
-                input_field.disabled = False
-                input_field.readOnly = False
-                input_field.style.pointerEvents = "auto"
-                input_field.style.opacity = "1"
-                input_field.style.backgroundColor = "#ffffff"
-                input_field.focus()
-                window.console.log("✅ Enabled fill-blank input")
+            if is_require_correct:
+                window.console.log("👁️ Showing fill-blank in read-only mode (requireCorrect)")
+
+                # Keep text input disabled
+                input_field = container.querySelector(".fill-blank-input")
+                if input_field:
+                    input_field.disabled = True
+                    input_field.readOnly = True
+                    input_field.style.pointerEvents = "none"
+                    input_field.style.opacity = "0.7"
+                    input_field.style.backgroundColor = "#f8fafc"
+                    window.console.log("✅ Kept fill-blank input disabled")
+
+                # Show read-only notice
+                readonly_notice = document.createElement("div")
+                readonly_notice.style.cssText = "background:#dbeafe;border:1px solid #3b82f6;padding:12px;border-radius:6px;margin-bottom:12px;font-size:14px;color:#1e3a8a;"
+                readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> This step requires a correct answer and cannot be edited in review mode. This is a view-only display of your answer."
+                edit_wrapper.appendChild(readonly_notice)
+            else:
+                window.console.log("📝 Enabling fill-blank editing")
+
+                # Re-enable text input
+                input_field = container.querySelector(".fill-blank-input")
+                if input_field:
+                    input_field.disabled = False
+                    input_field.readOnly = False
+                    input_field.style.pointerEvents = "auto"
+                    input_field.style.opacity = "1"
+                    input_field.style.backgroundColor = "#ffffff"
+                    input_field.focus()
+                    window.console.log("✅ Enabled fill-blank input")
         
         elif step_type in ["freestyle", "math-expression"]:
             window.console.log("👁️ Showing math expression in read-only mode")
@@ -4287,15 +4371,18 @@ class ProblemSolverApp:
             # Show read-only notice
             readonly_notice = document.createElement("div")
             readonly_notice.style.cssText = "background:#dbeafe;border:1px solid #3b82f6;padding:12px;border-radius:6px;margin-bottom:12px;font-size:14px;color:#1e3a8a;"
-            readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> Math expression answers cannot be edited in review mode. This is a view-only display of your answer."
+            if is_require_correct:
+                readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> This step requires a correct answer and cannot be edited in review mode. This is a view-only display of your answer."
+            else:
+                readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> Math expression answers cannot be edited in review mode. This is a view-only display of your answer."
             edit_wrapper.appendChild(readonly_notice)
         
         # Create button container
         button_container = document.createElement("div")
         button_container.style.cssText = "display:flex;gap:12px;margin-top:16px;"
 
-        # ✅ Only show Save button for editable step types (not math-expression)
-        if not is_math_expr_readonly:
+        # ✅ Only show Save button for editable step types (not read-only)
+        if not is_readonly:
             # Save button
             save_btn = document.createElement("button")
             save_btn.className = "btn"
@@ -4315,7 +4402,7 @@ class ProblemSolverApp:
         # Cancel button (always show, but different style for read-only)
         cancel_btn = document.createElement("button")
         cancel_btn.className = "btn ghost"
-        if is_math_expr_readonly:
+        if is_readonly:
             # For read-only, make Cancel button blue and full width
             cancel_btn.style.cssText = "flex:1;background:#3b82f6;color:white;font-weight:600;padding:12px;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;"
             cancel_btn.textContent = "✖️ Close"
@@ -8488,6 +8575,7 @@ class ProblemSolverApp:
       Calculate score for a step based on its type and user's answer.
       Returns a score between 0 and 100.
       ✅ FIXED: Re-checks answer correctness instead of using cached value
+      ✅ FIXED: Uses cached value for requireCorrect steps (read-only)
       """
       step_type = step_state.get("step_type", "math-expression")
 
@@ -8499,6 +8587,13 @@ class ProblemSolverApp:
       if not step_state.get("finished", False):
           window.console.log(f"   Score: 0 (not finished)")
           return 0.0
+
+      # ✅ Check requireCorrect - if true, use cached value (not editable)
+      is_require_correct = step_data.get("requireCorrect", False)
+      if is_require_correct:
+          score = 100.0 if step_state.get("correct", False) else 0.0
+          window.console.log(f"   Score: {score} (requireCorrect, cached)")
+          return score
 
       # Math expression and other simple types (use cached value - not editable)
       if step_type == "math-expression" or step_type == "step-by-step":
