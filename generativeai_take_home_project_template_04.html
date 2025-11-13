@@ -1,0 +1,830 @@
+"""
+Session 4 - Take-Home Project: Multi-Model Text Analysis Tool
+============================================================
+
+Project Overview:
+-----------------
+Build a comprehensive tool that implements attention mechanism from scratch,
+compares different transformer models, and visualizes attention patterns.
+
+Learning Objectives:
+-------------------
+1. Implement attention mechanism from scratch using NumPy
+2. Use multiple pre-trained transformer models from HuggingFace
+3. Compare model performance on sentiment analysis
+4. Visualize attention weights
+5. Analyze and document findings
+
+IMPORTANT SETUP:
+----------------
+This project requires internet connection and ~3-5GB of disk space.
+Models will download automatically on first use from HuggingFace Hub.
+
+Requirements:
+------------
+pip install numpy matplotlib seaborn transformers torch pandas
+
+Installation Steps:
+------------------
+1. Create virtual environment (recommended):
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+2. Install packages:
+   pip install numpy matplotlib seaborn transformers torch pandas
+
+3. Verify installation:
+   python -c "import transformers; print('✓ Setup complete!')"
+
+4. Check internet connection (required for first run)
+
+5. Ensure ~5GB free disk space for model downloads
+
+Model Downloads:
+---------------
+- First run: Models download automatically (~100MB-1GB each)
+- Subsequent runs: Use cached models (fast)
+- Cache location: ~/.cache/huggingface/
+- Total download: ~3-5GB for all models used
+
+Due Date: Before Session 5
+Points: 30% of mini-projects grade
+
+Author: [Your Name]
+Date: [Date]
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import torch
+import torch.nn.functional as F
+from transformers import (
+    AutoTokenizer, 
+    AutoModelForSequenceClassification,
+    AutoModel,
+    pipeline
+)
+import pandas as pd
+from typing import List, Dict, Tuple
+import warnings
+import sys
+warnings.filterwarnings('ignore')
+
+
+# ============================================================================
+# SETUP VERIFICATION
+# ============================================================================
+
+def verify_setup():
+    """
+    Verify that all required packages are installed and accessible
+    """
+    print("="*80)
+    print("VERIFYING SETUP")
+    print("="*80)
+    
+    required_packages = {
+        'numpy': np,
+        'matplotlib': plt,
+        'seaborn': sns,
+        'torch': torch,
+        'transformers': None  # Will check separately
+    }
+    
+    all_ok = True
+    
+    for package_name, package_obj in required_packages.items():
+        try:
+            if package_name == 'transformers':
+                import transformers
+                print(f"✓ {package_name}: version {transformers.__version__}")
+            else:
+                print(f"✓ {package_name}: installed")
+        except ImportError:
+            print(f"✗ {package_name}: NOT FOUND")
+            print(f"  Install with: pip install {package_name}")
+            all_ok = False
+    
+    # Check internet connectivity (try to reach HuggingFace)
+    print("\nChecking internet connectivity...")
+    try:
+        import urllib.request
+        urllib.request.urlopen('https://huggingface.co', timeout=5)
+        print("✓ Internet connection: OK")
+    except:
+        print("⚠ Internet connection: FAILED")
+        print("  Note: You need internet to download models on first run")
+        print("  Subsequent runs will use cached models")
+    
+    # Check disk space
+    print("\nChecking disk space...")
+    try:
+        import shutil
+        total, used, free = shutil.disk_usage("/")
+        free_gb = free // (2**30)
+        print(f"✓ Free disk space: {free_gb} GB")
+        if free_gb < 5:
+            print("⚠ Warning: Less than 5GB free. You may need more space for models.")
+    except:
+        print("⚠ Could not check disk space")
+    
+    print("\n" + "="*80)
+    if all_ok:
+        print("✓ SETUP VERIFICATION PASSED")
+        print("You're ready to start the project!")
+    else:
+        print("✗ SETUP VERIFICATION FAILED")
+        print("Please install missing packages before continuing.")
+        sys.exit(1)
+    print("="*80 + "\n")
+    
+    return all_ok
+
+
+# ============================================================================
+# PART 1: ATTENTION FROM SCRATCH (15 points)
+# ============================================================================
+
+class SimpleAttention:
+    """
+    Implement attention mechanism from scratch using NumPy
+    
+    TODO for Students:
+    - Complete the attention calculation
+    - Add proper documentation
+    - Test with different inputs
+    """
+    
+    def __init__(self, d_k: int):
+        """
+        Initialize attention mechanism
+        
+        Args:
+            d_k: Dimension of key/query vectors
+        """
+        self.d_k = d_k
+        self.scale = np.sqrt(d_k)
+    
+    def calculate_attention(self, Q: np.ndarray, K: np.ndarray, 
+                          V: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Calculate attention output and weights
+        
+        Args:
+            Q: Query matrix (seq_len, d_k)
+            K: Key matrix (seq_len, d_k)
+            V: Value matrix (seq_len, d_v)
+        
+        Returns:
+            output: Attention output (seq_len, d_v)
+            weights: Attention weights (seq_len, seq_len)
+        
+        TODO: Implement the attention formula
+        Step 1: Calculate scores = Q @ K.T / sqrt(d_k)
+        Step 2: Apply softmax to get weights
+        Step 3: Calculate output = weights @ V
+        """
+        
+        # YOUR CODE HERE
+        # Step 1: Calculate attention scores
+        scores = None  # TODO: Implement
+        
+        # Step 2: Apply softmax
+        weights = None  # TODO: Implement
+        
+        # Step 3: Calculate output
+        output = None  # TODO: Implement
+        
+        return output, weights
+    
+    def visualize_attention(self, weights: np.ndarray, tokens: List[str],
+                          save_path: str = 'attention_weights.png'):
+        """
+        Visualize attention weights as a heatmap
+        
+        Args:
+            weights: Attention weights matrix (seq_len, seq_len)
+            tokens: List of token strings
+            save_path: Path to save the visualization
+        
+        TODO: Create an informative heatmap visualization
+        """
+        
+        # YOUR CODE HERE
+        # Create a figure
+        fig, ax = plt.subplots(figsize=(10, 8))
+        
+        # TODO: Create heatmap using seaborn
+        # Hints:
+        # - Use sns.heatmap()
+        # - Set annot=True to show values
+        # - Use appropriate colormap (e.g., 'YlOrRd')
+        # - Add labels for x and y axes
+        
+        plt.title('Attention Weights Heatmap', fontsize=16, fontweight='bold')
+        plt.tight_layout()
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        print(f"✓ Attention visualization saved to {save_path}")
+        
+        return fig
+
+
+# ============================================================================
+# PART 2: MULTI-MODEL SENTIMENT ANALYZER (10 points)
+# ============================================================================
+
+class MultiModelSentimentAnalyzer:
+    """
+    Compare multiple transformer models for sentiment analysis
+    
+    TODO for Students:
+    - Implement model loading
+    - Add prediction methods
+    - Create comparison visualizations
+    """
+    
+    def __init__(self):
+        """Initialize multiple sentiment analysis models"""
+        
+        # Define models to compare
+        self.model_names = {
+            'distilbert': 'distilbert-base-uncased-finetuned-sst-2-english',
+            'roberta': 'cardiffnlp/twitter-roberta-base-sentiment',
+            'bert': 'nlptown/bert-base-multilingual-uncased-sentiment'
+        }
+        
+        self.models = {}
+        self.tokenizers = {}
+        
+        print("Loading models...")
+        # TODO: Load each model and tokenizer
+        # YOUR CODE HERE
+    
+    def predict_single(self, text: str, model_name: str) -> Dict:
+        """
+        Predict sentiment for a single text using specified model
+        
+        Args:
+            text: Input text
+            model_name: Name of model to use ('distilbert', 'roberta', or 'bert')
+        
+        Returns:
+            Dictionary with prediction results
+        
+        TODO: Implement prediction logic
+        """
+        
+        # YOUR CODE HERE
+        result = {
+            'text': text,
+            'model': model_name,
+            'label': None,  # TODO: Get predicted label
+            'confidence': None,  # TODO: Get confidence score
+            'scores': {}  # TODO: Get all class scores
+        }
+        
+        return result
+    
+    def compare_models(self, texts: List[str]) -> pd.DataFrame:
+        """
+        Compare all models on a list of texts
+        
+        Args:
+            texts: List of input texts
+        
+        Returns:
+            DataFrame with comparison results
+        
+        TODO: Compare all models and create summary
+        """
+        
+        results = []
+        
+        # YOUR CODE HERE
+        # For each text and each model:
+        # 1. Get prediction
+        # 2. Store results
+        # 3. Create DataFrame
+        
+        df = pd.DataFrame(results)
+        return df
+    
+    def visualize_comparison(self, df: pd.DataFrame, 
+                           save_path: str = 'model_comparison.png'):
+        """
+        Create visualization comparing model performance
+        
+        TODO: Create informative comparison plots
+        """
+        
+        # YOUR CODE HERE
+        # Create subplots comparing:
+        # 1. Confidence scores across models
+        # 2. Agreement between models
+        # 3. Processing time (bonus)
+        
+        pass
+
+
+# ============================================================================
+# PART 3: ATTENTION PATTERN ANALYZER (5 points)
+# ============================================================================
+
+class AttentionPatternAnalyzer:
+    """
+    Analyze attention patterns from real transformer models
+    
+    TODO for Students:
+    - Extract attention from BERT
+    - Analyze patterns
+    - Create visualizations
+    """
+    
+    def __init__(self, model_name: str = 'bert-base-uncased'):
+        """Load model with attention outputs"""
+        
+        # YOUR CODE HERE
+        # Load model with output_attentions=True
+        self.tokenizer = None  # TODO
+        self.model = None  # TODO
+    
+    def extract_attention(self, text: str, layer: int = 0, 
+                         head: int = 0) -> Tuple[np.ndarray, List[str]]:
+        """
+        Extract attention weights from specific layer and head
+        
+        Args:
+            text: Input text
+            layer: Which layer to extract from
+            head: Which attention head to extract from
+        
+        Returns:
+            attention_weights: Attention matrix
+            tokens: List of tokens
+        
+        TODO: Implement attention extraction
+        """
+        
+        # YOUR CODE HERE
+        pass
+    
+    def analyze_patterns(self, text: str) -> Dict:
+        """
+        Analyze attention patterns across all layers and heads
+        
+        Returns:
+            Dictionary with analysis results:
+            - Average attention distance
+            - Most attended tokens
+            - Layer-wise patterns
+        
+        TODO: Implement comprehensive analysis
+        """
+        
+        # YOUR CODE HERE
+        analysis = {
+            'total_layers': None,
+            'total_heads': None,
+            'avg_attention_distance': None,
+            'most_attended_tokens': [],
+            'layer_patterns': {}
+        }
+        
+        return analysis
+
+
+# ============================================================================
+# MAIN EXECUTION AND TESTING
+# ============================================================================
+
+def test_simple_attention():
+    """Test the SimpleAttention implementation"""
+    
+    print("\n" + "="*80)
+    print("TESTING SIMPLE ATTENTION")
+    print("="*80)
+    
+    # Create test data
+    seq_len, d_k, d_v = 6, 8, 8
+    Q = np.random.randn(seq_len, d_k)
+    K = np.random.randn(seq_len, d_k)
+    V = np.random.randn(seq_len, d_v)
+    
+    # Initialize attention
+    attention = SimpleAttention(d_k)
+    
+    # Calculate attention
+    output, weights = attention.calculate_attention(Q, K, V)
+    
+    # Verify shapes
+    print(f"✓ Output shape: {output.shape} (expected: {(seq_len, d_v)})")
+    print(f"✓ Weights shape: {weights.shape} (expected: {(seq_len, seq_len)})")
+    
+    # Verify weights sum to 1
+    row_sums = weights.sum(axis=1)
+    print(f"✓ Weights sum to 1: {np.allclose(row_sums, 1.0)}")
+    
+    # Visualize
+    tokens = ["The", "cat", "sat", "on", "the", "mat"]
+    attention.visualize_attention(weights, tokens)
+    
+    print("\n✓ Simple Attention test completed!")
+
+
+def test_multi_model_analyzer():
+    """Test the MultiModelSentimentAnalyzer"""
+    
+    print("\n" + "="*80)
+    print("TESTING MULTI-MODEL SENTIMENT ANALYZER")
+    print("="*80)
+    
+    # Initialize analyzer
+    analyzer = MultiModelSentimentAnalyzer()
+    
+    # Test texts
+    test_texts = [
+        "I absolutely love this transformer architecture!",
+        "This is terrible and confusing.",
+        "The model works okay, nothing special.",
+        "Revolutionary breakthrough in NLP!",
+        "Worst experience ever."
+    ]
+    
+    # Compare models
+    results = analyzer.compare_models(test_texts)
+    
+    print("\nComparison Results:")
+    print(results)
+    
+    # Visualize
+    analyzer.visualize_comparison(results)
+    
+    print("\n✓ Multi-model analyzer test completed!")
+
+
+def test_attention_pattern_analyzer():
+    """Test the AttentionPatternAnalyzer"""
+    
+    print("\n" + "="*80)
+    print("TESTING ATTENTION PATTERN ANALYZER")
+    print("="*80)
+    
+    # Initialize analyzer
+    analyzer = AttentionPatternAnalyzer()
+    
+    # Test text
+    text = "The transformer architecture revolutionized natural language processing."
+    
+    # Extract attention
+    attention, tokens = analyzer.extract_attention(text, layer=0, head=0)
+    
+    print(f"✓ Extracted attention shape: {attention.shape}")
+    print(f"✓ Tokens: {tokens}")
+    
+    # Analyze patterns
+    analysis = analyzer.analyze_patterns(text)
+    
+    print("\nAttention Pattern Analysis:")
+    for key, value in analysis.items():
+        print(f"  {key}: {value}")
+    
+    print("\n✓ Attention pattern analyzer test completed!")
+
+
+def generate_report():
+    """
+    Generate a comprehensive report of findings
+    
+    TODO for Students:
+    - Summarize all results
+    - Include visualizations
+    - Provide insights and conclusions
+    """
+    
+    print("\n" + "="*80)
+    print("GENERATING COMPREHENSIVE REPORT")
+    print("="*80)
+    
+    report = """
+    MULTI-MODEL TEXT ANALYSIS TOOL - REPORT
+    ========================================
+    
+    1. ATTENTION MECHANISM IMPLEMENTATION
+    -------------------------------------
+    [TODO: Describe your implementation]
+    - How does the attention formula work?
+    - What patterns did you observe?
+    
+    2. MODEL COMPARISON RESULTS
+    ---------------------------
+    [TODO: Summarize model comparison]
+    - Which model performed best?
+    - What are the differences between models?
+    - Processing time comparison
+    
+    3. ATTENTION PATTERN ANALYSIS
+    -----------------------------
+    [TODO: Describe attention patterns]
+    - What patterns emerged across layers?
+    - Which tokens receive most attention?
+    - How does attention change by layer?
+    
+    4. KEY INSIGHTS
+    ---------------
+    [TODO: Your key learnings]
+    - What did you learn about attention?
+    - How do different models compare?
+    - Real-world implications
+    
+    5. CHALLENGES AND SOLUTIONS
+    ---------------------------
+    [TODO: Describe any challenges you faced]
+    - What was difficult?
+    - How did you overcome it?
+    
+    6. FUTURE IMPROVEMENTS
+    ---------------------
+    [TODO: What would you do differently?]
+    - Additional features to implement
+    - Better visualizations
+    - Performance optimizations
+    """
+    
+    # Save report
+    with open('project_report.txt', 'w') as f:
+        f.write(report)
+    
+    print("✓ Report template saved to 'project_report.txt'")
+    print("  Please complete the TODO sections with your findings!")
+
+
+# ============================================================================
+# BONUS CHALLENGES (Optional - Extra Credit)
+# ============================================================================
+
+def bonus_challenge_1():
+    """
+    BONUS 1: Implement Multi-Head Attention
+    
+    Extend SimpleAttention to support multiple attention heads
+    """
+    pass
+
+
+def bonus_challenge_2():
+    """
+    BONUS 2: Fine-tune a Small Model
+    
+    Fine-tune a small transformer on a custom sentiment dataset
+    """
+    pass
+
+
+def bonus_challenge_3():
+    """
+    BONUS 3: Build Interactive Dashboard
+    
+    Create a Streamlit/Gradio app to interact with your models
+    """
+    pass
+
+
+# ============================================================================
+# MAIN FUNCTION
+# ============================================================================
+
+def main():
+    """
+    Main execution function
+    
+    This runs all components of the project:
+    0. Verify setup (IMPORTANT!)
+    1. Simple attention implementation
+    2. Multi-model comparison
+    3. Attention pattern analysis
+    4. Report generation
+    """
+    
+    print("="*80)
+    print("SESSION 4 - TAKE-HOME PROJECT")
+    print("Multi-Model Text Analysis Tool")
+    print("="*80)
+    print("\nIMPORTANT NOTES:")
+    print("- First run will download models (~3-5GB total)")
+    print("- This may take 10-30 minutes depending on your internet speed")
+    print("- Subsequent runs will be much faster (using cached models)")
+    print("- Models are cached in: ~/.cache/huggingface/")
+    print("="*80 + "\n")
+    
+    # First, verify setup
+    if not verify_setup():
+        print("\n✗ Setup verification failed. Please fix issues before continuing.")
+        return
+    
+    input("\nPress Enter to continue with the project (models will download)...")
+    
+    try:
+        # Part 1: Test simple attention
+        test_simple_attention()
+        
+        # Part 2: Test multi-model analyzer
+        print("\n⚠ Note: Next step will download 3 sentiment models (~1-2GB total)")
+        input("Press Enter to continue...")
+        test_multi_model_analyzer()
+        
+        # Part 3: Test attention pattern analyzer
+        print("\n⚠ Note: Next step will download BERT model (~500MB)")
+        input("Press Enter to continue...")
+        test_attention_pattern_analyzer()
+        
+        # Generate report
+        generate_report()
+        
+        print("\n" + "="*80)
+        print("✓ ALL TESTS COMPLETED SUCCESSFULLY!")
+        print("="*80)
+        print("\nNext Steps:")
+        print("1. Complete all TODO sections")
+        print("2. Fill in the project report")
+        print("3. Test with your own examples")
+        print("4. (Optional) Try bonus challenges")
+        print("\nGood luck! 🚀")
+        
+    except Exception as e:
+        print(f"\n✗ Error occurred: {e}")
+        print("\nTroubleshooting:")
+        print("1. Check internet connection")
+        print("2. Ensure enough disk space (~5GB)")
+        print("3. Try updating packages: pip install --upgrade transformers torch")
+        print("4. Check if you're behind a proxy/firewall")
+        print("\nPlease debug and complete the TODO sections.")
+
+
+if __name__ == "__main__":
+    """
+    Run this script to test your implementation
+    
+    Usage:
+        python session4_project.py
+    
+    Grading Criteria:
+    ----------------
+    - Part 1 (Attention from scratch): 15 points
+      * Correct implementation: 10 points
+      * Visualization: 5 points
+    
+    - Part 2 (Multi-model comparison): 10 points
+      * Model loading and prediction: 5 points
+      * Comparison and visualization: 5 points
+    
+    - Part 3 (Attention analysis): 5 points
+      * Extraction: 3 points
+      * Analysis: 2 points
+    
+    - Report: 5 points
+      * Completeness: 3 points
+      * Insights: 2 points
+    
+    - Bonus (Optional): Up to 5 extra points
+    
+    Total: 35 points (+ 5 bonus)
+    """
+    
+    main()
+
+
+# ============================================================================
+# HELPFUL FUNCTIONS AND UTILITIES
+# ============================================================================
+
+def create_sample_dataset():
+    """Create sample dataset for testing"""
+    
+    samples = [
+        # Positive samples
+        ("I love this!", "positive"),
+        ("Absolutely amazing and wonderful!", "positive"),
+        ("This is the best thing ever!", "positive"),
+        ("Fantastic work, really impressive!", "positive"),
+        
+        # Negative samples
+        ("I hate this.", "negative"),
+        ("Terrible and disappointing.", "negative"),
+        ("Worst experience ever!", "negative"),
+        ("This is awful.", "negative"),
+        
+        # Neutral samples
+        ("It's okay, nothing special.", "neutral"),
+        ("The product works as expected.", "neutral"),
+        ("Average quality.", "neutral"),
+        ("Not bad, not great.", "neutral"),
+    ]
+    
+    return samples
+
+
+def save_results(results: Dict, filename: str = 'results.json'):
+    """Save results to JSON file"""
+    import json
+    
+    with open(filename, 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    print(f"✓ Results saved to {filename}")
+
+
+def load_results(filename: str = 'results.json') -> Dict:
+    """Load results from JSON file"""
+    import json
+    
+    with open(filename, 'r') as f:
+        results = json.load(f)
+    
+    return results
+
+
+# ============================================================================
+# DOCUMENTATION AND HELP
+# ============================================================================
+
+"""
+STUDENT INSTRUCTIONS
+====================
+
+Step 1: Setup Environment
+-------------------------
+1. Install required packages:
+   pip install numpy matplotlib seaborn transformers torch pandas
+
+2. Verify installation:
+   python -c "import transformers; print('Setup OK!')"
+
+Step 2: Complete TODOs
+----------------------
+Work through the code and complete all sections marked with TODO:
+
+1. SimpleAttention.calculate_attention()
+   - Implement the attention formula
+   - Make sure weights sum to 1
+
+2. SimpleAttention.visualize_attention()
+   - Create an informative heatmap
+   - Use seaborn for visualization
+
+3. MultiModelSentimentAnalyzer.__init__()
+   - Load all three models
+   - Initialize tokenizers
+
+4. MultiModelSentimentAnalyzer.predict_single()
+   - Implement prediction logic
+   - Return confidence scores
+
+5. MultiModelSentimentAnalyzer.compare_models()
+   - Compare all models on test texts
+   - Create comparison DataFrame
+
+6. AttentionPatternAnalyzer methods
+   - Extract attention from BERT
+   - Analyze patterns across layers
+
+Step 3: Test Your Code
+----------------------
+Run the script and verify:
+- All tests pass
+- Visualizations are generated
+- Results make sense
+
+Step 4: Complete Report
+-----------------------
+Fill in the project_report.txt with your findings:
+- Describe implementation
+- Summarize results
+- Provide insights
+
+Step 5: Submit
+-------------
+Submit the following files:
+1. session4_project.py (completed)
+2. project_report.txt (completed)
+3. All generated visualizations
+4. README.md with usage instructions
+
+Tips for Success
+----------------
+1. Start early - this project takes time!
+2. Test each part independently before running all together
+3. Use print statements to debug
+4. Refer back to lecture slides for formulas
+5. Ask questions on the course forum
+6. Have fun experimenting with different models!
+
+Common Issues
+------------
+- Out of memory: Use smaller batch sizes or lighter models
+- Slow processing: Start with smaller test sets
+- Import errors: Make sure all packages are installed
+- Model loading fails: Check internet connection
+
+Good luck! 🎓
+"""
