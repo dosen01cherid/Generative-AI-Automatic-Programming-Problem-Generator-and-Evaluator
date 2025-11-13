@@ -5050,6 +5050,10 @@ class ProblemSolverApp:
                 self.score_tracker.full_reset()
                 window.console.log("✅ Score tracker fully reset for new problem set")
 
+            # ✅ Clear edit history from localStorage (new session starts)
+            window.localStorage.removeItem("score_edits")
+            window.console.log("✅ Edit history cleared from localStorage (new session)")
+
             # ✅ Reset score display manager for new problem set
             if hasattr(self, 'score_display_manager'):
                 self.score_display_manager["last_edit_time"] = None
@@ -5681,8 +5685,8 @@ class ProblemSolverApp:
             window.localStorage.setItem("score_display_manager", json.dumps(manager_state))
             window.console.log("✅ Saved score display manager")
 
-            # Save global edit tracking
-            if hasattr(self.score_tracker, 'ever_edited_steps') and self.score_tracker.ever_edited_steps:
+            # Save global edit tracking (always save, even if empty)
+            if hasattr(self.score_tracker, 'ever_edited_steps'):
                 edits_to_save = {}
                 for (prob_idx, step_idx) in self.score_tracker.ever_edited_steps:
                     prob_key = str(prob_idx)
