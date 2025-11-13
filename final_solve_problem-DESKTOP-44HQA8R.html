@@ -7786,7 +7786,7 @@ class ProblemSolverApp:
         is_correct = (user_answer == correct_answer)
         must_correct = step_data.get("requireCorrect", False)
 
-        window.console.log(f"MC Single: user={user_answer}, correct={correct_answer}, is_correct={is_correct}")
+        window.console.log(f"MC Single: user={user_answer}, correct={correct_answer}, is_correct={is_correct}, must_correct={must_correct}")
 
         # ✅ CRITICAL: Update BOTH solve_state AND problem_states
         if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -7824,6 +7824,7 @@ class ProblemSolverApp:
                 """
             else:
                 if must_correct:
+                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
                     feedback_div.innerHTML = """
                         <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                             ❌ Incorrect. This step requires the correct answer. Please try again.
@@ -7832,9 +7833,12 @@ class ProblemSolverApp:
                     # Reset finished status if must be correct
                     if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
                         self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
                         self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     self.save_to_storage()
+                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
                     return
                 else:
                     feedback_div.innerHTML = f"""
@@ -7845,6 +7849,7 @@ class ProblemSolverApp:
 
         # Save and check completion
         self.save_to_storage()
+        window.console.log("✅ Proceeding to check completion and show next step")
         self._check_problem_completion_and_show_next_step(step_idx)
 
 
@@ -7916,6 +7921,7 @@ class ProblemSolverApp:
                 """
             else:
                 if must_correct:
+                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
                     feedback_div.innerHTML = """
                         <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                             ❌ Incorrect. This step requires the correct answer. Please try again.
@@ -7924,9 +7930,12 @@ class ProblemSolverApp:
                     # Reset finished status if must be correct
                     if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
                         self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
                         self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     self.save_to_storage()
+                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
                     return
                 else:
                     correct_list = ", ".join(sorted(correct_answers))
@@ -7938,6 +7947,7 @@ class ProblemSolverApp:
 
         # Save and check completion
         self.save_to_storage()
+        window.console.log("✅ Proceeding to check completion and show next step")
         self._check_problem_completion_and_show_next_step(step_idx)
 
 
@@ -8006,6 +8016,7 @@ class ProblemSolverApp:
                 """
             else:
                 if must_correct:
+                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
                     feedback_div.innerHTML = """
                         <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                             ❌ Incorrect. This step requires the correct answer. Please try again.
@@ -8014,9 +8025,12 @@ class ProblemSolverApp:
                     # Reset finished status if must be correct
                     if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
                         self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
                         self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     self.save_to_storage()
+                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
                     return
                 else:
                     correct_display = "True" if correct_answer == "true" else "False"
@@ -8028,6 +8042,7 @@ class ProblemSolverApp:
 
         # Save and check completion
         self.save_to_storage()
+        window.console.log("✅ Proceeding to check completion and show next step")
         self._check_problem_completion_and_show_next_step(step_idx)
 
 
@@ -8125,6 +8140,7 @@ class ProblemSolverApp:
                 """
             else:
                 if must_correct:
+                    window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
                     feedback_div.innerHTML = """
                         <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                             ❌ Incorrect. This step requires the correct answer. Please try again.
@@ -8133,9 +8149,12 @@ class ProblemSolverApp:
                     # Reset finished status if must be correct
                     if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
                         self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
                         self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                        window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
                     self.save_to_storage()
+                    window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
                     return
                 else:
                     # ✅ FIX: Use correct_answers instead of accepted_answers
@@ -8151,6 +8170,7 @@ class ProblemSolverApp:
 
         # Save and check completion
         self.save_to_storage()
+        window.console.log("✅ Proceeding to check completion and show next step")
         self._check_problem_completion_and_show_next_step(step_idx)
     
     # ============================================
