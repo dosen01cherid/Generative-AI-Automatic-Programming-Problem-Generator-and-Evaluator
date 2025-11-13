@@ -3033,7 +3033,7 @@ class ProblemSolverApp:
             margin-bottom: 12px;
         """
 
-        # Step header with edit button (no correctness indicator)
+        # Step header with edit/review button (no correctness indicator)
         step_header = document.createElement("div")
         step_header.style.cssText = """
             display: flex;
@@ -3042,6 +3042,11 @@ class ProblemSolverApp:
             margin-bottom: 12px;
         """
 
+        # Check if this is a math-expression step (read-only in review)
+        step_type = step_data.get("step_type", "math-expression")
+        is_math_expr = step_type == "math-expression" or step_type == "step-by-step"
+        button_label = "👁️ Review" if is_math_expr else "✏️ Edit"
+
         step_header.innerHTML = f"""
             <div style="font-weight: 600; color: #475569;">
                 Step {step_idx + 1}
@@ -3049,7 +3054,7 @@ class ProblemSolverApp:
             <button class="edit-step-btn" data-problem="{prob_idx}" data-step="{step_idx}"
                     style="padding: 6px 12px; background: #3b82f6; color: white; border: none;
                            border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500;">
-                ✏️ Edit
+                {button_label}
             </button>
         """
         step_container.appendChild(step_header)
@@ -4188,16 +4193,27 @@ class ProblemSolverApp:
         # Scroll to it smoothly
         container.scrollIntoView({'behavior': 'smooth', 'block': 'center'})
         
+        # ✅ Check if this is a math-expression (read-only in review mode)
+        is_math_expr_readonly = step_type in ["freestyle", "math-expression"]
+
         # Create edit wrapper
         edit_wrapper = document.createElement("div")
         edit_wrapper.className = "edit-mode-wrapper"
-        edit_wrapper.style.cssText = "background:#fef3c7;border:3px solid #f59e0b;padding:20px;border-radius:12px;margin-top:16px;animation:slideIn 0.3s ease-out;"
-        
+        if is_math_expr_readonly:
+            edit_wrapper.style.cssText = "background:#e0f2fe;border:3px solid#0284c7;padding:20px;border-radius:12px;margin-top:16px;animation:slideIn 0.3s ease-out;"
+        else:
+            edit_wrapper.style.cssText = "background:#fef3c7;border:3px solid #f59e0b;padding:20px;border-radius:12px;margin-top:16px;animation:slideIn 0.3s ease-out;"
+
         edit_header = document.createElement("div")
-        edit_header.style.cssText = "font-size:18px;font-weight:700;color:#92400e;margin-bottom:16px;text-align:center;"
-        edit_header.innerHTML = "✏️ Editing Mode - Update Your Answer"
+        edit_header.style.cssText = "font-size:18px;font-weight:700;margin-bottom:16px;text-align:center;"
+        if is_math_expr_readonly:
+            edit_header.style.color = "#0c4a6e"
+            edit_header.innerHTML = "👁️ Review Mode - View Only"
+        else:
+            edit_header.style.color = "#92400e"
+            edit_header.innerHTML = "✏️ Editing Mode - Update Your Answer"
         edit_wrapper.appendChild(edit_header)
-        
+
         # ✅ Handle different step types
         if step_type in ["multiple-choice-single", "multiple-choice-multiple"]:
             window.console.log(f"📝 Enabling {step_type} editing")
@@ -4248,70 +4264,81 @@ class ProblemSolverApp:
                 window.console.log("✅ Enabled fill-blank input")
         
         elif step_type in ["freestyle", "math-expression"]:
-            window.console.log("🎨 Enabling freestyle math editing")
+            window.console.log("👁️ Showing math expression in read-only mode")
 
-            # ✅ Get the stored MathQuill instance
+            # ✅ Get the stored MathQuill instance and disable it
             if hasattr(container, 'mq_field') and container.mq_field:
                 try:
-                    # Focus the existing MathQuill field
-                    container.mq_field.focus()
-                    window.console.log("✅ MathQuill field focused")
+                    # Disable the MathQuill field (make it read-only)
+                    container.mq_field.config({'disabled': True})
+                    window.console.log("✅ MathQuill field disabled for review")
                 except Exception as e:
-                    window.console.error(f"⚠️ Could not focus MathQuill: {e}")
+                    window.console.error(f"⚠️ Could not disable MathQuill: {e}")
             else:
                 window.console.warn("⚠️ MathQuill instance not found on container")
 
-            # Make sure the input container is visible and styled for editing
+            # Make sure the input container is visible but disabled
             input_container = container.querySelector(".math-input-container")
             if input_container:
-                input_container.style.pointerEvents = "auto"
-                input_container.style.opacity = "1"
+                input_container.style.pointerEvents = "none"
+                input_container.style.opacity = "0.7"
+                input_container.style.background = "#f8fafc"
 
-            # Show instruction for freestyle editing
-            freestyle_hint = document.createElement("div")
-            freestyle_hint.style.cssText = "background:#fef9c3;border:1px solid #eab308;padding:12px;border-radius:6px;margin-bottom:12px;font-size:14px;color:#854d0e;"
-            freestyle_hint.innerHTML = "💡 <strong>Tip:</strong> Click in the math field above to edit your answer. Use your keyboard to enter mathematical expressions."
-            edit_wrapper.appendChild(freestyle_hint)
+            # Show read-only notice
+            readonly_notice = document.createElement("div")
+            readonly_notice.style.cssText = "background:#dbeafe;border:1px solid #3b82f6;padding:12px;border-radius:6px;margin-bottom:12px;font-size:14px;color:#1e3a8a;"
+            readonly_notice.innerHTML = "ℹ️ <strong>Note:</strong> Math expression answers cannot be edited in review mode. This is a view-only display of your answer."
+            edit_wrapper.appendChild(readonly_notice)
         
         # Create button container
         button_container = document.createElement("div")
         button_container.style.cssText = "display:flex;gap:12px;margin-top:16px;"
-        
-        # Save button
-        save_btn = document.createElement("button")
-        save_btn.className = "btn"
-        save_btn.style.cssText = "flex:1;background:#10b981;color:white;font-weight:600;padding:12px;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;"
-        save_btn.textContent = "💾 Save Answer"
-        save_btn.onmouseover = create_proxy(lambda e: setattr(e.target.style, 'background', '#059669'))
-        save_btn.onmouseout = create_proxy(lambda e: setattr(e.target.style, 'background', '#10b981'))
-        
-        def make_save_handler(prob_idx, s_idx):
-            def handler(e):
-                self.save_answer_from_review(prob_idx, s_idx)
-            return handler
-        
-        save_btn.addEventListener("click", create_proxy(make_save_handler(problem_idx, step_idx)))
-        button_container.appendChild(save_btn)
-        
-        # Cancel button
+
+        # ✅ Only show Save button for editable step types (not math-expression)
+        if not is_math_expr_readonly:
+            # Save button
+            save_btn = document.createElement("button")
+            save_btn.className = "btn"
+            save_btn.style.cssText = "flex:1;background:#10b981;color:white;font-weight:600;padding:12px;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;"
+            save_btn.textContent = "💾 Save Answer"
+            save_btn.onmouseover = create_proxy(lambda e: setattr(e.target.style, 'background', '#059669'))
+            save_btn.onmouseout = create_proxy(lambda e: setattr(e.target.style, 'background', '#10b981'))
+
+            def make_save_handler(prob_idx, s_idx):
+                def handler(e):
+                    self.save_answer_from_review(prob_idx, s_idx)
+                return handler
+
+            save_btn.addEventListener("click", create_proxy(make_save_handler(problem_idx, step_idx)))
+            button_container.appendChild(save_btn)
+
+        # Cancel button (always show, but different style for read-only)
         cancel_btn = document.createElement("button")
         cancel_btn.className = "btn ghost"
-        cancel_btn.style.cssText = "flex:1;background:#ef4444;color:white;font-weight:600;padding:12px;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;"
-        cancel_btn.textContent = "❌ Cancel"
-        cancel_btn.onmouseover = create_proxy(lambda e: setattr(e.target.style, 'background', '#dc2626'))
-        cancel_btn.onmouseout = create_proxy(lambda e: setattr(e.target.style, 'background', '#ef4444'))
-        
+        if is_math_expr_readonly:
+            # For read-only, make Cancel button blue and full width
+            cancel_btn.style.cssText = "flex:1;background:#3b82f6;color:white;font-weight:600;padding:12px;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;"
+            cancel_btn.textContent = "✖️ Close"
+            cancel_btn.onmouseover = create_proxy(lambda e: setattr(e.target.style, 'background', '#2563eb'))
+            cancel_btn.onmouseout = create_proxy(lambda e: setattr(e.target.style, 'background', '#3b82f6'))
+        else:
+            # For editable, keep red Cancel button
+            cancel_btn.style.cssText = "flex:1;background:#ef4444;color:white;font-weight:600;padding:12px;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;"
+            cancel_btn.textContent = "❌ Cancel"
+            cancel_btn.onmouseover = create_proxy(lambda e: setattr(e.target.style, 'background', '#dc2626'))
+            cancel_btn.onmouseout = create_proxy(lambda e: setattr(e.target.style, 'background', '#ef4444'))
+
         def make_cancel_handler(prob_idx):
             def handler(e):
-                self.cancel_edit_from_review(prob_idx, show_cancel_message=True)
+                self.cancel_edit_from_review(prob_idx, show_cancel_message=False)
             return handler
-        
+
         cancel_btn.addEventListener("click", create_proxy(make_cancel_handler(problem_idx)))
         button_container.appendChild(cancel_btn)
-        
+
         edit_wrapper.appendChild(button_container)
         container.appendChild(edit_wrapper)
-        
+
         window.console.log("✅ Edit UI fully constructed and displayed")
 
     def _recreate_mc_single_step(self, container, step_idx, saved_step, original_step_data):
@@ -8473,11 +8500,10 @@ class ProblemSolverApp:
           window.console.log(f"   Score: 0 (not finished)")
           return 0.0
 
-      # Math expression and other simple types
+      # Math expression and other simple types (use cached value - not editable)
       if step_type == "math-expression" or step_type == "step-by-step":
-          is_correct = self._check_math_expression_correctness(step_data, step_state)
-          score = 100.0 if is_correct else 0.0
-          window.console.log(f"   Score: {score} (math-expression, re-checked: {is_correct})")
+          score = 100.0 if step_state.get("correct", False) else 0.0
+          window.console.log(f"   Score: {score} (math-expression, cached)")
           return score
 
       # Multiple choice - single answer
