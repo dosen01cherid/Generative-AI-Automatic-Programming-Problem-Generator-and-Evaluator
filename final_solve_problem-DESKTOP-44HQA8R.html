@@ -2739,29 +2739,33 @@ class ScoreRecalculationTracker:
         window.console.log(f"   Current session: {len(self.edited_steps)} edits, {len(self.first_time_edits_in_session)} first-time")
         window.console.log(f"   Ever edited (global): {len(self.ever_edited_steps)}")
 
-        # ✅ ALWAYS cancel existing timer and start a new one (restart on each edit)
-        if self.timer_handle:
-            window.clearTimeout(self.timer_handle)
-            self.timer_handle = None
-            window.console.log("⏱️ Timer restarted due to new edit")
-
         # ✅ Check if we have at least 2 first-time edits in current session
         if len(self.first_time_edits_in_session) >= 2:
             window.console.log("✅ At least 2 first-time edits detected (global) - triggering immediate recalculation")
+            # Cancel timer if running (no longer needed)
+            if self.timer_handle:
+                window.clearTimeout(self.timer_handle)
+                self.timer_handle = None
+                window.console.log("⏱️ Timer cancelled (2 edits reached)")
             self.trigger_recalculation("2_edits")
         else:
             window.console.log(f"⏱️ Only {len(self.first_time_edits_in_session)} first-time edit(s)")
-            # ✅ Only start timer if in review mode (review section exists)
-            # Otherwise, score_display_manager timer handles it
-            msg_el = document.querySelector("#reviewScoreMessage")
-            if msg_el:
-                window.console.log("⏱️ In review mode - starting 5-minute timer")
-                def timer_callback():
-                    self.trigger_recalculation("5_minutes")
-                self.timer_handle = window.setTimeout(create_proxy(timer_callback), 5 * 60 * 1000)
-                self.update_ui_message()
+            # ✅ Only start timer if NOT already running
+            if not self.timer_handle:
+                # ✅ Only start timer if in review mode (review section exists)
+                # Otherwise, score_display_manager timer handles it
+                msg_el = document.querySelector("#reviewScoreMessage")
+                if msg_el:
+                    window.console.log("⏱️ In review mode - starting 5-minute timer")
+                    def timer_callback():
+                        self.trigger_recalculation("5_minutes")
+                    self.timer_handle = window.setTimeout(create_proxy(timer_callback), 5 * 60 * 1000)
+                    self.update_ui_message()
+                else:
+                    window.console.log("⏱️ In solving mode - score_display_manager will handle timer")
             else:
-                window.console.log("⏱️ In solving mode - score_display_manager will handle timer")
+                window.console.log("⏱️ Timer already running - not restarting")
+                self.update_ui_message()  # Update countdown display
     
     def trigger_recalculation(self, reason):
         """Recalculate score and reset"""
@@ -3432,9 +3436,13 @@ class ProblemSolverApp:
                 self.score_display_manager["edited_problems"].add(problem_idx)
                 window.console.log(f"✅ First edit for problem {problem_idx}")
 
-            # Update last edit timestamp
+            # ✅ Update last edit timestamp ONLY on first edit (don't restart timer)
             import js
-            self.score_display_manager["last_edit_time"] = js.Date.now()
+            if not self.score_display_manager["pending_score_update"]:
+                self.score_display_manager["last_edit_time"] = js.Date.now()
+                window.console.log("⏱️ Started 5-minute timer (first edit)")
+            else:
+                window.console.log("⏱️ Timer already running - not restarting")
 
             # ✅ Use score_tracker's first-time step edit count (not problem count)
             first_time_step_edits = len(self.score_tracker.first_time_edits_in_session)
