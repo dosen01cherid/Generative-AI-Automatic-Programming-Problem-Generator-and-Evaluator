@@ -2906,8 +2906,24 @@ class PersistenceManager:
                 return async function(dbName, version, store) {
                     const dbReq = indexedDB.open(dbName, version);
                     return new Promise((resolve, reject) => {
+                        dbReq.onupgradeneeded = e => {
+                            const db = e.target.result;
+                            // Create object stores if they don't exist
+                            if (!db.objectStoreNames.contains("analytics")) {
+                                db.createObjectStore("analytics", { keyPath: "id" });
+                            }
+                            if (!db.objectStoreNames.contains("hashes")) {
+                                db.createObjectStore("hashes", { keyPath: "id" });
+                            }
+                        };
                         dbReq.onsuccess = e => {
                             const db = e.target.result;
+                            // Check if the requested store exists
+                            if (!db.objectStoreNames.contains(store)) {
+                                db.close();
+                                resolve([]);  // Return empty array if store doesn't exist
+                                return;
+                            }
                             const tx = db.transaction(store, "readonly");
                             const st = tx.objectStore(store);
                             const keysReq = st.getAllKeys();
