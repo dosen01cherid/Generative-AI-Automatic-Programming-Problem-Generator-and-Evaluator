@@ -7,6 +7,8 @@ A Chrome/Edge browser extension that automatically captures student progress rep
 - **Auto-Capture**: Automatically detects and captures base64-encoded progress reports from WhatsApp messages
 - **Real-time Monitoring**: Scans messages in real-time as they arrive
 - **Phone Number Detection**: Extracts student phone numbers from chat context
+- **🆕 Auto-Inject**: Directly inject data into Analytics App with ONE CLICK - no copy/paste needed!
+- **Smart Tab Detection**: Finds open Analytics App or opens it automatically
 - **One-Click Export**: Export captured reports directly to the Analytics App
 - **Privacy-Focused**: All data stays local, no external servers
 - **Easy Toggle**: Enable/disable auto-capture with one click
@@ -33,6 +35,11 @@ A Chrome/Edge browser extension that automatically captures student progress rep
 5. **Pin the Extension** (Optional)
    - Click the puzzle piece icon in the toolbar
    - Click the pin icon next to "WhatsApp Analytics"
+
+6. **Enable File Access** (Required for Auto-Inject with local files)
+   - Click "Details" on the extension card
+   - Scroll down and enable "Allow access to file URLs"
+   - This lets the extension inject data into `file:///` Analytics App pages
 
 ### Method 2: Generate Better Icons (Optional)
 
@@ -77,20 +84,32 @@ The extension includes placeholder icons. For better-looking icons:
 
 ### Export to Analytics App
 
-**Method 1: One-Click Copy & Paste**
+**Method 1: 🆕 Auto-Inject (RECOMMENDED!)**
 
 1. Click the extension icon
-2. Click "Export to Analytics App"
+2. Click "🚀 Auto-Inject to Analytics"
+3. Done! The extension:
+   - Finds or opens Analytics App
+   - Injects data directly into the page
+   - Automatically starts analysis
+   - No copy/paste needed!
+
+**Method 2: Copy & Paste**
+
+1. Click the extension icon
+2. Click "📤 Copy & Open Analytics"
 3. Reports are copied to clipboard and Analytics App opens
 4. Paste (Ctrl+V) into the text area
 5. Click "Analyze & Add Submissions"
 
-**Method 2: Manual Process**
+**Method 3: Manual Process**
 
 1. Click "View Captured Reports"
 2. Copy individual or all reports
 3. Open Analytics App
 4. Paste and analyze
+
+**Note:** Auto-Inject is the fastest and easiest method! See [AUTO-INJECT-GUIDE.md](AUTO-INJECT-GUIDE.md) for detailed information.
 
 ### Clear Reports
 
@@ -206,6 +225,14 @@ The extension requests the following permissions:
 - **Popup**: Right-click extension icon → Inspect popup
 
 ## Version History
+
+### v1.1.0 (2024-11-14)
+- **🆕 NEW: Auto-Inject Feature** - Direct data injection into Analytics App
+- **Tab Communication** - Extension can now communicate with Analytics App page
+- **Smart Tab Detection** - Automatically finds or opens Analytics App
+- **Auto-Analysis** - Optionally trigger analysis automatically after injection
+- **Content Script Injection** - Dynamic script injection into Analytics page
+- Added comprehensive AUTO-INJECT-GUIDE.md documentation
 
 ### v1.0.0 (2024-11-14)
 - Initial release
