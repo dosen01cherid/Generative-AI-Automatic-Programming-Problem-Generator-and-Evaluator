@@ -240,6 +240,13 @@ The extension requests the following permissions:
 
 ## Version History
 
+### v1.3.0 (2024-11-14)
+- **🆕 NEW: Real-Time Dashboard Support** - Extension triggers live updates in Analytics App
+- **Event Dispatching** - Notifies real-time views when new submissions arrive
+- **Timed-Quiz Integration** - Automatic leaderboard updates during quiz mode
+- **Live Updates** - Dashboard and leaderboard refresh automatically with new data
+- **Enhanced Auto-Inject** - Now includes event dispatching for live features
+
 ### v1.2.0 (2024-11-14)
 - **🆕🆕 NEW: Auto-Inject Mode** - Continuous automatic injection!
 - **Toggle-Activated** - One switch to enable/disable continuous injection
