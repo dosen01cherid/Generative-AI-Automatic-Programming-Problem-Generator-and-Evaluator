@@ -1042,7 +1042,7 @@ class ProgressAnalyzer:
                 if isinstance(step, dict):
                     step_info = {
                         "step_number": step.get("step_number"),
-                        "finalized": step.get("finalized", step.get("finished", False)),
+                        "finalized": step.get("finalized", False),
                         "attempts": []
                     }
                     for att in step.get("attempts", []) or []:
@@ -1459,11 +1459,9 @@ class ProgressAnalyzer:
 
                 # Calculate summary statistics
                 total_steps = len(step_states)
-                # ✅ Handle both "finalized" (old) and "finished" (desktop) formats
-                finalized_steps = sum(1 for s in step_states if s.get("finalized", s.get("finished", False)))
+                finalized_steps = sum(1 for s in step_states if s.get("finalized", False))
                 correct_steps = sum(1 for s in step_states if s.get("correct", False))
-                # ✅ Handle both attempt counters and user_answers arrays
-                total_attempts = sum(s.get("attempts", len(s.get("user_answers", []))) for s in step_states)
+                total_attempts = sum(s.get("attempts", 0) for s in step_states)
                 total_finalize_attempts = sum(s.get("finalize_attempts", 0) for s in step_states)
 
                 window.console.log(f"📊 Statistics:")
@@ -1478,48 +1476,28 @@ class ProgressAnalyzer:
                 for step_idx, step_state in enumerate(step_states):
                     window.console.log(f"  📌 Step {step_idx + 1}:")
                     window.console.log(f"    - Keys: {list(step_state.keys())}")
-
-                    # ✅ Handle both "finalized" (old) and "finished" (desktop) formats
-                    is_finalized = step_state.get("finalized", step_state.get("finished", False))
-                    window.console.log(f"    - Finalized/Finished: {is_finalized}")
+                    window.console.log(f"    - Finalized: {step_state.get('finalized', False)}")
                     window.console.log(f"    - Correct: {step_state.get('correct', False)}")
-
-                    # ✅ Handle both "attempt_history" (old) and "user_answers" (desktop) formats
-                    attempt_history = step_state.get("attempt_history", [])
-                    user_answers = step_state.get("user_answers", [])
-
-                    window.console.log(f"    - Attempt history entries: {len(attempt_history)}")
-                    window.console.log(f"    - User answers: {len(user_answers)}")
+                    window.console.log(f"    - Attempts: {len(step_state.get('attempt_history', []))}")
 
                     step_progress = {
                         "step_number": step_idx + 1,
-                        "finalized": is_finalized,
+                        "finalized": step_state.get("finalized", False),
                         "correct": step_state.get("correct", False),
                         "structure_correct": step_state.get("structure_correct", False),
                         "attempts": []
                     }
 
-                    # Add attempt history (old format with detailed objects)
-                    if attempt_history:
-                        for att_idx, attempt in enumerate(attempt_history):
-                            window.console.log(f"      ✏️ Attempt {att_idx + 1} (old format): {attempt.get('correct', False)}")
-                            step_progress["attempts"].append({
-                                "answer_latex": attempt.get("answer_latex", ""),
-                                "expression": step_state.get("step", {}).get("expression", ""),
-                                "correct": attempt.get("correct", False),
-                                "time_taken_seconds": attempt.get("time_taken_seconds", 0)
-                            })
-                    # Add user answers (desktop format with simple strings)
-                    elif user_answers:
-                        window.console.log(f"      ✏️ Using user_answers (desktop format): {user_answers}")
-                        for ans_idx, answer in enumerate(user_answers):
-                            # Desktop format stores answers as simple strings/LaTeX
-                            step_progress["attempts"].append({
-                                "answer_latex": answer if isinstance(answer, str) else str(answer),
-                                "expression": "",
-                                "correct": step_state.get("correct", False) if ans_idx == len(user_answers) - 1 else False,
-                                "time_taken_seconds": 0
-                            })
+                    # Add attempt history
+                    attempt_history = step_state.get("attempt_history", [])
+                    for att_idx, attempt in enumerate(attempt_history):
+                        window.console.log(f"      ✏️ Attempt {att_idx + 1}: {attempt.get('correct', False)}")
+                        step_progress["attempts"].append({
+                            "answer_latex": attempt.get("answer_latex", ""),
+                            "expression": step_state.get("step", {}).get("expression", ""),
+                            "correct": attempt.get("correct", False),
+                            "time_taken_seconds": attempt.get("time_taken_seconds", 0)
+                        })
 
                     steps_progress.append(step_progress)
 
@@ -1637,7 +1615,7 @@ class ProgressAnalyzer:
                 if isinstance(step, dict):
                     step_info = {
                         "step_number": step.get("step_number"),
-                        "finalized": step.get("finalized", step.get("finished", False)),
+                        "finalized": step.get("finalized", False),
                         "attempts": []
                     }
                     for att in step.get("attempts", []) or []:
@@ -1673,7 +1651,7 @@ class ProgressAnalyzer:
         # Check step-level details
         for step in steps_progress:
             if isinstance(step, dict):
-                step_finalized = step.get("finalized", step.get("finished", False))
+                step_finalized = step.get("finalized", False)
                 step_attempts = step.get("attempts", [])
                 step_correct = step.get("correct", False)
 
@@ -2222,19 +2200,13 @@ class DisplayManager:
 
         for step in steps:
             step_no = step.get("step_number", "?")
-            finalized = step.get("finalized", step.get("finished", False))
+            finalized = step.get("finalized", False)
             correct = step.get("correct", False)
             structure_correct = step.get("structure_correct", False)
 
             # Status badge
-            # ✅ For non-math questions, structure_correct is not used, so finalized alone is enough
-            # For math questions, both finalized and structure_correct should be True
-            if finalized:
-                if structure_correct or correct:
-                    status = "<span style='color:#059669;font-weight:600;'>✅ Finalized</span>"
-                else:
-                    # Finalized but incorrect (shouldn't happen with requireCorrect, but handle it)
-                    status = "<span style='color:#d97706;font-weight:600;'>⚠️ Finalized (incorrect)</span>"
+            if finalized and structure_correct:
+                status = "<span style='color:#059669;font-weight:600;'>✅ Finalized</span>"
             elif correct:
                 status = "<span style='color:#d97706;font-weight:600;'>⚠️ Correct but not finalized</span>"
             else:
