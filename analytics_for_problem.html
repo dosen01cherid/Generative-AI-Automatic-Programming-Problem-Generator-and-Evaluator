@@ -23,9 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-006 (Loading Indicators)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-007 (Roster Management)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ Enhanced loading indicators for app startup and IndexedDB operations');
+    console.log('✅ NEW: Save/Load/Delete student rosters with custom names');
   </script>
 
   <!-- PyScript core -->
@@ -440,6 +440,9 @@ button.detail-toggle:hover {
       <button id="parseRosterMergeBtn" class="btn success">Parse & Merge</button>
       <button id="clearRosterBtn" class="btn ghost">Clear Roster</button>
       <button id="viewRosterBtn" class="btn ghost">View Roster</button>
+      <button id="saveRosterBtn" class="btn" style="background:#10b981;">💾 Save Roster</button>
+      <button id="loadRosterBtn" class="btn" style="background:#3b82f6;">📂 Load Roster</button>
+      <button id="deleteRosterBtn" class="btn" style="background:#ef4444;">🗑️ Delete Rosters</button>
     </div>
     <div id="rosterStatus" class="small" style="margin-top:8px; color:#059669;"></div>
   </div>
@@ -980,6 +983,9 @@ class RosterManager:
             ("#parseRosterMergeBtn", self.parse_and_merge),
             ("#clearRosterBtn", self.clear_roster),
             ("#viewRosterBtn", self.view_roster),
+            ("#saveRosterBtn", self.save_roster),
+            ("#loadRosterBtn", self.load_roster),
+            ("#deleteRosterBtn", self.delete_rosters),
         ]
         
         for selector, handler in bindings:
@@ -1162,7 +1168,323 @@ class RosterManager:
         html_content += "</tbody></table>"
         
         self.app.create_modal("Student Roster", html_content)
-    
+
+    def save_roster(self, e=None):
+        """Save current roster to IndexedDB"""
+        import asyncio
+        if not self.student_roster:
+            window.alert("No roster to save. Please parse a roster first.")
+            return
+        asyncio.ensure_future(self._save_roster_async())
+
+    async def _save_roster_async(self):
+        """Async method to save roster"""
+        from js import window
+
+        # Prompt for roster name
+        roster_name = window.prompt("Enter a name for this roster:\n(e.g., 'Linear Algebra 08.00')")
+
+        if not roster_name or not roster_name.strip():
+            return
+
+        roster_name = roster_name.strip()
+
+        try:
+            # Save roster to IndexedDB
+            await self.app.persistence_manager.db_manager.save_data(
+                "rosters",
+                roster_name,
+                self.student_roster
+            )
+            window.alert(f"✅ Roster '{roster_name}' saved successfully!")
+            window.console.log(f"💾 Saved roster: {roster_name}")
+        except Exception as e:
+            window.console.error(f"❌ Failed to save roster: {e}")
+            window.alert(f"Failed to save roster: {e}")
+
+    def load_roster(self, e=None):
+        """Load a saved roster from IndexedDB"""
+        import asyncio
+        asyncio.ensure_future(self._load_roster_async())
+
+    async def _load_roster_async(self):
+        """Async method to load roster"""
+        from js import window
+
+        try:
+            # Get list of saved rosters
+            self.app.persistence_manager.db_manager._show_progress("📋 Loading saved rosters...")
+            saved_keys = await self.app.persistence_manager.list_saved_keys("rosters")
+            self.app.persistence_manager.db_manager._hide_progress()
+
+            if not saved_keys:
+                window.alert("No saved rosters found.")
+                return
+
+            # Show roster selection modal
+            selected_roster = await self._show_roster_selection_modal(saved_keys)
+
+            if selected_roster:
+                # Load the selected roster
+                self.app.persistence_manager.db_manager._show_progress(f"📂 Loading roster: {selected_roster}...")
+                roster_data = await self.app.persistence_manager.db_manager.load_data("rosters", selected_roster)
+                self.app.persistence_manager.db_manager._hide_progress()
+
+                if roster_data:
+                    self.student_roster = roster_data
+                    self.app.student_roster = roster_data
+                    self.update_roster_status(f"✅ Loaded roster '{selected_roster}' ({len(roster_data)} students)")
+                    window.console.log(f"📂 Loaded roster: {selected_roster} ({len(roster_data)} students)")
+                else:
+                    window.alert(f"Failed to load roster '{selected_roster}'")
+        except Exception as e:
+            self.app.persistence_manager.db_manager._hide_progress()
+            window.console.error(f"❌ Failed to load roster: {e}")
+            window.alert(f"Failed to load roster: {e}")
+
+    async def _show_roster_selection_modal(self, roster_keys):
+        """Show modal to select a roster to load"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        # Create future for user choice
+        future = asyncio.Future()
+
+        # Create modal overlay
+        overlay = document.createElement("div")
+        overlay.className = "startup-modal-overlay"
+
+        # Create modal content
+        modal = document.createElement("div")
+        modal.className = "startup-modal"
+
+        # Build roster list
+        rosters_html = '<div class="saved-sessions-list" style="max-height: 400px; overflow-y: auto;">'
+        for key in roster_keys:
+            rosters_html += f'''
+                <div class="session-item roster-item-selectable" data-key="{self._escape(key)}"
+                     style="cursor: pointer; transition: background 0.2s;">
+                    <div class="session-name">📚 {self._escape(key)}</div>
+                    <div class="session-info">Saved student roster</div>
+                </div>
+            '''
+        rosters_html += '</div>'
+
+        modal.innerHTML = f'''
+            <h2 style="margin-top: 0;">📂 Load Saved Roster</h2>
+            <p style="color: #6b7280;">Select a roster to load:</p>
+            {rosters_html}
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button class="modal-btn modal-btn-secondary" id="cancel-load-roster-btn">
+                    Cancel
+                </button>
+            </div>
+        '''
+
+        overlay.appendChild(modal)
+        document.body.appendChild(overlay)
+
+        # Get elements
+        roster_items = modal.querySelectorAll(".roster-item-selectable")
+        cancel_btn = modal.querySelector("#cancel-load-roster-btn")
+
+        # Close modal
+        def close_modal(result=None):
+            if not future.done():
+                future.set_result(result)
+            overlay.remove()
+            item_proxy.destroy()
+            cancel_proxy.destroy()
+
+        # Handle roster selection
+        def select_roster(event):
+            item = event.currentTarget
+            roster_key = item.getAttribute("data-key")
+            close_modal(roster_key)
+
+        # Bind events
+        item_proxy = create_proxy(select_roster)
+        for item in roster_items:
+            item.addEventListener("click", item_proxy)
+
+        cancel_proxy = create_proxy(lambda e: close_modal(None))
+        cancel_btn.addEventListener("click", cancel_proxy)
+
+        # Close on overlay click
+        overlay.addEventListener("click", create_proxy(lambda e: close_modal(None) if e.target == overlay else None))
+
+        # Wait for user choice
+        return await future
+
+    def delete_rosters(self, e=None):
+        """Delete selected rosters from IndexedDB"""
+        import asyncio
+        asyncio.ensure_future(self._delete_rosters_async())
+
+    async def _delete_rosters_async(self):
+        """Async method to delete rosters"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+
+        try:
+            # Get list of saved rosters
+            self.app.persistence_manager.db_manager._show_progress("📋 Loading saved rosters...")
+            saved_keys = await self.app.persistence_manager.list_saved_keys("rosters")
+            self.app.persistence_manager.db_manager._hide_progress()
+
+            if not saved_keys:
+                window.alert("No saved rosters to delete.")
+                return
+
+            window.console.log(f"📋 Found {len(saved_keys)} saved rosters")
+
+            # Create modal overlay
+            overlay = document.createElement("div")
+            overlay.id = "delete-roster-modal-overlay"
+            overlay.className = "startup-modal-overlay"
+
+            # Create modal content
+            modal = document.createElement("div")
+            modal.className = "startup-modal"
+
+            # Build roster list with checkboxes
+            rosters_html = '<div class="saved-sessions-list" style="max-height: 400px; overflow-y: auto;">'
+            for key in saved_keys:
+                rosters_html += f'''
+                    <div class="session-item" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" class="roster-checkbox" value="{self._escape(key)}"
+                                   style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                            <div>
+                                <div class="session-name" style="font-weight: 600; color: #111827;">📚 {self._escape(key)}</div>
+                                <div class="session-info" style="font-size: 12px; color: #6b7280;">Saved student roster</div>
+                            </div>
+                        </label>
+                    </div>
+                '''
+            rosters_html += '</div>'
+
+            modal.innerHTML = f'''
+                <h2 style="margin-top: 0;">🗑️ Delete Saved Rosters</h2>
+                <p style="color: #6b7280;">Select one or more rosters to delete permanently.</p>
+                <div style="margin: 16px 0;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #111827;">
+                        <input type="checkbox" id="select-all-rosters-checkbox"
+                               style="margin-right: 8px; width: 16px; height: 16px; cursor: pointer;">
+                        <strong>Select All</strong>
+                    </label>
+                </div>
+                {rosters_html}
+                <div class="modal-actions" style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="modal-btn modal-btn-secondary" id="cancel-delete-roster-btn">
+                        Cancel
+                    </button>
+                    <button class="modal-btn" id="confirm-delete-roster-btn"
+                            style="background: #ef4444; color: white;" disabled>
+                        🗑️ Delete Selected
+                    </button>
+                </div>
+            '''
+
+            overlay.appendChild(modal)
+            document.body.appendChild(overlay)
+
+            # Get elements
+            checkboxes = modal.querySelectorAll(".roster-checkbox")
+            select_all = modal.querySelector("#select-all-rosters-checkbox")
+            confirm_btn = modal.querySelector("#confirm-delete-roster-btn")
+            cancel_btn = modal.querySelector("#cancel-delete-roster-btn")
+
+            # Update button state based on selection
+            def update_button_state():
+                selected_count = len([cb for cb in checkboxes if cb.checked])
+                confirm_btn.disabled = selected_count == 0
+                if selected_count > 0:
+                    confirm_btn.textContent = f"🗑️ Delete {selected_count} Roster{'s' if selected_count > 1 else ''}"
+                else:
+                    confirm_btn.textContent = "🗑️ Delete Selected"
+
+            # Handle checkbox changes
+            def on_checkbox_change(e):
+                update_button_state()
+                # Update select all checkbox
+                all_checked = all(cb.checked for cb in checkboxes)
+                some_checked = any(cb.checked for cb in checkboxes)
+                select_all.checked = all_checked
+                select_all.indeterminate = some_checked and not all_checked
+
+            # Handle select all
+            def on_select_all(e):
+                for cb in checkboxes:
+                    cb.checked = select_all.checked
+                update_button_state()
+
+            # Bind checkbox events
+            checkbox_proxy = create_proxy(on_checkbox_change)
+            for cb in checkboxes:
+                cb.addEventListener("change", checkbox_proxy)
+
+            select_all_proxy = create_proxy(on_select_all)
+            select_all.addEventListener("change", select_all_proxy)
+
+            # Handle cancel
+            def close_modal(e=None):
+                overlay.remove()
+                checkbox_proxy.destroy()
+                select_all_proxy.destroy()
+                cancel_proxy.destroy()
+                confirm_proxy.destroy()
+
+            # Handle confirm delete
+            async def confirm_delete(e=None):
+                selected_keys = [cb.value for cb in checkboxes if cb.checked]
+
+                if not selected_keys:
+                    return
+
+                # Confirm deletion
+                count = len(selected_keys)
+                if not window.confirm(f"⚠️ Are you sure you want to delete {count} roster{'s' if count > 1 else ''}?\n\nThis action cannot be undone."):
+                    return
+
+                # Show loading indicator
+                self.app.persistence_manager.db_manager._show_progress(f"🗑️ Deleting {count} roster{'s' if count > 1 else ''}...")
+
+                # Delete each selected roster
+                deleted_count = 0
+                for i, key in enumerate(selected_keys, 1):
+                    try:
+                        self.app.persistence_manager.db_manager._show_progress(f"🗑️ Deleting roster {i}/{count}...")
+                        await self.app.persistence_manager.db_manager.delete_data("rosters", key)
+                        window.console.log(f"🗑️ Deleted roster: {key}")
+                        deleted_count += 1
+                    except Exception as e:
+                        window.console.error(f"❌ Failed to delete {key}: {e}")
+
+                # Hide loading indicator
+                self.app.persistence_manager.db_manager._hide_progress()
+
+                # Show result
+                if deleted_count > 0:
+                    window.alert(f"✅ Successfully deleted {deleted_count} roster{'s' if deleted_count > 1 else ''}.")
+
+                close_modal()
+
+            cancel_proxy = create_proxy(close_modal)
+            confirm_proxy = create_proxy(confirm_delete)
+
+            cancel_btn.addEventListener("click", cancel_proxy)
+            confirm_btn.addEventListener("click", confirm_proxy)
+
+            # Close on overlay click
+            overlay.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == overlay else None))
+
+        except Exception as e:
+            self.app.persistence_manager.db_manager._hide_progress()
+            window.console.error(f"❌ Failed to show delete rosters modal: {e}")
+            window.alert(f"Failed to load rosters: {e}")
+
     def _escape(self, text):
         """Escape HTML text"""
         import html
