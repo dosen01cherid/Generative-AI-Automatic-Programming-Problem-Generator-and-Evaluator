@@ -1,17 +1,19 @@
-# WhatsApp Analytics Extension
+# WhatsApp & Telegram Analytics Extension
 
-A Chrome/Edge browser extension that automatically captures student progress reports from WhatsApp Web and integrates with the Analytics App.
+A Chrome/Edge browser extension that automatically captures student progress reports from WhatsApp Web and Telegram Web and integrates with the Analytics App.
 
 ## Features
 
-- **Auto-Capture**: Automatically detects and captures base64-encoded progress reports from WhatsApp messages
-- **Real-time Monitoring**: Scans messages in real-time as they arrive
-- **Phone Number Detection**: Extracts student phone numbers from chat context
+- **🆕 Dual Platform Support**: Works with both WhatsApp Web and Telegram Web!
+- **Auto-Capture**: Automatically detects and captures base64-encoded progress reports from messages
+- **Real-time Monitoring**: Scans messages in real-time as they arrive on both platforms
+- **Phone Number Detection**: Extracts student phone numbers from chat context (WhatsApp) or message body (Telegram)
 - **🆕 Auto-Inject Mode**: Enable continuous automatic injection - reports inject instantly when captured!
 - **Smart Tab Detection**: Finds open Analytics App or opens it automatically
 - **One-Click Export**: Export captured reports directly to the Analytics App
 - **Privacy-Focused**: All data stays local, no external servers
 - **Easy Toggle**: Enable/disable auto-capture and auto-inject with one click
+- **Platform Agnostic**: Seamlessly handles reports from both WhatsApp and Telegram
 
 ## Installation
 
@@ -34,7 +36,7 @@ A Chrome/Edge browser extension that automatically captures student progress rep
 
 5. **Pin the Extension** (Optional)
    - Click the puzzle piece icon in the toolbar
-   - Click the pin icon next to "WhatsApp Analytics"
+   - Click the pin icon next to "WhatsApp & Telegram Analytics"
 
 6. **Enable File Access** (Required for Auto-Inject with local files)
    - Click "Details" on the extension card
@@ -68,12 +70,20 @@ The extension includes placeholder icons. For better-looking icons:
 
 ## Usage
 
+### Platform Support
+
+The extension works on both:
+- **WhatsApp Web** (https://web.whatsapp.com/)
+- **Telegram Web** (https://web.telegram.org/)
+
+Simply open either platform in your browser and the extension will automatically monitor for progress reports!
+
 ### Automatic Capture
 
-1. **Monitor is Active**: The extension automatically scans all messages
+1. **Monitor is Active**: The extension automatically scans all messages on both WhatsApp and Telegram
 2. **Detection**: When a student sends a progress report (base64-encoded data), it's captured automatically
-3. **Notification**: You'll see a notification when new reports are captured
-4. **Badge**: The extension icon shows the number of captured reports
+3. **Notification**: You'll see a notification when new reports are captured (from either platform)
+4. **Badge**: The extension icon shows the total number of captured reports from both platforms
 
 ### View Captured Reports
 
@@ -239,6 +249,16 @@ The extension requests the following permissions:
 - **Popup**: Right-click extension icon → Inspect popup
 
 ## Version History
+
+### v1.4.0 (2024-11-14)
+- **🆕🆕 NEW: Telegram Web Support** - Full Telegram integration!
+- **Dual Platform Monitoring** - Works simultaneously on WhatsApp and Telegram
+- **Telegram Content Script** - Dedicated script for Telegram Web monitoring
+- **Smart Phone Detection** - Extracts phone from Telegram message body
+- **Username Detection** - Captures Telegram usernames for identification
+- **Unified Badge** - Shows combined count from both platforms
+- **Updated UI** - New gradient (WhatsApp green → Telegram blue)
+- **Platform Indicator** - Each report tagged with source platform
 
 ### v1.3.0 (2024-11-14)
 - **🆕 NEW: Real-Time Dashboard Support** - Extension triggers live updates in Analytics App

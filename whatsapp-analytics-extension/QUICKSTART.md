@@ -1,18 +1,18 @@
 # Quick Start Guide
 
-Get up and running with the WhatsApp Analytics Extension in 5 minutes!
+Get up and running with the WhatsApp & Telegram Analytics Extension in 5 minutes!
 
-## 🆕 NEW: Auto-Inject Mode + Live Dashboard!
+## 🆕 NEW: Telegram Support + Auto-Inject Mode + Live Dashboard!
 
-**The easiest way ever - completely automatic!**
+**The easiest way ever - works with both WhatsApp and Telegram!**
 
 Once configured, just:
 1. Toggle "Auto-Inject Mode" ON
-2. Open WhatsApp Web
+2. Open WhatsApp Web OR Telegram Web (or both!)
 3. Activate Real-Time Dashboard or Timed-Quiz mode in Analytics App
-4. Done! Reports inject automatically and views update live!
+4. Done! Reports inject automatically from BOTH platforms and views update live!
 
-No clicks, no waiting, no manual work! Real-time updates!
+No clicks, no waiting, no manual work! Real-time updates from WhatsApp AND Telegram!
 
 ## Step 1: Install the Extension (2 minutes)
 
