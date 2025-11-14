@@ -3426,23 +3426,34 @@ class ProgressAnalyzer:
             btn.style.boxShadow = "0 4px 20px rgba(37,211,102,0.4)"
 
         def on_click(evt):
-            # Get teacher's WhatsApp number from settings or prompt
-            teacher_number = window.prompt(
-                "Enter teacher's WhatsApp number (include country code):",
-                "+62"  # Default Indonesia
-            )
+            # Check if teacher number is already saved for this session
+            teacher_number = getattr(self, 'teacher_whatsapp_number', None)
 
-            if teacher_number:
-                # Clean number
-                teacher_number = teacher_number.replace("+", "").replace("-", "").replace(" ", "")
+            # If not saved, prompt for it
+            if not teacher_number:
+                teacher_number = window.prompt(
+                    "Enter teacher's WhatsApp number (include country code):",
+                    "+62"  # Default Indonesia
+                )
 
-                # Create message with current progress data
-                message = "🎓 Progress Update from Quiz\n\n"
-                message += "[Your progress data will be automatically attached when you submit through the app]"
+                if teacher_number:
+                    # Clean and save number for this session
+                    teacher_number = teacher_number.replace("+", "").replace("-", "").replace(" ", "")
+                    self.teacher_whatsapp_number = teacher_number
+                    window.console.log(f"✅ Teacher WhatsApp number saved for this session: +{teacher_number}")
+                else:
+                    # User cancelled
+                    return
 
-                # Open WhatsApp
-                whatsapp_url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(message)}"
-                window.open(whatsapp_url, "_blank")
+            # Create message with current progress data
+            message = "🎓 Progress Update from Quiz\n\n"
+            message += "[Your progress data will be automatically attached when you submit through the app]"
+
+            # Open WhatsApp
+            whatsapp_url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(message)}"
+            window.open(whatsapp_url, "_blank")
+
+            window.console.log(f"📱 Opened WhatsApp for +{teacher_number}")
 
         from pyodide.ffi import create_proxy
         btn.addEventListener("mouseenter", create_proxy(on_hover))
