@@ -1666,8 +1666,11 @@ class MathParser:
     """Handles LaTeX parsing, structural comparison, and error popups"""
 
     GRAMMAR = r"""
-start: matrix_ops
+start: equation
+   | matrix_ops
    | expr
+
+?equation: expr "=" expr    -> equation
 
 ?expr: sum
 
@@ -2261,6 +2264,10 @@ CIRC: "\\circ"
             def braces_expr(self, expr):
                 return expr
 
+            def equation(self, lhs, rhs):
+                """Handle equations like x=3 by returning an Eq object"""
+                return sp.Eq(lhs, rhs, evaluate=False)
+
             def number(self, tok):
                 s = str(tok)
                 return sp.Integer(s) if '.' not in s else sp.Float(s)
@@ -2661,6 +2668,21 @@ CIRC: "\\circ"
         """Check equality for scalar or matrix expressions with multiple strategies"""
         import sympy as sp
         try:
+            # Handle equation comparisons
+            if isinstance(a, sp.Equality) and isinstance(b, sp.Equality):
+                # Both are equations: compare both sides
+                lhs_eq = self.final_eq(a.lhs, b.lhs) and self.final_eq(a.rhs, b.rhs)
+                rhs_eq = self.final_eq(a.lhs, b.rhs) and self.final_eq(a.rhs, b.lhs)
+                return lhs_eq or rhs_eq
+            elif isinstance(a, sp.Equality) and not isinstance(b, sp.Equality):
+                # a is equation, b is plain expression
+                # Check if b matches either side of the equation
+                return self.final_eq(a.lhs, b) or self.final_eq(a.rhs, b)
+            elif isinstance(b, sp.Equality) and not isinstance(a, sp.Equality):
+                # b is equation, a is plain expression
+                # Check if a matches either side of the equation
+                return self.final_eq(a, b.lhs) or self.final_eq(a, b.rhs)
+
             # Handle matrix comparisons
             if isinstance(a, sp.MatrixBase) and isinstance(b, sp.MatrixBase):
                 if a.shape != b.shape:
@@ -5964,13 +5986,13 @@ class ProblemSolverApp:
                         {
                             "instruction": "Now solve the equation 2x + 6 = 12 for x",
                             "description": [
-                                {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x"}
+                                {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x. Enter just the value of x."}
                             ],
-                            "expected": "x=3",
+                            "expected": "3",
                             "type": "math-expression",
                             "expected_structure": {
                                 "operators": {},
-                                "operands": {"x": 1, "3": 1}
+                                "operands": {"3": 1}
                             }
                         }
                     ]
@@ -6059,13 +6081,13 @@ class ProblemSolverApp:
                             {
                                 "instruction": "Now solve the equation 2x + 6 = 12 for x",
                                 "description": [
-                                    {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x"}
+                                    {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x. Enter just the value of x."}
                                 ],
-                                "expected": "x=3",
+                                "expected": "3",
                                 "type": "math-expression",
                                 "expected_structure": {
                                     "operators": {},
-                                    "operands": {"x": 1, "3": 1}
+                                    "operands": {"3": 1}
                                 }
                             }
                         ]
@@ -6144,8 +6166,9 @@ PROBLEM 1: Algebra: Solve for x
 
   Step 2:
     Instruction: Now solve the equation 2x + 6 = 12 for x
-    Description: Subtract 6 from both sides, then divide by 2 to isolate x
-    Expected Answer: x=3
+    Description: Subtract 6 from both sides, then divide by 2 to isolate x.
+                 Enter just the value of x.
+    Expected Answer: 3
     Type: math-expression
 
 PROBLEM 2: Calculus: Find the Derivative
