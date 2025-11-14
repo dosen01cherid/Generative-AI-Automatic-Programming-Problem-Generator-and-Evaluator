@@ -23,9 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-004 (Auto-recovery)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-005 (Delete Selected)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ Old databases will be auto-deleted if version conflicts are detected');
+    console.log('✅ New: Delete Selected button for managing saved sessions');
   </script>
 
   <!-- PyScript core -->
@@ -454,6 +454,7 @@ button.detail-toggle:hover {
       <button id="analyzeBtn" class="btn">Analyze & Add Submissions</button>
       <button id="clearAnalyticsBtn" class="btn ghost">Clear All</button>
       <button id="loadSavedBtn" class="btn" style="background:#3b82f6;">📂 Load Saved</button>
+      <button id="deleteSelectedBtn" class="btn" style="background:#ef4444;">🗑️ Delete Selected</button>
       <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
     </div>
   </div>
@@ -1353,6 +1354,7 @@ class ProgressAnalyzer:
             ("#analyzeBtn", self.analyze_submissions),
             ("#clearAnalyticsBtn", self.clear_analytics),
             ("#loadSavedBtn", self.load_saved_analytics),
+            ("#deleteSelectedBtn", self.delete_selected_sessions),
             ("#exportAnalyticsBtn", self.export_analytics),
         ]
         for selector, handler in bindings:
@@ -2067,6 +2069,11 @@ class ProgressAnalyzer:
         """Trigger the load saved analytics modal"""
         import asyncio
         asyncio.ensure_future(self.app.persistence_manager.restore_saved_analytics())
+
+    def delete_selected_sessions(self, e=None):
+        """Show modal to select and delete saved sessions"""
+        import asyncio
+        asyncio.ensure_future(self.app.persistence_manager.show_delete_sessions_modal())
 
     def export_analytics(self, e=None):
         from js import window
@@ -3231,6 +3238,161 @@ class PersistenceManager:
             self.app.analytics_data = []
             self.app.progress_analyzer.analytics_data = []
             self.app.display_manager.display_analytics([], [])
+
+    # =========================================================
+    # DELETE SELECTED SESSIONS MODAL
+    # =========================================================
+    async def show_delete_sessions_modal(self):
+        """Show modal to select and delete saved sessions"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        window.console.log("🗑️ Showing delete sessions modal...")
+
+        # Get list of saved sessions
+        saved_keys = await self.list_saved_keys("analytics")
+
+        if not saved_keys:
+            window.alert("No saved sessions to delete.")
+            return
+
+        window.console.log(f"📋 Found {len(saved_keys)} saved sessions")
+
+        # Create modal overlay
+        overlay = document.createElement("div")
+        overlay.id = "delete-modal-overlay"
+        overlay.className = "startup-modal-overlay"
+
+        # Create modal content
+        modal = document.createElement("div")
+        modal.className = "startup-modal"
+
+        # Build sessions list with checkboxes
+        sessions_html = '<div class="saved-sessions-list" style="max-height: 400px; overflow-y: auto;">'
+        for key in saved_keys:
+            sessions_html += f'''
+                <div class="session-item" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" class="session-checkbox" value="{self._escape(key)}"
+                               style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                        <div>
+                            <div class="session-name" style="font-weight: 600; color: #111827;">📊 {self._escape(key)}</div>
+                            <div class="session-info" style="font-size: 12px; color: #6b7280;">Saved analytics session</div>
+                        </div>
+                    </label>
+                </div>
+            '''
+        sessions_html += '</div>'
+
+        modal.innerHTML = f'''
+            <h2 style="margin-top: 0;">🗑️ Delete Saved Sessions</h2>
+            <p style="color: #6b7280;">Select one or more sessions to delete permanently.</p>
+            <div style="margin: 16px 0;">
+                <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #111827;">
+                    <input type="checkbox" id="select-all-checkbox"
+                           style="margin-right: 8px; width: 16px; height: 16px; cursor: pointer;">
+                    <strong>Select All</strong>
+                </label>
+            </div>
+            {sessions_html}
+            <div class="modal-actions" style="margin-top: 20px; display: flex; gap: 12px;">
+                <button class="modal-btn modal-btn-secondary" id="cancel-delete-btn">
+                    Cancel
+                </button>
+                <button class="modal-btn" id="confirm-delete-btn"
+                        style="background: #ef4444; color: white;" disabled>
+                    🗑️ Delete Selected
+                </button>
+            </div>
+        '''
+
+        overlay.appendChild(modal)
+        document.body.appendChild(overlay)
+
+        # Get elements
+        checkboxes = modal.querySelectorAll(".session-checkbox")
+        select_all = modal.querySelector("#select-all-checkbox")
+        confirm_btn = modal.querySelector("#confirm-delete-btn")
+        cancel_btn = modal.querySelector("#cancel-delete-btn")
+
+        # Update button state based on selection
+        def update_button_state():
+            selected_count = len([cb for cb in checkboxes if cb.checked])
+            confirm_btn.disabled = selected_count == 0
+            if selected_count > 0:
+                confirm_btn.textContent = f"🗑️ Delete {selected_count} Session{'s' if selected_count > 1 else ''}"
+            else:
+                confirm_btn.textContent = "🗑️ Delete Selected"
+
+        # Handle checkbox changes
+        def on_checkbox_change(e):
+            update_button_state()
+            # Update select all checkbox
+            all_checked = all(cb.checked for cb in checkboxes)
+            some_checked = any(cb.checked for cb in checkboxes)
+            select_all.checked = all_checked
+            select_all.indeterminate = some_checked and not all_checked
+
+        # Handle select all
+        def on_select_all(e):
+            for cb in checkboxes:
+                cb.checked = select_all.checked
+            update_button_state()
+
+        # Bind checkbox events
+        checkbox_proxy = create_proxy(on_checkbox_change)
+        for cb in checkboxes:
+            cb.addEventListener("change", checkbox_proxy)
+
+        select_all_proxy = create_proxy(on_select_all)
+        select_all.addEventListener("change", select_all_proxy)
+
+        # Handle cancel
+        def close_modal(e=None):
+            overlay.remove()
+            checkbox_proxy.destroy()
+            select_all_proxy.destroy()
+            cancel_proxy.destroy()
+            confirm_proxy.destroy()
+
+        # Handle confirm delete
+        async def confirm_delete(e=None):
+            selected_keys = [cb.value for cb in checkboxes if cb.checked]
+
+            if not selected_keys:
+                return
+
+            # Confirm deletion
+            count = len(selected_keys)
+            if not window.confirm(f"⚠️ Are you sure you want to delete {count} session{'s' if count > 1 else ''}?\n\nThis action cannot be undone."):
+                return
+
+            # Delete each selected session
+            deleted_count = 0
+            for key in selected_keys:
+                try:
+                    await self.db_manager.delete_data("analytics", key)
+                    window.console.log(f"🗑️ Deleted session: {key}")
+                    deleted_count += 1
+                except Exception as e:
+                    window.console.error(f"❌ Failed to delete {key}: {e}")
+
+            # Show result
+            if deleted_count > 0:
+                window.alert(f"✅ Successfully deleted {deleted_count} session{'s' if deleted_count > 1 else ''}.")
+
+            close_modal()
+
+        cancel_proxy = create_proxy(close_modal)
+        confirm_proxy = create_proxy(confirm_delete)
+
+        cancel_btn.addEventListener("click", cancel_proxy)
+        confirm_btn.addEventListener("click", confirm_proxy)
+
+        # Close on overlay click
+        overlay.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == overlay else None))
+
 class AnalyticsApp:
     def __init__(self):
         self.roster_manager = RosterManager()
