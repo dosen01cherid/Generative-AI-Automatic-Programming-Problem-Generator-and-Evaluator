@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate Extension Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Extension Icon Generator</h1>
+    <p>Right-click each icon below and "Save Image As..." with the specified filename</p>
+
+    <div>
+        <h3>icon16.png</h3>
+        <canvas id="icon16" width="16" height="16"></canvas>
+    </div>
+
+    <div>
+        <h3>icon48.png</h3>
+        <canvas id="icon48" width="48" height="48"></canvas>
+    </div>
+
+    <div>
+        <h3>icon128.png</h3>
+        <canvas id="icon128" width="128" height="128"></canvas>
+    </div>
+
+    <button onclick="generateAllIcons()">Generate Icons</button>
+
+    <script>
+        function drawIcon(canvas, size) {
+            const ctx = canvas.getContext('2d');
+
+            // Background - WhatsApp green
+            ctx.fillStyle = '#25D366';
+            ctx.fillRect(0, 0, size, size);
+
+            // Add rounded corners
+            ctx.globalCompositeOperation = 'destination-in';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, size * 0.2);
+            ctx.fill();
+            ctx.globalCompositeOperation = 'source-over';
+
+            // White chart/analytics symbol
+            ctx.strokeStyle = 'white';
+            ctx.fillStyle = 'white';
+            ctx.lineWidth = size * 0.08;
+
+            // Draw simple bar chart
+            const barWidth = size * 0.15;
+            const gap = size * 0.08;
+            const startX = size * 0.25;
+            const baseY = size * 0.75;
+
+            // Bar 1 (short)
+            ctx.fillRect(startX, baseY - size * 0.2, barWidth, size * 0.2);
+
+            // Bar 2 (medium)
+            ctx.fillRect(startX + barWidth + gap, baseY - size * 0.35, barWidth, size * 0.35);
+
+            // Bar 3 (tall)
+            ctx.fillRect(startX + (barWidth + gap) * 2, baseY - size * 0.5, barWidth, size * 0.5);
+        }
+
+        function generateAllIcons() {
+            drawIcon(document.getElementById('icon16'), 16);
+            drawIcon(document.getElementById('icon48'), 48);
+            drawIcon(document.getElementById('icon128'), 128);
+        }
+
+        // Auto-generate on load
+        window.onload = generateAllIcons;
+    </script>
+</body>
+</html>
