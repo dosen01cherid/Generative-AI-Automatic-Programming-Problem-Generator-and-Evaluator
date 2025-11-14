@@ -608,7 +608,14 @@ class IndexedDBManager:
                     const bridge = {
                         openDB: function(name, version) {
                             return new Promise((resolve, reject) => {
+                                // Check if IndexedDB is available and not blocked
+                                if (!window.indexedDB) {
+                                    reject(new Error('TRACKING_PREVENTION: IndexedDB is not available. This may be due to browser tracking prevention settings or private browsing mode.'));
+                                    return;
+                                }
+
                                 const request = indexedDB.open(name, version);
+
                                 request.onupgradeneeded = e => {
                                     const db = e.target.result;
                                     if (!db.objectStoreNames.contains("analytics")) {
@@ -618,6 +625,7 @@ class IndexedDBManager:
                                         db.createObjectStore("hashes", { keyPath: "id" });
                                     }
                                 };
+
                                 request.onsuccess = e => {
                                     const db = e.target.result;
                                     // Check if required stores exist
@@ -641,12 +649,30 @@ class IndexedDBManager:
                                             }
                                         };
                                         upgradeRequest.onsuccess = e => resolve(e.target.result);
-                                        upgradeRequest.onerror = e => reject(e.target.error);
+                                        upgradeRequest.onerror = e => {
+                                            const error = e.target.error;
+                                            if (error && error.name === 'UnknownError') {
+                                                reject(new Error('DB_CORRUPTED: Database is corrupted and cannot be upgraded.'));
+                                            } else {
+                                                reject(error);
+                                            }
+                                        };
                                     } else {
                                         resolve(db);
                                     }
                                 };
-                                request.onerror = e => reject(e.target.error);
+
+                                request.onerror = e => {
+                                    const error = e.target.error;
+                                    console.error('IndexedDB open error:', error);
+
+                                    // Detect tracking prevention or blocked IndexedDB
+                                    if (error && (error.name === 'UnknownError' || error.name === 'InvalidStateError')) {
+                                        reject(new Error('TRACKING_PREVENTION: IndexedDB appears to be blocked by browser tracking prevention or privacy settings.'));
+                                    } else {
+                                        reject(error);
+                                    }
+                                };
                             });
                         },
 
@@ -740,8 +766,37 @@ class IndexedDBManager:
             )
 
             window.PyIndexedDBBridge = create_bridge()
+
+            # Test if IndexedDB actually works (not blocked by tracking prevention)
+            try:
+                test_db = await window.PyIndexedDBBridge.openDB(self.db_name, self.db_version)
+                test_db.close()
+                window.console.log("✅ IndexedDB initialized and tested successfully")
+            except Exception as test_error:
+                error_msg = str(test_error)
+                if "TRACKING_PREVENTION" in error_msg:
+                    window.console.error("🚫 IndexedDB is blocked by tracking prevention!")
+                    window.console.error("💡 Solutions:")
+                    window.console.error("   1. Disable tracking prevention for this site")
+                    window.console.error("   2. Allow storage access in browser settings")
+                    window.console.error("   3. Use a different browser")
+                    window.console.error("   4. Exit private/incognito mode")
+                    window.console.warn("⚠️ Falling back to localStorage")
+                    self.fallback_mode = True
+                elif "DB_CORRUPTED" in error_msg:
+                    window.console.error("💥 Database is corrupted!")
+                    if window.confirm("⚠️ Database is corrupted. Delete and recreate?\n\nThis will clear all saved analytics sessions."):
+                        from js import indexedDB
+                        indexedDB.deleteDatabase(self.db_name)
+                        window.console.log(f"🗑️ Deleted corrupted database: {self.db_name}")
+                        window.alert("Database deleted. Please reload the page to continue.")
+                    self.fallback_mode = True
+                else:
+                    window.console.error(f"❌ IndexedDB test failed: {test_error}")
+                    window.console.warn("⚠️ Falling back to localStorage")
+                    self.fallback_mode = True
+
             self.initialized = True
-            window.console.log("✅ IndexedDB Bridge initialized successfully")
 
         except Exception as e:
             window.console.warn(f"⚠️ IndexedDB initialization failed ({e}), using localStorage fallback")
@@ -788,10 +843,30 @@ class IndexedDBManager:
             return result
 
         except Exception as e:
+            error_msg = str(e)
             window.console.error(f"❌ Error saving data: {e}")
+
+            # Detect specific error types
+            if "TRACKING_PREVENTION" in error_msg:
+                window.console.error("🚫 IndexedDB is blocked by tracking prevention!")
+                window.console.error("💡 Solutions:")
+                window.console.error("   1. Disable tracking prevention for this site")
+                window.console.error("   2. Allow storage access in browser settings")
+                window.console.error("   3. Use a different browser")
+                window.console.error("   4. Exit private/incognito mode")
+            elif "DB_CORRUPTED" in error_msg:
+                window.console.error("💥 Database is corrupted!")
+                if window.confirm("⚠️ Database is corrupted. Delete and recreate?\n\nThis will clear all saved analytics sessions."):
+                    from js import indexedDB
+                    indexedDB.deleteDatabase(self.db_name)
+                    window.console.log(f"🗑️ Deleted corrupted database: {self.db_name}")
+                    window.alert("Database deleted. Please reload the page to continue.")
+                    return False
+
+            # Try localStorage fallback
             try:
                 window.localStorage.setItem(f"{store_name}_{key}", json.dumps(data))
-                window.console.warn("⚠️ Saved to localStorage (fallback after error)")
+                window.console.warn("⚠️ Saved to localStorage (fallback after IndexedDB error)")
                 return True
             except Exception as e2:
                 window.console.error(f"❌ Fallback save failed: {e2}")
