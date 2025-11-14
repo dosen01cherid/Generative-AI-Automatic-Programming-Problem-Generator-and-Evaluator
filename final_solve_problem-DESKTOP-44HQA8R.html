@@ -7580,6 +7580,27 @@ This demonstrates the complete format for creating your own problem sets!
       window.console.log(f"⏳ Problem {index} is incomplete, creating solve UI")
       container.innerHTML = ""
 
+      # ✅ Add problem description if it exists
+      problem_description = problem.get("description", [])
+      if problem_description and isinstance(problem_description, list):
+          desc_html = self.render_content_blocks(problem_description)
+          if desc_html.strip():
+              desc_container = document.createElement("div")
+              desc_container.className = "problem-description"
+              desc_container.style.cssText = """
+                  background: #f0f9ff;
+                  padding: 16px 20px;
+                  border-radius: 12px;
+                  border-left: 4px solid #3b82f6;
+                  margin-bottom: 20px;
+                  font-size: 15px;
+                  line-height: 1.6;
+                  color: #1e293b;
+              """
+              desc_container.innerHTML = f"<div style='font-weight:600;margin-bottom:8px;color:#1e40af;'>📋 Problem Description:</div>{desc_html}"
+              container.appendChild(desc_container)
+              window.console.log("✅ Added problem description to solve view")
+
       # Global attempt history container
       global_history_div = document.createElement("div")
       global_history_div.id = f"globalHistory_{index}"
