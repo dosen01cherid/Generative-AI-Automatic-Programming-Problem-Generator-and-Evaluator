@@ -1828,52 +1828,52 @@ class ProgressAnalyzer:
                 content_key = (problem_number, problem_hash)
                 content_groups[content_key].append(sub)
 
-            # Build cheating groups
-            cheating_groups = []
-            group_number = 1
+        # Build cheating groups (after all submissions are processed)
+        cheating_groups = []
+        group_number = 1
 
-            for content_key, group_submissions in content_groups.items():
-                problem_number, problem_hash = content_key
+        for content_key, group_submissions in content_groups.items():
+            problem_number, problem_hash = content_key
 
-                if len(group_submissions) <= 1:
-                    continue
+            if len(group_submissions) <= 1:
+                continue
 
-                # Check if all submissions in this group are unworked
-                all_unworked = all(self.is_unworked_submission(sub) for sub in group_submissions)
-                if all_unworked:
-                    # Skip this group - multiple students with same unworked problem is not cheating
-                    continue
+            # Check if all submissions in this group are unworked
+            all_unworked = all(self.is_unworked_submission(sub) for sub in group_submissions)
+            if all_unworked:
+                # Skip this group - multiple students with same unworked problem is not cheating
+                continue
 
-                # Group by student to ensure we're looking at different students
-                students_map = {}
-                for sub in group_submissions:
-                    student_key = (
-                        sub.get("registration_number")
-                        or self.normalize_phone(sub.get("student_phone", ""))
-                        or sub.get("student_name", "").strip().lower()
-                    )
-                    if student_key not in students_map:
-                        students_map[student_key] = sub
+            # Group by student to ensure we're looking at different students
+            students_map = {}
+            for sub in group_submissions:
+                student_key = (
+                    sub.get("registration_number")
+                    or self.normalize_phone(sub.get("student_phone", ""))
+                    or sub.get("student_name", "").strip().lower()
+                )
+                if student_key not in students_map:
+                    students_map[student_key] = sub
 
-                # If multiple different students have identical content, it's cheating
-                if len(students_map) > 1:
-                    unique_students = list(students_map.values())
+            # If multiple different students have identical content, it's cheating
+            if len(students_map) > 1:
+                unique_students = list(students_map.values())
 
-                    cheating_groups.append({
-                        "group_number": group_number,
-                        "problems": [f"Problem {problem_number}: {unique_students[0].get('problem', {}).get('title', 'Unknown')}"],
-                        "problem_count": 1,
-                        "hash": problem_hash[:16] + "...",
-                        "students": [{
-                            "name": sub.get("student_name", "Unknown"),
-                            "reg_no": sub.get("registration_number", ""),
-                            "phone": sub.get("student_phone", ""),
-                            "export_timestamp": sub.get("analysis_timestamp", ""),
-                            "export_id": sub.get("export_id", "")
-                        } for sub in unique_students],
-                        "count": len(unique_students)
-                    })
-                    group_number += 1
+                cheating_groups.append({
+                    "group_number": group_number,
+                    "problems": [f"Problem {problem_number}: {unique_students[0].get('problem', {}).get('title', 'Unknown')}"],
+                    "problem_count": 1,
+                    "hash": problem_hash[:16] + "...",
+                    "students": [{
+                        "name": sub.get("student_name", "Unknown"),
+                        "reg_no": sub.get("registration_number", ""),
+                        "phone": sub.get("student_phone", ""),
+                        "export_timestamp": sub.get("analysis_timestamp", ""),
+                        "export_id": sub.get("export_id", "")
+                    } for sub in unique_students],
+                    "count": len(unique_students)
+                })
+                group_number += 1
 
         # Persist the ignored duplicates list for DisplayManager to use
         self.ignored_duplicates = ignored_duplicates
