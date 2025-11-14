@@ -5895,21 +5895,26 @@ class ProblemSolverApp:
             window.console.error(f"Error switching tab: {e}")
 
     def copy_example_to_clipboard(self, event):
-        """Copy example problem set to clipboard"""
+        """Copy example problem set base64 to clipboard"""
         try:
-            textarea = document.querySelector("#exampleFormatText")
-            if not textarea:
-                return
+            # Get the base64 compressed example directly
+            base64_example = self.get_example_problem_set()
 
             # Use navigator.clipboard if available
             if hasattr(window.navigator, 'clipboard'):
-                window.navigator.clipboard.writeText(textarea.value)
-                window.alert("✅ Example copied to clipboard!")
+                window.navigator.clipboard.writeText(base64_example)
+                window.alert("✅ Base64-compressed example copied to clipboard!\n\nYou can now paste it in the 'Paste JSON' tab.")
             else:
-                # Fallback: select and copy
-                textarea.select()
+                # Fallback: create a temporary textarea
+                temp = document.createElement("textarea")
+                temp.value = base64_example
+                temp.style.position = "fixed"
+                temp.style.opacity = "0"
+                document.body.appendChild(temp)
+                temp.select()
                 document.execCommand('copy')
-                window.alert("✅ Example copied to clipboard!")
+                document.body.removeChild(temp)
+                window.alert("✅ Base64-compressed example copied to clipboard!\n\nYou can now paste it in the 'Paste JSON' tab.")
 
             window.console.log("✅ Example copied to clipboard")
 
@@ -6028,41 +6033,189 @@ class ProblemSolverApp:
             if not textarea:
                 return
 
-            # Get the base64 example and also create a readable version
-            base64_example = self.get_example_problem_set()
+            # Get the example JSON structure
+            example_json = {
+                "problem_set_id": "example-001",
+                "problem_set_description": "Example Problem Set - Mathematics Practice",
+                "problems": [
+                    {
+                        "title": "Algebra: Solve for x",
+                        "description": [
+                            {"type": "text", "value": "Solve the equation 2(x + 3) = 12 for x. Show your work by first simplifying the left side, then isolating the variable."}
+                        ],
+                        "steps": [
+                            {
+                                "instruction": "Simplify the left side by distributing 2 across (x + 3)",
+                                "description": [
+                                    {"type": "text", "value": "Apply the distributive property: 2(x + 3) = 2·x + 2·3"}
+                                ],
+                                "expected": "2x+6",
+                                "type": "math-expression",
+                                "expected_structure": {
+                                    "operators": {"Add": 1, "Mul": 1},
+                                    "operands": {"2": 1, "x": 1, "6": 1}
+                                }
+                            },
+                            {
+                                "instruction": "Now solve the equation 2x + 6 = 12 for x",
+                                "description": [
+                                    {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x"}
+                                ],
+                                "expected": "x=3",
+                                "type": "math-expression",
+                                "expected_structure": {
+                                    "operators": {},
+                                    "operands": {"x": 1, "3": 1}
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Calculus: Find the Derivative",
+                        "description": [
+                            {"type": "text", "value": "Find the derivative of f(x) = x² + 3x with respect to x using the power rule."}
+                        ],
+                        "steps": [
+                            {
+                                "instruction": "Apply the power rule to find f'(x)",
+                                "description": [
+                                    {"type": "text", "value": "Use the power rule: d/dx(xⁿ) = n·xⁿ⁻¹ for each term. For x², the derivative is 2x. For 3x, the derivative is 3."}
+                                ],
+                                "expected": "2x+3",
+                                "type": "math-expression",
+                                "expected_structure": {
+                                    "operators": {"Add": 1, "Mul": 1},
+                                    "operands": {"2": 1, "x": 1, "3": 1}
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "title": "Matrix Addition",
+                        "description": [
+                            {"type": "text", "value": "Add the two matrices: [[1,2],[3,4]] + [[2,3],[4,5]]. Add corresponding elements."}
+                        ],
+                        "steps": [
+                            {
+                                "instruction": "Add the corresponding elements of both matrices",
+                                "description": [
+                                    {"type": "text", "value": "For matrix addition, add each element in position (i,j) from the first matrix with the element at position (i,j) from the second matrix. (1+2=3, 2+3=5, 3+4=7, 4+5=9)"}
+                                ],
+                                "expected": "[[3,5],[7,9]]",
+                                "type": "math-expression",
+                                "expected_structure": {
+                                    "operators": {},
+                                    "operands": {"3": 1, "5": 1, "7": 1, "9": 1}
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
 
-            # Create a readable formatted text
-            formatted_text = f"""📝 EXAMPLE PROBLEM SET FORMAT
+            # Convert to formatted JSON string
+            json_text = json.dumps(example_json, indent=2)
 
-This is the base64-compressed format that the app expects:
+            # Compress with Brotli and encode to base64
+            import brotli
+            compressed = brotli.compress(json_text.encode("utf-8"))
+            base64_text = base64.b64encode(compressed).decode("utf-8")
 
-{base64_example}
+            # Create a readable formatted text showing all three formats
+            formatted_text = f"""━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 EXAMPLE PROBLEM SET - THREE FORMATS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
----
+📚 SECTION 1: FORMATTED TEXT DESCRIPTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💡 How to use this:
-1. Copy the base64 text above
-2. Paste it in the "Paste JSON" tab
-3. Click "Load Problem Set"
+Problem Set ID: example-001
+Description: Example Problem Set - Mathematics Practice
 
-Or simply click "Load This Example" button below to load it directly!
+PROBLEM 1: Algebra: Solve for x
+  Description: Solve the equation 2(x + 3) = 12 for x. Show your work by first
+               simplifying the left side, then isolating the variable.
 
----
+  Step 1:
+    Instruction: Simplify the left side by distributing 2 across (x + 3)
+    Description: Apply the distributive property: 2(x + 3) = 2·x + 2·3
+    Expected Answer: 2x+6
+    Type: math-expression
 
-📚 What's included in this example:
-- Problem 1: Algebra - Solve for x (2 steps with full descriptions)
-- Problem 2: Calculus - Find the Derivative (1 step with explanation)
-- Problem 3: Matrix Addition (1 step with detailed instructions)
+  Step 2:
+    Instruction: Now solve the equation 2x + 6 = 12 for x
+    Description: Subtract 6 from both sides, then divide by 2 to isolate x
+    Expected Answer: x=3
+    Type: math-expression
+
+PROBLEM 2: Calculus: Find the Derivative
+  Description: Find the derivative of f(x) = x² + 3x with respect to x using
+               the power rule.
+
+  Step 1:
+    Instruction: Apply the power rule to find f'(x)
+    Description: Use the power rule: d/dx(xⁿ) = n·xⁿ⁻¹ for each term. For x²,
+                 the derivative is 2x. For 3x, the derivative is 3.
+    Expected Answer: 2x+3
+    Type: math-expression
+
+PROBLEM 3: Matrix Addition
+  Description: Add the two matrices: [[1,2],[3,4]] + [[2,3],[4,5]]. Add
+               corresponding elements.
+
+  Step 1:
+    Instruction: Add the corresponding elements of both matrices
+    Description: For matrix addition, add each element in position (i,j) from
+                 the first matrix with the element at position (i,j) from the
+                 second matrix. (1+2=3, 2+3=5, 3+4=7, 4+5=9)
+    Expected Answer: [[3,5],[7,9]]
+    Type: math-expression
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 SECTION 2: JSON FORMAT (Before Compression)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{json_text}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🗜️ SECTION 3: BROTLI-COMPRESSED BASE64 (Final Format)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This is what you paste in the "Paste JSON" tab:
+
+{base64_text}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 HOW TO USE THIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Method 1: Copy the compressed base64 text above
+  1. Copy the base64 text from Section 3
+  2. Go to "Paste JSON" tab
+  3. Paste and click "Load Problem Set"
+
+Method 2: Use the button
+  • Click "Load This Example" button below to load directly!
+
+Method 3: Create your own
+  1. Edit the JSON in Section 2 with your own problems
+  2. Compress it using Brotli: brotli.compress(json.encode('utf-8'))
+  3. Encode to base64: base64.b64encode(compressed)
+  4. Paste the result in "Paste JSON" tab
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ WHAT'S INCLUDED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Each problem includes:
-✓ Problem title
-✓ Problem description (what to solve)
-✓ Step instruction (what to do in this step)
-✓ Step description (detailed explanation)
-✓ Expected answer
-✓ Expected structure (for minimal keyboard generation)
+  ✓ Problem title
+  ✓ Problem description (what to solve)
+  ✓ Step instruction (what to do in this step)
+  ✓ Step description (detailed explanation)
+  ✓ Expected answer
+  ✓ Expected structure (for minimal keyboard generation)
 
-This demonstrates the complete format needed for creating your own problem sets.
+This demonstrates the complete format for creating your own problem sets!
 """
 
             textarea.value = formatted_text
