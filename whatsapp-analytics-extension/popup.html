@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Analytics</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 400px;
+            min-height: 300px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f8fafc;
+            color: #0f172a;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .container {
+            padding: 16px;
+        }
+
+        .stats {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #25D366;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+        }
+
+        .button:last-child {
+            margin-bottom: 0;
+        }
+
+        .button-primary {
+            background: #25D366;
+            color: white;
+        }
+
+        .button-primary:hover {
+            background: #1faa52;
+        }
+
+        .button-secondary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .button-secondary:hover {
+            background: #2563eb;
+        }
+
+        .button-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .button-danger:hover {
+            background: #dc2626;
+        }
+
+        .button:disabled {
+            background: #e2e8f0;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-label {
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #25D366;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .reports-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .report-item {
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .report-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .report-sender {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .report-time {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .report-phone {
+            color: #64748b;
+            font-size: 11px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-active {
+            background: #10b981;
+        }
+
+        .status-inactive {
+            background: #ef4444;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 32px 16px;
+            color: #94a3b8;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state-text {
+            font-size: 13px;
+        }
+
+        .input-group {
+            margin-bottom: 12px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #25D366;
+        }
+
+        .footer {
+            padding: 12px 16px;
+            background: #f1f5f9;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>💬 WhatsApp Analytics</h1>
+        <p>Auto-capture student progress reports</p>
+    </div>
+
+    <div class="container">
+        <!-- Status -->
+        <div class="stats">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center;">
+                    <span class="status-indicator" id="statusIndicator"></span>
+                    <span id="statusText" style="font-size: 13px; font-weight: 600;">Loading...</span>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="reportCount">0</div>
+                    <div class="stat-label">Reports Captured</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="sessionCount">0</div>
+                    <div class="stat-label">Active Session</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="section">
+            <div class="section-title">Controls</div>
+
+            <div class="toggle-container">
+                <span class="toggle-label">Auto-capture enabled</span>
+                <label class="toggle">
+                    <input type="checkbox" id="enabledToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="button button-primary" id="viewReportsBtn">
+                📊 View Captured Reports
+            </button>
+            <button class="button button-secondary" id="exportBtn" disabled>
+                📤 Export to Analytics App
+            </button>
+            <button class="button button-danger" id="clearBtn">
+                🗑️ Clear All Reports
+            </button>
+        </div>
+
+        <!-- Settings -->
+        <div class="section">
+            <div class="section-title">Settings</div>
+            <div class="input-group">
+                <label class="input-label">Analytics App URL</label>
+                <input type="text" class="input-field" id="analyticsUrl"
+                       placeholder="http://localhost:8000/analytics_for_problem.html">
+            </div>
+            <button class="button button-secondary" id="saveSettingsBtn">
+                💾 Save Settings
+            </button>
+        </div>
+
+        <!-- Recent Reports Preview -->
+        <div class="section" id="reportsSection" style="display: none;">
+            <div class="section-title">Recent Reports</div>
+            <div class="reports-list" id="reportsList">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <div class="empty-state-text">No reports captured yet</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Extension v1.0.0 • For educational use
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
