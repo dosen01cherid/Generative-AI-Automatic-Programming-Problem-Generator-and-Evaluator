@@ -657,7 +657,18 @@ class IndexedDBManager:
                                     // Check if store exists before creating transaction
                                     if (!db.objectStoreNames.contains(store)) {
                                         delayClose(db);
-                                        reject(new Error(`Object store '${store}' not found. Database may need to be upgraded.`));
+                                        // Offer to delete corrupted database
+                                        const errorMsg = `Object store '${store}' not found. Database appears corrupted.`;
+                                        console.error(`❌ ${errorMsg}`);
+
+                                        // Automatically delete and retry if corrupted
+                                        if (confirm(`⚠️ Database is corrupted. Delete and recreate?\n\nThis will clear all saved analytics sessions.`)) {
+                                            indexedDB.deleteDatabase(dbName);
+                                            console.log(`🗑️ Deleted corrupted database: ${dbName}`);
+                                            reject(new Error('Database deleted. Please reload the page.'));
+                                        } else {
+                                            reject(new Error(errorMsg));
+                                        }
                                         return;
                                     }
                                     const tx = db.transaction(store, "readwrite");
