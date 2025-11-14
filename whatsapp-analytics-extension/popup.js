@@ -13,6 +13,7 @@ const reportCount = document.getElementById('reportCount');
 const sessionCount = document.getElementById('sessionCount');
 const enabledToggle = document.getElementById('enabledToggle');
 const viewReportsBtn = document.getElementById('viewReportsBtn');
+const autoInjectBtn = document.getElementById('autoInjectBtn');
 const exportBtn = document.getElementById('exportBtn');
 const clearBtn = document.getElementById('clearBtn');
 const analyticsUrl = document.getElementById('analyticsUrl');
@@ -62,7 +63,8 @@ function updateUI() {
     reportCount.textContent = capturedReports.length;
     sessionCount.textContent = capturedReports.length > 0 ? '1' : '0';
 
-    // Enable/disable export button
+    // Enable/disable buttons
+    autoInjectBtn.disabled = capturedReports.length === 0;
     exportBtn.disabled = capturedReports.length === 0;
 
     // Show/hide reports section
@@ -136,6 +138,43 @@ viewReportsBtn.addEventListener('click', () => {
     const reportsData = encodeURIComponent(JSON.stringify(capturedReports));
     chrome.tabs.create({
         url: `reports.html?data=${reportsData}`
+    });
+});
+
+/**
+ * Event: Auto-inject to analytics (NEW!)
+ */
+autoInjectBtn.addEventListener('click', () => {
+    if (capturedReports.length === 0) {
+        showToast('No reports to inject');
+        return;
+    }
+
+    if (!analyticsUrl.value) {
+        showToast('Please set Analytics App URL in settings');
+        return;
+    }
+
+    // Disable button and show loading state
+    autoInjectBtn.disabled = true;
+    autoInjectBtn.textContent = '⏳ Injecting...';
+
+    // Send auto-inject request to background script
+    chrome.runtime.sendMessage({
+        type: 'AUTO_INJECT_TO_ANALYTICS',
+        reports: capturedReports,
+        autoAnalyze: true  // Automatically trigger analysis
+    }, (response) => {
+        // Re-enable button
+        autoInjectBtn.disabled = false;
+        autoInjectBtn.textContent = '🚀 Auto-Inject to Analytics';
+
+        if (response && response.success) {
+            showToast(`✅ Injected ${capturedReports.length} reports to Analytics App!`);
+        } else {
+            const error = response ? response.error : 'Unknown error';
+            showToast(`❌ Error: ${error}`);
+        }
     });
 });
 

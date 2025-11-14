@@ -23,9 +23,10 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-012 (WhatsApp Integration)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-013 (Extension Auto-Inject)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ NEW: WhatsApp Integration - Import progress reports from WhatsApp chats');
+    console.log('✅ NEW: Browser Extension Auto-Inject - Real-time WhatsApp capture');
+    console.log('✅ WhatsApp Integration - Manual import and extension support');
     console.log('✅ Auto-finalize MC/TF/fill-blank questions when answered');
   </script>
 
@@ -2500,45 +2501,65 @@ class ProgressAnalyzer:
             <div style="margin-bottom:20px;">
                 <h2 style="margin:0 0 16px 0;color:#0f172a;font-size:24px;">💬 WhatsApp Integration</h2>
                 <p style="color:#64748b;margin:0 0 20px 0;">
-                    Connect your WhatsApp to automatically capture student progress reports sent to your number.
+                    Two ways to capture student progress reports from WhatsApp.
                 </p>
             </div>
 
-            <div style="background:#e0f2fe;border-left:4px solid #0ea5e9;padding:16px;border-radius:8px;margin-bottom:20px;">
-                <h3 style="margin:0 0 8px 0;color:#0369a1;font-size:16px;">How it works:</h3>
-                <ol style="margin:8px 0 0 20px;color:#075985;line-height:1.8;">
-                    <li>Open WhatsApp Web by clicking the button below</li>
-                    <li>Scan QR code to login to your WhatsApp account</li>
-                    <li>Export the chat with students (3 dots menu → More → Export chat)</li>
-                    <li>Upload the exported chat file below to capture progress reports</li>
-                </ol>
-            </div>
-
-            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
-                <button id="openWhatsAppBtn" class="btn" style="background:#25D366;color:white;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;font-size:14px;font-weight:600;">
-                    🌐 Open WhatsApp Web
+            <div style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);color:white;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                    <div style="font-size:32px;">🚀</div>
+                    <div>
+                        <h3 style="margin:0;font-size:18px;font-weight:700;">NEW: Browser Extension (RECOMMENDED!)</h3>
+                        <p style="margin:4px 0 0 0;opacity:0.95;font-size:13px;">Automatic real-time capture with ONE CLICK</p>
+                    </div>
+                </div>
+                <div style="background:rgba(255,255,255,0.15);border-radius:8px;padding:14px;margin:12px 0;">
+                    <p style="margin:0 0 10px 0;font-weight:600;font-size:14px;">How it works:</p>
+                    <ol style="margin:0 0 0 20px;padding:0;font-size:13px;line-height:1.8;">
+                        <li>Install the Chrome extension (see instructions below)</li>
+                        <li>Open WhatsApp Web - extension monitors automatically</li>
+                        <li>Students send progress reports - captured in real-time</li>
+                        <li>Click "Auto-Inject" in extension - data appears here instantly!</li>
+                    </ol>
+                </div>
+                <button id="showExtensionGuideBtn" class="btn" style="background:white;color:#059669;padding:10px 20px;border-radius:6px;border:none;cursor:pointer;font-size:14px;font-weight:600;width:100%;">
+                    📖 View Extension Installation Guide
                 </button>
             </div>
 
-            <div style="background:#f8fafc;border-radius:8px;padding:16px;margin-bottom:20px;">
-                <h3 style="margin:0 0 12px 0;color:#0f172a;font-size:16px;">Import WhatsApp Chat Export</h3>
-                <p style="color:#64748b;font-size:14px;margin:0 0 12px 0;">
-                    Upload a WhatsApp chat export file (.txt) to automatically extract progress reports:
-                </p>
-                <input type="file" id="whatsappFileInput" accept=".txt" style="margin-bottom:12px;padding:8px;border:1px solid #e2e8f0;border-radius:6px;width:100%;"/>
-                <button id="importWhatsAppBtn" class="btn" style="background:#3b82f6;color:white;padding:10px 20px;border-radius:6px;border:none;cursor:pointer;font-size:14px;font-weight:600;">
-                    📥 Import Chat Messages
-                </button>
-            </div>
+            <div style="background:#f1f5f9;border-radius:8px;padding:16px;margin-bottom:20px;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                    <div style="font-size:24px;">📤</div>
+                    <div>
+                        <h3 style="margin:0;font-size:16px;font-weight:700;color:#475569;">Manual Upload (Backup Method)</h3>
+                        <p style="margin:4px 0 0 0;color:#64748b;font-size:12px;">For when you can't use the extension</p>
+                    </div>
+                </div>
 
-            <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:8px;margin-bottom:20px;">
-                <h3 style="margin:0 0 8px 0;color:#92400e;font-size:14px;">⚠️ Important Notes:</h3>
-                <ul style="margin:8px 0 0 20px;color:#78350f;font-size:13px;line-height:1.6;">
-                    <li>WhatsApp chat exports must be in text format (.txt)</li>
-                    <li>Progress reports should be base64-encoded exports sent by students</li>
-                    <li>The system will automatically detect and extract progress data from messages</li>
-                    <li>Teacher phone number will be extracted from the chat context</li>
-                </ul>
+                <details style="margin-top:12px;">
+                    <summary style="cursor:pointer;padding:10px;background:#e2e8f0;border-radius:6px;font-weight:600;color:#334155;font-size:14px;">
+                        Click to show manual upload instructions
+                    </summary>
+                    <div style="padding:16px 0;">
+                        <div style="background:#e0f2fe;border-left:4px solid #0ea5e9;padding:12px;border-radius:6px;margin-bottom:16px;">
+                            <h4 style="margin:0 0 8px 0;color:#0369a1;font-size:14px;">Steps:</h4>
+                            <ol style="margin:0 0 0 20px;color:#075985;font-size:13px;line-height:1.6;">
+                                <li>Open WhatsApp Web and login</li>
+                                <li>Export chat: 3 dots (⋮) → More → Export chat → Without Media</li>
+                                <li>Upload the .txt file below</li>
+                            </ol>
+                        </div>
+
+                        <button id="openWhatsAppBtn" class="btn" style="background:#25D366;color:white;padding:10px 20px;border-radius:6px;border:none;cursor:pointer;font-size:14px;font-weight:600;margin-bottom:12px;width:100%;">
+                            🌐 Open WhatsApp Web
+                        </button>
+
+                        <input type="file" id="whatsappFileInput" accept=".txt" style="margin-bottom:10px;padding:8px;border:1px solid #cbd5e1;border-radius:6px;width:100%;font-size:13px;"/>
+                        <button id="importWhatsAppBtn" class="btn" style="background:#3b82f6;color:white;padding:10px 20px;border-radius:6px;border:none;cursor:pointer;font-size:14px;font-weight:600;width:100%;">
+                            📥 Import Chat Export
+                        </button>
+                    </div>
+                </details>
             </div>
 
             <div style="text-align:right;">
@@ -2552,9 +2573,57 @@ class ProgressAnalyzer:
         document.body.appendChild(overlay)
 
         # Event handlers
+        def show_extension_guide(evt):
+            guide_html = """
+                <div style='max-width:600px;'>
+                    <h3 style='margin-top:0;color:#059669;'>🚀 Browser Extension Installation</h3>
+
+                    <div style='background:#f0fdf4;border:2px solid #10b981;border-radius:8px;padding:16px;margin-bottom:16px;'>
+                        <h4 style='margin:0 0 12px 0;color:#065f46;'>Quick Setup (5 minutes)</h4>
+                        <ol style='margin:0;padding-left:20px;color:#064e3b;line-height:1.8;'>
+                            <li>Go to <strong>chrome://extensions</strong> in your browser</li>
+                            <li>Enable <strong>"Developer mode"</strong> (top-right toggle)</li>
+                            <li>Click <strong>"Load unpacked"</strong></li>
+                            <li>Select the <code>whatsapp-analytics-extension</code> folder</li>
+                            <li>Click <strong>"Details"</strong> → Enable <strong>"Allow access to file URLs"</strong></li>
+                            <li>Set this page's URL in extension settings</li>
+                        </ol>
+                    </div>
+
+                    <div style='background:#eff6ff;border-left:4px solid #3b82f6;border-radius:6px;padding:16px;margin-bottom:16px;'>
+                        <h4 style='margin:0 0 8px 0;color:#1e40af;'>✨ How to Use:</h4>
+                        <ol style='margin:0;padding-left:20px;color:#1e3a8a;line-height:1.8;'>
+                            <li>Open WhatsApp Web - extension monitors automatically</li>
+                            <li>Students send progress reports - captured in real-time</li>
+                            <li>Click extension icon → <strong>"🚀 Auto-Inject to Analytics"</strong></li>
+                            <li>Data appears in this page instantly!</li>
+                        </ol>
+                    </div>
+
+                    <div style='background:#fef3c7;border-left:4px solid #f59e0b;border-radius:6px;padding:14px;'>
+                        <p style='margin:0;color:#92400e;font-size:13px;'>
+                            <strong>📁 Extension Location:</strong><br>
+                            The extension folder is in your project directory:<br>
+                            <code style='background:#fbbf24;color:#78350f;padding:2px 6px;border-radius:4px;'>whatsapp-analytics-extension/</code>
+                        </p>
+                    </div>
+                </div>
+            """
+            window.alert("Browser Extension Installation Guide\n\n" +
+                        "1. Open chrome://extensions in Chrome\n" +
+                        "2. Enable 'Developer mode' (top-right)\n" +
+                        "3. Click 'Load unpacked'\n" +
+                        "4. Select the 'whatsapp-analytics-extension' folder\n" +
+                        "5. Click 'Details' and enable 'Allow access to file URLs'\n" +
+                        "6. Configure Analytics App URL in extension settings\n\n" +
+                        "Then:\n" +
+                        "- Open WhatsApp Web\n" +
+                        "- Extension captures reports automatically\n" +
+                        "- Click 'Auto-Inject' to send data here!\n\n" +
+                        "See README.md in whatsapp-analytics-extension folder for details.")
+
         def open_whatsapp(evt):
             window.open("https://web.whatsapp.com", "_blank")
-            window.alert("📱 Please scan the QR code to login to WhatsApp Web.\n\nOnce logged in, you can export your chat with students:\n1. Open the chat\n2. Click the 3 dots (⋮) menu\n3. Select 'More' → 'Export chat'\n4. Choose 'Without Media'\n5. Upload the exported .txt file using the import button below")
 
         def close_modal(evt=None):
             overlay.remove()
@@ -2579,10 +2648,13 @@ class ProgressAnalyzer:
             reader.readAsText(file)
 
         # Bind events
+        extension_guide_btn = document.querySelector("#showExtensionGuideBtn")
         open_btn = document.querySelector("#openWhatsAppBtn")
         close_btn = document.querySelector("#closeWhatsAppModalBtn")
         import_btn = document.querySelector("#importWhatsAppBtn")
 
+        if extension_guide_btn:
+            extension_guide_btn.addEventListener("click", create_proxy(show_extension_guide))
         if open_btn:
             open_btn.addEventListener("click", create_proxy(open_whatsapp))
         if close_btn:
