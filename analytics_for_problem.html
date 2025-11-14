@@ -23,7 +23,7 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-009 (Auto-Finalize)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-010 (MC-Multiple Fix)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
     console.log('✅ NEW: Auto-finalize MC/TF/fill-blank questions when answered');
   </script>
@@ -2023,15 +2023,28 @@ class ProgressAnalyzer:
                         # Desktop format with user_answers array
                         user_answers = step_state.get("user_answers", [])
                         window.console.log(f"      📝 Desktop format: {len(user_answers)} user answers")
-                        for att_idx, answer in enumerate(user_answers):
-                            # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
-                            is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
+
+                        # ✅ SPECIAL HANDLING: For MC-multiple, treat entire array as ONE attempt
+                        if step_type == "multiple-choice-multiple" and user_answers:
+                            # All selected options in one submission = 1 attempt
+                            window.console.log(f"      📋 MC-multiple: treating {len(user_answers)} selections as 1 attempt")
                             step_progress["attempts"].append({
-                                "answer_latex": answer if isinstance(answer, str) else str(answer),
+                                "answer_latex": str(user_answers),  # Store all selections together
                                 "expression": "",
-                                "correct": is_correct,
+                                "correct": step_state.get("correct", False),
                                 "time_taken_seconds": 0
                             })
+                        else:
+                            # For other types, each user_answer is a separate attempt
+                            for att_idx, answer in enumerate(user_answers):
+                                # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
+                                is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
+                                step_progress["attempts"].append({
+                                    "answer_latex": answer if isinstance(answer, str) else str(answer),
+                                    "expression": "",
+                                    "correct": is_correct,
+                                    "time_taken_seconds": 0
+                                })
 
                     steps_progress.append(step_progress)
 
