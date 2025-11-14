@@ -3721,10 +3721,27 @@ class ProblemSolverApp:
         """Format an answer for display with MathJax support"""
         answer_str = str(answer)
 
-        # Check if it looks like LaTeX (contains backslashes or curly braces)
-        if '\\' in answer_str or ('{' in answer_str and '}' in answer_str):
-            # Wrap in delimiters for MathJax rendering
-            return f"\\({answer_str}\\)"
+        # Check if it looks like LaTeX or math notation
+        # Includes: backslashes, curly braces, or matrix notation (double square brackets)
+        is_latex = ('\\' in answer_str or
+                    ('{' in answer_str and '}' in answer_str) or
+                    '[[' in answer_str)
+
+        if is_latex:
+            # Convert matrices from [[...]] format to proper LaTeX if needed
+            if '[[' in answer_str and '\\begin{' not in answer_str:
+                try:
+                    # Parse and convert to proper LaTeX
+                    parsed = self.math_parser.parse_latex(answer_str)
+                    latex_output = self._convert_latex_preserve_order(parsed)
+                    # Wrap in display delimiters for MathJax rendering
+                    return f"$$\\displaystyle {latex_output}$$"
+                except:
+                    # Fallback: just wrap as-is
+                    return f"\\({answer_str}\\)"
+            else:
+                # Already LaTeX, just wrap in delimiters for MathJax rendering
+                return f"\\({answer_str}\\)"
         else:
             # Plain text, return as is but escape HTML
             import html
