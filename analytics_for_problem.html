@@ -614,7 +614,8 @@ class IndexedDBManager:
                                     return;
                                 }
 
-                                const request = indexedDB.open(name, version);
+                                // Don't use version parameter - always open latest version to avoid version conflicts
+                                const request = indexedDB.open(name);
 
                                 request.onupgradeneeded = e => {
                                     const db = e.target.result;
@@ -633,36 +634,10 @@ class IndexedDBManager:
                                     const hasHashes = db.objectStoreNames.contains("hashes");
 
                                     if (!hasAnalytics || !hasHashes) {
-                                        // Stores are missing, need to upgrade
-                                        console.warn(`⚠️ Missing stores. Upgrading database from version ${db.version} to ${db.version + 1}`);
+                                        // Stores are missing - database is corrupted
+                                        console.error(`❌ Missing required stores. Database appears corrupted.`);
                                         db.close();
-
-                                        // Reopen with incremented version to trigger onupgradeneeded
-                                        const upgradeRequest = indexedDB.open(name, db.version + 1);
-                                        upgradeRequest.onupgradeneeded = e => {
-                                            const upgradedDb = e.target.result;
-                                            if (!upgradedDb.objectStoreNames.contains("analytics")) {
-                                                upgradedDb.createObjectStore("analytics", { keyPath: "id" });
-                                            }
-                                            if (!upgradedDb.objectStoreNames.contains("hashes")) {
-                                                upgradedDb.createObjectStore("hashes", { keyPath: "id" });
-                                            }
-                                        };
-                                        upgradeRequest.onsuccess = e => resolve(e.target.result);
-                                        upgradeRequest.onerror = e => {
-                                            const error = e.target.error;
-                                            if (error && error.name === 'VersionError') {
-                                                // Version mismatch during upgrade, open latest version
-                                                console.warn(`⚠️ Version mismatch during upgrade. Opening latest version...`);
-                                                const finalRequest = indexedDB.open(name);
-                                                finalRequest.onsuccess = e => resolve(e.target.result);
-                                                finalRequest.onerror = e => reject(e.target.error);
-                                            } else if (error && error.name === 'UnknownError') {
-                                                reject(new Error('DB_CORRUPTED: Database is corrupted and cannot be upgraded.'));
-                                            } else {
-                                                reject(error);
-                                            }
-                                        };
+                                        reject(new Error('DB_CORRUPTED: Required object stores are missing from database.'));
                                     } else {
                                         resolve(db);
                                     }
@@ -671,19 +646,6 @@ class IndexedDBManager:
                                 request.onerror = e => {
                                     const error = e.target.error;
                                     console.error('IndexedDB open error:', error);
-
-                                    // Detect version mismatch - open without version to get current version
-                                    if (error && error.name === 'VersionError') {
-                                        console.warn(`⚠️ Version mismatch. Opening with latest version...`);
-                                        const retryRequest = indexedDB.open(name);  // Open without version = latest
-                                        retryRequest.onsuccess = e => {
-                                            const db = e.target.result;
-                                            console.log(`✅ Opened database with version ${db.version}`);
-                                            resolve(db);
-                                        };
-                                        retryRequest.onerror = e => reject(e.target.error);
-                                        return;
-                                    }
 
                                     // Detect tracking prevention or blocked IndexedDB
                                     if (error && (error.name === 'UnknownError' || error.name === 'InvalidStateError')) {
