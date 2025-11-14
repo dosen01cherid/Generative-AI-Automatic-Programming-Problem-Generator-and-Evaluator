@@ -442,6 +442,7 @@ button.detail-toggle:hover {
     <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
       <button id="analyzeBtn" class="btn">Analyze & Add Submissions</button>
       <button id="clearAnalyticsBtn" class="btn ghost">Clear All</button>
+      <button id="loadSavedBtn" class="btn" style="background:#3b82f6;">📂 Load Saved</button>
       <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
     </div>
   </div>
@@ -1210,6 +1211,7 @@ class ProgressAnalyzer:
         bindings = [
             ("#analyzeBtn", self.analyze_submissions),
             ("#clearAnalyticsBtn", self.clear_analytics),
+            ("#loadSavedBtn", self.load_saved_analytics),
             ("#exportAnalyticsBtn", self.export_analytics),
         ]
         for selector, handler in bindings:
@@ -1459,8 +1461,27 @@ class ProgressAnalyzer:
 
                 # Calculate summary statistics
                 total_steps = len(step_states)
+
                 # ✅ Support both 'finalized' and 'finished' field names
-                finalized_steps = sum(1 for s in step_states if s.get("finalized", s.get("finished", False)))
+                # ✅ For non-math types, consider finalized if they have an answer
+                def is_step_finalized(s):
+                    # Check standard finalized/finished fields
+                    finalized = s.get("finalized", s.get("finished", False))
+
+                    # Special handling for non-math-expression types
+                    step_type = s.get("step_type", "")
+                    if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
+                        # For these types, consider finalized if answered or correct
+                        user_answers = s.get("user_answers", [])
+                        is_correct = s.get("correct", False)
+                        has_answer = user_answers and len(user_answers) > 0
+
+                        if is_correct or has_answer:
+                            return True
+
+                    return finalized
+
+                finalized_steps = sum(1 for s in step_states if is_step_finalized(s))
                 correct_steps = sum(1 for s in step_states if s.get("correct", False))
                 # ✅ Support both attempt_history (array) and attempts (count)
                 def get_attempt_count(s):
@@ -1486,6 +1507,24 @@ class ProgressAnalyzer:
 
                     # ✅ Support both 'finalized' and 'finished' field names
                     is_finalized = step_state.get("finalized", step_state.get("finished", False))
+
+                    # ✅ SPECIAL HANDLING: For non-math-expression types, consider finalized if answered
+                    # Non-math types (MC, T/F, fill-blank) are "done" once they submit an answer
+                    # Unlike math-expression which requires explicit finalization
+                    step_type = step_state.get("step_type", "")
+                    if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
+                        # For these types, consider finalized if:
+                        # 1. Already marked as finished/finalized, OR
+                        # 2. They answered correctly, OR
+                        # 3. They have at least one answer (attempted the question)
+                        user_answers = step_state.get("user_answers", [])
+                        is_correct = step_state.get("correct", False)
+                        has_answer = user_answers and len(user_answers) > 0
+
+                        if is_correct or has_answer:
+                            is_finalized = True
+                            window.console.log(f"    - Non-math type '{step_type}' with answer → forcing finalized=True")
+
                     window.console.log(f"    - Finalized/Finished: {is_finalized}")
                     window.console.log(f"    - Correct: {step_state.get('correct', False)}")
 
@@ -1882,6 +1921,11 @@ class ProgressAnalyzer:
 
         from js import window
         window.alert("Analytics cleared.")
+
+    def load_saved_analytics(self, e=None):
+        """Trigger the load saved analytics modal"""
+        import asyncio
+        asyncio.ensure_future(self.app.persistence_manager.restore_saved_analytics())
 
     def export_analytics(self, e=None):
         from js import window
