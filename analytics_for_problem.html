@@ -1459,9 +1459,16 @@ class ProgressAnalyzer:
 
                 # Calculate summary statistics
                 total_steps = len(step_states)
-                finalized_steps = sum(1 for s in step_states if s.get("finalized", False))
+                # ✅ Support both 'finalized' and 'finished' field names
+                finalized_steps = sum(1 for s in step_states if s.get("finalized", s.get("finished", False)))
                 correct_steps = sum(1 for s in step_states if s.get("correct", False))
-                total_attempts = sum(s.get("attempts", 0) for s in step_states)
+                # ✅ Support both attempt_history (array) and attempts (count)
+                def get_attempt_count(s):
+                    attempt_history = s.get("attempt_history", [])
+                    if attempt_history:
+                        return len(attempt_history)
+                    return s.get("attempts", 0)
+                total_attempts = sum(get_attempt_count(s) for s in step_states)
                 total_finalize_attempts = sum(s.get("finalize_attempts", 0) for s in step_states)
 
                 window.console.log(f"📊 Statistics:")
@@ -1476,28 +1483,49 @@ class ProgressAnalyzer:
                 for step_idx, step_state in enumerate(step_states):
                     window.console.log(f"  📌 Step {step_idx + 1}:")
                     window.console.log(f"    - Keys: {list(step_state.keys())}")
-                    window.console.log(f"    - Finalized: {step_state.get('finalized', False)}")
+
+                    # ✅ Support both 'finalized' and 'finished' field names
+                    is_finalized = step_state.get("finalized", step_state.get("finished", False))
+                    window.console.log(f"    - Finalized/Finished: {is_finalized}")
                     window.console.log(f"    - Correct: {step_state.get('correct', False)}")
-                    window.console.log(f"    - Attempts: {len(step_state.get('attempt_history', []))}")
+
+                    # ✅ Support both attempt_history (array) and attempts (count)
+                    attempt_history = step_state.get("attempt_history", [])
+                    attempt_count = len(attempt_history) if attempt_history else step_state.get("attempts", 0)
+                    window.console.log(f"    - Attempts: {attempt_count}")
 
                     step_progress = {
                         "step_number": step_idx + 1,
-                        "finalized": step_state.get("finalized", False),
+                        "finalized": is_finalized,
                         "correct": step_state.get("correct", False),
                         "structure_correct": step_state.get("structure_correct", False),
                         "attempts": []
                     }
 
-                    # Add attempt history
-                    attempt_history = step_state.get("attempt_history", [])
-                    for att_idx, attempt in enumerate(attempt_history):
-                        window.console.log(f"      ✏️ Attempt {att_idx + 1}: {attempt.get('correct', False)}")
-                        step_progress["attempts"].append({
-                            "answer_latex": attempt.get("answer_latex", ""),
-                            "expression": step_state.get("step", {}).get("expression", ""),
-                            "correct": attempt.get("correct", False),
-                            "time_taken_seconds": attempt.get("time_taken_seconds", 0)
-                        })
+                    # ✅ Add attempt history from either format
+                    if attempt_history:
+                        # New format with detailed attempt_history
+                        for att_idx, attempt in enumerate(attempt_history):
+                            window.console.log(f"      ✏️ Attempt {att_idx + 1}: {attempt.get('correct', False)}")
+                            step_progress["attempts"].append({
+                                "answer_latex": attempt.get("answer_latex", ""),
+                                "expression": step_state.get("step", {}).get("expression", ""),
+                                "correct": attempt.get("correct", False),
+                                "time_taken_seconds": attempt.get("time_taken_seconds", 0)
+                            })
+                    elif "user_answers" in step_state:
+                        # Desktop format with user_answers array
+                        user_answers = step_state.get("user_answers", [])
+                        window.console.log(f"      📝 Desktop format: {len(user_answers)} user answers")
+                        for att_idx, answer in enumerate(user_answers):
+                            # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
+                            is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
+                            step_progress["attempts"].append({
+                                "answer_latex": answer if isinstance(answer, str) else str(answer),
+                                "expression": "",
+                                "correct": is_correct,
+                                "time_taken_seconds": 0
+                            })
 
                     steps_progress.append(step_progress)
 
