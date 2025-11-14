@@ -713,36 +713,53 @@ print("✅ pyscript module created and registered")
     }
 /* Keyboard Accordion Styles */
 .keyboard-accordion {
-  border: 1px solid #e5e7eb;
+  border: 2px solid #e2e8f0;
   border-radius: 8px;
   overflow: hidden;
+  background: #fff;
 }
 
 .keyboard-accordion-header {
-  background: #f9fafb;
-  padding: 12px 16px;
+  background: #f0f4ff;
+  padding: 12px 14px;
   cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 15px;
   user-select: none;
   transition: background 0.2s;
 }
 
 .keyboard-accordion-header:hover {
-  background: #f3f4f6;
+  background: #dbeafe;
+}
+
+.keyboard-accordion.open .keyboard-accordion-header {
+  background: #dbeafe;
+  border-bottom: 2px solid #e2e8f0;
 }
 
 .keyboard-accordion-body {
-  display: none;
-  background: #fff;
-  border-top: 1px solid #e5e7eb;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: #fafbfc;
+}
+
+.keyboard-accordion.open .keyboard-accordion-body {
+  max-height: 500px;
 }
 
 .keyboard-accordion-icon {
+  font-size: 14px;
   color: #6b7280;
   transition: transform 0.2s;
+}
+
+.keyboard-accordion.open .keyboard-accordion-icon {
+  transform: rotate(180deg);
 }
 
 /* Input Button Styles */
@@ -755,6 +772,30 @@ print("✅ pyscript module created and registered")
   cursor: pointer;
   transition: all 0.15s;
   font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* SVG button content styling */
+.input-btn svg {
+  display: block;
+  margin: auto;
+  pointer-events: none; /* Prevent SVG from intercepting clicks */
+}
+
+/* Ensure SVG buttons maintain proper sizing */
+.input-btn.navigation svg,
+.input-btn.special svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Math variable styling - make variables prominent */
+.math-var {
+  font-family: 'Times New Roman', 'STIX Two Math', 'Latin Modern Math', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1e40af;
+  pointer-events: none;
 }
 
 .input-btn:hover {
@@ -893,6 +934,60 @@ print("✅ pyscript module created and registered")
     .problem-area-hidden {
       animation: fadeOut 0.5s ease-out forwards;
       pointer-events: none;
+    }
+
+    /* Tab styles */
+    .load-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 0;
+    }
+
+    .load-tab {
+      padding: 12px 20px;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: #6b7280;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      bottom: -2px;
+    }
+
+    .load-tab:hover {
+      color: #374151;
+      background: #f9fafb;
+    }
+
+    .load-tab.active {
+      color: #2563eb;
+      border-bottom-color: #2563eb;
+      background: #eff6ff;
+    }
+
+    .load-tab-content {
+      display: none;
+      animation: fadeInTab 0.3s ease-in;
+    }
+
+    .load-tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeInTab {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* Button loading states */
@@ -1262,8 +1357,8 @@ print("✅ pyscript module created and registered")
               </div>
             </div>
 
-            <!-- Comprehensive Keyboard -->
-            <div id="keyboardAccordionsContainer" style="margin-top: 16px">
+            <!-- Comprehensive Keyboard for Freestyle -->
+            <div id="freestyleKeyboard" style="margin-top: 16px">
               <div style="font-weight: 600; margin-bottom: 8px; font-size: 15px">⌨️ Input Keyboard:</div>
 
               <!-- Numbers & Basic Accordion -->
@@ -1298,6 +1393,7 @@ print("✅ pyscript module created and registered")
                     <button class="input-btn navigation" data-action="MOVE_LEFT" id="freestyleMoveLeft"></button>
                     <button class="input-btn navigation" data-action="MOVE_RIGHT" id="freestyleMoveRight"></button>
                     <button class="input-btn delete" data-action="CLEAR">Clear</button>
+                    <button class="input-btn symbol" data-action="x"><span class="math-var">x</span></button>
                   </div>
                 </div>
               </div>
@@ -1310,13 +1406,13 @@ print("✅ pyscript module created and registered")
                 </div>
                 <div id="algebraBody" class="keyboard-accordion-body">
                   <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; padding: 8px">
-                    <button class="input-btn symbol" data-action="x">x</button>
-                    <button class="input-btn symbol" data-action="y">y</button>
-                    <button class="input-btn symbol" data-action="z">z</button>
-                    <button class="input-btn symbol" data-action="a">a</button>
-                    <button class="input-btn symbol" data-action="b">b</button>
-                    <button class="input-btn symbol" data-action="c">c</button>
-                    <button class="input-btn symbol" data-action="n">n</button>
+                    <button class="input-btn symbol" data-action="x"><span class="math-var">x</span></button>
+                    <button class="input-btn symbol" data-action="y"><span class="math-var">y</span></button>
+                    <button class="input-btn symbol" data-action="z"><span class="math-var">z</span></button>
+                    <button class="input-btn symbol" data-action="a"><span class="math-var">a</span></button>
+                    <button class="input-btn symbol" data-action="b"><span class="math-var">b</span></button>
+                    <button class="input-btn symbol" data-action="c"><span class="math-var">c</span></button>
+                    <button class="input-btn symbol" data-action="n"><span class="math-var">n</span></button>
                     <button class="input-btn special" data-action="\\frac">÷(fr)</button>
                     <button class="input-btn special" data-action="|">|x|</button>
                     <button class="input-btn special" data-action="\\sqrt">√</button>
@@ -1362,25 +1458,115 @@ print("✅ pyscript module created and registered")
                     <button class="input-btn operator" data-action="\\arcsin">asin</button>
                     <button class="input-btn operator" data-action="\\arccos">acos</button>
                     <button class="input-btn operator" data-action="\\arctan">atan</button>
-                    <button class="input-btn symbol" data-action="\\pi">π</button>
+                    <button class="input-btn symbol" data-action="\\pi"><span class="math-var">π</span></button>
                     <button class="input-btn operator" data-action="\\ln">ln</button>
+                    <button class="input-btn special" data-action="\\circ"><span style="font-size:13px;">deg°</span></button>
                   </div>
                 </div>
               </div>
 
-              <!-- Matrix Accordion -->
+              <!-- Matrix & Row Operations Accordion -->
               <div class="keyboard-accordion" style="margin-bottom: 6px">
                 <div class="keyboard-accordion-header" data-target="matrixBody">
-                  <span>⬜ Matrix</span>
+                  <span>⬜ Matrix & Row Operations</span>
                   <span class="keyboard-accordion-icon">▼</span>
                 </div>
                 <div id="matrixBody" class="keyboard-accordion-body">
                   <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; padding: 8px">
+                    <!-- Basic Matrix Notation -->
                     <button class="input-btn special" data-action="[">[</button>
                     <button class="input-btn special" data-action="]">]</button>
                     <button class="input-btn special" data-action=",">,</button>
                     <button class="input-btn special" data-action="\\\\">\</button>
                     <button class="input-btn special" data-action="&">&</button>
+
+                    <!-- Matrix Operations -->
+                    <button class="input-btn operator" data-action="\\det">det</button>
+                    <button class="input-btn special" data-action="^T">[&nbsp;]<sup><sup>T</sup></sup></button>
+                    <button class="input-btn special" data-action="^{-1}">[&nbsp;]<sup><sup>-1</sup></sup></button>
+                    <button class="input-btn operator" data-action="\\cdot">·</button>
+                    <button class="input-btn operator" data-action="\\times">×</button>
+
+                    <!-- Row Operation Buttons -->
+                    <button class="input-btn symbol" data-action="R"><span class="math-var">R</span></button>
+                    <button class="input-btn special" data-action="_" id="freestyleSubscriptMatrix"></button>
+                    <button class="input-btn special" data-action="|">|</button>
+                    <button class="input-btn operator" data-action="\\to">→</button>
+                    <button class="input-btn operator" data-action="\\leftarrow">←</button>
+                    <button class="input-btn operator" data-action="\\leftrightarrow">↔</button>
+
+                    <!-- Division for Row Scaling -->
+                    <button class="input-btn operator" data-action="/">÷</button>
+                    <button class="input-btn operator" data-action="+">+</button>
+                    <button class="input-btn operator" data-action="-">−</button>
+
+                    <!-- Identity and Zero matrices -->
+                    <button class="input-btn symbol" data-action="I"><span class="math-var">I</span></button>
+                    <button class="input-btn symbol" data-action="O"><span class="math-var">O</span></button>
+                    <button class="input-btn operator" data-action="\\text{rref}">rref</button>
+                    <button class="input-btn operator" data-action="\\text{rank}">rank</button>
+                    <button class="input-btn operator" data-action="\\text{tr}">tr</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Greek Letters Accordion -->
+              <div class="keyboard-accordion" style="margin-bottom: 6px">
+                <div class="keyboard-accordion-header" data-target="greekBody">
+                  <span>🇬🇷 Greek Letters</span>
+                  <span class="keyboard-accordion-icon">▼</span>
+                </div>
+                <div id="greekBody" class="keyboard-accordion-body">
+                  <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; padding: 8px">
+                    <button class="input-btn symbol" data-action="\\alpha"><span class="math-var">α</span></button>
+                    <button class="input-btn symbol" data-action="\\beta"><span class="math-var">β</span></button>
+                    <button class="input-btn symbol" data-action="\\gamma"><span class="math-var">γ</span></button>
+                    <button class="input-btn symbol" data-action="\\delta"><span class="math-var">δ</span></button>
+                    <button class="input-btn symbol" data-action="\\theta"><span class="math-var">θ</span></button>
+                    <button class="input-btn symbol" data-action="\\lambda"><span class="math-var">λ</span></button>
+                    <button class="input-btn symbol" data-action="\\sigma"><span class="math-var">σ</span></button>
+                    <button class="input-btn symbol" data-action="\\phi"><span class="math-var">φ</span></button>
+                    <button class="input-btn symbol" data-action="\\omega"><span class="math-var">ω</span></button>
+                    <button class="input-btn symbol" data-action="\\mu"><span class="math-var">μ</span></button>
+                    <button class="input-btn symbol" data-action="\\rho"><span class="math-var">ρ</span></button>
+                    <button class="input-btn symbol" data-action="\\tau"><span class="math-var">τ</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Comparison & Logic Accordion -->
+              <div class="keyboard-accordion" style="margin-bottom: 6px">
+                <div class="keyboard-accordion-header" data-target="comparisonBody">
+                  <span>⚖️ Comparison & Logic</span>
+                  <span class="keyboard-accordion-icon">▼</span>
+                </div>
+                <div id="comparisonBody" class="keyboard-accordion-body">
+                  <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; padding: 8px">
+                    <!-- Comparison operators -->
+                    <button class="input-btn operator" data-action="=">=</button>
+                    <button class="input-btn operator" data-action="\\neq">≠</button>
+                    <button class="input-btn operator" data-action="\\lt">&lt;</button>
+                    <button class="input-btn operator" data-action="\\gt">&gt;</button>
+                    <button class="input-btn operator" data-action="\\leq">≤</button>
+
+                    <button class="input-btn operator" data-action="\\geq">≥</button>
+                    <button class="input-btn operator" data-action="\\approx">≈</button>
+                    <button class="input-btn operator" data-action="\\equiv">≡</button>
+                    <button class="input-btn operator" data-action="\\propto">∝</button>
+                    <button class="input-btn operator" data-action="\\pm">±</button>
+
+                    <!-- Set theory -->
+                    <button class="input-btn operator" data-action="\\in">∈</button>
+                    <button class="input-btn operator" data-action="\\notin">∉</button>
+                    <button class="input-btn operator" data-action="\\subset">⊂</button>
+                    <button class="input-btn operator" data-action="\\subseteq">⊆</button>
+                    <button class="input-btn operator" data-action="\\cup">∪</button>
+
+                    <button class="input-btn operator" data-action="\\cap">∩</button>
+                    <button class="input-btn operator" data-action="\\emptyset">∅</button>
+                    <button class="input-btn operator" data-action="\\forall">∀</button>
+                    <button class="input-btn operator" data-action="\\exists">∃</button>
+                    <button class="input-btn operator" data-action="\\therefore">∴</button>
                   </div>
                 </div>
               </div>
@@ -1392,14 +1578,43 @@ print("✅ pyscript module created and registered")
           <div class="panel">
             <h3>📂 Load Problem Set</h3>
 
-            <label>Load Problem Set From File</label>
-            <input type="file" id="uploadFile" accept=".txt,text/plain" />
+            <!-- Tabs Navigation -->
+            <div class="load-tabs">
+              <button class="load-tab active" data-tab="fileTab">📁 From File</button>
+              <button class="load-tab" data-tab="jsonTab">📋 Paste JSON</button>
+              <button class="load-tab" data-tab="exampleTab">📝 Example Format</button>
+            </div>
 
-            <div style="text-align: center; margin: 12px 0; color: #94a3b8">— OR —</div>
+            <!-- Tab 1: Load from File -->
+            <div id="fileTab" class="load-tab-content active">
+              <label>Load Problem Set From File</label>
+              <input type="file" id="uploadFile" accept=".txt,text/plain" />
+              <p style="margin-top: 12px; font-size: 13px; color: #6b7280;">
+                💡 Select a .txt file containing base64-compressed problem set JSON
+              </p>
+            </div>
 
-            <label>📋 Paste JSON</label>
-            <textarea id="pasteJson" placeholder="Paste base64-compressed JSON" style="width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid #e6eef8;"></textarea>
-            <button id="loadJsonBtn" class="btn">📂 Load Problem Set From Pasted JSON</button>
+            <!-- Tab 2: Paste JSON -->
+            <div id="jsonTab" class="load-tab-content">
+              <label>📋 Paste Base64-Compressed JSON</label>
+              <textarea id="pasteJson" placeholder="Paste base64-compressed JSON here..." style="width:100%;min-height:120px;padding:12px;border-radius:8px;border:1px solid #e2e8f0;font-family:monospace;font-size:12px;"></textarea>
+              <button id="loadJsonBtn" class="btn" style="margin-top: 12px;">📂 Load Problem Set</button>
+            </div>
+
+            <!-- Tab 3: Example Format -->
+            <div id="exampleTab" class="load-tab-content">
+              <label>📝 Example Formatted Problem Set</label>
+              <p style="margin: 12px 0; font-size: 13px; color: #6b7280;">
+                This is an example of a properly formatted problem set. You can copy and modify this template.
+              </p>
+              <textarea id="exampleFormatText" readonly style="width:100%;min-height:300px;padding:12px;border-radius:8px;border:1px solid #e2e8f0;font-family:monospace;font-size:11px;background:#f9fafb;"></textarea>
+              <button id="copyExampleBtn" class="btn" style="margin-top: 12px; background: #10b981;">
+                📋 Copy Example to Clipboard
+              </button>
+              <button id="loadExampleBtn" class="btn" style="margin-top: 12px; margin-left: 8px;">
+                📂 Load This Example
+              </button>
+            </div>
           </div>
         </div>
 
@@ -3009,7 +3224,203 @@ class ScoreRecalculationTracker:
                     if len(self.first_time_edits_in_session) < 2:
                         self.update_ui_message()
                 window.setTimeout(create_proxy(update_countdown), 1000)
-                
+
+
+class KeyboardInputHandler:
+  """Common handler for keyboard input to MathQuill fields"""
+
+  @staticmethod
+  def handle_action(mathquill_field, action):
+      """
+      Handle keyboard action for a MathQuill field
+
+      Args:
+          mathquill_field: MathQuill field instance
+          action: String action from button data-action attribute
+      """
+      if not mathquill_field:
+          window.console.error("No MathQuill field provided")
+          return
+
+      window.console.log(f"KeyboardInputHandler: Action = {action}")
+
+      # ==================== NAVIGATION & CONTROL ====================
+      if action == "BACKSPACE":
+          mathquill_field.keystroke("Backspace")
+      elif action == "CLEAR":
+          mathquill_field.latex("")
+      elif action == "MOVE_LEFT":
+          mathquill_field.keystroke("Left")
+      elif action == "MOVE_RIGHT":
+          mathquill_field.keystroke("Right")
+      elif action == "SELECT_LEFT":
+          mathquill_field.keystroke("Shift-Left")
+      elif action == "SELECT_RIGHT":
+          mathquill_field.keystroke("Shift-Right")
+
+      # ==================== SPECIAL OPERATORS ====================
+      elif action == "^":
+          mathquill_field.cmd("^")
+      elif action == "_":
+          mathquill_field.cmd("_")
+      elif action == "/":
+          mathquill_field.cmd("/")
+
+      # ==================== ARITHMETIC OPERATORS ====================
+      elif action == "+":
+          mathquill_field.write("+")
+      elif action == "-":
+          mathquill_field.write("-")
+      elif action == "*":
+          mathquill_field.cmd("times")
+      elif action == "\\times":
+          mathquill_field.cmd("times")
+      elif action == "\\cdot":
+          mathquill_field.cmd("cdot")
+      elif action == "\\div":
+          mathquill_field.cmd("div")
+      elif action == "=":
+          mathquill_field.write("=")
+
+      # ==================== BRACKETS & DELIMITERS ====================
+      elif action == "(":
+          mathquill_field.write("(")
+      elif action == ")":
+          mathquill_field.write(")")
+      elif action == "[":
+          mathquill_field.write("[")
+      elif action == "]":
+          mathquill_field.write("]")
+      elif action == "{":
+          mathquill_field.write("{")
+      elif action == "}":
+          mathquill_field.write("}")
+      elif action == "|":
+          mathquill_field.cmd("|")
+      elif action == ",":
+          mathquill_field.write(",")
+      elif action == ".":
+          mathquill_field.write(".")
+      elif action == "&":
+          mathquill_field.write("&")
+      elif action == "\\\\":
+          mathquill_field.write("\\\\")
+
+      # ==================== ALGEBRA & CALCULUS ====================
+      elif action == "\\sqrt":
+          mathquill_field.cmd("sqrt")
+      elif action == "\\frac":
+          mathquill_field.cmd("frac")
+      elif action == "\\int":
+          mathquill_field.cmd("int")
+      elif action == "\\sum":
+          mathquill_field.cmd("sum")
+      elif action == "\\prod":
+          mathquill_field.cmd("prod")
+      elif action == "\\infty":
+          mathquill_field.cmd("infty")
+      elif action == "\\partial":
+          mathquill_field.cmd("partial")
+      elif action == "\\to":
+          mathquill_field.cmd("to")
+      elif action == "\\lim":
+          mathquill_field.cmd("lim")
+
+      # ==================== TRIGONOMETRY ====================
+      elif action == "\\sin":
+          mathquill_field.cmd("sin")
+      elif action == "\\cos":
+          mathquill_field.cmd("cos")
+      elif action == "\\tan":
+          mathquill_field.cmd("tan")
+      elif action == "\\cot":
+          mathquill_field.cmd("cot")
+      elif action == "\\sec":
+          mathquill_field.cmd("sec")
+      elif action == "\\csc":
+          mathquill_field.cmd("csc")
+      elif action == "\\arcsin":
+          mathquill_field.cmd("arcsin")
+      elif action == "\\arccos":
+          mathquill_field.cmd("arccos")
+      elif action == "\\arctan":
+          mathquill_field.cmd("arctan")
+
+      # ==================== LOGARITHMS ====================
+      elif action == "\\log":
+          mathquill_field.cmd("log")
+      elif action == "\\ln":
+          mathquill_field.cmd("ln")
+      elif action == "\\exp":
+          mathquill_field.cmd("exp")
+      elif action == "e":
+          mathquill_field.write("e")
+
+      # ==================== GREEK LETTERS ====================
+      elif action == "\\alpha":
+          mathquill_field.cmd("alpha")
+      elif action == "\\beta":
+          mathquill_field.cmd("beta")
+      elif action == "\\gamma":
+          mathquill_field.cmd("gamma")
+      elif action == "\\delta":
+          mathquill_field.cmd("delta")
+      elif action == "\\theta":
+          mathquill_field.cmd("theta")
+      elif action == "\\lambda":
+          mathquill_field.cmd("lambda")
+      elif action == "\\pi":
+          mathquill_field.cmd("pi")
+      elif action == "\\sigma":
+          mathquill_field.cmd("sigma")
+      elif action == "\\phi":
+          mathquill_field.cmd("phi")
+      elif action == "\\omega":
+          mathquill_field.cmd("omega")
+
+      # ==================== SEQUENCES ====================
+      elif action.startswith("SEQ:"):
+          # Handle sequences like d/dx, SEQ:d,/,d,x
+          # Supports keystrokes in curly braces like {Space}, {Right}
+          sequence = action[4:]
+          keys = sequence.split(",")
+          for key in keys:
+              key = key.strip()
+
+              # Check if it's a keystroke command in curly braces
+              if key.startswith("{") and key.endswith("}"):
+                  # Extract keystroke name (e.g., {Space} -> Space, {Right} -> Right)
+                  keystroke_name = key[1:-1]
+                  mathquill_field.keystroke(keystroke_name)
+              elif key == "/":
+                  mathquill_field.cmd("/")
+              elif key == "_":
+                  mathquill_field.cmd("_")
+              elif key == "^":
+                  mathquill_field.cmd("^")
+              elif key.startswith("\\"):
+                  mathquill_field.cmd(key[1:])  # Remove backslash
+              else:
+                  mathquill_field.write(key)
+
+      # ==================== GENERIC LATEX COMMAND ====================
+      elif action.startswith("\\"):
+          # Remove backslash and use cmd()
+          cmd_name = action[1:]
+          window.console.log(f"Generic LaTeX cmd: {cmd_name}")
+          mathquill_field.cmd(cmd_name)
+
+      # ==================== DEFAULT: WRITE AS TEXT ====================
+      else:
+          # For digits, variables, and simple text
+          mathquill_field.write(action)
+
+      # Focus the field after input
+      try:
+          mathquill_field.focus()
+      except:
+          pass
+
 
 class ProblemSolverApp:
     # ============================================
@@ -4969,7 +5380,38 @@ class ProblemSolverApp:
                   window.console.log(f"✅ Set previous answer: {user_answer[0]}")
               # Store instance for later access
               container.mq_field = mq_instance
+              # Disable soft keyboard for touch devices
+              self.disable_soft_keyboard(mq_instance)
               window.console.log("✅ MathQuill field initialized")
+
+              # ✅ Build and insert minimal keyboard based on expected structure
+              expected_structure = step_data.get('expected_structure')
+              buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure)
+
+              keyboard_html = '<div class="minimal-keyboard" style="margin-top:12px;"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
+              for btn in buttons_needed:
+                  keyboard_html += self.create_keyboard_button_html(btn)
+              keyboard_html += '</div></div>'
+
+              keyboard_container = document.createElement("div")
+              keyboard_container.innerHTML = keyboard_html
+              input_container.appendChild(keyboard_container)
+
+              # Attach event handlers to keyboard buttons
+              keyboard_btns = input_container.querySelectorAll(".minimal-keyboard .input-btn")
+              for i in range(keyboard_btns.length):
+                  btn = keyboard_btns[i]
+                  action = btn.getAttribute("data-action")
+                  if action:
+                      def make_handler(mq, act):
+                          def handler(e):
+                              e.preventDefault()
+                              KeyboardInputHandler.handle_action(mq, act)
+                          return handler
+                      btn.addEventListener("click", create_proxy(make_handler(mq_instance, action)))
+
+              window.console.log(f"✅ Minimal keyboard created with {len(buttons_needed)} buttons")
+
           except Exception as e:
               window.console.error(f"❌ Error initializing MathQuill: {e}")
               # Fallback: show previous answer as text
@@ -5038,7 +5480,10 @@ class ProblemSolverApp:
         if overlay:
             overlay.style.opacity = "0"
             window.setTimeout(create_proxy(lambda: overlay.remove()), 400)
-        
+
+        # Populate example problem set text
+        self.populate_example_text()
+
         # ✅ ADD THIS NEW LINE:
         self.start_score_display_timer()
     
@@ -5089,6 +5534,26 @@ class ProblemSolverApp:
         telegram_btn = document.querySelector("#shareTelegramBtn")
         if telegram_btn:
             telegram_btn.addEventListener("click", create_proxy(lambda e: self.share_via_telegram(e)))
+
+        # Tab switching for load page
+        tab_buttons = document.querySelectorAll(".load-tab")
+        for i in range(tab_buttons.length):
+            tab_btn = tab_buttons[i]
+            def make_tab_handler(btn):
+                def handler(e):
+                    self.switch_load_tab(btn.getAttribute("data-tab"))
+                return handler
+            tab_btn.addEventListener("click", create_proxy(make_tab_handler(tab_btn)))
+
+        # Copy example button
+        copy_example_btn = document.querySelector("#copyExampleBtn")
+        if copy_example_btn:
+            copy_example_btn.addEventListener("click", create_proxy(lambda e: self.copy_example_to_clipboard(e)))
+
+        # Load example button
+        load_example_btn = document.querySelector("#loadExampleBtn")
+        if load_example_btn:
+            load_example_btn.addEventListener("click", create_proxy(lambda e: self.load_example_problem_set(e)))
 
         # Credit history modal handlers
         show_history_btn = document.querySelector("#showCreditHistory")
@@ -5400,7 +5865,212 @@ class ProblemSolverApp:
             import traceback
             window.console.error(traceback.format_exc())
             window.alert(f"❌ Failed to load: {e}")
-    
+
+    def switch_load_tab(self, tab_id):
+        """Switch between load page tabs"""
+        try:
+            # Remove active class from all tabs and contents
+            all_tabs = document.querySelectorAll(".load-tab")
+            all_contents = document.querySelectorAll(".load-tab-content")
+
+            for i in range(all_tabs.length):
+                all_tabs[i].classList.remove("active")
+
+            for i in range(all_contents.length):
+                all_contents[i].classList.remove("active")
+
+            # Add active class to selected tab and content
+            selected_tab = document.querySelector(f'.load-tab[data-tab="{tab_id}"]')
+            selected_content = document.querySelector(f'#{tab_id}')
+
+            if selected_tab:
+                selected_tab.classList.add("active")
+
+            if selected_content:
+                selected_content.classList.add("active")
+
+            window.console.log(f"✅ Switched to tab: {tab_id}")
+
+        except Exception as e:
+            window.console.error(f"Error switching tab: {e}")
+
+    def copy_example_to_clipboard(self, event):
+        """Copy example problem set to clipboard"""
+        try:
+            textarea = document.querySelector("#exampleFormatText")
+            if not textarea:
+                return
+
+            # Use navigator.clipboard if available
+            if hasattr(window.navigator, 'clipboard'):
+                window.navigator.clipboard.writeText(textarea.value)
+                window.alert("✅ Example copied to clipboard!")
+            else:
+                # Fallback: select and copy
+                textarea.select()
+                document.execCommand('copy')
+                window.alert("✅ Example copied to clipboard!")
+
+            window.console.log("✅ Example copied to clipboard")
+
+        except Exception as e:
+            window.console.error(f"Error copying to clipboard: {e}")
+            window.alert(f"❌ Failed to copy: {e}")
+
+    def load_example_problem_set(self, event):
+        """Load the example problem set directly"""
+        try:
+            example_data = self.get_example_problem_set()
+
+            # Use the same decode_and_load method
+            self.decode_and_load(example_data)
+
+            window.console.log("✅ Example problem set loaded")
+
+        except Exception as e:
+            window.console.error(f"Error loading example: {e}")
+            window.alert(f"❌ Failed to load example: {e}")
+
+    def get_example_problem_set(self):
+        """Return example base64-compressed problem set"""
+        # This is a sample problem set with different problem types
+        example_json = {
+            "problem_set_id": "example-001",
+            "problem_set_description": "Example Problem Set - Mathematics Practice",
+            "problems": [
+                {
+                    "title": "Algebra: Solve for x",
+                    "description": [
+                        {"type": "text", "value": "Solve the equation 2(x + 3) = 12 for x. Show your work by first simplifying the left side, then isolating the variable."}
+                    ],
+                    "steps": [
+                        {
+                            "instruction": "Simplify the left side by distributing 2 across (x + 3)",
+                            "description": [
+                                {"type": "text", "value": "Apply the distributive property: 2(x + 3) = 2·x + 2·3"}
+                            ],
+                            "expected": "2x+6",
+                            "type": "math-expression",
+                            "expected_structure": {
+                                "operators": {"Add": 1, "Mul": 1},
+                                "operands": {"2": 1, "x": 1, "6": 1}
+                            }
+                        },
+                        {
+                            "instruction": "Now solve the equation 2x + 6 = 12 for x",
+                            "description": [
+                                {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x"}
+                            ],
+                            "expected": "x=3",
+                            "type": "math-expression",
+                            "expected_structure": {
+                                "operators": {},
+                                "operands": {"x": 1, "3": 1}
+                            }
+                        }
+                    ]
+                },
+                {
+                    "title": "Calculus: Find the Derivative",
+                    "description": [
+                        {"type": "text", "value": "Find the derivative of f(x) = x² + 3x with respect to x using the power rule."}
+                    ],
+                    "steps": [
+                        {
+                            "instruction": "Apply the power rule to find f'(x)",
+                            "description": [
+                                {"type": "text", "value": "Use the power rule: d/dx(xⁿ) = n·xⁿ⁻¹ for each term. For x², the derivative is 2x. For 3x, the derivative is 3."}
+                            ],
+                            "expected": "2x+3",
+                            "type": "math-expression",
+                            "expected_structure": {
+                                "operators": {"Add": 1, "Mul": 1},
+                                "operands": {"2": 1, "x": 1, "3": 1}
+                            }
+                        }
+                    ]
+                },
+                {
+                    "title": "Matrix Addition",
+                    "description": [
+                        {"type": "text", "value": "Add the two matrices: [[1,2],[3,4]] + [[2,3],[4,5]]. Add corresponding elements."}
+                    ],
+                    "steps": [
+                        {
+                            "instruction": "Add the corresponding elements of both matrices",
+                            "description": [
+                                {"type": "text", "value": "For matrix addition, add each element in position (i,j) from the first matrix with the element at position (i,j) from the second matrix. (1+2=3, 2+3=5, 3+4=7, 4+5=9)"}
+                            ],
+                            "expected": "[[3,5],[7,9]]",
+                            "type": "math-expression",
+                            "expected_structure": {
+                                "operators": {},
+                                "operands": {"3": 1, "5": 1, "7": 1, "9": 1}
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+
+        # Compress and encode
+        import brotli
+        json_text = json.dumps(example_json)
+        compressed = brotli.compress(json_text.encode("utf-8"))
+        base64_text = base64.b64encode(compressed).decode("utf-8")
+
+        return base64_text
+
+    def populate_example_text(self):
+        """Populate the example text area with formatted problem set"""
+        try:
+            textarea = document.querySelector("#exampleFormatText")
+            if not textarea:
+                return
+
+            # Get the base64 example and also create a readable version
+            base64_example = self.get_example_problem_set()
+
+            # Create a readable formatted text
+            formatted_text = f"""📝 EXAMPLE PROBLEM SET FORMAT
+
+This is the base64-compressed format that the app expects:
+
+{base64_example}
+
+---
+
+💡 How to use this:
+1. Copy the base64 text above
+2. Paste it in the "Paste JSON" tab
+3. Click "Load Problem Set"
+
+Or simply click "Load This Example" button below to load it directly!
+
+---
+
+📚 What's included in this example:
+- Problem 1: Algebra - Solve for x (2 steps with full descriptions)
+- Problem 2: Calculus - Find the Derivative (1 step with explanation)
+- Problem 3: Matrix Addition (1 step with detailed instructions)
+
+Each problem includes:
+✓ Problem title
+✓ Problem description (what to solve)
+✓ Step instruction (what to do in this step)
+✓ Step description (detailed explanation)
+✓ Expected answer
+✓ Expected structure (for minimal keyboard generation)
+
+This demonstrates the complete format needed for creating your own problem sets.
+"""
+
+            textarea.value = formatted_text
+            window.console.log("✅ Example text populated")
+
+        except Exception as e:
+            window.console.error(f"Error populating example text: {e}")
+
     def update_problem_set_info(self, description):
         info_panel = document.querySelector("#problemSetInfo")
         desc_el = document.querySelector("#currentProblemSetDescription")
@@ -6989,6 +7659,38 @@ class ProblemSolverApp:
       # Initialize MathQuill
       if self.MQ:
           answer_field = self.MQ.MathField(step_div.querySelector(".step-answer"))
+
+          # Disable soft keyboard for touch devices
+          self.disable_soft_keyboard(answer_field)
+
+          # ✅ Build and insert minimal keyboard based on expected structure
+          expected_structure = step_data.get('expected_structure')
+          buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure)
+
+          keyboard_html = '<div class="minimal-keyboard" style="margin-top:12px;"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
+          for btn in buttons_needed:
+              keyboard_html += self.create_keyboard_button_html(btn)
+          keyboard_html += '</div></div>'
+
+          answer_container = step_div.querySelector(".step-answer").parentElement
+          keyboard_container = document.createElement("div")
+          keyboard_container.innerHTML = keyboard_html
+          answer_container.appendChild(keyboard_container)
+
+          # Attach event handlers to keyboard buttons
+          keyboard_btns = answer_container.querySelectorAll(".minimal-keyboard .input-btn")
+          for i in range(keyboard_btns.length):
+              btn = keyboard_btns[i]
+              action = btn.getAttribute("data-action")
+              if action:
+                  def make_handler(mq, act):
+                      def handler(e):
+                          e.preventDefault()
+                          KeyboardInputHandler.handle_action(mq, act)
+                      return handler
+                  btn.addEventListener("click", create_proxy(make_handler(answer_field, action)))
+
+          window.console.log(f"✅ Minimal keyboard created with {len(buttons_needed)} buttons")
       else:
           answer_field = None
 
@@ -9971,27 +10673,8 @@ class ProblemSolverApp:
             if not target_field:
                 return
 
-            # Handle special actions
-            if action == "BACKSPACE":
-                target_field.keystroke("Backspace")
-            elif action == "CLEAR":
-                target_field.latex("")
-            elif action == "MOVE_LEFT":
-                target_field.keystroke("Left")
-            elif action == "MOVE_RIGHT":
-                target_field.keystroke("Right")
-            elif action.startswith("SEQ:"):
-                # Handle sequences like "d,/,d,x"
-                parts = action[4:].split(",")
-                for part in parts:
-                    if part.startswith("{") and part.endswith("}"):
-                        target_field.keystroke(part[1:-1])
-                    else:
-                        target_field.write(part)
-            else:
-                target_field.write(action)
-
-            target_field.focus()
+            # Use the comprehensive KeyboardInputHandler
+            KeyboardInputHandler.handle_action(target_field, action)
 
         except Exception as e:
             window.console.error(f"Input handler error: {e}")
@@ -11824,6 +12507,8 @@ class ProblemSolverApp:
               problem_input.innerHTML = ""
               self.freestyle_problem_mf = self.MQ.MathField(problem_input)  # ← Just this
               window.console.log("✅ Problem MathField initialized")
+              # Disable soft keyboard for touch devices
+              self.disable_soft_keyboard(self.freestyle_problem_mf)
               window.setTimeout(create_proxy(lambda: self.freestyle_problem_mf.focus()), 100)
             else:
                 window.console.error("❌ Problem input element not found")
@@ -11833,6 +12518,8 @@ class ProblemSolverApp:
               answer_input.innerHTML = ""
               self.freestyle_answer_mf = self.MQ.MathField(answer_input)
               window.console.log("✅ Answer MathField initialized")
+              # Disable soft keyboard for touch devices
+              self.disable_soft_keyboard(self.freestyle_answer_mf)
             else:
                 window.console.error("❌ Answer input element not found")
 
@@ -11906,11 +12593,342 @@ class ProblemSolverApp:
         except Exception as e:
             window.console.error(f"Button setup error: {e}")
 
+    def toggle_keyboard_accordion(self, target_id):
+        """Toggle keyboard accordion open/close"""
+        try:
+            body = document.querySelector(f"#{target_id}")
+            if not body:
+                return
+
+            # Find parent accordion container
+            accordion = body.parentElement
+            if not accordion:
+                return
+
+            # Toggle open class
+            if accordion.classList.contains("open"):
+                accordion.classList.remove("open")
+            else:
+                accordion.classList.add("open")
+
+        except Exception as e:
+            window.console.error(f"Accordion toggle error: {e}")
+
+    def get_power_svg(self, size="24", color="currentColor"):
+        """SVG: Grey-filled box with superscripted white-filled box (for exponent/power)"""
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="2" y="10" width="10" height="10" rx="1"
+                stroke="{color}" stroke-width="2"
+                fill="#9ca3af"/>
+          <rect x="13" y="4" width="8" height="8" rx="1"
+                stroke="{color}" stroke-width="1.5"
+                fill="#ffffff"/>
+        </svg>"""
+
+    def get_subscript_svg(self, size="24", color="currentColor"):
+        """SVG: Grey-filled box with subscripted white-filled box (for subscript)"""
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="2" y="4" width="10" height="10" rx="1"
+                stroke="{color}" stroke-width="2"
+                fill="#9ca3af"/>
+          <rect x="13" y="12" width="8" height="8" rx="1"
+                stroke="{color}" stroke-width="1.5"
+                fill="#ffffff"/>
+        </svg>"""
+
+    def get_move_left_svg(self, size="24", stroke_width=2, color="currentColor"):
+        """SVG: left-pointing arrow (move left)"""
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M21 12 H11" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M15 8 L11 12 L15 16" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>"""
+
+    def get_move_right_svg(self, size="24", stroke_width=2, color="currentColor"):
+        """SVG: right-pointing arrow (move right)"""
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M3 12 H13" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M9 8 L13 12 L9 16" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>"""
+
+    def get_select_left_svg(self, size="24", stroke_width=2, color="currentColor"):
+        """SVG: box followed by a left-pointing arrow (select left)"""
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <rect x="3" y="6" width="8" height="12" rx="2" stroke="{color}" stroke-width="{stroke_width}" fill="none"/>
+          <path d="M21 12 H11" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M15 8 L11 12 L15 16" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>"""
+
+    def get_select_right_svg(self, size="24", stroke_width=2, color="currentColor"):
+        """SVG: right-pointing arrow followed by a box (select right)"""
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <path d="M3 12 H13" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M9 8 L13 12 L9 16" stroke="{color}" stroke-width="{stroke_width}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <rect x="13.5" y="6" width="7" height="12" rx="2" stroke="{color}" stroke-width="{stroke_width}" fill="none"/>
+        </svg>"""
+
+    def disable_soft_keyboard(self, mathquill_field):
+        """Disable Android soft keyboard for a MathQuill field"""
+        try:
+            if not mathquill_field:
+                return
+
+            # Get the MathQuill element
+            el = mathquill_field.el()
+            if not el:
+                return
+
+            # Find and configure the textarea to prevent soft keyboard
+            textarea = el.querySelector('textarea')
+            if textarea:
+                textarea.setAttribute('readonly', 'readonly')
+                textarea.setAttribute('inputmode', 'none')
+                textarea.style.caretColor = 'transparent'
+                window.console.log("✅ Soft keyboard disabled for field")
+
+        except Exception as e:
+            window.console.error(f"Error disabling soft keyboard: {e}")
+
+    def build_minimal_keyboard_from_structure(self, expected_structure):
+        """Build truly minimal keyboard - only needed digits + limited distractors"""
+        if not expected_structure:
+            # Default: just basic digits and controls
+            return ['0','1','2','3','BACKSPACE','MOVE_LEFT','MOVE_RIGHT','CLEAR']
+
+        buttons = []
+        operators = expected_structure.get('operators', {})
+        operands = expected_structure.get('operands', {})
+
+        # Extract ONLY required digits from operands
+        required_digits = set()
+        has_decimal = False
+        has_negative = False
+
+        for operand in operands.keys():
+            operand_str = str(operand)
+
+            # Check for negative numbers
+            if operand_str.startswith('-') or operand_str.startswith('(-'):
+                has_negative = True
+                window.console.log(f"Detected negative in operand: {operand_str}")
+
+            # Extract digits
+            num_str = operand_str.replace("-", "").replace(".", "").replace("(", "").replace(")", "").replace(" ", "")
+            for digit in num_str:
+                if digit.isdigit():
+                    required_digits.add(digit)
+            # Check for decimal
+            if "." in operand_str:
+                has_decimal = True
+
+        # Check if operands dictionary contains negative numbers
+        for operand_key, operand_count in operands.items():
+            try:
+                # Try to convert to float to check if negative
+                num_val = float(operand_key)
+                if num_val < 0:
+                    has_negative = True
+                    window.console.log(f"Detected negative number: {num_val}")
+            except:
+                pass
+
+        # Add 2-3 distractor digits (NOT in answer)
+        all_digits = set("0123456789")
+        available_distractors = list(all_digits - required_digits)
+        distractor_digits = set()
+        if available_distractors:
+            import random
+            random.seed(hash(str(operands)))  # Consistent distractors
+            num_distractors = min(3, len(available_distractors))
+            distractors = random.sample(available_distractors, num_distractors)
+            distractor_digits = set(distractors)
+
+        # Combine required digits and distractors, then sort to hide the answer
+        all_button_digits = required_digits | distractor_digits
+        for digit in sorted(all_button_digits):
+            buttons.append(digit)
+
+        # Add decimal if needed
+        if has_decimal:
+            buttons.append('.')
+
+        # Add operators ONLY if present
+        # ✅ If there's Add operator, include BOTH + and - (SymPy represents negatives in Add)
+        if 'Add' in operators:
+            buttons.append('+')
+            buttons.append('-')
+            window.console.log("Added + and - (Add operator detected)")
+        elif has_negative or 'Sub' in operators:
+            # Only add minus if no Add operator but negative detected
+            buttons.append('-')
+            window.console.log("Added minus button (negative detected)")
+
+        if 'Mul' in operators:
+            buttons.append('\\times')
+        if 'Pow' in operators:
+            buttons.append('^')
+        if 'Div' in str(operators) or '/' in str(operators):
+            buttons.append('/')
+
+        # Add special functions ONLY if present
+        if 'frac' in str(operators).lower() or 'Rational' in str(operators):
+            buttons.append('\\frac')
+        if 'sqrt' in str(operators).lower():
+            buttons.append('\\sqrt')
+        if 'Pow' in str(operators) and any('_' in str(op) for op in operators):
+            buttons.append('_')
+
+        # Check for trigonometry functions - add degree symbol if found
+        has_trig = any(trig in str(operators) for trig in ['sin', 'cos', 'tan', 'sec', 'csc', 'cot'])
+        if has_trig:
+            # Add degree symbol for angle input
+            buttons.append('\\circ')
+            window.console.log("Added degree symbol (trig function detected)")
+
+        # Check for matrix row operations
+        matrix_ops = expected_structure.get('matrix_ops', [])
+        has_row_op = any('row' in str(op).lower() for op in matrix_ops)
+        if has_row_op:
+            buttons.append('R')
+            buttons.append('\\to')
+            window.console.log("Added R and → (row operation detected)")
+
+        # Add variables from operands
+        operands_str = str(operands).lower()
+        if 'x' in operands_str and 'x' not in ['exp']:
+            buttons.append('x')
+        if 'y' in operands_str:
+            buttons.append('y')
+        if 'pi' in operands_str or 'π' in operands_str:
+            buttons.append('\\pi')
+        if 'r' in operands_str and has_row_op:
+            # R is already added above for row operations
+            pass
+
+        # Always include basic controls (navigation first, then backspace at end)
+        buttons.extend(['(', ')', 'MOVE_LEFT', 'MOVE_RIGHT', 'SELECT_LEFT', 'SELECT_RIGHT', 'CLEAR', 'BACKSPACE'])
+
+        # Remove duplicates while preserving order
+        seen = set()
+        unique_buttons = []
+        for b in buttons:
+            if b not in seen:
+                seen.add(b)
+                unique_buttons.append(b)
+
+        window.console.log(f"Final buttons: {unique_buttons}")
+        return unique_buttons
+
+    def create_keyboard_button_html(self, action):
+        """Create HTML for a single keyboard button with SVG support"""
+        # Determine button class
+        btn_class = 'input-btn'
+
+        if action.isdigit():
+            btn_class += ' digit'
+            label = action
+        elif action in ['BACKSPACE', 'CLEAR']:
+            btn_class += ' delete'
+            label = '⌫' if action == 'BACKSPACE' else 'C'
+        elif action == 'MOVE_LEFT':
+            btn_class += ' navigation'
+            label = self.get_move_left_svg("20")
+        elif action == 'MOVE_RIGHT':
+            btn_class += ' navigation'
+            label = self.get_move_right_svg("20")
+        elif action == 'SELECT_LEFT':
+            btn_class += ' navigation'
+            label = self.get_select_left_svg("20")
+        elif action == 'SELECT_RIGHT':
+            btn_class += ' navigation'
+            label = self.get_select_right_svg("20")
+        elif action == '^':
+            btn_class += ' special'
+            label = self.get_power_svg("20")
+        elif action == '_':
+            btn_class += ' special'
+            label = self.get_subscript_svg("20")
+        elif action in ['+', '-', '\\times', '/', '=']:
+            btn_class += ' operator'
+            label_map = {'\\times': '×', '/': '÷'}
+            label = label_map.get(action, action)
+        elif action in ['x', 'y', 'z', 'n', 'a', 'b', 'c', 't', 'R', 'θ']:
+            btn_class += ' symbol'
+            # Render variables in italic math style
+            label = f'<span class="math-var">{action}</span>'
+        elif action == '\\pi':
+            btn_class += ' symbol'
+            label = '<span class="math-var">π</span>'
+        elif action == '\\frac':
+            btn_class += ' special'
+            label = '<span style="font-size:11px;">a/b</span>'
+        elif action == '\\sqrt':
+            btn_class += ' special'
+            label = '√'
+        elif action == '\\infty':
+            btn_class += ' operator'
+            label = '∞'
+        elif action == '\\circ':
+            btn_class += ' special'
+            label = '<span style="font-size:13px;">deg°</span>'
+        elif action == '\\to':
+            btn_class += ' operator'
+            label = '→'
+        else:
+            btn_class += ' special'
+            label = action
+
+        return f'<button class="{btn_class}" data-action="{action}">{label}</button>'
+
+    def inject_freestyle_svgs(self):
+        """Inject SVG icons into freestyle keyboard buttons"""
+        try:
+            # Inject navigation SVGs
+            move_left = document.querySelector("#freestyleMoveLeft")
+            if move_left:
+                move_left.innerHTML = self.get_move_left_svg("24")
+                window.console.log("✅ Injected move left SVG")
+
+            move_right = document.querySelector("#freestyleMoveRight")
+            if move_right:
+                move_right.innerHTML = self.get_move_right_svg("24")
+                window.console.log("✅ Injected move right SVG")
+
+            # Inject power/subscript SVGs
+            power_btn = document.querySelector("#freestylePower")
+            if power_btn:
+                power_btn.innerHTML = self.get_power_svg("24")
+                window.console.log("✅ Injected power SVG")
+
+            subscript_btn = document.querySelector("#freestyleSubscript")
+            if subscript_btn:
+                subscript_btn.innerHTML = self.get_subscript_svg("24")
+                window.console.log("✅ Injected subscript SVG")
+
+            # Inject matrix subscript SVG
+            subscript_matrix_btn = document.querySelector("#freestyleSubscriptMatrix")
+            if subscript_matrix_btn:
+                subscript_matrix_btn.innerHTML = self.get_subscript_svg("24")
+                window.console.log("✅ Injected subscript matrix SVG")
+
+            window.console.log("✅ All freestyle SVGs injected")
+
+        except Exception as e:
+            window.console.error(f"SVG injection error: {e}")
+
     def _setup_freestyle_keyboard(self):
         """Setup keyboard event handlers for freestyle page"""
         try:
-            # Setup keyboard button handlers
-            keyboard_btns = document.querySelectorAll("#keyboardAccordionsContainer .input-btn")
+            # Inject SVG icons first
+            self.inject_freestyle_svgs()
+
+            # Setup keyboard button handlers for freestyle accordion keyboard
+            keyboard_btns = document.querySelectorAll("#freestyleKeyboard .input-btn")
             window.console.log(f"Found {keyboard_btns.length} keyboard buttons")
 
             for i in range(keyboard_btns.length):
@@ -11920,6 +12938,7 @@ class ProblemSolverApp:
                 if action and not hasattr(btn, '_handler_attached'):
                     def make_handler(act):
                         def handler(e):
+                            e.preventDefault()
                             self.handle_freestyle_input(act)
                         return handler
                     btn.addEventListener("click", create_proxy(make_handler(action)))
@@ -11928,25 +12947,19 @@ class ProblemSolverApp:
             window.console.log("✅ Keyboard button handlers attached")
 
             # Setup keyboard accordion headers
-            headers = document.querySelectorAll("#keyboardAccordionsContainer .keyboard-accordion-header")
+            headers = document.querySelectorAll("#freestyleKeyboard .keyboard-accordion-header")
             window.console.log(f"Found {headers.length} accordion headers")
 
             for i in range(headers.length):
                 header = headers[i]
+                target_id = header.getAttribute("data-target")
 
                 if not hasattr(header, '_handler_attached'):
-                    def make_accordion_handler(h):
+                    def make_accordion_handler(tid):
                         def handler(e):
-                            target_id = h.getAttribute("data-target")
-                            body = document.querySelector(f"#{target_id}")
-                            if body:
-                                is_open = body.style.display == "block"
-                                body.style.display = "none" if is_open else "block"
-                                icon = h.querySelector(".keyboard-accordion-icon")
-                                if icon:
-                                    icon.textContent = "▲" if not is_open else "▼"
+                            self.toggle_keyboard_accordion(tid)
                         return handler
-                    header.addEventListener("click", create_proxy(make_accordion_handler(header)))
+                    header.addEventListener("click", create_proxy(make_accordion_handler(target_id)))
                     header._handler_attached = True
 
             window.console.log("✅ Accordion handlers attached")
