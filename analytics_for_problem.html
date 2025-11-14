@@ -627,6 +627,12 @@ class IndexedDBManager:
                             const db = await bridge.openDB(dbName, version);
                             return new Promise((resolve, reject) => {
                                 try {
+                                    // Check if store exists before creating transaction
+                                    if (!db.objectStoreNames.contains(store)) {
+                                        delayClose(db);
+                                        reject(new Error(`Object store '${store}' not found. Database may need to be upgraded.`));
+                                        return;
+                                    }
                                     const tx = db.transaction(store, "readwrite");
                                     const st = tx.objectStore(store);
                                     const keyStr = String(key);
@@ -646,6 +652,12 @@ class IndexedDBManager:
                             const db = await bridge.openDB(dbName, version);
                             return new Promise((resolve, reject) => {
                                 try {
+                                    // Check if store exists before creating transaction
+                                    if (!db.objectStoreNames.contains(store)) {
+                                        delayClose(db);
+                                        resolve(null);  // Return null if store doesn't exist
+                                        return;
+                                    }
                                     const tx = db.transaction(store, "readonly");
                                     const st = tx.objectStore(store);
                                     const req = st.get(String(key));
@@ -666,6 +678,12 @@ class IndexedDBManager:
                             const db = await bridge.openDB(dbName, version);
                             return new Promise((resolve, reject) => {
                                 try {
+                                    // Check if store exists before creating transaction
+                                    if (!db.objectStoreNames.contains(store)) {
+                                        delayClose(db);
+                                        resolve(true);  // Return success if store doesn't exist (nothing to delete)
+                                        return;
+                                    }
                                     const tx = db.transaction(store, "readwrite");
                                     const st = tx.objectStore(store);
                                     const req = st.delete(String(key));
