@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WhatsApp Analytics - Progress Report Capture",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Automatically captures student progress reports from WhatsApp Web and sends them to Analytics App",
   "permissions": [
     "storage",

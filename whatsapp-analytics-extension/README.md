@@ -7,11 +7,11 @@ A Chrome/Edge browser extension that automatically captures student progress rep
 - **Auto-Capture**: Automatically detects and captures base64-encoded progress reports from WhatsApp messages
 - **Real-time Monitoring**: Scans messages in real-time as they arrive
 - **Phone Number Detection**: Extracts student phone numbers from chat context
-- **🆕 Auto-Inject**: Directly inject data into Analytics App with ONE CLICK - no copy/paste needed!
+- **🆕 Auto-Inject Mode**: Enable continuous automatic injection - reports inject instantly when captured!
 - **Smart Tab Detection**: Finds open Analytics App or opens it automatically
 - **One-Click Export**: Export captured reports directly to the Analytics App
 - **Privacy-Focused**: All data stays local, no external servers
-- **Easy Toggle**: Enable/disable auto-capture with one click
+- **Easy Toggle**: Enable/disable auto-capture and auto-inject with one click
 
 ## Installation
 
@@ -84,17 +84,31 @@ The extension includes placeholder icons. For better-looking icons:
 
 ### Export to Analytics App
 
-**Method 1: 🆕 Auto-Inject (RECOMMENDED!)**
+**Method 1: 🆕🆕 AUTO-INJECT MODE (FULLY AUTOMATIC!)**
+
+Enable continuous automatic injection:
 
 1. Click the extension icon
-2. Click "🚀 Auto-Inject to Analytics"
+2. Toggle "🚀 Auto-Inject Mode" to **ON**
+3. That's it! Now:
+   - Every new report is **instantly injected**
+   - No clicks needed
+   - Completely hands-free
+   - Works 24/7 while enabled
+
+**To disable:** Toggle "Auto-Inject Mode" to OFF
+
+**Method 2: Manual Inject (One-Click)**
+
+1. Click the extension icon
+2. Click "🚀 Manual Inject Now"
 3. Done! The extension:
    - Finds or opens Analytics App
    - Injects data directly into the page
    - Automatically starts analysis
    - No copy/paste needed!
 
-**Method 2: Copy & Paste**
+**Method 3: Copy & Paste**
 
 1. Click the extension icon
 2. Click "📤 Copy & Open Analytics"
@@ -225,6 +239,14 @@ The extension requests the following permissions:
 - **Popup**: Right-click extension icon → Inspect popup
 
 ## Version History
+
+### v1.2.0 (2024-11-14)
+- **🆕🆕 NEW: Auto-Inject Mode** - Continuous automatic injection!
+- **Toggle-Activated** - One switch to enable/disable continuous injection
+- **Instant Injection** - Reports inject automatically when captured
+- **Status Indicator** - Visual feedback when auto-inject mode is active
+- **Zero-Click Workflow** - Completely hands-free operation
+- **Validation** - Prevents enabling without Analytics URL configured
 
 ### v1.1.0 (2024-11-14)
 - **🆕 NEW: Auto-Inject Feature** - Direct data injection into Analytics App
