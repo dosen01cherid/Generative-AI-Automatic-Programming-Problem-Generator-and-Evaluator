@@ -1042,7 +1042,7 @@ class ProgressAnalyzer:
                 if isinstance(step, dict):
                     step_info = {
                         "step_number": step.get("step_number"),
-                        "finalized": step.get("finalized", False),
+                        "finalized": step.get("finalized", step.get("finished", False)),
                         "attempts": []
                     }
                     for att in step.get("attempts", []) or []:
@@ -1637,7 +1637,7 @@ class ProgressAnalyzer:
                 if isinstance(step, dict):
                     step_info = {
                         "step_number": step.get("step_number"),
-                        "finalized": step.get("finalized", False),
+                        "finalized": step.get("finalized", step.get("finished", False)),
                         "attempts": []
                     }
                     for att in step.get("attempts", []) or []:
@@ -1673,7 +1673,7 @@ class ProgressAnalyzer:
         # Check step-level details
         for step in steps_progress:
             if isinstance(step, dict):
-                step_finalized = step.get("finalized", False)
+                step_finalized = step.get("finalized", step.get("finished", False))
                 step_attempts = step.get("attempts", [])
                 step_correct = step.get("correct", False)
 
@@ -2222,13 +2222,19 @@ class DisplayManager:
 
         for step in steps:
             step_no = step.get("step_number", "?")
-            finalized = step.get("finalized", False)
+            finalized = step.get("finalized", step.get("finished", False))
             correct = step.get("correct", False)
             structure_correct = step.get("structure_correct", False)
 
             # Status badge
-            if finalized and structure_correct:
-                status = "<span style='color:#059669;font-weight:600;'>✅ Finalized</span>"
+            # ✅ For non-math questions, structure_correct is not used, so finalized alone is enough
+            # For math questions, both finalized and structure_correct should be True
+            if finalized:
+                if structure_correct or correct:
+                    status = "<span style='color:#059669;font-weight:600;'>✅ Finalized</span>"
+                else:
+                    # Finalized but incorrect (shouldn't happen with requireCorrect, but handle it)
+                    status = "<span style='color:#d97706;font-weight:600;'>⚠️ Finalized (incorrect)</span>"
             elif correct:
                 status = "<span style='color:#d97706;font-weight:600;'>⚠️ Correct but not finalized</span>"
             else:
