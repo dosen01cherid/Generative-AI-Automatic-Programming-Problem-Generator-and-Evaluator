@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Kahoot-like Live Quiz via WhatsApp</title>
+
+  <!-- Shared Analytics Styles -->
+  <link rel="stylesheet" href="shared_analytics_styles.css" />
+
+  <!-- Additional styles specific to live quiz -->
+  <style>
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .game-status {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 12px;
+    }
+
+    .status-waiting {
+      background: #fbbf24;
+      color: #78350f;
+    }
+
+    .status-active {
+      background: #10b981;
+      color: white;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .status-ended {
+      background: #6b7280;
+      color: white;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .control-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .control-btn {
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .control-btn-start {
+      background: #10b981;
+      color: white;
+    }
+
+    .control-btn-start:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+
+    .control-btn-next {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .control-btn-next:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    .control-btn-end {
+      background: #dc2626;
+      color: white;
+    }
+
+    .control-btn-end:hover {
+      background: #b91c1c;
+      transform: translateY(-1px);
+    }
+
+    .control-btn:disabled {
+      background: #e5e7eb;
+      color: #9ca3af;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .question-display {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .question-number {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .question-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .option-box {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    .option-correct {
+      border-color: #10b981;
+      background: rgba(16, 185, 129, 0.2);
+    }
+
+    .live-indicator {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      animation: blink 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .answer-count {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      display: inline-block;
+      margin-top: 12px;
+      backdrop-filter: blur(10px);
+    }
+
+    .leaderboard-row {
+      transition: all 0.3s ease;
+    }
+
+    .leaderboard-row.position-up {
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .leaderboard-row.position-down {
+      animation: slideDown 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(20px); background: #dcfce7; }
+      100% { transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+      0% { transform: translateY(-20px); background: #fee2e2; }
+      100% { transform: translateY(0); }
+    }
+
+    .rank-badge {
+      display: inline-block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 28px;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .rank-1 {
+      background: linear-gradient(135deg, #ffd700, #ffed4e);
+      color: #78350f;
+    }
+
+    .rank-2 {
+      background: linear-gradient(135deg, #c0c0c0, #e8e8e8);
+      color: #374151;
+    }
+
+    .rank-3 {
+      background: linear-gradient(135deg, #cd7f32, #e39a5f);
+      color: #78350f;
+    }
+
+    .rank-other {
+      background: #e5e7eb;
+      color: #6b7280;
+    }
+
+    .connection-status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .connection-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .connected {
+      background: #10b981;
+    }
+
+    .disconnected {
+      background: #ef4444;
+    }
+
+    .whatsapp-log {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+    }
+
+    .log-entry {
+      padding: 4px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .log-timestamp {
+      color: #9ca3af;
+      margin-right: 8px;
+    }
+
+    .log-message {
+      color: #374151;
+    }
+
+    .log-answer {
+      color: #059669;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Connection Status Indicator -->
+  <div class="connection-status" id="connectionStatus">
+    <div class="connection-dot disconnected" id="connectionDot"></div>
+    <span id="connectionText">Not Connected</span>
+  </div>
+
+  <header>
+    <h1>
+      🎮 Live Quiz Game (WhatsApp)
+      <span class="game-status status-waiting" id="gameStatus">Waiting to Start</span>
+    </h1>
+  </header>
+
+  <div class="container" id="mainContainer">
+    <!-- Game Control Panel -->
+    <div class="panel">
+      <h3>🎛️ Game Controls</h3>
+      <div class="control-panel">
+        <button class="control-btn control-btn-start" id="btnStart">
+          ▶️ Start Game
+        </button>
+        <button class="control-btn control-btn-next" id="btnNext" disabled>
+          ⏭️ Next Question
+        </button>
+        <button class="control-btn control-btn-end" id="btnEnd" disabled>
+          ⏹️ End Game
+        </button>
+        <button class="control-btn" style="background:#8b5cf6;color:white;" id="btnConnect">
+          📱 Connect WhatsApp
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Stats -->
+    <div class="panel" id="statsPanel">
+      <h3>📊 Live Statistics</h3>
+      <div class="stats-grid">
+        <div class="stats-card" style="background:#e0f2fe;">
+          <div class="stats-number" id="statPlayers">0</div>
+          <div class="stats-label">Players</div>
+        </div>
+        <div class="stats-card" style="background:#fef3c7;">
+          <div class="stats-number" id="statQuestion">0</div>
+          <div class="stats-label">Current Question</div>
+        </div>
+        <div class="stats-card" style="background:#dcfce7;">
+          <div class="stats-number" id="statAnswered">0</div>
+          <div class="stats-label">Answered</div>
+        </div>
+        <div class="stats-card" style="background:#fee2e2;">
+          <div class="stats-number" id="statWaiting">0</div>
+          <div class="stats-label">Waiting</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Current Question Display -->
+    <div class="question-display" id="questionPanel" style="display:none;">
+      <div class="question-number" id="questionNumber">Question 1 of 10</div>
+      <div class="question-text" id="questionText">What is 2 + 2?</div>
+      <div class="question-options" id="questionOptions">
+        <div class="option-box">A. 3</div>
+        <div class="option-box option-correct">B. 4</div>
+        <div class="option-box">C. 5</div>
+        <div class="option-box">D. 6</div>
+      </div>
+      <div class="answer-count">
+        <span class="live-indicator"></span>
+        <span id="answerCount">0 answers received</span>
+      </div>
+    </div>
+
+    <!-- Live Leaderboard -->
+    <div class="panel">
+      <div class="flex-between mb-3">
+        <h3 style="margin:0;">🏆 Live Leaderboard</h3>
+        <button class="btn" style="background:#64748b; font-size:13px; padding:6px 12px;" id="btnRefresh">
+          🔄 Refresh
+        </button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table id="leaderboardTable">
+          <thead>
+            <tr style="background:#f3f4f6;">
+              <th style="width:60px;">Rank</th>
+              <th>Player Name</th>
+              <th>Phone</th>
+              <th style="text-align:center;">Score</th>
+              <th style="text-align:center;">Answered</th>
+              <th style="text-align:center;">Correct</th>
+              <th style="text-align:center;">Speed</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding:40px; color:#9ca3af;">
+                No players yet. Start the game to see live results!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WhatsApp Activity Log -->
+    <div class="panel">
+      <h3>📱 WhatsApp Activity Log</h3>
+      <div class="whatsapp-log" id="activityLog">
+        <div class="log-entry">
+          <span class="log-timestamp">[00:00:00]</span>
+          <span class="log-message">System ready. Waiting for WhatsApp connection...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================
+    // GAME STATE MANAGEMENT
+    // =========================================
+    const GameState = {
+      status: 'waiting', // waiting, active, ended
+      currentQuestion: 0,
+      totalQuestions: 10,
+      players: new Map(), // phone -> {name, score, answered, correct, avgSpeed}
+      currentAnswers: new Map(), // phone -> answer
+      questions: [],
+      whatsappConnected: false,
+      websocket: null
+    };
+
+    // =========================================
+    // SAMPLE QUESTIONS
+    // =========================================
+    const sampleQuestions = [
+      {
+        question: "What is 2 + 2?",
+        options: ["A. 3", "B. 4", "C. 5", "D. 6"],
+        correctAnswer: "B",
+        type: "multiple-choice"
+      },
+      {
+        question: "What is the capital of Indonesia?",
+        options: ["A. Bandung", "B. Jakarta", "C. Surabaya", "D. Yogyakarta"],
+        correctAnswer: "B",
+        type: "multiple-choice"
+      },
+      {
+        question: "Calculate: 15 × 3",
+        options: ["A. 35", "B. 40", "C. 45", "D. 50"],
+        correctAnswer: "C",
+        type: "multiple-choice"
+      },
+      {
+        question: "What is the square root of 144?",
+        options: ["A. 10", "B. 11", "C. 12", "D. 13"],
+        correctAnswer: "C",
+        type: "multiple-choice"
+      },
+      {
+        question: "Which is larger: 3/4 or 2/3?",
+        options: ["A. 3/4", "B. 2/3", "C. Equal", "D. Cannot determine"],
+        correctAnswer: "A",
+        type: "multiple-choice"
+      }
+    ];
+
+    GameState.questions = sampleQuestions;
+    GameState.totalQuestions = sampleQuestions.length;
+
+    // =========================================
+    // UI UPDATE FUNCTIONS
+    // =========================================
+    function updateStats() {
+      document.getElementById('statPlayers').textContent = GameState.players.size;
+      document.getElementById('statQuestion').textContent = GameState.currentQuestion;
+      document.getElementById('statAnswered').textContent = GameState.currentAnswers.size;
+      document.getElementById('statWaiting').textContent = Math.max(0, GameState.players.size - GameState.currentAnswers.size);
+    }
+
+    function updateGameStatus(status) {
+      const statusEl = document.getElementById('gameStatus');
+      statusEl.className = 'game-status';
+
+      if (status === 'waiting') {
+        statusEl.textContent = 'Waiting to Start';
+        statusEl.classList.add('status-waiting');
+      } else if (status === 'active') {
+        statusEl.textContent = 'Game In Progress';
+        statusEl.classList.add('status-active');
+      } else if (status === 'ended') {
+        statusEl.textContent = 'Game Ended';
+        statusEl.classList.add('status-ended');
+      }
+    }
+
+    function updateConnectionStatus(connected) {
+      const dot = document.getElementById('connectionDot');
+      const text = document.getElementById('connectionText');
+
+      if (connected) {
+        dot.className = 'connection-dot connected';
+        text.textContent = 'WhatsApp Connected';
+      } else {
+        dot.className = 'connection-dot disconnected';
+        text.textContent = 'Not Connected';
+      }
+    }
+
+    function showQuestion(index) {
+      if (index < 0 || index >= GameState.questions.length) {
+        document.getElementById('questionPanel').style.display = 'none';
+        return;
+      }
+
+      const q = GameState.questions[index];
+      document.getElementById('questionPanel').style.display = 'block';
+      document.getElementById('questionNumber').textContent = `Question ${index + 1} of ${GameState.totalQuestions}`;
+      document.getElementById('questionText').textContent = q.question;
+
+      const optionsHTML = q.options.map((opt, i) => {
+        const letter = opt.charAt(0);
+        const isCorrect = letter === q.correctAnswer;
+        return `<div class="option-box ${isCorrect ? 'option-correct' : ''}">${opt}</div>`;
+      }).join('');
+
+      document.getElementById('questionOptions').innerHTML = optionsHTML;
+      document.getElementById('answerCount').textContent = '0 answers received';
+    }
+
+    function updateLeaderboard() {
+      const tbody = document.getElementById('leaderboardBody');
+
+      if (GameState.players.size === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align:center; padding:40px; color:#9ca3af;">
+              No players yet. Start the game to see live results!
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      // Convert to array and sort by score
+      const playerArray = Array.from(GameState.players.entries()).map(([phone, data]) => ({
+        phone,
+        ...data
+      }));
+
+      playerArray.sort((a, b) => {
+        if (b.score !== a.score) return b.score - a.score;
+        if (b.correct !== a.correct) return b.correct - a.correct;
+        return (a.avgSpeed || 999) - (b.avgSpeed || 999);
+      });
+
+      const rows = playerArray.map((player, index) => {
+        const rank = index + 1;
+        let rankClass = 'rank-other';
+        if (rank === 1) rankClass = 'rank-1';
+        else if (rank === 2) rankClass = 'rank-2';
+        else if (rank === 3) rankClass = 'rank-3';
+
+        const speedDisplay = player.avgSpeed ? `${player.avgSpeed.toFixed(1)}s` : '—';
+
+        return `
+          <tr class="leaderboard-row">
+            <td style="text-align:center;">
+              <span class="rank-badge ${rankClass}">${rank}</span>
+            </td>
+            <td><strong>${escapeHtml(player.name)}</strong></td>
+            <td>${escapeHtml(player.phone)}</td>
+            <td style="text-align:center;"><span class="score-badge score-high">${player.score}</span></td>
+            <td style="text-align:center;">${player.answered}</td>
+            <td style="text-align:center;">${player.correct}</td>
+            <td style="text-align:center;">${speedDisplay}</td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = rows;
+    }
+
+    function addLogEntry(message, type = 'info') {
+      const log = document.getElementById('activityLog');
+      const now = new Date();
+      const timestamp = now.toTimeString().split(' ')[0];
+
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+
+      let messageClass = 'log-message';
+      if (type === 'answer') messageClass = 'log-answer';
+
+      entry.innerHTML = `
+        <span class="log-timestamp">[${timestamp}]</span>
+        <span class="${messageClass}">${escapeHtml(message)}</span>
+      `;
+
+      log.appendChild(entry);
+      log.scrollTop = log.scrollHeight;
+
+      // Keep only last 50 entries
+      while (log.children.length > 50) {
+        log.removeChild(log.firstChild);
+      }
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // =========================================
+    // GAME CONTROL FUNCTIONS
+    // =========================================
+    function startGame() {
+      if (GameState.status !== 'waiting') return;
+
+      GameState.status = 'active';
+      GameState.currentQuestion = 1;
+      GameState.currentAnswers.clear();
+
+      updateGameStatus('active');
+      document.getElementById('btnStart').disabled = true;
+      document.getElementById('btnNext').disabled = false;
+      document.getElementById('btnEnd').disabled = false;
+
+      showQuestion(0);
+      addLogEntry('🎮 Game started!', 'info');
+
+      // Simulate WhatsApp message sending
+      if (GameState.whatsappConnected) {
+        addLogEntry('📤 Sending question to WhatsApp group...', 'info');
+      }
+
+      updateStats();
+    }
+
+    function nextQuestion() {
+      if (GameState.currentQuestion >= GameState.totalQuestions) {
+        endGame();
+        return;
+      }
+
+      GameState.currentQuestion++;
+      GameState.currentAnswers.clear();
+
+      if (GameState.currentQuestion <= GameState.totalQuestions) {
+        showQuestion(GameState.currentQuestion - 1);
+        addLogEntry(`📝 Question ${GameState.currentQuestion} displayed`, 'info');
+
+        if (GameState.whatsappConnected) {
+          addLogEntry('📤 Sending question to WhatsApp group...', 'info');
+        }
+      } else {
+        endGame();
+      }
+
+      updateStats();
+    }
+
+    function endGame() {
+      GameState.status = 'ended';
+      updateGameStatus('ended');
+
+      document.getElementById('btnStart').disabled = false;
+      document.getElementById('btnNext').disabled = true;
+      document.getElementById('btnEnd').disabled = true;
+      document.getElementById('questionPanel').style.display = 'none';
+
+      addLogEntry('🏁 Game ended!', 'info');
+
+      if (GameState.whatsappConnected) {
+        addLogEntry('📤 Sending final results to WhatsApp...', 'info');
+      }
+    }
+
+    function connectWhatsApp() {
+      // Placeholder for WhatsApp connection
+      // In real implementation, this would:
+      // 1. Connect to backend server
+      // 2. Initialize whatsapp-web.js
+      // 3. Show QR code for scanning
+      // 4. Establish WebSocket connection
+
+      if (GameState.whatsappConnected) {
+        GameState.whatsappConnected = false;
+        updateConnectionStatus(false);
+        addLogEntry('❌ Disconnected from WhatsApp', 'info');
+        document.getElementById('btnConnect').textContent = '📱 Connect WhatsApp';
+      } else {
+        // Simulate connection
+        setTimeout(() => {
+          GameState.whatsappConnected = true;
+          updateConnectionStatus(true);
+          addLogEntry('✅ Connected to WhatsApp successfully', 'info');
+          document.getElementById('btnConnect').textContent = '📱 Disconnect WhatsApp';
+
+          // Simulate some players joining
+          addSamplePlayers();
+        }, 1000);
+      }
+    }
+
+    // =========================================
+    // SIMULATE INCOMING ANSWERS (for testing)
+    // =========================================
+    function addSamplePlayers() {
+      const samplePlayers = [
+        {phone: '+628123456789', name: 'Alice Johnson'},
+        {phone: '+628234567890', name: 'Bob Smith'},
+        {phone: '+628345678901', name: 'Charlie Brown'},
+        {phone: '+628456789012', name: 'Diana Prince'},
+        {phone: '+628567890123', name: 'Ethan Hunt'}
+      ];
+
+      samplePlayers.forEach(player => {
+        GameState.players.set(player.phone, {
+          name: player.name,
+          score: 0,
+          answered: 0,
+          correct: 0,
+          avgSpeed: 0
+        });
+        addLogEntry(`👤 ${player.name} joined the game`, 'info');
+      });
+
+      updateStats();
+      updateLeaderboard();
+    }
+
+    function simulateAnswer(phone, answer, correct, speed) {
+      if (!GameState.players.has(phone)) return;
+
+      const player = GameState.players.get(phone);
+      GameState.currentAnswers.set(phone, answer);
+
+      player.answered++;
+      if (correct) {
+        player.correct++;
+        // Points: 1000 base + speed bonus (faster = more points)
+        const speedBonus = Math.max(0, 500 - speed * 10);
+        player.score += 1000 + Math.floor(speedBonus);
+      }
+
+      // Update average speed
+      player.avgSpeed = ((player.avgSpeed * (player.answered - 1)) + speed) / player.answered;
+
+      addLogEntry(`${player.name} answered: ${answer} ${correct ? '✓' : '✗'}`, 'answer');
+
+      const answerCount = GameState.currentAnswers.size;
+      document.getElementById('answerCount').textContent = `${answerCount} answer${answerCount !== 1 ? 's' : ''} received`;
+
+      updateStats();
+      updateLeaderboard();
+    }
+
+    // =========================================
+    // EVENT LISTENERS
+    // =========================================
+    document.getElementById('btnStart').addEventListener('click', startGame);
+    document.getElementById('btnNext').addEventListener('click', nextQuestion);
+    document.getElementById('btnEnd').addEventListener('click', endGame);
+    document.getElementById('btnConnect').addEventListener('click', connectWhatsApp);
+    document.getElementById('btnRefresh').addEventListener('click', updateLeaderboard);
+
+    // =========================================
+    // WEBSOCKET CONNECTION (Placeholder)
+    // =========================================
+    function initializeWebSocket() {
+      // In real implementation:
+      // const ws = new WebSocket('ws://localhost:3000');
+      //
+      // ws.onopen = () => {
+      //   console.log('Connected to server');
+      // };
+      //
+      // ws.onmessage = (event) => {
+      //   const data = JSON.parse(event.data);
+      //   handleIncomingMessage(data);
+      // };
+      //
+      // ws.onerror = (error) => {
+      //   console.error('WebSocket error:', error);
+      // };
+
+      console.log('WebSocket connection placeholder - needs backend implementation');
+    }
+
+    function handleIncomingMessage(data) {
+      // Handle different message types from backend
+      switch (data.type) {
+        case 'player_joined':
+          GameState.players.set(data.phone, {
+            name: data.name,
+            score: 0,
+            answered: 0,
+            correct: 0,
+            avgSpeed: 0
+          });
+          addLogEntry(`👤 ${data.name} joined the game`, 'info');
+          updateStats();
+          updateLeaderboard();
+          break;
+
+        case 'answer_received':
+          simulateAnswer(data.phone, data.answer, data.correct, data.speed);
+          break;
+
+        case 'whatsapp_connected':
+          GameState.whatsappConnected = true;
+          updateConnectionStatus(true);
+          addLogEntry('✅ WhatsApp connected', 'info');
+          break;
+
+        case 'whatsapp_disconnected':
+          GameState.whatsappConnected = false;
+          updateConnectionStatus(false);
+          addLogEntry('❌ WhatsApp disconnected', 'info');
+          break;
+      }
+    }
+
+    // =========================================
+    // INITIALIZE ON LOAD
+    // =========================================
+    window.addEventListener('DOMContentLoaded', () => {
+      updateStats();
+      updateLeaderboard();
+      addLogEntry('System initialized. Ready to start!', 'info');
+
+      // For testing: simulate some activity after connection
+      window.testSimulation = () => {
+        if (!GameState.whatsappConnected) {
+          alert('Please connect WhatsApp first!');
+          return;
+        }
+        if (GameState.status !== 'active') {
+          alert('Please start the game first!');
+          return;
+        }
+
+        // Simulate answers from random players
+        const players = Array.from(GameState.players.keys());
+        const currentQ = GameState.questions[GameState.currentQuestion - 1];
+
+        players.forEach((phone, index) => {
+          setTimeout(() => {
+            const answers = ['A', 'B', 'C', 'D'];
+            const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
+            const correct = randomAnswer === currentQ.correctAnswer;
+            const speed = 2 + Math.random() * 8; // 2-10 seconds
+
+            simulateAnswer(phone, randomAnswer, correct, speed);
+          }, index * 500);
+        });
+      };
+
+      console.log('Tip: After starting the game, run testSimulation() in console to simulate answers');
+    });
+  </script>
+</body>
+</html>

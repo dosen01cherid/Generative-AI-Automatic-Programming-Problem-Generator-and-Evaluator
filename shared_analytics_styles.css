@@ -1,0 +1,405 @@
+/* =========================================
+   SHARED ANALYTICS STYLES
+   Used by both analytics_for_problem.html and kahoot_live.html
+   ========================================= */
+
+/* =========================================
+   GLOBAL RESET & BASE STYLES
+   ========================================= */
+body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding: 16px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* =========================================
+   MODAL STYLING
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+}
+
+.modal {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal h2 {
+    margin: 0 0 20px 0;
+    color: #0f172a;
+    font-size: 24px;
+}
+
+.modal p {
+    margin: 0 0 20px 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.modal-btn-primary {
+    background: #3b82f6;
+    color: white;
+}
+
+.modal-btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.modal-btn-primary:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.modal-btn-secondary {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.modal-btn-secondary:hover {
+    background: #e2e8f0;
+}
+
+.modal-btn-danger {
+    background: #dc2626;
+    color: white;
+}
+
+.modal-btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* =========================================
+   PANEL STYLING
+   ========================================= */
+.panel {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s ease;
+}
+
+.panel:hover {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.panel h3 {
+    margin-top: 0;
+    color: #0f172a;
+}
+
+/* =========================================
+   STATISTIC CARDS
+   ========================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.stats-card {
+    text-align: center;
+    border-radius: 10px;
+    padding: 10px 6px;
+}
+
+.stats-number {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #111827;
+}
+
+.stats-label {
+    font-size: 0.8em;
+    color: #6b7280;
+}
+
+/* =========================================
+   SCORE BADGES
+   ========================================= */
+.score-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12px;
+    color: #fff;
+}
+
+.score-high { background-color: #16a34a; }           /* green */
+.score-medium { background-color: #facc15; color:#111827; } /* yellow */
+.score-low { background-color: #dc2626; }            /* red */
+
+.badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-radius: 8px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* =========================================
+   TABLE STYLING
+   ========================================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+th, td {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px;
+    vertical-align: middle;
+}
+
+th {
+    background: #f3f4f6;
+    text-align: left;
+    font-weight: 600;
+}
+
+tbody tr:nth-child(even):not(.detail-row) {
+    background: #fcfcfc;
+}
+
+tr.detail-row td {
+    background: #f9fafb;
+}
+
+/* Sortable headers */
+.sortable-header, .sortable-status-header {
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+}
+
+.sortable-header:hover, .sortable-status-header:hover {
+    background: #e5e7eb;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+.btn {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button.detail-toggle {
+    background: #e0f2fe;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    color: #0369a1;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 8px;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+button.detail-toggle:hover {
+    background: #0369a1;
+    color: #ffffff;
+}
+
+/* =========================================
+   LOADING SPINNER
+   ========================================= */
+.spinner {
+    border: 3px solid #f3f4f6;
+    border-top: 3px solid #3b82f6;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 12px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    font-size: 16px;
+    color: #64748b;
+    margin-top: 12px;
+}
+
+/* =========================================
+   PROBLEM CARD STYLING
+   ========================================= */
+.problem-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.problem-header {
+    background: #f9fafb;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s ease;
+}
+
+.problem-header:hover {
+    background: #f3f4f6;
+}
+
+.problem-body {
+    padding: 10px 12px;
+    background: #fcfcfc;
+}
+
+/* =========================================
+   MATHJAX OUTPUT AREA
+   ========================================= */
+.mathjax-latex {
+    display: block;
+    font-size: 14px;
+    margin: 4px 0;
+    color: #111827;
+    line-height: 1.4;
+}
+
+.mathjax-latex mjx-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN
+   ========================================= */
+@media (max-width: 768px) {
+    th, td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    }
+
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+
+/* =========================================
+   UTILITY CLASSES
+   ========================================= */
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mb-2 {
+    margin-bottom: 8px;
+}
+
+.mb-3 {
+    margin-bottom: 12px;
+}
+
+.mt-2 {
+    margin-top: 8px;
+}
+
+.mt-3 {
+    margin-top: 12px;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gap-2 {
+    gap: 8px;
+}
+
+.gap-3 {
+    gap: 12px;
+}
