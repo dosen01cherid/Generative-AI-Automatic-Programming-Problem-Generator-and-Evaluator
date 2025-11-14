@@ -23,7 +23,7 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-010 (MC-Multiple Fix)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-011 (Sortable Tables)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
     console.log('✅ NEW: Auto-finalize MC/TF/fill-blank questions when answered');
   </script>
@@ -2668,16 +2668,26 @@ class DisplayManager:
     def create_student_table(self, groups, submissions, cheating_phones):
         panel = document.createElement("div")
         panel.className = "panel"
-        panel.innerHTML = """
-            <h3 style='margin-top:0;'>🏫 Student Progress</h3>
+
+        # Get sort indicators
+        def get_sort_indicator(col):
+            if self.current_sort["column"] == col:
+                return "▼" if self.current_sort["direction"] == "desc" else "▲"
+            return ""
+
+        panel.innerHTML = f"""
+            <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;'>
+                <h3 style='margin:0;'>🏫 Student Progress</h3>
+                <button id='collapseAllBtn' class='btn' style='background:#64748b; font-size:13px; padding:6px 12px;'>🔽 Collapse All</button>
+            </div>
             <div style='overflow-x:auto;'>
             <table id='scoreTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
                 <thead>
                     <tr style='background:#f3f4f6;'>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Reg No</th>
-                        <th>Score</th>
+                        <th class='sortable-header' data-column='name' style='cursor:pointer;user-select:none;' title='Click to sort'>Name {get_sort_indicator('name')}</th>
+                        <th class='sortable-header' data-column='reg' style='cursor:pointer;user-select:none;' title='Click to sort'>Reg No {get_sort_indicator('reg')}</th>
+                        <th class='sortable-header' data-column='score' style='cursor:pointer;user-select:none;' title='Click to sort'>Score {get_sort_indicator('score')}</th>
                         <th>Phone</th>
                         <th>Details</th>
                     </tr>
@@ -2701,6 +2711,9 @@ class DisplayManager:
                 "phone": phone, "name": name, "reg": reg,
                 "score": score, "is_cheating": is_cheating, "subs": subs
             })
+
+        # Store data for re-sorting
+        self.student_table_data = student_data
 
         sorted_data = self.sort_student_data(student_data)
 
@@ -2834,20 +2847,27 @@ class DisplayManager:
     def create_status_table(self, groups, cheating_phones, phone_to_cheat_group):
         panel = document.createElement("div")
         panel.className = "panel"
-        panel.innerHTML = """
+
+        # Get sort indicators for status table
+        def get_status_sort_indicator(col):
+            if self.status_sort["column"] == col:
+                return "▼" if self.status_sort["direction"] == "desc" else "▲"
+            return ""
+
+        panel.innerHTML = f"""
             <h3 style='margin-top:0;'>📋 Submission Status (Extended)</h3>
             <div style='overflow-x:auto;'>
             <table id='statusTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
                 <thead>
                     <tr style='background:#f3f4f6;'>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Reg No</th>
+                        <th class='sortable-status-header' data-column='name' style='cursor:pointer;user-select:none;' title='Click to sort'>Name {get_status_sort_indicator('name')}</th>
+                        <th class='sortable-status-header' data-column='reg' style='cursor:pointer;user-select:none;' title='Click to sort'>Reg No {get_status_sort_indicator('reg')}</th>
                         <th>Phone</th>
-                        <th>Status</th>
+                        <th class='sortable-status-header' data-column='status' style='cursor:pointer;user-select:none;' title='Click to sort'>Status {get_status_sort_indicator('status')}</th>
                         <th>✅ Success</th>
                         <th>🕓 Ignored</th>
-                        <th>⚠️ Invalid</th>
+                        <th class='sortable-status-header' data-column='invalid' style='cursor:pointer;user-select:none;' title='Click to sort'>⚠️ Invalid {get_status_sort_indicator('invalid')}</th>
                         <th>🚨 Cheating</th>
                     </tr>
                 </thead>
@@ -2914,6 +2934,9 @@ class DisplayManager:
                 "plagiat_count": plagiat_count
             })
 
+        # Store data for re-sorting
+        self.status_table_data = student_status_data
+
         sorted_status_data = self.sort_status_data(student_status_data)
         for idx, s in enumerate(sorted_status_data, 1):
             tr = document.createElement("tr")
@@ -2948,6 +2971,89 @@ class DisplayManager:
             div.textContent = f"📱 {phone} — {name}: {err}"
             panel.appendChild(div)
         return panel
+
+    # =====================================================
+    # RE-RENDER TABLES (for sorting)
+    # =====================================================
+    def rerender_student_table(self):
+        """Re-render student table body with current sort"""
+        tbody = document.querySelector("#scoreTableBody")
+        if not tbody or not hasattr(self, "student_table_data"):
+            return
+
+        # Clear existing rows
+        tbody.innerHTML = ""
+
+        # Sort data
+        sorted_data = self.sort_student_data(self.student_table_data)
+
+        # Render rows
+        for idx, student in enumerate(sorted_data, 1):
+            score_display = "—" if student["is_cheating"] else f"{student['score']}%"
+            cls = "score-low" if student["is_cheating"] else self.app.progress_analyzer.get_score_class(student["score"])
+            tr = document.createElement("tr")
+            tr.innerHTML = f"""
+                <td>{idx}</td>
+                <td>{html.escape(student['name'])}</td>
+                <td>{html.escape(str(student['reg']))}</td>
+                <td style='text-align:center;'><span class='score-badge {cls}'>{score_display}</span></td>
+                <td>{html.escape(student['phone'])}</td>
+                <td><button class='detail-toggle' data-phone='{html.escape(student['phone'])}'>🔽 Details</button></td>
+            """
+            tbody.appendChild(tr)
+            tbody.appendChild(self.create_detail_row(student["subs"]))
+
+        # Update header indicators
+        thead = document.querySelector("#scoreTable thead")
+        if thead:
+            for th in thead.querySelectorAll(".sortable-header"):
+                col = th.getAttribute("data-column")
+                indicator = ""
+                if self.current_sort["column"] == col:
+                    indicator = " ▼" if self.current_sort["direction"] == "desc" else " ▲"
+                # Update text (remove old indicator and add new one)
+                text = th.textContent.replace(" ▼", "").replace(" ▲", "")
+                th.textContent = text + indicator
+
+    def rerender_status_table(self):
+        """Re-render status table body with current sort"""
+        tbody = document.querySelector("#statusTableBody")
+        if not tbody or not hasattr(self, "status_table_data"):
+            return
+
+        # Clear existing rows
+        tbody.innerHTML = ""
+
+        # Sort data
+        sorted_status_data = self.sort_status_data(self.status_table_data)
+
+        # Render rows
+        for idx, s in enumerate(sorted_status_data, 1):
+            tr = document.createElement("tr")
+            tr.innerHTML = f"""
+                <td>{idx}</td>
+                <td>{html.escape(s['name'])}</td>
+                <td>{html.escape(str(s['reg']))}</td>
+                <td>{html.escape(s['phone'])}</td>
+                <td style='text-align:center;'><span class='score-badge {s['status_class']}'>{s['status']}</span></td>
+                <td style='text-align:center;'>{s['success_count']}</td>
+                <td style='text-align:center;'>{s['ignored_count']}</td>
+                <td style='text-align:center;'>{s['invalid_count']}</td>
+                <td style='text-align:center;'>{s['plagiat_count']}</td>
+            """
+            tbody.appendChild(tr)
+
+        # Update header indicators
+        thead = document.querySelector("#statusTable thead")
+        if thead:
+            for th in thead.querySelectorAll(".sortable-status-header"):
+                col = th.getAttribute("data-column")
+                indicator = ""
+                if self.status_sort["column"] == col:
+                    indicator = " ▼" if self.status_sort["direction"] == "desc" else " ▲"
+                # Update text (remove old indicator and add new one)
+                text = th.textContent.replace(" ▼", "").replace(" ▲", "")
+                th.textContent = text + indicator
 
     # =====================================================
     # EVENT HANDLERS
@@ -2992,6 +3098,82 @@ class DisplayManager:
 
         tbody.addEventListener("click", create_proxy(on_click))
 
+        # Add click handlers for sortable headers (Student Progress table)
+        score_thead = document.querySelector("#scoreTable thead")
+        if score_thead:
+            def on_header_click(ev):
+                target = ev.target
+                if target.classList.contains("sortable-header"):
+                    col = target.getAttribute("data-column")
+                    # Toggle sort direction if clicking same column, otherwise default to asc
+                    if self.current_sort["column"] == col:
+                        self.current_sort["direction"] = "desc" if self.current_sort["direction"] == "asc" else "asc"
+                    else:
+                        self.current_sort["column"] = col
+                        self.current_sort["direction"] = "asc"
+                    # Re-render table
+                    self.rerender_student_table()
+
+            score_thead.addEventListener("click", create_proxy(on_header_click))
+
+        # Add click handlers for sortable headers (Status table)
+        status_thead = document.querySelector("#statusTable thead")
+        if status_thead:
+            def on_status_header_click(ev):
+                target = ev.target
+                if target.classList.contains("sortable-status-header"):
+                    col = target.getAttribute("data-column")
+                    # Toggle sort direction if clicking same column, otherwise default to asc
+                    if self.status_sort["column"] == col:
+                        self.status_sort["direction"] = "desc" if self.status_sort["direction"] == "asc" else "asc"
+                    else:
+                        self.status_sort["column"] = col
+                        self.status_sort["direction"] = "asc"
+                    # Re-render table
+                    self.rerender_status_table()
+
+            status_thead.addEventListener("click", create_proxy(on_status_header_click))
+
+        # Add click handler for Collapse All button
+        collapse_btn = document.querySelector("#collapseAllBtn")
+        if collapse_btn:
+            def on_collapse_all(ev):
+                # Find all detail rows and collapse them
+                detail_rows = document.querySelectorAll(".detail-row")
+                all_collapsed = True
+                for row in detail_rows:
+                    if row.style.display != "none":
+                        all_collapsed = False
+                        break
+
+                # If all are collapsed, expand all. Otherwise, collapse all
+                if all_collapsed:
+                    # Expand all
+                    for row in detail_rows:
+                        row.style.display = "table-row"
+                    # Update all toggle buttons
+                    toggle_btns = document.querySelectorAll(".detail-toggle")
+                    for btn in toggle_btns:
+                        btn.textContent = "🔼 Hide"
+                    collapse_btn.textContent = "🔽 Collapse All"
+                    # Typeset math for all expanded rows
+                    try:
+                        if hasattr(window, "MathJax"):
+                            window.MathJax.typesetPromise(list(detail_rows))
+                    except:
+                        pass
+                else:
+                    # Collapse all
+                    for row in detail_rows:
+                        row.style.display = "none"
+                    # Update all toggle buttons
+                    toggle_btns = document.querySelectorAll(".detail-toggle")
+                    for btn in toggle_btns:
+                        btn.textContent = "🔽 Details"
+                    collapse_btn.textContent = "🔼 Expand All"
+
+            collapse_btn.addEventListener("click", create_proxy(on_collapse_all))
+
     # =====================================================
     # SORT HELPERS
     # =====================================================
@@ -3031,6 +3213,8 @@ class DisplayManager:
             elif col == "status":
                 # status_priority first (lower is higher priority), then name
                 return (s.get("status_priority", 99), s.get("status", "").lower())
+            elif col == "invalid":
+                return s.get("invalid_count", 0)
             return s["name"].lower()
         return sorted(data, key=key, reverse=(direction == "desc"))
 
