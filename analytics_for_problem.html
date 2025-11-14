@@ -23,9 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-004 (Auto-recovery)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-011 (Sortable Tables)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ Old databases will be auto-deleted if version conflicts are detected');
+    console.log('✅ NEW: Auto-finalize MC/TF/fill-blank questions when answered');
   </script>
 
   <!-- PyScript core -->
@@ -440,6 +440,9 @@ button.detail-toggle:hover {
       <button id="parseRosterMergeBtn" class="btn success">Parse & Merge</button>
       <button id="clearRosterBtn" class="btn ghost">Clear Roster</button>
       <button id="viewRosterBtn" class="btn ghost">View Roster</button>
+      <button id="saveRosterBtn" class="btn" style="background:#10b981;">💾 Save Roster</button>
+      <button id="loadRosterBtn" class="btn" style="background:#3b82f6;">📂 Load Roster</button>
+      <button id="deleteRosterBtn" class="btn" style="background:#ef4444;">🗑️ Delete Rosters</button>
     </div>
     <div id="rosterStatus" class="small" style="margin-top:8px; color:#059669;"></div>
   </div>
@@ -454,6 +457,7 @@ button.detail-toggle:hover {
       <button id="analyzeBtn" class="btn">Analyze & Add Submissions</button>
       <button id="clearAnalyticsBtn" class="btn ghost">Clear All</button>
       <button id="loadSavedBtn" class="btn" style="background:#3b82f6;">📂 Load Saved</button>
+      <button id="deleteSelectedBtn" class="btn" style="background:#ef4444;">🗑️ Delete Selected</button>
       <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
     </div>
   </div>
@@ -979,6 +983,9 @@ class RosterManager:
             ("#parseRosterMergeBtn", self.parse_and_merge),
             ("#clearRosterBtn", self.clear_roster),
             ("#viewRosterBtn", self.view_roster),
+            ("#saveRosterBtn", self.save_roster),
+            ("#loadRosterBtn", self.load_roster),
+            ("#deleteRosterBtn", self.delete_rosters),
         ]
         
         for selector, handler in bindings:
@@ -1161,7 +1168,323 @@ class RosterManager:
         html_content += "</tbody></table>"
         
         self.app.create_modal("Student Roster", html_content)
-    
+
+    def save_roster(self, e=None):
+        """Save current roster to IndexedDB"""
+        import asyncio
+        if not self.student_roster:
+            window.alert("No roster to save. Please parse a roster first.")
+            return
+        asyncio.ensure_future(self._save_roster_async())
+
+    async def _save_roster_async(self):
+        """Async method to save roster"""
+        from js import window
+
+        # Prompt for roster name
+        roster_name = window.prompt("Enter a name for this roster:\n(e.g., 'Linear Algebra 08.00')")
+
+        if not roster_name or not roster_name.strip():
+            return
+
+        roster_name = roster_name.strip()
+
+        try:
+            # Save roster to IndexedDB
+            await self.app.persistence_manager.db_manager.save_data(
+                "rosters",
+                roster_name,
+                self.student_roster
+            )
+            window.alert(f"✅ Roster '{roster_name}' saved successfully!")
+            window.console.log(f"💾 Saved roster: {roster_name}")
+        except Exception as e:
+            window.console.error(f"❌ Failed to save roster: {e}")
+            window.alert(f"Failed to save roster: {e}")
+
+    def load_roster(self, e=None):
+        """Load a saved roster from IndexedDB"""
+        import asyncio
+        asyncio.ensure_future(self._load_roster_async())
+
+    async def _load_roster_async(self):
+        """Async method to load roster"""
+        from js import window
+
+        try:
+            # Get list of saved rosters
+            self.app.persistence_manager.db_manager._show_progress("📋 Loading saved rosters...")
+            saved_keys = await self.app.persistence_manager.list_saved_keys("rosters")
+            self.app.persistence_manager.db_manager._hide_progress()
+
+            if not saved_keys:
+                window.alert("No saved rosters found.")
+                return
+
+            # Show roster selection modal
+            selected_roster = await self._show_roster_selection_modal(saved_keys)
+
+            if selected_roster:
+                # Load the selected roster
+                self.app.persistence_manager.db_manager._show_progress(f"📂 Loading roster: {selected_roster}...")
+                roster_data = await self.app.persistence_manager.db_manager.load_data("rosters", selected_roster)
+                self.app.persistence_manager.db_manager._hide_progress()
+
+                if roster_data:
+                    self.student_roster = roster_data
+                    self.app.student_roster = roster_data
+                    self.update_roster_status(f"✅ Loaded roster '{selected_roster}' ({len(roster_data)} students)")
+                    window.console.log(f"📂 Loaded roster: {selected_roster} ({len(roster_data)} students)")
+                else:
+                    window.alert(f"Failed to load roster '{selected_roster}'")
+        except Exception as e:
+            self.app.persistence_manager.db_manager._hide_progress()
+            window.console.error(f"❌ Failed to load roster: {e}")
+            window.alert(f"Failed to load roster: {e}")
+
+    async def _show_roster_selection_modal(self, roster_keys):
+        """Show modal to select a roster to load"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        # Create future for user choice
+        future = asyncio.Future()
+
+        # Create modal overlay
+        overlay = document.createElement("div")
+        overlay.className = "startup-modal-overlay"
+
+        # Create modal content
+        modal = document.createElement("div")
+        modal.className = "startup-modal"
+
+        # Build roster list
+        rosters_html = '<div class="saved-sessions-list" style="max-height: 400px; overflow-y: auto;">'
+        for key in roster_keys:
+            rosters_html += f'''
+                <div class="session-item roster-item-selectable" data-key="{self._escape(key)}"
+                     style="cursor: pointer; transition: background 0.2s;">
+                    <div class="session-name">📚 {self._escape(key)}</div>
+                    <div class="session-info">Saved student roster</div>
+                </div>
+            '''
+        rosters_html += '</div>'
+
+        modal.innerHTML = f'''
+            <h2 style="margin-top: 0;">📂 Load Saved Roster</h2>
+            <p style="color: #6b7280;">Select a roster to load:</p>
+            {rosters_html}
+            <div class="modal-actions" style="margin-top: 20px;">
+                <button class="modal-btn modal-btn-secondary" id="cancel-load-roster-btn">
+                    Cancel
+                </button>
+            </div>
+        '''
+
+        overlay.appendChild(modal)
+        document.body.appendChild(overlay)
+
+        # Get elements
+        roster_items = modal.querySelectorAll(".roster-item-selectable")
+        cancel_btn = modal.querySelector("#cancel-load-roster-btn")
+
+        # Close modal
+        def close_modal(result=None):
+            if not future.done():
+                future.set_result(result)
+            overlay.remove()
+            item_proxy.destroy()
+            cancel_proxy.destroy()
+
+        # Handle roster selection
+        def select_roster(event):
+            item = event.currentTarget
+            roster_key = item.getAttribute("data-key")
+            close_modal(roster_key)
+
+        # Bind events
+        item_proxy = create_proxy(select_roster)
+        for item in roster_items:
+            item.addEventListener("click", item_proxy)
+
+        cancel_proxy = create_proxy(lambda e: close_modal(None))
+        cancel_btn.addEventListener("click", cancel_proxy)
+
+        # Close on overlay click
+        overlay.addEventListener("click", create_proxy(lambda e: close_modal(None) if e.target == overlay else None))
+
+        # Wait for user choice
+        return await future
+
+    def delete_rosters(self, e=None):
+        """Delete selected rosters from IndexedDB"""
+        import asyncio
+        asyncio.ensure_future(self._delete_rosters_async())
+
+    async def _delete_rosters_async(self):
+        """Async method to delete rosters"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+
+        try:
+            # Get list of saved rosters
+            self.app.persistence_manager.db_manager._show_progress("📋 Loading saved rosters...")
+            saved_keys = await self.app.persistence_manager.list_saved_keys("rosters")
+            self.app.persistence_manager.db_manager._hide_progress()
+
+            if not saved_keys:
+                window.alert("No saved rosters to delete.")
+                return
+
+            window.console.log(f"📋 Found {len(saved_keys)} saved rosters")
+
+            # Create modal overlay
+            overlay = document.createElement("div")
+            overlay.id = "delete-roster-modal-overlay"
+            overlay.className = "startup-modal-overlay"
+
+            # Create modal content
+            modal = document.createElement("div")
+            modal.className = "startup-modal"
+
+            # Build roster list with checkboxes
+            rosters_html = '<div class="saved-sessions-list" style="max-height: 400px; overflow-y: auto;">'
+            for key in saved_keys:
+                rosters_html += f'''
+                    <div class="session-item" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px;">
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" class="roster-checkbox" value="{self._escape(key)}"
+                                   style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                            <div>
+                                <div class="session-name" style="font-weight: 600; color: #111827;">📚 {self._escape(key)}</div>
+                                <div class="session-info" style="font-size: 12px; color: #6b7280;">Saved student roster</div>
+                            </div>
+                        </label>
+                    </div>
+                '''
+            rosters_html += '</div>'
+
+            modal.innerHTML = f'''
+                <h2 style="margin-top: 0;">🗑️ Delete Saved Rosters</h2>
+                <p style="color: #6b7280;">Select one or more rosters to delete permanently.</p>
+                <div style="margin: 16px 0;">
+                    <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #111827;">
+                        <input type="checkbox" id="select-all-rosters-checkbox"
+                               style="margin-right: 8px; width: 16px; height: 16px; cursor: pointer;">
+                        <strong>Select All</strong>
+                    </label>
+                </div>
+                {rosters_html}
+                <div class="modal-actions" style="margin-top: 20px; display: flex; gap: 12px;">
+                    <button class="modal-btn modal-btn-secondary" id="cancel-delete-roster-btn">
+                        Cancel
+                    </button>
+                    <button class="modal-btn" id="confirm-delete-roster-btn"
+                            style="background: #ef4444; color: white;" disabled>
+                        🗑️ Delete Selected
+                    </button>
+                </div>
+            '''
+
+            overlay.appendChild(modal)
+            document.body.appendChild(overlay)
+
+            # Get elements
+            checkboxes = modal.querySelectorAll(".roster-checkbox")
+            select_all = modal.querySelector("#select-all-rosters-checkbox")
+            confirm_btn = modal.querySelector("#confirm-delete-roster-btn")
+            cancel_btn = modal.querySelector("#cancel-delete-roster-btn")
+
+            # Update button state based on selection
+            def update_button_state():
+                selected_count = len([cb for cb in checkboxes if cb.checked])
+                confirm_btn.disabled = selected_count == 0
+                if selected_count > 0:
+                    confirm_btn.textContent = f"🗑️ Delete {selected_count} Roster{'s' if selected_count > 1 else ''}"
+                else:
+                    confirm_btn.textContent = "🗑️ Delete Selected"
+
+            # Handle checkbox changes
+            def on_checkbox_change(e):
+                update_button_state()
+                # Update select all checkbox
+                all_checked = all(cb.checked for cb in checkboxes)
+                some_checked = any(cb.checked for cb in checkboxes)
+                select_all.checked = all_checked
+                select_all.indeterminate = some_checked and not all_checked
+
+            # Handle select all
+            def on_select_all(e):
+                for cb in checkboxes:
+                    cb.checked = select_all.checked
+                update_button_state()
+
+            # Bind checkbox events
+            checkbox_proxy = create_proxy(on_checkbox_change)
+            for cb in checkboxes:
+                cb.addEventListener("change", checkbox_proxy)
+
+            select_all_proxy = create_proxy(on_select_all)
+            select_all.addEventListener("change", select_all_proxy)
+
+            # Handle cancel
+            def close_modal(e=None):
+                overlay.remove()
+                checkbox_proxy.destroy()
+                select_all_proxy.destroy()
+                cancel_proxy.destroy()
+                confirm_proxy.destroy()
+
+            # Handle confirm delete
+            async def confirm_delete(e=None):
+                selected_keys = [cb.value for cb in checkboxes if cb.checked]
+
+                if not selected_keys:
+                    return
+
+                # Confirm deletion
+                count = len(selected_keys)
+                if not window.confirm(f"⚠️ Are you sure you want to delete {count} roster{'s' if count > 1 else ''}?\n\nThis action cannot be undone."):
+                    return
+
+                # Show loading indicator
+                self.app.persistence_manager.db_manager._show_progress(f"🗑️ Deleting {count} roster{'s' if count > 1 else ''}...")
+
+                # Delete each selected roster
+                deleted_count = 0
+                for i, key in enumerate(selected_keys, 1):
+                    try:
+                        self.app.persistence_manager.db_manager._show_progress(f"🗑️ Deleting roster {i}/{count}...")
+                        await self.app.persistence_manager.db_manager.delete_data("rosters", key)
+                        window.console.log(f"🗑️ Deleted roster: {key}")
+                        deleted_count += 1
+                    except Exception as e:
+                        window.console.error(f"❌ Failed to delete {key}: {e}")
+
+                # Hide loading indicator
+                self.app.persistence_manager.db_manager._hide_progress()
+
+                # Show result
+                if deleted_count > 0:
+                    window.alert(f"✅ Successfully deleted {deleted_count} roster{'s' if deleted_count > 1 else ''}.")
+
+                close_modal()
+
+            cancel_proxy = create_proxy(close_modal)
+            confirm_proxy = create_proxy(confirm_delete)
+
+            cancel_btn.addEventListener("click", cancel_proxy)
+            confirm_btn.addEventListener("click", confirm_proxy)
+
+            # Close on overlay click
+            overlay.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == overlay else None))
+
+        except Exception as e:
+            self.app.persistence_manager.db_manager._hide_progress()
+            window.console.error(f"❌ Failed to show delete rosters modal: {e}")
+            window.alert(f"Failed to load rosters: {e}")
+
     def _escape(self, text):
         """Escape HTML text"""
         import html
@@ -1353,6 +1676,7 @@ class ProgressAnalyzer:
             ("#analyzeBtn", self.analyze_submissions),
             ("#clearAnalyticsBtn", self.clear_analytics),
             ("#loadSavedBtn", self.load_saved_analytics),
+            ("#deleteSelectedBtn", self.delete_selected_sessions),
             ("#exportAnalyticsBtn", self.export_analytics),
         ]
         for selector, handler in bindings:
@@ -1649,12 +1973,12 @@ class ProgressAnalyzer:
                     # ✅ Support both 'finalized' and 'finished' field names
                     is_finalized = step_state.get("finalized", step_state.get("finished", False))
 
-                    # ✅ SPECIAL HANDLING: For non-math-expression types, consider finalized if answered
+                    # ✅ SPECIAL HANDLING: For non-math-expression types, auto-finalize if answered
                     # Non-math types (MC, T/F, fill-blank) are "done" once they submit an answer
                     # Unlike math-expression which requires explicit finalization
                     step_type = step_state.get("step_type", "")
                     if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
-                        # For these types, consider finalized if:
+                        # For these types, auto-finalize if:
                         # 1. Already marked as finished/finalized, OR
                         # 2. They answered correctly, OR
                         # 3. They have at least one answer (attempted the question)
@@ -1664,7 +1988,9 @@ class ProgressAnalyzer:
 
                         if is_correct or has_answer:
                             is_finalized = True
-                            window.console.log(f"    - Non-math type '{step_type}' with answer → forcing finalized=True")
+                            # ✅ UPDATE THE STORED DATA: Explicitly set finalized=True
+                            step_state["finalized"] = True
+                            window.console.log(f"    - Non-math type '{step_type}' with answer → setting finalized=True")
 
                     window.console.log(f"    - Finalized/Finished: {is_finalized}")
                     window.console.log(f"    - Correct: {step_state.get('correct', False)}")
@@ -1697,15 +2023,28 @@ class ProgressAnalyzer:
                         # Desktop format with user_answers array
                         user_answers = step_state.get("user_answers", [])
                         window.console.log(f"      📝 Desktop format: {len(user_answers)} user answers")
-                        for att_idx, answer in enumerate(user_answers):
-                            # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
-                            is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
+
+                        # ✅ SPECIAL HANDLING: For MC-multiple, treat entire array as ONE attempt
+                        if step_type == "multiple-choice-multiple" and user_answers:
+                            # All selected options in one submission = 1 attempt
+                            window.console.log(f"      📋 MC-multiple: treating {len(user_answers)} selections as 1 attempt")
                             step_progress["attempts"].append({
-                                "answer_latex": answer if isinstance(answer, str) else str(answer),
+                                "answer_latex": str(user_answers),  # Store all selections together
                                 "expression": "",
-                                "correct": is_correct,
+                                "correct": step_state.get("correct", False),
                                 "time_taken_seconds": 0
                             })
+                        else:
+                            # For other types, each user_answer is a separate attempt
+                            for att_idx, answer in enumerate(user_answers):
+                                # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
+                                is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
+                                step_progress["attempts"].append({
+                                    "answer_latex": answer if isinstance(answer, str) else str(answer),
+                                    "expression": "",
+                                    "correct": is_correct,
+                                    "time_taken_seconds": 0
+                                })
 
                     steps_progress.append(step_progress)
 
@@ -2036,6 +2375,23 @@ class ProgressAnalyzer:
             window.alert("No valid submissions found.")
             return
 
+        # Check for submissions without phone numbers
+        missing_phone = [s for s in submissions if not s.get("student_phone")]
+        if missing_phone:
+            warning_msg = f"⚠️ WARNING: {len(missing_phone)} submission(s) missing phone numbers!\n\n"
+            warning_msg += "Submissions without phone numbers cannot be matched with roster data.\n\n"
+            warning_msg += "Missing phone for:\n"
+            for i, sub in enumerate(missing_phone[:5], 1):  # Show first 5
+                name = sub.get("student_name", "Unknown")
+                reg = sub.get("registration_number", "Unknown")
+                warning_msg += f"  {i}. {name} ({reg})\n"
+            if len(missing_phone) > 5:
+                warning_msg += f"  ... and {len(missing_phone) - 5} more\n"
+            warning_msg += "\nContinue anyway?"
+
+            if not window.confirm(warning_msg):
+                return
+
         submissions = self.merge_roster_data(submissions)
 
         self.analytics_data.extend(submissions)
@@ -2048,7 +2404,11 @@ class ProgressAnalyzer:
         # Persist asynchronously
         asyncio.ensure_future(self.app.persistence_manager.save_analytics_data())
 
-        window.alert(f"✅ Added {len(submissions)} submissions.\nInvalid: {len(invalid)}")
+        # Show summary with phone warning if needed
+        summary_msg = f"✅ Added {len(submissions)} submissions.\nInvalid: {len(invalid)}"
+        if missing_phone:
+            summary_msg += f"\n\n⚠️ {len(missing_phone)} submission(s) missing phone numbers"
+        window.alert(summary_msg)
 
     def clear_analytics(self, e=None):
         from js import document
@@ -2067,6 +2427,11 @@ class ProgressAnalyzer:
         """Trigger the load saved analytics modal"""
         import asyncio
         asyncio.ensure_future(self.app.persistence_manager.restore_saved_analytics())
+
+    def delete_selected_sessions(self, e=None):
+        """Show modal to select and delete saved sessions"""
+        import asyncio
+        asyncio.ensure_future(self.app.persistence_manager.show_delete_sessions_modal())
 
     def export_analytics(self, e=None):
         from js import window
@@ -2303,16 +2668,26 @@ class DisplayManager:
     def create_student_table(self, groups, submissions, cheating_phones):
         panel = document.createElement("div")
         panel.className = "panel"
-        panel.innerHTML = """
-            <h3 style='margin-top:0;'>🏫 Student Progress</h3>
+
+        # Get sort indicators
+        def get_sort_indicator(col):
+            if self.current_sort["column"] == col:
+                return "▼" if self.current_sort["direction"] == "desc" else "▲"
+            return ""
+
+        panel.innerHTML = f"""
+            <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;'>
+                <h3 style='margin:0;'>🏫 Student Progress</h3>
+                <button id='collapseAllBtn' class='btn' style='background:#64748b; font-size:13px; padding:6px 12px;'>🔽 Collapse All</button>
+            </div>
             <div style='overflow-x:auto;'>
             <table id='scoreTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
                 <thead>
                     <tr style='background:#f3f4f6;'>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Reg No</th>
-                        <th>Score</th>
+                        <th class='sortable-header' data-column='name' style='cursor:pointer;user-select:none;' title='Click to sort'>Name {get_sort_indicator('name')}</th>
+                        <th class='sortable-header' data-column='reg' style='cursor:pointer;user-select:none;' title='Click to sort'>Reg No {get_sort_indicator('reg')}</th>
+                        <th class='sortable-header' data-column='score' style='cursor:pointer;user-select:none;' title='Click to sort'>Score {get_sort_indicator('score')}</th>
                         <th>Phone</th>
                         <th>Details</th>
                     </tr>
@@ -2336,6 +2711,9 @@ class DisplayManager:
                 "phone": phone, "name": name, "reg": reg,
                 "score": score, "is_cheating": is_cheating, "subs": subs
             })
+
+        # Store data for re-sorting
+        self.student_table_data = student_data
 
         sorted_data = self.sort_student_data(student_data)
 
@@ -2469,20 +2847,27 @@ class DisplayManager:
     def create_status_table(self, groups, cheating_phones, phone_to_cheat_group):
         panel = document.createElement("div")
         panel.className = "panel"
-        panel.innerHTML = """
+
+        # Get sort indicators for status table
+        def get_status_sort_indicator(col):
+            if self.status_sort["column"] == col:
+                return "▼" if self.status_sort["direction"] == "desc" else "▲"
+            return ""
+
+        panel.innerHTML = f"""
             <h3 style='margin-top:0;'>📋 Submission Status (Extended)</h3>
             <div style='overflow-x:auto;'>
             <table id='statusTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
                 <thead>
                     <tr style='background:#f3f4f6;'>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Reg No</th>
+                        <th class='sortable-status-header' data-column='name' style='cursor:pointer;user-select:none;' title='Click to sort'>Name {get_status_sort_indicator('name')}</th>
+                        <th class='sortable-status-header' data-column='reg' style='cursor:pointer;user-select:none;' title='Click to sort'>Reg No {get_status_sort_indicator('reg')}</th>
                         <th>Phone</th>
-                        <th>Status</th>
+                        <th class='sortable-status-header' data-column='status' style='cursor:pointer;user-select:none;' title='Click to sort'>Status {get_status_sort_indicator('status')}</th>
                         <th>✅ Success</th>
                         <th>🕓 Ignored</th>
-                        <th>⚠️ Invalid</th>
+                        <th class='sortable-status-header' data-column='invalid' style='cursor:pointer;user-select:none;' title='Click to sort'>⚠️ Invalid {get_status_sort_indicator('invalid')}</th>
                         <th>🚨 Cheating</th>
                     </tr>
                 </thead>
@@ -2549,6 +2934,9 @@ class DisplayManager:
                 "plagiat_count": plagiat_count
             })
 
+        # Store data for re-sorting
+        self.status_table_data = student_status_data
+
         sorted_status_data = self.sort_status_data(student_status_data)
         for idx, s in enumerate(sorted_status_data, 1):
             tr = document.createElement("tr")
@@ -2583,6 +2971,89 @@ class DisplayManager:
             div.textContent = f"📱 {phone} — {name}: {err}"
             panel.appendChild(div)
         return panel
+
+    # =====================================================
+    # RE-RENDER TABLES (for sorting)
+    # =====================================================
+    def rerender_student_table(self):
+        """Re-render student table body with current sort"""
+        tbody = document.querySelector("#scoreTableBody")
+        if not tbody or not hasattr(self, "student_table_data"):
+            return
+
+        # Clear existing rows
+        tbody.innerHTML = ""
+
+        # Sort data
+        sorted_data = self.sort_student_data(self.student_table_data)
+
+        # Render rows
+        for idx, student in enumerate(sorted_data, 1):
+            score_display = "—" if student["is_cheating"] else f"{student['score']}%"
+            cls = "score-low" if student["is_cheating"] else self.app.progress_analyzer.get_score_class(student["score"])
+            tr = document.createElement("tr")
+            tr.innerHTML = f"""
+                <td>{idx}</td>
+                <td>{html.escape(student['name'])}</td>
+                <td>{html.escape(str(student['reg']))}</td>
+                <td style='text-align:center;'><span class='score-badge {cls}'>{score_display}</span></td>
+                <td>{html.escape(student['phone'])}</td>
+                <td><button class='detail-toggle' data-phone='{html.escape(student['phone'])}'>🔽 Details</button></td>
+            """
+            tbody.appendChild(tr)
+            tbody.appendChild(self.create_detail_row(student["subs"]))
+
+        # Update header indicators
+        thead = document.querySelector("#scoreTable thead")
+        if thead:
+            for th in thead.querySelectorAll(".sortable-header"):
+                col = th.getAttribute("data-column")
+                indicator = ""
+                if self.current_sort["column"] == col:
+                    indicator = " ▼" if self.current_sort["direction"] == "desc" else " ▲"
+                # Update text (remove old indicator and add new one)
+                text = th.textContent.replace(" ▼", "").replace(" ▲", "")
+                th.textContent = text + indicator
+
+    def rerender_status_table(self):
+        """Re-render status table body with current sort"""
+        tbody = document.querySelector("#statusTableBody")
+        if not tbody or not hasattr(self, "status_table_data"):
+            return
+
+        # Clear existing rows
+        tbody.innerHTML = ""
+
+        # Sort data
+        sorted_status_data = self.sort_status_data(self.status_table_data)
+
+        # Render rows
+        for idx, s in enumerate(sorted_status_data, 1):
+            tr = document.createElement("tr")
+            tr.innerHTML = f"""
+                <td>{idx}</td>
+                <td>{html.escape(s['name'])}</td>
+                <td>{html.escape(str(s['reg']))}</td>
+                <td>{html.escape(s['phone'])}</td>
+                <td style='text-align:center;'><span class='score-badge {s['status_class']}'>{s['status']}</span></td>
+                <td style='text-align:center;'>{s['success_count']}</td>
+                <td style='text-align:center;'>{s['ignored_count']}</td>
+                <td style='text-align:center;'>{s['invalid_count']}</td>
+                <td style='text-align:center;'>{s['plagiat_count']}</td>
+            """
+            tbody.appendChild(tr)
+
+        # Update header indicators
+        thead = document.querySelector("#statusTable thead")
+        if thead:
+            for th in thead.querySelectorAll(".sortable-status-header"):
+                col = th.getAttribute("data-column")
+                indicator = ""
+                if self.status_sort["column"] == col:
+                    indicator = " ▼" if self.status_sort["direction"] == "desc" else " ▲"
+                # Update text (remove old indicator and add new one)
+                text = th.textContent.replace(" ▼", "").replace(" ▲", "")
+                th.textContent = text + indicator
 
     # =====================================================
     # EVENT HANDLERS
@@ -2627,6 +3098,82 @@ class DisplayManager:
 
         tbody.addEventListener("click", create_proxy(on_click))
 
+        # Add click handlers for sortable headers (Student Progress table)
+        score_thead = document.querySelector("#scoreTable thead")
+        if score_thead:
+            def on_header_click(ev):
+                target = ev.target
+                if target.classList.contains("sortable-header"):
+                    col = target.getAttribute("data-column")
+                    # Toggle sort direction if clicking same column, otherwise default to asc
+                    if self.current_sort["column"] == col:
+                        self.current_sort["direction"] = "desc" if self.current_sort["direction"] == "asc" else "asc"
+                    else:
+                        self.current_sort["column"] = col
+                        self.current_sort["direction"] = "asc"
+                    # Re-render table
+                    self.rerender_student_table()
+
+            score_thead.addEventListener("click", create_proxy(on_header_click))
+
+        # Add click handlers for sortable headers (Status table)
+        status_thead = document.querySelector("#statusTable thead")
+        if status_thead:
+            def on_status_header_click(ev):
+                target = ev.target
+                if target.classList.contains("sortable-status-header"):
+                    col = target.getAttribute("data-column")
+                    # Toggle sort direction if clicking same column, otherwise default to asc
+                    if self.status_sort["column"] == col:
+                        self.status_sort["direction"] = "desc" if self.status_sort["direction"] == "asc" else "asc"
+                    else:
+                        self.status_sort["column"] = col
+                        self.status_sort["direction"] = "asc"
+                    # Re-render table
+                    self.rerender_status_table()
+
+            status_thead.addEventListener("click", create_proxy(on_status_header_click))
+
+        # Add click handler for Collapse All button
+        collapse_btn = document.querySelector("#collapseAllBtn")
+        if collapse_btn:
+            def on_collapse_all(ev):
+                # Find all detail rows and collapse them
+                detail_rows = document.querySelectorAll(".detail-row")
+                all_collapsed = True
+                for row in detail_rows:
+                    if row.style.display != "none":
+                        all_collapsed = False
+                        break
+
+                # If all are collapsed, expand all. Otherwise, collapse all
+                if all_collapsed:
+                    # Expand all
+                    for row in detail_rows:
+                        row.style.display = "table-row"
+                    # Update all toggle buttons
+                    toggle_btns = document.querySelectorAll(".detail-toggle")
+                    for btn in toggle_btns:
+                        btn.textContent = "🔼 Hide"
+                    collapse_btn.textContent = "🔽 Collapse All"
+                    # Typeset math for all expanded rows
+                    try:
+                        if hasattr(window, "MathJax"):
+                            window.MathJax.typesetPromise(list(detail_rows))
+                    except:
+                        pass
+                else:
+                    # Collapse all
+                    for row in detail_rows:
+                        row.style.display = "none"
+                    # Update all toggle buttons
+                    toggle_btns = document.querySelectorAll(".detail-toggle")
+                    for btn in toggle_btns:
+                        btn.textContent = "🔽 Details"
+                    collapse_btn.textContent = "🔼 Expand All"
+
+            collapse_btn.addEventListener("click", create_proxy(on_collapse_all))
+
     # =====================================================
     # SORT HELPERS
     # =====================================================
@@ -2666,6 +3213,8 @@ class DisplayManager:
             elif col == "status":
                 # status_priority first (lower is higher priority), then name
                 return (s.get("status_priority", 99), s.get("status", "").lower())
+            elif col == "invalid":
+                return s.get("invalid_count", 0)
             return s["name"].lower()
         return sorted(data, key=key, reverse=(direction == "desc"))
 
@@ -2698,7 +3247,9 @@ class PersistenceManager:
             old_modal.remove()
 
         # Get list of saved sessions
+        self.db_manager._show_progress("📋 Loading saved sessions...")
         saved_keys = await self.list_saved_keys("analytics")
+        self.db_manager._hide_progress()
         window.console.log(f"📋 Found {len(saved_keys)} saved sessions")
 
         # Create modal overlay
@@ -2858,18 +3409,22 @@ class PersistenceManager:
         import json
 
         try:
+            self.db_manager._show_progress(f"📂 Loading session: {key}...")
             window.console.log(f"📂 Loading session: {key}")
             data = await self.load_analytics_data(key)
 
             if data and isinstance(data, list):
                 window.console.log(f"✅ Loaded {len(data)} entries from '{key}'")
+                self.db_manager._hide_progress()
                 return data
             else:
                 window.console.warn(f"⚠️ No data found for key '{key}'")
+                self.db_manager._hide_progress()
                 return []
 
         except Exception as e:
             window.console.error(f"❌ Failed to load session '{key}': {e}")
+            self.db_manager._hide_progress()
             return []
 
     def _escape(self, text):
@@ -3231,6 +3786,170 @@ class PersistenceManager:
             self.app.analytics_data = []
             self.app.progress_analyzer.analytics_data = []
             self.app.display_manager.display_analytics([], [])
+
+    # =========================================================
+    # DELETE SELECTED SESSIONS MODAL
+    # =========================================================
+    async def show_delete_sessions_modal(self):
+        """Show modal to select and delete saved sessions"""
+        from js import document, window
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        window.console.log("🗑️ Showing delete sessions modal...")
+
+        # Get list of saved sessions
+        self.db_manager._show_progress("📋 Loading saved sessions...")
+        saved_keys = await self.list_saved_keys("analytics")
+        self.db_manager._hide_progress()
+
+        if not saved_keys:
+            window.alert("No saved sessions to delete.")
+            return
+
+        window.console.log(f"📋 Found {len(saved_keys)} saved sessions")
+
+        # Create modal overlay
+        overlay = document.createElement("div")
+        overlay.id = "delete-modal-overlay"
+        overlay.className = "startup-modal-overlay"
+
+        # Create modal content
+        modal = document.createElement("div")
+        modal.className = "startup-modal"
+
+        # Build sessions list with checkboxes
+        sessions_html = '<div class="saved-sessions-list" style="max-height: 400px; overflow-y: auto;">'
+        for key in saved_keys:
+            sessions_html += f'''
+                <div class="session-item" style="padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" class="session-checkbox" value="{self._escape(key)}"
+                               style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
+                        <div>
+                            <div class="session-name" style="font-weight: 600; color: #111827;">📊 {self._escape(key)}</div>
+                            <div class="session-info" style="font-size: 12px; color: #6b7280;">Saved analytics session</div>
+                        </div>
+                    </label>
+                </div>
+            '''
+        sessions_html += '</div>'
+
+        modal.innerHTML = f'''
+            <h2 style="margin-top: 0;">🗑️ Delete Saved Sessions</h2>
+            <p style="color: #6b7280;">Select one or more sessions to delete permanently.</p>
+            <div style="margin: 16px 0;">
+                <label style="display: flex; align-items: center; cursor: pointer; font-size: 14px; color: #111827;">
+                    <input type="checkbox" id="select-all-checkbox"
+                           style="margin-right: 8px; width: 16px; height: 16px; cursor: pointer;">
+                    <strong>Select All</strong>
+                </label>
+            </div>
+            {sessions_html}
+            <div class="modal-actions" style="margin-top: 20px; display: flex; gap: 12px;">
+                <button class="modal-btn modal-btn-secondary" id="cancel-delete-btn">
+                    Cancel
+                </button>
+                <button class="modal-btn" id="confirm-delete-btn"
+                        style="background: #ef4444; color: white;" disabled>
+                    🗑️ Delete Selected
+                </button>
+            </div>
+        '''
+
+        overlay.appendChild(modal)
+        document.body.appendChild(overlay)
+
+        # Get elements
+        checkboxes = modal.querySelectorAll(".session-checkbox")
+        select_all = modal.querySelector("#select-all-checkbox")
+        confirm_btn = modal.querySelector("#confirm-delete-btn")
+        cancel_btn = modal.querySelector("#cancel-delete-btn")
+
+        # Update button state based on selection
+        def update_button_state():
+            selected_count = len([cb for cb in checkboxes if cb.checked])
+            confirm_btn.disabled = selected_count == 0
+            if selected_count > 0:
+                confirm_btn.textContent = f"🗑️ Delete {selected_count} Session{'s' if selected_count > 1 else ''}"
+            else:
+                confirm_btn.textContent = "🗑️ Delete Selected"
+
+        # Handle checkbox changes
+        def on_checkbox_change(e):
+            update_button_state()
+            # Update select all checkbox
+            all_checked = all(cb.checked for cb in checkboxes)
+            some_checked = any(cb.checked for cb in checkboxes)
+            select_all.checked = all_checked
+            select_all.indeterminate = some_checked and not all_checked
+
+        # Handle select all
+        def on_select_all(e):
+            for cb in checkboxes:
+                cb.checked = select_all.checked
+            update_button_state()
+
+        # Bind checkbox events
+        checkbox_proxy = create_proxy(on_checkbox_change)
+        for cb in checkboxes:
+            cb.addEventListener("change", checkbox_proxy)
+
+        select_all_proxy = create_proxy(on_select_all)
+        select_all.addEventListener("change", select_all_proxy)
+
+        # Handle cancel
+        def close_modal(e=None):
+            overlay.remove()
+            checkbox_proxy.destroy()
+            select_all_proxy.destroy()
+            cancel_proxy.destroy()
+            confirm_proxy.destroy()
+
+        # Handle confirm delete
+        async def confirm_delete(e=None):
+            selected_keys = [cb.value for cb in checkboxes if cb.checked]
+
+            if not selected_keys:
+                return
+
+            # Confirm deletion
+            count = len(selected_keys)
+            if not window.confirm(f"⚠️ Are you sure you want to delete {count} session{'s' if count > 1 else ''}?\n\nThis action cannot be undone."):
+                return
+
+            # Show loading indicator
+            self.db_manager._show_progress(f"🗑️ Deleting {count} session{'s' if count > 1 else ''}...")
+
+            # Delete each selected session
+            deleted_count = 0
+            for i, key in enumerate(selected_keys, 1):
+                try:
+                    self.db_manager._show_progress(f"🗑️ Deleting session {i}/{count}...")
+                    await self.db_manager.delete_data("analytics", key)
+                    window.console.log(f"🗑️ Deleted session: {key}")
+                    deleted_count += 1
+                except Exception as e:
+                    window.console.error(f"❌ Failed to delete {key}: {e}")
+
+            # Hide loading indicator
+            self.db_manager._hide_progress()
+
+            # Show result
+            if deleted_count > 0:
+                window.alert(f"✅ Successfully deleted {deleted_count} session{'s' if deleted_count > 1 else ''}.")
+
+            close_modal()
+
+        cancel_proxy = create_proxy(close_modal)
+        confirm_proxy = create_proxy(confirm_delete)
+
+        cancel_btn.addEventListener("click", cancel_proxy)
+        confirm_btn.addEventListener("click", confirm_proxy)
+
+        # Close on overlay click
+        overlay.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == overlay else None))
+
 class AnalyticsApp:
     def __init__(self):
         self.roster_manager = RosterManager()
@@ -3249,18 +3968,25 @@ class AnalyticsApp:
     
     async def initialize(self):
         self.update_status("⏳ Initializing...")
-        
+
+        self.update_status("📋 Loading roster manager...")
         self.roster_manager.initialize()
+
+        self.update_status("📊 Loading progress analyzer...")
         self.progress_analyzer.initialize()
+
+        self.update_status("🖥️ Loading display manager...")
         self.display_manager.initialize()
+
+        self.update_status("💾 Initializing database...")
         await self.persistence_manager.initialize()
-        
+
+        self.update_status("✅ Ready!")
+
         overlay = document.querySelector("#loadingOverlay")
         if overlay:
             overlay.style.opacity = "0"
             window.setTimeout(create_proxy(lambda: overlay.remove()), 600)
-        
-        self.update_status("✅ Ready!")
     
     def update_status(self, msg):
         box = document.querySelector("#loadingStatus")
