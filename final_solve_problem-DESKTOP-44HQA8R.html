@@ -5407,8 +5407,8 @@ class ProblemSolverApp:
               window.console.log("✅ MathQuill field initialized")
 
               # ✅ Build and insert minimal keyboard based on expected structure
-              expected_structure = step_data.get('expected_structure')
-              buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure)
+              expected_structure = original_step_data.get('expected_structure')
+              buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure, original_step_data)
 
               keyboard_html = '<div class="minimal-keyboard" style="margin-top:12px;"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
               for btn in buttons_needed:
@@ -7862,7 +7862,7 @@ This demonstrates the complete format for creating your own problem sets!
 
           # ✅ Build and insert minimal keyboard based on expected structure
           expected_structure = step_data.get('expected_structure')
-          buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure)
+          buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure, step_data)
 
           keyboard_html = '<div class="minimal-keyboard" style="margin-top:12px;"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
           for btn in buttons_needed:
@@ -12891,7 +12891,7 @@ This demonstrates the complete format for creating your own problem sets!
         except Exception as e:
             window.console.error(f"Error disabling soft keyboard: {e}")
 
-    def build_minimal_keyboard_from_structure(self, expected_structure):
+    def build_minimal_keyboard_from_structure(self, expected_structure, step_data=None):
         """Build truly minimal keyboard - only needed digits + limited distractors"""
         if not expected_structure:
             # Default: just basic digits and controls
@@ -12900,6 +12900,18 @@ This demonstrates the complete format for creating your own problem sets!
         buttons = []
         operators = expected_structure.get('operators', {})
         operands = expected_structure.get('operands', {})
+
+        # Check if this is a matrix by looking for brackets in expected answer
+        has_matrix = False
+        if step_data:
+            expected_answer = step_data.get('expected', '')
+            has_matrix = '[' in expected_answer and ']' in expected_answer
+            window.console.log(f"Matrix detection from expected answer: has_matrix={has_matrix}, expected={expected_answer}")
+
+        # Also check for Matrix in operators
+        if not has_matrix and operators:
+            has_matrix = any('matrix' in str(op).lower() for op in operators)
+            window.console.log(f"Matrix detection from operators: has_matrix={has_matrix}")
 
         # Extract ONLY required digits from operands
         required_digits = set()
@@ -12986,6 +12998,13 @@ This demonstrates the complete format for creating your own problem sets!
             # Add degree symbol for angle input
             buttons.append('\\circ')
             window.console.log("Added degree symbol (trig function detected)")
+
+        # Add matrix brackets and comma if matrix detected
+        if has_matrix:
+            buttons.append('[')
+            buttons.append(']')
+            buttons.append(',')
+            window.console.log("Added [, ], and , (matrix detected)")
 
         # Check for matrix row operations
         matrix_ops = expected_structure.get('matrix_ops', [])
