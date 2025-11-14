@@ -23,9 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-007 (Roster Management)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-008 (Phone Warning)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ NEW: Save/Load/Delete student rosters with custom names');
+    console.log('✅ NEW: Warning when progress reports missing phone numbers');
   </script>
 
   <!-- PyScript core -->
@@ -2360,6 +2360,23 @@ class ProgressAnalyzer:
             window.alert("No valid submissions found.")
             return
 
+        # Check for submissions without phone numbers
+        missing_phone = [s for s in submissions if not s.get("student_phone")]
+        if missing_phone:
+            warning_msg = f"⚠️ WARNING: {len(missing_phone)} submission(s) missing phone numbers!\n\n"
+            warning_msg += "Submissions without phone numbers cannot be matched with roster data.\n\n"
+            warning_msg += "Missing phone for:\n"
+            for i, sub in enumerate(missing_phone[:5], 1):  # Show first 5
+                name = sub.get("student_name", "Unknown")
+                reg = sub.get("registration_number", "Unknown")
+                warning_msg += f"  {i}. {name} ({reg})\n"
+            if len(missing_phone) > 5:
+                warning_msg += f"  ... and {len(missing_phone) - 5} more\n"
+            warning_msg += "\nContinue anyway?"
+
+            if not window.confirm(warning_msg):
+                return
+
         submissions = self.merge_roster_data(submissions)
 
         self.analytics_data.extend(submissions)
@@ -2372,7 +2389,11 @@ class ProgressAnalyzer:
         # Persist asynchronously
         asyncio.ensure_future(self.app.persistence_manager.save_analytics_data())
 
-        window.alert(f"✅ Added {len(submissions)} submissions.\nInvalid: {len(invalid)}")
+        # Show summary with phone warning if needed
+        summary_msg = f"✅ Added {len(submissions)} submissions.\nInvalid: {len(invalid)}"
+        if missing_phone:
+            summary_msg += f"\n\n⚠️ {len(missing_phone)} submission(s) missing phone numbers"
+        window.alert(summary_msg)
 
     def clear_analytics(self, e=None):
         from js import document
