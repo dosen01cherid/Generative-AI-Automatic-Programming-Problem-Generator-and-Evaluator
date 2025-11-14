@@ -23,8 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-003 (Fixed list_saved_keys)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
-    console.log('✅ This version uses latest IndexedDB version everywhere (no hardcoded version)');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-004 (Auto-recovery)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('✅ Automatic version conflict detection and recovery enabled');
+    console.log('✅ Old databases will be auto-deleted if version conflicts are detected');
   </script>
 
   <!-- PyScript core -->
@@ -782,6 +783,16 @@ class IndexedDBManager:
                         window.console.log(f"🗑️ Deleted corrupted database: {self.db_name}")
                         window.alert("Database deleted. Please reload the page to continue.")
                     self.fallback_mode = True
+                elif "VersionError" in error_msg:
+                    window.console.error("🔄 Database version conflict detected - auto-deleting old database...")
+                    from js import indexedDB
+                    indexedDB.deleteDatabase(self.db_name)
+                    window.console.log(f"🗑️ Deleted database with version conflict: {self.db_name}")
+                    if window.confirm("⚠️ Database version conflict resolved.\n\nThe old database has been deleted.\n\nReload the page now?"):
+                        window.location.reload()
+                    else:
+                        window.console.warn("⚠️ Falling back to localStorage")
+                        self.fallback_mode = True
                 else:
                     window.console.error(f"❌ IndexedDB test failed: {test_error}")
                     window.console.warn("⚠️ Falling back to localStorage")
@@ -853,6 +864,14 @@ class IndexedDBManager:
                     window.console.log(f"🗑️ Deleted corrupted database: {self.db_name}")
                     window.alert("Database deleted. Please reload the page to continue.")
                     return False
+            elif "VersionError" in error_msg:
+                window.console.error("🔄 Database version conflict - auto-deleting old database...")
+                from js import indexedDB
+                indexedDB.deleteDatabase(self.db_name)
+                window.console.log(f"🗑️ Deleted database with version conflict: {self.db_name}")
+                if window.confirm("⚠️ Database version conflict resolved.\n\nThe old database has been deleted.\n\nReload the page now?"):
+                    window.location.reload()
+                return False
 
             # Try localStorage fallback
             try:
@@ -3056,7 +3075,18 @@ class PersistenceManager:
                             };
                             keysReq.onerror = e => { db.close(); reject(e.target.error); };
                         };
-                        dbReq.onerror = e => reject(e.target.error);
+                        dbReq.onerror = e => {
+                            const error = e.target.error;
+                            // Detect version error and auto-delete corrupted database
+                            if (error && error.name === 'VersionError') {
+                                console.warn('⚠️ VersionError detected - database version conflict. Auto-deleting...');
+                                indexedDB.deleteDatabase(dbName);
+                                console.log('🗑️ Deleted database due to version conflict. Please reload the page.');
+                                reject(new Error('VERSION_CONFLICT: Database deleted. Please reload the page.'));
+                            } else {
+                                reject(error);
+                            }
+                        };
                     });
                 }
                 """
@@ -3071,7 +3101,14 @@ class PersistenceManager:
             return [r.to_py() if hasattr(r, "to_py") else str(r) for r in result]
 
         except Exception as e:
-            window.console.warn(f"⚠️ list_saved_keys failed: {e}")
+            error_msg = str(e)
+            if "VERSION_CONFLICT" in error_msg:
+                window.console.error("🔄 Database version conflict detected and resolved.")
+                window.console.error("💡 Please reload the page to continue with a fresh database.")
+                if window.confirm("⚠️ Database version conflict detected.\n\nThe old database has been deleted.\n\nReload the page now?"):
+                    window.location.reload()
+            else:
+                window.console.warn(f"⚠️ list_saved_keys failed: {e}")
             return []
 
     # =========================================================
