@@ -618,7 +618,34 @@ class IndexedDBManager:
                                         db.createObjectStore("hashes", { keyPath: "id" });
                                     }
                                 };
-                                request.onsuccess = e => resolve(e.target.result);
+                                request.onsuccess = e => {
+                                    const db = e.target.result;
+                                    // Check if required stores exist
+                                    const hasAnalytics = db.objectStoreNames.contains("analytics");
+                                    const hasHashes = db.objectStoreNames.contains("hashes");
+
+                                    if (!hasAnalytics || !hasHashes) {
+                                        // Stores are missing, need to upgrade
+                                        console.warn(`⚠️ Missing stores. Upgrading database from version ${db.version} to ${db.version + 1}`);
+                                        db.close();
+
+                                        // Reopen with incremented version to trigger onupgradeneeded
+                                        const upgradeRequest = indexedDB.open(name, db.version + 1);
+                                        upgradeRequest.onupgradeneeded = e => {
+                                            const upgradedDb = e.target.result;
+                                            if (!upgradedDb.objectStoreNames.contains("analytics")) {
+                                                upgradedDb.createObjectStore("analytics", { keyPath: "id" });
+                                            }
+                                            if (!upgradedDb.objectStoreNames.contains("hashes")) {
+                                                upgradedDb.createObjectStore("hashes", { keyPath: "id" });
+                                            }
+                                        };
+                                        upgradeRequest.onsuccess = e => resolve(e.target.result);
+                                        upgradeRequest.onerror = e => reject(e.target.error);
+                                    } else {
+                                        resolve(db);
+                                    }
+                                };
                                 request.onerror = e => reject(e.target.error);
                             });
                         },
@@ -630,7 +657,18 @@ class IndexedDBManager:
                                     // Check if store exists before creating transaction
                                     if (!db.objectStoreNames.contains(store)) {
                                         delayClose(db);
-                                        reject(new Error(`Object store '${store}' not found. Database may need to be upgraded.`));
+                                        // Offer to delete corrupted database
+                                        const errorMsg = `Object store '${store}' not found. Database appears corrupted.`;
+                                        console.error(`❌ ${errorMsg}`);
+
+                                        // Automatically delete and retry if corrupted
+                                        if (confirm(`⚠️ Database is corrupted. Delete and recreate?\n\nThis will clear all saved analytics sessions.`)) {
+                                            indexedDB.deleteDatabase(dbName);
+                                            console.log(`🗑️ Deleted corrupted database: ${dbName}`);
+                                            reject(new Error('Database deleted. Please reload the page.'));
+                                        } else {
+                                            reject(new Error(errorMsg));
+                                        }
                                         return;
                                     }
                                     const tx = db.transaction(store, "readwrite");
