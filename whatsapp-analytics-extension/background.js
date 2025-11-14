@@ -1,9 +1,9 @@
 /**
- * WhatsApp Analytics Extension - Background Service Worker
+ * WhatsApp & Telegram Analytics Extension - Background Service Worker
  * Handles storage, notifications, and communication between components
  */
 
-console.log('🔧 Background service worker started');
+console.log('🔧 Background service worker started (WhatsApp & Telegram support)');
 
 // Storage for captured reports
 let capturedReports = [];

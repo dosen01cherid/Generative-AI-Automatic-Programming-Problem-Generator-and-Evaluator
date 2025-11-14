@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "WhatsApp Analytics - Progress Report Capture",
-  "version": "1.3.0",
-  "description": "Automatically captures student progress reports from WhatsApp Web and sends them to Analytics App",
+  "name": "WhatsApp & Telegram Analytics - Progress Report Capture",
+  "version": "1.4.0",
+  "description": "Automatically captures student progress reports from WhatsApp Web and Telegram Web and sends them to Analytics App",
   "permissions": [
     "storage",
     "activeTab",
@@ -12,6 +12,7 @@
   ],
   "host_permissions": [
     "https://web.whatsapp.com/*",
+    "https://web.telegram.org/*",
     "http://*/*",
     "https://*/*",
     "file:///*"
@@ -23,6 +24,11 @@
     {
       "matches": ["https://web.whatsapp.com/*"],
       "js": ["content.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://web.telegram.org/*"],
+      "js": ["telegram-content.js"],
       "run_at": "document_idle"
     }
   ],
