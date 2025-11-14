@@ -23,9 +23,10 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-011 (Sortable Tables)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-012 (WhatsApp Integration)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ NEW: Auto-finalize MC/TF/fill-blank questions when answered');
+    console.log('✅ NEW: WhatsApp Integration - Import progress reports from WhatsApp chats');
+    console.log('✅ Auto-finalize MC/TF/fill-blank questions when answered');
   </script>
 
   <!-- PyScript core -->
@@ -459,6 +460,7 @@ button.detail-toggle:hover {
       <button id="loadSavedBtn" class="btn" style="background:#3b82f6;">📂 Load Saved</button>
       <button id="deleteSelectedBtn" class="btn" style="background:#ef4444;">🗑️ Delete Selected</button>
       <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
+      <button id="whatsappBtn" class="btn" style="background:#25D366;">💬 WhatsApp Integration</button>
     </div>
   </div>
 
@@ -1678,6 +1680,7 @@ class ProgressAnalyzer:
             ("#loadSavedBtn", self.load_saved_analytics),
             ("#deleteSelectedBtn", self.delete_selected_sessions),
             ("#exportAnalyticsBtn", self.export_analytics),
+            ("#whatsappBtn", self.show_whatsapp_integration),
         ]
         for selector, handler in bindings:
             element = document.querySelector(selector)
@@ -2474,6 +2477,193 @@ class ProgressAnalyzer:
         if ignored:
             msg += f"\n🕓 Ignored {len(ignored)} duplicate submissions."
         window.alert(msg)
+
+    # ============================================================
+    # WHATSAPP INTEGRATION
+    # ============================================================
+    def show_whatsapp_integration(self, e=None):
+        """Show WhatsApp integration modal with options to connect and import chats"""
+        from js import window, document
+        from pyodide.ffi import create_proxy
+
+        # Create modal overlay
+        overlay = document.createElement("div")
+        overlay.className = "modal"
+        overlay.style.cssText = "display:flex;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10000;justify-content:center;align-items:center;"
+
+        # Create modal content
+        modal = document.createElement("div")
+        modal.className = "modal-content"
+        modal.style.cssText = "background:white;border-radius:12px;padding:24px;max-width:700px;width:90%;max-height:80vh;overflow-y:auto;"
+
+        modal.innerHTML = """
+            <div style="margin-bottom:20px;">
+                <h2 style="margin:0 0 16px 0;color:#0f172a;font-size:24px;">💬 WhatsApp Integration</h2>
+                <p style="color:#64748b;margin:0 0 20px 0;">
+                    Connect your WhatsApp to automatically capture student progress reports sent to your number.
+                </p>
+            </div>
+
+            <div style="background:#e0f2fe;border-left:4px solid #0ea5e9;padding:16px;border-radius:8px;margin-bottom:20px;">
+                <h3 style="margin:0 0 8px 0;color:#0369a1;font-size:16px;">How it works:</h3>
+                <ol style="margin:8px 0 0 20px;color:#075985;line-height:1.8;">
+                    <li>Open WhatsApp Web by clicking the button below</li>
+                    <li>Scan QR code to login to your WhatsApp account</li>
+                    <li>Export the chat with students (3 dots menu → More → Export chat)</li>
+                    <li>Upload the exported chat file below to capture progress reports</li>
+                </ol>
+            </div>
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;">
+                <button id="openWhatsAppBtn" class="btn" style="background:#25D366;color:white;padding:12px 24px;border-radius:8px;border:none;cursor:pointer;font-size:14px;font-weight:600;">
+                    🌐 Open WhatsApp Web
+                </button>
+            </div>
+
+            <div style="background:#f8fafc;border-radius:8px;padding:16px;margin-bottom:20px;">
+                <h3 style="margin:0 0 12px 0;color:#0f172a;font-size:16px;">Import WhatsApp Chat Export</h3>
+                <p style="color:#64748b;font-size:14px;margin:0 0 12px 0;">
+                    Upload a WhatsApp chat export file (.txt) to automatically extract progress reports:
+                </p>
+                <input type="file" id="whatsappFileInput" accept=".txt" style="margin-bottom:12px;padding:8px;border:1px solid #e2e8f0;border-radius:6px;width:100%;"/>
+                <button id="importWhatsAppBtn" class="btn" style="background:#3b82f6;color:white;padding:10px 20px;border-radius:6px;border:none;cursor:pointer;font-size:14px;font-weight:600;">
+                    📥 Import Chat Messages
+                </button>
+            </div>
+
+            <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:16px;border-radius:8px;margin-bottom:20px;">
+                <h3 style="margin:0 0 8px 0;color:#92400e;font-size:14px;">⚠️ Important Notes:</h3>
+                <ul style="margin:8px 0 0 20px;color:#78350f;font-size:13px;line-height:1.6;">
+                    <li>WhatsApp chat exports must be in text format (.txt)</li>
+                    <li>Progress reports should be base64-encoded exports sent by students</li>
+                    <li>The system will automatically detect and extract progress data from messages</li>
+                    <li>Teacher phone number will be extracted from the chat context</li>
+                </ul>
+            </div>
+
+            <div style="text-align:right;">
+                <button id="closeWhatsAppModalBtn" class="btn ghost" style="padding:10px 20px;border-radius:6px;border:1px solid #e2e8f0;background:white;cursor:pointer;font-size:14px;">
+                    Close
+                </button>
+            </div>
+        """
+
+        overlay.appendChild(modal)
+        document.body.appendChild(overlay)
+
+        # Event handlers
+        def open_whatsapp(evt):
+            window.open("https://web.whatsapp.com", "_blank")
+            window.alert("📱 Please scan the QR code to login to WhatsApp Web.\n\nOnce logged in, you can export your chat with students:\n1. Open the chat\n2. Click the 3 dots (⋮) menu\n3. Select 'More' → 'Export chat'\n4. Choose 'Without Media'\n5. Upload the exported .txt file using the import button below")
+
+        def close_modal(evt=None):
+            overlay.remove()
+
+        def import_chat(evt):
+            file_input = document.querySelector("#whatsappFileInput")
+            if not file_input or not file_input.files or file_input.files.length == 0:
+                window.alert("⚠️ Please select a WhatsApp chat export file first.")
+                return
+
+            # Read the file
+            file = file_input.files[0]
+            reader = window.FileReader.new()
+
+            def on_load(e):
+                chat_content = e.target.result
+                # Parse and import the chat
+                self.import_whatsapp_chat(chat_content, file.name)
+                close_modal()
+
+            reader.onload = create_proxy(on_load)
+            reader.readAsText(file)
+
+        # Bind events
+        open_btn = document.querySelector("#openWhatsAppBtn")
+        close_btn = document.querySelector("#closeWhatsAppModalBtn")
+        import_btn = document.querySelector("#importWhatsAppBtn")
+
+        if open_btn:
+            open_btn.addEventListener("click", create_proxy(open_whatsapp))
+        if close_btn:
+            close_btn.addEventListener("click", create_proxy(close_modal))
+        if import_btn:
+            import_btn.addEventListener("click", create_proxy(import_chat))
+
+        # Close on overlay click
+        overlay.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == overlay else None))
+
+    def import_whatsapp_chat(self, chat_content, filename):
+        """Parse WhatsApp chat export and extract progress reports"""
+        from js import window
+        import re
+
+        if not chat_content:
+            window.alert("⚠️ Chat file is empty.")
+            return
+
+        # Initialize WhatsApp service if not exists
+        if not hasattr(self, 'whatsapp_service'):
+            self.whatsapp_service = WhatsAppService()
+
+        # Parse the chat and extract progress reports
+        try:
+            reports = self.whatsapp_service.parse_chat_export(chat_content)
+
+            if not reports:
+                window.alert("⚠️ No progress reports found in the chat.\n\nMake sure the chat contains base64-encoded progress exports sent by students.")
+                return
+
+            # Process each report as if it was pasted
+            total_processed = 0
+            total_submissions = 0
+
+            for report in reports:
+                # Extract the base64 data
+                base64_data = report.get('data', '')
+                phone = report.get('phone', '')
+                timestamp = report.get('timestamp', '')
+
+                if base64_data:
+                    # Process this export data by simulating paste
+                    # We'll add it to the textarea and analyze it
+                    try:
+                        # Decode and process the export
+                        decoded, format_type = self.decode_base64_data(base64_data)
+                        if decoded:
+                            # Add phone context to the data
+                            if phone and 'metadata' in decoded:
+                                decoded['metadata']['whatsapp_phone'] = phone
+                                decoded['metadata']['whatsapp_timestamp'] = timestamp
+
+                            # Process the submissions
+                            submissions = decoded.get('submissions', [])
+                            total_submissions += len(submissions)
+                            total_processed += 1
+                    except Exception as ex:
+                        window.console.log(f"Error processing report: {str(ex)}")
+                        continue
+
+            # Now analyze all the accumulated data
+            textarea = document.querySelector("#pasteProgressData")
+            if textarea:
+                # Combine all base64 data
+                combined_data = "\n\n".join([r.get('data', '') for r in reports if r.get('data')])
+                textarea.value = combined_data
+
+                # Trigger analysis
+                self.analyze_submissions()
+
+            msg = f"✅ WhatsApp Import Complete!\n\n"
+            msg += f"📊 Found {len(reports)} progress report(s)\n"
+            msg += f"📝 Total submissions: {total_submissions}\n"
+            msg += f"📱 Source: {filename}"
+
+            window.alert(msg)
+
+        except Exception as ex:
+            window.alert(f"❌ Error importing WhatsApp chat:\n\n{str(ex)}\n\nPlease make sure you exported the chat in text format (.txt)")
+            window.console.error(f"WhatsApp import error: {str(ex)}")
 
     # ============================================================
     # UTILITY: refresh with roster then persist
@@ -3949,6 +4139,162 @@ class PersistenceManager:
 
         # Close on overlay click
         overlay.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == overlay else None))
+
+# ================================================================
+# WHATSAPP SERVICE
+# ================================================================
+class WhatsAppService:
+    """Service for parsing WhatsApp chat exports and extracting progress reports"""
+
+    def __init__(self):
+        self.base64_pattern = r'[A-Za-z0-9+/]{100,}={0,2}'  # Pattern for base64 data (min 100 chars)
+
+    def parse_chat_export(self, chat_text):
+        """
+        Parse WhatsApp chat export and extract progress reports
+
+        Args:
+            chat_text: Raw text from WhatsApp chat export
+
+        Returns:
+            List of dictionaries containing:
+            - data: base64-encoded progress report
+            - phone: sender's phone number
+            - timestamp: message timestamp
+            - sender: sender name
+        """
+        import re
+        from js import window
+
+        if not chat_text:
+            return []
+
+        reports = []
+        lines = chat_text.split('\n')
+
+        # WhatsApp export format patterns:
+        # [DD/MM/YYYY, HH:MM:SS] Name: Message
+        # or
+        # DD/MM/YYYY, HH:MM - Name: Message
+
+        message_pattern = r'\[?(\d{1,2}/\d{1,2}/\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?)\]?\s*-?\s*([^:]+):\s*(.+)'
+
+        current_message = None
+        current_data = []
+
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+
+            # Try to match a new message header
+            match = re.match(message_pattern, line)
+
+            if match:
+                # Save previous message if it had base64 data
+                if current_message and current_data:
+                    combined = ''.join(current_data)
+                    if len(combined) >= 100:  # Minimum length for valid base64 export
+                        reports.append({
+                            'data': combined,
+                            'phone': current_message.get('phone', ''),
+                            'timestamp': current_message.get('timestamp', ''),
+                            'sender': current_message.get('sender', ''),
+                            'date': current_message.get('date', '')
+                        })
+
+                # Start new message
+                date, time, sender, content = match.groups()
+                current_message = {
+                    'date': date,
+                    'time': time,
+                    'timestamp': f"{date} {time}",
+                    'sender': sender.strip(),
+                    'phone': self._extract_phone_from_sender(sender),
+                }
+                current_data = []
+
+                # Check if this line contains base64 data
+                base64_matches = re.findall(self.base64_pattern, content)
+                if base64_matches:
+                    current_data.extend(base64_matches)
+
+            else:
+                # Continuation of previous message
+                if current_message:
+                    # Look for base64 data in continuation lines
+                    base64_matches = re.findall(self.base64_pattern, line)
+                    if base64_matches:
+                        current_data.extend(base64_matches)
+
+        # Don't forget the last message
+        if current_message and current_data:
+            combined = ''.join(current_data)
+            if len(combined) >= 100:
+                reports.append({
+                    'data': combined,
+                    'phone': current_message.get('phone', ''),
+                    'timestamp': current_message.get('timestamp', ''),
+                    'sender': current_message.get('sender', ''),
+                    'date': current_message.get('date', '')
+                })
+
+        window.console.log(f"WhatsApp Service: Found {len(reports)} potential progress reports")
+        return reports
+
+    def _extract_phone_from_sender(self, sender):
+        """Extract phone number from sender name if present"""
+        import re
+
+        if not sender:
+            return ""
+
+        # Look for phone number patterns in sender name
+        # Common formats: +62 XXX, 0XXX, +62XXX
+        phone_pattern = r'(\+?62\s?\d[\d\s-]{7,13}|0\d[\d\s-]{7,13})'
+        match = re.search(phone_pattern, sender)
+
+        if match:
+            phone = match.group(1)
+            # Normalize phone number
+            phone = re.sub(r'[^\d+]', '', phone)
+            if phone.startswith('0'):
+                phone = '+62' + phone[1:]
+            elif phone.startswith('62') and not phone.startswith('+'):
+                phone = '+' + phone
+            return phone
+
+        return ""
+
+    def validate_base64_export(self, data):
+        """Validate if a base64 string looks like a valid progress export"""
+        import re
+
+        if not data or len(data) < 100:
+            return False
+
+        # Check if it's valid base64 format
+        if not re.match(r'^[A-Za-z0-9+/]+=*$', data):
+            return False
+
+        # Try to decode and check for expected structure
+        try:
+            import base64
+            import brotli
+            import json
+
+            decoded_bytes = base64.b64decode(data)
+            decompressed = brotli.decompress(decoded_bytes)
+            obj = json.loads(decompressed)
+
+            # Check for expected fields
+            if 'submissions' in obj or 'metadata' in obj:
+                return True
+
+        except Exception:
+            pass
+
+        return False
 
 class AnalyticsApp:
     def __init__(self):
