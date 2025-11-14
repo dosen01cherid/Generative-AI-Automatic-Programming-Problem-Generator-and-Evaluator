@@ -129,6 +129,12 @@ function autoImportReports(reports) {
                     `🤖 Auto-imported ${reports.length} reports and started analysis!`,
                     'success'
                 );
+
+                // Dispatch event for real-time dashboard/leaderboard updates
+                // Wait a bit for analysis to complete, then dispatch
+                setTimeout(() => {
+                    dispatchNewSubmissionEvent();
+                }, 1500);
             } else {
                 showNotification(
                     `✅ Injected ${reports.length} reports. Click "Analyze & Add Submissions" to process.`,
@@ -137,6 +143,23 @@ function autoImportReports(reports) {
             }
         }, 500);
     });
+}
+
+/**
+ * Dispatch event to notify real-time views of new submissions
+ */
+function dispatchNewSubmissionEvent() {
+    console.log('📡 Dispatching newSubmissionReceived event for live updates');
+
+    const event = new CustomEvent('newSubmissionReceived', {
+        detail: {
+            timestamp: new Date().toISOString(),
+            source: 'whatsapp-extension'
+        }
+    });
+
+    window.dispatchEvent(event);
+    console.log('✅ Event dispatched - real-time views will update');
 }
 
 /**

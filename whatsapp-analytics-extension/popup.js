@@ -12,6 +12,7 @@ const statusText = document.getElementById('statusText');
 const reportCount = document.getElementById('reportCount');
 const sessionCount = document.getElementById('sessionCount');
 const enabledToggle = document.getElementById('enabledToggle');
+const autoInjectModeToggle = document.getElementById('autoInjectModeToggle');
 const viewReportsBtn = document.getElementById('viewReportsBtn');
 const autoInjectBtn = document.getElementById('autoInjectBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -26,9 +27,10 @@ const reportsList = document.getElementById('reportsList');
  */
 function loadData() {
     // Load settings
-    chrome.storage.sync.get(['enabled', 'analyticsUrl'], (result) => {
+    chrome.storage.sync.get(['enabled', 'analyticsUrl', 'autoInjectMode'], (result) => {
         settings = result;
         enabledToggle.checked = result.enabled !== false;
+        autoInjectModeToggle.checked = result.autoInjectMode || false;
         analyticsUrl.value = result.analyticsUrl || '';
         updateStatus();
     });
@@ -46,12 +48,24 @@ function loadData() {
  * Update status indicator
  */
 function updateStatus() {
+    const autoInjectMode = autoInjectModeToggle.checked;
+
     if (enabledToggle.checked) {
         statusIndicator.className = 'status-indicator status-active';
-        statusText.textContent = 'Active - Monitoring messages';
+        if (autoInjectMode) {
+            statusText.textContent = '🚀 Active - Auto-inject mode ON';
+            statusText.style.color = '#059669';
+            statusText.style.fontWeight = '700';
+        } else {
+            statusText.textContent = 'Active - Monitoring messages';
+            statusText.style.color = '';
+            statusText.style.fontWeight = '';
+        }
     } else {
         statusIndicator.className = 'status-indicator status-inactive';
         statusText.textContent = 'Inactive - Auto-capture disabled';
+        statusText.style.color = '';
+        statusText.style.fontWeight = '';
     }
 }
 
@@ -122,6 +136,29 @@ enabledToggle.addEventListener('change', () => {
     chrome.storage.sync.set({ enabled }, () => {
         updateStatus();
         showToast(enabled ? 'Auto-capture enabled' : 'Auto-capture disabled');
+    });
+});
+
+/**
+ * Event: Toggle auto-inject mode
+ */
+autoInjectModeToggle.addEventListener('change', () => {
+    const autoInjectMode = autoInjectModeToggle.checked;
+
+    if (autoInjectMode && !analyticsUrl.value) {
+        // Can't enable without URL
+        autoInjectModeToggle.checked = false;
+        showToast('⚠️ Please set Analytics App URL first!');
+        return;
+    }
+
+    chrome.storage.sync.set({ autoInjectMode }, () => {
+        updateStatus();
+        if (autoInjectMode) {
+            showToast('🚀 Auto-Inject Mode ACTIVATED!\nReports will inject automatically.');
+        } else {
+            showToast('Auto-Inject Mode deactivated');
+        }
     });
 });
 

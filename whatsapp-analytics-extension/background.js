@@ -16,6 +16,7 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.sync.set({
         enabled: true,
         autoSend: false,
+        autoInjectMode: false,  // Auto-inject mode off by default
         analyticsUrl: ''
     });
 
@@ -77,6 +78,21 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
             saveReports();
             updateBadge();
             sendResponse({ success: true });
+
+            // Check if auto-inject mode is enabled
+            chrome.storage.sync.get(['autoInjectMode'], (result) => {
+                if (result.autoInjectMode) {
+                    console.log('🚀 Auto-inject mode enabled - triggering automatic injection');
+                    // Automatically inject to analytics app
+                    handleAutoInject(capturedReports, true, (response) => {
+                        if (response && response.success) {
+                            console.log('✅ Auto-injection completed successfully');
+                        } else {
+                            console.warn('⚠️ Auto-injection failed:', response ? response.error : 'Unknown error');
+                        }
+                    });
+                }
+            });
             break;
 
         case 'GET_ALL_REPORTS':

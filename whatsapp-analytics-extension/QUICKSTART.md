@@ -2,6 +2,18 @@
 
 Get up and running with the WhatsApp Analytics Extension in 5 minutes!
 
+## 🆕 NEW: Auto-Inject Mode + Live Dashboard!
+
+**The easiest way ever - completely automatic!**
+
+Once configured, just:
+1. Toggle "Auto-Inject Mode" ON
+2. Open WhatsApp Web
+3. Activate Real-Time Dashboard or Timed-Quiz mode in Analytics App
+4. Done! Reports inject automatically and views update live!
+
+No clicks, no waiting, no manual work! Real-time updates!
+
 ## Step 1: Install the Extension (2 minutes)
 
 1. Open Chrome or Edge browser
@@ -39,14 +51,26 @@ When students send progress reports:
 - A notification pops up
 - The badge shows the count
 
-## Step 5: Export to Analytics (30 seconds)
+## Step 5: Choose Your Workflow
+
+### Option A: Auto-Inject Mode (RECOMMENDED - Zero clicks!)
 
 1. Click the extension icon
-2. Click "Export to Analytics App"
-3. The reports are copied and Analytics App opens
-4. Press Ctrl+V (or Cmd+V) to paste
-5. Click "Analyze & Add Submissions"
-6. Done!
+2. Toggle "🚀 Auto-Inject Mode" to **ON**
+3. Done! Reports now inject automatically!
+
+### Option B: Manual Inject (One click when ready)
+
+1. Click the extension icon
+2. Click "🚀 Manual Inject Now"
+3. Done!
+
+### Option C: Copy & Paste (Traditional)
+
+1. Click the extension icon
+2. Click "📤 Copy & Open Analytics"
+3. Press Ctrl+V to paste
+4. Click "Analyze & Add Submissions"
 
 ## Visual Guide
 
