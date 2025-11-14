@@ -6003,13 +6003,13 @@ class ProblemSolverApp:
                         {
                             "instruction": "Now solve the equation 2x + 6 = 12 for x",
                             "description": [
-                                {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x. Enter just the value of x."}
+                                {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x. You can enter the answer as an equation (x=3) or just the value (3)."}
                             ],
-                            "expected": "3",
+                            "expected": "x=3",
                             "type": "math-expression",
                             "expected_structure": {
-                                "operators": {},
-                                "operands": {"3": 1}
+                                "operators": {"Eq": 1},
+                                "operands": {"x": 1, "3": 1}
                             }
                         }
                     ]
@@ -6098,13 +6098,13 @@ class ProblemSolverApp:
                             {
                                 "instruction": "Now solve the equation 2x + 6 = 12 for x",
                                 "description": [
-                                    {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x. Enter just the value of x."}
+                                    {"type": "text", "value": "Subtract 6 from both sides, then divide by 2 to isolate x. You can enter the answer as an equation (x=3) or just the value (3)."}
                                 ],
-                                "expected": "3",
+                                "expected": "x=3",
                                 "type": "math-expression",
                                 "expected_structure": {
-                                    "operators": {},
-                                    "operands": {"3": 1}
+                                    "operators": {"Eq": 1},
+                                    "operands": {"x": 1, "3": 1}
                                 }
                             }
                         ]
@@ -6184,8 +6184,8 @@ PROBLEM 1: Algebra: Solve for x
   Step 2:
     Instruction: Now solve the equation 2x + 6 = 12 for x
     Description: Subtract 6 from both sides, then divide by 2 to isolate x.
-                 Enter just the value of x.
-    Expected Answer: 3
+                 You can enter the answer as an equation (x=3) or just the value (3).
+    Expected Answer: x=3
     Type: math-expression
 
 PROBLEM 2: Calculus: Find the Derivative
@@ -12918,17 +12918,22 @@ This demonstrates the complete format for creating your own problem sets!
         operators = expected_structure.get('operators', {})
         operands = expected_structure.get('operands', {})
 
-        # Check if this is a matrix by looking for brackets in expected answer
+        # Check if this is a matrix or equation by looking at expected answer
         has_matrix = False
+        has_equation = False
         if step_data:
             expected_answer = step_data.get('expected', '')
             has_matrix = '[' in expected_answer and ']' in expected_answer
-            window.console.log(f"Matrix detection from expected answer: has_matrix={has_matrix}, expected={expected_answer}")
+            has_equation = '=' in expected_answer
+            window.console.log(f"Detection from expected answer: has_matrix={has_matrix}, has_equation={has_equation}, expected={expected_answer}")
 
-        # Also check for Matrix in operators
+        # Also check for Matrix/Equation in operators
         if not has_matrix and operators:
             has_matrix = any('matrix' in str(op).lower() for op in operators)
             window.console.log(f"Matrix detection from operators: has_matrix={has_matrix}")
+        if not has_equation and operators:
+            has_equation = any('eq' in str(op).lower() for op in operators)
+            window.console.log(f"Equation detection from operators: has_equation={has_equation}")
 
         # Extract ONLY required digits from operands
         required_digits = set()
@@ -13022,6 +13027,11 @@ This demonstrates the complete format for creating your own problem sets!
             buttons.append(']')
             buttons.append(',')
             window.console.log("Added [, ], and , (matrix detected)")
+
+        # Add equals sign if equation detected
+        if has_equation:
+            buttons.append('=')
+            window.console.log("Added = (equation detected)")
 
         # Check for matrix row operations
         matrix_ops = expected_structure.get('matrix_ops', [])
