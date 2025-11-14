@@ -442,6 +442,7 @@ button.detail-toggle:hover {
     <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
       <button id="analyzeBtn" class="btn">Analyze & Add Submissions</button>
       <button id="clearAnalyticsBtn" class="btn ghost">Clear All</button>
+      <button id="loadSavedBtn" class="btn" style="background:#3b82f6;">📂 Load Saved</button>
       <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
     </div>
   </div>
@@ -1210,6 +1211,7 @@ class ProgressAnalyzer:
         bindings = [
             ("#analyzeBtn", self.analyze_submissions),
             ("#clearAnalyticsBtn", self.clear_analytics),
+            ("#loadSavedBtn", self.load_saved_analytics),
             ("#exportAnalyticsBtn", self.export_analytics),
         ]
         for selector, handler in bindings:
@@ -1919,6 +1921,11 @@ class ProgressAnalyzer:
 
         from js import window
         window.alert("Analytics cleared.")
+
+    def load_saved_analytics(self, e=None):
+        """Trigger the load saved analytics modal"""
+        import asyncio
+        asyncio.ensure_future(self.app.persistence_manager.restore_saved_analytics())
 
     def export_analytics(self, e=None):
         from js import window
