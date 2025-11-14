@@ -651,7 +651,13 @@ class IndexedDBManager:
                                         upgradeRequest.onsuccess = e => resolve(e.target.result);
                                         upgradeRequest.onerror = e => {
                                             const error = e.target.error;
-                                            if (error && error.name === 'UnknownError') {
+                                            if (error && error.name === 'VersionError') {
+                                                // Version mismatch during upgrade, open latest version
+                                                console.warn(`⚠️ Version mismatch during upgrade. Opening latest version...`);
+                                                const finalRequest = indexedDB.open(name);
+                                                finalRequest.onsuccess = e => resolve(e.target.result);
+                                                finalRequest.onerror = e => reject(e.target.error);
+                                            } else if (error && error.name === 'UnknownError') {
                                                 reject(new Error('DB_CORRUPTED: Database is corrupted and cannot be upgraded.'));
                                             } else {
                                                 reject(error);
@@ -665,6 +671,19 @@ class IndexedDBManager:
                                 request.onerror = e => {
                                     const error = e.target.error;
                                     console.error('IndexedDB open error:', error);
+
+                                    // Detect version mismatch - open without version to get current version
+                                    if (error && error.name === 'VersionError') {
+                                        console.warn(`⚠️ Version mismatch. Opening with latest version...`);
+                                        const retryRequest = indexedDB.open(name);  // Open without version = latest
+                                        retryRequest.onsuccess = e => {
+                                            const db = e.target.result;
+                                            console.log(`✅ Opened database with version ${db.version}`);
+                                            resolve(db);
+                                        };
+                                        retryRequest.onerror = e => reject(e.target.error);
+                                        return;
+                                    }
 
                                     // Detect tracking prevention or blocked IndexedDB
                                     if (error && (error.name === 'UnknownError' || error.name === 'InvalidStateError')) {
