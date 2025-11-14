@@ -12908,6 +12908,47 @@ This demonstrates the complete format for creating your own problem sets!
           <rect x="13.5" y="6" width="7" height="12" rx="2" stroke="{color}" stroke-width="{stroke_width}" fill="none"/>
         </svg>"""
 
+    def get_keyboard_toggle_svg(self, size="24", is_enabled=True, color="currentColor"):
+        """SVG: Keyboard icon with indicator light
+
+        Args:
+            size: SVG size
+            is_enabled: If True, shows green light (soft keyboard on), else red light (minimal mode)
+            color: Icon color
+        """
+        light_color = "#10b981" if is_enabled else "#ef4444"  # Green if enabled, red if disabled
+        light_glow = "0 0 4px rgba(16, 185, 129, 0.8)" if is_enabled else "0 0 4px rgba(239, 68, 68, 0.8)"
+
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+          <!-- Keyboard base -->
+          <rect x="2" y="6" width="20" height="12" rx="2"
+                stroke="{color}" stroke-width="2" fill="none"/>
+
+          <!-- Keys (3 rows) -->
+          <!-- Top row -->
+          <rect x="4" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="7" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="10" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="13" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="16" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
+
+          <!-- Middle row -->
+          <rect x="4" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="7" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="10" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="13" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
+          <rect x="16" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
+
+          <!-- Bottom row (spacebar) -->
+          <rect x="7" y="14" width="10" height="1.5" rx="0.3" fill="{color}"/>
+
+          <!-- Indicator light (top right) -->
+          <circle cx="20" cy="4" r="2" fill="{light_color}"
+                  style="filter: drop-shadow({light_glow})"/>
+          <circle cx="20" cy="4" r="1.2" fill="white" opacity="0.6"/>
+        </svg>"""
+
     def detect_handheld_device(self):
         """Detect if device is handheld (small screen)"""
         try:
@@ -12986,18 +13027,18 @@ This demonstrates the complete format for creating your own problem sets!
             self.soft_keyboard_enabled = not self.soft_keyboard_enabled
             window.console.log(f"⌨️ Toggled keyboard: soft_keyboard_enabled={self.soft_keyboard_enabled}")
 
-            # Update button appearance
+            # Update button appearance with SVG
             toggle_btns = document.querySelectorAll('[data-action="TOGGLE_KEYBOARD"]')
             for i in range(toggle_btns.length):
                 btn = toggle_btns[i]
                 if self.soft_keyboard_enabled:
-                    btn.innerHTML = '⌨️'  # Physical keyboard icon
-                    btn.title = 'Switch to Minimal Keyboard'
-                    btn.style.background = '#3b82f6'  # Blue when soft keyboard enabled
+                    btn.innerHTML = self.get_keyboard_toggle_svg("20", is_enabled=True, color="white")
+                    btn.title = 'Soft Keyboard ON - Click to use Minimal Keyboard'
+                    btn.style.background = '#10b981'  # Green when enabled
                 else:
-                    btn.innerHTML = '📱'  # Phone/minimal keyboard icon
-                    btn.title = 'Switch to Soft Keyboard'
-                    btn.style.background = '#64748b'  # Gray when minimal keyboard
+                    btn.innerHTML = self.get_keyboard_toggle_svg("20", is_enabled=False, color="white")
+                    btn.title = 'Minimal Keyboard - Click to enable Soft Keyboard'
+                    btn.style.background = '#64748b'  # Gray when minimal
 
             # Apply to all existing MathQuill fields
             answer_fields = document.querySelectorAll('.step-answer')
@@ -13233,17 +13274,17 @@ This demonstrates the complete format for creating your own problem sets!
             btn_class += ' operator'
             label = '→'
         elif action == 'TOGGLE_KEYBOARD':
-            btn_class += ' navigation'
-            # Set initial icon based on current state
+            btn_class += ' navigation keyboard-toggle'
+            # Set initial SVG based on current state
             if self.soft_keyboard_enabled:
-                label = '⌨️'  # Physical keyboard icon when soft keyboard is enabled
-                title = 'Switch to Minimal Keyboard'
-                bg_color = '#3b82f6'
+                label = self.get_keyboard_toggle_svg("20", is_enabled=True, color="white")
+                title = 'Soft Keyboard ON - Click to use Minimal Keyboard'
+                bg_color = '#10b981'  # Green when enabled
             else:
-                label = '📱'  # Phone/minimal keyboard icon
-                title = 'Switch to Soft Keyboard'
-                bg_color = '#64748b'
-            return f'<button class="{btn_class}" data-action="{action}" title="{title}" style="background:{bg_color}">{label}</button>'
+                label = self.get_keyboard_toggle_svg("20", is_enabled=False, color="white")
+                title = 'Minimal Keyboard - Click to enable Soft Keyboard'
+                bg_color = '#64748b'  # Gray when minimal
+            return f'<button class="{btn_class}" data-action="{action}" title="{title}" style="background:{bg_color};padding:8px;">{label}</button>'
         else:
             btn_class += ' special'
             label = action
