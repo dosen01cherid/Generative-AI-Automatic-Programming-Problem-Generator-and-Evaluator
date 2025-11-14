@@ -23,9 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-005 (Delete Selected)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-006 (Loading Indicators)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ New: Delete Selected button for managing saved sessions');
+    console.log('✅ Enhanced loading indicators for app startup and IndexedDB operations');
   </script>
 
   <!-- PyScript core -->
@@ -2705,7 +2705,9 @@ class PersistenceManager:
             old_modal.remove()
 
         # Get list of saved sessions
+        self.db_manager._show_progress("📋 Loading saved sessions...")
         saved_keys = await self.list_saved_keys("analytics")
+        self.db_manager._hide_progress()
         window.console.log(f"📋 Found {len(saved_keys)} saved sessions")
 
         # Create modal overlay
@@ -2865,18 +2867,22 @@ class PersistenceManager:
         import json
 
         try:
+            self.db_manager._show_progress(f"📂 Loading session: {key}...")
             window.console.log(f"📂 Loading session: {key}")
             data = await self.load_analytics_data(key)
 
             if data and isinstance(data, list):
                 window.console.log(f"✅ Loaded {len(data)} entries from '{key}'")
+                self.db_manager._hide_progress()
                 return data
             else:
                 window.console.warn(f"⚠️ No data found for key '{key}'")
+                self.db_manager._hide_progress()
                 return []
 
         except Exception as e:
             window.console.error(f"❌ Failed to load session '{key}': {e}")
+            self.db_manager._hide_progress()
             return []
 
     def _escape(self, text):
@@ -3251,7 +3257,9 @@ class PersistenceManager:
         window.console.log("🗑️ Showing delete sessions modal...")
 
         # Get list of saved sessions
+        self.db_manager._show_progress("📋 Loading saved sessions...")
         saved_keys = await self.list_saved_keys("analytics")
+        self.db_manager._hide_progress()
 
         if not saved_keys:
             window.alert("No saved sessions to delete.")
@@ -3368,15 +3376,22 @@ class PersistenceManager:
             if not window.confirm(f"⚠️ Are you sure you want to delete {count} session{'s' if count > 1 else ''}?\n\nThis action cannot be undone."):
                 return
 
+            # Show loading indicator
+            self.db_manager._show_progress(f"🗑️ Deleting {count} session{'s' if count > 1 else ''}...")
+
             # Delete each selected session
             deleted_count = 0
-            for key in selected_keys:
+            for i, key in enumerate(selected_keys, 1):
                 try:
+                    self.db_manager._show_progress(f"🗑️ Deleting session {i}/{count}...")
                     await self.db_manager.delete_data("analytics", key)
                     window.console.log(f"🗑️ Deleted session: {key}")
                     deleted_count += 1
                 except Exception as e:
                     window.console.error(f"❌ Failed to delete {key}: {e}")
+
+            # Hide loading indicator
+            self.db_manager._hide_progress()
 
             # Show result
             if deleted_count > 0:
@@ -3411,18 +3426,25 @@ class AnalyticsApp:
     
     async def initialize(self):
         self.update_status("⏳ Initializing...")
-        
+
+        self.update_status("📋 Loading roster manager...")
         self.roster_manager.initialize()
+
+        self.update_status("📊 Loading progress analyzer...")
         self.progress_analyzer.initialize()
+
+        self.update_status("🖥️ Loading display manager...")
         self.display_manager.initialize()
+
+        self.update_status("💾 Initializing database...")
         await self.persistence_manager.initialize()
-        
+
+        self.update_status("✅ Ready!")
+
         overlay = document.querySelector("#loadingOverlay")
         if overlay:
             overlay.style.opacity = "0"
             window.setTimeout(create_proxy(lambda: overlay.remove()), 600)
-        
-        self.update_status("✅ Ready!")
     
     def update_status(self, msg):
         box = document.querySelector("#loadingStatus")
