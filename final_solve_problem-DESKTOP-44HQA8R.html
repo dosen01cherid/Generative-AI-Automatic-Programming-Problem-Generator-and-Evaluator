@@ -3282,6 +3282,13 @@ class KeyboardInputHandler:
           mathquill_field.keystroke("Shift-Left")
       elif action == "SELECT_RIGHT":
           mathquill_field.keystroke("Shift-Right")
+      elif action == "TOGGLE_KEYBOARD":
+          # Special action: toggle keyboard mode
+          if hasattr(window, 'problem_solver_app'):
+              window.problem_solver_app.toggle_soft_keyboard(None)
+          else:
+              window.console.error("App instance not found for keyboard toggle")
+          return  # Don't process further
 
       # ==================== SPECIAL OPERATORS ====================
       elif action == "^":
@@ -5422,7 +5429,9 @@ class ProblemSolverApp:
                   window.console.log(f"✅ Set previous answer: {user_answer[0]}")
               # Store instance for later access
               container.mq_field = mq_instance
-              # Disable soft keyboard for touch devices
+              # Store reference for keyboard toggling
+              math_field.mathquill = mq_instance
+              # Disable soft keyboard for touch devices (conditionally)
               self.disable_soft_keyboard(mq_instance)
               window.console.log("✅ MathQuill field initialized")
 
@@ -5508,6 +5517,11 @@ class ProblemSolverApp:
         # ✅ Time tracking for steps
         # Format: {problem_idx: {step_idx: {"first_attempt_time": seconds, "edit_sessions": [session_times]}}}
         self.step_time_tracking = {}
+
+        # ✅ Keyboard toggle state
+        self.is_handheld_device = self.detect_handheld_device()
+        self.soft_keyboard_enabled = not self.is_handheld_device  # Big screen: enable soft keyboard by default
+        window.console.log(f"🖥️ Device detection: handheld={self.is_handheld_device}, soft_keyboard={self.soft_keyboard_enabled}")
 
     def init(self):
         # Initialize MathQuill
@@ -7876,9 +7890,13 @@ This demonstrates the complete format for creating your own problem sets!
 
       # Initialize MathQuill
       if self.MQ:
-          answer_field = self.MQ.MathField(step_div.querySelector(".step-answer"))
+          answer_elem = step_div.querySelector(".step-answer")
+          answer_field = self.MQ.MathField(answer_elem)
 
-          # Disable soft keyboard for touch devices
+          # Store reference for keyboard toggling
+          answer_elem.mathquill = answer_field
+
+          # Disable soft keyboard for touch devices (conditionally)
           self.disable_soft_keyboard(answer_field)
 
           # ✅ Build and insert minimal keyboard based on expected structure
@@ -12890,10 +12908,37 @@ This demonstrates the complete format for creating your own problem sets!
           <rect x="13.5" y="6" width="7" height="12" rx="2" stroke="{color}" stroke-width="{stroke_width}" fill="none"/>
         </svg>"""
 
+    def detect_handheld_device(self):
+        """Detect if device is handheld (small screen)"""
+        try:
+            # Check screen width - consider < 768px as handheld
+            is_small_screen = window.innerWidth < 768
+
+            # Check for touch capability
+            is_touch = hasattr(window.navigator, 'maxTouchPoints') and window.navigator.maxTouchPoints > 0
+
+            # Check user agent for mobile indicators
+            user_agent = window.navigator.userAgent.lower() if hasattr(window.navigator, 'userAgent') else ""
+            is_mobile_ua = any(mobile in user_agent for mobile in ['android', 'iphone', 'ipad', 'mobile'])
+
+            # Consider handheld if small screen OR (touch + mobile UA)
+            is_handheld = is_small_screen or (is_touch and is_mobile_ua)
+
+            window.console.log(f"Device detection: width={window.innerWidth}, touch={is_touch}, mobile_ua={is_mobile_ua}, handheld={is_handheld}")
+            return is_handheld
+        except Exception as e:
+            window.console.error(f"Error detecting device: {e}")
+            return False  # Default to non-handheld
+
     def disable_soft_keyboard(self, mathquill_field):
-        """Disable Android soft keyboard for a MathQuill field"""
+        """Conditionally disable soft keyboard based on toggle state"""
         try:
             if not mathquill_field:
+                return
+
+            # Only disable if soft keyboard is toggled off
+            if self.soft_keyboard_enabled:
+                window.console.log("⌨️ Soft keyboard enabled, not disabling")
                 return
 
             # Get the MathQuill element
@@ -12911,6 +12956,66 @@ This demonstrates the complete format for creating your own problem sets!
 
         except Exception as e:
             window.console.error(f"Error disabling soft keyboard: {e}")
+
+    def enable_soft_keyboard(self, mathquill_field):
+        """Enable soft keyboard for a MathQuill field"""
+        try:
+            if not mathquill_field:
+                return
+
+            # Get the MathQuill element
+            el = mathquill_field.el()
+            if not el:
+                return
+
+            # Find and configure the textarea to allow soft keyboard
+            textarea = el.querySelector('textarea')
+            if textarea:
+                textarea.removeAttribute('readonly')
+                textarea.setAttribute('inputmode', 'text')
+                textarea.style.caretColor = ''
+                window.console.log("✅ Soft keyboard enabled for field")
+
+        except Exception as e:
+            window.console.error(f"Error enabling soft keyboard: {e}")
+
+    def toggle_soft_keyboard(self, event):
+        """Toggle between soft keyboard and minimal keyboard"""
+        try:
+            # Toggle state
+            self.soft_keyboard_enabled = not self.soft_keyboard_enabled
+            window.console.log(f"⌨️ Toggled keyboard: soft_keyboard_enabled={self.soft_keyboard_enabled}")
+
+            # Update button appearance
+            toggle_btns = document.querySelectorAll('[data-action="TOGGLE_KEYBOARD"]')
+            for i in range(toggle_btns.length):
+                btn = toggle_btns[i]
+                if self.soft_keyboard_enabled:
+                    btn.innerHTML = '⌨️'  # Physical keyboard icon
+                    btn.title = 'Switch to Minimal Keyboard'
+                    btn.style.background = '#3b82f6'  # Blue when soft keyboard enabled
+                else:
+                    btn.innerHTML = '📱'  # Phone/minimal keyboard icon
+                    btn.title = 'Switch to Soft Keyboard'
+                    btn.style.background = '#64748b'  # Gray when minimal keyboard
+
+            # Apply to all existing MathQuill fields
+            answer_fields = document.querySelectorAll('.step-answer')
+            for i in range(answer_fields.length):
+                field = answer_fields[i]
+                # Get MathQuill instance if it exists
+                if hasattr(field, 'mathquill'):
+                    if self.soft_keyboard_enabled:
+                        self.enable_soft_keyboard(field.mathquill)
+                    else:
+                        self.disable_soft_keyboard(field.mathquill)
+
+            # Show notification
+            msg = "Soft keyboard enabled" if self.soft_keyboard_enabled else "Minimal keyboard mode"
+            window.alert(f"⌨️ {msg}")
+
+        except Exception as e:
+            window.console.error(f"Error toggling keyboard: {e}")
 
     def build_minimal_keyboard_from_structure(self, expected_structure, step_data=None):
         """Build truly minimal keyboard - only needed digits + limited distractors"""
@@ -13059,7 +13164,7 @@ This demonstrates the complete format for creating your own problem sets!
             pass
 
         # Always include basic controls (navigation first, then backspace at end)
-        buttons.extend(['(', ')', 'MOVE_LEFT', 'MOVE_RIGHT', 'SELECT_LEFT', 'SELECT_RIGHT', 'CLEAR', 'BACKSPACE'])
+        buttons.extend(['TOGGLE_KEYBOARD', '(', ')', 'MOVE_LEFT', 'MOVE_RIGHT', 'SELECT_LEFT', 'SELECT_RIGHT', 'CLEAR', 'BACKSPACE'])
 
         # Remove duplicates while preserving order
         seen = set()
@@ -13127,6 +13232,18 @@ This demonstrates the complete format for creating your own problem sets!
         elif action == '\\to':
             btn_class += ' operator'
             label = '→'
+        elif action == 'TOGGLE_KEYBOARD':
+            btn_class += ' navigation'
+            # Set initial icon based on current state
+            if self.soft_keyboard_enabled:
+                label = '⌨️'  # Physical keyboard icon when soft keyboard is enabled
+                title = 'Switch to Minimal Keyboard'
+                bg_color = '#3b82f6'
+            else:
+                label = '📱'  # Phone/minimal keyboard icon
+                title = 'Switch to Soft Keyboard'
+                bg_color = '#64748b'
+            return f'<button class="{btn_class}" data-action="{action}" title="{title}" style="background:{bg_color}">{label}</button>'
         else:
             btn_class += ' special'
             label = action
