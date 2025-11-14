@@ -3381,88 +3381,341 @@ class ProgressAnalyzer:
         """
 
     def create_floating_whatsapp_button(self):
-        """Create floating WhatsApp share button for quick submission"""
+        """Create floating share button for quick submission via WhatsApp or Telegram"""
         from js import document, window
 
         # Check if button already exists
-        if document.getElementById("floatingWhatsAppBtn"):
+        if document.getElementById("floatingShareBtn"):
             return
 
-        # Create floating button
+        # Create floating + button
         btn = document.createElement("button")
-        btn.id = "floatingWhatsAppBtn"
+        btn.id = "floatingShareBtn"
         btn.innerHTML = """
-            <div style='font-size:28px;'>💬</div>
-            <div style='font-size:10px;margin-top:2px;font-weight:600;'>WhatsApp</div>
+            <div style='font-size:36px;font-weight:300;'>+</div>
         """
         btn.style.cssText = """
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             color: white;
             border: none;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+            box-shadow: 0 4px 20px rgba(59,130,246,0.4);
             z-index: 9999;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         """
 
-        # Hover effect
-        def on_hover(evt):
-            btn.style.transform = "scale(1.1)"
-            btn.style.boxShadow = "0 6px 30px rgba(37,211,102,0.6)"
+        # Create popup menu (initially hidden)
+        menu = document.createElement("div")
+        menu.id = "sharePopupMenu"
+        menu.style.cssText = """
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            padding: 12px;
+            gap: 8px;
+            min-width: 200px;
+        """
 
-        def on_leave(evt):
+        # WhatsApp option (using SVG from Wikipedia)
+        whatsapp_option = document.createElement("button")
+        whatsapp_option.innerHTML = """
+            <svg style='width:24px;height:24px;' viewBox="0 0 24 24" fill="#25D366">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            </svg>
+            <span style='margin-left:12px;font-weight:600;color:#25D366;'>WhatsApp</span>
+        """
+        whatsapp_option.style.cssText = """
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: none;
+            background: #f0fdf4;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        """
+
+        # Telegram option (using SVG from Wikipedia)
+        telegram_option = document.createElement("button")
+        telegram_option.innerHTML = """
+            <svg style='width:24px;height:24px;' viewBox="0 0 24 24" fill="#0088cc">
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+            <span style='margin-left:12px;font-weight:600;color:#0088cc;'>Telegram</span>
+        """
+        telegram_option.style.cssText = """
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border: none;
+            background: #eff6ff;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        """
+
+        menu.appendChild(whatsapp_option)
+        menu.appendChild(telegram_option)
+
+        # Hover effects for options
+        def whatsapp_hover(evt):
+            whatsapp_option.style.background = "#dcfce7"
+            whatsapp_option.style.transform = "scale(1.02)"
+
+        def whatsapp_leave(evt):
+            whatsapp_option.style.background = "#f0fdf4"
+            whatsapp_option.style.transform = "scale(1)"
+
+        def telegram_hover(evt):
+            telegram_option.style.background = "#dbeafe"
+            telegram_option.style.transform = "scale(1.02)"
+
+        def telegram_leave(evt):
+            telegram_option.style.background = "#eff6ff"
+            telegram_option.style.transform = "scale(1)"
+
+        # Hover effect for main button
+        def btn_hover(evt):
+            btn.style.transform = "scale(1.1) rotate(90deg)"
+            btn.style.boxShadow = "0 6px 30px rgba(59,130,246,0.6)"
+
+        def btn_leave(evt):
             btn.style.transform = "scale(1)"
-            btn.style.boxShadow = "0 4px 20px rgba(37,211,102,0.4)"
+            btn.style.boxShadow = "0 4px 20px rgba(59,130,246,0.4)"
 
-        def on_click(evt):
-            # Check if teacher number is already saved for this session
+        # Toggle menu on button click
+        def toggle_menu(evt):
+            if menu.style.display == "none" or menu.style.display == "":
+                menu.style.display = "flex"
+                btn.innerHTML = "<div style='font-size:36px;font-weight:300;transform:rotate(45deg);'>+</div>"
+            else:
+                menu.style.display = "none"
+                btn.innerHTML = "<div style='font-size:36px;font-weight:300;'>+</div>"
+
+        # Get or prompt for user info
+        def get_user_info():
+            teacher_name = getattr(self, 'teacher_name', None)
+            student_name = getattr(self, 'student_name', None)
+
+            if not teacher_name or not student_name:
+                teacher_name = window.prompt(
+                    "Enter teacher's name:",
+                    getattr(self, 'teacher_name', "")
+                )
+                if not teacher_name:
+                    return None, None
+
+                student_name = window.prompt(
+                    "Enter your name (student):",
+                    getattr(self, 'student_name', "")
+                )
+                if not student_name:
+                    return None, None
+
+                # Save for session
+                self.teacher_name = teacher_name
+                self.student_name = student_name
+                window.console.log(f"✅ Names saved - Teacher: {teacher_name}, Student: {student_name}")
+
+            return teacher_name, student_name
+
+        # Get progress data as base64
+        def get_progress_data():
+            # Get current progress from textarea or analytics data
+            from js import document
+            textarea = document.getElementById("pasteProgressData")
+            if textarea and textarea.value:
+                return textarea.value.strip()
+            return ""
+
+        # Segment message for platform limits
+        def segment_message(message, max_length):
+            """Split message into chunks respecting max length"""
+            if len(message) <= max_length:
+                return [message]
+
+            segments = []
+            current = ""
+            lines = message.split('\n')
+
+            for line in lines:
+                if len(current) + len(line) + 1 <= max_length:
+                    current += line + '\n'
+                else:
+                    if current:
+                        segments.append(current.strip())
+                    # If single line is too long, split it
+                    if len(line) > max_length:
+                        for i in range(0, len(line), max_length):
+                            segments.append(line[i:i+max_length])
+                        current = ""
+                    else:
+                        current = line + '\n'
+
+            if current:
+                segments.append(current.strip())
+
+            return segments
+
+        # WhatsApp handler
+        def send_via_whatsapp(evt):
+            menu.style.display = "none"
+            btn.innerHTML = "<div style='font-size:36px;font-weight:300;'>+</div>"
+
+            teacher_name, student_name = get_user_info()
+            if not teacher_name or not student_name:
+                return
+
+            # Get teacher WhatsApp number
             teacher_number = getattr(self, 'teacher_whatsapp_number', None)
-
-            # If not saved, prompt for it
             if not teacher_number:
                 teacher_number = window.prompt(
                     "Enter teacher's WhatsApp number (include country code):",
-                    "+62"  # Default Indonesia
+                    "+62"
                 )
-
                 if teacher_number:
-                    # Clean and save number for this session
                     teacher_number = teacher_number.replace("+", "").replace("-", "").replace(" ", "")
                     self.teacher_whatsapp_number = teacher_number
-                    window.console.log(f"✅ Teacher WhatsApp number saved for this session: +{teacher_number}")
                 else:
-                    # User cancelled
                     return
 
-            # Create message with current progress data
-            message = "🎓 Progress Update from Quiz\n\n"
-            message += "[Your progress data will be automatically attached when you submit through the app]"
+            # Get progress data
+            progress_data = get_progress_data()
 
-            # Open WhatsApp
-            whatsapp_url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(message)}"
-            window.open(whatsapp_url, "_blank")
+            # Create message
+            header = f"🎓 Progress Report\n\nTo: {teacher_name}\nFrom: {student_name}\n\n"
+            footer = "\n\n---\nSent via Analytics App"
 
-            window.console.log(f"📱 Opened WhatsApp for +{teacher_number}")
+            # WhatsApp limit is ~4096 chars, but we use 3500 to be safe
+            MAX_LENGTH = 3500
 
+            if progress_data:
+                full_message = header + progress_data + footer
+                segments = segment_message(full_message, MAX_LENGTH)
+
+                # Send first segment
+                first_msg = segments[0]
+                if len(segments) > 1:
+                    first_msg += f"\n\n[Part 1/{len(segments)}]"
+
+                url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(first_msg)}"
+                window.open(url, "_blank")
+
+                # Notify about additional segments
+                if len(segments) > 1:
+                    window.alert(f"✅ Message is long! It has been split into {len(segments)} parts.\n\nPart 1 is opening now. Please copy and send the remaining parts:\n\n" +
+                               "\n\n---NEXT PART---\n\n".join(segments[1:]))
+            else:
+                message = header + "[No progress data available yet]" + footer
+                url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(message)}"
+                window.open(url, "_blank")
+
+            window.console.log(f"📱 WhatsApp opened for {teacher_name}")
+
+        # Telegram handler
+        def send_via_telegram(evt):
+            menu.style.display = "none"
+            btn.innerHTML = "<div style='font-size:36px;font-weight:300;'>+</div>"
+
+            teacher_name, student_name = get_user_info()
+            if not teacher_name or not student_name:
+                return
+
+            # Get student phone number for Telegram (required since Telegram doesn't show sender's number)
+            student_phone = getattr(self, 'student_phone_number', None)
+            if not student_phone:
+                student_phone = window.prompt(
+                    "Enter your phone number (with country code, e.g., +6281234567890):",
+                    "+62"
+                )
+                if student_phone:
+                    self.student_phone_number = student_phone
+                else:
+                    return
+
+            # Get teacher Telegram username
+            teacher_username = getattr(self, 'teacher_telegram_username', None)
+            if not teacher_username:
+                teacher_username = window.prompt(
+                    "Enter teacher's Telegram username (without @):",
+                    ""
+                )
+                if teacher_username:
+                    teacher_username = teacher_username.replace("@", "")
+                    self.teacher_telegram_username = teacher_username
+                else:
+                    return
+
+            # Get progress data
+            progress_data = get_progress_data()
+
+            # Create message with student phone number
+            header = f"🎓 Progress Report\n\nTo: {teacher_name}\nFrom: {student_name}\nPhone: {student_phone}\n\n"
+            footer = "\n\n---\nSent via Analytics App"
+
+            # Telegram limit is 4096 characters
+            MAX_LENGTH = 4000
+
+            if progress_data:
+                full_message = header + progress_data + footer
+                segments = segment_message(full_message, MAX_LENGTH)
+
+                # Send first segment
+                first_msg = segments[0]
+                if len(segments) > 1:
+                    first_msg += f"\n\n[Part 1/{len(segments)}]"
+
+                url = f"https://t.me/{teacher_username}?text={window.encodeURIComponent(first_msg)}"
+                window.open(url, "_blank")
+
+                # Notify about additional segments
+                if len(segments) > 1:
+                    window.alert(f"✅ Message is long! It has been split into {len(segments)} parts.\n\nPart 1 is opening now. Please copy and send the remaining parts:\n\n" +
+                               "\n\n---NEXT PART---\n\n".join(segments[1:]))
+            else:
+                message = header + "[No progress data available yet]" + footer
+                url = f"https://t.me/{teacher_username}?text={window.encodeURIComponent(message)}"
+                window.open(url, "_blank")
+
+            window.console.log(f"✈️ Telegram opened for {teacher_name} (from {student_phone})")
+
+        # Bind events
         from pyodide.ffi import create_proxy
-        btn.addEventListener("mouseenter", create_proxy(on_hover))
-        btn.addEventListener("mouseleave", create_proxy(on_leave))
-        btn.addEventListener("click", create_proxy(on_click))
+        btn.addEventListener("mouseenter", create_proxy(btn_hover))
+        btn.addEventListener("mouseleave", create_proxy(btn_leave))
+        btn.addEventListener("click", create_proxy(toggle_menu))
 
+        whatsapp_option.addEventListener("mouseenter", create_proxy(whatsapp_hover))
+        whatsapp_option.addEventListener("mouseleave", create_proxy(whatsapp_leave))
+        whatsapp_option.addEventListener("click", create_proxy(send_via_whatsapp))
+
+        telegram_option.addEventListener("mouseenter", create_proxy(telegram_hover))
+        telegram_option.addEventListener("mouseleave", create_proxy(telegram_leave))
+        telegram_option.addEventListener("click", create_proxy(send_via_telegram))
+
+        # Add to page
         document.body.appendChild(btn)
+        document.body.appendChild(menu)
 
-        window.console.log("✅ Floating WhatsApp button created")
+        window.console.log("✅ Floating share button created with WhatsApp and Telegram support")
 
 class DisplayManager:
     def display_cheating_panel(self, cheating_groups, results):
@@ -4936,6 +5189,89 @@ class WhatsAppService:
     def __init__(self):
         self.base64_pattern = r'[A-Za-z0-9+/]{100,}={0,2}'  # Pattern for base64 data (min 100 chars)
 
+    def combine_segmented_messages(self, chat_text):
+        """
+        Detect and combine segmented messages (marked with [Part X/N])
+
+        Args:
+            chat_text: Raw text from WhatsApp/Telegram chat
+
+        Returns:
+            Text with segmented messages combined
+        """
+        import re
+        from js import window
+
+        if not chat_text:
+            return chat_text
+
+        lines = chat_text.split('\n')
+        combined_lines = []
+        segment_buffer = {}  # Store segments by sender: {sender: {part_num: content}}
+
+        # Pattern for part markers: [Part 1/3], [Part 2/3], etc.
+        part_pattern = r'\[Part\s+(\d+)/(\d+)\]'
+
+        message_pattern = r'\[?(\d{1,2}/\d{1,2}/\d{2,4}),?\s+(\d{1,2}:\d{2}(?::\d{2})?)\]?\s*-?\s*([^:]+):\s*(.+)'
+
+        for line in lines:
+            match = re.match(message_pattern, line)
+
+            if match:
+                date, time, sender, content = match.groups()
+                sender_key = sender.strip()
+
+                # Check if this message contains a part marker
+                part_match = re.search(part_pattern, content)
+
+                if part_match:
+                    part_num = int(part_match.group(1))
+                    total_parts = int(part_match.group(2))
+
+                    # Remove part marker from content
+                    content_clean = re.sub(part_pattern, '', content).strip()
+
+                    # Initialize buffer for this sender if needed
+                    if sender_key not in segment_buffer:
+                        segment_buffer[sender_key] = {
+                            'parts': {},
+                            'total': total_parts,
+                            'header': f"[{date}, {time}] {sender}: "
+                        }
+
+                    # Store this part
+                    segment_buffer[sender_key]['parts'][part_num] = content_clean
+
+                    # Check if we have all parts
+                    if len(segment_buffer[sender_key]['parts']) == total_parts:
+                        # Combine all parts in order
+                        combined_content = []
+                        for i in range(1, total_parts + 1):
+                            if i in segment_buffer[sender_key]['parts']:
+                                combined_content.append(segment_buffer[sender_key]['parts'][i])
+
+                        # Create combined message
+                        full_message = segment_buffer[sender_key]['header'] + '\n'.join(combined_content)
+                        combined_lines.append(full_message)
+
+                        window.console.log(f"✅ Combined {total_parts} segments from {sender_key}")
+
+                        # Clear buffer for this sender
+                        del segment_buffer[sender_key]
+                else:
+                    # Regular message, not a segment
+                    combined_lines.append(line)
+            else:
+                # Not a message header, could be continuation
+                combined_lines.append(line)
+
+        # Add warning for incomplete segments
+        for sender, data in segment_buffer.items():
+            window.console.warn(f"⚠️ Incomplete segmented message from {sender}: " +
+                              f"got {len(data['parts'])}/{data['total']} parts")
+
+        return '\n'.join(combined_lines)
+
     def parse_chat_export(self, chat_text):
         """
         Parse WhatsApp chat export and extract progress reports
@@ -4955,6 +5291,9 @@ class WhatsAppService:
 
         if not chat_text:
             return []
+
+        # First, combine any segmented messages
+        chat_text = self.combine_segmented_messages(chat_text)
 
         reports = []
         lines = chat_text.split('\n')
