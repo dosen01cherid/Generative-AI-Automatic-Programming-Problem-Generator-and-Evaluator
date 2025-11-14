@@ -23,9 +23,9 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-008 (Phone Warning)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 Analytics App Version: 2024-11-14-009 (Auto-Finalize)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
-    console.log('✅ NEW: Warning when progress reports missing phone numbers');
+    console.log('✅ NEW: Auto-finalize MC/TF/fill-blank questions when answered');
   </script>
 
   <!-- PyScript core -->
@@ -1973,12 +1973,12 @@ class ProgressAnalyzer:
                     # ✅ Support both 'finalized' and 'finished' field names
                     is_finalized = step_state.get("finalized", step_state.get("finished", False))
 
-                    # ✅ SPECIAL HANDLING: For non-math-expression types, consider finalized if answered
+                    # ✅ SPECIAL HANDLING: For non-math-expression types, auto-finalize if answered
                     # Non-math types (MC, T/F, fill-blank) are "done" once they submit an answer
                     # Unlike math-expression which requires explicit finalization
                     step_type = step_state.get("step_type", "")
                     if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
-                        # For these types, consider finalized if:
+                        # For these types, auto-finalize if:
                         # 1. Already marked as finished/finalized, OR
                         # 2. They answered correctly, OR
                         # 3. They have at least one answer (attempted the question)
@@ -1988,7 +1988,9 @@ class ProgressAnalyzer:
 
                         if is_correct or has_answer:
                             is_finalized = True
-                            window.console.log(f"    - Non-math type '{step_type}' with answer → forcing finalized=True")
+                            # ✅ UPDATE THE STORED DATA: Explicitly set finalized=True
+                            step_state["finalized"] = True
+                            window.console.log(f"    - Non-math type '{step_type}' with answer → setting finalized=True")
 
                     window.console.log(f"    - Finalized/Finished: {is_finalized}")
                     window.console.log(f"    - Correct: {step_state.get('correct', False)}")
