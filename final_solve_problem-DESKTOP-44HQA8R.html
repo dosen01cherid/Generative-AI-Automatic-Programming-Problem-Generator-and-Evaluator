@@ -5991,13 +5991,13 @@ class ProblemSolverApp:
                         {
                             "instruction": "Simplify the left side by distributing 2 across (x + 3)",
                             "description": [
-                                {"type": "text", "value": "Apply the distributive property: 2(x + 3) = 2·x + 2·3"}
+                                {"type": "text", "value": "Apply the distributive property: 2(x + 3) = 2·x + 2·3. Write the simplified equation."}
                             ],
-                            "expected": "2x+6",
+                            "expected": "2x+6=12",
                             "type": "math-expression",
                             "expected_structure": {
-                                "operators": {"Add": 1, "Mul": 1},
-                                "operands": {"2": 1, "x": 1, "6": 1}
+                                "operators": {"Add": 1, "Mul": 1, "Eq": 1},
+                                "operands": {"2": 1, "x": 1, "6": 1, "12": 1}
                             }
                         },
                         {
@@ -6086,13 +6086,13 @@ class ProblemSolverApp:
                             {
                                 "instruction": "Simplify the left side by distributing 2 across (x + 3)",
                                 "description": [
-                                    {"type": "text", "value": "Apply the distributive property: 2(x + 3) = 2·x + 2·3"}
+                                    {"type": "text", "value": "Apply the distributive property: 2(x + 3) = 2·x + 2·3. Write the simplified equation."}
                                 ],
-                                "expected": "2x+6",
+                                "expected": "2x+6=12",
                                 "type": "math-expression",
                                 "expected_structure": {
-                                    "operators": {"Add": 1, "Mul": 1},
-                                    "operands": {"2": 1, "x": 1, "6": 1}
+                                    "operators": {"Add": 1, "Mul": 1, "Eq": 1},
+                                    "operands": {"2": 1, "x": 1, "6": 1, "12": 1}
                                 }
                             },
                             {
@@ -6177,8 +6177,9 @@ PROBLEM 1: Algebra: Solve for x
 
   Step 1:
     Instruction: Simplify the left side by distributing 2 across (x + 3)
-    Description: Apply the distributive property: 2(x + 3) = 2·x + 2·3
-    Expected Answer: 2x+6
+    Description: Apply the distributive property: 2(x + 3) = 2·x + 2·3.
+                 Write the simplified equation.
+    Expected Answer: 2x+6=12
     Type: math-expression
 
   Step 2:
