@@ -5996,7 +5996,7 @@ class ProblemSolverApp:
                             "expected": "2x+6=12",
                             "type": "math-expression",
                             "expected_structure": {
-                                "operators": {"Add": 1, "Mul": 1, "Eq": 1},
+                                "operators": {"Add": 1, "Mul": 1, "Equality": 1},
                                 "operands": {"2": 1, "x": 1, "6": 1, "12": 1}
                             }
                         },
@@ -6008,7 +6008,7 @@ class ProblemSolverApp:
                             "expected": "x=3",
                             "type": "math-expression",
                             "expected_structure": {
-                                "operators": {"Eq": 1},
+                                "operators": {"Equality": 1},
                                 "operands": {"x": 1, "3": 1}
                             }
                         }
@@ -6091,7 +6091,7 @@ class ProblemSolverApp:
                                 "expected": "2x+6=12",
                                 "type": "math-expression",
                                 "expected_structure": {
-                                    "operators": {"Add": 1, "Mul": 1, "Eq": 1},
+                                    "operators": {"Add": 1, "Mul": 1, "Equality": 1},
                                     "operands": {"2": 1, "x": 1, "6": 1, "12": 1}
                                 }
                             },
@@ -6103,7 +6103,7 @@ class ProblemSolverApp:
                                 "expected": "x=3",
                                 "type": "math-expression",
                                 "expected_structure": {
-                                    "operators": {"Eq": 1},
+                                    "operators": {"Equality": 1},
                                     "operands": {"x": 1, "3": 1}
                                 }
                             }
@@ -12933,8 +12933,9 @@ This demonstrates the complete format for creating your own problem sets!
             has_matrix = any('matrix' in str(op).lower() for op in operators)
             window.console.log(f"Matrix detection from operators: has_matrix={has_matrix}")
         if not has_equation and operators:
-            has_equation = any('eq' in str(op).lower() for op in operators)
-            window.console.log(f"Equation detection from operators: has_equation={has_equation}")
+            # Check for both "Eq" and "Equality" (SymPy uses Equality)
+            has_equation = any('eq' in str(op).lower() or 'equality' in str(op).lower() for op in operators)
+            window.console.log(f"Equation detection from operators: has_equation={has_equation}, operators={operators}")
 
         # Extract ONLY required digits from operands
         required_digits = set()
