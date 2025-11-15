@@ -7712,9 +7712,9 @@ class DataManager:
                 raise Exception(f"Failed to parse text format: {e}")
 
     def _show_validation_popup(self, original_text, parsed_problems):
-        """Show validation results and formatted text with syntax highlighting"""
-        # Ensure highlight.js is loaded
-        self._ensure_highlightjs_loaded()
+        """Show validation results and formatted text with editable syntax highlighting"""
+        # Ensure CodeMirror is loaded
+        self._ensure_codemirror_loaded()
 
         # Create backdrop
         backdrop = document.createElement("div")
@@ -7728,7 +7728,7 @@ class DataManager:
         modal = document.createElement("div")
         modal.style.cssText = (
             "background:#fff;border-radius:12px;padding:24px;"
-            "max-width:1000px;width:95%;max-height:90vh;overflow-y:auto;"
+            "max-width:1200px;width:95%;max-height:90vh;overflow-y:auto;"
             "box-shadow:0 20px 60px rgba(0,0,0,0.4);"
         )
 
@@ -7764,15 +7764,12 @@ class DataManager:
         # Reconstruct formatted text with comments
         formatted_with_comments = self._reconstruct_text_with_comments(original_text)
 
-        # Escape HTML in formatted text
-        escaped_text = formatted_with_comments.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
-
         modal.innerHTML = f"""
             {summary_html}
             {issues_html}
             <div style='margin-bottom:12px;'>
-                <h4 style='margin:0 0 8px 0;'>Formatted Text with Auto-Fix Comments:</h4>
-                <div style='display:flex;gap:8px;margin-bottom:8px;'>
+                <h4 style='margin:0 0 8px 0;'>📝 Editable Problem Set (with Auto-Fix Comments):</h4>
+                <div style='display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;'>
                     <button id='copyFormattedBtn' style='
                         padding:8px 16px;background:#10b981;color:white;border:none;
                         border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;
@@ -7781,32 +7778,26 @@ class DataManager:
                         padding:8px 16px;background:#3b82f6;color:white;border:none;
                         border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;
                     '>💾 Download as .txt</button>
-                    <button id='toggleViewBtn' style='
-                        padding:8px 16px;background:#8b5cf6;color:white;border:none;
+                    <button id='reimportBtn' style='
+                        padding:8px 16px;background:#f59e0b;color:white;border:none;
                         border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;
-                    '>🎨 Toggle Highlighting</button>
+                    '>🔄 Re-import Edited Text</button>
                 </div>
-                <div id='codeViewContainer' style='
-                    max-height:500px;overflow:auto;
-                    border:2px solid #e6eef8;border-radius:8px;
-                    background:#1e1e1e;
-                '>
-                    <pre style='margin:0;'><code id='formattedCode' class='language-markdown' style='
-                        display:block;padding:16px;
-                        font-family:Consolas,Monaco,"Courier New",monospace;
-                        font-size:13px;line-height:1.6;
-                        color:#d4d4d4;
-                    '>{escaped_text}</code></pre>
+                <div style='font-size:12px;color:#64748b;margin-bottom:8px;padding:8px;background:#f8fafc;border-radius:4px;'>
+                    💡 <strong>Tip:</strong> You can edit the text below. Fix any issues, then click "Re-import" to load the corrected version.
                 </div>
-                <textarea id='formattedTextArea' style='
-                    width:100%;height:400px;padding:12px;display:none;
-                    font-family:Consolas,Monaco,"Courier New",monospace;font-size:13px;
+                <div id='codeMirrorContainer' style='
                     border:2px solid #e6eef8;border-radius:8px;
-                    background:#f8fafc;resize:vertical;
-                '>{formatted_with_comments}</textarea>
+                    overflow:hidden;
+                '></div>
             </div>
-            <div style='display:flex;justify-content:flex-end;gap:8px;margin-top:16px;'>
-                <button id='closeValidationBtn' class='btn'>Close</button>
+            <div style='display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:16px;'>
+                <div style='font-size:12px;color:#64748b;'>
+                    <span id='lineCountInfo'></span>
+                </div>
+                <div style='display:flex;gap:8px;'>
+                    <button id='closeValidationBtn' class='btn'>Close</button>
+                </div>
             </div>
         """
 
@@ -7816,22 +7807,104 @@ class DataManager:
         # Get elements
         copy_btn = modal.querySelector("#copyFormattedBtn")
         download_btn = modal.querySelector("#downloadFormattedBtn")
-        toggle_btn = modal.querySelector("#toggleViewBtn")
+        reimport_btn = modal.querySelector("#reimportBtn")
         close_btn = modal.querySelector("#closeValidationBtn")
-        text_area = modal.querySelector("#formattedTextArea")
-        code_container = modal.querySelector("#codeViewContainer")
-        code_element = modal.querySelector("#formattedCode")
+        cm_container = modal.querySelector("#codeMirrorContainer")
+        line_count_info = modal.querySelector("#lineCountInfo")
 
-        # Apply syntax highlighting
-        self._apply_syntax_highlighting(code_element)
+        # Store reference for handlers
+        self._validation_editor = None
+        self._validation_backdrop = backdrop
+
+        # Show loading message
+        cm_container.innerHTML = """
+        <div style='padding:40px;text-align:center;color:#64748b;'>
+            <div style='font-size:18px;margin-bottom:8px;'>⏳ Loading editor...</div>
+            <div style='font-size:13px;'>Please wait while CodeMirror initializes</div>
+        </div>
+        """
+
+        # Initialize CodeMirror editor with retry logic
+        def init_editor(attempt=0):
+            if attempt > 100:
+                cm_container.innerHTML = """
+                <div style='padding:40px;text-align:center;color:#dc2626;'>
+                    <div style='font-size:18px;margin-bottom:8px;'>❌ Failed to load editor</div>
+                    <div style='font-size:13px;'>CodeMirror could not be initialized. Try refreshing the page.</div>
+                </div>
+                """
+                return
+
+            # Check if CodeMirror is ready
+            check_code = """
+            (function() {
+                return typeof CodeMirror !== 'undefined' &&
+                       typeof CodeMirror.defineSimpleMode !== 'undefined';
+            })();
+            """
+            is_ready = window.eval(check_code)
+
+            if is_ready:
+                try:
+                    editor = self._init_codemirror_editor(cm_container, formatted_with_comments)
+                    if editor:
+                        self._validation_editor = editor
+
+                        # Update line count
+                        def update_line_count():
+                            if editor:
+                                js_code = """
+                                (function(editor) {
+                                    return editor.lineCount();
+                                })(arguments[0]);
+                                """
+                                line_count = window.eval(js_code)(editor)
+                                line_count_info.textContent = f"📄 {line_count} lines"
+
+                        update_line_count()
+
+                        # Update on change
+                        js_code = """
+                        (function(editor, callback) {
+                            editor.on('change', function() {
+                                callback();
+                            });
+                        })(arguments[0], arguments[1]);
+                        """
+                        window.eval(js_code)(editor, create_proxy(update_line_count))
+                        window.console.log("✓ Editor initialized successfully")
+                    else:
+                        window.console.error("Editor returned null")
+                        window.setTimeout(create_proxy(lambda: init_editor(attempt + 1)), 100)
+                except Exception as e:
+                    window.console.error(f"Error initializing editor: {e}")
+                    window.setTimeout(create_proxy(lambda: init_editor(attempt + 1)), 100)
+            else:
+                # CodeMirror not ready, try again
+                window.setTimeout(create_proxy(lambda: init_editor(attempt + 1)), 100)
+
+        # Start initialization with delay to allow scripts to load
+        window.setTimeout(create_proxy(lambda: init_editor(0)), 500)
 
         def close_popup():
+            self._validation_editor = None
             backdrop.remove()
 
         def copy_text():
+            # Get current text from CodeMirror
+            if self._validation_editor:
+                js_code = """
+                (function(editor) {
+                    return editor.getValue();
+                })(arguments[0]);
+                """
+                current_text = window.eval(js_code)(self._validation_editor)
+            else:
+                current_text = formatted_with_comments
+
             # Create a temporary textarea to copy from
             temp_textarea = document.createElement('textarea')
-            temp_textarea.value = formatted_with_comments
+            temp_textarea.value = current_text
             temp_textarea.style.position = 'fixed'
             temp_textarea.style.opacity = '0'
             document.body.appendChild(temp_textarea)
@@ -7848,7 +7921,19 @@ class DataManager:
 
         def download_text():
             from js import Blob, URL
-            blob = Blob.new([formatted_with_comments], {"type": "text/plain"})
+
+            # Get current text from CodeMirror
+            if self._validation_editor:
+                js_code = """
+                (function(editor) {
+                    return editor.getValue();
+                })(arguments[0]);
+                """
+                current_text = window.eval(js_code)(self._validation_editor)
+            else:
+                current_text = formatted_with_comments
+
+            blob = Blob.new([current_text], {"type": "text/plain"})
             url = URL.createObjectURL(blob)
             a = document.createElement("a")
             a.href = url
@@ -7857,21 +7942,32 @@ class DataManager:
             a.remove()
             window.setTimeout(create_proxy(lambda: URL.revokeObjectURL(url)), 1000)
 
-        def toggle_view():
-            if code_container.style.display == 'none':
-                # Show code view
-                code_container.style.display = 'block'
-                text_area.style.display = 'none'
-                toggle_btn.textContent = "📝 Plain Text View"
-            else:
-                # Show text area
-                code_container.style.display = 'none'
-                text_area.style.display = 'block'
-                toggle_btn.textContent = "🎨 Highlighted View"
+        def reimport_text():
+            if not self._validation_editor:
+                window.alert("Editor not initialized")
+                return
+
+            # Get edited text from CodeMirror
+            js_code = """
+            (function(editor) {
+                return editor.getValue();
+            })(arguments[0]);
+            """
+            edited_text = window.eval(js_code)(self._validation_editor)
+
+            # Close the validation popup
+            close_popup()
+
+            # Re-import the edited text
+            try:
+                self._process_text_import(edited_text, lambda: None)
+                window.alert("✅ Successfully re-imported edited problem set!")
+            except Exception as e:
+                window.alert(f"❌ Re-import failed: {e}")
 
         copy_btn.addEventListener("click", create_proxy(lambda e: copy_text()))
         download_btn.addEventListener("click", create_proxy(lambda e: download_text()))
-        toggle_btn.addEventListener("click", create_proxy(lambda e: toggle_view()))
+        reimport_btn.addEventListener("click", create_proxy(lambda e: reimport_text()))
         close_btn.addEventListener("click", create_proxy(lambda e: close_popup()))
         backdrop.addEventListener("click", create_proxy(lambda e: close_popup() if e.target == backdrop else None))
 
@@ -7884,29 +7980,46 @@ class DataManager:
             return f"{comments_section}\n\n{original_text}"
         return original_text
 
-    def _ensure_highlightjs_loaded(self):
-        """Ensure highlight.js is loaded for syntax highlighting"""
+    def _ensure_codemirror_loaded(self):
+        """Ensure CodeMirror is loaded for syntax highlighting"""
         js_code = """
         (function() {
-            // Check if highlight.js is already loaded
-            if (window.hljs) {
+            // Check if CodeMirror is already loaded
+            if (window.CodeMirror) {
                 return true;
             }
 
-            // Load highlight.js CSS (VS Code Dark Theme)
-            if (!document.getElementById('highlightjs-css')) {
+            // Load CodeMirror CSS
+            if (!document.getElementById('codemirror-css')) {
                 const link = document.createElement('link');
-                link.id = 'highlightjs-css';
+                link.id = 'codemirror-css';
                 link.rel = 'stylesheet';
-                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css';
                 document.head.appendChild(link);
             }
 
-            // Load highlight.js script
-            if (!document.getElementById('highlightjs-script')) {
+            // Load CodeMirror theme (monokai)
+            if (!document.getElementById('codemirror-theme')) {
+                const link = document.createElement('link');
+                link.id = 'codemirror-theme';
+                link.rel = 'stylesheet';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css';
+                document.head.appendChild(link);
+            }
+
+            // Load CodeMirror script
+            if (!document.getElementById('codemirror-script')) {
                 const script = document.createElement('script');
-                script.id = 'highlightjs-script';
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+                script.id = 'codemirror-script';
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js';
+                document.head.appendChild(script);
+            }
+
+            // Load simple mode addon for custom syntax
+            if (!document.getElementById('codemirror-simple-mode')) {
+                const script = document.createElement('script');
+                script.id = 'codemirror-simple-mode';
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/mode/simple.min.js';
                 document.head.appendChild(script);
             }
 
@@ -7915,88 +8028,83 @@ class DataManager:
         """
         window.eval(js_code)
 
-    def _apply_syntax_highlighting(self, code_element):
-        """Apply syntax highlighting to a code element"""
+    def _init_codemirror_editor(self, container, initial_text):
+        """Initialize CodeMirror editor with custom problem set syntax highlighting"""
         js_code = """
-        (function(element) {
-            // Define custom highlighting for problem set format
-            const customLanguage = {
-                contains: [
-                    // Comments (// AUTO-FIX:, //)
-                    {
-                        className: 'comment',
-                        begin: '//',
-                        end: '$',
-                        relevance: 10
-                    },
-                    // Problem and Step delimiters
-                    {
-                        className: 'section',
-                        begin: '^###',
-                        end: '$',
-                        relevance: 10
-                    },
-                    {
-                        className: 'section',
-                        begin: '^#$',
-                        relevance: 10
-                    },
-                    // Field labels
-                    {
-                        className: 'attr',
-                        begin: '^(Problem Title|Problem Description|Step Description|Step Type|Step Expression|Step Expected|Option [A-H]|Correct Answer|Must Be Correct|Answer Type|Alternative Answer):',
-                        relevance: 10
-                    },
-                    // Math expressions in backticks
-                    {
-                        className: 'string',
-                        begin: '`',
-                        end: '`',
-                        relevance: 5
-                    },
-                    // Step types
-                    {
-                        className: 'keyword',
-                        begin: '\\b(step-by-step|multiple-choice-single|multiple-choice-multiple|true-false|fill-blank)\\b',
-                        relevance: 5
-                    },
-                    // Boolean values
-                    {
-                        className: 'literal',
-                        begin: '\\b(true|false|True|False)\\b',
-                        relevance: 5
-                    }
-                ]
-            };
+        (function(container, text) {
+            try {
+                // Clear container
+                container.innerHTML = '';
 
-            // Wait for hljs to be loaded
-            function applyHighlighting(attempts) {
-                if (attempts > 50) {
-                    console.warn('Highlight.js not loaded, using plain text');
-                    return;
-                }
+                // Check if mode is already defined
+                if (!CodeMirror.modes.problemset) {
+                    // Define custom mode for problem set format
+                    CodeMirror.defineSimpleMode("problemset", {
+                        start: [
+                            // Comments
+                            {regex: /\\/\\/.*/, token: "comment"},
 
-                if (typeof hljs !== 'undefined') {
-                    // Register custom language
-                    hljs.registerLanguage('problemset', function() {
-                        return customLanguage;
+                            // Problem delimiters
+                            {regex: /^###/, token: "header", sol: true},
+                            {regex: /^#$/, token: "header", sol: true},
+
+                            // Field labels
+                            {regex: /^(Problem Title|Problem Description|Step Description|Step Type|Step Expression|Step Expected|Option [A-H]|Correct Answer|Must Be Correct|Answer Type|Alternative Answer):/,
+                             token: "keyword", sol: true},
+
+                            // Step types
+                            {regex: /\\b(step-by-step|multiple-choice-single|multiple-choice-multiple|true-false|fill-blank)\\b/,
+                             token: "variable-2"},
+
+                            // Boolean values
+                            {regex: /\\b(true|false|True|False)\\b/, token: "atom"},
+
+                            // Math expressions in backticks
+                            {regex: /`[^`]*`/, token: "string"},
+
+                            // Numbers
+                            {regex: /\\b\\d+\\b/, token: "number"}
+                        ]
                     });
-
-                    // Apply highlighting
-                    element.className = 'language-problemset';
-                    hljs.highlightElement(element);
-                    console.log('✓ Syntax highlighting applied');
-                } else {
-                    setTimeout(function() {
-                        applyHighlighting(attempts + 1);
-                    }, 100);
                 }
-            }
 
-            applyHighlighting(0);
-        })(arguments[0]);
+                // Create editor
+                const editor = CodeMirror(container, {
+                    value: text,
+                    mode: "problemset",
+                    theme: "monokai",
+                    lineNumbers: true,
+                    lineWrapping: true,
+                    indentUnit: 2,
+                    tabSize: 2,
+                    indentWithTabs: false,
+                    styleActiveLine: true,
+                    matchBrackets: true,
+                    autoCloseBrackets: true,
+                    viewportMargin: Infinity,
+                    extraKeys: {
+                        "Ctrl-/": "toggleComment",
+                        "Cmd-/": "toggleComment"
+                    }
+                });
+
+                // Set height
+                editor.setSize(null, "500px");
+
+                // Force refresh after a short delay
+                setTimeout(function() {
+                    editor.refresh();
+                }, 10);
+
+                console.log('✓ CodeMirror editor created successfully');
+                return editor;
+            } catch (error) {
+                console.error('Error creating CodeMirror editor:', error);
+                return null;
+            }
+        })(arguments[0], arguments[1]);
         """
-        window.eval(js_code)(code_element)
+        return window.eval(js_code)(container, initial_text)
 
     def _import_problem_data(self, data):
         if isinstance(data, dict) and "problems" in data:
