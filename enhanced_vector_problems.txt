@@ -1,0 +1,515 @@
+ENHANCED VECTOR PROBLEM SET - Mixed Step Types for Better Learning
+===================================================================
+
+This problem set uses multiple question types to reinforce both computational skills
+and conceptual understanding of vectors.
+
+LEGEND:
+📝 = Expression & Answer (step-by-step)
+🔘 = Multiple Choice (Single)
+☑️ = Multiple Choice (Multiple)
+✓/✗ = True/False
+📋 = Fill in the Blank
+
+
+###Problem Title: Understanding Vector Addition in R²
+Problem Description: Given vectors u = (3, 5) and v = (2, -1), explore vector addition
+
+#Step 1 [Multiple Choice - Single]: What does vector addition represent geometrically?
+Step Type: multiple-choice-single
+Question: What does adding two vectors represent geometrically?
+Options:
+  A) Placing vectors head-to-tail and drawing from first tail to last head
+  B) Multiplying the magnitudes of the vectors
+  C) Finding the angle between the vectors
+  D) Subtracting one vector from another
+Correct: A
+Explanation: Vector addition follows the parallelogram law or head-to-tail method, where the resultant vector goes from the tail of the first to the head of the last.
+
+#Step 2 [Expression & Answer]: Write component form u + v
+Step Type: step-by-step
+Step Expression: `[[3,5]] + [[2,-1]]`
+Step Expected: `[[3,5]] + [[2,-1]]`
+
+#Step 3 [True/False]: Verify addition is commutative
+Step Type: true-false
+Question: Is u + v = v + u for any vectors u and v?
+Answer: True
+Explanation: Vector addition is commutative. Adding vectors in any order gives the same result.
+
+#Step 4 [Expression & Answer]: Add corresponding components
+Step Type: step-by-step
+Step Expression: `[[3,5]] + [[2,-1]]`
+Step Expected: `[[5,4]]`
+
+
+###Problem Title: Vector Subtraction and Properties
+Problem Description: Given vectors a = (7, 3) and b = (4, 8), find a - b and explore properties
+
+#Step 1 [Fill in Blank]: Complete the subtraction formula
+Step Type: fill-blank
+Question: For vectors a = (a₁, a₂) and b = (b₁, b₂), the subtraction a - b = (__, __)
+Blanks:
+  - Blank 1: a₁ - b₁
+  - Blank 2: a₂ - b₂
+Explanation: Vector subtraction is performed component-wise.
+
+#Step 2 [Expression & Answer]: Write component form a - b
+Step Type: step-by-step
+Step Expression: `[[7,3]] - [[4,8]]`
+Step Expected: `[[7,3]] - [[4,8]]`
+
+#Step 3 [Expression & Answer]: Subtract corresponding components
+Step Type: step-by-step
+Step Expression: `[[7,3]] - [[4,8]]`
+Step Expected: `[[3,-5]]`
+
+#Step 4 [True/False]: Check if subtraction is commutative
+Step Type: true-false
+Question: Is a - b = b - a for all vectors a and b?
+Answer: False
+Explanation: Vector subtraction is NOT commutative. In fact, a - b = -(b - a).
+
+
+###Problem Title: Scalar Multiplication - Concept and Calculation
+Problem Description: Given vector v = (2, -3, 4), find 3v and understand scalar multiplication
+
+#Step 1 [Multiple Choice - Single]: What does scalar multiplication do?
+Step Type: multiple-choice-single
+Question: When you multiply a vector by a scalar k, what happens to the vector?
+Options:
+  A) It rotates by k degrees
+  B) Its magnitude is multiplied by |k| and direction reverses if k < 0
+  C) Only its direction changes
+  D) It becomes perpendicular to the original
+Correct: B
+Explanation: Scalar multiplication scales the magnitude by |k| and reverses direction if k is negative.
+
+#Step 2 [Expression & Answer]: Write scalar multiplication
+Step Type: step-by-step
+Step Expression: `3*[[2,-3,4]]`
+Step Expected: `3*[[2,-3,4]]`
+
+#Step 3 [Multiple Choice - Multiple]: Select all true statements about 3v
+Step Type: multiple-choice-multiple
+Question: Which statements are true about 3v compared to v?
+Options:
+  A) 3v is three times longer than v
+  B) 3v points in the same direction as v
+  C) 3v is perpendicular to v
+  D) Each component of 3v is three times the corresponding component of v
+Correct: A, B, D
+Explanation: Positive scalar multiplication preserves direction and scales all components equally.
+
+#Step 4 [Expression & Answer]: Multiply each component by scalar
+Step Type: step-by-step
+Step Expression: `3*[[2,-3,4]]`
+Step Expected: `[[6,-9,12]]`
+
+
+###Problem Title: Dot Product - From Concept to Calculation
+Problem Description: Given vectors u = (3, 4) and v = (2, 5), calculate and understand the dot product
+
+#Step 1 [Fill in Blank]: Complete the dot product formula
+Step Type: fill-blank
+Question: For vectors u = (u₁, u₂) and v = (v₁, v₂), the dot product u · v = __×__ + __×__
+Blanks:
+  - Blank 1: u₁
+  - Blank 2: v₁
+  - Blank 3: u₂
+  - Blank 4: v₂
+Explanation: The dot product multiplies corresponding components and sums the results.
+
+#Step 2 [Expression & Answer]: Apply dot product formula
+Step Type: step-by-step
+Step Expression: `3*2 + 4*5`
+Step Expected: `3*2 + 4*5`
+
+#Step 3 [Multiple Choice - Single]: What does the dot product represent?
+Step Type: multiple-choice-single
+Question: What does u · v tell us about the relationship between u and v?
+Options:
+  A) The angle between them only
+  B) How much u and v point in the same direction (projection relationship)
+  C) The distance between their endpoints
+  D) Their combined magnitude
+Correct: B
+Explanation: The dot product measures how much two vectors align, combining their magnitudes and the angle between them.
+
+#Step 4 [Expression & Answer]: Compute the result
+Step Type: step-by-step
+Step Expression: `3*2 + 4*5`
+Step Expected: `26`
+
+#Step 5 [True/False]: Check if result is positive
+Step Type: true-false
+Question: Since u · v = 26 > 0, the angle between u and v is acute (less than 90°). True or False?
+Answer: True
+Explanation: A positive dot product indicates an acute angle; negative means obtuse; zero means perpendicular.
+
+
+###Problem Title: Verifying Orthogonality - Theory Meets Practice
+Problem Description: Determine if vectors u = (2, 3) and v = (-6, 4) are orthogonal
+
+#Step 1 [Multiple Choice - Single]: What does orthogonal mean?
+Step Type: multiple-choice-single
+Question: What does it mean for two vectors to be orthogonal?
+Options:
+  A) They have the same magnitude
+  B) They are perpendicular (at 90° angle)
+  C) They point in opposite directions
+  D) They have the same direction
+Correct: B
+Explanation: Orthogonal vectors are perpendicular, forming a 90-degree angle.
+
+#Step 2 [Fill in Blank]: State the orthogonality condition
+Step Type: fill-blank
+Question: Two vectors u and v are orthogonal if and only if their dot product u · v = __
+Blanks:
+  - Blank 1: 0
+Explanation: The dot product equals zero when vectors are perpendicular.
+
+#Step 3 [Expression & Answer]: Calculate dot product
+Step Type: step-by-step
+Step Expression: `2*(-6) + 3*4`
+Step Expected: `2*(-6) + 3*4`
+
+#Step 4 [Expression & Answer]: Evaluate the result
+Step Type: step-by-step
+Step Expression: `2*(-6) + 3*4`
+Step Expected: `0`
+
+#Step 5 [Expression & Answer]: Check orthogonality condition
+Step Type: step-by-step
+Step Expression: `2*(-6) + 3*4 == 0`
+Step Expected: `True`
+
+#Step 6 [True/False]: Confirm orthogonality
+Step Type: true-false
+Question: Based on the calculation, vectors u and v are orthogonal. True or False?
+Answer: True
+Explanation: Since u · v = 0, the vectors are perpendicular.
+
+
+###Problem Title: Vector Magnitude - Concept and Computation
+Problem Description: Find the magnitude (length) of vector v = (3, 4) and understand its meaning
+
+#Step 1 [Multiple Choice - Single]: What does magnitude represent?
+Step Type: multiple-choice-single
+Question: What does the magnitude ||v|| of a vector represent?
+Options:
+  A) The direction of the vector
+  B) The length or size of the vector
+  C) The angle it makes with the x-axis
+  D) The sum of its components
+Correct: B
+Explanation: Magnitude is the length of the vector, calculated using the Pythagorean theorem.
+
+#Step 2 [Fill in Blank]: Complete the magnitude formula
+Step Type: fill-blank
+Question: For vector v = (x, y), the magnitude ||v|| = √(__² + __²)
+Blanks:
+  - Blank 1: x
+  - Blank 2: y
+Explanation: The magnitude formula comes from the Pythagorean theorem.
+
+#Step 3 [Expression & Answer]: Apply magnitude formula
+Step Type: step-by-step
+Step Expression: `sqrt(3**2 + 4**2)`
+Step Expected: `sqrt(3**2 + 4**2)`
+
+#Step 4 [True/False]: Recognize a Pythagorean triple
+Step Type: true-false
+Question: The vector (3, 4) forms a Pythagorean triple with magnitude 5. True or False?
+Answer: True
+Explanation: 3² + 4² = 9 + 16 = 25 = 5², making this a classic 3-4-5 Pythagorean triple.
+
+#Step 5 [Expression & Answer]: Compute squares
+Step Type: step-by-step
+Step Expression: `sqrt(3**2 + 4**2)`
+Step Expected: `sqrt(25)`
+
+#Step 6 [Expression & Answer]: Simplify
+Step Type: step-by-step
+Step Expression: `sqrt(25)`
+Step Expected: `5`
+
+
+###Problem Title: Unit Vectors - Normalization Process
+Problem Description: Find the unit vector in the direction of v = (3, 4)
+
+#Step 1 [Multiple Choice - Single]: What is a unit vector?
+Step Type: multiple-choice-single
+Question: What is a unit vector?
+Options:
+  A) A vector with all components equal to 1
+  B) A vector with magnitude equal to 1
+  C) A vector pointing along the x-axis
+  D) The zero vector
+Correct: B
+Explanation: A unit vector has magnitude 1 and indicates direction only.
+
+#Step 2 [Fill in Blank]: Complete the unit vector formula
+Step Type: fill-blank
+Question: To find the unit vector û in the direction of v, we calculate û = v / __
+Blanks:
+  - Blank 1: ||v||
+Explanation: Dividing a vector by its magnitude produces a unit vector in the same direction.
+
+#Step 3 [Expression & Answer]: Find magnitude of v
+Step Type: step-by-step
+Step Expression: `sqrt(3**2 + 4**2)`
+Step Expected: `5`
+
+#Step 4 [Expression & Answer]: Divide v by its magnitude
+Step Type: step-by-step
+Step Expression: `[[3,4]]/5`
+Step Expected: `[[3/5, 4/5]]`
+
+#Step 5 [True/False]: Verify unit vector property
+Step Type: true-false
+Question: The magnitude of (3/5, 4/5) equals 1. True or False?
+Answer: True
+Explanation: √((3/5)² + (4/5)²) = √(9/25 + 16/25) = √(25/25) = 1
+
+
+###Problem Title: Cross Product - Geometric Understanding
+Problem Description: Given a = (1, 2, 3) and b = (4, 5, 6), find a × b
+
+#Step 1 [Multiple Choice - Multiple]: Select properties of cross product
+Step Type: multiple-choice-multiple
+Question: Which statements are true about the cross product a × b?
+Options:
+  A) a × b is perpendicular to both a and b
+  B) a × b is parallel to a
+  C) ||a × b|| equals the area of the parallelogram formed by a and b
+  D) a × b = b × a
+Correct: A, C
+Explanation: The cross product is perpendicular to both input vectors, and its magnitude gives the parallelogram area. It's anti-commutative: a × b = -(b × a).
+
+#Step 2 [Fill in Blank]: State the i-component formula
+Step Type: fill-blank
+Question: For a = (a₁, a₂, a₃) and b = (b₁, b₂, b₃), the i-component of a × b = __×__ - __×__
+Blanks:
+  - Blank 1: a₂
+  - Blank 2: b₃
+  - Blank 3: a₃
+  - Blank 4: b₂
+Explanation: The i-component uses the determinant of the 2×2 matrix with j and k components.
+
+#Step 3 [Expression & Answer]: Calculate i component
+Step Type: step-by-step
+Step Expression: `2*6 - 3*5`
+Step Expected: `-3`
+
+#Step 4 [Expression & Answer]: Calculate j component (negative)
+Step Type: step-by-step
+Step Expression: `-(1*6 - 3*4)`
+Step Expected: `6`
+
+#Step 5 [Expression & Answer]: Calculate k component
+Step Type: step-by-step
+Step Expression: `1*5 - 2*4`
+Step Expected: `-3`
+
+#Step 6 [Expression & Answer]: Combine components
+Step Type: step-by-step
+Step Expression: `[[-3, 6, -3]]`
+Step Expected: `[[-3, 6, -3]]`
+
+#Step 7 [True/False]: Verify perpendicularity
+Step Type: true-false
+Question: To verify a × b is perpendicular to a, we should check if (a × b) · a = 0. True or False?
+Answer: True
+Explanation: Two vectors are perpendicular if and only if their dot product is zero.
+
+
+###Problem Title: Vector Projections - Geometric Interpretation
+Problem Description: Find the projection of u = (3, 4) onto v = (1, 0)
+
+#Step 1 [Multiple Choice - Single]: What is projection?
+Step Type: multiple-choice-single
+Question: What does the projection of u onto v represent geometrically?
+Options:
+  A) The component of u in the direction of v
+  B) The sum of u and v
+  C) The angle between u and v
+  D) The distance from u to v
+Correct: A
+Explanation: Projection finds how much of vector u points in the direction of vector v.
+
+#Step 2 [Fill in Blank]: Complete the projection formula
+Step Type: fill-blank
+Question: The scalar projection of u onto v = (u · v) / __
+Blanks:
+  - Blank 1: ||v||
+Explanation: We divide the dot product by the magnitude of v to get the scalar projection.
+
+#Step 3 [Expression & Answer]: Calculate dot product u · v
+Step Type: step-by-step
+Step Expression: `3*1 + 4*0`
+Step Expected: `3`
+
+#Step 4 [Expression & Answer]: Calculate ||v||²
+Step Type: step-by-step
+Step Expression: `1**2 + 0**2`
+Step Expected: `1`
+
+#Step 5 [Multiple Choice - Single]: What's the next step?
+Step Type: multiple-choice-single
+Question: To find the vector projection, what should we do with the scalar projection 3?
+Options:
+  A) Add it to v
+  B) Multiply v by this scalar
+  C) Square it
+  D) Take its reciprocal
+Correct: B
+Explanation: Vector projection = (scalar projection) × (unit vector in direction of v) = (u·v/||v||²) × v
+
+#Step 6 [Expression & Answer]: Calculate scalar factor
+Step Type: step-by-step
+Step Expression: `3/1`
+Step Expected: `3`
+
+#Step 7 [Expression & Answer]: Multiply v by scalar factor
+Step Type: step-by-step
+Step Expression: `3*[[1,0]]`
+Step Expected: `[[3,0]]`
+
+
+###Problem Title: Applications - Force Resultant
+Problem Description: Two forces F₁ = (3, 4) N and F₂ = (-1, 5) N act on an object. Find resultant and magnitude.
+
+#Step 1 [Multiple Choice - Single]: What is a resultant force?
+Step Type: multiple-choice-single
+Question: What does the resultant force represent?
+Options:
+  A) The difference between the two forces
+  B) The single force that has the same effect as all forces combined
+  C) The average of all forces
+  D) The largest force acting
+Correct: B
+Explanation: The resultant is the vector sum of all forces, representing their combined effect.
+
+#Step 2 [Expression & Answer]: Calculate resultant F₁ + F₂
+Step Type: step-by-step
+Step Expression: `[[3,4]] + [[-1,5]]`
+Step Expected: `[[2,9]]`
+
+#Step 3 [True/False]: Direction matters in forces
+Step Type: true-false
+Question: In physics, the direction of a force is just as important as its magnitude. True or False?
+Answer: True
+Explanation: Forces are vectors - both magnitude and direction determine their effect.
+
+#Step 4 [Expression & Answer]: Calculate magnitude of resultant
+Step Type: step-by-step
+Step Expression: `sqrt(2**2 + 9**2)`
+Step Expected: `sqrt(85)`
+
+#Step 5 [Multiple Choice - Single]: Interpret the result
+Step Type: multiple-choice-single
+Question: The resultant force magnitude √85 ≈ 9.22 N. How does this compare to the individual forces?
+Options:
+  A) It's less than both forces (vector cancellation)
+  B) It's between the two force magnitudes
+  C) It's greater than both individual forces (vector addition)
+  D) It equals the sum of the magnitudes
+Correct: C
+Explanation: ||F₁|| = 5 N and ||F₂|| ≈ 5.1 N, but the resultant is ≈9.22 N because the forces point in similar directions (both have large positive y-components).
+
+
+###Problem Title: Linear Combinations - Basis Representation
+Problem Description: Express w = (7, 1) as c₁u + c₂v where u = (2, 1) and v = (1, -1)
+
+#Step 1 [Multiple Choice - Single]: What is a linear combination?
+Step Type: multiple-choice-single
+Question: What does it mean to express w as a linear combination of u and v?
+Options:
+  A) Adding u and v to get w
+  B) Finding scalars c₁ and c₂ such that c₁u + c₂v = w
+  C) Multiplying u and v together
+  D) Finding the dot product of u and v
+Correct: B
+Explanation: A linear combination means finding scalar coefficients that when applied to the basis vectors sum to the target vector.
+
+#Step 2 [True/False]: System of equations needed
+Step Type: true-false
+Question: To find c₁ and c₂, we need to set up a system of equations by matching components. True or False?
+Answer: True
+Explanation: We equate components: c₁(2) + c₂(1) = 7 and c₁(1) + c₂(-1) = 1
+
+#Step 3 [Expression & Answer]: First component equation
+Step Type: step-by-step
+Step Expression: `2*c1 + c2`
+Step Expected: `7`
+
+#Step 4 [Expression & Answer]: Second component equation
+Step Type: step-by-step
+Step Expression: `c1 - c2`
+Step Expected: `1`
+
+#Step 5 [Fill in Blank]: Solve for c₁
+Step Type: fill-blank
+Question: From the second equation c₁ - c₂ = 1, we get c₁ = __ + 1
+Blanks:
+  - Blank 1: c2
+Explanation: Adding c₂ to both sides gives c₁ = c₂ + 1
+
+#Step 6 [Expression & Answer]: Substitute into first equation
+Step Type: step-by-step
+Step Expression: `2*(c2 + 1) + c2`
+Step Expected: `7`
+
+#Step 7 [Expression & Answer]: Simplify
+Step Type: step-by-step
+Step Expression: `3*c2 + 2`
+Step Expected: `7`
+
+#Step 8 [Expression & Answer]: Solve for c₂
+Step Type: step-by-step
+Step Expression: `c2`
+Step Expected: `5/3`
+
+#Step 9 [Expression & Answer]: Solve for c₁
+Step Type: step-by-step
+Step Expression: `5/3 + 1`
+Step Expected: `8/3`
+
+#Step 10 [True/False]: Verify the solution
+Step Type: true-false
+Question: We should verify: (8/3)(2,1) + (5/3)(1,-1) = (7,1). True or False?
+Answer: True
+Explanation: Always verify your solution by substituting back into the original equation.
+
+
+========================================
+END OF ENHANCED VECTOR PROBLEM SET
+========================================
+
+PEDAGOGICAL BENEFITS OF MIXED STEP TYPES:
+
+1. **Conceptual Understanding** (Multiple Choice/True-False)
+   - Students must understand WHY, not just HOW
+   - Tests recognition of key concepts
+   - Provides immediate feedback on misconceptions
+
+2. **Formula Mastery** (Fill in Blank)
+   - Reinforces important formulas
+   - Tests recall without multiple choice hints
+   - Helps memorization through active retrieval
+
+3. **Computational Skills** (Expression & Answer)
+   - Develops calculation proficiency
+   - Shows step-by-step problem solving
+   - Builds algebraic manipulation skills
+
+4. **Metacognition** (Verification steps with True/False)
+   - Students check their own understanding
+   - Promotes self-monitoring
+   - Connects calculations to concepts
+
+5. **Engagement** (Variety)
+   - Different question types maintain interest
+   - Reduces monotony
+   - Appeals to different learning styles
