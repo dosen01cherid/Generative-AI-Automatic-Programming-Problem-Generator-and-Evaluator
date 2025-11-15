@@ -1,0 +1,1295 @@
+###PROBLEM SET: SESSION 04 - SISTEM PERSAMAAN LINEAR
+###Linear Algebra - Informatics Engineering
+###Universitas Mercu Buana
+
+======================================================================
+
+###Problem Title: Determinant of 2x2 Matrix - Basic
+Problem Description: Calculate the determinant of A = [[3,2],[1,4]]
+
+#Step Description: Apply formula det(A) = a₁₁a₂₂ - a₁₂a₂₁
+Step Expression: `3*4 - 2*1`
+Step Expected: `10`
+
+
+###Problem Title: Determinant of 2x2 Matrix - Negative Result
+Problem Description: Calculate the determinant of A = [[2,5],[3,7]]
+
+#Step Description: Apply formula det(A) = a₁₁a₂₂ - a₁₂a₂₁
+Step Expression: `2*7 - 5*3`
+Step Expected: `-1`
+
+
+###Problem Title: Determinant of 2x2 Matrix - Zero Result
+Problem Description: Calculate the determinant of A = [[4,6],[2,3]]
+
+#Step Description: Apply formula det(A) = a₁₁a₂₂ - a₁₂a₂₁
+Step Expression: `4*3 - 6*2`
+Step Expected: `0`
+
+
+###Problem Title: Cramer's Rule - 2x2 System Setup
+Problem Description: Solve 2x + 3y = 8, x - y = 1 using Cramer's rule. First, find det(A)
+
+#Step Description: Form coefficient matrix A
+Step Expression: `[[2,3],[1,-1]]`
+Step Expected: `[[2,3],[1,-1]]`
+
+#Step Description: Calculate det(A)
+Step Expression: `2*(-1) - 3*1`
+Step Expected: `-5`
+
+
+###Problem Title: Cramer's Rule - Finding x
+Problem Description: Continue solving 2x + 3y = 8, x - y = 1. Find x using det(Aₓ)
+
+#Step Description: Replace first column of A with constants [8,1]
+Step Expression: `[[8,3],[1,-1]]`
+Step Expected: `[[8,3],[1,-1]]`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `8*(-1) - 3*1`
+Step Expected: `-11`
+
+#Step Description: Calculate x = det(Aₓ)/det(A)
+Step Expression: `(-11)/(-5)`
+Step Expected: `11/5`
+
+
+###Problem Title: Cramer's Rule - Finding y
+Problem Description: Continue solving 2x + 3y = 8, x - y = 1. Find y using det(Aᵧ)
+
+#Step Description: Replace second column of A with constants [8,1]
+Step Expression: `[[2,8],[1,1]]`
+Step Expected: `[[2,8],[1,1]]`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `2*1 - 8*1`
+Step Expected: `-6`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A)
+Step Expression: `(-6)/(-5)`
+Step Expected: `6/5`
+
+
+###Problem Title: Determinant Test for Unique Solution
+Problem Description: Use determinant to determine if system with A = [[3,2],[6,4]] has a unique solution
+
+#Step Description: Calculate det(A)
+Step Expression: `3*4 - 2*6`
+Step Expected: `0`
+
+
+###Problem Title: Matrix Inverse Using Determinant - Step 1
+Problem Description: Find inverse of A = [[2,1],[1,3]] using determinant method. First find det(A)
+
+#Step Description: Calculate det(A)
+Step Expression: `2*3 - 1*1`
+Step Expected: `5`
+
+
+###Problem Title: Matrix Inverse Using Determinant - Step 2
+Problem Description: Continue finding A⁻¹. Form the adjugate matrix
+
+#Step Description: Swap diagonal elements and negate off-diagonal
+Step Expression: `[[3,-1],[-1,2]]`
+Step Expected: `[[3,-1],[-1,2]]`
+
+#Step Description: Calculate A⁻¹ = (1/det(A)) × adj(A)
+Step Expression: `(1/5)*[[3,-1],[-1,2]]`
+Step Expected: `[[3/5,-1/5],[-1/5,2/5]]`
+
+
+###Problem Title: Solving System Using Inverse Matrix
+Problem Description: Solve Ax = b where A = [[2,1],[1,3]] and b = [[7],[10]] using A⁻¹ = [[3/5,-1/5],[-1/5,2/5]]
+
+#Step Description: Calculate first component of x = A⁻¹b
+Step Expression: `(3/5)*7 + (-1/5)*10`
+Step Expected: `11/5`
+
+#Step Description: Calculate second component of x = A⁻¹b
+Step Expression: `(-1/5)*7 + (2/5)*10`
+Step Expected: `13/5`
+
+#Step Description: Form solution vector
+Step Expression: `[[3/5,-1/5],[-1/5,2/5]] * [[7],[10]]`
+Step Expected: `[[11/5],[13/5]]`
+
+
+###Problem Title: Determinant 3x3 - Cofactor Expansion Row 1
+Problem Description: Calculate det(A) for A = [[2,3,1],[1,4,2],[3,1,5]] using cofactor expansion along row 1
+
+#Step Description: Calculate minor M₁₁ (remove row 1, col 1)
+Step Expression: `4*5 - 2*1`
+Step Expected: `18`
+
+#Step Description: Calculate cofactor C₁₁ = (-1)^(1+1) × M₁₁
+Step Expression: `1*18`
+Step Expected: `18`
+
+#Step Description: Calculate minor M₁₂ (remove row 1, col 2)
+Step Expression: `1*5 - 2*3`
+Step Expected: `-1`
+
+#Step Description: Calculate cofactor C₁₂ = (-1)^(1+2) × M₁₂
+Step Expression: `-1*(-1)`
+Step Expected: `1`
+
+#Step Description: Calculate minor M₁₃ (remove row 1, col 3)
+Step Expression: `1*1 - 4*3`
+Step Expected: `-11`
+
+#Step Description: Calculate cofactor C₁₃ = (-1)^(1+3) × M₁₃
+Step Expression: `1*(-11)`
+Step Expected: `-11`
+
+#Step Description: Calculate det(A) = a₁₁C₁₁ + a₁₂C₁₂ + a₁₃C₁₃
+Step Expression: `2*18 + 3*1 + 1*(-11)`
+Step Expected: `28`
+
+
+###Problem Title: Determinant 3x3 - Upper Triangular
+Problem Description: Calculate determinant of upper triangular matrix A = [[2,3,4],[0,5,6],[0,0,7]]
+
+#Step Description: For triangular matrix, determinant is product of diagonal elements
+Step Expression: `2*5*7`
+Step Expected: `70`
+
+
+###Problem Title: Determinant 3x3 - Diagonal Matrix
+Problem Description: Calculate determinant of diagonal matrix D = [[3,0,0],[0,-2,0],[0,0,4]]
+
+#Step Description: Product of diagonal elements
+Step Expression: `3*(-2)*4`
+Step Expected: `-24`
+
+
+###Problem Title: Cramer's Rule 3x3 - Setup
+Problem Description: Solve x + 2y + z = 6, 2x - y + 3z = 9, 3x + y - z = 2 using Cramer's rule. Find det(A)
+
+#Step Description: Form coefficient matrix A
+Step Expression: `[[1,2,1],[2,-1,3],[3,1,-1]]`
+Step Expected: `[[1,2,1],[2,-1,3],[3,1,-1]]`
+
+#Step Description: Calculate minor M₁₁
+Step Expression: `(-1)*(-1) - 3*1`
+Step Expected: `-2`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*(-2)`
+Step Expected: `-2`
+
+#Step Description: Calculate minor M₁₂
+Step Expression: `2*(-1) - 3*3`
+Step Expected: `-11`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-11)`
+Step Expected: `11`
+
+#Step Description: Calculate minor M₁₃
+Step Expression: `2*1 - (-1)*3`
+Step Expected: `5`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*5`
+Step Expected: `5`
+
+#Step Description: Calculate det(A)
+Step Expression: `1*(-2) + 2*11 + 1*5`
+Step Expected: `25`
+
+
+###Problem Title: Cramer's Rule 3x3 - Finding x
+Problem Description: Continue with system. Find x using det(Aₓ) where constants are [6,9,2]
+
+#Step Description: Form Aₓ by replacing first column with constants
+Step Expression: `[[6,2,1],[9,-1,3],[2,1,-1]]`
+Step Expected: `[[6,2,1],[9,-1,3],[2,1,-1]]`
+
+#Step Description: Calculate minor for position (1,1)
+Step Expression: `(-1)*(-1) - 3*1`
+Step Expected: `-2`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*(-2)`
+Step Expected: `-2`
+
+#Step Description: Calculate minor for position (1,2)
+Step Expression: `9*(-1) - 3*2`
+Step Expected: `-15`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-15)`
+Step Expected: `15`
+
+#Step Description: Calculate minor for position (1,3)
+Step Expression: `9*1 - (-1)*2`
+Step Expected: `11`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*11`
+Step Expected: `11`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `6*(-2) + 2*15 + 1*11`
+Step Expected: `29`
+
+#Step Description: Calculate x = det(Aₓ)/det(A)
+Step Expression: `29/25`
+Step Expected: `29/25`
+
+
+###Problem Title: Cramer's Rule 3x3 - Finding y
+Problem Description: Find y using det(Aᵧ) by replacing second column with constants
+
+#Step Description: Form Aᵧ
+Step Expression: `[[1,6,1],[2,9,3],[3,2,-1]]`
+Step Expected: `[[1,6,1],[2,9,3],[3,2,-1]]`
+
+#Step Description: Calculate minor for position (1,1)
+Step Expression: `9*(-1) - 3*2`
+Step Expected: `-15`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*(-15)`
+Step Expected: `-15`
+
+#Step Description: Calculate minor for position (1,2)
+Step Expression: `2*(-1) - 3*3`
+Step Expected: `-11`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-11)`
+Step Expected: `11`
+
+#Step Description: Calculate minor for position (1,3)
+Step Expression: `2*2 - 9*3`
+Step Expected: `-23`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*(-23)`
+Step Expected: `-23`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `1*(-15) + 6*11 + 1*(-23)`
+Step Expected: `28`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A)
+Step Expression: `28/25`
+Step Expected: `28/25`
+
+
+###Problem Title: Cramer's Rule 3x3 - Finding z
+Problem Description: Find z using det(Aᵤ) by replacing third column with constants
+
+#Step Description: Form Aᵤ
+Step Expression: `[[1,2,6],[2,-1,9],[3,1,2]]`
+Step Expected: `[[1,2,6],[2,-1,9],[3,1,2]]`
+
+#Step Description: Calculate minor for position (1,1)
+Step Expression: `(-1)*2 - 9*1`
+Step Expected: `-11`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*(-11)`
+Step Expected: `-11`
+
+#Step Description: Calculate minor for position (1,2)
+Step Expression: `2*2 - 9*3`
+Step Expected: `-23`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-23)`
+Step Expected: `23`
+
+#Step Description: Calculate minor for position (1,3)
+Step Expression: `2*1 - (-1)*3`
+Step Expected: `5`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*5`
+Step Expected: `5`
+
+#Step Description: Calculate det(Aᵤ)
+Step Expression: `1*(-11) + 2*23 + 6*5`
+Step Expected: `65`
+
+#Step Description: Calculate z = det(Aᵤ)/det(A)
+Step Expression: `65/25`
+Step Expected: `13/5`
+
+
+###Problem Title: Cofactor Matrix 2x2
+Problem Description: Find the cofactor matrix of A = [[3,2],[1,4]]
+
+#Step Description: Calculate C₁₁ = (-1)^(1+1) × M₁₁ where M₁₁ = 4
+Step Expression: `1*4`
+Step Expected: `4`
+
+#Step Description: Calculate C₁₂ = (-1)^(1+2) × M₁₂ where M₁₂ = 1
+Step Expression: `-1*1`
+Step Expected: `-1`
+
+#Step Description: Calculate C₂₁ = (-1)^(2+1) × M₂₁ where M₂₁ = 2
+Step Expression: `-1*2`
+Step Expected: `-2`
+
+#Step Description: Calculate C₂₂ = (-1)^(2+2) × M₂₂ where M₂₂ = 3
+Step Expression: `1*3`
+Step Expected: `3`
+
+#Step Description: Form cofactor matrix
+Step Expression: `[[4,-1],[-2,3]]`
+Step Expected: `[[4,-1],[-2,3]]`
+
+
+###Problem Title: Adjugate Matrix from Cofactor Matrix
+Problem Description: Find adjugate of A = [[3,2],[1,4]] from cofactor matrix C = [[4,-1],[-2,3]]
+
+#Step Description: Adjugate is transpose of cofactor matrix
+Step Expression: `transpose([[4,-1],[-2,3]])`
+Step Expected: `[[4,-2],[-1,3]]`
+
+
+###Problem Title: Matrix Inverse Using Adjugate
+Problem Description: Find A⁻¹ for A = [[3,2],[1,4]] using adj(A) = [[4,-2],[-1,3]]
+
+#Step Description: Calculate det(A)
+Step Expression: `3*4 - 2*1`
+Step Expected: `10`
+
+#Step Description: Calculate A⁻¹ = (1/det(A)) × adj(A)
+Step Expression: `(1/10)*[[4,-2],[-1,3]]`
+Step Expected: `[[2/5,-1/5],[-1/10,3/10]]`
+
+
+###Problem Title: 3x3 System - Matrix Form
+Problem Description: Write the system x + 2y + z = 6, 2x - y + 3z = 9, 3x + y - z = 2 in matrix form
+
+#Step Description: Form coefficient matrix A
+Step Expression: `[[1,2,1],[2,-1,3],[3,1,-1]]`
+Step Expected: `[[1,2,1],[2,-1,3],[3,1,-1]]`
+
+#Step Description: Form variable vector
+Step Expression: `[[x],[y],[z]]`
+Step Expected: `[[x],[y],[z]]`
+
+#Step Description: Form constant vector b
+Step Expression: `[[6],[9],[2]]`
+Step Expected: `[[6],[9],[2]]`
+
+
+###Problem Title: Using Determinant to Check Consistency
+Problem Description: Use det(A) to determine if system with A = [[2,4],[1,2]] has unique solution
+
+#Step Description: Calculate det(A)
+Step Expression: `2*2 - 4*1`
+Step Expected: `0`
+
+
+###Problem Title: Determinant Zero Implies No Unique Solution
+Problem Description: For A = [[3,6],[2,4]], show det(A) = 0, meaning no unique solution exists
+
+#Step Description: Calculate det(A)
+Step Expression: `3*4 - 6*2`
+Step Expected: `0`
+
+
+###Problem Title: Non-Zero Determinant Guarantees Unique Solution
+Problem Description: For A = [[5,2],[3,1]], verify system has unique solution using determinant
+
+#Step Description: Calculate det(A)
+Step Expression: `5*1 - 2*3`
+Step Expected: `-1`
+
+
+###Problem Title: Augmented Matrix Formation
+Problem Description: Form the augmented matrix [A|b] for system: 2x + 3y = 7, x - 2y = -1
+
+#Step Description: Write coefficient matrix A
+Step Expression: `[[2,3],[1,-2]]`
+Step Expected: `[[2,3],[1,-2]]`
+
+#Step Description: Write constant vector b
+Step Expression: `[[7],[-1]]`
+Step Expected: `[[7],[-1]]`
+
+#Step Description: Form augmented matrix [A|b]
+Step Expression: `[[2,3,7],[1,-2,-1]]`
+Step Expected: `[[2,3,7],[1,-2,-1]]`
+
+
+###Problem Title: Augmented Matrix 3x3
+Problem Description: Form augmented matrix for: x - y + 2z = 3, 2x + y - z = 1, 3x + 2y + z = 4
+
+#Step Description: Form augmented matrix [A|b]
+Step Expression: `[[1,-1,2,3],[2,1,-1,1],[3,2,1,4]]`
+Step Expected: `[[1,-1,2,3],[2,1,-1,1],[3,2,1,4]]`
+
+
+###Problem Title: Consistent System - Unique Solution
+Problem Description: Determine if the system 2x + y = 5, x - y = 1 is consistent and find the solution
+
+#Step Description: Add equations to eliminate y
+Step Expression: `(2*x + y) + (x - y)`
+Step Expected: `5 + 1`
+
+#Step Description: Simplify
+Step Expression: `3*x`
+Step Expected: `6`
+
+#Step Description: Solve for x
+Step Expression: `x`
+Step Expected: `2`
+
+#Step Description: Substitute into second equation
+Step Expression: `2 - y`
+Step Expected: `1`
+
+#Step Description: Solve for y
+Step Expression: `y`
+Step Expected: `1`
+
+
+###Problem Title: Inconsistent System
+Problem Description: Show that the system 2x + 3y = 6, 2x + 3y = 10 is inconsistent
+
+#Step Description: Write the expression for subtracting first equation from second
+Step Expression: `(2*x + 3*y) - (2*x + 3*y)`
+Step Expected: `(2*x + 3*y) - (2*x + 3*y)`
+
+#Step Description: Simplify left side
+Step Expression: `0`
+Step Expected: `0`
+
+#Step Description: Write right side
+Step Expression: `10 - 6`
+Step Expected: `10 - 6`
+
+#Step Description: Simplify right side
+Step Expression: `4`
+Step Expected: `4`
+
+
+###Problem Title: Dependent System
+Problem Description: Show that 2x + 4y = 8 and x + 2y = 4 represent the same line (infinitely many solutions)
+
+#Step Description: Write the expression for dividing first equation by 2
+Step Expression: `(2*x + 4*y)/2`
+Step Expected: `(2*x + 4*y)/2`
+
+#Step Description: Simplify the left side
+Step Expression: `x + 2*y`
+Step Expected: `x + 2*y`
+
+#Step Description: Write the right side after dividing by 2
+Step Expression: `8/2`
+Step Expected: `8/2`
+
+#Step Description: Simplify the right side
+Step Expression: `4`
+Step Expected: `4`
+
+
+###Problem Title: Homogeneous System - Trivial Solution
+Problem Description: Find the solution to the homogeneous system: 2x + 3y = 0, x - y = 0
+
+#Step Description: From second equation
+Step Expression: `x`
+Step Expected: `y`
+
+#Step Description: Substitute into first equation
+Step Expression: `2*y + 3*y`
+Step Expected: `0`
+
+#Step Description: Simplify
+Step Expression: `5*y`
+Step Expected: `0`
+
+#Step Description: Solve for y
+Step Expression: `y`
+Step Expected: `0`
+
+#Step Description: Therefore x equals
+Step Expression: `x`
+Step Expected: `0`
+
+
+###Problem Title: Homogeneous System - Non-Trivial Solution
+Problem Description: Find non-trivial solutions to: x + 2y - z = 0, 2x + 4y - 2z = 0
+
+#Step Description: Write the expression for dividing second equation by 2
+Step Expression: `(2*x + 4*y - 2*z)/2`
+Step Expected: `(2*x + 4*y - 2*z)/2`
+
+#Step Description: Simplify the left side
+Step Expression: `x + 2*y - z`
+Step Expected: `x + 2*y - z`
+
+#Step Description: Write the right side
+Step Expression: `0`
+Step Expected: `0`
+
+#Step Description: Express z in terms of free variables
+Step Expression: `z`
+Step Expected: `x + 2*y`
+
+
+###Problem Title: System with Parameter
+Problem Description: For what value of k does the system x + 2y = 3, 2x + ky = 6 have infinitely many solutions?
+
+#Step Description: Write the expression for multiplying first equation by 2
+Step Expression: `2*(x + 2*y)`
+Step Expected: `2*(x + 2*y)`
+
+#Step Description: Simplify the left side
+Step Expression: `2*x + 4*y`
+Step Expected: `2*x + 4*y`
+
+#Step Description: Write the right side after multiplying by 2
+Step Expression: `2*3`
+Step Expected: `2*3`
+
+#Step Description: Simplify the right side
+Step Expression: `6`
+Step Expected: `6`
+
+#Step Description: For infinite solutions, second equation must match, so k equals
+Step Expression: `k`
+Step Expected: `4`
+
+
+###Problem Title: System with No Solution - Parameter
+Problem Description: For what value of k does x + 2y = 3, 2x + 4y = k have no solution?
+
+#Step Description: Write the expression for multiplying first equation by 2
+Step Expression: `2*(x + 2*y)`
+Step Expected: `2*(x + 2*y)`
+
+#Step Description: Simplify the left side
+Step Expression: `2*x + 4*y`
+Step Expected: `2*x + 4*y`
+
+#Step Description: Write the right side after multiplying by 2
+Step Expression: `2*3`
+Step Expected: `2*3`
+
+#Step Description: Simplify the right side
+Step Expression: `6`
+Step Expected: `6`
+
+#Step Description: For no solution, k must not equal what value?
+Step Expression: `6`
+Step Expected: `6`
+
+
+###Problem Title: Three Variables - Back Substitution Setup
+Problem Description: Given system in row echelon form: x + 2y + 3z = 14, y + 2z = 8, z = 2, solve using back substitution
+
+#Step Description: From third equation
+Step Expression: `z`
+Step Expected: `2`
+
+#Step Description: Substitute z into second equation
+Step Expression: `y + 2*2`
+Step Expected: `8`
+
+#Step Description: Solve for y
+Step Expression: `y`
+Step Expected: `4`
+
+#Step Description: Substitute y and z into first equation
+Step Expression: `x + 2*4 + 3*2`
+Step Expected: `14`
+
+#Step Description: Simplify
+Step Expression: `x + 8 + 6`
+Step Expected: `14`
+
+#Step Description: Solve for x
+Step Expression: `x`
+Step Expected: `0`
+
+
+###Problem Title: Application - Mixture Problem Using Cramer's Rule
+Problem Description: A chemist needs 10 liters of 35% acid. Solution A is 20% acid, Solution B is 50% acid. Use Cramer's rule to find amounts needed.
+
+#Step Description: Set up system: x + y = 10, 0.2x + 0.5y = 3.5
+Step Expression: `[[1,1],[0.2,0.5]]`
+Step Expected: `[[1,1],[0.2,0.5]]`
+
+#Step Description: Calculate det(A)
+Step Expression: `1*0.5 - 1*0.2`
+Step Expected: `0.3`
+
+#Step Description: Form Aₓ by replacing first column with [10, 3.5]
+Step Expression: `[[10,1],[3.5,0.5]]`
+Step Expected: `[[10,1],[3.5,0.5]]`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `10*0.5 - 1*3.5`
+Step Expected: `1.5`
+
+#Step Description: Calculate x = det(Aₓ)/det(A)
+Step Expression: `1.5/0.3`
+Step Expected: `5`
+
+#Step Description: Form Aᵧ by replacing second column with [10, 3.5]
+Step Expression: `[[1,10],[0.2,3.5]]`
+Step Expected: `[[1,10],[0.2,3.5]]`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `1*3.5 - 10*0.2`
+Step Expected: `1.5`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A)
+Step Expression: `1.5/0.3`
+Step Expected: `5`
+
+
+###Problem Title: Application - Cost Problem Using Cramer's Rule
+Problem Description: Adult tickets cost $8, child tickets cost $5. 100 tickets sold for $650. Use Cramer's rule to find quantities.
+
+#Step Description: Set up system: x + y = 100, 8x + 5y = 650
+Step Expression: `[[1,1],[8,5]]`
+Step Expected: `[[1,1],[8,5]]`
+
+#Step Description: Calculate det(A)
+Step Expression: `1*5 - 1*8`
+Step Expected: `-3`
+
+#Step Description: Form Aₓ = [[100,1],[650,5]]
+Step Expression: `[[100,1],[650,5]]`
+Step Expected: `[[100,1],[650,5]]`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `100*5 - 1*650`
+Step Expected: `-150`
+
+#Step Description: Calculate x = det(Aₓ)/det(A) (adult tickets)
+Step Expression: `(-150)/(-3)`
+Step Expected: `50`
+
+#Step Description: Form Aᵧ = [[1,100],[8,650]]
+Step Expression: `[[1,100],[8,650]]`
+Step Expected: `[[1,100],[8,650]]`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `1*650 - 100*8`
+Step Expected: `-150`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A) (child tickets)
+Step Expression: `(-150)/(-3)`
+Step Expected: `50`
+
+
+###Problem Title: Application - Investment Problem
+Problem Description: An investor puts $10,000 into two accounts. One pays 3% annual interest, the other 5%. If the total interest after one year is $420, how much was invested in each account?
+
+#Step Description: Let x = amount at 3%, y = amount at 5%. Write total investment equation
+Step Expression: `x + y`
+Step Expected: `10000`
+
+#Step Description: Write total interest equation
+Step Expression: `0.03*x + 0.05*y`
+Step Expected: `420`
+
+#Step Description: From first equation, express y in terms of x
+Step Expression: `y`
+Step Expected: `10000 - x`
+
+#Step Description: Write substitution into interest equation
+Step Expression: `0.03*x + 0.05*(10000 - x)`
+Step Expected: `0.03*x + 0.05*(10000 - x)`
+
+#Step Description: Expand the expression
+Step Expression: `0.03*x + 500 - 0.05*x`
+Step Expected: `0.03*x + 500 - 0.05*x`
+
+#Step Description: Write the right side
+Step Expression: `420`
+Step Expected: `420`
+
+#Step Description: Combine like terms on left side
+Step Expression: `-0.02*x + 500`
+Step Expected: `-0.02*x + 500`
+
+#Step Description: Write the equation
+Step Expression: `-0.02*x + 500`
+Step Expected: `420`
+
+#Step Description: Solve for x
+Step Expression: `x`
+Step Expected: `4000`
+
+#Step Description: Calculate y
+Step Expression: `10000 - 4000`
+Step Expected: `10000 - 4000`
+
+#Step Description: Simplify y
+Step Expression: `6000`
+Step Expected: `6000`
+
+
+###Problem Title: Determinant of 3x3 - Different Methods
+Problem Description: Calculate det(A) for A = [[1,2,3],[4,5,6],[7,8,9]] and show it equals zero
+
+#Step Description: Expand along first row - calculate M₁₁
+Step Expression: `5*9 - 6*8`
+Step Expected: `-3`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*(-3)`
+Step Expected: `-3`
+
+#Step Description: Calculate M₁₂
+Step Expression: `4*9 - 6*7`
+Step Expected: `-6`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-6)`
+Step Expected: `6`
+
+#Step Description: Calculate M₁₃
+Step Expression: `4*8 - 5*7`
+Step Expected: `-3`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*(-3)`
+Step Expected: `-3`
+
+#Step Description: Calculate det(A)
+Step Expression: `1*(-3) + 2*6 + 3*(-3)`
+Step Expected: `0`
+
+
+###Problem Title: Determinant Test for Unique Solution
+Problem Description: Use determinant to check if system with A = [[3,2],[6,4]] has a unique solution
+
+#Step Description: Calculate det(A)
+Step Expression: `3*4 - 2*6`
+Step Expected: `0`
+
+
+###Problem Title: Determinant for 3x3 - Unique Solution Test
+Problem Description: Determine if A = [[1,2,3],[0,1,4],[0,0,2]] has a unique solution (upper triangular)
+
+#Step Description: For upper triangular matrix, determinant is product of diagonal
+Step Expression: `1*1*2`
+Step Expected: `2`
+
+
+###Problem Title: Cramer's Rule - 2x2 System
+Problem Description: Solve 3x + 2y = 8, x - y = -1 using Cramer's rule
+
+#Step Description: Calculate det(A)
+Step Expression: `3*(-1) - 2*1`
+Step Expected: `-5`
+
+#Step Description: Replace first column with constants for det(Aₓ)
+Step Expression: `[[8,2],[-1,-1]]`
+Step Expected: `[[8,2],[-1,-1]]`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `8*(-1) - 2*(-1)`
+Step Expected: `-6`
+
+#Step Description: Calculate x = det(Aₓ)/det(A)
+Step Expression: `-6/(-5)`
+Step Expected: `6/5`
+
+#Step Description: Replace second column with constants for det(Aᵧ)
+Step Expression: `[[3,8],[1,-1]]`
+Step Expected: `[[3,8],[1,-1]]`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `3*(-1) - 8*1`
+Step Expected: `-11`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A)
+Step Expression: `-11/(-5)`
+Step Expected: `11/5`
+
+
+###Problem Title: Cramer's Rule with Fractions
+Problem Description: Solve x + 2y = 7, 3x - y = 4 using Cramer's rule
+
+#Step Description: Calculate det(A) for A = [[1,2],[3,-1]]
+Step Expression: `1*(-1) - 2*3`
+Step Expected: `-7`
+
+#Step Description: Form Aₓ = [[7,2],[4,-1]]
+Step Expression: `[[7,2],[4,-1]]`
+Step Expected: `[[7,2],[4,-1]]`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `7*(-1) - 2*4`
+Step Expected: `-15`
+
+#Step Description: Calculate x = det(Aₓ)/det(A)
+Step Expression: `(-15)/(-7)`
+Step Expected: `15/7`
+
+#Step Description: Form Aᵧ = [[1,7],[3,4]]
+Step Expression: `[[1,7],[3,4]]`
+Step Expected: `[[1,7],[3,4]]`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `1*4 - 7*3`
+Step Expected: `-17`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A)
+Step Expression: `(-17)/(-7)`
+Step Expected: `17/7`
+
+
+###Problem Title: Cramer's Rule with Decimal Coefficients
+Problem Description: Solve: 0.5x + 0.3y = 5, 0.2x - 0.4y = 1 using Cramer's rule
+
+#Step Description: Calculate det(A) for A = [[0.5, 0.3],[0.2, -0.4]]
+Step Expression: `0.5*(-0.4) - 0.3*0.2`
+Step Expected: `-0.26`
+
+#Step Description: Form Aₓ = [[5, 0.3],[1, -0.4]]
+Step Expression: `[[5,0.3],[1,-0.4]]`
+Step Expected: `[[5,0.3],[1,-0.4]]`
+
+#Step Description: Calculate det(Aₓ)
+Step Expression: `5*(-0.4) - 0.3*1`
+Step Expected: `-2.3`
+
+#Step Description: Calculate x = det(Aₓ)/det(A)
+Step Expression: `(-2.3)/(-0.26)`
+Step Expected: `115/13`
+
+#Step Description: Form Aᵧ = [[0.5, 5],[0.2, 1]]
+Step Expression: `[[0.5,5],[0.2,1]]`
+Step Expected: `[[0.5,5],[0.2,1]]`
+
+#Step Description: Calculate det(Aᵧ)
+Step Expression: `0.5*1 - 5*0.2`
+Step Expected: `-0.5`
+
+#Step Description: Calculate y = det(Aᵧ)/det(A)
+Step Expression: `(-0.5)/(-0.26)`
+Step Expected: `25/13`
+
+
+###Problem Title: Over-determined System Check
+Problem Description: Check if the system x + y = 3, 2x + 2y = 6, x - y = 1 is consistent
+
+#Step Description: Write expression for checking if equation 2 is multiple of equation 1
+Step Expression: `2*(x + y)`
+Step Expected: `2*(x + y)`
+
+#Step Description: Simplify left side
+Step Expression: `2*x + 2*y`
+Step Expected: `2*x + 2*y`
+
+#Step Description: Write right side after multiplying by 2
+Step Expression: `2*3`
+Step Expected: `2*3`
+
+#Step Description: Simplify right side
+Step Expression: `6`
+Step Expected: `6`
+
+#Step Description: Write expression for adding equations 1 and 3
+Step Expression: `(x + y) + (x - y)`
+Step Expected: `(x + y) + (x - y)`
+
+#Step Description: Simplify left side
+Step Expression: `2*x`
+Step Expected: `2*x`
+
+#Step Description: Write right side
+Step Expression: `3 + 1`
+Step Expected: `3 + 1`
+
+#Step Description: Simplify right side
+Step Expression: `4`
+Step Expected: `4`
+
+#Step Description: Solve for x
+Step Expression: `x`
+Step Expected: `2`
+
+#Step Description: Substitute x = 2 into equation 1 to find y
+Step Expression: `3 - 2`
+Step Expected: `3 - 2`
+
+#Step Description: Calculate y
+Step Expression: `1`
+Step Expected: `1`
+
+
+###Problem Title: Under-determined System
+Problem Description: For system x + 2y + z = 5, 2x + y - z = 3, express solution in terms of parameter
+
+#Step Description: Write expression for adding both equations to eliminate z
+Step Expression: `(x + 2*y + z) + (2*x + y - z)`
+Step Expected: `(x + 2*y + z) + (2*x + y - z)`
+
+#Step Description: Simplify left side
+Step Expression: `3*x + 3*y`
+Step Expected: `3*x + 3*y`
+
+#Step Description: Write right side
+Step Expression: `5 + 3`
+Step Expected: `5 + 3`
+
+#Step Description: Simplify right side
+Step Expression: `8`
+Step Expected: `8`
+
+#Step Description: Divide both sides by 3
+Step Expression: `(3*x + 3*y)/3`
+Step Expected: `(3*x + 3*y)/3`
+
+#Step Description: Simplify left side
+Step Expression: `x + y`
+Step Expected: `x + y`
+
+#Step Description: Simplify right side
+Step Expression: `8/3`
+Step Expected: `8/3`
+
+#Step Description: Express x in terms of y
+Step Expression: `x`
+Step Expected: `8/3 - y`
+
+#Step Description: Substitute into first equation to express z
+Step Expression: `(8/3 - y) + 2*y + z`
+Step Expected: `5`
+
+#Step Description: Simplify left side
+Step Expression: `8/3 + y + z`
+Step Expected: `8/3 + y + z`
+
+#Step Description: Write the equation
+Step Expression: `8/3 + y + z`
+Step Expected: `5`
+
+#Step Description: Solve for z in terms of y
+Step Expression: `z`
+Step Expected: `7/3 - y`
+
+
+###Problem Title: Break-even Analysis
+Problem Description: A company has fixed costs of $1000 and variable cost of $5 per unit. Selling price is $15 per unit. Find the break-even point.
+
+#Step Description: Let x = number of units. Write total cost equation
+Step Expression: `1000 + 5*x`
+Step Expected: `1000 + 5*x`
+
+#Step Description: Write revenue equation
+Step Expression: `15*x`
+Step Expected: `15*x`
+
+#Step Description: At break-even, cost equals revenue, write the equation
+Step Expression: `1000 + 5*x`
+Step Expected: `15*x`
+
+#Step Description: Rearrange to isolate constant term
+Step Expression: `1000`
+Step Expected: `15*x - 5*x`
+
+#Step Description: Simplify right side
+Step Expression: `1000`
+Step Expected: `10*x`
+
+#Step Description: Solve for x
+Step Expression: `x`
+Step Expected: `100`
+
+
+###Problem Title: Supply and Demand
+Problem Description: Supply: p = 2q + 10, Demand: p = -3q + 60. Find equilibrium (price and quantity)
+
+#Step Description: At equilibrium, supply equals demand, write the equation
+Step Expression: `2*q + 10`
+Step Expected: `-3*q + 60`
+
+#Step Description: Add 3q to both sides
+Step Expression: `2*q + 10 + 3*q`
+Step Expected: `2*q + 10 + 3*q`
+
+#Step Description: Simplify left side
+Step Expression: `5*q + 10`
+Step Expected: `5*q + 10`
+
+#Step Description: Write right side
+Step Expression: `60`
+Step Expected: `60`
+
+#Step Description: Solve for q
+Step Expression: `q`
+Step Expected: `10`
+
+#Step Description: Find equilibrium price by substituting q = 10 into supply equation
+Step Expression: `2*10 + 10`
+Step Expected: `2*10 + 10`
+
+#Step Description: Calculate equilibrium price
+Step Expression: `30`
+Step Expected: `30`
+
+
+###Problem Title: Work Rate Problem
+Problem Description: Worker A can complete a job in 6 hours, Worker B in 4 hours. Working together, how long does it take?
+
+#Step Description: Calculate A's rate per hour
+Step Expression: `1/6`
+Step Expected: `1/6`
+
+#Step Description: Calculate B's rate per hour
+Step Expression: `1/4`
+Step Expected: `1/4`
+
+#Step Description: Write expression for combined rate per hour
+Step Expression: `1/6 + 1/4`
+Step Expected: `1/6 + 1/4`
+
+#Step Description: Calculate combined rate
+Step Expression: `5/12`
+Step Expected: `5/12`
+
+#Step Description: Write expression for time to complete together
+Step Expression: `1/(5/12)`
+Step Expected: `1/(5/12)`
+
+#Step Description: Calculate time
+Step Expression: `12/5`
+Step Expected: `12/5`
+
+
+###Problem Title: Age Problem
+Problem Description: Currently, father is 3 times as old as son. In 10 years, father will be twice as old as son. Find their current ages.
+
+#Step Description: Let f = father's age, s = son's age. Write current relationship
+Step Expression: `f`
+Step Expected: `3*s`
+
+#Step Description: Write father's age in 10 years
+Step Expression: `f + 10`
+Step Expected: `f + 10`
+
+#Step Description: Write son's age in 10 years
+Step Expression: `s + 10`
+Step Expected: `s + 10`
+
+#Step Description: Write future relationship equation
+Step Expression: `f + 10`
+Step Expected: `2*(s + 10)`
+
+#Step Description: Substitute f = 3s into the equation
+Step Expression: `3*s + 10`
+Step Expected: `3*s + 10`
+
+#Step Description: Expand right side
+Step Expression: `2*s + 20`
+Step Expected: `2*s + 20`
+
+#Step Description: Write the equation
+Step Expression: `3*s + 10`
+Step Expected: `2*s + 20`
+
+#Step Description: Solve for s
+Step Expression: `s`
+Step Expected: `10`
+
+#Step Description: Calculate f using f = 3s
+Step Expression: `3*10`
+Step Expected: `3*10`
+
+#Step Description: Simplify f
+Step Expression: `30`
+Step Expected: `30`
+
+
+###Problem Title: Distance-Rate-Time Problem
+Problem Description: Two cars start from the same point. Car A travels north at 60 km/h, Car B travels east at 80 km/h. After how many hours are they 100 km apart?
+
+#Step Description: Let t = time in hours. Distance traveled by A
+Step Expression: `60*t`
+Step Expected: `60*t`
+
+#Step Description: Distance traveled by B
+Step Expression: `80*t`
+Step Expected: `80*t`
+
+#Step Description: Using Pythagorean theorem for distance between them
+Step Expression: `(60*t)**2 + (80*t)**2`
+Step Expected: `100**2`
+
+#Step Description: Expand left side
+Step Expression: `3600*t**2 + 6400*t**2`
+Step Expected: `10000`
+
+#Step Description: Combine
+Step Expression: `10000*t**2`
+Step Expected: `10000`
+
+#Step Description: Solve for t²
+Step Expression: `t**2`
+Step Expected: `1`
+
+#Step Description: Solve for t
+Step Expression: `t`
+Step Expected: `1`
+
+
+###Problem Title: Area of Triangle Using Determinant
+Problem Description: Find the area of triangle with vertices at (1,2), (3,5), (4,1) using determinant
+
+#Step Description: Set up determinant with coordinates
+Step Expression: `[[1,2,1],[3,5,1],[4,1,1]]`
+Step Expected: `[[1,2,1],[3,5,1],[4,1,1]]`
+
+#Step Description: Calculate minor M₁₁
+Step Expression: `5*1 - 1*1`
+Step Expected: `4`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*4`
+Step Expected: `4`
+
+#Step Description: Calculate minor M₁₂
+Step Expression: `3*1 - 1*4`
+Step Expected: `-1`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-1)`
+Step Expected: `1`
+
+#Step Description: Calculate minor M₁₃
+Step Expression: `3*1 - 5*4`
+Step Expected: `-17`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*(-17)`
+Step Expected: `-17`
+
+#Step Description: Calculate determinant
+Step Expression: `1*4 + 2*1 + 1*(-17)`
+Step Expected: `-11`
+
+#Step Description: Calculate area = (1/2)|det|
+Step Expression: `(1/2)*abs(-11)`
+Step Expected: `11/2`
+
+
+###Problem Title: Area of Parallelogram Using Determinant
+Problem Description: Find area of parallelogram with adjacent sides u = (3,1) and v = (1,4)
+
+#Step Description: Form 2x2 matrix with vectors as columns
+Step Expression: `[[3,1],[1,4]]`
+Step Expected: `[[3,1],[1,4]]`
+
+#Step Description: Calculate determinant
+Step Expression: `3*4 - 1*1`
+Step Expected: `11`
+
+#Step Description: Area equals absolute value of determinant
+Step Expression: `abs(11)`
+Step Expected: `11`
+
+
+###Problem Title: Collinearity Test Using Determinant
+Problem Description: Determine if points (2,3), (4,7), (5,9) are collinear using determinant
+
+#Step Description: Set up determinant
+Step Expression: `[[2,3,1],[4,7,1],[5,9,1]]`
+Step Expected: `[[2,3,1],[4,7,1],[5,9,1]]`
+
+#Step Description: Calculate minor M₁₁
+Step Expression: `7*1 - 1*9`
+Step Expected: `-2`
+
+#Step Description: Calculate cofactor C₁₁
+Step Expression: `1*(-2)`
+Step Expected: `-2`
+
+#Step Description: Calculate minor M₁₂
+Step Expression: `4*1 - 1*5`
+Step Expected: `-1`
+
+#Step Description: Calculate cofactor C₁₂
+Step Expression: `-1*(-1)`
+Step Expected: `1`
+
+#Step Description: Calculate minor M₁₃
+Step Expression: `4*9 - 7*5`
+Step Expected: `1`
+
+#Step Description: Calculate cofactor C₁₃
+Step Expression: `1*1`
+Step Expected: `1`
+
+#Step Description: Calculate determinant
+Step Expression: `2*(-2) + 3*1 + 1*1`
+Step Expected: `0`
+
+
+======================================================================
+PRACTICE EXERCISES (WITHOUT SOLUTIONS)
+======================================================================
+
+###Exercise 1: Determinants
+Calculate the determinants:
+a) A = [[5,3],[2,1]]
+b) B = [[4,7],[2,3]]
+c) C = [[1,2,3],[0,4,5],[0,0,6]]
+
+###Exercise 2: Cramer's Rule 2x2
+Solve using Cramer's rule:
+a) 2x + 3y = 13, x - 2y = -3
+b) 3x - y = 5, 2x + y = 10
+c) 4x + 5y = 19, 3x - 2y = -1
+
+###Exercise 3: Cramer's Rule 3x3
+Solve using Cramer's rule: x + y + z = 9, 2x - y + 2z = 12, x - 2y + z = 6
+
+###Exercise 4: Matrix Inverse Using Determinants
+a) Find det(A) for A = [[2,1],[1,3]]
+b) Find the cofactor matrix of A
+c) Find adj(A)
+d) Find A⁻¹ using A⁻¹ = (1/det(A)) × adj(A)
+e) Verify: AA⁻¹ = I
+
+###Exercise 5: Determinant Test for Solutions
+Use determinants to determine if each system has a unique solution:
+a) 2x + 3y = 5, 4x + 6y = 10
+b) x + 2y = 3, 3x - y = 5
+c) 5x + 2y = 7, 3x + y = 4
+
+###Exercise 6: Applications with Cramer's Rule
+A theater sells orchestra seats for $20 and balcony seats for $12. 
+If 400 tickets were sold for $6400, use Cramer's rule to find how many of each type were sold.
+
+###Exercise 7: Mixture Problem with Determinants
+How many liters of 30% alcohol solution must be mixed with 
+40% alcohol solution to get 10 liters of 36% solution? Use Cramer's rule.
+
+###Exercise 8: Cofactor Expansion
+Calculate det(A) using cofactor expansion along the first row:
+A = [[2,1,3],[0,4,1],[1,2,5]]
+
+###Exercise 9: System Using Inverse Matrix
+Solve the system using A⁻¹:
+3x + 2y = 11, x + 4y = 13
+a) Find det(A)
+b) Find adj(A)
+c) Find A⁻¹
+d) Calculate x = A⁻¹b
+
+###Exercise 10: 3x3 Determinant Properties
+For A = [[1,2,1],[3,1,2],[2,1,3]], verify:
+a) det(A) using first row expansion
+b) det(A) using first column expansion
+c) Are the results the same?
+
+======================================================================
+END OF PROBLEM SET
+======================================================================
