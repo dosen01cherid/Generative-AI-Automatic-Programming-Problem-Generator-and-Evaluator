@@ -2132,8 +2132,8 @@ CIRC: "\\circ"
         # Replace mathrm{d} with d
         t = t.replace("\\mathrm{d}", "d")
 
-        # Remove spacing macros
-        t = re.sub(r"\\(?:,|;|:|!|quad|qquad| )", "", t)
+        # Remove spacing macros (but NOT backslash-space, which is handled by _preprocess_row_operations)
+        t = re.sub(r"\\(?:,|;|:|!|quad|qquad)", "", t)
 
         # Protect matrix row separators
         t = re.sub(r"\\\\\s*", "\\\\", t)
