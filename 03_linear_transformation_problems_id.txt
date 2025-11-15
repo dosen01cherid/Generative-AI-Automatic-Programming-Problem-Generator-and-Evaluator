@@ -1,7 +1,60 @@
-###Judul Soal: Verifikasi Linearitas - Aditivitas
-Deskripsi Soal: Diberikan T: RR^2 -> RR^2 dengan T(x,y) = (2x+y, x-y). Verifikasi bahwa T(u+v) = T(u) + T(v) untuk u = (1,2) dan v = (3,1)
+###Judul Soal: Pengenalan Transformasi - Konsep Dasar
+Deskripsi Soal: Pahami konsep dasar transformasi sebagai fungsi dari satu ruang vektor ke ruang vektor lain
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Apa syarat transformasi linear?
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu transformasi?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Transformasi T: RR^2 -> RR^2 adalah:
+Pilihan:
+  A) Fungsi yang memetakan vektor dari RR^2 ke RR^2
+  B) Operasi penjumlahan vektor
+  C) Perkalian matriks
+  D) Proyeksi vektor
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Contoh sederhana: T(x,y) = (2x, 3y), hitung T(1,0)
+Tipe Langkah: step-by-step
+Ekspresi: [[2*1, 3*0]]
+Jawaban: [[2,0]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung T(0,1)
+Tipe Langkah: step-by-step
+Ekspresi: [[2*0, 3*1]]
+Jawaban: [[0,3]]
+
+#Langkah 4 [Benar/Salah]: Interpretasi transformasi
+Tipe Langkah: true-false
+Pertanyaan: Transformasi T(x,y) = (2x, 3y) menskalakan komponen-x dengan 2 dan komponen-y dengan 3
+Jawaban Benar: Benar
+
+
+###Judul Soal: Transformasi Sederhana - Penskalaan
+Deskripsi Soal: Pahami transformasi penskalaan T(x,y) = (kx, ky)
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang dilakukan penskalaan?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Transformasi penskalaan dengan faktor k > 1 akan:
+Pilihan:
+  A) Memperbesar vektor
+  B) Memperkecil vektor
+  C) Merotasi vektor
+  D) Merefleksi vektor
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Untuk T(x,y) = (3x, 3y), hitung T(2,4)
+Tipe Langkah: step-by-step
+Ekspresi: [[3*2, 3*4]]
+Jawaban: [[6,12]]
+
+#Langkah 3 [Benar/Salah]: Sifat penskalaan
+Tipe Langkah: true-false
+Pertanyaan: Penskalaan mempertahankan arah vektor tetapi mengubah panjangnya
+Jawaban Benar: Benar
+
+
+###Judul Soal: Apa Itu Transformasi Linear?
+Deskripsi Soal: Memahami dua sifat yang membuat transformasi menjadi linear
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Syarat transformasi linear
 Tipe Langkah: multiple-choice-single
 Pertanyaan: Transformasi T disebut linear jika memenuhi dua sifat. Apa saja kedua sifat tersebut?
 Pilihan:
@@ -11,80 +64,89 @@ Pilihan:
   D) T(cv) = cT(v) dan T(u-v) = T(u) - T(v)
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Hitung u + v
+#Langkah 2 [Isi Titik-Titik]: Nama sifat pertama
+Tipe Langkah: fill-blank
+Pertanyaan: Sifat T(u+v) = T(u) + T(v) disebut sifat {blank}
+Jawaban Benar: aditivitas
+
+#Langkah 3 [Isi Titik-Titik]: Nama sifat kedua
+Tipe Langkah: fill-blank
+Pertanyaan: Sifat T(cv) = cT(v) disebut sifat {blank}
+Jawaban Benar: homogenitas
+
+#Langkah 4 [Benar/Salah]: Konsekuensi linearitas
+Tipe Langkah: true-false
+Pertanyaan: Jika T adalah transformasi linear, maka T(0) harus sama dengan 0
+Jawaban Benar: Benar
+
+
+###Judul Soal: Verifikasi Aditivitas
+Deskripsi Soal: Periksa apakah T(x,y) = (2x+y, x-y) memenuhi sifat aditivitas untuk u = (1,2) dan v = (3,1)
+
+#Langkah 1 [Ekspresi & Jawaban]: Hitung u + v
 Tipe Langkah: step-by-step
 Ekspresi: [[1,2]] + [[3,1]]
 Jawaban: [[4,3]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada (u+v) = (4,3)
+#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada (u+v) = (4,3)
 Tipe Langkah: step-by-step
 Ekspresi: [[2*4+3, 4-3]]
 Jawaban: [[11,1]]
 
-#Langkah 4 [Ekspresi & Jawaban]: Terapkan T pada u = (1,2)
+#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada u = (1,2)
 Tipe Langkah: step-by-step
 Ekspresi: [[2*1+2, 1-2]]
 Jawaban: [[4,-1]]
 
-#Langkah 5 [Ekspresi & Jawaban]: Terapkan T pada v = (3,1)
+#Langkah 4 [Ekspresi & Jawaban]: Terapkan T pada v = (3,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[2*3+1, 3-1]]
 Jawaban: [[7,2]]
 
-#Langkah 6 [Ekspresi & Jawaban]: Hitung T(u) + T(v)
+#Langkah 5 [Ekspresi & Jawaban]: Hitung T(u) + T(v)
 Tipe Langkah: step-by-step
 Ekspresi: [[4,-1]] + [[7,2]]
 Jawaban: [[11,1]]
 
-#Langkah 7 [Benar/Salah]: Apakah T memenuhi sifat aditivitas?
+#Langkah 6 [Benar/Salah]: Kesimpulan aditivitas
 Tipe Langkah: true-false
-Pertanyaan: Karena T(u+v) = [[11,1]] dan T(u) + T(v) = [[11,1]], maka T memenuhi sifat aditivitas T(u+v) = T(u) + T(v)
+Pertanyaan: Karena T(u+v) = [[11,1]] dan T(u) + T(v) = [[11,1]], maka T memenuhi sifat aditivitas
 Jawaban Benar: Benar
 
 
-###Judul Soal: Verifikasi Linearitas - Homogenitas
-Deskripsi Soal: Diberikan T: RR^2 -> RR^2 dengan T(x,y) = (3x, 2y). Verifikasi bahwa T(cv) = cT(v) untuk c = 4 dan v = (2,5)
+###Judul Soal: Verifikasi Homogenitas
+Deskripsi Soal: Periksa apakah T(x,y) = (3x, 2y) memenuhi sifat homogenitas untuk c = 4 dan v = (2,5)
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud sifat homogenitas?
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sifat homogenitas pada transformasi linear T menyatakan bahwa:
-Pilihan:
-  A) T(cv) = cT(v) untuk semua skalar c dan vektor v
-  B) T(u+v) = T(u) + T(v) untuk semua vektor u dan v
-  C) T(c+v) = c + T(v) untuk semua skalar c dan vektor v
-  D) T(cv) = T(c)T(v) untuk semua skalar c dan vektor v
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung cv
+#Langkah 1 [Ekspresi & Jawaban]: Hitung cv
 Tipe Langkah: step-by-step
 Ekspresi: 4*[[2,5]]
 Jawaban: [[8,20]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada cv = (8,20)
+#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada cv = (8,20)
 Tipe Langkah: step-by-step
 Ekspresi: [[3*8, 2*20]]
 Jawaban: [[24,40]]
 
-#Langkah 4 [Ekspresi & Jawaban]: Terapkan T pada v = (2,5)
+#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada v = (2,5)
 Tipe Langkah: step-by-step
 Ekspresi: [[3*2, 2*5]]
 Jawaban: [[6,10]]
 
-#Langkah 5 [Ekspresi & Jawaban]: Hitung cT(v)
+#Langkah 4 [Ekspresi & Jawaban]: Hitung cT(v)
 Tipe Langkah: step-by-step
 Ekspresi: 4*[[6,10]]
 Jawaban: [[24,40]]
 
-#Langkah 6 [Benar/Salah]: Apakah T memenuhi sifat homogenitas?
+#Langkah 5 [Benar/Salah]: Kesimpulan homogenitas
 Tipe Langkah: true-false
-Pertanyaan: Karena T(cv) = [[24,40]] dan cT(v) = [[24,40]], maka T memenuhi sifat homogenitas T(cv) = cT(v)
+Pertanyaan: Karena T(cv) = [[24,40]] dan cT(v) = [[24,40]], maka T memenuhi sifat homogenitas
 Jawaban Benar: Benar
 
 
-###Judul Soal: Transformasi Tidak Linear
-Deskripsi Soal: Tunjukkan bahwa T(x,y) = (x+1, 2y) BUKAN transformasi linear dengan menguji T(0,0)
+###Judul Soal: Transformasi TIDAK Linear
+Deskripsi Soal: Tunjukkan bahwa T(x,y) = (x+1, 2y) BUKAN transformasi linear
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Bagaimana cara membuktikan transformasi tidak linear?
+#Langkah 1 [Pilihan Ganda - Tunggal]: Cara membuktikan tidak linear
 Tipe Langkah: multiple-choice-single
 Pertanyaan: Untuk membuktikan T bukan transformasi linear, cukup tunjukkan salah satu:
 Pilihan:
@@ -99,21 +161,16 @@ Tipe Langkah: step-by-step
 Ekspresi: [[0+1, 2*0]]
 Jawaban: [[1,0]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Vektor nol harus dipetakan ke vektor nol
-Tipe Langkah: step-by-step
-Ekspresi: [[0,0]]
-Jawaban: [[0,0]]
-
-#Langkah 4 [Benar/Salah]: Apakah T adalah transformasi linear?
+#Langkah 3 [Benar/Salah]: Kesimpulan
 Tipe Langkah: true-false
 Pertanyaan: Karena T([[0,0]]) = [[1,0]] ne [[0,0]], maka T bukan transformasi linear
 Jawaban Benar: Benar
 
 
-###Judul Soal: Representasi Matriks Transformasi Linear
-Deskripsi Soal: Cari matriks A yang merepresentasikan transformasi linear T(x,y) = (2x-y, x+3y)
+###Judul Soal: Representasi Matriks - Pengenalan
+Deskripsi Soal: Pahami bahwa setiap transformasi linear dapat diwakili oleh matriks
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Bagaimana cara mencari matriks transformasi?
+#Langkah 1 [Pilihan Ganda - Tunggal]: Cara mencari matriks transformasi
 Tipe Langkah: multiple-choice-single
 Pertanyaan: Untuk mencari matriks transformasi T, kita perlu:
 Pilihan:
@@ -123,60 +180,78 @@ Pilihan:
   D) Cari invers dari T
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada vektor basis standar e_1 = (1,0)
+#Langkah 2 [Isi Titik-Titik]: Vektor basis standar di RR^2
+Tipe Langkah: fill-blank
+Pertanyaan: Vektor basis standar di RR^2 adalah e_1 = (1,{blank}) dan e_2 = ({blank},1)
+Jawaban Benar: 0, 0
+
+
+###Judul Soal: Mencari Matriks Transformasi Sederhana
+Deskripsi Soal: Cari matriks untuk T(x,y) = (2x, 3y)
+
+#Langkah 1 [Ekspresi & Jawaban]: Terapkan T pada e_1 = (1,0)
+Tipe Langkah: step-by-step
+Ekspresi: [[2*1, 3*0]]
+Jawaban: [[2,0]]
+
+#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada e_2 = (0,1)
+Tipe Langkah: step-by-step
+Ekspresi: [[2*0, 3*1]]
+Jawaban: [[0,3]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Bentuk matriks dengan T(e_1) sebagai kolom pertama dan T(e_2) sebagai kolom kedua
+Tipe Langkah: step-by-step
+Ekspresi: [[2,0],[0,3]]
+Jawaban: [[2,0],[0,3]]
+
+
+###Judul Soal: Mencari Matriks Transformasi Umum
+Deskripsi Soal: Cari matriks A yang merepresentasikan T(x,y) = (2x-y, x+3y)
+
+#Langkah 1 [Ekspresi & Jawaban]: Terapkan T pada e_1 = (1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[2*1-0, 1+3*0]]
 Jawaban: [[2,1]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada vektor basis standar e_2 = (0,1)
+#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada e_2 = (0,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[2*0-1, 0+3*1]]
 Jawaban: [[-1,3]]
 
-#Langkah 4 [Isi Titik-Titik]: Kolom pertama matriks
-Tipe Langkah: fill-blank
-Pertanyaan: T(e_1) = [[2,1]] menjadi kolom {blank} dari matriks A
-Jawaban Benar: pertama
-
-#Langkah 5 [Ekspresi & Jawaban]: Bentuk matriks A dengan T(e_1) sebagai kolom pertama dan T(e_2) sebagai kolom kedua
+#Langkah 3 [Ekspresi & Jawaban]: Bentuk matriks A
 Tipe Langkah: step-by-step
 Ekspresi: [[2,-1],[1,3]]
 Jawaban: [[2,-1],[1,3]]
 
 
-###Judul Soal: Menerapkan Transformasi Linear Menggunakan Matriks
-Deskripsi Soal: Diberikan matriks transformasi A = [[3,1],[2,4]], cari T(2,5)
+###Judul Soal: Menggunakan Matriks untuk Menghitung Transformasi
+Deskripsi Soal: Diberikan matriks A = [[3,1],[2,4]], cari T(2,5)
 
-#Langkah 1 [Benar/Salah]: Cara menghitung transformasi
+#Langkah 1 [Benar/Salah]: Cara menghitung
 Tipe Langkah: true-false
-Pertanyaan: Untuk menghitung T(v) menggunakan matriks A, kita kalikan A dengan v dalam bentuk vektor kolom
+Pertanyaan: Untuk menghitung T(v), kita kalikan matriks A dengan v dalam bentuk vektor kolom
 Jawaban Benar: Benar
 
-#Langkah 2 [Ekspresi & Jawaban]: Tulis vektor sebagai vektor kolom
-Tipe Langkah: step-by-step
-Ekspresi: [[2],[5]]
-Jawaban: [[2],[5]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Hitung komponen pertama hasil
+#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen pertama hasil
 Tipe Langkah: step-by-step
 Ekspresi: 3*2 + 1*5
 Jawaban: 11
 
-#Langkah 4 [Ekspresi & Jawaban]: Hitung komponen kedua hasil
+#Langkah 3 [Ekspresi & Jawaban]: Hitung komponen kedua hasil
 Tipe Langkah: step-by-step
 Ekspresi: 2*2 + 4*5
 Jawaban: 24
 
-#Langkah 5 [Ekspresi & Jawaban]: Bentuk vektor hasil
+#Langkah 4 [Ekspresi & Jawaban]: Bentuk vektor hasil
 Tipe Langkah: step-by-step
 Ekspresi: [[3,1],[2,4]] * [[2],[5]]
 Jawaban: [[11],[24]]
 
 
-###Judul Soal: Transformasi Penskalaan
-Deskripsi Soal: Cari matriks untuk transformasi penskalaan dengan faktor 3 pada arah-x dan faktor 2 pada arah-y
+###Judul Soal: Transformasi Penskalaan dengan Matriks
+Deskripsi Soal: Cari matriks untuk penskalaan dengan faktor 3 pada arah-x dan faktor 2 pada arah-y
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Apa bentuk umum matriks penskalaan?
+#Langkah 1 [Pilihan Ganda - Tunggal]: Bentuk matriks penskalaan
 Tipe Langkah: multiple-choice-single
 Pertanyaan: Matriks penskalaan dengan faktor k_x pada arah-x dan k_y pada arah-y berbentuk:
 Pilihan:
@@ -186,70 +261,36 @@ Pilihan:
   D) [[k_x,k_y],[k_y,k_x]]
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Skalakan e_1 = (1,0) dengan faktor-faktor tersebut
-Tipe Langkah: step-by-step
-Ekspresi: [[3*1, 2*0]]
-Jawaban: [[3,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Skalakan e_2 = (0,1) dengan faktor-faktor tersebut
-Tipe Langkah: step-by-step
-Ekspresi: [[3*0, 2*1]]
-Jawaban: [[0,2]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks penskalaan
+#Langkah 2 [Ekspresi & Jawaban]: Bentuk matriks penskalaan
 Tipe Langkah: step-by-step
 Ekspresi: [[3,0],[0,2]]
 Jawaban: [[3,0],[0,2]]
 
-
-###Judul Soal: Menerapkan Transformasi Penskalaan
-Deskripsi Soal: Terapkan matriks penskalaan S = [[4,0],[0,3]] pada vektor v = (2,5)
-
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
+#Langkah 3 [Ekspresi & Jawaban]: Terapkan pada vektor (4,5)
 Tipe Langkah: step-by-step
-Ekspresi: 4*2 + 0*5
-Jawaban: 8
+Ekspresi: [[3,0],[0,2]] * [[4],[5]]
+Jawaban: [[12],[10]]
 
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0*2 + 3*5
-Jawaban: 15
 
-#Langkah 3 [Pilihan Ganda - Tunggal]: Interpretasi hasil
+###Judul Soal: Transformasi Rotasi 90 Derajat
+Deskripsi Soal: Cari matriks untuk rotasi 90° berlawanan arah jarum jam
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Efek rotasi 90°
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Vektor [[2,5]] diskalakan menjadi [[8,15]]. Apa yang terjadi?
-Pilihan:
-  A) Komponen-x diperbesar 4 kali, komponen-y diperbesar 3 kali
-  B) Komponen-x diperbesar 3 kali, komponen-y diperbesar 4 kali
-  C) Kedua komponen diperbesar 4 kali
-  D) Vektor diputar dan diskalakan
-Jawaban Benar: A
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk vektor yang diskalakan
-Tipe Langkah: step-by-step
-Ekspresi: [[4,0],[0,3]] * [[2],[5]]
-Jawaban: [[8],[15]]
-
-
-###Judul Soal: Matriks Rotasi 90 Derajat
-Deskripsi Soal: Cari matriks yang merotasi vektor berlawanan arah jarum jam sebesar 90 derajat di RR^2
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Arah rotasi positif
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Dalam matematika, rotasi positif (berlawanan arah jarum jam) sebesar 90° mengubah:
+Pertanyaan: Rotasi 90° berlawanan arah jarum jam mengubah:
 Pilihan:
   A) (1,0) menjadi (0,1) dan (0,1) menjadi (-1,0)
   B) (1,0) menjadi (0,-1) dan (0,1) menjadi (1,0)
   C) (1,0) menjadi (-1,0) dan (0,1) menjadi (0,-1)
-  D) (1,0) menjadi (1,1) dan (0,1) menjadi (-1,1)
+  D) Tidak mengubah vektor basis
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Rotasi e_1 = (1,0) sebesar 90° berlawanan arah jarum jam
+#Langkah 2 [Ekspresi & Jawaban]: Rotasi e_1 = (1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[0,1]]
 Jawaban: [[0,1]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Rotasi e_2 = (0,1) sebesar 90° berlawanan arah jarum jam
+#Langkah 3 [Ekspresi & Jawaban]: Rotasi e_2 = (0,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[-1,0]]
 Jawaban: [[-1,0]]
@@ -261,14 +302,14 @@ Jawaban: [[0,-1],[1,0]]
 
 
 ###Judul Soal: Menerapkan Rotasi 90 Derajat
-Deskripsi Soal: Rotasi vektor v = (3,2) berlawanan arah jarum jam sebesar 90° menggunakan matriks R = [[0,-1],[1,0]]
+Deskripsi Soal: Rotasi vektor v = (3,2) sebesar 90° berlawanan arah jarum jam
 
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama vektor terrotasi
+#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
 Tipe Langkah: step-by-step
 Ekspresi: 0*3 + (-1)*2
 Jawaban: -2
 
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua vektor terrotasi
+#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
 Tipe Langkah: step-by-step
 Ekspresi: 1*3 + 0*2
 Jawaban: 3
@@ -278,16 +319,16 @@ Tipe Langkah: step-by-step
 Ekspresi: [[0,-1],[1,0]] * [[3],[2]]
 Jawaban: [[-2],[3]]
 
-#Langkah 4 [Benar/Salah]: Verifikasi hasil
+#Langkah 4 [Benar/Salah]: Verifikasi kuadran
 Tipe Langkah: true-false
-Pertanyaan: Vektor (3,2) setelah dirotasi 90° berlawanan arah jarum jam menjadi (-2,3), yang berada di kuadran II
+Pertanyaan: Vektor (3,2) dari kuadran I setelah rotasi 90° menjadi (-2,3) di kuadran II
 Jawaban Benar: Benar
 
 
-###Judul Soal: Matriks Rotasi 180 Derajat
-Deskripsi Soal: Cari matriks yang merotasi vektor sebesar 180° di RR^2
+###Judul Soal: Rotasi 180 Derajat
+Deskripsi Soal: Cari matriks untuk rotasi 180°
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Efek rotasi 180 derajat
+#Langkah 1 [Pilihan Ganda - Tunggal]: Efek rotasi 180°
 Tipe Langkah: multiple-choice-single
 Pertanyaan: Rotasi 180° mengubah vektor (x,y) menjadi:
 Pilihan:
@@ -297,36 +338,26 @@ Pilihan:
   D) (x,-y)
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Rotasi e_1 = (1,0) sebesar 180°
-Tipe Langkah: step-by-step
-Ekspresi: [[-1,0]]
-Jawaban: [[-1,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Rotasi e_2 = (0,1) sebesar 180°
-Tipe Langkah: step-by-step
-Ekspresi: [[0,-1]]
-Jawaban: [[0,-1]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks rotasi
+#Langkah 2 [Ekspresi & Jawaban]: Bentuk matriks rotasi 180°
 Tipe Langkah: step-by-step
 Ekspresi: [[-1,0],[0,-1]]
 Jawaban: [[-1,0],[0,-1]]
 
 
 ###Judul Soal: Refleksi Terhadap Sumbu-X
-Deskripsi Soal: Cari matriks untuk refleksi terhadap sumbu-x di RR^2
+Deskripsi Soal: Cari matriks untuk refleksi terhadap sumbu-x
 
 #Langkah 1 [Benar/Salah]: Sifat refleksi sumbu-x
 Tipe Langkah: true-false
-Pertanyaan: Refleksi terhadap sumbu-x mengubah (x,y) menjadi (x,-y), mempertahankan komponen-x dan membalik komponen-y
+Pertanyaan: Refleksi terhadap sumbu-x mempertahankan komponen-x dan membalik komponen-y
 Jawaban Benar: Benar
 
-#Langkah 2 [Ekspresi & Jawaban]: Refleksi e_1 = (1,0) terhadap sumbu-x
+#Langkah 2 [Ekspresi & Jawaban]: Refleksi e_1 = (1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[1,0]]
 Jawaban: [[1,0]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Refleksi e_2 = (0,1) terhadap sumbu-x
+#Langkah 3 [Ekspresi & Jawaban]: Refleksi e_2 = (0,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[0,-1]]
 Jawaban: [[0,-1]]
@@ -337,27 +368,17 @@ Ekspresi: [[1,0],[0,-1]]
 Jawaban: [[1,0],[0,-1]]
 
 
-###Judul Soal: Menerapkan Refleksi Terhadap Sumbu-X
-Deskripsi Soal: Refleksikan vektor v = (4,3) terhadap sumbu-x menggunakan matriks R = [[1,0],[0,-1]]
+###Judul Soal: Menerapkan Refleksi Sumbu-X
+Deskripsi Soal: Refleksikan v = (4,3) terhadap sumbu-x
 
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 1*4 + 0*3
-Jawaban: 4
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0*4 + (-1)*3
-Jawaban: -3
-
-#Langkah 3 [Ekspresi & Jawaban]: Bentuk vektor terefleksi
+#Langkah 1 [Ekspresi & Jawaban]: Hitung hasil refleksi
 Tipe Langkah: step-by-step
 Ekspresi: [[1,0],[0,-1]] * [[4],[3]]
 Jawaban: [[4],[-3]]
 
-#Langkah 4 [Pilihan Ganda - Tunggal]: Interpretasi geometris
+#Langkah 2 [Pilihan Ganda - Tunggal]: Interpretasi
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Vektor (4,3) di kuadran I setelah direfleksi terhadap sumbu-x menjadi (4,-3) yang berada di kuadran:
+Pertanyaan: Vektor (4,3) dari kuadran I setelah refleksi terhadap sumbu-x menjadi (4,-3) di kuadran:
 Pilihan:
   A) IV
   B) I
@@ -367,11 +388,11 @@ Jawaban Benar: A
 
 
 ###Judul Soal: Refleksi Terhadap Sumbu-Y
-Deskripsi Soal: Cari matriks untuk refleksi terhadap sumbu-y di RR^2
+Deskripsi Soal: Cari matriks untuk refleksi terhadap sumbu-y
 
 #Langkah 1 [Pilihan Ganda - Tunggal]: Sifat refleksi sumbu-y
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Refleksi terhadap sumbu-y mengubah vektor (x,y) menjadi:
+Pertanyaan: Refleksi terhadap sumbu-y mengubah (x,y) menjadi:
 Pilihan:
   A) (-x,y)
   B) (x,-y)
@@ -379,17 +400,7 @@ Pilihan:
   D) (y,x)
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Refleksi e_1 = (1,0) terhadap sumbu-y
-Tipe Langkah: step-by-step
-Ekspresi: [[-1,0]]
-Jawaban: [[-1,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Refleksi e_2 = (0,1) terhadap sumbu-y
-Tipe Langkah: step-by-step
-Ekspresi: [[0,1]]
-Jawaban: [[0,1]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks refleksi
+#Langkah 2 [Ekspresi & Jawaban]: Bentuk matriks refleksi sumbu-y
 Tipe Langkah: step-by-step
 Ekspresi: [[-1,0],[0,1]]
 Jawaban: [[-1,0],[0,1]]
@@ -400,15 +411,15 @@ Deskripsi Soal: Cari matriks untuk refleksi terhadap garis y = x
 
 #Langkah 1 [Benar/Salah]: Sifat refleksi y=x
 Tipe Langkah: true-false
-Pertanyaan: Refleksi terhadap garis y = x menukar komponen-x dan komponen-y, sehingga (x,y) menjadi (y,x)
+Pertanyaan: Refleksi terhadap y = x menukar komponen-x dan komponen-y
 Jawaban Benar: Benar
 
-#Langkah 2 [Ekspresi & Jawaban]: Refleksi e_1 = (1,0) terhadap y=x menjadi (0,1)
+#Langkah 2 [Ekspresi & Jawaban]: Refleksi e_1 = (1,0) menjadi (0,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[0,1]]
 Jawaban: [[0,1]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Refleksi e_2 = (0,1) terhadap y=x menjadi (1,0)
+#Langkah 3 [Ekspresi & Jawaban]: Refleksi e_2 = (0,1) menjadi (1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[1,0]]
 Jawaban: [[1,0]]
@@ -419,36 +430,26 @@ Ekspresi: [[0,1],[1,0]]
 Jawaban: [[0,1],[1,0]]
 
 
-###Judul Soal: Menerapkan Refleksi Terhadap y=x
-Deskripsi Soal: Refleksikan vektor v = (3,7) terhadap garis y = x menggunakan matriks R = [[0,1],[1,0]]
+###Judul Soal: Menerapkan Refleksi y=x
+Deskripsi Soal: Refleksikan v = (3,7) terhadap y = x
 
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 0*3 + 1*7
-Jawaban: 7
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 1*3 + 0*7
-Jawaban: 3
-
-#Langkah 3 [Ekspresi & Jawaban]: Bentuk vektor terefleksi
+#Langkah 1 [Ekspresi & Jawaban]: Hitung hasil refleksi
 Tipe Langkah: step-by-step
 Ekspresi: [[0,1],[1,0]] * [[3],[7]]
 Jawaban: [[7],[3]]
 
-#Langkah 4 [Benar/Salah]: Verifikasi simetri
+#Langkah 2 [Benar/Salah]: Simetri refleksi
 Tipe Langkah: true-false
-Pertanyaan: Jika kita refleksikan (3,7) terhadap y=x menjadi (7,3), kemudian refleksikan lagi, kita mendapat (3,7) kembali
+Pertanyaan: Jika refleksikan (3,7) menjadi (7,3), lalu refleksikan lagi, hasilnya (3,7)
 Jawaban Benar: Benar
 
 
 ###Judul Soal: Transformasi Geser Horizontal
-Deskripsi Soal: Cari matriks untuk geser horizontal dengan faktor geser k = 2
+Deskripsi Soal: Cari matriks untuk geser horizontal dengan faktor 2
 
 #Langkah 1 [Pilihan Ganda - Tunggal]: Definisi geser horizontal
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Geser horizontal dengan faktor k mengubah vektor (x,y) menjadi:
+Pertanyaan: Geser horizontal dengan faktor k mengubah (x,y) menjadi:
 Pilihan:
   A) (x+ky, y)
   B) (x, y+kx)
@@ -456,94 +457,36 @@ Pilihan:
   D) (x, ky)
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Terapkan geser pada e_1 = (1,0)
+#Langkah 2 [Ekspresi & Jawaban]: Geser e_1 = (1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[1,0]]
 Jawaban: [[1,0]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan geser pada e_2 = (0,1), rumus geser: (x+ky, y)
+#Langkah 3 [Ekspresi & Jawaban]: Geser e_2 = (0,1) menjadi (2,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[2,1]]
 Jawaban: [[2,1]]
 
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks geser horizontal
+#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks geser
 Tipe Langkah: step-by-step
 Ekspresi: [[1,2],[0,1]]
 Jawaban: [[1,2],[0,1]]
 
 
-###Judul Soal: Menerapkan Geser Horizontal
-Deskripsi Soal: Terapkan matriks geser horizontal H = [[1,3],[0,1]] pada vektor v = (2,4)
-
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 1*2 + 3*4
-Jawaban: 14
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0*2 + 1*4
-Jawaban: 4
-
-#Langkah 3 [Ekspresi & Jawaban]: Bentuk vektor tergeser
-Tipe Langkah: step-by-step
-Ekspresi: [[1,3],[0,1]] * [[2],[4]]
-Jawaban: [[14],[4]]
-
-#Langkah 4 [Pilihan Ganda - Tunggal]: Efek geser horizontal
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Setelah geser horizontal, komponen-y vektor:
-Pilihan:
-  A) Tetap sama (tidak berubah)
-  B) Bertambah sebesar k kali komponen-x
-  C) Berkurang sebesar k kali komponen-x
-  D) Menjadi nol
-Jawaban Benar: A
-
-
-###Judul Soal: Transformasi Geser Vertikal
-Deskripsi Soal: Cari matriks untuk geser vertikal dengan faktor geser k = 3
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi geser vertikal
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Geser vertikal dengan faktor k mengubah vektor (x,y) menjadi:
-Pilihan:
-  A) (x, y+kx)
-  B) (x+ky, y)
-  C) (x, ky)
-  D) (kx, y)
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Terapkan geser pada e_1 = (1,0), rumus geser: (x, y+kx)
-Tipe Langkah: step-by-step
-Ekspresi: [[1,3]]
-Jawaban: [[1,3]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan geser pada e_2 = (0,1)
-Tipe Langkah: step-by-step
-Ekspresi: [[0,1]]
-Jawaban: [[0,1]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks geser vertikal
-Tipe Langkah: step-by-step
-Ekspresi: [[1,0],[3,1]]
-Jawaban: [[1,0],[3,1]]
-
-
 ###Judul Soal: Proyeksi ke Sumbu-X
 Deskripsi Soal: Cari matriks untuk proyeksi ke sumbu-x
 
-#Langkah 1 [Benar/Salah]: Sifat proyeksi ke sumbu-x
+#Langkah 1 [Benar/Salah]: Sifat proyeksi sumbu-x
 Tipe Langkah: true-false
-Pertanyaan: Proyeksi vektor (x,y) ke sumbu-x menghasilkan (x,0), mempertahankan komponen-x dan menghilangkan komponen-y
+Pertanyaan: Proyeksi ke sumbu-x mengubah (x,y) menjadi (x,0)
 Jawaban Benar: Benar
 
-#Langkah 2 [Ekspresi & Jawaban]: Proyeksi e_1 = (1,0) ke sumbu-x
+#Langkah 2 [Ekspresi & Jawaban]: Proyeksi e_1 = (1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[1,0]]
 Jawaban: [[1,0]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Proyeksi e_2 = (0,1) ke sumbu-x
+#Langkah 3 [Ekspresi & Jawaban]: Proyeksi e_2 = (0,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[0,0]]
 Jawaban: [[0,0]]
@@ -554,201 +497,102 @@ Ekspresi: [[1,0],[0,0]]
 Jawaban: [[1,0],[0,0]]
 
 
-###Judul Soal: Menerapkan Proyeksi ke Sumbu-X
-Deskripsi Soal: Proyeksikan vektor v = (5,8) ke sumbu-x menggunakan matriks P = [[1,0],[0,0]]
-
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 1*5 + 0*8
-Jawaban: 5
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0*5 + 0*8
-Jawaban: 0
-
-#Langkah 3 [Ekspresi & Jawaban]: Bentuk vektor terproyeksi
-Tipe Langkah: step-by-step
-Ekspresi: [[1,0],[0,0]] * [[5],[8]]
-Jawaban: [[5],[0]]
-
-#Langkah 4 [Pilihan Ganda - Tunggal]: Interpretasi hasil
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Proyeksi vektor (5,8) ke sumbu-x menghasilkan (5,0). Panjang vektor proyeksi adalah:
-Pilihan:
-  A) 5
-  B) 8
-  C) 13
-  D) sqrt(89)
-Jawaban Benar: A
-
-
 ###Judul Soal: Proyeksi ke Sumbu-Y
 Deskripsi Soal: Cari matriks untuk proyeksi ke sumbu-y
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat proyeksi ke sumbu-y
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Proyeksi vektor (x,y) ke sumbu-y menghasilkan:
-Pilihan:
-  A) (0,y)
-  B) (x,0)
-  C) (y,0)
-  D) (0,x)
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Proyeksi e_1 = (1,0) ke sumbu-y
-Tipe Langkah: step-by-step
-Ekspresi: [[0,0]]
-Jawaban: [[0,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Proyeksi e_2 = (0,1) ke sumbu-y
-Tipe Langkah: step-by-step
-Ekspresi: [[0,1]]
-Jawaban: [[0,1]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks proyeksi
+#Langkah 1 [Ekspresi & Jawaban]: Bentuk matriks proyeksi ke sumbu-y
 Tipe Langkah: step-by-step
 Ekspresi: [[0,0],[0,1]]
 Jawaban: [[0,0],[0,1]]
 
 
-###Judul Soal: Komposisi Transformasi - Skalakan lalu Rotasi
-Deskripsi Soal: Cari matriks untuk transformasi yang pertama menskalakan dengan S = [[2,0],[0,3]] kemudian rotasi dengan R = [[0,-1],[1,0]]
+###Judul Soal: Komposisi Transformasi - Pengenalan
+Deskripsi Soal: Pahami bahwa transformasi dapat digabungkan
 
 #Langkah 1 [Pilihan Ganda - Tunggal]: Urutan komposisi
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Untuk transformasi yang "pertama S kemudian R", matriks komposisi adalah:
+Pertanyaan: Untuk "pertama S kemudian R", matriks komposisi adalah:
 Pilihan:
   A) R xx S (matriks R dikali S)
   B) S xx R (matriks S dikali R)
-  C) R + S (matriks R ditambah S)
-  D) S + R (matriks S ditambah R)
+  C) R + S
+  D) S + R
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Hitung elemen baris 1, kolom 1 dari komposisi R*S
+#Langkah 2 [Benar/Salah]: Komutatifitas
+Tipe Langkah: true-false
+Pertanyaan: Secara umum, RS ne SR (komposisi tidak komutatif)
+Jawaban Benar: Benar
+
+
+###Judul Soal: Komposisi - Skalakan lalu Rotasi
+Deskripsi Soal: Gabungkan penskalaan S = [[2,0],[0,3]] dengan rotasi R = [[0,-1],[1,0]]
+
+#Langkah 1 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari R*S
 Tipe Langkah: step-by-step
 Ekspresi: 0*2 + (-1)*0
 Jawaban: 0
 
-#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen baris 1, kolom 2
+#Langkah 2 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari R*S
 Tipe Langkah: step-by-step
 Ekspresi: 0*0 + (-1)*3
 Jawaban: -3
 
-#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen baris 2, kolom 1
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari R*S
 Tipe Langkah: step-by-step
 Ekspresi: 1*2 + 0*0
 Jawaban: 2
 
-#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen baris 2, kolom 2
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari R*S
 Tipe Langkah: step-by-step
 Ekspresi: 1*0 + 0*3
 Jawaban: 0
 
-#Langkah 6 [Ekspresi & Jawaban]: Bentuk matriks komposisi RS
+#Langkah 5 [Ekspresi & Jawaban]: Bentuk matriks komposisi
 Tipe Langkah: step-by-step
 Ekspresi: [[0,-1],[1,0]] * [[2,0],[0,3]]
 Jawaban: [[0,-3],[2,0]]
 
 
-###Judul Soal: Komposisi Transformasi - Refleksi lalu Skalakan
-Deskripsi Soal: Cari matriks untuk transformasi yang pertama merefleksi terhadap sumbu-x kemudian menskalakan dengan faktor 2
+###Judul Soal: Transformasi Identitas
+Deskripsi Soal: Pahami transformasi yang tidak mengubah vektor
 
-#Langkah 1 [Ekspresi & Jawaban]: Matriks refleksi terhadap sumbu-x
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi identitas
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Transformasi identitas adalah:
+Pilihan:
+  A) Memetakan setiap vektor ke dirinya sendiri
+  B) Memetakan setiap vektor ke nol
+  C) Membalik setiap vektor
+  D) Merotasi setiap vektor
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Matriks identitas 2x2
 Tipe Langkah: step-by-step
-Ekspresi: [[1,0],[0,-1]]
-Jawaban: [[1,0],[0,-1]]
+Ekspresi: [[1,0],[0,1]]
+Jawaban: [[1,0],[0,1]]
 
-#Langkah 2 [Ekspresi & Jawaban]: Matriks penskalaan dengan faktor 2
+
+###Judul Soal: Transformasi Nol
+Deskripsi Soal: Transformasi yang memetakan semua vektor ke nol
+
+#Langkah 1 [Ekspresi & Jawaban]: Matriks nol 2x2
 Tipe Langkah: step-by-step
-Ekspresi: [[2,0],[0,2]]
-Jawaban: [[2,0],[0,2]]
+Ekspresi: [[0,0],[0,0]]
+Jawaban: [[0,0],[0,0]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen baris 1, kolom 1 dari S*R
-Tipe Langkah: step-by-step
-Ekspresi: 2*1 + 0*0
-Jawaban: 2
-
-#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen baris 1, kolom 2 dari S*R
-Tipe Langkah: step-by-step
-Ekspresi: 2*0 + 0*(-1)
-Jawaban: 0
-
-#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen baris 2, kolom 1 dari S*R
-Tipe Langkah: step-by-step
-Ekspresi: 0*1 + 2*0
-Jawaban: 0
-
-#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen baris 2, kolom 2 dari S*R
-Tipe Langkah: step-by-step
-Ekspresi: 0*0 + 2*(-1)
-Jawaban: -2
-
-#Langkah 7 [Ekspresi & Jawaban]: Bentuk matriks komposisi
-Tipe Langkah: step-by-step
-Ekspresi: [[2,0],[0,2]] * [[1,0],[0,-1]]
-Jawaban: [[2,0],[0,-2]]
-
-#Langkah 8 [Benar/Salah]: Komutatifitas komposisi
+#Langkah 2 [Benar/Salah]: Linearitas transformasi nol
 Tipe Langkah: true-false
-Pertanyaan: Untuk matriks S dan R ini, S*R = R*S sehingga komposisi bersifat komutatif
-Jawaban Benar: Salah
-
-
-###Judul Soal: Menerapkan Komposisi Transformasi
-Deskripsi Soal: Terapkan komposisi T = [[0,-3],[2,0]] (skalakan lalu rotasi) pada vektor v = (4,2)
-
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 0*4 + (-3)*2
-Jawaban: -6
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 2*4 + 0*2
-Jawaban: 8
-
-#Langkah 3 [Ekspresi & Jawaban]: Bentuk vektor hasil
-Tipe Langkah: step-by-step
-Ekspresi: [[0,-3],[2,0]] * [[4],[2]]
-Jawaban: [[-6],[8]]
-
-
-###Judul Soal: Mencari Matriks Transformasi dari Vektor Peta
-Deskripsi Soal: Cari matriks transformasi T jika T(1,0) = (2,3) dan T(0,1) = (-1,4)
-
-#Langkah 1 [Benar/Salah]: Prinsip konstruksi matriks
-Tipe Langkah: true-false
-Pertanyaan: Kolom-kolom matriks transformasi adalah hasil pemetaan vektor-vektor basis standar
+Pertanyaan: Transformasi nol adalah transformasi linear
 Jawaban Benar: Benar
 
-#Langkah 2 [Isi Titik-Titik]: Kolom pertama
-Tipe Langkah: fill-blank
-Pertanyaan: T(e_1) = (2,3) menjadi kolom {blank} dari matriks
-Jawaban Benar: pertama
 
-#Langkah 3 [Ekspresi & Jawaban]: Kolom pertama adalah T(e_1)
-Tipe Langkah: step-by-step
-Ekspresi: [[2,3]]
-Jawaban: [[2,3]]
+###Judul Soal: Transformasi di RR^3 - Pengenalan
+Deskripsi Soal: Cari matriks untuk T: RR^3 -> RR^3 dengan T(x,y,z) = (x+y, 2z, x-y+z)
 
-#Langkah 4 [Ekspresi & Jawaban]: Kolom kedua adalah T(e_2)
-Tipe Langkah: step-by-step
-Ekspresi: [[-1,4]]
-Jawaban: [[-1,4]]
-
-#Langkah 5 [Ekspresi & Jawaban]: Bentuk matriks transformasi
-Tipe Langkah: step-by-step
-Ekspresi: [[2,-1],[3,4]]
-Jawaban: [[2,-1],[3,4]]
-
-
-###Judul Soal: Transformasi Linear di RR^3 - Bagian 1
-Deskripsi Soal: Cari matriks untuk T: RR^3 -> RR^3 yang didefinisikan oleh T(x,y,z) = (x+y, 2z, x-y+z)
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Dimensi matriks transformasi
+#Langkah 1 [Pilihan Ganda - Tunggal]: Ukuran matriks
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Untuk transformasi T: RR^3 -> RR^3, matriks transformasi berukuran:
+Pertanyaan: Matriks untuk T: RR^3 -> RR^3 berukuran:
 Pilihan:
   A) 3 xx 3
   B) 2 xx 3
@@ -756,281 +600,58 @@ Pilihan:
   D) 2 xx 2
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada e_1 = (1,0,0)
+#Langkah 2 [Ekspresi & Jawaban]: T(e_1) = T(1,0,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[1+0, 2*0, 1-0+0]]
 Jawaban: [[1,0,1]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada e_2 = (0,1,0)
+#Langkah 3 [Ekspresi & Jawaban]: T(e_2) = T(0,1,0)
 Tipe Langkah: step-by-step
 Ekspresi: [[0+1, 2*0, 0-1+0]]
 Jawaban: [[1,0,-1]]
 
-#Langkah 4 [Ekspresi & Jawaban]: Terapkan T pada e_3 = (0,0,1)
+#Langkah 4 [Ekspresi & Jawaban]: T(e_3) = T(0,0,1)
 Tipe Langkah: step-by-step
 Ekspresi: [[0+0, 2*1, 0-0+1]]
 Jawaban: [[0,2,1]]
 
-#Langkah 5 [Ekspresi & Jawaban]: Bentuk matriks transformasi
+#Langkah 5 [Ekspresi & Jawaban]: Bentuk matriks
 Tipe Langkah: step-by-step
 Ekspresi: [[1,1,0],[0,0,2],[1,-1,1]]
 Jawaban: [[1,1,0],[0,0,2],[1,-1,1]]
 
 
-###Judul Soal: Menerapkan Transformasi Linear di RR^3
-Deskripsi Soal: Terapkan transformasi T = [[1,1,0],[0,0,2],[1,-1,1]] pada vektor v = (2,3,4)
+###Judul Soal: Rotasi Umum dengan Sudut theta
+Deskripsi Soal: Cari matriks rotasi untuk sudut theta = 60° (π/3)
 
-#Langkah 1 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 1*2 + 1*3 + 0*4
-Jawaban: 5
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0*2 + 0*3 + 2*4
-Jawaban: 8
-
-#Langkah 3 [Ekspresi & Jawaban]: Hitung komponen ketiga
-Tipe Langkah: step-by-step
-Ekspresi: 1*2 + (-1)*3 + 1*4
-Jawaban: 3
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk vektor hasil
-Tipe Langkah: step-by-step
-Ekspresi: [[1,1,0],[0,0,2],[1,-1,1]] * [[2],[3],[4]]
-Jawaban: [[5],[8],[3]]
-
-
-###Judul Soal: Transformasi Identitas
-Deskripsi Soal: Tunjukkan bahwa transformasi identitas T(v) = v memiliki representasi matriks I
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi transformasi identitas
+#Langkah 1 [Pilihan Ganda - Tunggal]: Bentuk umum rotasi
 Tipe Langkah: multiple-choice-single
-Pertanyaan: Transformasi identitas adalah transformasi yang:
-Pilihan:
-  A) Memetakan setiap vektor ke dirinya sendiri
-  B) Memetakan setiap vektor ke vektor nol
-  C) Memetakan setiap vektor ke vektor satuan
-  D) Membalik arah setiap vektor
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada e_1 = (1,0)
-Tipe Langkah: step-by-step
-Ekspresi: [[1,0]]
-Jawaban: [[1,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada e_2 = (0,1)
-Tipe Langkah: step-by-step
-Ekspresi: [[0,1]]
-Jawaban: [[0,1]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks identitas
-Tipe Langkah: step-by-step
-Ekspresi: [[1,0],[0,1]]
-Jawaban: [[1,0],[0,1]]
-
-
-###Judul Soal: Transformasi Nol
-Deskripsi Soal: Cari matriks untuk transformasi nol T(v) = 0 untuk semua v di RR^2
-
-#Langkah 1 [Benar/Salah]: Sifat transformasi nol
-Tipe Langkah: true-false
-Pertanyaan: Transformasi nol memetakan setiap vektor ke vektor nol [[0,0]]
-Jawaban Benar: Benar
-
-#Langkah 2 [Ekspresi & Jawaban]: Terapkan T pada e_1 = (1,0)
-Tipe Langkah: step-by-step
-Ekspresi: [[0,0]]
-Jawaban: [[0,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Terapkan T pada e_2 = (0,1)
-Tipe Langkah: step-by-step
-Ekspresi: [[0,0]]
-Jawaban: [[0,0]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks nol
-Tipe Langkah: step-by-step
-Ekspresi: [[0,0],[0,0]]
-Jawaban: [[0,0],[0,0]]
-
-
-###Judul Soal: Rotasi dengan Sudut theta - Rumus Umum
-Deskripsi Soal: Cari matriks untuk rotasi dengan sudut theta = 60 derajat (pi/3 radian) berlawanan arah jarum jam
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Bentuk umum matriks rotasi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Matriks rotasi dengan sudut theta berlawanan arah jarum jam adalah:
+Pertanyaan: Matriks rotasi sudut theta adalah:
 Pilihan:
   A) [[cos(theta), -sin(theta)],[sin(theta), cos(theta)]]
   B) [[sin(theta), cos(theta)],[cos(theta), sin(theta)]]
   C) [[cos(theta), sin(theta)],[-sin(theta), cos(theta)]]
-  D) [[-cos(theta), sin(theta)],[sin(theta), cos(theta)]]
+  D) Tidak ada yang benar
 Jawaban Benar: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Hitung cos(60°)
+#Langkah 2 [Ekspresi & Jawaban]: cos(60°) = 1/2
 Tipe Langkah: step-by-step
 Ekspresi: 1/2
 Jawaban: 1/2
 
-#Langkah 3 [Ekspresi & Jawaban]: Hitung sin(60°)
+#Langkah 3 [Ekspresi & Jawaban]: sin(60°) = sqrt(3)/2
 Tipe Langkah: step-by-step
 Ekspresi: sqrt(3)/2
 Jawaban: sqrt(3)/2
 
-#Langkah 4 [Ekspresi & Jawaban]: Kolom pertama: (cos theta, sin theta)
-Tipe Langkah: step-by-step
-Ekspresi: [[1/2, sqrt(3)/2]]
-Jawaban: [[1/2, sqrt(3)/2]]
-
-#Langkah 5 [Ekspresi & Jawaban]: Kolom kedua: (-sin theta, cos theta)
-Tipe Langkah: step-by-step
-Ekspresi: [[-sqrt(3)/2, 1/2]]
-Jawaban: [[-sqrt(3)/2, 1/2]]
-
-#Langkah 6 [Ekspresi & Jawaban]: Bentuk matriks rotasi R(60°)
+#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks rotasi 60°
 Tipe Langkah: step-by-step
 Ekspresi: [[1/2, -sqrt(3)/2],[sqrt(3)/2, 1/2]]
 Jawaban: [[1/2, -sqrt(3)/2],[sqrt(3)/2, 1/2]]
 
 
-###Judul Soal: Rotasi 45 Derajat
-Deskripsi Soal: Cari matriks untuk rotasi sebesar 45° berlawanan arah jarum jam
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Nilai trigonometri 45°
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Nilai cos(45°) dan sin(45°) adalah:
-Pilihan:
-  A) sqrt(2)/2 untuk keduanya
-  B) 1/2 untuk keduanya
-  C) cos(45°) = 1, sin(45°) = 0
-  D) cos(45°) = 0, sin(45°) = 1
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Hitung cos(45°)
-Tipe Langkah: step-by-step
-Ekspresi: sqrt(2)/2
-Jawaban: sqrt(2)/2
-
-#Langkah 3 [Ekspresi & Jawaban]: Hitung sin(45°)
-Tipe Langkah: step-by-step
-Ekspresi: sqrt(2)/2
-Jawaban: sqrt(2)/2
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks rotasi R(45°)
-Tipe Langkah: step-by-step
-Ekspresi: [[sqrt(2)/2, -sqrt(2)/2],[sqrt(2)/2, sqrt(2)/2]]
-Jawaban: [[sqrt(2)/2, -sqrt(2)/2],[sqrt(2)/2, sqrt(2)/2]]
-
-
-###Judul Soal: Invers Rotasi
-Deskripsi Soal: Tunjukkan bahwa rotasi sebesar theta kemudian sebesar -theta menghasilkan identitas. Gunakan R(90°) dan R(-90°)
-
-#Langkah 1 [Benar/Salah]: Sifat invers rotasi
-Tipe Langkah: true-false
-Pertanyaan: Rotasi sebesar theta diikuti rotasi sebesar -theta mengembalikan vektor ke posisi semula
-Jawaban Benar: Benar
-
-#Langkah 2 [Ekspresi & Jawaban]: Rotasi sebesar 90°
-Tipe Langkah: step-by-step
-Ekspresi: [[0,-1],[1,0]]
-Jawaban: [[0,-1],[1,0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Rotasi sebesar -90°
-Tipe Langkah: step-by-step
-Ekspresi: [[0,1],[-1,0]]
-Jawaban: [[0,1],[-1,0]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen baris 1, kolom 1 dari R(-90°)R(90°)
-Tipe Langkah: step-by-step
-Ekspresi: 0*0 + 1*1
-Jawaban: 1
-
-#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen baris 1, kolom 2 dari R(-90°)R(90°)
-Tipe Langkah: step-by-step
-Ekspresi: 0*(-1) + 1*0
-Jawaban: 0
-
-#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen baris 2, kolom 1 dari R(-90°)R(90°)
-Tipe Langkah: step-by-step
-Ekspresi: (-1)*0 + 0*1
-Jawaban: 0
-
-#Langkah 7 [Ekspresi & Jawaban]: Hitung elemen baris 2, kolom 2 dari R(-90°)R(90°)
-Tipe Langkah: step-by-step
-Ekspresi: (-1)*(-1) + 0*0
-Jawaban: 1
-
-#Langkah 8 [Ekspresi & Jawaban]: Bentuk hasil kali (harus identitas)
-Tipe Langkah: step-by-step
-Ekspresi: [[0,1],[-1,0]] * [[0,-1],[1,0]]
-Jawaban: [[1,0],[0,1]]
-
-
-###Judul Soal: Transformasi Kontraksi
-Deskripsi Soal: Cari matriks untuk kontraksi dengan faktor 1/2 pada kedua arah
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi kontraksi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Kontraksi dengan faktor k (dimana 0 < k < 1) akan:
-Pilihan:
-  A) Memperkecil ukuran vektor
-  B) Memperbesar ukuran vektor
-  C) Merotasi vektor
-  D) Merefleksi vektor
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Skalakan e_1 dengan 1/2
-Tipe Langkah: step-by-step
-Ekspresi: [[1/2, 0]]
-Jawaban: [[1/2, 0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Skalakan e_2 dengan 1/2
-Tipe Langkah: step-by-step
-Ekspresi: [[0, 1/2]]
-Jawaban: [[0, 1/2]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Bentuk matriks kontraksi
-Tipe Langkah: step-by-step
-Ekspresi: [[1/2, 0],[0, 1/2]]
-Jawaban: [[1/2, 0],[0, 1/2]]
-
-
-###Judul Soal: Transformasi Dilatasi
-Deskripsi Soal: Terapkan dilatasi dengan faktor 3 pada vektor v = (2,4)
-
-#Langkah 1 [Pilihan Ganda - Tunggal]: Dilatasi vs kontraksi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Dilatasi berbeda dengan kontraksi karena:
-Pilihan:
-  A) Dilatasi memperbesar (k > 1), kontraksi memperkecil (0 < k < 1)
-  B) Dilatasi merotasi, kontraksi merefleksi
-  C) Dilatasi linear, kontraksi tidak linear
-  D) Tidak ada perbedaan
-Jawaban Benar: A
-
-#Langkah 2 [Ekspresi & Jawaban]: Matriks dilatasi
-Tipe Langkah: step-by-step
-Ekspresi: [[3,0],[0,3]]
-Jawaban: [[3,0],[0,3]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Hitung komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 3*2 + 0*4
-Jawaban: 6
-
-#Langkah 4 [Ekspresi & Jawaban]: Hitung komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0*2 + 3*4
-Jawaban: 12
-
-#Langkah 5 [Ekspresi & Jawaban]: Bentuk vektor terdilatasi
-Tipe Langkah: step-by-step
-Ekspresi: [[3,0],[0,3]] * [[2],[4]]
-Jawaban: [[6],[12]]
-
-
-###Judul Soal: Mencari Prabayang
-Deskripsi Soal: Diberikan transformasi T dengan matriks A = [[2,1],[1,3]] dan T(v) = (7,10), cari v
+###Judul Soal: Mencari Prabayang (Preimage)
+Deskripsi Soal: Diberikan T dengan A = [[2,1],[1,3]] dan T(v) = (7,10), cari v
 
 #Langkah 1 [Pilihan Ganda - Tunggal]: Konsep prabayang
 Tipe Langkah: multiple-choice-single
@@ -1038,115 +659,46 @@ Pertanyaan: Jika T(v) = w, maka v disebut:
 Pilihan:
   A) Prabayang (preimage) dari w
   B) Bayang (image) dari w
-  C) Kernel dari w
-  D) Range dari w
+  C) Kernel
+  D) Range
 Jawaban Benar: A
 
-#Langkah 2 [Benar/Salah]: Menyusun sistem persamaan
+#Langkah 2 [Benar/Salah]: Cara mencari prabayang
 Tipe Langkah: true-false
-Pertanyaan: Untuk mencari v, kita selesaikan sistem persamaan linear Av = [[7],[10]]
+Pertanyaan: Untuk mencari v, selesaikan sistem persamaan Av = w
 Jawaban Benar: Benar
 
-#Langkah 3 [Ekspresi & Jawaban]: Persamaan pertama: 2x + y
+#Langkah 3 [Ekspresi & Jawaban]: Persamaan pertama: 2x + y = 7
 Tipe Langkah: step-by-step
 Ekspresi: 2*x + y
 Jawaban: 7
 
-#Langkah 4 [Ekspresi & Jawaban]: Persamaan kedua: x + 3y
+#Langkah 4 [Ekspresi & Jawaban]: Persamaan kedua: x + 3y = 10
 Tipe Langkah: step-by-step
 Ekspresi: x + 3*y
 Jawaban: 10
 
-#Langkah 5 [Ekspresi & Jawaban]: Dari persamaan pertama, nyatakan y dalam x
+#Langkah 5 [Ekspresi & Jawaban]: Dari persamaan pertama: y = 7 - 2x
 Tipe Langkah: step-by-step
 Ekspresi: y
 Jawaban: 7 - 2*x
 
-#Langkah 6 [Ekspresi & Jawaban]: Substitusi ke persamaan kedua: x + 3(7 - 2x)
+#Langkah 6 [Ekspresi & Jawaban]: Substitusi: x + 3(7 - 2x) = 10
 Tipe Langkah: step-by-step
 Ekspresi: x + 3*(7 - 2*x)
 Jawaban: 10
 
-#Langkah 7 [Ekspresi & Jawaban]: Sederhanakan: x + 21 - 6x
+#Langkah 7 [Ekspresi & Jawaban]: Sederhanakan: -5x + 21 = 10
 Tipe Langkah: step-by-step
 Ekspresi: -5*x + 21
 Jawaban: 10
 
-#Langkah 8 [Ekspresi & Jawaban]: Selesaikan untuk x
+#Langkah 8 [Ekspresi & Jawaban]: Nilai x
 Tipe Langkah: step-by-step
 Ekspresi: x
 Jawaban: 11/5
 
-#Langkah 9 [Ekspresi & Jawaban]: Selesaikan untuk y
+#Langkah 9 [Ekspresi & Jawaban]: Nilai y
 Tipe Langkah: step-by-step
 Ekspresi: 7 - 2*(11/5)
 Jawaban: 13/5
-
-
-###Judul Soal: Transformasi Persegi Satuan
-Deskripsi Soal: Cari bayang dari titik-titik sudut persegi satuan (0,0), (1,0), (0,1), (1,1) di bawah T = [[2,1],[1,2]]
-
-#Langkah 1 [Benar/Salah]: Persegi satuan
-Tipe Langkah: true-false
-Pertanyaan: Persegi satuan adalah persegi dengan titik sudut (0,0), (1,0), (0,1), (1,1) di RR^2
-Jawaban Benar: Benar
-
-#Langkah 2 [Ekspresi & Jawaban]: T(0,0)
-Tipe Langkah: step-by-step
-Ekspresi: [[2,1],[1,2]] * [[0],[0]]
-Jawaban: [[0],[0]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Hitung T(1,0) - komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 2*1 + 1*0
-Jawaban: 2
-
-#Langkah 4 [Ekspresi & Jawaban]: Hitung T(1,0) - komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 1*1 + 2*0
-Jawaban: 1
-
-#Langkah 5 [Ekspresi & Jawaban]: Bentuk T(1,0)
-Tipe Langkah: step-by-step
-Ekspresi: [[2,1],[1,2]] * [[1],[0]]
-Jawaban: [[2],[1]]
-
-#Langkah 6 [Ekspresi & Jawaban]: Hitung T(0,1) - komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 2*0 + 1*1
-Jawaban: 1
-
-#Langkah 7 [Ekspresi & Jawaban]: Hitung T(0,1) - komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 1*0 + 2*1
-Jawaban: 2
-
-#Langkah 8 [Ekspresi & Jawaban]: Bentuk T(0,1)
-Tipe Langkah: step-by-step
-Ekspresi: [[2,1],[1,2]] * [[0],[1]]
-Jawaban: [[1],[2]]
-
-#Langkah 9 [Ekspresi & Jawaban]: Hitung T(1,1) - komponen pertama
-Tipe Langkah: step-by-step
-Ekspresi: 2*1 + 1*1
-Jawaban: 3
-
-#Langkah 10 [Ekspresi & Jawaban]: Hitung T(1,1) - komponen kedua
-Tipe Langkah: step-by-step
-Ekspresi: 1*1 + 2*1
-Jawaban: 3
-
-#Langkah 11 [Ekspresi & Jawaban]: Bentuk T(1,1)
-Tipe Langkah: step-by-step
-Ekspresi: [[2,1],[1,2]] * [[1],[1]]
-Jawaban: [[3],[3]]
-
-#Langkah 12 [Pilihan Ganda - Tunggal]: Bentuk hasil transformasi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Persegi satuan dengan sudut (0,0), (1,0), (0,1), (1,1) ditransformasi menjadi bentuk dengan sudut (0,0), (2,1), (1,2), (3,3). Bentuk yang dihasilkan adalah:
-Pilihan:
-  A) Jajaran genjang (parallelogram)
-  B) Persegi
-  C) Persegi panjang
-  D) Trapesium
-Jawaban Benar: A
