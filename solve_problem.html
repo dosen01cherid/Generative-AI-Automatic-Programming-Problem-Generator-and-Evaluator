@@ -2085,9 +2085,10 @@ CIRC: "\\circ"
             ops = re.sub(r'-\s*-', ' + ', ops)
             ops = re.sub(r'\+\s*-|-\s*\+', ' - ', ops)
 
-            # 8) Remove stray backslashes before letters and parentheses
-            #    Fixes: \R -> R, \( -> (, \) -> ), etc.
-            ops = re.sub(r'\\([a-zA-Z()])', r'\1', ops)
+            # 8) Remove stray backslashes before UPPERCASE letters and parentheses only
+            #    Fixes: \R -> R, \( -> (, \) -> )
+            #    Preserves: \to, \rightarrow, \frac, etc. (lowercase commands)
+            ops = re.sub(r'\\([A-Z()])', r'\1', ops)
 
             # 9) Clean up multiple spaces in ops
             ops = re.sub(r'\s+', ' ', ops).strip()
