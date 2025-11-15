@@ -3,6 +3,7 @@ Problem Description: Pahami definisi persamaan linear dan karakteristiknya
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi persamaan linear
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Persamaan linear adalah:
 Options:
   A) Persamaan yang variabelnya hanya berpangkat 1 dan tidak ada perkalian antar variabel
@@ -13,6 +14,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Contoh persamaan linear
 Step Type: multiple-choice-multiple
+Requires Correct: True
 Question: Pilih semua yang merupakan persamaan linear:
 Options:
   A) 2x + 3y = 5
@@ -23,11 +25,13 @@ Correct Answer: A, C
 
 #Step 3 [Benar/Salah]: Bentuk umum
 Step Type: true-false
+Requires Correct: True
 Question: Bentuk umum persamaan linear dua variabel adalah ax + by = c di mana a, b, c adalah konstanta
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Geometri persamaan linear
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Secara geometris, persamaan linear dengan 2 variabel (x,y) merepresentasikan:
 Options:
   A) Garis lurus di bidang 2D
@@ -42,6 +46,7 @@ Problem Description: Pahami apa itu sistem persamaan linear dan komponen-kompone
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu sistem persamaan linear?
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem persamaan linear adalah:
 Options:
   A) Kumpulan dua atau lebih persamaan linear yang melibatkan variabel-variabel yang sama
@@ -52,6 +57,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Notasi sistem
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem persamaan {x + y = 5, x - y = 1} memiliki:
 Options:
   A) 2 persamaan dengan 2 variabel (x dan y)
@@ -62,11 +68,13 @@ Correct Answer: A
 
 #Step 3 [Benar/Salah]: Tujuan sistem
 Step Type: true-false
+Requires Correct: True
 Question: Tujuan menyelesaikan sistem persamaan linear adalah mencari nilai variabel yang memenuhi semua persamaan sekaligus
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Geometri sistem 2x2
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Secara geometris, solusi sistem 2 persamaan linear dengan 2 variabel adalah:
 Options:
   A) Titik perpotongan dua garis
@@ -81,6 +89,7 @@ Problem Description: Pahami konsep solusi dan jenis-jenis kemungkinan solusi sis
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi solusi
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Solusi dari sistem persamaan linear adalah:
 Options:
   A) Nilai-nilai variabel yang memenuhi semua persamaan dalam sistem
@@ -91,6 +100,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Verifikasi solusi
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Untuk memverifikasi (x,y) = (3,2) adalah solusi dari {x+y=5, x-y=1}, kita harus:
 Options:
   A) Substitusi x=3 dan y=2 ke kedua persamaan dan periksa apakah kedua persamaan terpenuhi
@@ -101,6 +111,7 @@ Correct Answer: A
 
 #Step 3 [Pilihan Ganda - Tunggal]: Kemungkinan jumlah solusi
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem persamaan linear dapat memiliki:
 Options:
   A) Tepat satu solusi, tak hingga solusi, atau tidak ada solusi
@@ -111,6 +122,7 @@ Correct Answer: A
 
 #Step 4 [Benar/Salah]: Solusi unik
 Step Type: true-false
+Requires Correct: True
 Question: Jika dua garis berpotongan di satu titik, sistem memiliki solusi unik (tepat satu solusi)
 Correct Answer: Benar
 
@@ -120,6 +132,7 @@ Problem Description: Pahami pentingnya sistem persamaan linear dalam aplikasi ny
 
 #Step 1 [Pilihan Ganda - Tunggal]: Kegunaan sistem linear
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Mengapa sistem persamaan linear penting dalam dunia nyata?
 Options:
   A) Banyak masalah praktis (ekonomi, teknik, sains) dapat dimodelkan sebagai sistem persamaan linear
@@ -130,6 +143,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Aplikasi sistem linear
 Step Type: multiple-choice-multiple
+Requires Correct: True
 Question: Di bidang mana sistem persamaan linear digunakan?
 Options:
   A) Ekonomi (keseimbangan pasar, optimasi produksi)
@@ -140,11 +154,13 @@ Correct Answer: A, B, C
 
 #Step 3 [Benar/Salah]: Sistem dan komputer
 Step Type: true-false
+Requires Correct: True
 Question: Sistem persamaan linear yang besar (ribuan variabel) dapat diselesaikan secara efisien menggunakan komputer
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Metode penyelesaian
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Mengapa kita mempelajari berbagai metode untuk menyelesaikan sistem linear?
 Options:
   A) Metode yang berbeda cocok untuk masalah berbeda; beberapa lebih efisien untuk kasus tertentu
@@ -159,6 +175,7 @@ Problem Description: Selesaikan sistem persamaan x + y = 5 dan x - y = 1 menggun
 
 #Step 1 [Pilihan Ganda - Tunggal]: Langkah pertama metode substitusi
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Dalam metode substitusi, langkah pertama adalah:
 Options:
   A) Nyatakan satu variabel dalam bentuk variabel lain dari salah satu persamaan
@@ -169,31 +186,37 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Dari persamaan pertama, nyatakan x dalam y
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 5 - y
 
 #Step 3 [Ekspresi & Jawaban]: Substitusi x = 5 - y ke persamaan kedua
 Step Type: step-by-step
+Requires Correct: True
 Expression: (5 - y) - y
 Answer: 1
 
 #Step 4 [Ekspresi & Jawaban]: Sederhanakan dan selesaikan untuk y
 Step Type: step-by-step
+Requires Correct: True
 Expression: 5 - 2*y
 Answer: 1
 
 #Step 5 [Ekspresi & Jawaban]: Hitung nilai y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 2
 
 #Step 6 [Ekspresi & Jawaban]: Substitusi y = 2 ke x = 5 - y
 Step Type: step-by-step
+Requires Correct: True
 Expression: 5 - 2
 Answer: 3
 
 #Step 7 [Ekspresi & Jawaban]: Solusi sistem
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[3,2]]
 Answer: [[3,2]]
 
@@ -203,6 +226,7 @@ Problem Description: Selesaikan sistem persamaan 2x + 3y = 13 dan x + y = 5 meng
 
 #Step 1 [Pilihan Ganda - Tunggal]: Tujuan metode eliminasi
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Tujuan metode eliminasi adalah:
 Options:
   A) Menghilangkan salah satu variabel dengan menjumlahkan atau mengurangkan persamaan
@@ -213,31 +237,37 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*(x + y)
 Answer: 2*x + 2*y
 
 #Step 3 [Ekspresi & Jawaban]: Hasil persamaan kedua setelah dikali 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*x + 2*y
 Answer: 10
 
 #Step 4 [Ekspresi & Jawaban]: Kurangkan persamaan baru dari persamaan pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: (2*x + 3*y) - (2*x + 2*y)
 Answer: 13 - 10
 
 #Step 5 [Ekspresi & Jawaban]: Sederhanakan untuk mendapat y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 3
 
 #Step 6 [Ekspresi & Jawaban]: Substitusi y = 3 ke x + y = 5
 Step Type: step-by-step
+Requires Correct: True
 Expression: x + 3
 Answer: 5
 
 #Step 7 [Ekspresi & Jawaban]: Hitung nilai x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 2
 
@@ -247,21 +277,25 @@ Problem Description: Tuliskan sistem 3x + 2y = 7 dan x - y = 1 dalam bentuk matr
 
 #Step 1 [Benar/Salah]: Definisi matriks augmented
 Step Type: true-false
+Requires Correct: True
 Question: Matriks augmented menggabungkan matriks koefisien dengan vektor konstanta yang dipisahkan garis vertikal
 Correct Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Baris pertama matriks augmented
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[3,2,7]]
 Answer: [[3,2,7]]
 
 #Step 3 [Ekspresi & Jawaban]: Baris kedua matriks augmented
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,-1,1]]
 Answer: [[1,-1,1]]
 
 #Step 4 [Ekspresi & Jawaban]: Matriks augmented lengkap
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[3,2,7],[1,-1,1]]
 Answer: [[3,2,7],[1,-1,1]]
 
@@ -271,41 +305,49 @@ Problem Description: Selesaikan sistem x + y + z = 6, 2x - y + z = 3, dan x + 2y
 
 #Step 1 [Ekspresi & Jawaban]: Bentuk matriks augmented awal
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
 Answer: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
 
 #Step 2 [Ekspresi & Jawaban]: Eliminasi x dari baris 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]|R_2\to R_2-2R_1
 Answer: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]
 
 #Step 3 [Ekspresi & Jawaban]: Eliminasi x dari baris 3
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]|R_3\to R_3-R_1
 Answer: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]
 
 #Step 4 [Ekspresi & Jawaban]: Jadikan pivot baris 2 sama dengan 1
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]|R_2\to (-1/3)R_2
 Answer: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]
 
 #Step 5 [Ekspresi & Jawaban]: Eliminasi y dari baris 3
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]|R_3\to R_3-R_2
 Answer: [[1,1,1,6],[0,1,1/3,3],[0,0,-7/3,-7]]
 
 #Step 6 [Ekspresi & Jawaban]: Selesaikan untuk z
 Step Type: step-by-step
+Requires Correct: True
 Expression: z
 Answer: 3
 
 #Step 7 [Ekspresi & Jawaban]: Substitusi z = 3 untuk mendapat y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 2
 
 #Step 8 [Ekspresi & Jawaban]: Substitusi y = 2, z = 3 untuk mendapat x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 1
 
@@ -315,6 +357,7 @@ Problem Description: Tunjukkan bahwa sistem x + y = 3 dan 2x + 2y = 8 tidak memi
 
 #Step 1 [Pilihan Ganda - Tunggal]: Ciri sistem tidak konsisten
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem linear tidak konsisten jika:
 Options:
   A) Terdapat baris dengan semua koefisien nol tetapi konstanta tidak nol
@@ -325,16 +368,19 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*(x + y)
 Answer: 2*x + 2*y
 
 #Step 3 [Ekspresi & Jawaban]: Hasil kali ruas kanan
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*3
 Answer: 6
 
 #Step 4 [Benar/Salah]: Pertentangan
 Step Type: true-false
+Requires Correct: True
 Question: Persamaan 2x + 2y = 6 bertentangan dengan 2x + 2y = 8, sehingga sistem tidak konsisten
 Correct Answer: Benar
 
@@ -344,16 +390,19 @@ Problem Description: Tunjukkan bahwa sistem x + 2y = 4 dan 2x + 4y = 8 memiliki 
 
 #Step 1 [Ekspresi & Jawaban]: Bentuk matriks augmented
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,2,4],[2,4,8]]
 Answer: [[1,2,4],[2,4,8]]
 
 #Step 2 [Ekspresi & Jawaban]: Eliminasi baris 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,2,4],[2,4,8]]|R_2\to R_2-2R_1
 Answer: [[1,2,4],[0,0,0]]
 
 #Step 3 [Pilihan Ganda - Tunggal]: Interpretasi baris nol
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Baris [[0,0,0]] dalam matriks augmented menunjukkan:
 Options:
   A) Persamaan bergantung, sistem memiliki infinit solusi
@@ -364,6 +413,7 @@ Correct Answer: A
 
 #Step 4 [Ekspresi & Jawaban]: Nyatakan x dalam parameter t dimana y = t
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 4 - 2*t
 
@@ -373,6 +423,7 @@ Problem Description: Tentukan nilai k agar sistem x + 2y = 3 dan 2x + ky = 6 mem
 
 #Step 1 [Pilihan Ganda - Tunggal]: Syarat solusi unik
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem 2x2 memiliki solusi unik jika:
 Options:
   A) Determinan matriks koefisien tidak nol
@@ -383,16 +434,19 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Matriks koefisien
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,2],[2,k]]
 Answer: [[1,2],[2,k]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung determinan
 Step Type: step-by-step
+Requires Correct: True
 Expression: 1*k - 2*2
 Answer: k - 4
 
 #Step 4 [Benar/Salah]: Syarat k
 Step Type: true-false
+Requires Correct: True
 Question: Untuk solusi unik, k - 4 ne 0, sehingga k ne 4
 Correct Answer: Benar
 
@@ -402,6 +456,7 @@ Problem Description: Sistem x + y = 5 dan 2x - y = 4 memiliki solusi (3,2). Inte
 
 #Step 1 [Pilihan Ganda - Tunggal]: Representasi geometris persamaan linear
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Setiap persamaan linear dalam dua variabel merepresentasikan:
 Options:
   A) Garis lurus di bidang xy
@@ -412,16 +467,19 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Solusi sistem
 Step Type: true-false
+Requires Correct: True
 Question: Solusi sistem adalah titik potong kedua garis
 Correct Answer: Benar
 
 #Step 3 [Ekspresi & Jawaban]: Verifikasi solusi di persamaan pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: 3 + 2
 Answer: 5
 
 #Step 4 [Ekspresi & Jawaban]: Verifikasi solusi di persamaan kedua
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*3 - 2
 Answer: 4
 
@@ -431,11 +489,13 @@ Problem Description: Selesaikan sistem homogen 2x + y = 0 dan x - 3y = 0
 
 #Step 1 [Benar/Salah]: Definisi sistem homogen
 Step Type: true-false
+Requires Correct: True
 Question: Sistem linear homogen adalah sistem dimana semua konstanta ruas kanan bernilai nol
 Correct Answer: Benar
 
 #Step 2 [Pilihan Ganda - Tunggal]: Solusi trivial
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem homogen selalu memiliki solusi:
 Options:
   A) Trivial x = 0, y = 0
@@ -446,26 +506,31 @@ Correct Answer: A
 
 #Step 3 [Ekspresi & Jawaban]: Dari persamaan kedua, nyatakan x dalam y
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 3*y
 
 #Step 4 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*(3*y) + y
 Answer: 0
 
 #Step 5 [Ekspresi & Jawaban]: Sederhanakan
 Step Type: step-by-step
+Requires Correct: True
 Expression: 7*y
 Answer: 0
 
 #Step 6 [Ekspresi & Jawaban]: Solusi y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 0
 
 #Step 7 [Ekspresi & Jawaban]: Solusi x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 0
 
@@ -475,6 +540,7 @@ Problem Description: Selesaikan sistem (1/2)x + (1/3)y = 2 dan (1/4)x - (1/2)y =
 
 #Step 1 [Pilihan Ganda - Tunggal]: Strategi menghilangkan pecahan
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Untuk menghilangkan pecahan dari persamaan, kita dapat:
 Options:
   A) Kalikan dengan KPK dari semua penyebut
@@ -485,41 +551,49 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 6
 Step Type: step-by-step
+Requires Correct: True
 Expression: 6*((1/2)*x + (1/3)*y)
 Answer: 3*x + 2*y
 
 #Step 3 [Ekspresi & Jawaban]: Hasil ruas kanan pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: 6*2
 Answer: 12
 
 #Step 4 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 4
 Step Type: step-by-step
+Requires Correct: True
 Expression: 4*((1/4)*x - (1/2)*y)
 Answer: x - 2*y
 
 #Step 5 [Ekspresi & Jawaban]: Hasil ruas kanan kedua
 Step Type: step-by-step
+Requires Correct: True
 Expression: 4*(-1)
 Answer: -4
 
 #Step 6 [Ekspresi & Jawaban]: Sistem baru menjadi 3x + 2y = 12 dan x - 2y = -4, jumlahkan
 Step Type: step-by-step
+Requires Correct: True
 Expression: (3*x + 2*y) + (x - 2*y)
 Answer: 12 + (-4)
 
 #Step 7 [Ekspresi & Jawaban]: Selesaikan untuk x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 2
 
 #Step 8 [Ekspresi & Jawaban]: Substitusi x = 2 ke x - 2y = -4
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2 - 2*y
 Answer: -4
 
 #Step 9 [Ekspresi & Jawaban]: Selesaikan untuk y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 3
 
@@ -529,36 +603,43 @@ Problem Description: Ana membeli 3 buku dan 2 pensil seharga Rp 23000. Budi memb
 
 #Step 1 [Isi Titik-Titik]: Definisi variabel
 Step Type: fill-blank
+Requires Correct: True
 Question: Misalkan x = harga satu {blank} dan y = harga satu pensil
 Correct Answer: buku
 
 #Step 2 [Ekspresi & Jawaban]: Persamaan dari informasi Ana
 Step Type: step-by-step
+Requires Correct: True
 Expression: 3*x + 2*y
 Answer: 23000
 
 #Step 3 [Ekspresi & Jawaban]: Persamaan dari informasi Budi
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*x + y
 Answer: 15000
 
 #Step 4 [Ekspresi & Jawaban]: Dari persamaan kedua, nyatakan y dalam x
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 15000 - 2*x
 
 #Step 5 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: 3*x + 2*(15000 - 2*x)
 Answer: 23000
 
 #Step 6 [Ekspresi & Jawaban]: Sederhanakan
 Step Type: step-by-step
+Requires Correct: True
 Expression: 3*x + 30000 - 4*x
 Answer: 23000
 
 #Step 7 [Ekspresi & Jawaban]: Selesaikan untuk x (harga buku)
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 7000
 
@@ -568,26 +649,31 @@ Problem Description: Campuran berisi 40% alkohol dicampur dengan campuran 70% al
 
 #Step 1 [Ekspresi & Jawaban]: Jumlah alkohol dari campuran pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: 0.4*6
 Answer: 2.4
 
 #Step 2 [Ekspresi & Jawaban]: Jumlah alkohol dari campuran kedua
 Step Type: step-by-step
+Requires Correct: True
 Expression: 0.7*4
 Answer: 2.8
 
 #Step 3 [Ekspresi & Jawaban]: Total alkohol dalam campuran
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2.4 + 2.8
 Answer: 5.2
 
 #Step 4 [Ekspresi & Jawaban]: Total volume campuran
 Step Type: step-by-step
+Requires Correct: True
 Expression: 6 + 4
 Answer: 10
 
 #Step 5 [Ekspresi & Jawaban]: Persentase alkohol dalam campuran akhir
 Step Type: step-by-step
+Requires Correct: True
 Expression: (5.2/10)*100
 Answer: 52
 
@@ -597,16 +683,19 @@ Problem Description: Selesaikan sistem x + 2y + z = 4 dan 2x + 4y + 2z = 8
 
 #Step 1 [Ekspresi & Jawaban]: Bentuk matriks augmented
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,2,1,4],[2,4,2,8]]
 Answer: [[1,2,1,4],[2,4,2,8]]
 
 #Step 2 [Ekspresi & Jawaban]: Eliminasi baris 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: [[1,2,1,4],[2,4,2,8]]|R_2\to R_2-2R_1
 Answer: [[1,2,1,4],[0,0,0,0]]
 
 #Step 3 [Pilihan Ganda - Tunggal]: Jumlah variabel bebas
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Sistem memiliki 3 variabel tetapi hanya 1 persamaan independen, sehingga jumlah variabel bebas adalah:
 Options:
   A) 2
@@ -617,6 +706,7 @@ Correct Answer: A
 
 #Step 4 [Ekspresi & Jawaban]: Misalkan y = s dan z = t, nyatakan x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 4 - 2*s - t
 
@@ -626,6 +716,7 @@ Problem Description: Tanpa menyelesaikan, tentukan apakah sistem x + y = 2, 2x +
 
 #Step 1 [Pilihan Ganda - Tunggal]: Observasi persamaan
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Perhatikan bahwa persamaan kedua adalah kelipatan dari persamaan pertama. Ini menunjukkan:
 Options:
   A) Persamaan bergantung (dependent)
@@ -636,6 +727,7 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Konsistensi sistem
 Step Type: true-false
+Requires Correct: True
 Question: Karena semua persamaan merepresentasikan garis yang sama, sistem konsisten dengan infinit banyak solusi
 Correct Answer: Benar
 
@@ -645,6 +737,7 @@ Problem Description: Selesaikan sistem 5x + 3y = 31 dan 7x - 2y = 20
 
 #Step 1 [Pilihan Ganda - Tunggal]: Strategi eliminasi terbaik
 Step Type: multiple-choice-single
+Requires Correct: True
 Question: Untuk mengeliminasi y, kita dapat:
 Options:
   A) Kalikan persamaan pertama dengan 2 dan persamaan kedua dengan 3
@@ -655,56 +748,67 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*(5*x + 3*y)
 Answer: 10*x + 6*y
 
 #Step 3 [Ekspresi & Jawaban]: Ruas kanan setelah dikali 2
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*31
 Answer: 62
 
 #Step 4 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 3
 Step Type: step-by-step
+Requires Correct: True
 Expression: 3*(7*x - 2*y)
 Answer: 21*x - 6*y
 
 #Step 5 [Ekspresi & Jawaban]: Ruas kanan setelah dikali 3
 Step Type: step-by-step
+Requires Correct: True
 Expression: 3*20
 Answer: 60
 
 #Step 6 [Ekspresi & Jawaban]: Jumlahkan kedua persamaan baru
 Step Type: step-by-step
+Requires Correct: True
 Expression: (10*x + 6*y) + (21*x - 6*y)
 Answer: 62 + 60
 
 #Step 7 [Ekspresi & Jawaban]: Sederhanakan untuk x
 Step Type: step-by-step
+Requires Correct: True
 Expression: 31*x
 Answer: 122
 
 #Step 8 [Ekspresi & Jawaban]: Hitung nilai x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 122/31
 
 #Step 9 [Ekspresi & Jawaban]: Sederhanakan x
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 4
 
 #Step 10 [Ekspresi & Jawaban]: Substitusi x = 4 ke 5x + 3y = 31
 Step Type: step-by-step
+Requires Correct: True
 Expression: 5*4 + 3*y
 Answer: 31
 
 #Step 11 [Ekspresi & Jawaban]: Selesaikan untuk y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: (31-20)/3
 
 #Step 12 [Ekspresi & Jawaban]: Hitung nilai y
 Step Type: step-by-step
+Requires Correct: True
 Expression: y
 Answer: 11/3
 
@@ -714,31 +818,37 @@ Problem Description: Periksa apakah (2,1,3) adalah solusi dari sistem x + y + z 
 
 #Step 1 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2 + 1 + 3
 Answer: 6
 
 #Step 2 [Benar/Salah]: Persamaan pertama terpenuhi
 Step Type: true-false
+Requires Correct: True
 Question: Karena 2 + 1 + 3 = 6, persamaan pertama terpenuhi
 Correct Answer: Benar
 
 #Step 3 [Ekspresi & Jawaban]: Substitusi ke persamaan kedua
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*2 - 1
 Answer: 3
 
 #Step 4 [Benar/Salah]: Persamaan kedua terpenuhi
 Step Type: true-false
+Requires Correct: True
 Question: Karena 2(2) - 1 = 3, persamaan kedua terpenuhi
 Correct Answer: Benar
 
 #Step 5 [Ekspresi & Jawaban]: Substitusi ke persamaan ketiga
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2 + 2*3
 Answer: 8
 
 #Step 6 [Benar/Salah]: Kesimpulan
 Step Type: true-false
+Requires Correct: True
 Question: Karena semua persamaan terpenuhi, (2,1,3) adalah solusi sistem
 Correct Answer: Benar
 
@@ -748,25 +858,30 @@ Problem Description: Perusahaan memproduksi produk A dan B. Produk A memerlukan 
 
 #Step 1 [Isi Titik-Titik]: Definisi variabel
 Step Type: fill-blank
+Requires Correct: True
 Question: Misalkan x = jumlah produk {blank}
 Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Jika hanya produk A diproduksi (y = 0), persamaan waktu mesin
 Step Type: step-by-step
+Requires Correct: True
 Expression: 2*x
 Answer: 100
 
 #Step 3 [Ekspresi & Jawaban]: Maksimal produk A
 Step Type: step-by-step
+Requires Correct: True
 Expression: x
 Answer: 50
 
 #Step 4 [Ekspresi & Jawaban]: Verifikasi dengan waktu tenaga kerja: 1 jam × 50 produk
 Step Type: step-by-step
+Requires Correct: True
 Expression: 1*50
 Answer: 50
 
 #Step 5 [Benar/Salah]: Kelayakan solusi
 Step Type: true-false
+Requires Correct: True
 Question: Karena 50 jam tenaga kerja < 80 jam tersedia, produksi 50 unit produk A layak
 Correct Answer: Benar
