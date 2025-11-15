@@ -1,222 +1,660 @@
-###Problem Title: Pengenalan Operasi Baris - Perkalian Skalar (Tipe 1)
-Problem Description: Lakukan operasi baris: kalikan baris pertama dengan `1/2` pada matriks `[[2,4,6],[1,2,3]]`
-
-#Step Description: Kalikan baris 1 dengan 1/2
-Step Expression: `[[2,4,6],[1,2,3]]|R_1\to (1/2)R_1`
-Step Expected: `[[1,2,3],[1,2,3]]`
-
-
-###Problem Title: Pengenalan Operasi Baris - Perkalian Skalar Negatif
-Problem Description: Lakukan operasi baris: kalikan baris kedua dengan `-1` pada matriks `[[1,2,3],[2,-4,6]]`
-
-#Step Description: Kalikan baris 2 dengan -1
-Step Expression: `[[1,2,3],[2,-4,6]]|R_2\to -R_2`
-Step Expected: `[[1,2,3],[-2,4,-6]]`
-
-
-###Problem Title: Pengenalan Operasi Baris - Pertukaran Baris (Tipe 2)
-Problem Description: Lakukan operasi baris: tukar baris 1 dan baris 2 pada matriks `[[0,1,2],[1,0,3]]`
-
-#Step Description: Tukar baris 1 dan baris 2
-Step Expression: `[[0,1,2],[1,0,3]]|R_1\leftrightarrow R_2`
-Step Expected: `[[1,0,3],[0,1,2]]`
-
-
-###Problem Title: Pengenalan Operasi Baris - Penjumlahan Baris (Tipe 3)
-Problem Description: Lakukan operasi baris: ganti baris 2 dengan `R_2 - R_1` pada matriks `[[1,2,3],[2,4,7]]`
-
-#Step Description: Kurangi baris 2 dengan baris 1
-Step Expression: `[[1,2,3],[2,4,7]]|R_2\to R_2-R_1`
-Step Expected: `[[1,2,3],[1,2,4]]`
-
-
-###Problem Title: Pengenalan Operasi Baris - Penjumlahan dengan Skalar
-Problem Description: Lakukan operasi baris: ganti baris 2 dengan `R_2 - 2R_1` pada matriks `[[1,1,2],[2,3,5]]`
-
-#Step Description: Kurangi baris 2 dengan 2 kali baris 1
-Step Expression: `[[1,1,2],[2,3,5]]|R_2\to R_2-2R_1`
-Step Expected: `[[1,1,2],[0,1,1]]`
-
-
-###Problem Title: Kombinasi Operasi Baris - Dua Langkah
-Problem Description: Ubah matriks `[[2,4,8],[1,3,7]]` menjadi bentuk yang pivot pertamanya adalah 1
-
-#Step Description: Jadikan pivot pertama sama dengan 1
-Step Expression: `[[2,4,8],[1,3,7]]|R_1\to (1/2)R_1`
-Step Expected: `[[1,2,4],[1,3,7]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama
-Step Expression: `[[1,2,4],[1,3,7]]|R_2\to R_2-R_1`
-Step Expected: `[[1,2,4],[0,1,3]]`
-
-
-###Problem Title: Eliminasi Gauss-Jordan - Sistem 2x2 Sederhana
-Problem Description: Selesaikan sistem persamaan linear `[[2,4,16],[1,3,11]]` menggunakan metode eliminasi Gauss-Jordan hingga bentuk eselon baris tereduksi
-
-#Step Description: Jadikan pivot pertama sama dengan 1
-Step Expression: `[[2,4,16],[1,3,11]]|R_1\to (1/2)R_1`
-Step Expected: `[[1,2,8],[1,3,11]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama
-Step Expression: `[[1,2,8],[1,3,11]]|R_2\to R_2-R_1`
-Step Expected: `[[1,2,8],[0,1,3]]`
-
-#Step Description: Eliminasi elemen di atas pivot kedua
-Step Expression: `[[1,2,8],[0,1,3]]|R_1\to R_1-2R_2`
-Step Expected: `[[1,0,2],[0,1,3]]`
-
-
-###Problem Title: Eliminasi Gauss-Jordan - Sistem 2x2 dengan Pecahan
-Problem Description: Selesaikan sistem persamaan linear `[[4,2,10],[2,3,11]]` menggunakan metode eliminasi Gauss-Jordan
-
-#Step Description: Jadikan pivot pertama sama dengan 1
-Step Expression: `[[4,2,10],[2,3,11]]|R_1\to (1/4)R_1`
-Step Expected: `[[1,1/2,5/2],[2,3,11]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama
-Step Expression: `[[1,1/2,5/2],[2,3,11]]|R_2\to R_2-2R_1`
-Step Expected: `[[1,1/2,5/2],[0,2,6]]`
-
-#Step Description: Jadikan pivot kedua sama dengan 1
-Step Expression: `[[1,1/2,5/2],[0,2,6]]|R_2\to (1/2)R_2`
-Step Expected: `[[1,1/2,5/2],[0,1,3]]`
-
-#Step Description: Eliminasi elemen di atas pivot kedua
-Step Expression: `[[1,1/2,5/2],[0,1,3]]|R_1\to R_1-(1/2)R_2`
-Step Expected: `[[1,0,1],[0,1,3]]`
-
-
-###Problem Title: Eliminasi Gauss-Jordan - Sistem dengan Bilangan Negatif
-Problem Description: Selesaikan sistem persamaan linear `[[3,-6,9],[1,-2,5]]` menggunakan metode eliminasi Gauss-Jordan
-
-#Step Description: Jadikan pivot pertama sama dengan 1
-Step Expression: `[[3,-6,9],[1,-2,5]]|R_1\to (1/3)R_1`
-Step Expected: `[[1,-2,3],[1,-2,5]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama
-Step Expression: `[[1,-2,3],[1,-2,5]]|R_2\to R_2-R_1`
-Step Expected: `[[1,-2,3],[0,0,2]]`
-
-#Step Description: Jadikan pivot kedua sama dengan 1
-Step Expression: `[[1,-2,3],[0,0,2]]|R_2\to (1/2)R_2`
-Step Expected: `[[1,-2,3],[0,0,1]]`
-
-#Step Description: Eliminasi elemen di atas pivot kedua
-Step Expression: `[[1,-2,3],[0,0,1]]|R_1\to R_1-3R_2`
-Step Expected: `[[1,-2,0],[0,0,1]]`
-
-
-###Problem Title: Eliminasi Gauss-Jordan - Sistem 3x3 Sederhana
-Problem Description: Selesaikan sistem persamaan linear `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` menggunakan metode eliminasi Gauss-Jordan
-
-#Step Description: Eliminasi elemen di bawah pivot pertama pada baris 2
-Step Expression: `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]|R_2\to R_2-2R_1`
-Step Expected: `[[1,2,3,14],[0,1,1,3],[3,1,2,11]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama pada baris 3
-Step Expression: `[[1,2,3,14],[0,1,1,3],[3,1,2,11]]|R_3\to R_3-3R_1`
-Step Expected: `[[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]`
-
-#Step Description: Eliminasi elemen di bawah pivot kedua
-Step Expression: `[[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]|R_3\to R_3+5R_2`
-Step Expected: `[[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]`
-
-#Step Description: Jadikan pivot ketiga sama dengan 1
-Step Expression: `[[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]|R_3\to (-1/2)R_3`
-Step Expected: `[[1,2,3,14],[0,1,1,3],[0,0,1,8]]`
-
-#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 2
-Step Expression: `[[1,2,3,14],[0,1,1,3],[0,0,1,8]]|R_2\to R_2-R_3`
-Step Expected: `[[1,2,3,14],[0,1,0,-5],[0,0,1,8]]`
-
-#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 1
-Step Expression: `[[1,2,3,14],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-3R_3`
-Step Expected: `[[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]`
-
-#Step Description: Eliminasi elemen di atas pivot kedua
-Step Expression: `[[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-2R_2`
-Step Expected: `[[1,0,0,0],[0,1,0,-5],[0,0,1,8]]`
-
-
-###Problem Title: Eliminasi Gauss-Jordan dengan Pertukaran Baris
-Problem Description: Selesaikan sistem persamaan linear `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]` yang memerlukan pertukaran baris
-
-#Step Description: Tukar baris untuk mendapatkan pivot bukan nol
-Step Expression: `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]|R_1\leftrightarrow R_2`
-Step Expected: `[[1,1,2,7],[0,2,1,5],[2,1,3,10]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama
-Step Expression: `[[1,1,2,7],[0,2,1,5],[2,1,3,10]]|R_3\to R_3-2R_1`
-Step Expected: `[[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]`
-
-#Step Description: Jadikan pivot kedua sama dengan 1
-Step Expression: `[[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]|R_2\to (1/2)R_2`
-Step Expected: `[[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]`
-
-#Step Description: Eliminasi elemen di bawah pivot kedua
-Step Expression: `[[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]|R_3\to R_3+R_2`
-Step Expected: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]`
-
-#Step Description: Jadikan pivot ketiga sama dengan 1
-Step Expression: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]|R_3\to -2R_3`
-Step Expected: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,1,3]]`
-
-#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 2
-Step Expression: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,1,3]]|R_2\to R_2-(1/2)R_3`
-Step Expected: `[[1,1,2,7],[0,1,0,1],[0,0,1,3]]`
-
-#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 1
-Step Expression: `[[1,1,2,7],[0,1,0,1],[0,0,1,3]]|R_1\to R_1-2R_3`
-Step Expected: `[[1,1,0,1],[0,1,0,1],[0,0,1,3]]`
-
-#Step Description: Eliminasi elemen di atas pivot kedua
-Step Expression: `[[1,1,0,1],[0,1,0,1],[0,0,1,3]]|R_1\to R_1-R_2`
-Step Expected: `[[1,0,0,0],[0,1,0,1],[0,0,1,3]]`
-
-
-###Problem Title: Latihan Identifikasi Operasi Baris
-Problem Description: Tentukan operasi baris yang digunakan untuk transformasi `[[2,6,4],[0,3,9]]` menjadi `[[1,3,2],[0,3,9]]`
-
-#Step Description: Identifikasi dan lakukan operasi baris yang tepat
-Step Expression: `[[2,6,4],[0,3,9]]|R_1\to (1/2)R_1`
-Step Expected: `[[1,3,2],[0,3,9]]`
-
-
-###Problem Title: Sistem 3x3 dengan Multiple Scaling
-Problem Description: Selesaikan sistem `[[2,4,6,18],[3,1,2,11],[1,1,1,6]]` yang memerlukan beberapa operasi skalar
-
-#Step Description: Jadikan pivot pertama sama dengan 1
-Step Expression: `[[2,4,6,18],[3,1,2,11],[1,1,1,6]]|R_1\to (1/2)R_1`
-Step Expected: `[[1,2,3,9],[3,1,2,11],[1,1,1,6]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama pada baris 2
-Step Expression: `[[1,2,3,9],[3,1,2,11],[1,1,1,6]]|R_2\to R_2-3R_1`
-Step Expected: `[[1,2,3,9],[0,-5,-7,-16],[1,1,1,6]]`
-
-#Step Description: Eliminasi elemen di bawah pivot pertama pada baris 3
-Step Expression: `[[1,2,3,9],[0,-5,-7,-16],[1,1,1,6]]|R_3\to R_3-R_1`
-Step Expected: `[[1,2,3,9],[0,-5,-7,-16],[0,-1,-2,-3]]`
-
-#Step Description: Jadikan pivot kedua sama dengan 1
-Step Expression: `[[1,2,3,9],[0,-5,-7,-16],[0,-1,-2,-3]]|R_2\to (-1/5)R_2`
-Step Expected: `[[1,2,3,9],[0,1,7/5,16/5],[0,-1,-2,-3]]`
-
-#Step Description: Eliminasi elemen di bawah pivot kedua
-Step Expression: `[[1,2,3,9],[0,1,7/5,16/5],[0,-1,-2,-3]]|R_3\to R_3+R_2`
-Step Expected: `[[1,2,3,9],[0,1,7/5,16/5],[0,0,-3/5,1/5]]`
-
-#Step Description: Jadikan pivot ketiga sama dengan 1
-Step Expression: `[[1,2,3,9],[0,1,7/5,16/5],[0,0,-3/5,1/5]]|R_3\to (-5/3)R_3`
-Step Expected: `[[1,2,3,9],[0,1,7/5,16/5],[0,0,1,-1/3]]`
-
-#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 2
-Step Expression: `[[1,2,3,9],[0,1,7/5,16/5],[0,0,1,-1/3]]|R_2\to R_2-(7/5)R_3`
-Step Expected: `[[1,2,3,9],[0,1,0,49/15],[0,0,1,-1/3]]`
-
-#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 1
-Step Expression: `[[1,2,3,9],[0,1,0,49/15],[0,0,1,-1/3]]|R_1\to R_1-3R_3`
-Step Expected: `[[1,2,0,28/3],[0,1,0,49/15],[0,0,1,-1/3]]`
-
-#Step Description: Eliminasi elemen di atas pivot kedua
-Step Expression: `[[1,2,0,28/3],[0,1,0,49/15],[0,0,1,-1/3]]|R_1\to R_1-2R_2`
-Step Expected: `[[1,0,0,42/15],[0,1,0,49/15],[0,0,1,-1/3]]`
+###Judul Soal: Pengenalan Operasi Baris - Apa Itu Operasi Baris?
+Deskripsi Soal: Pahami konsep dasar operasi baris elementer pada matriks
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Tujuan operasi baris
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa tujuan utama dari operasi baris elementer?
+Pilihan:
+  A) Mengubah matriks menjadi bentuk yang lebih sederhana tanpa mengubah solusi sistem
+  B) Membuat semua elemen matriks menjadi nol
+  C) Menghitung determinan matriks
+  D) Mengalikan semua elemen dengan konstanta
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Jenis operasi baris elementer
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Ada tiga jenis operasi baris elementer. Pilih semua yang benar:
+Pilihan:
+  A) Mengalikan satu baris dengan konstanta bukan nol
+  B) Menukar dua baris
+  C) Menambah kelipatan satu baris ke baris lain
+  D) Menghapus satu baris
+Jawaban Benar: A, B, C
+
+#Langkah 3 [Benar/Salah]: Sifat operasi baris
+Tipe Langkah: true-false
+Pertanyaan: Operasi baris elementer tidak mengubah himpunan solusi dari sistem persamaan linear
+Jawaban Benar: Benar
+
+
+###Judul Soal: Notasi Operasi Baris - Memahami Simbol
+Deskripsi Soal: Pelajari notasi standar untuk operasi baris
+
+#Langkah 1 [Isi Titik-Titik]: Notasi perkalian skalar
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk mengalikan baris 2 dengan 3, kita tulis R_2 → {blank}R_2
+Jawaban Benar: 3
+
+#Langkah 2 [Isi Titik-Titik]: Notasi pertukaran baris
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk menukar baris 1 dan baris 3, kita tulis R_1 {blank} R_3
+Jawaban Benar: \leftrightarrow
+
+#Langkah 3 [Isi Titik-Titik]: Notasi penjumlahan baris
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk mengganti baris 2 dengan "baris 2 dikurangi 2 kali baris 1", kita tulis R_2 → R_2 {blank} 2R_1
+Jawaban Benar: -
+
+#Langkah 4 [Benar/Salah]: Arti notasi
+Tipe Langkah: true-false
+Pertanyaan: Notasi R_3 → R_3 + 5R_1 berarti "ganti baris 3 dengan baris 3 ditambah 5 kali baris 1"
+Jawaban Benar: Benar
+
+
+###Judul Soal: Identifikasi Operasi Baris Tipe 1 - Perkalian Skalar
+Deskripsi Soal: Matriks berubah dari `[[2,4,6],[1,2,3]]` menjadi `[[1,2,3],[1,2,3]]`. Identifikasi operasi yang dilakukan.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Baris mana yang berubah?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Baris mana yang mengalami perubahan?
+Pilihan:
+  A) Baris 1
+  B) Baris 2
+  C) Kedua baris
+  D) Tidak ada baris yang berubah
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Jenis operasi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Jenis operasi apa yang dilakukan?
+Pilihan:
+  A) Perkalian baris dengan skalar
+  B) Pertukaran baris
+  C) Penjumlahan baris
+  D) Tidak ada operasi
+Jawaban Benar: A
+
+#Langkah 3 [Isi Titik-Titik]: Skalar yang digunakan
+Tipe Langkah: fill-blank
+Pertanyaan: Baris 1 dikalikan dengan berapa? Jawab dalam bentuk pecahan jika perlu: {blank}
+Jawaban Benar: 1/2
+
+#Langkah 4 [Ekspresi & Jawaban]: Tuliskan notasi operasi baris
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,4,6],[1,2,3]]|R_1\to (1/2)R_1
+Hasil yang Diharapkan: [[1,2,3],[1,2,3]]
+
+
+###Judul Soal: Melakukan Operasi Baris Tipe 1 - Perkalian Skalar
+Deskripsi Soal: Lakukan operasi: kalikan baris pertama dengan `1/2` pada matriks `[[4,8,12],[2,3,5]]`
+
+#Langkah 1 [Benar/Salah]: Efek pada baris lain
+Tipe Langkah: true-false
+Pertanyaan: Ketika mengalikan satu baris dengan skalar, baris-baris lain tidak berubah
+Jawaban Benar: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Kalikan baris 1 dengan 1/2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[4,8,12],[2,3,5]]|R_1\to (1/2)R_1
+Hasil yang Diharapkan: [[2,4,6],[2,3,5]]
+
+
+###Judul Soal: Identifikasi Operasi Baris Tipe 2 - Pertukaran Baris
+Deskripsi Soal: Matriks berubah dari `[[0,1,2],[1,0,3]]` menjadi `[[1,0,3],[0,1,2]]`. Identifikasi operasi yang dilakukan.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang terjadi?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang terjadi pada matriks?
+Pilihan:
+  A) Baris 1 dan baris 2 ditukar posisinya
+  B) Baris 1 dikalikan dengan konstanta
+  C) Baris 2 ditambah dengan baris 1
+  D) Tidak ada perubahan
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Verifikasi pertukaran
+Tipe Langkah: true-false
+Pertanyaan: Setelah pertukaran, baris 1 baru sama dengan baris 2 lama
+Jawaban Benar: Benar
+
+#Langkah 3 [Ekspresi & Jawaban]: Tuliskan notasi operasi baris
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[0,1,2],[1,0,3]]|R_1\leftrightarrow R_2
+Hasil yang Diharapkan: [[1,0,3],[0,1,2]]
+
+
+###Judul Soal: Melakukan Operasi Baris Tipe 2 - Pertukaran Baris
+Deskripsi Soal: Tukar baris 1 dan baris 2 pada matriks `[[3,4,5],[1,2,3]]`
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Hasil pertukaran
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Setelah menukar R_1 dan R_2, baris pertama menjadi:
+Pilihan:
+  A) [[1,2,3]]
+  B) [[3,4,5]]
+  C) [[4,6,8]]
+  D) [[2,2,2]]
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Tukar baris 1 dan baris 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,4,5],[1,2,3]]|R_1\leftrightarrow R_2
+Hasil yang Diharapkan: [[1,2,3],[3,4,5]]
+
+
+###Judul Soal: Identifikasi Operasi Baris Tipe 3 - Penjumlahan Baris
+Deskripsi Soal: Matriks berubah dari `[[1,2,3],[2,4,7]]` menjadi `[[1,2,3],[1,2,4]]`. Identifikasi operasi yang dilakukan.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Baris mana yang berubah?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Baris mana yang berubah?
+Pilihan:
+  A) Hanya baris 2
+  B) Hanya baris 1
+  C) Kedua baris
+  D) Tidak ada
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Jenis operasi
+Tipe Langkah: true-false
+Pertanyaan: Ini adalah operasi penjumlahan/pengurangan baris (Tipe 3)
+Jawaban Benar: Benar
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Operasi yang tepat
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi mana yang menghasilkan perubahan ini?
+Pilihan:
+  A) R_2 → R_2 - R_1
+  B) R_2 → R_2 + R_1
+  C) R_2 → 2R_2
+  D) R_1 → R_1 - R_2
+Jawaban Benar: A
+
+#Langkah 4 [Ekspresi & Jawaban]: Tuliskan notasi dan hasil
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3],[2,4,7]]|R_2\to R_2-R_1
+Hasil yang Diharapkan: [[1,2,3],[1,2,4]]
+
+
+###Judul Soal: Melakukan Operasi Baris Tipe 3 - Penjumlahan Sederhana
+Deskripsi Soal: Lakukan operasi: ganti baris 2 dengan `R_2 - R_1` pada matriks `[[1,1,2],[3,4,8]]`
+
+#Langkah 1 [Isi Titik-Titik]: Hitung elemen pertama baris 2 baru
+Tipe Langkah: fill-blank
+Pertanyaan: Elemen pertama baris 2 baru = 3 - 1 = {blank}
+Jawaban Benar: 2
+
+#Langkah 2 [Isi Titik-Titik]: Hitung elemen kedua baris 2 baru
+Tipe Langkah: fill-blank
+Pertanyaan: Elemen kedua baris 2 baru = 4 - 1 = {blank}
+Jawaban Benar: 3
+
+#Langkah 3 [Ekspresi & Jawaban]: Hasil operasi lengkap
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1,2],[3,4,8]]|R_2\to R_2-R_1
+Hasil yang Diharapkan: [[1,1,2],[2,3,6]]
+
+
+###Judul Soal: Identifikasi Operasi dengan Skalar
+Deskripsi Soal: Matriks berubah dari `[[1,1,2],[2,3,5]]` menjadi `[[1,1,2],[0,1,1]]`. Identifikasi operasi yang dilakukan.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Operasi apa yang dilakukan?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi mana yang mengubah baris 2?
+Pilihan:
+  A) R_2 → R_2 - 2R_1
+  B) R_2 → R_2 - R_1
+  C) R_2 → (1/2)R_2
+  D) R_2 → R_2 + R_1
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Verifikasi
+Tipe Langkah: true-false
+Pertanyaan: Untuk memverifikasi, kita hitung: [[2,3,5]] - 2[[1,1,2]] = [[0,1,1]]
+Jawaban Benar: Benar
+
+#Langkah 3 [Ekspresi & Jawaban]: Tuliskan operasi lengkap
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1,2],[2,3,5]]|R_2\to R_2-2R_1
+Hasil yang Diharapkan: [[1,1,2],[0,1,1]]
+
+
+###Judul Soal: Melakukan Operasi dengan Skalar
+Deskripsi Soal: Lakukan operasi R_2 → R_2 - 3R_1 pada matriks `[[1,2,3],[3,7,12]]`
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Langkah pertama
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk melakukan R_2 - 3R_1, langkah pertama adalah:
+Pilihan:
+  A) Hitung 3R_1 terlebih dahulu
+  B) Kalikan R_2 dengan 3
+  C) Tukar R_1 dan R_2
+  D) Langsung kurangkan
+Jawaban Benar: A
+
+#Langkah 2 [Isi Titik-Titik]: Hitung 3R_1
+Tipe Langkah: fill-blank
+Pertanyaan: 3R_1 = 3[[1,2,3]] = [[3,{blank},9]]
+Jawaban Benar: 6
+
+#Langkah 3 [Ekspresi & Jawaban]: Hasil operasi
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3],[3,7,12]]|R_2\to R_2-3R_1
+Hasil yang Diharapkan: [[1,2,3],[0,1,3]]
+
+
+###Judul Soal: Kombinasi Dua Operasi - Urutan Penting
+Deskripsi Soal: Ubah `[[2,4,8],[1,3,7]]` dengan dua operasi: (1) R_1 → (1/2)R_1, (2) R_2 → R_2 - R_1
+
+#Langkah 1 [Benar/Salah]: Urutan operasi
+Tipe Langkah: true-false
+Pertanyaan: Urutan operasi baris penting - melakukan operasi dalam urutan berbeda bisa memberi hasil berbeda
+Jawaban Benar: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Operasi pertama
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,4,8],[1,3,7]]|R_1\to (1/2)R_1
+Hasil yang Diharapkan: [[1,2,4],[1,3,7]]
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Mengapa operasi 1 dulu?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa kita lakukan R_1 → (1/2)R_1 terlebih dahulu?
+Pilihan:
+  A) Agar pivot (elemen kiri atas) menjadi 1, memudahkan eliminasi selanjutnya
+  B) Tidak ada alasan khusus
+  C) Untuk membuat baris 2 menjadi nol
+  D) Untuk menukar baris
+Jawaban Benar: A
+
+#Langkah 4 [Ekspresi & Jawaban]: Operasi kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,4],[1,3,7]]|R_2\to R_2-R_1
+Hasil yang Diharapkan: [[1,2,4],[0,1,3]]
+
+
+###Judul Soal: Identifikasi Urutan Operasi
+Deskripsi Soal: Matriks berubah dari `[[3,6,9],[1,3,6]]` menjadi `[[1,2,3],[0,1,3]]`. Identifikasi urutan operasi yang dilakukan.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Operasi pertama
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi pertama yang dilakukan adalah:
+Pilihan:
+  A) R_1 → (1/3)R_1
+  B) R_2 → R_2 - R_1
+  C) R_1 ↔ R_2
+  D) R_2 → (1/3)R_2
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Operasi kedua
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Setelah R_1 → (1/3)R_1 menghasilkan [[1,2,3],[1,3,6]], operasi selanjutnya adalah:
+Pilihan:
+  A) R_2 → R_2 - R_1
+  B) R_2 → R_2 + R_1
+  C) R_2 → (1/2)R_2
+  D) Tidak ada operasi lagi
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Hasil akhir
+Tipe Langkah: true-false
+Pertanyaan: Dengan urutan R_1 → (1/3)R_1 kemudian R_2 → R_2 - R_1, kita dapatkan [[1,2,3],[0,1,3]]
+Jawaban Benar: Benar
+
+
+###Judul Soal: Bentuk Eselon Baris - Pengenalan
+Deskripsi Soal: Pahami apa itu bentuk eselon baris (row echelon form)
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi pivot
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang dimaksud dengan "pivot" dalam matriks?
+Pilihan:
+  A) Elemen bukan nol pertama (dari kiri) di setiap baris
+  B) Elemen terbesar dalam matriks
+  C) Elemen diagonal utama
+  D) Elemen terakhir di setiap baris
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Syarat bentuk eselon baris
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Matriks dalam bentuk eselon baris jika memenuhi syarat berikut (pilih semua yang benar):
+Pilihan:
+  A) Semua baris nol (jika ada) berada di bawah
+  B) Pivot setiap baris berada di sebelah kanan pivot baris sebelumnya
+  C) Semua elemen di bawah pivot adalah nol
+  D) Semua pivot harus bernilai 1
+Jawaban Benar: A, B, C
+
+#Langkah 3 [Benar/Salah]: Contoh bentuk eselon
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,2,3],[0,1,4],[0,0,1]] adalah dalam bentuk eselon baris
+Jawaban Benar: Benar
+
+#Langkah 4 [Benar/Salah]: Bukan bentuk eselon
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,2,3],[2,1,4],[0,0,1]] BUKAN dalam bentuk eselon baris karena ada elemen bukan nol di bawah pivot pertama
+Jawaban Benar: Benar
+
+
+###Judul Soal: Bentuk Eselon Baris Tereduksi - Pengenalan
+Deskripsi Soal: Pahami bentuk eselon baris tereduksi (reduced row echelon form)
+
+#Langkah 1 [Pilihan Ganda - Berganda]: Syarat tambahan untuk bentuk tereduksi
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Selain syarat eselon baris biasa, bentuk tereduksi juga memerlukan:
+Pilihan:
+  A) Setiap pivot bernilai 1
+  B) Setiap elemen di ATAS pivot adalah nol
+  C) Tidak boleh ada baris nol
+  D) Harus matriks persegi
+Jawaban Benar: A, B
+
+#Langkah 2 [Benar/Salah]: Contoh tereduksi
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,0,0],[0,1,0],[0,0,1]] adalah bentuk eselon baris tereduksi (ini adalah matriks identitas)
+Jawaban Benar: Benar
+
+#Langkah 3 [Benar/Salah]: Bukan tereduksi
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,2,3],[0,1,4],[0,0,1]] adalah eselon baris tetapi BUKAN tereduksi karena ada elemen bukan nol di atas pivot
+Jawaban Benar: Benar
+
+
+###Judul Soal: Eliminasi Gauss-Jordan Lengkap 2x2
+Deskripsi Soal: Selesaikan sistem `[[2,4,16],[1,3,11]]` hingga bentuk eselon baris tereduksi
+
+#Langkah 1 [Ekspresi & Jawaban]: Jadikan pivot pertama = 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,4,16],[1,3,11]]|R_1\to (1/2)R_1
+Hasil yang Diharapkan: [[1,2,8],[1,3,11]]
+
+#Langkah 2 [Ekspresi & Jawaban]: Eliminasi di bawah pivot pertama
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,8],[1,3,11]]|R_2\to R_2-R_1
+Hasil yang Diharapkan: [[1,2,8],[0,1,3]]
+
+#Langkah 3 [Benar/Salah]: Sudah eselon baris?
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,2,8],[0,1,3]] sudah dalam bentuk eselon baris
+Jawaban Benar: Benar
+
+#Langkah 4 [Benar/Salah]: Sudah tereduksi?
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,2,8],[0,1,3]] BELUM dalam bentuk tereduksi karena ada elemen 2 di atas pivot kedua
+Jawaban Benar: Benar
+
+#Langkah 5 [Ekspresi & Jawaban]: Eliminasi di atas pivot kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,8],[0,1,3]]|R_1\to R_1-2R_2
+Hasil yang Diharapkan: [[1,0,2],[0,1,3]]
+
+#Langkah 6 [Pilihan Ganda - Tunggal]: Solusi sistem
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dari [[1,0,2],[0,1,3]], solusi sistem adalah:
+Pilihan:
+  A) x = 2, y = 3
+  B) x = 3, y = 2
+  C) x = 1, y = 0
+  D) x = 0, y = 1
+Jawaban Benar: A
+
+
+###Judul Soal: Identifikasi Kesalahan Operasi Baris
+Deskripsi Soal: Seseorang mengklaim melakukan R_2 → R_2 - 2R_1 pada `[[1,2,3],[4,5,6]]` dan mendapat `[[1,2,3],[2,1,0]]`. Apakah ini benar?
+
+#Langkah 1 [Isi Titik-Titik]: Hitung yang benar
+Tipe Langkah: fill-blank
+Pertanyaan: 2R_1 = 2[[1,2,3]] = [[2,4,{blank}]]
+Jawaban Benar: 6
+
+#Langkah 2 [Isi Titik-Titik]: Hasil yang benar
+Tipe Langkah: fill-blank
+Pertanyaan: R_2 - 2R_1 = [[4,5,6]] - [[2,4,6]] = [[2,1,{blank}]]
+Jawaban Benar: 0
+
+#Langkah 3 [Benar/Salah]: Verifikasi kesalahan
+Tipe Langkah: true-false
+Pertanyaan: Hasil [[1,2,3],[2,1,0]] adalah BENAR untuk operasi R_2 → R_2 - 2R_1
+Jawaban Benar: Benar
+
+
+###Judul Soal: Sistem 2x2 dengan Pecahan
+Deskripsi Soal: Selesaikan `[[4,2,10],[2,3,11]]` menggunakan eliminasi Gauss-Jordan
+
+#Langkah 1 [Ekspresi & Jawaban]: Jadikan pivot pertama = 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[4,2,10],[2,3,11]]|R_1\to (1/4)R_1
+Hasil yang Diharapkan: [[1,1/2,5/2],[2,3,11]]
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Operasi selanjutnya
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk mengeliminasi elemen di bawah pivot pertama, operasi yang tepat adalah:
+Pilihan:
+  A) R_2 → R_2 - 2R_1
+  B) R_2 → R_2 - R_1
+  C) R_2 → (1/2)R_2
+  D) R_2 → R_2 + 2R_1
+Jawaban Benar: A
+
+#Langkah 3 [Ekspresi & Jawaban]: Eliminasi di bawah pivot pertama
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1/2,5/2],[2,3,11]]|R_2\to R_2-2R_1
+Hasil yang Diharapkan: [[1,1/2,5/2],[0,2,6]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Jadikan pivot kedua = 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1/2,5/2],[0,2,6]]|R_2\to (1/2)R_2
+Hasil yang Diharapkan: [[1,1/2,5/2],[0,1,3]]
+
+#Langkah 5 [Ekspresi & Jawaban]: Eliminasi di atas pivot kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1/2,5/2],[0,1,3]]|R_1\to R_1-(1/2)R_2
+Hasil yang Diharapkan: [[1,0,1],[0,1,3]]
+
+
+###Judul Soal: Identifikasi Operasi pada Sistem 3x3
+Deskripsi Soal: Matriks `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` menjadi `[[1,2,3,14],[0,1,1,3],[3,1,2,11]]`. Apa operasi yang dilakukan?
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Baris yang berubah
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Baris mana yang berubah?
+Pilihan:
+  A) Baris 2
+  B) Baris 1
+  C) Baris 3
+  D) Semua baris
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Operasi yang dilakukan
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi apa yang mengubah baris 2?
+Pilihan:
+  A) R_2 → R_2 - 2R_1
+  B) R_2 → R_2 - R_1
+  C) R_2 → (1/2)R_2
+  D) R_2 → R_2 + 2R_1
+Jawaban Benar: A
+
+#Langkah 3 [Ekspresi & Jawaban]: Verifikasi operasi
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[2,5,7,31],[3,1,2,11]]|R_2\to R_2-2R_1
+Hasil yang Diharapkan: [[1,2,3,14],[0,1,1,3],[3,1,2,11]]
+
+
+###Judul Soal: Sistem 3x3 Lengkap - Bagian 1
+Deskripsi Soal: Selesaikan `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` sampai bentuk eselon baris
+
+#Langkah 1 [Benar/Salah]: Pivot pertama sudah 1?
+Tipe Langkah: true-false
+Pertanyaan: Pivot pertama sudah bernilai 1, jadi kita bisa langsung eliminasi di bawahnya
+Jawaban Benar: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Eliminasi baris 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[2,5,7,31],[3,1,2,11]]|R_2\to R_2-2R_1
+Hasil yang Diharapkan: [[1,2,3,14],[0,1,1,3],[3,1,2,11]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Eliminasi baris 3
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[0,1,1,3],[3,1,2,11]]|R_3\to R_3-3R_1
+Hasil yang Diharapkan: [[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Eliminasi di bawah pivot kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]|R_3\to R_3+5R_2
+Hasil yang Diharapkan: [[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]
+
+#Langkah 5 [Ekspresi & Jawaban]: Jadikan pivot ketiga = 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]|R_3\to (-1/2)R_3
+Hasil yang Diharapkan: [[1,2,3,14],[0,1,1,3],[0,0,1,8]]
+
+#Langkah 6 [Benar/Salah]: Bentuk eselon baris tercapai?
+Tipe Langkah: true-false
+Pertanyaan: Matriks [[1,2,3,14],[0,1,1,3],[0,0,1,8]] sudah dalam bentuk eselon baris
+Jawaban Benar: Benar
+
+
+###Judul Soal: Sistem 3x3 Lengkap - Bagian 2 (Back Substitution)
+Deskripsi Soal: Lanjutkan dari `[[1,2,3,14],[0,1,1,3],[0,0,1,8]]` ke bentuk tereduksi
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Strategi eliminasi mundur
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk mendapat bentuk tereduksi, kita eliminasi:
+Pilihan:
+  A) Dari bawah ke atas, menghilangkan elemen di atas setiap pivot
+  B) Dari atas ke bawah
+  C) Hanya baris pertama
+  D) Semua baris sekaligus
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Eliminasi di atas pivot ketiga (baris 2)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[0,1,1,3],[0,0,1,8]]|R_2\to R_2-R_3
+Hasil yang Diharapkan: [[1,2,3,14],[0,1,0,-5],[0,0,1,8]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Eliminasi di atas pivot ketiga (baris 1)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3,14],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-3R_3
+Hasil yang Diharapkan: [[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Eliminasi di atas pivot kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-2R_2
+Hasil yang Diharapkan: [[1,0,0,0],[0,1,0,-5],[0,0,1,8]]
+
+#Langkah 5 [Pilihan Ganda - Tunggal]: Solusi sistem
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dari bentuk tereduksi, solusi sistem adalah:
+Pilihan:
+  A) x = 0, y = -5, z = 8
+  B) x = 1, y = 0, z = 0
+  C) x = 8, y = -5, z = 0
+  D) Tidak ada solusi
+Jawaban Benar: A
+
+
+###Judul Soal: Sistem dengan Pertukaran Baris
+Deskripsi Soal: Selesaikan `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]` yang memerlukan pertukaran baris
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Masalah dengan matriks awal
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa kita perlu menukar baris?
+Pilihan:
+  A) Elemen kiri atas (posisi pivot pertama) adalah nol
+  B) Baris terlalu panjang
+  C) Untuk membuat perhitungan lebih mudah
+  D) Tidak perlu tukar baris
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Baris mana yang ditukar?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk mendapat pivot pertama bukan nol, kita tukar:
+Pilihan:
+  A) R_1 dengan R_2 (atau R_3)
+  B) R_2 dengan R_3
+  C) Tidak perlu tukar
+  D) Semua baris
+Jawaban Benar: A
+
+#Langkah 3 [Ekspresi & Jawaban]: Tukar baris 1 dan 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[0,2,1,5],[1,1,2,7],[2,1,3,10]]|R_1\leftrightarrow R_2
+Hasil yang Diharapkan: [[1,1,2,7],[0,2,1,5],[2,1,3,10]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Eliminasi baris 3
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1,2,7],[0,2,1,5],[2,1,3,10]]|R_3\to R_3-2R_1
+Hasil yang Diharapkan: [[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]
+
+#Langkah 5 [Ekspresi & Jawaban]: Jadikan pivot kedua = 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]|R_2\to (1/2)R_2
+Hasil yang Diharapkan: [[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]
+
+#Langkah 6 [Ekspresi & Jawaban]: Eliminasi di bawah pivot kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]|R_3\to R_3+R_2
+Hasil yang Diharapkan: [[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]
+
+#Langkah 7 [Ekspresi & Jawaban]: Jadikan pivot ketiga = 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]|R_3\to -2R_3
+Hasil yang Diharapkan: [[1,1,2,7],[0,1,1/2,5/2],[0,0,1,3]]
+
+
+###Judul Soal: Latihan Identifikasi Campuran
+Deskripsi Soal: Diberikan transformasi `[[2,4,6],[3,5,8]]` → `[[1,2,3],[3,5,8]]` → `[[1,2,3],[0,-1,-1]]`. Identifikasi kedua operasi.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Operasi pertama
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi dari [[2,4,6],[3,5,8]] ke [[1,2,3],[3,5,8]] adalah:
+Pilihan:
+  A) R_1 → (1/2)R_1
+  B) R_2 → R_2 - R_1
+  C) R_1 ↔ R_2
+  D) R_1 → 2R_1
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Operasi kedua
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi dari [[1,2,3],[3,5,8]] ke [[1,2,3],[0,-1,-1]] adalah:
+Pilihan:
+  A) R_2 → R_2 - 3R_1
+  B) R_2 → R_2 - R_1
+  C) R_2 → (1/3)R_2
+  D) R_1 → R_1 + R_2
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Verifikasi urutan
+Tipe Langkah: true-false
+Pertanyaan: Dengan operasi R_1 → (1/2)R_1 diikuti R_2 → R_2 - 3R_1, kita mengubah [[2,4,6],[3,5,8]] menjadi [[1,2,3],[0,-1,-1]]
+Jawaban Benar: Benar
+
+
+###Judul Soal: Strategi Pemilihan Operasi
+Deskripsi Soal: Untuk mengubah `[[3,6,9],[6,13,21]]` ke bentuk eselon baris tereduksi, strategi apa yang efisien?
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Langkah pertama yang baik
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Langkah pertama yang paling efisien adalah:
+Pilihan:
+  A) R_1 → (1/3)R_1 untuk membuat pivot = 1
+  B) R_2 → R_2 - 2R_1 langsung
+  C) R_1 ↔ R_2
+  D) R_2 → (1/6)R_2
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Alasan strategi
+Tipe Langkah: true-false
+Pertanyaan: Lebih baik jadikan pivot = 1 terlebih dahulu karena memudahkan perhitungan eliminasi selanjutnya
+Jawaban Benar: Benar
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Setelah R_1 → (1/3)R_1 menghasilkan [[1,2,3],[6,13,21]], langkah selanjutnya:
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Operasi selanjutnya yang tepat adalah:
+Pilihan:
+  A) R_2 → R_2 - 6R_1
+  B) R_2 → R_2 - R_1
+  C) R_2 → R_2 - 2R_1
+  D) R_2 → (1/2)R_2
+Jawaban Benar: A
