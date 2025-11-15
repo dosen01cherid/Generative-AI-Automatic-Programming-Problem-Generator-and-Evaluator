@@ -2258,8 +2258,15 @@ CIRC: "\\circ"
       # Ensure & separators have no surrounding whitespace
       t = re.sub(r"\s*&\s*", "&", t)
 
+      # ⭐ CRITICAL: Replace backslash-space BEFORE removing all whitespace
+      # This prevents "\ R" from becoming "\R" when whitespace is removed
+      t = t.replace(r"\ ", "<<SPACE>>")
+
       # Remove whitespace
       t = re.sub(r"\s+", "", t)
+
+      # Restore the spaces that were marked by backslash-space
+      t = t.replace("<<SPACE>>", " ")
 
       # ⭐ CRITICAL FIX: Add explicit multiplication for implicit cases
       # IMPORTANT: Apply these BEFORE the digit-letter rule to avoid conflicts
