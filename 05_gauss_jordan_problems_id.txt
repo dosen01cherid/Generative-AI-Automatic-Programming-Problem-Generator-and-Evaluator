@@ -1,3 +1,159 @@
+###Judul Soal: Konsep Dasar - Apa Itu Baris dalam Matriks?
+Deskripsi Soal: Pahami definisi baris dalam konteks matriks dan sistem persamaan linear
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi baris
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam matriks [[2,3,1],[4,5,2],[1,0,3]], baris adalah:
+Pilihan:
+  A) Susunan elemen horizontal, misalnya [2,3,1]
+  B) Susunan elemen vertikal, misalnya [2,4,1]
+  C) Elemen diagonal matriks
+  D) Jumlah semua elemen dalam matriks
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Jumlah baris
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Berapa banyak baris dalam matriks [[1,2,3,4],[5,6,7,8],[9,10,11,12]]?
+Pilihan:
+  A) 3 baris
+  B) 4 baris
+  C) 12 baris
+  D) 7 baris
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Hubungan baris dan persamaan
+Tipe Langkah: true-false
+Pertanyaan: Dalam matriks augmented untuk sistem persamaan linear, setiap baris mewakili satu persamaan
+Jawaban Benar: Benar
+
+#Langkah 4 [Isi Titik-Titik]: Identifikasi baris
+Tipe Langkah: fill-blank
+Pertanyaan: Dalam matriks [[a,b,c],[d,e,f]], baris kedua adalah [{blank},{blank},{blank}]
+Jawaban Benar: d,e,f
+
+
+###Judul Soal: Konsep Pivot - Definisi dan Peran Pivot
+Deskripsi Soal: Pahami apa itu elemen pivot dan mengapa pivot penting dalam eliminasi Gauss-Jordan
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu pivot?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Elemen pivot dalam eliminasi Gauss-Jordan adalah:
+Pilihan:
+  A) Elemen bukan nol pertama (dari kiri) dalam suatu baris
+  B) Elemen terbesar dalam matriks
+  C) Elemen terakhir dalam setiap baris
+  D) Elemen pada diagonal utama
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Identifikasi pivot
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam baris [0,0,3,2,1], elemen pivot adalah:
+Pilihan:
+  A) 3 (elemen bukan nol pertama)
+  B) 0 (elemen pertama)
+  C) 1 (elemen terakhir)
+  D) 2 (elemen terbesar bukan nol)
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Posisi pivot
+Tipe Langkah: true-false
+Pertanyaan: Dalam bentuk eselon baris tereduksi, setiap pivot harus bernilai 1
+Jawaban Benar: Benar
+
+#Langkah 4 [Benar/Salah]: Peran pivot
+Tipe Langkah: true-false
+Pertanyaan: Pivot digunakan untuk mengeliminasi elemen-elemen lain dalam kolomnya menjadi nol
+Jawaban Benar: Benar
+
+#Langkah 5 [Pilihan Ganda - Tunggal]: Identifikasi pivot dalam matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam matriks [[1,2,3],[0,5,4],[0,0,2]], elemen-elemen pivot berada pada posisi:
+Pilihan:
+  A) Baris 1 kolom 1; Baris 2 kolom 2; Baris 3 kolom 3
+  B) Hanya diagonal utama
+  C) Semua elemen bernilai 1
+  D) Elemen terbesar di setiap baris
+Jawaban Benar: A
+
+
+###Judul Soal: Filosofi Pemilihan Pivot - Mengapa Posisi Pivot Penting?
+Deskripsi Soal: Pahami prinsip dan filosofi di balik pemilihan posisi pivot yang optimal
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Tujuan pemilihan pivot
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa kita memilih elemen bukan nol pertama sebagai pivot?
+Pilihan:
+  A) Untuk membentuk struktur tangga (echelon) yang sistematis dan menghindari baris nol di tengah
+  B) Karena elemen pertama selalu yang terbesar
+  C) Untuk mempercepat perhitungan tanpa alasan khusus
+  D) Tidak ada alasan khusus, hanya konvensi
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Pivot dan eliminasi
+Tipe Langkah: true-false
+Pertanyaan: Memilih pivot yang tepat membantu kita mengeliminasi elemen di bawah dan di atas pivot secara sistematis
+Jawaban Benar: Benar
+
+#Langkah 3 [Pilihan Ganda - Berganda]: Karakteristik pivot yang baik
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Dalam eliminasi Gauss-Jordan, pivot yang baik memiliki karakteristik:
+Pilihan:
+  A) Bukan nol (tidak boleh nol)
+  B) Lebih kiri dari pivot baris di bawahnya
+  C) Diubah menjadi 1 (pivot=1)
+  D) Harus bilangan bulat
+Jawaban Benar: A, B, C
+
+#Langkah 4 [Benar/Salah]: Strategi pivot
+Tipe Langkah: true-false
+Pertanyaan: Jika elemen yang seharusnya menjadi pivot bernilai nol, kita dapat menukar baris untuk mendapatkan pivot bukan nol
+Jawaban Benar: Benar
+
+
+###Judul Soal: Prinsip Pemilihan Posisi Pivot - Bentuk Eselon
+Deskripsi Soal: Pahami prinsip pemilihan posisi pivot untuk membentuk reduced row echelon form (RREF)
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Posisi pivot dalam RREF
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam bentuk eselon baris tereduksi (RREF), posisi pivot pada baris ke-2 harus:
+Pilihan:
+  A) Lebih ke kanan dari posisi pivot pada baris ke-1
+  B) Tepat di bawah pivot baris ke-1
+  C) Di posisi yang sama dengan pivot baris ke-1
+  D) Tidak ada aturan khusus
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Struktur pivot
+Tipe Langkah: true-false
+Pertanyaan: Dalam RREF yang benar, pivot membentuk pola "tangga" dari kiri atas ke kanan bawah
+Jawaban Benar: Benar
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Contoh posisi pivot
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks mana yang memiliki struktur pivot yang benar untuk bentuk eselon?
+Pilihan:
+  A) [[1,2,0],[0,0,1],[0,0,0]] - pivot di kolom 1 dan 3
+  B) [[0,1,2],[1,0,3],[0,0,1]] - pivot tidak terurut
+  C) [[1,0,0],[1,0,0],[0,0,1]] - ada duplikasi pivot
+  D) [[0,0,0],[1,2,3],[0,1,2]] - baris nol tidak di bawah
+Jawaban Benar: A
+
+#Langkah 4 [Benar/Salah]: Kolom pivot
+Tipe Langkah: true-false
+Pertanyaan: Dalam RREF, selain pivot (yang bernilai 1), semua elemen lain dalam kolom pivot harus bernilai 0
+Jawaban Benar: Benar
+
+#Langkah 5 [Pilihan Ganda - Tunggal]: Strategi pivot optimal
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa strategi terbaik dalam memilih pivot?
+Pilihan:
+  A) Mulai dari baris paling atas, pilih elemen bukan nol pertama, lalu turun ke baris berikutnya dengan pivot lebih ke kanan
+  B) Pilih elemen terbesar di setiap baris
+  C) Pilih pivot secara acak
+  D) Selalu pilih elemen di diagonal utama
+Jawaban Benar: A
+
+
 ###Judul Soal: Pengenalan Operasi Baris - Apa Itu Operasi Baris?
 Deskripsi Soal: Pahami konsep dasar operasi baris elementer pada matriks
 
