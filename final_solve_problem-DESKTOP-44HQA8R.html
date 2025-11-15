@@ -13653,10 +13653,10 @@ This demonstrates the complete format for creating your own problem sets!
             btn_class += ' navigation keyboard-toggle'
             # Set initial SVG based on current state - button color stays same, only light changes
             if self.soft_keyboard_enabled:
-                label = self.get_keyboard_toggle_svg("90", is_enabled=True, color="white")
+                label = self.get_keyboard_toggle_svg("60", is_enabled=True, color="white")
                 title = 'Soft Keyboard ON - Click to use Minimal Keyboard'
             else:
-                label = self.get_keyboard_toggle_svg("90", is_enabled=False, color="white")
+                label = self.get_keyboard_toggle_svg("60", is_enabled=False, color="white")
                 title = 'Minimal Keyboard - Click to enable Soft Keyboard'
             return f'<button class="{btn_class}" data-action="{action}" title="{title}" style="background:#3b82f6;padding:8px;">{label}</button>'
         else:
