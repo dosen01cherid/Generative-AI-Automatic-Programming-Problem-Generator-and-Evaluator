@@ -2025,6 +2025,184 @@ CIRC: "\\circ"
         """
         window.eval(js_code)
 
+    def _show_enhanced_error_popup(self, latex_expr, error_pos, error_type, error_msg):
+        """Display enhanced error popup with MathJax rendering and error highlighting"""
+        # Escape strings for JavaScript
+        safe_latex = latex_expr.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+        safe_error_type = error_type.replace("\\", "\\\\").replace("`", "'")
+        safe_error_msg = error_msg.replace("\\", "\\\\").replace("`", "'").replace("\n", " ")
+
+        # Split LaTeX at error position for highlighting
+        error_pos = error_pos if error_pos is not None else len(latex_expr)
+        error_pos = max(0, min(error_pos, len(latex_expr)))
+
+        # Create a highlighted version - insert red box around error position
+        before_error = latex_expr[:error_pos]
+        at_error = latex_expr[error_pos:error_pos+1] if error_pos < len(latex_expr) else ""
+        after_error = latex_expr[error_pos+1:] if error_pos < len(latex_expr) else ""
+
+        # Escape for display
+        safe_before = before_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+        safe_at = at_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+        safe_after = after_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+
+        js_code = f"""
+            (function(){{
+                let existing = document.querySelector('#enhancedParseErrorPopup');
+                if(existing) existing.remove();
+
+                let popup = document.createElement('div');
+                popup.id = 'enhancedParseErrorPopup';
+
+                let isMobile = window.innerWidth <= 768;
+
+                popup.style.cssText = `
+                    position:fixed;
+                    ${{isMobile ? 'top:0;left:0;right:0;bottom:0;' : 'top:50%;left:50%;transform:translate(-50%,-50%);max-width:700px;'}}
+                    background:#fff;
+                    border:2px solid #ef4444;
+                    border-radius:${{isMobile ? '0' : '12px'}};
+                    box-shadow:0 12px 40px rgba(0,0,0,0.2);
+                    z-index:9999;
+                    overflow:auto;
+                    -webkit-overflow-scrolling:touch;
+                    padding:${{isMobile ? '60px 16px 16px' : '24px'}};
+                `;
+
+                // Close button
+                let closeBtn = document.createElement('button');
+                closeBtn.textContent = '×';
+                closeBtn.style.cssText = `
+                    position:absolute;
+                    top:${{isMobile ? '10px' : '16px'}};
+                    right:${{isMobile ? '10px' : '16px'}};
+                    background:#ef4444;
+                    color:white;
+                    border:none;
+                    border-radius:50%;
+                    width:${{isMobile ? '44px' : '32px'}};
+                    height:${{isMobile ? '44px' : '32px'}};
+                    font-size:${{isMobile ? '28px' : '24px'}};
+                    cursor:pointer;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    line-height:1;
+                `;
+                closeBtn.onclick = () => popup.remove();
+
+                // Title
+                let title = document.createElement('div');
+                title.textContent = '⚠️ Parse Error';
+                title.style.cssText = `
+                    font-size:${{isMobile ? '22px' : '20px'}};
+                    font-weight:bold;
+                    color:#ef4444;
+                    margin-bottom:16px;
+                    font-family:system-ui,-apple-system,sans-serif;
+                `;
+
+                // Error type and message
+                let errorInfo = document.createElement('div');
+                errorInfo.style.cssText = `
+                    background:#fee2e2;
+                    padding:12px;
+                    border-radius:8px;
+                    margin-bottom:16px;
+                    font-family:system-ui,-apple-system,sans-serif;
+                    font-size:14px;
+                `;
+                errorInfo.innerHTML = `
+                    <div style='font-weight:600;color:#991b1b;margin-bottom:4px;'>{safe_error_type}</div>
+                    <div style='color:#7f1d1d;'>{safe_error_msg}</div>
+                `;
+
+                // Section label
+                let label = document.createElement('div');
+                label.textContent = 'Your expression with error highlighted:';
+                label.style.cssText = `
+                    font-size:14px;
+                    font-weight:600;
+                    margin-bottom:8px;
+                    color:#374151;
+                    font-family:system-ui,-apple-system,sans-serif;
+                `;
+
+                // Math display container
+                let mathContainer = document.createElement('div');
+                mathContainer.style.cssText = `
+                    background:#f9fafb;
+                    padding:16px;
+                    border-radius:8px;
+                    margin-bottom:16px;
+                    overflow-x:auto;
+                    border:1px solid #e5e7eb;
+                `;
+
+                // Create highlighted LaTeX - use \\colorbox for highlighting
+                let highlightedLatex = "{safe_before}\\\\colorbox{{#fecaca}}{{{safe_at}}}{safe_after}";
+
+                mathContainer.innerHTML = `
+                    <div style='font-size:18px;text-align:left;'>
+                        $$${highlightedLatex}$$
+                    </div>
+                    <div style='margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;'>
+                        <div style='font-size:12px;color:#6b7280;font-family:monospace;word-break:break-all;'>
+                            {safe_latex}
+                        </div>
+                        <div style='margin-top:4px;font-size:11px;color:#ef4444;font-family:monospace;'>
+                            ${"".padStart(error_pos, " ")}↑ Error here (position {error_pos})
+                        </div>
+                    </div>
+                `;
+
+                // Hint section
+                let hint = document.createElement('div');
+                hint.style.cssText = `
+                    background:#dbeafe;
+                    padding:12px;
+                    border-radius:8px;
+                    font-size:13px;
+                    color:#1e40af;
+                    font-family:system-ui,-apple-system,sans-serif;
+                `;
+                hint.innerHTML = `
+                    <div style='font-weight:600;margin-bottom:4px;'>💡 Common fixes:</div>
+                    <ul style='margin:4px 0 0 20px;padding:0;'>
+                        <li>Check for unmatched brackets or parentheses</li>
+                        <li>Ensure all fractions have numerator and denominator</li>
+                        <li>Remove incomplete power notation (like x^)</li>
+                        <li>Check matrix format: [[row1],[row2]]</li>
+                    </ul>
+                `;
+
+                popup.appendChild(closeBtn);
+                popup.appendChild(title);
+                popup.appendChild(errorInfo);
+                popup.appendChild(label);
+                popup.appendChild(mathContainer);
+                popup.appendChild(hint);
+                document.body.appendChild(popup);
+
+                // Render MathJax
+                if(window.MathJax && window.MathJax.typesetPromise) {{
+                    window.MathJax.typesetPromise([mathContainer]).catch(err => {{
+                        console.warn('MathJax rendering failed:', err);
+                        // Fallback: show without MathJax
+                        mathContainer.innerHTML = `
+                            <div style='font-family:monospace;font-size:14px;color:#1f2937;'>
+                                {safe_latex}
+                            </div>
+                            <div style='margin-top:4px;font-size:11px;color:#ef4444;font-family:monospace;'>
+                                ${"".padStart(error_pos, " ")}↑ Error at position {error_pos}
+                            </div>
+                        `;
+                    }});
+                }}
+            }})();
+        """
+        window.eval(js_code)
+
     def _preprocess_row_operations(self, latex_str):
         """
         Safe preprocessing: only apply row-operation regexes to the operation part.
@@ -2371,7 +2549,7 @@ CIRC: "\\circ"
               except Exception as retry_error:
                   window.console.log(f"❌ Retry also failed: {retry_error}")
 
-          # If retry also failed, show original error
+          # If retry also failed, show original error with visual highlighting
           pos = getattr(e, "pos_in_stream", None)
           line = getattr(e, "line", "?")
           col = getattr(e, "column", "?")
@@ -2392,6 +2570,10 @@ CIRC: "\\circ"
           except Exception:
               context = clean
 
+          # 🆕 Show enhanced error with MathJax rendering and highlighting
+          self._show_enhanced_error_popup(clean, pos, type(e).__name__, simplified_msg)
+
+          # Also log to console
           msg = (
               f"❌ Parse error in LaTeX:\n\n"
               f"Line: {line}, Column: {col}\n"
@@ -2399,7 +2581,6 @@ CIRC: "\\circ"
               f"Message: {simplified_msg}\n\n"
               f"Context:\n{context}"
           )
-          self._show_error_popup(msg)
           window.console.error(msg)
           return None
 
