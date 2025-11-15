@@ -10093,6 +10093,16 @@ This demonstrates the complete format for creating your own problem sets!
                         return do_hide
                     window.setTimeout(create_proxy(hide_container(container)), 500)
 
+        # ✅ Hide global attempt history
+        global_history = document.querySelector(f"#globalHistory_{prob_idx}")
+        if global_history:
+            global_history.classList.add("problem-area-hidden")
+            # After animation completes, set display to none
+            def hide_history():
+                global_history.style.display = "none"
+            window.setTimeout(create_proxy(hide_history), 500)
+            window.console.log(f"✅ Global attempt history hidden for problem {prob_idx}")
+
         # Create completion banner
         banner = document.createElement("div")
         banner.id = f"completionBanner_{prob_idx}"
