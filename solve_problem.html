@@ -1967,6 +1967,64 @@ CIRC: "\\circ"
         """
         window.eval(js_code)
 
+    def _show_info_popup(self, message):
+        """Display auto-dismiss info toast for auto-corrections"""
+        safe_msg = message.replace("`", "'").replace("\\", "\\\\").replace("\n", "\\n")
+        js_code = f"""
+            (function(){{
+                let existing = document.querySelector('#autoFixToast');
+                if(existing) existing.remove();
+
+                let toast = document.createElement('div');
+                toast.id = 'autoFixToast';
+                toast.style.cssText = `
+                    position:fixed;
+                    top:20px;
+                    left:50%;
+                    transform:translateX(-50%);
+                    background:#10b981;
+                    color:white;
+                    font-family:system-ui, -apple-system, sans-serif;
+                    padding:12px 24px;
+                    border-radius:8px;
+                    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+                    z-index:10000;
+                    font-size:14px;
+                    font-weight:500;
+                    max-width:90%;
+                    text-align:center;
+                    animation:slideDown 0.3s ease;
+                `;
+
+                // Add animation keyframes if not already present
+                if(!document.querySelector('#toastAnimationStyle')){{
+                    let style = document.createElement('style');
+                    style.id = 'toastAnimationStyle';
+                    style.textContent = `
+                        @keyframes slideDown {{
+                            from {{ transform:translateX(-50%) translateY(-20px); opacity:0; }}
+                            to {{ transform:translateX(-50%) translateY(0); opacity:1; }}
+                        }}
+                        @keyframes slideUp {{
+                            from {{ transform:translateX(-50%) translateY(0); opacity:1; }}
+                            to {{ transform:translateX(-50%) translateY(-20px); opacity:0; }}
+                        }}
+                    `;
+                    document.head.appendChild(style);
+                }}
+
+                toast.textContent = `{safe_msg}`;
+                document.body.appendChild(toast);
+
+                // Auto-dismiss after 3 seconds with fade-out animation
+                setTimeout(() => {{
+                    toast.style.animation = 'slideUp 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }}, 3000);
+            }})();
+        """
+        window.eval(js_code)
+
     def _preprocess_row_operations(self, latex_str):
         """
         Safe preprocessing: only apply row-operation regexes to the operation part.
@@ -2153,12 +2211,103 @@ CIRC: "\\circ"
 
       return False
   
+    def auto_fix_common_errors(self, latex_str):
+      """
+      Attempt to automatically fix common LaTeX syntax errors.
+      Returns (fixed_string, list_of_fixes_applied)
+      """
+      import re
+
+      fixes_applied = []
+      original = latex_str
+      s = latex_str
+
+      # 1. Fix missing commas between numbers in matrices (space-separated)
+      #    [[1 2 3],[4 5 6]] → [[1,2,3],[4,5,6]]
+      before = s
+      s = re.sub(r'(\d)\s+(\d)', r'\1,\2', s)
+      if s != before:
+          fixes_applied.append("Added missing commas between numbers")
+
+      # 2. Fix unbalanced square brackets in matrices
+      #    Count opening and closing brackets, add missing ones
+      open_count = s.count('[')
+      close_count = s.count(']')
+      if open_count > close_count:
+          s = s + (']' * (open_count - close_count))
+          fixes_applied.append(f"Added {open_count - close_count} missing closing bracket(s)")
+      elif close_count > open_count:
+          s = ('[' * (close_count - open_count)) + s
+          fixes_applied.append(f"Added {close_count - open_count} missing opening bracket(s)")
+
+      # 3. Fix mismatched brackets in matrices (curly/square)
+      #    [[1,2,3},[4,5,6]] → [[1,2,3],[4,5,6]]
+      before = s
+      # Replace } with ] if it appears after [ and before ]
+      s = re.sub(r'\[([^[\]]*)\}', r'[\1]', s)
+      # Replace { with [ if it appears in matrix context
+      s = re.sub(r'\{([^[\]{}]*)\]', r'[\1]', s)
+      if s != before:
+          fixes_applied.append("Fixed mismatched brackets (changed {} to [])")
+
+      # 4. Fix missing pipe before row operations
+      #    [[1,2]]R_1 → [[1,2]]|R_1
+      before = s
+      s = re.sub(r'\]\](\s*R_\d+)', r']]|\1', s)
+      if s != before:
+          fixes_applied.append("Added missing pipe before row operation")
+
+      # 5. Fix double operators
+      #    2+-3 → 2-3,  2-+3 → 2-3,  2--3 → 2+3,  2++3 → 2+3
+      before = s
+      s = re.sub(r'\+\s*-', '-', s)
+      s = re.sub(r'-\s*\+', '-', s)
+      s = re.sub(r'-\s*-', '+', s)
+      s = re.sub(r'\+\s*\+', '+', s)
+      if s != before:
+          fixes_applied.append("Fixed double operators")
+
+      # 6. Fix unbalanced parentheses
+      open_paren = s.count('(')
+      close_paren = s.count(')')
+      if open_paren > close_paren:
+          s = s + (')' * (open_paren - close_paren))
+          fixes_applied.append(f"Added {open_paren - close_paren} missing closing parenthesis")
+      elif close_paren > open_paren:
+          s = ('(' * (close_paren - open_paren)) + s
+          fixes_applied.append(f"Added {close_paren - open_paren} missing opening parenthesis")
+
+      # 7. Fix missing asterisk in fraction notation
+      #    \frac12 → \frac{1}{2}
+      before = s
+      s = re.sub(r'\\frac(\d)(\d)', r'\\frac{\1}{\2}', s)
+      if s != before:
+          fixes_applied.append("Fixed fraction notation (added braces)")
+
+      # 8. Remove stray trailing operators
+      #    2+3+ → 2+3,  5*7* → 5*7
+      before = s
+      s = re.sub(r'[+\-*/]\s*$', '', s)
+      if s != before:
+          fixes_applied.append("Removed trailing operator")
+
+      return (s, fixes_applied)
+
     def parse_latex(self, latex):
-      """Parse LaTeX to SymPy expression with error popup display"""
+      """Parse LaTeX to SymPy expression with error popup display and auto-fix"""
       import re
       from lark.exceptions import UnexpectedToken, UnexpectedCharacters, UnexpectedEOF
 
       window.console.log(f"🔍 [DEBUG 1] Original LaTeX: {latex}")
+
+      # 🆕 AUTO-FIX: Try to fix common errors first
+      fixed_latex, fixes = self.auto_fix_common_errors(latex)
+      if fixes:
+          window.console.log(f"🔧 Auto-fixes applied: {', '.join(fixes)}")
+          window.console.log(f"🔧 Fixed LaTeX: {fixed_latex}")
+          # Show a subtle notification to user
+          self._show_info_popup(f"✨ Auto-corrected: {', '.join(fixes)}")
+          latex = fixed_latex
 
       cleaned = self.clean_latex(latex)
       window.console.log(f"🔍 [DEBUG 2] After clean_latex: {cleaned}")
@@ -2186,6 +2335,29 @@ CIRC: "\\circ"
           return result
 
       except (UnexpectedToken, UnexpectedCharacters, UnexpectedEOF) as e:
+          # 🆕 RETRY: Try more aggressive fixes on first failure
+          window.console.log("⚠️ Initial parse failed, attempting aggressive auto-fix...")
+
+          # Try removing extra spaces around operators
+          retry_clean = re.sub(r'\s*([+\-*/=])\s*', r'\1', clean)
+
+          # Try fixing common matrix issues in the cleaned string
+          retry_clean = re.sub(r',\s*,', ',', retry_clean)  # Remove double commas
+          retry_clean = re.sub(r'\[\s*,', '[', retry_clean)  # Remove leading comma in row
+          retry_clean = re.sub(r',\s*\]', ']', retry_clean)  # Remove trailing comma in row
+
+          if retry_clean != clean:
+              try:
+                  window.console.log(f"🔧 Retry with aggressive fixes: {retry_clean}")
+                  tree = self.parser.parse(retry_clean)
+                  result = self.transformer.transform(tree)
+                  self._show_info_popup("✨ Fixed parsing error with aggressive corrections")
+                  window.console.log(f"✅ Retry successful: {result}")
+                  return result
+              except Exception as retry_error:
+                  window.console.log(f"❌ Retry also failed: {retry_error}")
+
+          # If retry also failed, show original error
           pos = getattr(e, "pos_in_stream", None)
           line = getattr(e, "line", "?")
           col = getattr(e, "column", "?")
