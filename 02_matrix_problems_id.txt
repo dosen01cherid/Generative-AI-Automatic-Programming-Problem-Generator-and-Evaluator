@@ -3,6 +3,162 @@ Aljabar Linear - Teknik Informatika
 Universitas Mercu Buana
 
 
+###Judul Soal: Konsep Dasar - Apa Itu Matriks?
+Deskripsi Soal: Pahami definisi matriks sebagai susunan bilangan dalam bentuk persegi panjang
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks adalah:
+Pilihan:
+  A) Susunan bilangan dalam baris dan kolom yang berbentuk persegi panjang
+  B) Hanya satu bilangan tunggal
+  C) Vektor yang sangat panjang
+  D) Selalu berbentuk bujur sangkar
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Representasi matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks [[1,2,3],[4,5,6]] memiliki struktur:
+Pilihan:
+  A) 2 baris dan 3 kolom
+  B) 3 baris dan 2 kolom
+  C) 2 baris dan 2 kolom
+  D) 6 baris dan 1 kolom
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Elemen matriks
+Tipe Langkah: true-false
+Pertanyaan: Setiap angka dalam matriks disebut elemen atau entri matriks
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Notasi matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks biasanya dilambangkan dengan:
+Pilihan:
+  A) Huruf kapital, misalnya A, B, C
+  B) Huruf kecil, misalnya a, b, c
+  C) Angka saja
+  D) Simbol khusus saja
+Jawaban Benar: A
+
+
+###Judul Soal: Baris, Kolom, dan Dimensi Matriks
+Deskripsi Soal: Pahami konsep baris, kolom, dan dimensi dalam matriks
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi baris
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Baris dalam matriks adalah:
+Pilihan:
+  A) Susunan elemen horizontal (dari kiri ke kanan)
+  B) Susunan elemen vertikal (dari atas ke bawah)
+  C) Elemen diagonal
+  D) Total semua elemen
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Definisi kolom
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Kolom dalam matriks adalah:
+Pilihan:
+  A) Susunan elemen vertikal (dari atas ke bawah)
+  B) Susunan elemen horizontal (dari kiri ke kanan)
+  C) Elemen di tepi matriks
+  D) Elemen pertama di setiap baris
+Jawaban Benar: A
+
+#Langkah 3 [Isi Titik-Titik]: Ukuran matriks
+Tipe Langkah: fill-blank
+Pertanyaan: Matriks [[a,b],[c,d],[e,f]] memiliki {blank} baris dan {blank} kolom
+Jawaban Benar: 3,2
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Notasi dimensi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks berukuran 3x4 berarti:
+Pilihan:
+  A) 3 baris dan 4 kolom
+  B) 4 baris dan 3 kolom
+  C) 3 elemen dan 4 elemen
+  D) Total 7 elemen
+Jawaban Benar: A
+
+#Langkah 5 [Benar/Salah]: Urutan notasi
+Tipe Langkah: true-false
+Pertanyaan: Dalam notasi m x n, m selalu menyatakan jumlah baris dan n jumlah kolom
+Jawaban Benar: Benar
+
+
+###Judul Soal: Elemen dan Posisi dalam Matriks
+Deskripsi Soal: Pahami cara mengidentifikasi dan merujuk elemen tertentu dalam matriks
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Notasi elemen
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Notasi a_(i,j) atau a_ij dalam matriks A berarti:
+Pilihan:
+  A) Elemen di baris ke-i dan kolom ke-j
+  B) Elemen di kolom ke-i dan baris ke-j
+  C) Perkalian i dan j
+  D) Penjumlahan i dan j
+Jawaban Benar: A
+
+#Langkah 2 [Isi Titik-Titik]: Identifikasi elemen
+Tipe Langkah: fill-blank
+Pertanyaan: Dalam matriks A = [[1,2,3],[4,5,6]], elemen a_(2,3) = {blank}
+Jawaban Benar: 6
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Posisi elemen
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam matriks [[7,8],[9,10],[11,12]], elemen 10 berada di posisi:
+Pilihan:
+  A) Baris 2, kolom 2
+  B) Baris 2, kolom 1
+  C) Baris 1, kolom 2
+  D) Baris 3, kolom 2
+Jawaban Benar: A
+
+#Langkah 4 [Benar/Salah]: Konvensi indeks
+Tipe Langkah: true-false
+Pertanyaan: Indeks baris dan kolom dimulai dari 1 (bukan 0) dalam notasi matematis standar
+Jawaban Benar: Benar
+
+
+###Judul Soal: Filosofi Matriks - Mengapa Mempelajari Matriks?
+Deskripsi Soal: Pahami pentingnya matriks dalam matematika, sains, dan teknologi
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Kegunaan matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa matriks penting dalam matematika dan aplikasinya?
+Pilihan:
+  A) Matriks mengorganisir data dan merepresentasikan transformasi linear secara efisien
+  B) Matriks hanya untuk matematika teoritis
+  C) Matriks tidak memiliki aplikasi praktis
+  D) Matriks hanya digunakan dalam aljabar
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Aplikasi matriks
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Di bidang mana matriks banyak digunakan?
+Pilihan:
+  A) Computer graphics (transformasi 3D, rendering)
+  B) Sistem persamaan linear (ekonomi, teknik)
+  C) Machine learning (data, neural networks)
+  D) Hanya dalam matematika murni
+Jawaban Benar: A, B, C
+
+#Langkah 3 [Benar/Salah]: Matriks dan transformasi
+Tipe Langkah: true-false
+Pertanyaan: Matriks dapat merepresentasikan transformasi geometri seperti rotasi, refleksi, dan penskalaan
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Matriks dalam data
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam analisis data dan machine learning, mengapa matriks sangat berguna?
+Pilihan:
+  A) Matriks memungkinkan operasi pada banyak data sekaligus secara efisien
+  B) Matriks membuat data lebih rumit
+  C) Matriks hanya untuk visualisasi
+  D) Tidak ada keuntungan khusus
+Jawaban Benar: A
+
+
 ###Judul Soal: Penjumlahan Matriks 2x2
 Deskripsi Soal: Diberikan matriks A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], cari A + B
 

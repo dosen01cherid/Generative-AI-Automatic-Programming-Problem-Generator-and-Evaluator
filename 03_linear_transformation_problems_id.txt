@@ -1,3 +1,42 @@
+###Judul Soal: Konsep Dasar - Apa Itu Fungsi/Pemetaan?
+Deskripsi Soal: Pahami konsep fungsi sebagai dasar untuk memahami transformasi
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi fungsi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Fungsi adalah:
+Pilihan:
+  A) Aturan yang memetakan setiap elemen dari himpunan input ke tepat satu elemen di himpunan output
+  B) Kumpulan bilangan acak
+  C) Operasi penjumlahan
+  D) Hanya berlaku untuk bilangan real
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Notasi fungsi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Notasi f: A -> B berarti:
+Pilihan:
+  A) Fungsi f memetakan elemen dari himpunan A ke himpunan B
+  B) A dikurangi B
+  C) A lebih besar dari B
+  D) A dibagi B
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Input dan output
+Tipe Langkah: true-false
+Pertanyaan: Dalam fungsi f(x) = y, x disebut input dan y disebut output atau nilai fungsi
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Fungsi pada vektor
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Jika kita punya fungsi yang inputnya vektor dan outputnya juga vektor, fungsi tersebut disebut:
+Pilihan:
+  A) Transformasi vektor
+  B) Skalar
+  C) Bilangan kompleks
+  D) Koordinat
+Jawaban Benar: A
+
+
 ###Judul Soal: Pengenalan Transformasi - Konsep Dasar
 Deskripsi Soal: Pahami konsep dasar transformasi sebagai fungsi dari satu ruang vektor ke ruang vektor lain
 
@@ -49,6 +88,45 @@ Jawaban: [[6,12]]
 Tipe Langkah: true-false
 Pertanyaan: Penskalaan mempertahankan arah vektor tetapi mengubah panjangnya
 Jawaban Benar: Benar
+
+
+###Judul Soal: Filosofi Transformasi - Mengapa Mempelajari Transformasi Linear?
+Deskripsi Soal: Pahami pentingnya transformasi linear dalam matematika dan aplikasinya
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Kegunaan transformasi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa transformasi linear penting dalam matematika dan sains?
+Pilihan:
+  A) Transformasi linear menggambarkan perubahan yang mempertahankan struktur, seperti rotasi, refleksi, dan proyeksi
+  B) Transformasi linear hanya untuk matematika teoritis
+  C) Transformasi linear tidak memiliki aplikasi praktis
+  D) Transformasi linear hanya untuk menghitung luas
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Aplikasi transformasi linear
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Di bidang mana transformasi linear banyak digunakan?
+Pilihan:
+  A) Computer graphics (rotasi, scaling, shearing objek 3D)
+  B) Pemrosesan sinyal dan kompresi data
+  C) Fisika kuantum dan mekanika
+  D) Hanya dalam matematika murni
+Jawaban Benar: A, B, C
+
+#Langkah 3 [Benar/Salah]: Transformasi dan matriks
+Tipe Langkah: true-false
+Pertanyaan: Setiap transformasi linear dapat direpresentasikan sebagai perkalian matriks
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Mengapa "linear" penting?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa kita fokus pada transformasi "linear" dan bukan transformasi lainnya?
+Pilihan:
+  A) Transformasi linear lebih mudah dipahami, dihitung, dan memiliki sifat-sifat matematis yang baik
+  B) Transformasi non-linear tidak ada
+  C) Transformasi linear lebih rumit
+  D) Tidak ada alasan khusus
+Jawaban Benar: A
 
 
 ###Judul Soal: Apa Itu Transformasi Linear?

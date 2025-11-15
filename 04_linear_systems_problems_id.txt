@@ -1,3 +1,159 @@
+###Judul Soal: Konsep Dasar - Apa Itu Persamaan Linear?
+Deskripsi Soal: Pahami definisi persamaan linear dan karakteristiknya
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi persamaan linear
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Persamaan linear adalah:
+Pilihan:
+  A) Persamaan yang variabelnya hanya berpangkat 1 dan tidak ada perkalian antar variabel
+  B) Persamaan yang mengandung variabel berpangkat 2
+  C) Persamaan yang selalu menghasilkan garis lurus vertikal
+  D) Persamaan yang tidak memiliki solusi
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Contoh persamaan linear
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Pilih semua yang merupakan persamaan linear:
+Pilihan:
+  A) 2x + 3y = 5
+  B) x^2 + y = 3
+  C) x - 4y + z = 7
+  D) xy = 6
+Jawaban Benar: A, C
+
+#Langkah 3 [Benar/Salah]: Bentuk umum
+Tipe Langkah: true-false
+Pertanyaan: Bentuk umum persamaan linear dua variabel adalah ax + by = c di mana a, b, c adalah konstanta
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Geometri persamaan linear
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Secara geometris, persamaan linear dengan 2 variabel (x,y) merepresentasikan:
+Pilihan:
+  A) Garis lurus di bidang 2D
+  B) Lingkaran
+  C) Parabola
+  D) Titik tunggal
+Jawaban Benar: A
+
+
+###Judul Soal: Sistem Persamaan Linear - Definisi dan Konsep
+Deskripsi Soal: Pahami apa itu sistem persamaan linear dan komponen-komponennya
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu sistem persamaan linear?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Sistem persamaan linear adalah:
+Pilihan:
+  A) Kumpulan dua atau lebih persamaan linear yang melibatkan variabel-variabel yang sama
+  B) Satu persamaan dengan banyak variabel
+  C) Kumpulan persamaan non-linear
+  D) Hanya berlaku untuk dua persamaan saja
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Notasi sistem
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Sistem persamaan {x + y = 5, x - y = 1} memiliki:
+Pilihan:
+  A) 2 persamaan dengan 2 variabel (x dan y)
+  B) 1 persamaan dengan 2 variabel
+  C) 2 persamaan dengan 1 variabel
+  D) 4 persamaan
+Jawaban Benar: A
+
+#Langkah 3 [Benar/Salah]: Tujuan sistem
+Tipe Langkah: true-false
+Pertanyaan: Tujuan menyelesaikan sistem persamaan linear adalah mencari nilai variabel yang memenuhi semua persamaan sekaligus
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Geometri sistem 2x2
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Secara geometris, solusi sistem 2 persamaan linear dengan 2 variabel adalah:
+Pilihan:
+  A) Titik perpotongan dua garis
+  B) Dua garis sejajar
+  C) Seluruh bidang
+  D) Tidak ada hubungan geometris
+Jawaban Benar: A
+
+
+###Judul Soal: Solusi Sistem - Apa Itu Solusi?
+Deskripsi Soal: Pahami konsep solusi dan jenis-jenis kemungkinan solusi sistem
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi solusi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Solusi dari sistem persamaan linear adalah:
+Pilihan:
+  A) Nilai-nilai variabel yang memenuhi semua persamaan dalam sistem
+  B) Nilai variabel dari persamaan pertama saja
+  C) Jumlah semua koefisien
+  D) Selalu berupa bilangan bulat
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Verifikasi solusi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk memverifikasi (x,y) = (3,2) adalah solusi dari {x+y=5, x-y=1}, kita harus:
+Pilihan:
+  A) Substitusi x=3 dan y=2 ke kedua persamaan dan periksa apakah kedua persamaan terpenuhi
+  B) Hanya periksa persamaan pertama
+  C) Hanya periksa persamaan kedua
+  D) Kalikan kedua persamaan
+Jawaban Benar: A
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Kemungkinan jumlah solusi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Sistem persamaan linear dapat memiliki:
+Pilihan:
+  A) Tepat satu solusi, tak hingga solusi, atau tidak ada solusi
+  B) Hanya tepat satu solusi
+  C) Selalu tak hingga solusi
+  D) Maksimal 3 solusi
+Jawaban Benar: A
+
+#Langkah 4 [Benar/Salah]: Solusi unik
+Tipe Langkah: true-false
+Pertanyaan: Jika dua garis berpotongan di satu titik, sistem memiliki solusi unik (tepat satu solusi)
+Jawaban Benar: Benar
+
+
+###Judul Soal: Filosofi Sistem Linear - Mengapa Mempelajari Sistem Persamaan Linear?
+Deskripsi Soal: Pahami pentingnya sistem persamaan linear dalam aplikasi nyata
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Kegunaan sistem linear
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa sistem persamaan linear penting dalam dunia nyata?
+Pilihan:
+  A) Banyak masalah praktis (ekonomi, teknik, sains) dapat dimodelkan sebagai sistem persamaan linear
+  B) Sistem linear hanya untuk matematika teoritis
+  C) Tidak ada aplikasi praktis
+  D) Hanya untuk menghitung luas dan volume
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Aplikasi sistem linear
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Di bidang mana sistem persamaan linear digunakan?
+Pilihan:
+  A) Ekonomi (keseimbangan pasar, optimasi produksi)
+  B) Teknik sipil (analisis struktur, arus lalu lintas)
+  C) Ilmu komputer (computer graphics, machine learning)
+  D) Hanya dalam matematika murni
+Jawaban Benar: A, B, C
+
+#Langkah 3 [Benar/Salah]: Sistem dan komputer
+Tipe Langkah: true-false
+Pertanyaan: Sistem persamaan linear yang besar (ribuan variabel) dapat diselesaikan secara efisien menggunakan komputer
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Metode penyelesaian
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa kita mempelajari berbagai metode untuk menyelesaikan sistem linear?
+Pilihan:
+  A) Metode yang berbeda cocok untuk masalah berbeda; beberapa lebih efisien untuk kasus tertentu
+  B) Hanya untuk membuat pelajaran lebih sulit
+  C) Semua metode memberikan hasil berbeda
+  D) Tidak ada alasan khusus
+Jawaban Benar: A
+
+
 ###Judul Soal: Sistem Linear 2x2 - Metode Substitusi Sederhana
 Deskripsi Soal: Selesaikan sistem persamaan x + y = 5 dan x - y = 1 menggunakan metode substitusi
 

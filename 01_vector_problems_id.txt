@@ -4,6 +4,157 @@ Set soal ini menggunakan berbagai jenis pertanyaan untuk memperkuat keterampilan
 dan pemahaman konseptual tentang vektor.
 
 
+###Judul Soal: Konsep Dasar - Apa Itu Vektor?
+Deskripsi Soal: Pahami definisi vektor dan representasinya dalam matematika
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi vektor
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Vektor adalah:
+Pilihan:
+  A) Besaran yang memiliki magnitude (besar) dan arah
+  B) Hanya sebuah bilangan tunggal
+  C) Hanya menunjukkan arah tanpa besar
+  D) Selalu berupa garis lurus horizontal
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Contoh besaran vektor
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Pilih semua yang merupakan besaran vektor dalam fisika:
+Pilihan:
+  A) Kecepatan (memiliki besar dan arah)
+  B) Gaya (memiliki besar dan arah)
+  C) Massa (hanya besar, tanpa arah)
+  D) Perpindahan (memiliki besar dan arah)
+Jawaban Benar: A, B, D
+
+#Langkah 3 [Benar/Salah]: Representasi vektor
+Tipe Langkah: true-false
+Pertanyaan: Vektor dapat direpresentasikan sebagai deretan angka dalam kurung siku, misalnya [3,4]
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Notasi vektor
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Vektor [2,5] dalam RR^2 berarti:
+Pilihan:
+  A) Vektor di ruang 2 dimensi dengan komponen x=2 dan y=5
+  B) Vektor di ruang 5 dimensi
+  C) Perkalian 2 dengan 5
+  D) Matriks berukuran 2x5
+Jawaban Benar: A
+
+
+###Judul Soal: Komponen Vektor - Memahami Elemen Vektor
+Deskripsi Soal: Pahami apa itu komponen atau elemen dalam vektor
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu komponen vektor?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Dalam vektor v = [7,3,-2], komponen adalah:
+Pilihan:
+  A) Nilai-nilai individual 7, 3, dan -2
+  B) Jumlah semua elemen (7+3-2)
+  C) Hanya nilai pertama yaitu 7
+  D) Panjang vektor
+Jawaban Benar: A
+
+#Langkah 2 [Isi Titik-Titik]: Identifikasi komponen
+Tipe Langkah: fill-blank
+Pertanyaan: Dalam vektor [5,8,1], komponen kedua adalah {blank}
+Jawaban Benar: 8
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Dimensi vektor
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Vektor [4,2,9,1] berada di ruang dimensi berapa?
+Pilihan:
+  A) RR^4 (ruang 4 dimensi)
+  B) RR^2 (ruang 2 dimensi)
+  C) RR^3 (ruang 3 dimensi)
+  D) RR^1 (ruang 1 dimensi)
+Jawaban Benar: A
+
+#Langkah 4 [Benar/Salah]: Jumlah komponen
+Tipe Langkah: true-false
+Pertanyaan: Jumlah komponen dalam vektor menentukan dimensi ruang vektor tersebut
+Jawaban Benar: Benar
+
+
+###Judul Soal: Interpretasi Geometris vs Aljabar Vektor
+Deskripsi Soal: Pahami dua cara pandang terhadap vektor: geometris (visual) dan aljabar (numerik)
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Interpretasi geometris
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Secara geometris, vektor [3,4] dapat digambarkan sebagai:
+Pilihan:
+  A) Anak panah dari titik asal (0,0) ke titik (3,4)
+  B) Titik tunggal di (3,4)
+  C) Garis yang melewati (3,4)
+  D) Lingkaran dengan radius 3 dan 4
+Jawaban Benar: A
+
+#Langkah 2 [Benar/Salah]: Posisi vs arah
+Tipe Langkah: true-false
+Pertanyaan: Dalam interpretasi geometris, yang penting dari vektor adalah arah dan panjangnya, bukan posisi titik awalnya
+Jawaban Benar: Benar
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Interpretasi aljabar
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Secara aljabar, vektor [2,5] diperlakukan sebagai:
+Pilihan:
+  A) Pasangan terurut angka yang dapat dioperasikan secara aritmatika
+  B) Gambar anak panah
+  C) Koordinat titik saja
+  D) Fungsi matematika
+Jawaban Benar: A
+
+#Langkah 4 [Pilihan Ganda - Berganda]: Kegunaan dua interpretasi
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Mengapa kita perlu dua interpretasi (geometris dan aljabar)?
+Pilihan:
+  A) Interpretasi geometris membantu visualisasi dan intuisi
+  B) Interpretasi aljabar memudahkan komputasi dan perhitungan
+  C) Keduanya saling melengkapi dalam pemahaman
+  D) Hanya satu interpretasi yang benar
+Jawaban Benar: A, B, C
+
+
+###Judul Soal: Filosofi Vektor - Mengapa Mempelajari Vektor?
+Deskripsi Soal: Pahami pentingnya dan aplikasi vektor dalam berbagai bidang
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Kegunaan vektor
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Mengapa vektor penting dalam sains dan teknik?
+Pilihan:
+  A) Vektor merepresentasikan besaran yang memiliki arah, seperti gaya, kecepatan, dan percepatan
+  B) Vektor hanya untuk matematika teoritis
+  C) Vektor tidak memiliki aplikasi praktis
+  D) Vektor hanya digunakan dalam geometri
+Jawaban Benar: A
+
+#Langkah 2 [Pilihan Ganda - Berganda]: Aplikasi vektor
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Di bidang mana vektor banyak digunakan?
+Pilihan:
+  A) Fisika (gaya, kecepatan, medan)
+  B) Computer graphics (posisi, rotasi objek)
+  C) Machine learning (representasi data)
+  D) Hanya dalam matematika murni
+Jawaban Benar: A, B, C
+
+#Langkah 3 [Benar/Salah]: Vektor dalam data
+Tipe Langkah: true-false
+Pertanyaan: Dalam machine learning, data sering direpresentasikan sebagai vektor di ruang berdimensi tinggi
+Jawaban Benar: Benar
+
+#Langkah 4 [Pilihan Ganda - Tunggal]: Kelebihan representasi vektor
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa keuntungan utama merepresentasikan besaran sebagai vektor?
+Pilihan:
+  A) Memungkinkan operasi matematika sistematis dan analisis yang konsisten
+  B) Membuat perhitungan lebih rumit
+  C) Hanya untuk keperluan notasi
+  D) Tidak ada keuntungan khusus
+Jawaban Benar: A
+
+
 ###Judul Soal: Memahami Penjumlahan Vektor di R2
 Deskripsi Soal: Diberikan vektor u = [[3,5]] dan v = [[2,-1]], eksplorasi penjumlahan vektor
 
