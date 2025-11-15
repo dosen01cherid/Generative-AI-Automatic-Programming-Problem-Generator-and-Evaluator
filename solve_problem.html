@@ -6523,6 +6523,11 @@ class ProblemSolverApp:
             self.problem_states = {}
             self.current_problem_index = None
 
+            # ✅ Clear global attempt history for new problem set
+            self.global_attempt_history = []
+            self.problem_global_histories = {}
+            window.console.log("✅ Global attempt history cleared for new problem set")
+
             # ✅ FULL RESET of score tracker when new problem set is loaded
             if hasattr(self, 'score_tracker') and self.score_tracker:
                 self.score_tracker.full_reset()
