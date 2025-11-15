@@ -2407,6 +2407,13 @@ CIRC: "\\circ"
       if s != before:
           fixes_applied.append("Fixed pipe delimiter (\\right| → \\right]|)")
 
+      # 0.5. Fix period instead of comma between matrix rows
+      #    ]\right].\left[ → ]\right],\left[
+      before = s
+      s = re.sub(r'(\]|\\\right\])\s*\.\s*(\[|\\left\[)', r'\1,\2', s)
+      if s != before:
+          fixes_applied.append("Fixed period to comma between matrix rows")
+
       # 1. Fix missing commas between numbers in matrices (space-separated)
       #    [[1 2 3],[4 5 6]] → [[1,2,3],[4,5,6]]
       before = s
