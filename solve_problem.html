@@ -2483,6 +2483,23 @@ CIRC: "\\circ"
       if s != before:
           fixes_applied.append("Removed empty exponent braces")
 
+      # 11. Fix missing underscore in row operations
+      #    R1 → R_1,  R2 → R_2,  R123 → R_123
+      before = s
+      s = re.sub(r'R(\d+)', r'R_\1', s)
+      if s != before:
+          fixes_applied.append("Added missing underscore in row notation (R1 → R_1)")
+
+      # 12. Normalize arrow notation in row operations
+      #    -> → \to,  <- → \leftarrow
+      before = s
+      # Only replace arrows that appear in row operation context (after R_digit)
+      s = re.sub(r'(R_\d+)\s*->\s*', r'\1\\to ', s)
+      s = re.sub(r'(R_\d+)\s*<->\s*', r'\1\\leftrightarrow ', s)
+      s = re.sub(r'(R_\d+)\s*<-\s*', r'\1\\leftarrow ', s)
+      if s != before:
+          fixes_applied.append("Normalized arrow notation (-> → \\to)")
+
       return (s, fixes_applied)
 
     def parse_latex(self, latex):
