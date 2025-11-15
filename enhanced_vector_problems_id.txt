@@ -1,0 +1,505 @@
+SET SOAL VEKTOR YANG DITINGKATKAN - Berbagai Jenis Langkah untuk Pembelajaran Lebih Baik
+
+Set soal ini menggunakan berbagai jenis pertanyaan untuk memperkuat keterampilan komputasi
+dan pemahaman konseptual tentang vektor.
+
+
+###Judul Soal: Memahami Penjumlahan Vektor di R2
+Deskripsi Soal: Diberikan vektor u = [[3,5]] dan v = [[2,-1]], eksplorasi penjumlahan vektor
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan penjumlahan vektor secara geometris?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang dimaksud dengan penjumlahan dua vektor secara geometris?
+Pilihan:
+  A) Menempatkan vektor ujung-ke-ekor dan menggambar dari ekor pertama ke ujung terakhir
+  B) Mengalikan besar kedua vektor
+  C) Mencari sudut antara kedua vektor
+  D) Mengurangkan satu vektor dari vektor lain
+Jawaban Benar: A
+Penjelasan: Penjumlahan vektor mengikuti hukum jajaran genjang atau metode ujung-ke-ekor, di mana vektor resultan dari ekor vektor pertama ke ujung vektor terakhir.
+
+#Langkah 2 [Ekspresi & Jawaban]: Tulis bentuk komponen u + v
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,5]] + [[2,-1]]
+Hasil yang Diharapkan: [[3,5]] + [[2,-1]]
+
+#Langkah 3 [Benar/Salah]: Verifikasi bahwa penjumlahan bersifat komutatif
+Tipe Langkah: true-false
+Pertanyaan: Apakah u + v = v + u untuk setiap vektor u dan v?
+Jawaban: Benar
+Penjelasan: Penjumlahan vektor bersifat komutatif. Menjumlahkan vektor dalam urutan apa pun menghasilkan hasil yang sama.
+
+#Langkah 4 [Ekspresi & Jawaban]: Jumlahkan komponen yang bersesuaian
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,5]] + [[2,-1]]
+Hasil yang Diharapkan: [[5,4]]
+
+
+###Judul Soal: Pengurangan Vektor dan Sifat-Sifatnya
+Deskripsi Soal: Diberikan vektor a = [[7,3]] dan b = [[4,8]], cari a - b dan eksplorasi sifat-sifatnya
+
+#Langkah 1 [Isi Titik-Titik]: Lengkapi rumus pengurangan
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk vektor a = (a_1, a_2) dan b = (b_1, b_2), pengurangan a - b = (__, __)
+Titik-Titik:
+  - Titik 1: a_1 - b_1
+  - Titik 2: a_2 - b_2
+Penjelasan: Pengurangan vektor dilakukan per komponen.
+
+#Langkah 2 [Ekspresi & Jawaban]: Tulis bentuk komponen a - b
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[7,3]] - [[4,8]]
+Hasil yang Diharapkan: [[7,3]] - [[4,8]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Kurangkan komponen yang bersesuaian
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[7,3]] - [[4,8]]
+Hasil yang Diharapkan: [[3,-5]]
+
+#Langkah 4 [Benar/Salah]: Periksa apakah pengurangan bersifat komutatif
+Tipe Langkah: true-false
+Pertanyaan: Apakah a - b = b - a untuk semua vektor a dan b?
+Jawaban: Salah
+Penjelasan: Pengurangan vektor TIDAK bersifat komutatif. Sebenarnya, a - b = -(b - a).
+
+
+###Judul Soal: Perkalian Skalar - Konsep dan Perhitungan
+Deskripsi Soal: Diberikan vektor v = [[2,-3,4]], cari 3v dan pahami perkalian skalar
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang dilakukan perkalian skalar?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Ketika Anda mengalikan vektor dengan skalar k, apa yang terjadi pada vektor tersebut?
+Pilihan:
+  A) Vektor berputar sebesar k derajat
+  B) Besarnya dikalikan dengan |k| dan arahnya berbalik jika k < 0
+  C) Hanya arahnya yang berubah
+  D) Vektor menjadi tegak lurus dengan vektor asli
+Jawaban Benar: B
+Penjelasan: Perkalian skalar mengubah besar vektor dengan faktor |k| dan membalik arah jika k negatif.
+
+#Langkah 2 [Ekspresi & Jawaban]: Tulis perkalian skalar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*[[2,-3,4]]
+Hasil yang Diharapkan: 3*[[2,-3,4]]
+
+#Langkah 3 [Pilihan Ganda - Berganda]: Pilih semua pernyataan yang benar tentang 3v
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Pernyataan mana yang benar tentang 3v dibandingkan dengan v?
+Pilihan:
+  A) 3v tiga kali lebih panjang dari v
+  B) 3v mengarah ke arah yang sama dengan v
+  C) 3v tegak lurus dengan v
+  D) Setiap komponen 3v adalah tiga kali komponen v yang bersesuaian
+Jawaban Benar: A, B, D
+Penjelasan: Perkalian skalar positif mempertahankan arah dan menskalakan semua komponen secara merata.
+
+#Langkah 4 [Ekspresi & Jawaban]: Kalikan setiap komponen dengan skalar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*[[2,-3,4]]
+Hasil yang Diharapkan: [[6,-9,12]]
+
+
+###Judul Soal: Hasil Kali Titik - Dari Konsep ke Perhitungan
+Deskripsi Soal: Diberikan vektor u = [[3,4]] dan v = [[2,5]], hitung dan pahami hasil kali titik
+
+#Langkah 1 [Isi Titik-Titik]: Lengkapi rumus hasil kali titik
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk vektor u = (u_1, u_2) dan v = (v_1, v_2), hasil kali titik u cdot v = __ kali __ + __ kali __
+Titik-Titik:
+  - Titik 1: u_1
+  - Titik 2: v_1
+  - Titik 3: u_2
+  - Titik 4: v_2
+Penjelasan: Hasil kali titik mengalikan komponen yang bersesuaian dan menjumlahkan hasilnya.
+
+#Langkah 2 [Ekspresi & Jawaban]: Terapkan rumus hasil kali titik
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*2 + 4*5
+Hasil yang Diharapkan: 3*2 + 4*5
+
+#Langkah 3 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan hasil kali titik?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang diberitahukan u cdot v tentang hubungan antara u dan v?
+Pilihan:
+  A) Hanya sudut di antara keduanya
+  B) Seberapa banyak u dan v mengarah ke arah yang sama (hubungan proyeksi)
+  C) Jarak antara titik ujung keduanya
+  D) Gabungan besar keduanya
+Jawaban Benar: B
+Penjelasan: Hasil kali titik mengukur seberapa banyak dua vektor sejajar, menggabungkan besar dan sudut di antara keduanya.
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung hasilnya
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*2 + 4*5
+Hasil yang Diharapkan: 26
+
+#Langkah 5 [Benar/Salah]: Periksa apakah hasilnya positif
+Tipe Langkah: true-false
+Pertanyaan: Karena u cdot v = 26 > 0, sudut antara u dan v adalah lancip (kurang dari 90 derajat). Benar atau Salah?
+Jawaban: Benar
+Penjelasan: Hasil kali titik positif menunjukkan sudut lancip; negatif berarti tumpul; nol berarti tegak lurus.
+
+
+###Judul Soal: Memverifikasi Ortogonalitas - Teori Bertemu Praktik
+Deskripsi Soal: Tentukan apakah vektor u = [[2,3]] dan v = [[-6,4]] ortogonal
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan ortogonal?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa artinya dua vektor ortogonal?
+Pilihan:
+  A) Keduanya memiliki besar yang sama
+  B) Keduanya tegak lurus (sudut 90 derajat)
+  C) Keduanya mengarah ke arah yang berlawanan
+  D) Keduanya memiliki arah yang sama
+Jawaban Benar: B
+Penjelasan: Vektor ortogonal adalah vektor yang tegak lurus, membentuk sudut 90 derajat.
+
+#Langkah 2 [Isi Titik-Titik]: Nyatakan syarat ortogonalitas
+Tipe Langkah: fill-blank
+Pertanyaan: Dua vektor u dan v ortogonal jika dan hanya jika hasil kali titik u cdot v = __
+Titik-Titik:
+  - Titik 1: 0
+Penjelasan: Hasil kali titik sama dengan nol ketika vektor tegak lurus.
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung hasil kali titik
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*(-6) + 3*4
+Hasil yang Diharapkan: 2*(-6) + 3*4
+
+#Langkah 4 [Ekspresi & Jawaban]: Evaluasi hasilnya
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*(-6) + 3*4
+Hasil yang Diharapkan: 0
+
+#Langkah 5 [Ekspresi & Jawaban]: Periksa syarat ortogonalitas
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*(-6) + 3*4 == 0
+Hasil yang Diharapkan: True
+
+#Langkah 6 [Benar/Salah]: Konfirmasi ortogonalitas
+Tipe Langkah: true-false
+Pertanyaan: Berdasarkan perhitungan, vektor u dan v adalah ortogonal. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: Karena u cdot v = 0, vektor-vektor tersebut tegak lurus.
+
+
+###Judul Soal: Besar Vektor - Konsep dan Komputasi
+Deskripsi Soal: Cari besar (panjang) vektor v = [[3,4]] dan pahami artinya
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan besar?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang dimaksud dengan besar ||v|| dari sebuah vektor?
+Pilihan:
+  A) Arah vektor
+  B) Panjang atau ukuran vektor
+  C) Sudut yang dibuat dengan sumbu x
+  D) Jumlah komponen-komponennya
+Jawaban Benar: B
+Penjelasan: Besar adalah panjang vektor, dihitung menggunakan teorema Pythagoras.
+
+#Langkah 2 [Isi Titik-Titik]: Lengkapi rumus besar
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk vektor v = (x, y), besar ||v|| = sqrt(__^2 + __^2)
+Titik-Titik:
+  - Titik 1: x
+  - Titik 2: y
+Penjelasan: Rumus besar berasal dari teorema Pythagoras.
+
+#Langkah 3 [Ekspresi & Jawaban]: Terapkan rumus besar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: sqrt(3^2 + 4^2)
+Hasil yang Diharapkan: sqrt(3^2 + 4^2)
+
+#Langkah 4 [Benar/Salah]: Kenali tripel Pythagoras
+Tipe Langkah: true-false
+Pertanyaan: Vektor [[3,4]] membentuk tripel Pythagoras dengan besar 5. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: 3^2 + 4^2 = 9 + 16 = 25 = 5^2, menjadikan ini tripel Pythagoras klasik 3-4-5.
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung kuadrat
+Tipe Langkah: step-by-step
+Ekspresi Langkah: sqrt(3^2 + 4^2)
+Hasil yang Diharapkan: sqrt(25)
+
+#Langkah 6 [Ekspresi & Jawaban]: Sederhanakan
+Tipe Langkah: step-by-step
+Ekspresi Langkah: sqrt(25)
+Hasil yang Diharapkan: 5
+
+
+###Judul Soal: Vektor Satuan - Proses Normalisasi
+Deskripsi Soal: Cari vektor satuan dalam arah v = [[3,4]]
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu vektor satuan?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa itu vektor satuan?
+Pilihan:
+  A) Vektor dengan semua komponen sama dengan 1
+  B) Vektor dengan besar sama dengan 1
+  C) Vektor yang mengarah sepanjang sumbu x
+  D) Vektor nol
+Jawaban Benar: B
+Penjelasan: Vektor satuan memiliki besar 1 dan hanya menunjukkan arah.
+
+#Langkah 2 [Isi Titik-Titik]: Lengkapi rumus vektor satuan
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk mencari vektor satuan u-topi dalam arah v, kita hitung u-topi = v / __
+Titik-Titik:
+  - Titik 1: ||v||
+Penjelasan: Membagi vektor dengan besarnya menghasilkan vektor satuan dengan arah yang sama.
+
+#Langkah 3 [Ekspresi & Jawaban]: Cari besar v
+Tipe Langkah: step-by-step
+Ekspresi Langkah: sqrt(3^2 + 4^2)
+Hasil yang Diharapkan: 5
+
+#Langkah 4 [Ekspresi & Jawaban]: Bagi v dengan besarnya
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,4]]/5
+Hasil yang Diharapkan: [[3/5, 4/5]]
+
+#Langkah 5 [Benar/Salah]: Verifikasi sifat vektor satuan
+Tipe Langkah: true-false
+Pertanyaan: Besar dari [[3/5, 4/5]] sama dengan 1. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: sqrt((3/5)^2 + (4/5)^2) = sqrt(9/25 + 16/25) = sqrt(25/25) = 1
+
+
+###Judul Soal: Hasil Kali Silang - Pemahaman Geometris
+Deskripsi Soal: Diberikan a = [[1,2,3]] dan b = [[4,5,6]], cari a xx b
+
+#Langkah 1 [Pilihan Ganda - Berganda]: Pilih sifat hasil kali silang
+Tipe Langkah: multiple-choice-multiple
+Pertanyaan: Pernyataan mana yang benar tentang hasil kali silang a xx b?
+Pilihan:
+  A) a xx b tegak lurus terhadap a dan b
+  B) a xx b sejajar dengan a
+  C) ||a xx b|| sama dengan luas jajaran genjang yang dibentuk oleh a dan b
+  D) a xx b = b xx a
+Jawaban Benar: A, C
+Penjelasan: Hasil kali silang tegak lurus terhadap kedua vektor input, dan besarnya memberikan luas jajaran genjang. Ini bersifat anti-komutatif: a xx b = -(b xx a).
+
+#Langkah 2 [Isi Titik-Titik]: Nyatakan rumus komponen i
+Tipe Langkah: fill-blank
+Pertanyaan: Untuk a = (a_1, a_2, a_3) dan b = (b_1, b_2, b_3), komponen i dari a xx b = __ kali __ - __ kali __
+Titik-Titik:
+  - Titik 1: a_2
+  - Titik 2: b_3
+  - Titik 3: a_3
+  - Titik 4: b_2
+Penjelasan: Komponen i menggunakan determinan matriks 2x2 dengan komponen j dan k.
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung komponen i
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*6 - 3*5
+Hasil yang Diharapkan: -3
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung komponen j (negatif)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: -(1*6 - 3*4)
+Hasil yang Diharapkan: 6
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung komponen k
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*5 - 2*4
+Hasil yang Diharapkan: -3
+
+#Langkah 6 [Ekspresi & Jawaban]: Gabungkan komponen
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[-3, 6, -3]]
+Hasil yang Diharapkan: [[-3, 6, -3]]
+
+#Langkah 7 [Benar/Salah]: Verifikasi ketegaklurusan
+Tipe Langkah: true-false
+Pertanyaan: Untuk memverifikasi a xx b tegak lurus terhadap a, kita harus memeriksa apakah (a xx b) cdot a = 0. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: Dua vektor tegak lurus jika dan hanya jika hasil kali titik mereka adalah nol.
+
+
+###Judul Soal: Proyeksi Vektor - Interpretasi Geometris
+Deskripsi Soal: Cari proyeksi u = [[3,4]] pada v = [[1,0]]
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu proyeksi?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang dimaksud dengan proyeksi u pada v secara geometris?
+Pilihan:
+  A) Komponen u dalam arah v
+  B) Jumlah u dan v
+  C) Sudut antara u dan v
+  D) Jarak dari u ke v
+Jawaban Benar: A
+Penjelasan: Proyeksi mencari seberapa banyak vektor u mengarah ke arah vektor v.
+
+#Langkah 2 [Isi Titik-Titik]: Lengkapi rumus proyeksi
+Tipe Langkah: fill-blank
+Pertanyaan: Proyeksi skalar dari u pada v = (u cdot v) / __
+Titik-Titik:
+  - Titik 1: ||v||
+Penjelasan: Kita membagi hasil kali titik dengan besar v untuk mendapatkan proyeksi skalar.
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung hasil kali titik u cdot v
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*1 + 4*0
+Hasil yang Diharapkan: 3
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung ||v||^2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1^2 + 0^2
+Hasil yang Diharapkan: 1
+
+#Langkah 5 [Pilihan Ganda - Tunggal]: Apa langkah selanjutnya?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk mencari proyeksi vektor, apa yang harus kita lakukan dengan proyeksi skalar 3?
+Pilihan:
+  A) Menambahkannya ke v
+  B) Mengalikan v dengan skalar ini
+  C) Mengkuadratkannya
+  D) Mengambil kebalikannya
+Jawaban Benar: B
+Penjelasan: Proyeksi vektor = (proyeksi skalar) kali (vektor satuan dalam arah v) = (u cdot v / ||v||^2) kali v
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung faktor skalar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3/1
+Hasil yang Diharapkan: 3
+
+#Langkah 7 [Ekspresi & Jawaban]: Kalikan v dengan faktor skalar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*[[1,0]]
+Hasil yang Diharapkan: [[3,0]]
+
+
+###Judul Soal: Aplikasi - Gaya Resultan
+Deskripsi Soal: Dua gaya F_1 = [[3,4]] N dan F_2 = [[-1,5]] N bekerja pada sebuah benda. Cari resultan dan besarnya.
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu gaya resultan?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa yang dimaksud dengan gaya resultan?
+Pilihan:
+  A) Selisih antara kedua gaya
+  B) Gaya tunggal yang memiliki efek yang sama dengan semua gaya yang digabungkan
+  C) Rata-rata dari semua gaya
+  D) Gaya terbesar yang bekerja
+Jawaban Benar: B
+Penjelasan: Resultan adalah jumlah vektor dari semua gaya, mewakili efek gabungan mereka.
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung resultan F_1 + F_2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,4]] + [[-1,5]]
+Hasil yang Diharapkan: [[2,9]]
+
+#Langkah 3 [Benar/Salah]: Arah penting dalam gaya
+Tipe Langkah: true-false
+Pertanyaan: Dalam fisika, arah gaya sama pentingnya dengan besarnya. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: Gaya adalah vektor - baik besar maupun arah menentukan efeknya.
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung besar resultan
+Tipe Langkah: step-by-step
+Ekspresi Langkah: sqrt(2^2 + 9^2)
+Hasil yang Diharapkan: sqrt(85)
+
+#Langkah 5 [Pilihan Ganda - Tunggal]: Interpretasikan hasilnya
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Besar gaya resultan sqrt(85) approx 9.22 N. Bagaimana ini dibandingkan dengan gaya individu?
+Pilihan:
+  A) Lebih kecil dari kedua gaya (pembatalan vektor)
+  B) Di antara kedua besar gaya
+  C) Lebih besar dari kedua gaya individu (penjumlahan vektor)
+  D) Sama dengan jumlah besar
+Jawaban Benar: C
+Penjelasan: ||F_1|| = 5 N dan ||F_2|| approx 5.1 N, tetapi resultan approx 9.22 N karena gaya mengarah ke arah yang mirip (keduanya memiliki komponen y positif yang besar).
+
+
+###Judul Soal: Kombinasi Linear - Representasi Basis
+Deskripsi Soal: Nyatakan w = [[7,1]] sebagai c_1*u + c_2*v di mana u = [[2,1]] dan v = [[1,-1]]
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu kombinasi linear?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apa artinya menyatakan w sebagai kombinasi linear dari u dan v?
+Pilihan:
+  A) Menambahkan u dan v untuk mendapatkan w
+  B) Mencari skalar c_1 dan c_2 sedemikian sehingga c_1*u + c_2*v = w
+  C) Mengalikan u dan v bersama-sama
+  D) Mencari hasil kali titik u dan v
+Jawaban Benar: B
+Penjelasan: Kombinasi linear berarti mencari koefisien skalar yang ketika diterapkan pada vektor basis menghasilkan vektor target.
+
+#Langkah 2 [Benar/Salah]: Sistem persamaan diperlukan
+Tipe Langkah: true-false
+Pertanyaan: Untuk mencari c_1 dan c_2, kita perlu menyusun sistem persamaan dengan menyamakan komponen. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: Kita menyamakan komponen: c_1*(2) + c_2*(1) = 7 dan c_1*(1) + c_2*(-1) = 1
+
+#Langkah 3 [Ekspresi & Jawaban]: Persamaan komponen pertama
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*c1 + c2
+Hasil yang Diharapkan: 7
+
+#Langkah 4 [Ekspresi & Jawaban]: Persamaan komponen kedua
+Tipe Langkah: step-by-step
+Ekspresi Langkah: c1 - c2
+Hasil yang Diharapkan: 1
+
+#Langkah 5 [Isi Titik-Titik]: Selesaikan untuk c_1
+Tipe Langkah: fill-blank
+Pertanyaan: Dari persamaan kedua c_1 - c_2 = 1, kita dapatkan c_1 = __ + 1
+Titik-Titik:
+  - Titik 1: c2
+Penjelasan: Menambahkan c_2 ke kedua sisi memberikan c_1 = c_2 + 1
+
+#Langkah 6 [Ekspresi & Jawaban]: Substitusikan ke persamaan pertama
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*(c2 + 1) + c2
+Hasil yang Diharapkan: 7
+
+#Langkah 7 [Ekspresi & Jawaban]: Sederhanakan
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*c2 + 2
+Hasil yang Diharapkan: 7
+
+#Langkah 8 [Ekspresi & Jawaban]: Selesaikan untuk c_2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: c2
+Hasil yang Diharapkan: 5/3
+
+#Langkah 9 [Ekspresi & Jawaban]: Selesaikan untuk c_1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 5/3 + 1
+Hasil yang Diharapkan: 8/3
+
+#Langkah 10 [Benar/Salah]: Verifikasi solusi
+Tipe Langkah: true-false
+Pertanyaan: Kita harus memverifikasi: (8/3)*[[2,1]] + (5/3)*[[1,-1]] = [[7,1]]. Benar atau Salah?
+Jawaban: Benar
+Penjelasan: Selalu verifikasi solusi Anda dengan mensubstitusikan kembali ke persamaan asli.
+
+
+AKHIR SET SOAL VEKTOR YANG DITINGKATKAN
+
+MANFAAT PEDAGOGIS DARI BERBAGAI JENIS LANGKAH:
+
+1. Pemahaman Konseptual (Pilihan Ganda/Benar-Salah)
+   - Siswa harus memahami MENGAPA, bukan hanya BAGAIMANA
+   - Menguji pengenalan konsep kunci
+   - Memberikan umpan balik langsung tentang kesalahpahaman
+
+2. Penguasaan Rumus (Isi Titik-Titik)
+   - Memperkuat rumus penting
+   - Menguji ingatan tanpa petunjuk pilihan ganda
+   - Membantu menghafal melalui pengambilan aktif
+
+3. Keterampilan Komputasi (Ekspresi & Jawaban)
+   - Mengembangkan kecakapan perhitungan
+   - Menunjukkan penyelesaian masalah langkah demi langkah
+   - Membangun keterampilan manipulasi aljabar
+
+4. Metakognisi (Langkah verifikasi dengan Benar/Salah)
+   - Siswa memeriksa pemahaman mereka sendiri
+   - Mempromosikan pemantauan diri
+   - Menghubungkan perhitungan dengan konsep
+
+5. Keterlibatan (Variasi)
+   - Berbagai jenis pertanyaan mempertahankan minat
+   - Mengurangi monoton
+   - Menarik bagi berbagai gaya belajar
