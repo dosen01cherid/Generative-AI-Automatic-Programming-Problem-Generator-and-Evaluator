@@ -2400,6 +2400,13 @@ CIRC: "\\circ"
       original = latex_str
       s = latex_str
 
+      # 0. Fix \right| when it should be \right]| in matrix context
+      #    \right|R_1 → \right]|R_1
+      before = s
+      s = re.sub(r'\\right\|(\s*R_)', r'\\right]|\1', s)
+      if s != before:
+          fixes_applied.append("Fixed pipe delimiter (\\right| → \\right]|)")
+
       # 1. Fix missing commas between numbers in matrices (space-separated)
       #    [[1 2 3],[4 5 6]] → [[1,2,3],[4,5,6]]
       before = s
