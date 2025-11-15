@@ -7102,8 +7102,14 @@ class DataManager:
 
         ⭐ Now supports all step types and "Must Be Correct" field
         ⭐ Preserves backticks when AsciiMathParser is not available
+        ⭐ Supports comments (lines starting with //)
+        ⭐ Auto-fixes and validates problems with comment annotations
         """
         import re
+
+        # Store validation issues for later display
+        self.validation_issues = []
+        self.fixed_text_lines = []  # Store the fixed version with comments
 
         def parse_mixed_content(content):
             """Parse text with $$latex$$ or `asciimath` into blocks array"""
@@ -7352,7 +7358,38 @@ class DataManager:
 
             return options
 
+        def is_comment_line(line):
+            """Check if a line is a comment"""
+            stripped = line.strip()
+            # Comment if starts with // but not ### or single # (which are delimiters)
+            return stripped.startswith('//') and not stripped.startswith('###') and not (stripped == '#')
+
+        def filter_comments(lines):
+            """Filter out comment lines but preserve them for later"""
+            filtered = []
+            comments = []
+            for i, line in enumerate(lines):
+                if is_comment_line(line):
+                    comments.append((i, line.strip()))
+                else:
+                    filtered.append(line)
+            return filtered, comments
+
+        def add_validation_comment(issue_type, message, line_number=None):
+            """Add a validation issue and comment"""
+            self.validation_issues.append({
+                'type': issue_type,
+                'message': message,
+                'line': line_number
+            })
+            comment = f"// AUTO-FIX: {message}"
+            self.fixed_text_lines.append(comment)
+            return comment
+
         try:
+            # Pre-process: split into lines and identify comments
+            all_lines = text.strip().split('\n')
+
             # Split by ### to get problems
             problem_sections = text.strip().split('###')
             problem_sections = [p.strip() for p in problem_sections if p.strip()]
@@ -7370,19 +7407,46 @@ class DataManager:
                 # First part is problem info
                 problem_lines = parts[0].split('\n')
 
-                title = extract_field(problem_lines, 'Problem Title:')
-                description_text = extract_field(problem_lines, 'Problem Description:')
+                # Filter out comments from problem lines
+                problem_lines_clean, problem_comments = filter_comments(problem_lines)
+
+                title = extract_field(problem_lines_clean, 'Problem Title:')
+                description_text = extract_field(problem_lines_clean, 'Problem Description:')
+
+                # Validation: Check for missing required fields
+                fixed_problem_section = []
+                has_issues = False
+
+                if not title:
+                    add_validation_comment('error', 'Missing Problem Title - adding default title')
+                    title = "Untitled Problem"
+                    fixed_problem_section.append("// AUTO-FIX: Missing Problem Title - added default")
+                    has_issues = True
+
+                if not description_text:
+                    add_validation_comment('warning', 'Missing Problem Description - adding default')
+                    description_text = "Problem description not provided"
+                    fixed_problem_section.append("// AUTO-FIX: Missing Problem Description - added default")
+                    has_issues = True
 
                 # Parse description into blocks
                 description_blocks = parse_mixed_content(description_text) if description_text else []
 
                 # Remaining parts are steps
                 steps = []
-                for step_section in parts[1:]:
+                for step_index, step_section in enumerate(parts[1:]):
                     step_lines = step_section.split('\n')
 
-                    step_desc = extract_field(step_lines, 'Step Description:')
-                    step_type = extract_field(step_lines, 'Step Type:')
+                    # Filter out comments from step lines
+                    step_lines_clean, step_comments = filter_comments(step_lines)
+
+                    step_desc = extract_field(step_lines_clean, 'Step Description:')
+                    step_type = extract_field(step_lines_clean, 'Step Type:')
+
+                    # Validation: Check for missing step description
+                    if not step_desc:
+                        add_validation_comment('warning', f'Step {step_index + 1}: Missing Step Description - adding default')
+                        step_desc = f"Step {step_index + 1}"
 
                     # Default to step-by-step if no type specified
                     if not step_type:
@@ -7400,7 +7464,7 @@ class DataManager:
                     }
 
                     # ✅ Parse "Must Be Correct" field (common to all assessment types)
-                    must_be_correct_str = extract_field(step_lines, 'Must Be Correct:')
+                    must_be_correct_str = extract_field(step_lines_clean, 'Must Be Correct:')
                     must_be_correct = None
                     if must_be_correct_str:
                         must_be_correct = must_be_correct_str.strip().lower() == 'true'
@@ -7409,10 +7473,11 @@ class DataManager:
                     # STEP-BY-STEP (Expression & Answer)
                     # ========================================
                     if step_type == "step-by-step":
-                        step_expr = extract_field(step_lines, 'Step Expression:')
-                        step_expected = extract_field(step_lines, 'Step Expected:')
+                        step_expr = extract_field(step_lines_clean, 'Step Expression:')
+                        step_expected = extract_field(step_lines_clean, 'Step Expected:')
 
                         if not step_expr:
+                            add_validation_comment('error', f'Step {step_index + 1}: Missing Step Expression - skipping step')
                             continue
 
                         # Handle expression (keep asciimath format or convert)
@@ -7471,12 +7536,16 @@ class DataManager:
                     # MULTIPLE CHOICE (SINGLE)
                     # ========================================
                     elif step_type == "multiple-choice-single":
-                        options = extract_options(step_lines)
-                        correct_answer = extract_field(step_lines, 'Correct Answer:')
+                        options = extract_options(step_lines_clean)
+                        correct_answer = extract_field(step_lines_clean, 'Correct Answer:')
 
                         if not options:
-                            window.console.warn(f"No options found for MC single question")
+                            add_validation_comment('error', f'Step {step_index + 1}: No options found for multiple-choice-single - skipping step')
                             continue
+
+                        if not correct_answer:
+                            add_validation_comment('warning', f'Step {step_index + 1}: Missing Correct Answer for multiple-choice-single - using A as default')
+                            correct_answer = 'A'
 
                         step_data.update({
                             "options": options,
@@ -7490,12 +7559,16 @@ class DataManager:
                     # MULTIPLE CHOICE (MULTIPLE)
                     # ========================================
                     elif step_type == "multiple-choice-multiple":
-                        options = extract_options(step_lines)
-                        correct_answer_str = extract_field(step_lines, 'Correct Answer:')
+                        options = extract_options(step_lines_clean)
+                        correct_answer_str = extract_field(step_lines_clean, 'Correct Answer:')
 
                         if not options:
-                            window.console.warn(f"No options found for MC multiple question")
+                            add_validation_comment('error', f'Step {step_index + 1}: No options found for multiple-choice-multiple - skipping step')
                             continue
+
+                        if not correct_answer_str:
+                            add_validation_comment('warning', f'Step {step_index + 1}: Missing Correct Answer for multiple-choice-multiple - using A as default')
+                            correct_answer_str = 'A'
 
                         # Parse comma-separated correct answers
                         correct_answers = []
@@ -7516,8 +7589,8 @@ class DataManager:
                     # TRUE/FALSE
                     # ========================================
                     elif step_type == "true-false":
-                        correct_answer_str = extract_field(step_lines, 'Correct Answer:')
-                        explanation = extract_field(step_lines, 'Explanation:')
+                        correct_answer_str = extract_field(step_lines_clean, 'Correct Answer:')
+                        explanation = extract_field(step_lines_clean, 'Explanation:')
 
                         correct_answer = None
                         if correct_answer_str:
@@ -7526,6 +7599,10 @@ class DataManager:
                                 correct_answer = True
                             elif answer_lower == 'false':
                                 correct_answer = False
+
+                        if correct_answer is None:
+                            add_validation_comment('warning', f'Step {step_index + 1}: Missing or invalid Correct Answer for true-false - defaulting to True')
+                            correct_answer = True
 
                         step_data["correct_answer"] = correct_answer
 
@@ -7540,8 +7617,12 @@ class DataManager:
                     # FILL IN THE BLANK
                     # ========================================
                     elif step_type == "fill-blank":
-                        answer_type = extract_field(step_lines, 'Answer Type:')
-                        correct_answer = extract_field(step_lines, 'Correct Answer:')
+                        answer_type = extract_field(step_lines_clean, 'Answer Type:')
+                        correct_answer = extract_field(step_lines_clean, 'Correct Answer:')
+
+                        if not correct_answer:
+                            add_validation_comment('error', f'Step {step_index + 1}: Missing Correct Answer for fill-blank - skipping step')
+                            continue
 
                         # Default to math if not specified
                         if not answer_type:
@@ -7563,7 +7644,7 @@ class DataManager:
                                 correct_answers.append({"value": correct_answer.strip(), "display": correct_answer.strip()})
 
                         # Check for alternative answers
-                        alt_answer = extract_field(step_lines, 'Alternative Answer:')
+                        alt_answer = extract_field(step_lines_clean, 'Alternative Answer:')
                         if alt_answer:
                             if answer_type == "math":
                                 value = convert_math_to_latex(alt_answer)
@@ -7599,6 +7680,10 @@ class DataManager:
 
                 problems.append(problem_data)
 
+            # Show validation results if there were any issues
+            if self.validation_issues:
+                self._show_validation_popup(text, problems)
+
             return {
                 "problems": problems,
                 "problem_set_description": "",
@@ -7625,6 +7710,294 @@ class DataManager:
                 )
             else:
                 raise Exception(f"Failed to parse text format: {e}")
+
+    def _show_validation_popup(self, original_text, parsed_problems):
+        """Show validation results and formatted text with syntax highlighting"""
+        # Ensure highlight.js is loaded
+        self._ensure_highlightjs_loaded()
+
+        # Create backdrop
+        backdrop = document.createElement("div")
+        backdrop.style.cssText = (
+            "position:fixed;top:0;left:0;right:0;bottom:0;"
+            "background:rgba(0,0,0,0.7);z-index:2000;"
+            "display:flex;align-items:center;justify-content:center;"
+        )
+
+        # Create modal
+        modal = document.createElement("div")
+        modal.style.cssText = (
+            "background:#fff;border-radius:12px;padding:24px;"
+            "max-width:1000px;width:95%;max-height:90vh;overflow-y:auto;"
+            "box-shadow:0 20px 60px rgba(0,0,0,0.4);"
+        )
+
+        # Count issues by type
+        errors = [i for i in self.validation_issues if i['type'] == 'error']
+        warnings = [i for i in self.validation_issues if i['type'] == 'warning']
+
+        # Build summary HTML
+        summary_html = f"""
+        <div style='margin-bottom:20px;'>
+            <h3 style='margin:0 0 12px 0;color:#0b6efd;'>📋 Import Validation Results</h3>
+            <div style='padding:12px;background:#f0f9ff;border-radius:8px;border-left:4px solid #0b6efd;'>
+                <div style='font-size:14px;'>
+                    <strong>Import Summary:</strong><br>
+                    ✅ Parsed: {len(parsed_problems)} problem(s)<br>
+                    {'⚠️ Warnings: ' + str(len(warnings)) + '<br>' if warnings else ''}
+                    {'❌ Errors: ' + str(len(errors)) + ' (auto-fixed)<br>' if errors else ''}
+                    {'' if errors or warnings else '✨ No issues found!'}
+                </div>
+            </div>
+        </div>
+        """
+
+        # Build issue list HTML if there are issues
+        issues_html = ""
+        if self.validation_issues:
+            issues_html = "<div style='margin-bottom:20px;'><h4 style='margin:0 0 8px 0;'>Issues Found:</h4><ul style='margin:0;padding-left:20px;'>"
+            for issue in self.validation_issues:
+                icon = "❌" if issue['type'] == 'error' else "⚠️"
+                issues_html += f"<li style='margin-bottom:4px;'>{icon} {issue['message']}</li>"
+            issues_html += "</ul></div>"
+
+        # Reconstruct formatted text with comments
+        formatted_with_comments = self._reconstruct_text_with_comments(original_text)
+
+        # Escape HTML in formatted text
+        escaped_text = formatted_with_comments.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+        modal.innerHTML = f"""
+            {summary_html}
+            {issues_html}
+            <div style='margin-bottom:12px;'>
+                <h4 style='margin:0 0 8px 0;'>Formatted Text with Auto-Fix Comments:</h4>
+                <div style='display:flex;gap:8px;margin-bottom:8px;'>
+                    <button id='copyFormattedBtn' style='
+                        padding:8px 16px;background:#10b981;color:white;border:none;
+                        border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;
+                    '>📋 Copy to Clipboard</button>
+                    <button id='downloadFormattedBtn' style='
+                        padding:8px 16px;background:#3b82f6;color:white;border:none;
+                        border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;
+                    '>💾 Download as .txt</button>
+                    <button id='toggleViewBtn' style='
+                        padding:8px 16px;background:#8b5cf6;color:white;border:none;
+                        border-radius:6px;cursor:pointer;font-weight:600;font-size:13px;
+                    '>🎨 Toggle Highlighting</button>
+                </div>
+                <div id='codeViewContainer' style='
+                    max-height:500px;overflow:auto;
+                    border:2px solid #e6eef8;border-radius:8px;
+                    background:#1e1e1e;
+                '>
+                    <pre style='margin:0;'><code id='formattedCode' class='language-markdown' style='
+                        display:block;padding:16px;
+                        font-family:Consolas,Monaco,"Courier New",monospace;
+                        font-size:13px;line-height:1.6;
+                        color:#d4d4d4;
+                    '>{escaped_text}</code></pre>
+                </div>
+                <textarea id='formattedTextArea' style='
+                    width:100%;height:400px;padding:12px;display:none;
+                    font-family:Consolas,Monaco,"Courier New",monospace;font-size:13px;
+                    border:2px solid #e6eef8;border-radius:8px;
+                    background:#f8fafc;resize:vertical;
+                '>{formatted_with_comments}</textarea>
+            </div>
+            <div style='display:flex;justify-content:flex-end;gap:8px;margin-top:16px;'>
+                <button id='closeValidationBtn' class='btn'>Close</button>
+            </div>
+        """
+
+        backdrop.appendChild(modal)
+        document.body.appendChild(backdrop)
+
+        # Get elements
+        copy_btn = modal.querySelector("#copyFormattedBtn")
+        download_btn = modal.querySelector("#downloadFormattedBtn")
+        toggle_btn = modal.querySelector("#toggleViewBtn")
+        close_btn = modal.querySelector("#closeValidationBtn")
+        text_area = modal.querySelector("#formattedTextArea")
+        code_container = modal.querySelector("#codeViewContainer")
+        code_element = modal.querySelector("#formattedCode")
+
+        # Apply syntax highlighting
+        self._apply_syntax_highlighting(code_element)
+
+        def close_popup():
+            backdrop.remove()
+
+        def copy_text():
+            # Create a temporary textarea to copy from
+            temp_textarea = document.createElement('textarea')
+            temp_textarea.value = formatted_with_comments
+            temp_textarea.style.position = 'fixed'
+            temp_textarea.style.opacity = '0'
+            document.body.appendChild(temp_textarea)
+            temp_textarea.select()
+            document.execCommand('copy')
+            document.body.removeChild(temp_textarea)
+
+            copy_btn.textContent = "✅ Copied!"
+            copy_btn.style.background = "#059669"
+            window.setTimeout(create_proxy(lambda: (
+                setattr(copy_btn, 'textContent', '📋 Copy to Clipboard'),
+                setattr(copy_btn.style, 'background', '#10b981')
+            )), 1500)
+
+        def download_text():
+            from js import Blob, URL
+            blob = Blob.new([formatted_with_comments], {"type": "text/plain"})
+            url = URL.createObjectURL(blob)
+            a = document.createElement("a")
+            a.href = url
+            a.download = f"formatted_problems_with_fixes.txt"
+            a.click()
+            a.remove()
+            window.setTimeout(create_proxy(lambda: URL.revokeObjectURL(url)), 1000)
+
+        def toggle_view():
+            if code_container.style.display == 'none':
+                # Show code view
+                code_container.style.display = 'block'
+                text_area.style.display = 'none'
+                toggle_btn.textContent = "📝 Plain Text View"
+            else:
+                # Show text area
+                code_container.style.display = 'none'
+                text_area.style.display = 'block'
+                toggle_btn.textContent = "🎨 Highlighted View"
+
+        copy_btn.addEventListener("click", create_proxy(lambda e: copy_text()))
+        download_btn.addEventListener("click", create_proxy(lambda e: download_text()))
+        toggle_btn.addEventListener("click", create_proxy(lambda e: toggle_view()))
+        close_btn.addEventListener("click", create_proxy(lambda e: close_popup()))
+        backdrop.addEventListener("click", create_proxy(lambda e: close_popup() if e.target == backdrop else None))
+
+    def _reconstruct_text_with_comments(self, original_text):
+        """Reconstruct the formatted text with validation comments added"""
+        # For now, just return the original text with validation comments prepended
+        # In a full implementation, you'd insert comments at the appropriate locations
+        comments_section = "\n".join(self.fixed_text_lines)
+        if comments_section:
+            return f"{comments_section}\n\n{original_text}"
+        return original_text
+
+    def _ensure_highlightjs_loaded(self):
+        """Ensure highlight.js is loaded for syntax highlighting"""
+        js_code = """
+        (function() {
+            // Check if highlight.js is already loaded
+            if (window.hljs) {
+                return true;
+            }
+
+            // Load highlight.js CSS (VS Code Dark Theme)
+            if (!document.getElementById('highlightjs-css')) {
+                const link = document.createElement('link');
+                link.id = 'highlightjs-css';
+                link.rel = 'stylesheet';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/vs2015.min.css';
+                document.head.appendChild(link);
+            }
+
+            // Load highlight.js script
+            if (!document.getElementById('highlightjs-script')) {
+                const script = document.createElement('script');
+                script.id = 'highlightjs-script';
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js';
+                document.head.appendChild(script);
+            }
+
+            return false;
+        })();
+        """
+        window.eval(js_code)
+
+    def _apply_syntax_highlighting(self, code_element):
+        """Apply syntax highlighting to a code element"""
+        js_code = """
+        (function(element) {
+            // Define custom highlighting for problem set format
+            const customLanguage = {
+                contains: [
+                    // Comments (// AUTO-FIX:, //)
+                    {
+                        className: 'comment',
+                        begin: '//',
+                        end: '$',
+                        relevance: 10
+                    },
+                    // Problem and Step delimiters
+                    {
+                        className: 'section',
+                        begin: '^###',
+                        end: '$',
+                        relevance: 10
+                    },
+                    {
+                        className: 'section',
+                        begin: '^#$',
+                        relevance: 10
+                    },
+                    // Field labels
+                    {
+                        className: 'attr',
+                        begin: '^(Problem Title|Problem Description|Step Description|Step Type|Step Expression|Step Expected|Option [A-H]|Correct Answer|Must Be Correct|Answer Type|Alternative Answer):',
+                        relevance: 10
+                    },
+                    // Math expressions in backticks
+                    {
+                        className: 'string',
+                        begin: '`',
+                        end: '`',
+                        relevance: 5
+                    },
+                    // Step types
+                    {
+                        className: 'keyword',
+                        begin: '\\b(step-by-step|multiple-choice-single|multiple-choice-multiple|true-false|fill-blank)\\b',
+                        relevance: 5
+                    },
+                    // Boolean values
+                    {
+                        className: 'literal',
+                        begin: '\\b(true|false|True|False)\\b',
+                        relevance: 5
+                    }
+                ]
+            };
+
+            // Wait for hljs to be loaded
+            function applyHighlighting(attempts) {
+                if (attempts > 50) {
+                    console.warn('Highlight.js not loaded, using plain text');
+                    return;
+                }
+
+                if (typeof hljs !== 'undefined') {
+                    // Register custom language
+                    hljs.registerLanguage('problemset', function() {
+                        return customLanguage;
+                    });
+
+                    // Apply highlighting
+                    element.className = 'language-problemset';
+                    hljs.highlightElement(element);
+                    console.log('✓ Syntax highlighting applied');
+                } else {
+                    setTimeout(function() {
+                        applyHighlighting(attempts + 1);
+                    }, 100);
+                }
+            }
+
+            applyHighlighting(0);
+        })(arguments[0]);
+        """
+        window.eval(js_code)(code_element)
+
     def _import_problem_data(self, data):
         if isinstance(data, dict) and "problems" in data:
             problems = data["problems"]
