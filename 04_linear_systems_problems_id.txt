@@ -1,772 +1,772 @@
-###Judul Soal: Konsep Dasar - Apa Itu Persamaan Linear?
-Deskripsi Soal: Pahami definisi persamaan linear dan karakteristiknya
+###Problem Title: Konsep Dasar - Apa Itu Persamaan Linear?
+Problem Description: Pahami definisi persamaan linear dan karakteristiknya
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi persamaan linear
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Persamaan linear adalah:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Definisi persamaan linear
+Step Type: multiple-choice-single
+Question: Persamaan linear adalah:
+Options:
   A) Persamaan yang variabelnya hanya berpangkat 1 dan tidak ada perkalian antar variabel
   B) Persamaan yang mengandung variabel berpangkat 2
   C) Persamaan yang selalu menghasilkan garis lurus vertikal
   D) Persamaan yang tidak memiliki solusi
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Pilihan Ganda - Berganda]: Contoh persamaan linear
-Tipe Langkah: multiple-choice-multiple
-Pertanyaan: Pilih semua yang merupakan persamaan linear:
-Pilihan:
+#Step 2 [Pilihan Ganda - Berganda]: Contoh persamaan linear
+Step Type: multiple-choice-multiple
+Question: Pilih semua yang merupakan persamaan linear:
+Options:
   A) 2x + 3y = 5
   B) x^2 + y = 3
   C) x - 4y + z = 7
   D) xy = 6
-Jawaban Benar: A, C
+Correct Answer: A, C
 
-#Langkah 3 [Benar/Salah]: Bentuk umum
-Tipe Langkah: true-false
-Pertanyaan: Bentuk umum persamaan linear dua variabel adalah ax + by = c di mana a, b, c adalah konstanta
-Jawaban Benar: Benar
+#Step 3 [Benar/Salah]: Bentuk umum
+Step Type: true-false
+Question: Bentuk umum persamaan linear dua variabel adalah ax + by = c di mana a, b, c adalah konstanta
+Correct Answer: Benar
 
-#Langkah 4 [Pilihan Ganda - Tunggal]: Geometri persamaan linear
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Secara geometris, persamaan linear dengan 2 variabel (x,y) merepresentasikan:
-Pilihan:
+#Step 4 [Pilihan Ganda - Tunggal]: Geometri persamaan linear
+Step Type: multiple-choice-single
+Question: Secara geometris, persamaan linear dengan 2 variabel (x,y) merepresentasikan:
+Options:
   A) Garis lurus di bidang 2D
   B) Lingkaran
   C) Parabola
   D) Titik tunggal
-Jawaban Benar: A
+Correct Answer: A
 
 
-###Judul Soal: Sistem Persamaan Linear - Definisi dan Konsep
-Deskripsi Soal: Pahami apa itu sistem persamaan linear dan komponen-komponennya
+###Problem Title: Sistem Persamaan Linear - Definisi dan Konsep
+Problem Description: Pahami apa itu sistem persamaan linear dan komponen-komponennya
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Apa itu sistem persamaan linear?
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem persamaan linear adalah:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Apa itu sistem persamaan linear?
+Step Type: multiple-choice-single
+Question: Sistem persamaan linear adalah:
+Options:
   A) Kumpulan dua atau lebih persamaan linear yang melibatkan variabel-variabel yang sama
   B) Satu persamaan dengan banyak variabel
   C) Kumpulan persamaan non-linear
   D) Hanya berlaku untuk dua persamaan saja
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Pilihan Ganda - Tunggal]: Notasi sistem
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem persamaan {x + y = 5, x - y = 1} memiliki:
-Pilihan:
+#Step 2 [Pilihan Ganda - Tunggal]: Notasi sistem
+Step Type: multiple-choice-single
+Question: Sistem persamaan {x + y = 5, x - y = 1} memiliki:
+Options:
   A) 2 persamaan dengan 2 variabel (x dan y)
   B) 1 persamaan dengan 2 variabel
   C) 2 persamaan dengan 1 variabel
   D) 4 persamaan
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 3 [Benar/Salah]: Tujuan sistem
-Tipe Langkah: true-false
-Pertanyaan: Tujuan menyelesaikan sistem persamaan linear adalah mencari nilai variabel yang memenuhi semua persamaan sekaligus
-Jawaban Benar: Benar
+#Step 3 [Benar/Salah]: Tujuan sistem
+Step Type: true-false
+Question: Tujuan menyelesaikan sistem persamaan linear adalah mencari nilai variabel yang memenuhi semua persamaan sekaligus
+Correct Answer: Benar
 
-#Langkah 4 [Pilihan Ganda - Tunggal]: Geometri sistem 2x2
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Secara geometris, solusi sistem 2 persamaan linear dengan 2 variabel adalah:
-Pilihan:
+#Step 4 [Pilihan Ganda - Tunggal]: Geometri sistem 2x2
+Step Type: multiple-choice-single
+Question: Secara geometris, solusi sistem 2 persamaan linear dengan 2 variabel adalah:
+Options:
   A) Titik perpotongan dua garis
   B) Dua garis sejajar
   C) Seluruh bidang
   D) Tidak ada hubungan geometris
-Jawaban Benar: A
+Correct Answer: A
 
 
-###Judul Soal: Solusi Sistem - Apa Itu Solusi?
-Deskripsi Soal: Pahami konsep solusi dan jenis-jenis kemungkinan solusi sistem
+###Problem Title: Solusi Sistem - Apa Itu Solusi?
+Problem Description: Pahami konsep solusi dan jenis-jenis kemungkinan solusi sistem
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi solusi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Solusi dari sistem persamaan linear adalah:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Definisi solusi
+Step Type: multiple-choice-single
+Question: Solusi dari sistem persamaan linear adalah:
+Options:
   A) Nilai-nilai variabel yang memenuhi semua persamaan dalam sistem
   B) Nilai variabel dari persamaan pertama saja
   C) Jumlah semua koefisien
   D) Selalu berupa bilangan bulat
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Pilihan Ganda - Tunggal]: Verifikasi solusi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Untuk memverifikasi (x,y) = (3,2) adalah solusi dari {x+y=5, x-y=1}, kita harus:
-Pilihan:
+#Step 2 [Pilihan Ganda - Tunggal]: Verifikasi solusi
+Step Type: multiple-choice-single
+Question: Untuk memverifikasi (x,y) = (3,2) adalah solusi dari {x+y=5, x-y=1}, kita harus:
+Options:
   A) Substitusi x=3 dan y=2 ke kedua persamaan dan periksa apakah kedua persamaan terpenuhi
   B) Hanya periksa persamaan pertama
   C) Hanya periksa persamaan kedua
   D) Kalikan kedua persamaan
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 3 [Pilihan Ganda - Tunggal]: Kemungkinan jumlah solusi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem persamaan linear dapat memiliki:
-Pilihan:
+#Step 3 [Pilihan Ganda - Tunggal]: Kemungkinan jumlah solusi
+Step Type: multiple-choice-single
+Question: Sistem persamaan linear dapat memiliki:
+Options:
   A) Tepat satu solusi, tak hingga solusi, atau tidak ada solusi
   B) Hanya tepat satu solusi
   C) Selalu tak hingga solusi
   D) Maksimal 3 solusi
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 4 [Benar/Salah]: Solusi unik
-Tipe Langkah: true-false
-Pertanyaan: Jika dua garis berpotongan di satu titik, sistem memiliki solusi unik (tepat satu solusi)
-Jawaban Benar: Benar
+#Step 4 [Benar/Salah]: Solusi unik
+Step Type: true-false
+Question: Jika dua garis berpotongan di satu titik, sistem memiliki solusi unik (tepat satu solusi)
+Correct Answer: Benar
 
 
-###Judul Soal: Filosofi Sistem Linear - Mengapa Mempelajari Sistem Persamaan Linear?
-Deskripsi Soal: Pahami pentingnya sistem persamaan linear dalam aplikasi nyata
+###Problem Title: Filosofi Sistem Linear - Mengapa Mempelajari Sistem Persamaan Linear?
+Problem Description: Pahami pentingnya sistem persamaan linear dalam aplikasi nyata
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Kegunaan sistem linear
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Mengapa sistem persamaan linear penting dalam dunia nyata?
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Kegunaan sistem linear
+Step Type: multiple-choice-single
+Question: Mengapa sistem persamaan linear penting dalam dunia nyata?
+Options:
   A) Banyak masalah praktis (ekonomi, teknik, sains) dapat dimodelkan sebagai sistem persamaan linear
   B) Sistem linear hanya untuk matematika teoritis
   C) Tidak ada aplikasi praktis
   D) Hanya untuk menghitung luas dan volume
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Pilihan Ganda - Berganda]: Aplikasi sistem linear
-Tipe Langkah: multiple-choice-multiple
-Pertanyaan: Di bidang mana sistem persamaan linear digunakan?
-Pilihan:
+#Step 2 [Pilihan Ganda - Berganda]: Aplikasi sistem linear
+Step Type: multiple-choice-multiple
+Question: Di bidang mana sistem persamaan linear digunakan?
+Options:
   A) Ekonomi (keseimbangan pasar, optimasi produksi)
   B) Teknik sipil (analisis struktur, arus lalu lintas)
   C) Ilmu komputer (computer graphics, machine learning)
   D) Hanya dalam matematika murni
-Jawaban Benar: A, B, C
+Correct Answer: A, B, C
 
-#Langkah 3 [Benar/Salah]: Sistem dan komputer
-Tipe Langkah: true-false
-Pertanyaan: Sistem persamaan linear yang besar (ribuan variabel) dapat diselesaikan secara efisien menggunakan komputer
-Jawaban Benar: Benar
+#Step 3 [Benar/Salah]: Sistem dan komputer
+Step Type: true-false
+Question: Sistem persamaan linear yang besar (ribuan variabel) dapat diselesaikan secara efisien menggunakan komputer
+Correct Answer: Benar
 
-#Langkah 4 [Pilihan Ganda - Tunggal]: Metode penyelesaian
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Mengapa kita mempelajari berbagai metode untuk menyelesaikan sistem linear?
-Pilihan:
+#Step 4 [Pilihan Ganda - Tunggal]: Metode penyelesaian
+Step Type: multiple-choice-single
+Question: Mengapa kita mempelajari berbagai metode untuk menyelesaikan sistem linear?
+Options:
   A) Metode yang berbeda cocok untuk masalah berbeda; beberapa lebih efisien untuk kasus tertentu
   B) Hanya untuk membuat pelajaran lebih sulit
   C) Semua metode memberikan hasil berbeda
   D) Tidak ada alasan khusus
-Jawaban Benar: A
+Correct Answer: A
 
 
-###Judul Soal: Sistem Linear 2x2 - Metode Substitusi Sederhana
-Deskripsi Soal: Selesaikan sistem persamaan x + y = 5 dan x - y = 1 menggunakan metode substitusi
+###Problem Title: Sistem Linear 2x2 - Metode Substitusi Sederhana
+Problem Description: Selesaikan sistem persamaan x + y = 5 dan x - y = 1 menggunakan metode substitusi
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Langkah pertama metode substitusi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Dalam metode substitusi, langkah pertama adalah:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Langkah pertama metode substitusi
+Step Type: multiple-choice-single
+Question: Dalam metode substitusi, langkah pertama adalah:
+Options:
   A) Nyatakan satu variabel dalam bentuk variabel lain dari salah satu persamaan
   B) Jumlahkan kedua persamaan
   C) Kurangkan kedua persamaan
   D) Kalikan kedua persamaan
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Dari persamaan pertama, nyatakan x dalam y
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 5 - y
+#Step 2 [Ekspresi & Jawaban]: Dari persamaan pertama, nyatakan x dalam y
+Step Type: step-by-step
+Expression: x
+Answer: 5 - y
 
-#Langkah 3 [Ekspresi & Jawaban]: Substitusi x = 5 - y ke persamaan kedua
-Tipe Langkah: step-by-step
-Ekspresi: (5 - y) - y
-Jawaban: 1
+#Step 3 [Ekspresi & Jawaban]: Substitusi x = 5 - y ke persamaan kedua
+Step Type: step-by-step
+Expression: (5 - y) - y
+Answer: 1
 
-#Langkah 4 [Ekspresi & Jawaban]: Sederhanakan dan selesaikan untuk y
-Tipe Langkah: step-by-step
-Ekspresi: 5 - 2*y
-Jawaban: 1
+#Step 4 [Ekspresi & Jawaban]: Sederhanakan dan selesaikan untuk y
+Step Type: step-by-step
+Expression: 5 - 2*y
+Answer: 1
 
-#Langkah 5 [Ekspresi & Jawaban]: Hitung nilai y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 2
+#Step 5 [Ekspresi & Jawaban]: Hitung nilai y
+Step Type: step-by-step
+Expression: y
+Answer: 2
 
-#Langkah 6 [Ekspresi & Jawaban]: Substitusi y = 2 ke x = 5 - y
-Tipe Langkah: step-by-step
-Ekspresi: 5 - 2
-Jawaban: 3
+#Step 6 [Ekspresi & Jawaban]: Substitusi y = 2 ke x = 5 - y
+Step Type: step-by-step
+Expression: 5 - 2
+Answer: 3
 
-#Langkah 7 [Ekspresi & Jawaban]: Solusi sistem
-Tipe Langkah: step-by-step
-Ekspresi: [[3,2]]
-Jawaban: [[3,2]]
+#Step 7 [Ekspresi & Jawaban]: Solusi sistem
+Step Type: step-by-step
+Expression: [[3,2]]
+Answer: [[3,2]]
 
 
-###Judul Soal: Sistem Linear 2x2 - Metode Eliminasi
-Deskripsi Soal: Selesaikan sistem persamaan 2x + 3y = 13 dan x + y = 5 menggunakan metode eliminasi
+###Problem Title: Sistem Linear 2x2 - Metode Eliminasi
+Problem Description: Selesaikan sistem persamaan 2x + 3y = 13 dan x + y = 5 menggunakan metode eliminasi
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Tujuan metode eliminasi
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Tujuan metode eliminasi adalah:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Tujuan metode eliminasi
+Step Type: multiple-choice-single
+Question: Tujuan metode eliminasi adalah:
+Options:
   A) Menghilangkan salah satu variabel dengan menjumlahkan atau mengurangkan persamaan
   B) Mengganti variabel dengan ekspresi lain
   C) Mengalikan semua variabel dengan konstanta
   D) Membagi kedua ruas dengan variabel
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 2
-Tipe Langkah: step-by-step
-Ekspresi: 2*(x + y)
-Jawaban: 2*x + 2*y
+#Step 2 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 2
+Step Type: step-by-step
+Expression: 2*(x + y)
+Answer: 2*x + 2*y
 
-#Langkah 3 [Ekspresi & Jawaban]: Hasil persamaan kedua setelah dikali 2
-Tipe Langkah: step-by-step
-Ekspresi: 2*x + 2*y
-Jawaban: 10
+#Step 3 [Ekspresi & Jawaban]: Hasil persamaan kedua setelah dikali 2
+Step Type: step-by-step
+Expression: 2*x + 2*y
+Answer: 10
 
-#Langkah 4 [Ekspresi & Jawaban]: Kurangkan persamaan baru dari persamaan pertama
-Tipe Langkah: step-by-step
-Ekspresi: (2*x + 3*y) - (2*x + 2*y)
-Jawaban: 13 - 10
+#Step 4 [Ekspresi & Jawaban]: Kurangkan persamaan baru dari persamaan pertama
+Step Type: step-by-step
+Expression: (2*x + 3*y) - (2*x + 2*y)
+Answer: 13 - 10
 
-#Langkah 5 [Ekspresi & Jawaban]: Sederhanakan untuk mendapat y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 3
+#Step 5 [Ekspresi & Jawaban]: Sederhanakan untuk mendapat y
+Step Type: step-by-step
+Expression: y
+Answer: 3
 
-#Langkah 6 [Ekspresi & Jawaban]: Substitusi y = 3 ke x + y = 5
-Tipe Langkah: step-by-step
-Ekspresi: x + 3
-Jawaban: 5
+#Step 6 [Ekspresi & Jawaban]: Substitusi y = 3 ke x + y = 5
+Step Type: step-by-step
+Expression: x + 3
+Answer: 5
 
-#Langkah 7 [Ekspresi & Jawaban]: Hitung nilai x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 2
-
-
-###Judul Soal: Sistem Linear 2x2 - Bentuk Matriks
-Deskripsi Soal: Tuliskan sistem 3x + 2y = 7 dan x - y = 1 dalam bentuk matriks augmented
-
-#Langkah 1 [Benar/Salah]: Definisi matriks augmented
-Tipe Langkah: true-false
-Pertanyaan: Matriks augmented menggabungkan matriks koefisien dengan vektor konstanta yang dipisahkan garis vertikal
-Jawaban Benar: Benar
-
-#Langkah 2 [Ekspresi & Jawaban]: Baris pertama matriks augmented
-Tipe Langkah: step-by-step
-Ekspresi: [[3,2,7]]
-Jawaban: [[3,2,7]]
-
-#Langkah 3 [Ekspresi & Jawaban]: Baris kedua matriks augmented
-Tipe Langkah: step-by-step
-Ekspresi: [[1,-1,1]]
-Jawaban: [[1,-1,1]]
-
-#Langkah 4 [Ekspresi & Jawaban]: Matriks augmented lengkap
-Tipe Langkah: step-by-step
-Ekspresi: [[3,2,7],[1,-1,1]]
-Jawaban: [[3,2,7],[1,-1,1]]
+#Step 7 [Ekspresi & Jawaban]: Hitung nilai x
+Step Type: step-by-step
+Expression: x
+Answer: 2
 
 
-###Judul Soal: Sistem Linear 3x3 - Metode Eliminasi Gauss
-Deskripsi Soal: Selesaikan sistem x + y + z = 6, 2x - y + z = 3, dan x + 2y - z = 2 menggunakan eliminasi
+###Problem Title: Sistem Linear 2x2 - Bentuk Matriks
+Problem Description: Tuliskan sistem 3x + 2y = 7 dan x - y = 1 dalam bentuk matriks augmented
 
-#Langkah 1 [Ekspresi & Jawaban]: Bentuk matriks augmented awal
-Tipe Langkah: step-by-step
-Ekspresi: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
-Jawaban: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
+#Step 1 [Benar/Salah]: Definisi matriks augmented
+Step Type: true-false
+Question: Matriks augmented menggabungkan matriks koefisien dengan vektor konstanta yang dipisahkan garis vertikal
+Correct Answer: Benar
 
-#Langkah 2 [Ekspresi & Jawaban]: Eliminasi x dari baris 2
-Tipe Langkah: step-by-step
-Ekspresi: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]|R_2\to R_2-2R_1
-Jawaban: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]
+#Step 2 [Ekspresi & Jawaban]: Baris pertama matriks augmented
+Step Type: step-by-step
+Expression: [[3,2,7]]
+Answer: [[3,2,7]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Eliminasi x dari baris 3
-Tipe Langkah: step-by-step
-Ekspresi: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]|R_3\to R_3-R_1
-Jawaban: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]
+#Step 3 [Ekspresi & Jawaban]: Baris kedua matriks augmented
+Step Type: step-by-step
+Expression: [[1,-1,1]]
+Answer: [[1,-1,1]]
 
-#Langkah 4 [Ekspresi & Jawaban]: Jadikan pivot baris 2 sama dengan 1
-Tipe Langkah: step-by-step
-Ekspresi: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]|R_2\to (-1/3)R_2
-Jawaban: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]
-
-#Langkah 5 [Ekspresi & Jawaban]: Eliminasi y dari baris 3
-Tipe Langkah: step-by-step
-Ekspresi: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]|R_3\to R_3-R_2
-Jawaban: [[1,1,1,6],[0,1,1/3,3],[0,0,-7/3,-7]]
-
-#Langkah 6 [Ekspresi & Jawaban]: Selesaikan untuk z
-Tipe Langkah: step-by-step
-Ekspresi: z
-Jawaban: 3
-
-#Langkah 7 [Ekspresi & Jawaban]: Substitusi z = 3 untuk mendapat y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 2
-
-#Langkah 8 [Ekspresi & Jawaban]: Substitusi y = 2, z = 3 untuk mendapat x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 1
+#Step 4 [Ekspresi & Jawaban]: Matriks augmented lengkap
+Step Type: step-by-step
+Expression: [[3,2,7],[1,-1,1]]
+Answer: [[3,2,7],[1,-1,1]]
 
 
-###Judul Soal: Sistem Tidak Konsisten - Tidak Ada Solusi
-Deskripsi Soal: Tunjukkan bahwa sistem x + y = 3 dan 2x + 2y = 8 tidak memiliki solusi
+###Problem Title: Sistem Linear 3x3 - Metode Eliminasi Gauss
+Problem Description: Selesaikan sistem x + y + z = 6, 2x - y + z = 3, dan x + 2y - z = 2 menggunakan eliminasi
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Ciri sistem tidak konsisten
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem linear tidak konsisten jika:
-Pilihan:
+#Step 1 [Ekspresi & Jawaban]: Bentuk matriks augmented awal
+Step Type: step-by-step
+Expression: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
+Answer: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
+
+#Step 2 [Ekspresi & Jawaban]: Eliminasi x dari baris 2
+Step Type: step-by-step
+Expression: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]|R_2\to R_2-2R_1
+Answer: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]
+
+#Step 3 [Ekspresi & Jawaban]: Eliminasi x dari baris 3
+Step Type: step-by-step
+Expression: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]|R_3\to R_3-R_1
+Answer: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]
+
+#Step 4 [Ekspresi & Jawaban]: Jadikan pivot baris 2 sama dengan 1
+Step Type: step-by-step
+Expression: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]|R_2\to (-1/3)R_2
+Answer: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]
+
+#Step 5 [Ekspresi & Jawaban]: Eliminasi y dari baris 3
+Step Type: step-by-step
+Expression: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]|R_3\to R_3-R_2
+Answer: [[1,1,1,6],[0,1,1/3,3],[0,0,-7/3,-7]]
+
+#Step 6 [Ekspresi & Jawaban]: Selesaikan untuk z
+Step Type: step-by-step
+Expression: z
+Answer: 3
+
+#Step 7 [Ekspresi & Jawaban]: Substitusi z = 3 untuk mendapat y
+Step Type: step-by-step
+Expression: y
+Answer: 2
+
+#Step 8 [Ekspresi & Jawaban]: Substitusi y = 2, z = 3 untuk mendapat x
+Step Type: step-by-step
+Expression: x
+Answer: 1
+
+
+###Problem Title: Sistem Tidak Konsisten - Tidak Ada Solusi
+Problem Description: Tunjukkan bahwa sistem x + y = 3 dan 2x + 2y = 8 tidak memiliki solusi
+
+#Step 1 [Pilihan Ganda - Tunggal]: Ciri sistem tidak konsisten
+Step Type: multiple-choice-single
+Question: Sistem linear tidak konsisten jika:
+Options:
   A) Terdapat baris dengan semua koefisien nol tetapi konstanta tidak nol
   B) Semua variabel bernilai nol
   C) Matriks koefisien singular
   D) Terdapat baris dengan semua elemen nol
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 2
-Tipe Langkah: step-by-step
-Ekspresi: 2*(x + y)
-Jawaban: 2*x + 2*y
+#Step 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 2
+Step Type: step-by-step
+Expression: 2*(x + y)
+Answer: 2*x + 2*y
 
-#Langkah 3 [Ekspresi & Jawaban]: Hasil kali ruas kanan
-Tipe Langkah: step-by-step
-Ekspresi: 2*3
-Jawaban: 6
+#Step 3 [Ekspresi & Jawaban]: Hasil kali ruas kanan
+Step Type: step-by-step
+Expression: 2*3
+Answer: 6
 
-#Langkah 4 [Benar/Salah]: Pertentangan
-Tipe Langkah: true-false
-Pertanyaan: Persamaan 2x + 2y = 6 bertentangan dengan 2x + 2y = 8, sehingga sistem tidak konsisten
-Jawaban Benar: Benar
+#Step 4 [Benar/Salah]: Pertentangan
+Step Type: true-false
+Question: Persamaan 2x + 2y = 6 bertentangan dengan 2x + 2y = 8, sehingga sistem tidak konsisten
+Correct Answer: Benar
 
 
-###Judul Soal: Sistem dengan Infinit Solusi - Sistem Bergantung
-Deskripsi Soal: Tunjukkan bahwa sistem x + 2y = 4 dan 2x + 4y = 8 memiliki infinit banyak solusi
+###Problem Title: Sistem dengan Infinit Solusi - Sistem Bergantung
+Problem Description: Tunjukkan bahwa sistem x + 2y = 4 dan 2x + 4y = 8 memiliki infinit banyak solusi
 
-#Langkah 1 [Ekspresi & Jawaban]: Bentuk matriks augmented
-Tipe Langkah: step-by-step
-Ekspresi: [[1,2,4],[2,4,8]]
-Jawaban: [[1,2,4],[2,4,8]]
+#Step 1 [Ekspresi & Jawaban]: Bentuk matriks augmented
+Step Type: step-by-step
+Expression: [[1,2,4],[2,4,8]]
+Answer: [[1,2,4],[2,4,8]]
 
-#Langkah 2 [Ekspresi & Jawaban]: Eliminasi baris 2
-Tipe Langkah: step-by-step
-Ekspresi: [[1,2,4],[2,4,8]]|R_2\to R_2-2R_1
-Jawaban: [[1,2,4],[0,0,0]]
+#Step 2 [Ekspresi & Jawaban]: Eliminasi baris 2
+Step Type: step-by-step
+Expression: [[1,2,4],[2,4,8]]|R_2\to R_2-2R_1
+Answer: [[1,2,4],[0,0,0]]
 
-#Langkah 3 [Pilihan Ganda - Tunggal]: Interpretasi baris nol
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Baris [[0,0,0]] dalam matriks augmented menunjukkan:
-Pilihan:
+#Step 3 [Pilihan Ganda - Tunggal]: Interpretasi baris nol
+Step Type: multiple-choice-single
+Question: Baris [[0,0,0]] dalam matriks augmented menunjukkan:
+Options:
   A) Persamaan bergantung, sistem memiliki infinit solusi
   B) Sistem tidak konsisten
   C) Solusi unik
   D) Semua variabel bernilai nol
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 4 [Ekspresi & Jawaban]: Nyatakan x dalam parameter t dimana y = t
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 4 - 2*t
+#Step 4 [Ekspresi & Jawaban]: Nyatakan x dalam parameter t dimana y = t
+Step Type: step-by-step
+Expression: x
+Answer: 4 - 2*t
 
 
-###Judul Soal: Sistem Linear dengan Parameter
-Deskripsi Soal: Tentukan nilai k agar sistem x + 2y = 3 dan 2x + ky = 6 memiliki solusi unik
+###Problem Title: Sistem Linear dengan Parameter
+Problem Description: Tentukan nilai k agar sistem x + 2y = 3 dan 2x + ky = 6 memiliki solusi unik
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Syarat solusi unik
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem 2x2 memiliki solusi unik jika:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Syarat solusi unik
+Step Type: multiple-choice-single
+Question: Sistem 2x2 memiliki solusi unik jika:
+Options:
   A) Determinan matriks koefisien tidak nol
   B) Determinan matriks koefisien sama dengan nol
   C) Kedua persamaan identik
   D) Konstanta ruas kanan nol
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Matriks koefisien
-Tipe Langkah: step-by-step
-Ekspresi: [[1,2],[2,k]]
-Jawaban: [[1,2],[2,k]]
+#Step 2 [Ekspresi & Jawaban]: Matriks koefisien
+Step Type: step-by-step
+Expression: [[1,2],[2,k]]
+Answer: [[1,2],[2,k]]
 
-#Langkah 3 [Ekspresi & Jawaban]: Hitung determinan
-Tipe Langkah: step-by-step
-Ekspresi: 1*k - 2*2
-Jawaban: k - 4
+#Step 3 [Ekspresi & Jawaban]: Hitung determinan
+Step Type: step-by-step
+Expression: 1*k - 2*2
+Answer: k - 4
 
-#Langkah 4 [Benar/Salah]: Syarat k
-Tipe Langkah: true-false
-Pertanyaan: Untuk solusi unik, k - 4 ne 0, sehingga k ne 4
-Jawaban Benar: Benar
+#Step 4 [Benar/Salah]: Syarat k
+Step Type: true-false
+Question: Untuk solusi unik, k - 4 ne 0, sehingga k ne 4
+Correct Answer: Benar
 
 
-###Judul Soal: Interpretasi Geometris Sistem 2x2
-Deskripsi Soal: Sistem x + y = 5 dan 2x - y = 4 memiliki solusi (3,2). Interpretasikan secara geometris
+###Problem Title: Interpretasi Geometris Sistem 2x2
+Problem Description: Sistem x + y = 5 dan 2x - y = 4 memiliki solusi (3,2). Interpretasikan secara geometris
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Representasi geometris persamaan linear
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Setiap persamaan linear dalam dua variabel merepresentasikan:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Representasi geometris persamaan linear
+Step Type: multiple-choice-single
+Question: Setiap persamaan linear dalam dua variabel merepresentasikan:
+Options:
   A) Garis lurus di bidang xy
   B) Titik di bidang xy
   C) Lingkaran
   D) Parabola
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Benar/Salah]: Solusi sistem
-Tipe Langkah: true-false
-Pertanyaan: Solusi sistem adalah titik potong kedua garis
-Jawaban Benar: Benar
+#Step 2 [Benar/Salah]: Solusi sistem
+Step Type: true-false
+Question: Solusi sistem adalah titik potong kedua garis
+Correct Answer: Benar
 
-#Langkah 3 [Ekspresi & Jawaban]: Verifikasi solusi di persamaan pertama
-Tipe Langkah: step-by-step
-Ekspresi: 3 + 2
-Jawaban: 5
+#Step 3 [Ekspresi & Jawaban]: Verifikasi solusi di persamaan pertama
+Step Type: step-by-step
+Expression: 3 + 2
+Answer: 5
 
-#Langkah 4 [Ekspresi & Jawaban]: Verifikasi solusi di persamaan kedua
-Tipe Langkah: step-by-step
-Ekspresi: 2*3 - 2
-Jawaban: 4
+#Step 4 [Ekspresi & Jawaban]: Verifikasi solusi di persamaan kedua
+Step Type: step-by-step
+Expression: 2*3 - 2
+Answer: 4
 
 
-###Judul Soal: Sistem Linear Homogen
-Deskripsi Soal: Selesaikan sistem homogen 2x + y = 0 dan x - 3y = 0
+###Problem Title: Sistem Linear Homogen
+Problem Description: Selesaikan sistem homogen 2x + y = 0 dan x - 3y = 0
 
-#Langkah 1 [Benar/Salah]: Definisi sistem homogen
-Tipe Langkah: true-false
-Pertanyaan: Sistem linear homogen adalah sistem dimana semua konstanta ruas kanan bernilai nol
-Jawaban Benar: Benar
+#Step 1 [Benar/Salah]: Definisi sistem homogen
+Step Type: true-false
+Question: Sistem linear homogen adalah sistem dimana semua konstanta ruas kanan bernilai nol
+Correct Answer: Benar
 
-#Langkah 2 [Pilihan Ganda - Tunggal]: Solusi trivial
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem homogen selalu memiliki solusi:
-Pilihan:
+#Step 2 [Pilihan Ganda - Tunggal]: Solusi trivial
+Step Type: multiple-choice-single
+Question: Sistem homogen selalu memiliki solusi:
+Options:
   A) Trivial x = 0, y = 0
   B) x = 1, y = 1
   C) Infinit banyak
   D) Tidak ada solusi
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 3 [Ekspresi & Jawaban]: Dari persamaan kedua, nyatakan x dalam y
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 3*y
+#Step 3 [Ekspresi & Jawaban]: Dari persamaan kedua, nyatakan x dalam y
+Step Type: step-by-step
+Expression: x
+Answer: 3*y
 
-#Langkah 4 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
-Tipe Langkah: step-by-step
-Ekspresi: 2*(3*y) + y
-Jawaban: 0
+#Step 4 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
+Step Type: step-by-step
+Expression: 2*(3*y) + y
+Answer: 0
 
-#Langkah 5 [Ekspresi & Jawaban]: Sederhanakan
-Tipe Langkah: step-by-step
-Ekspresi: 7*y
-Jawaban: 0
+#Step 5 [Ekspresi & Jawaban]: Sederhanakan
+Step Type: step-by-step
+Expression: 7*y
+Answer: 0
 
-#Langkah 6 [Ekspresi & Jawaban]: Solusi y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 0
+#Step 6 [Ekspresi & Jawaban]: Solusi y
+Step Type: step-by-step
+Expression: y
+Answer: 0
 
-#Langkah 7 [Ekspresi & Jawaban]: Solusi x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 0
+#Step 7 [Ekspresi & Jawaban]: Solusi x
+Step Type: step-by-step
+Expression: x
+Answer: 0
 
 
-###Judul Soal: Sistem 2x2 dengan Pecahan
-Deskripsi Soal: Selesaikan sistem (1/2)x + (1/3)y = 2 dan (1/4)x - (1/2)y = -1
+###Problem Title: Sistem 2x2 dengan Pecahan
+Problem Description: Selesaikan sistem (1/2)x + (1/3)y = 2 dan (1/4)x - (1/2)y = -1
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Strategi menghilangkan pecahan
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Untuk menghilangkan pecahan dari persamaan, kita dapat:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Strategi menghilangkan pecahan
+Step Type: multiple-choice-single
+Question: Untuk menghilangkan pecahan dari persamaan, kita dapat:
+Options:
   A) Kalikan dengan KPK dari semua penyebut
   B) Tambahkan semua pecahan
   C) Ubah ke desimal
   D) Abaikan penyebut
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 6
-Tipe Langkah: step-by-step
-Ekspresi: 6*((1/2)*x + (1/3)*y)
-Jawaban: 3*x + 2*y
+#Step 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 6
+Step Type: step-by-step
+Expression: 6*((1/2)*x + (1/3)*y)
+Answer: 3*x + 2*y
 
-#Langkah 3 [Ekspresi & Jawaban]: Hasil ruas kanan pertama
-Tipe Langkah: step-by-step
-Ekspresi: 6*2
-Jawaban: 12
+#Step 3 [Ekspresi & Jawaban]: Hasil ruas kanan pertama
+Step Type: step-by-step
+Expression: 6*2
+Answer: 12
 
-#Langkah 4 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 4
-Tipe Langkah: step-by-step
-Ekspresi: 4*((1/4)*x - (1/2)*y)
-Jawaban: x - 2*y
+#Step 4 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 4
+Step Type: step-by-step
+Expression: 4*((1/4)*x - (1/2)*y)
+Answer: x - 2*y
 
-#Langkah 5 [Ekspresi & Jawaban]: Hasil ruas kanan kedua
-Tipe Langkah: step-by-step
-Ekspresi: 4*(-1)
-Jawaban: -4
+#Step 5 [Ekspresi & Jawaban]: Hasil ruas kanan kedua
+Step Type: step-by-step
+Expression: 4*(-1)
+Answer: -4
 
-#Langkah 6 [Ekspresi & Jawaban]: Sistem baru menjadi 3x + 2y = 12 dan x - 2y = -4, jumlahkan
-Tipe Langkah: step-by-step
-Ekspresi: (3*x + 2*y) + (x - 2*y)
-Jawaban: 12 + (-4)
+#Step 6 [Ekspresi & Jawaban]: Sistem baru menjadi 3x + 2y = 12 dan x - 2y = -4, jumlahkan
+Step Type: step-by-step
+Expression: (3*x + 2*y) + (x - 2*y)
+Answer: 12 + (-4)
 
-#Langkah 7 [Ekspresi & Jawaban]: Selesaikan untuk x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 2
+#Step 7 [Ekspresi & Jawaban]: Selesaikan untuk x
+Step Type: step-by-step
+Expression: x
+Answer: 2
 
-#Langkah 8 [Ekspresi & Jawaban]: Substitusi x = 2 ke x - 2y = -4
-Tipe Langkah: step-by-step
-Ekspresi: 2 - 2*y
-Jawaban: -4
+#Step 8 [Ekspresi & Jawaban]: Substitusi x = 2 ke x - 2y = -4
+Step Type: step-by-step
+Expression: 2 - 2*y
+Answer: -4
 
-#Langkah 9 [Ekspresi & Jawaban]: Selesaikan untuk y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 3
-
-
-###Judul Soal: Aplikasi - Soal Cerita Uang
-Deskripsi Soal: Ana membeli 3 buku dan 2 pensil seharga Rp 23000. Budi membeli 2 buku dan 1 pensil seharga Rp 15000. Tentukan harga satu buku
-
-#Langkah 1 [Isi Titik-Titik]: Definisi variabel
-Tipe Langkah: fill-blank
-Pertanyaan: Misalkan x = harga satu {blank} dan y = harga satu pensil
-Jawaban Benar: buku
-
-#Langkah 2 [Ekspresi & Jawaban]: Persamaan dari informasi Ana
-Tipe Langkah: step-by-step
-Ekspresi: 3*x + 2*y
-Jawaban: 23000
-
-#Langkah 3 [Ekspresi & Jawaban]: Persamaan dari informasi Budi
-Tipe Langkah: step-by-step
-Ekspresi: 2*x + y
-Jawaban: 15000
-
-#Langkah 4 [Ekspresi & Jawaban]: Dari persamaan kedua, nyatakan y dalam x
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 15000 - 2*x
-
-#Langkah 5 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
-Tipe Langkah: step-by-step
-Ekspresi: 3*x + 2*(15000 - 2*x)
-Jawaban: 23000
-
-#Langkah 6 [Ekspresi & Jawaban]: Sederhanakan
-Tipe Langkah: step-by-step
-Ekspresi: 3*x + 30000 - 4*x
-Jawaban: 23000
-
-#Langkah 7 [Ekspresi & Jawaban]: Selesaikan untuk x (harga buku)
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 7000
+#Step 9 [Ekspresi & Jawaban]: Selesaikan untuk y
+Step Type: step-by-step
+Expression: y
+Answer: 3
 
 
-###Judul Soal: Aplikasi - Soal Cerita Campuran
-Deskripsi Soal: Campuran berisi 40% alkohol dicampur dengan campuran 70% alkohol. Jika 6 liter campuran pertama dicampur dengan 4 liter campuran kedua, berapa persen alkohol dalam campuran akhir?
+###Problem Title: Aplikasi - Soal Cerita Uang
+Problem Description: Ana membeli 3 buku dan 2 pensil seharga Rp 23000. Budi membeli 2 buku dan 1 pensil seharga Rp 15000. Tentukan harga satu buku
 
-#Langkah 1 [Ekspresi & Jawaban]: Jumlah alkohol dari campuran pertama
-Tipe Langkah: step-by-step
-Ekspresi: 0.4*6
-Jawaban: 2.4
+#Step 1 [Isi Titik-Titik]: Definisi variabel
+Step Type: fill-blank
+Question: Misalkan x = harga satu {blank} dan y = harga satu pensil
+Correct Answer: buku
 
-#Langkah 2 [Ekspresi & Jawaban]: Jumlah alkohol dari campuran kedua
-Tipe Langkah: step-by-step
-Ekspresi: 0.7*4
-Jawaban: 2.8
+#Step 2 [Ekspresi & Jawaban]: Persamaan dari informasi Ana
+Step Type: step-by-step
+Expression: 3*x + 2*y
+Answer: 23000
 
-#Langkah 3 [Ekspresi & Jawaban]: Total alkohol dalam campuran
-Tipe Langkah: step-by-step
-Ekspresi: 2.4 + 2.8
-Jawaban: 5.2
+#Step 3 [Ekspresi & Jawaban]: Persamaan dari informasi Budi
+Step Type: step-by-step
+Expression: 2*x + y
+Answer: 15000
 
-#Langkah 4 [Ekspresi & Jawaban]: Total volume campuran
-Tipe Langkah: step-by-step
-Ekspresi: 6 + 4
-Jawaban: 10
+#Step 4 [Ekspresi & Jawaban]: Dari persamaan kedua, nyatakan y dalam x
+Step Type: step-by-step
+Expression: y
+Answer: 15000 - 2*x
 
-#Langkah 5 [Ekspresi & Jawaban]: Persentase alkohol dalam campuran akhir
-Tipe Langkah: step-by-step
-Ekspresi: (5.2/10)*100
-Jawaban: 52
+#Step 5 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
+Step Type: step-by-step
+Expression: 3*x + 2*(15000 - 2*x)
+Answer: 23000
+
+#Step 6 [Ekspresi & Jawaban]: Sederhanakan
+Step Type: step-by-step
+Expression: 3*x + 30000 - 4*x
+Answer: 23000
+
+#Step 7 [Ekspresi & Jawaban]: Selesaikan untuk x (harga buku)
+Step Type: step-by-step
+Expression: x
+Answer: 7000
 
 
-###Judul Soal: Sistem 3x3 dengan Variabel Bebas
-Deskripsi Soal: Selesaikan sistem x + 2y + z = 4 dan 2x + 4y + 2z = 8
+###Problem Title: Aplikasi - Soal Cerita Campuran
+Problem Description: Campuran berisi 40% alkohol dicampur dengan campuran 70% alkohol. Jika 6 liter campuran pertama dicampur dengan 4 liter campuran kedua, berapa persen alkohol dalam campuran akhir?
 
-#Langkah 1 [Ekspresi & Jawaban]: Bentuk matriks augmented
-Tipe Langkah: step-by-step
-Ekspresi: [[1,2,1,4],[2,4,2,8]]
-Jawaban: [[1,2,1,4],[2,4,2,8]]
+#Step 1 [Ekspresi & Jawaban]: Jumlah alkohol dari campuran pertama
+Step Type: step-by-step
+Expression: 0.4*6
+Answer: 2.4
 
-#Langkah 2 [Ekspresi & Jawaban]: Eliminasi baris 2
-Tipe Langkah: step-by-step
-Ekspresi: [[1,2,1,4],[2,4,2,8]]|R_2\to R_2-2R_1
-Jawaban: [[1,2,1,4],[0,0,0,0]]
+#Step 2 [Ekspresi & Jawaban]: Jumlah alkohol dari campuran kedua
+Step Type: step-by-step
+Expression: 0.7*4
+Answer: 2.8
 
-#Langkah 3 [Pilihan Ganda - Tunggal]: Jumlah variabel bebas
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Sistem memiliki 3 variabel tetapi hanya 1 persamaan independen, sehingga jumlah variabel bebas adalah:
-Pilihan:
+#Step 3 [Ekspresi & Jawaban]: Total alkohol dalam campuran
+Step Type: step-by-step
+Expression: 2.4 + 2.8
+Answer: 5.2
+
+#Step 4 [Ekspresi & Jawaban]: Total volume campuran
+Step Type: step-by-step
+Expression: 6 + 4
+Answer: 10
+
+#Step 5 [Ekspresi & Jawaban]: Persentase alkohol dalam campuran akhir
+Step Type: step-by-step
+Expression: (5.2/10)*100
+Answer: 52
+
+
+###Problem Title: Sistem 3x3 dengan Variabel Bebas
+Problem Description: Selesaikan sistem x + 2y + z = 4 dan 2x + 4y + 2z = 8
+
+#Step 1 [Ekspresi & Jawaban]: Bentuk matriks augmented
+Step Type: step-by-step
+Expression: [[1,2,1,4],[2,4,2,8]]
+Answer: [[1,2,1,4],[2,4,2,8]]
+
+#Step 2 [Ekspresi & Jawaban]: Eliminasi baris 2
+Step Type: step-by-step
+Expression: [[1,2,1,4],[2,4,2,8]]|R_2\to R_2-2R_1
+Answer: [[1,2,1,4],[0,0,0,0]]
+
+#Step 3 [Pilihan Ganda - Tunggal]: Jumlah variabel bebas
+Step Type: multiple-choice-single
+Question: Sistem memiliki 3 variabel tetapi hanya 1 persamaan independen, sehingga jumlah variabel bebas adalah:
+Options:
   A) 2
   B) 1
   C) 0
   D) 3
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 4 [Ekspresi & Jawaban]: Misalkan y = s dan z = t, nyatakan x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 4 - 2*s - t
+#Step 4 [Ekspresi & Jawaban]: Misalkan y = s dan z = t, nyatakan x
+Step Type: step-by-step
+Expression: x
+Answer: 4 - 2*s - t
 
 
-###Judul Soal: Identifikasi Jenis Sistem
-Deskripsi Soal: Tanpa menyelesaikan, tentukan apakah sistem x + y = 2, 2x + 2y = 4, dan 3x + 3y = 6 konsisten atau tidak
+###Problem Title: Identifikasi Jenis Sistem
+Problem Description: Tanpa menyelesaikan, tentukan apakah sistem x + y = 2, 2x + 2y = 4, dan 3x + 3y = 6 konsisten atau tidak
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Observasi persamaan
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Perhatikan bahwa persamaan kedua adalah kelipatan dari persamaan pertama. Ini menunjukkan:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Observasi persamaan
+Step Type: multiple-choice-single
+Question: Perhatikan bahwa persamaan kedua adalah kelipatan dari persamaan pertama. Ini menunjukkan:
+Options:
   A) Persamaan bergantung (dependent)
   B) Persamaan tidak konsisten
   C) Solusi unik
   D) Tidak ada pola
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Benar/Salah]: Konsistensi sistem
-Tipe Langkah: true-false
-Pertanyaan: Karena semua persamaan merepresentasikan garis yang sama, sistem konsisten dengan infinit banyak solusi
-Jawaban Benar: Benar
+#Step 2 [Benar/Salah]: Konsistensi sistem
+Step Type: true-false
+Question: Karena semua persamaan merepresentasikan garis yang sama, sistem konsisten dengan infinit banyak solusi
+Correct Answer: Benar
 
 
-###Judul Soal: Sistem dengan Koefisien Besar
-Deskripsi Soal: Selesaikan sistem 5x + 3y = 31 dan 7x - 2y = 20
+###Problem Title: Sistem dengan Koefisien Besar
+Problem Description: Selesaikan sistem 5x + 3y = 31 dan 7x - 2y = 20
 
-#Langkah 1 [Pilihan Ganda - Tunggal]: Strategi eliminasi terbaik
-Tipe Langkah: multiple-choice-single
-Pertanyaan: Untuk mengeliminasi y, kita dapat:
-Pilihan:
+#Step 1 [Pilihan Ganda - Tunggal]: Strategi eliminasi terbaik
+Step Type: multiple-choice-single
+Question: Untuk mengeliminasi y, kita dapat:
+Options:
   A) Kalikan persamaan pertama dengan 2 dan persamaan kedua dengan 3
   B) Kalikan persamaan pertama dengan 7 dan persamaan kedua dengan 5
   C) Langsung jumlahkan persamaan
   D) Kalikan kedua persamaan dengan 10
-Jawaban Benar: A
+Correct Answer: A
 
-#Langkah 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 2
-Tipe Langkah: step-by-step
-Ekspresi: 2*(5*x + 3*y)
-Jawaban: 10*x + 6*y
+#Step 2 [Ekspresi & Jawaban]: Kalikan persamaan pertama dengan 2
+Step Type: step-by-step
+Expression: 2*(5*x + 3*y)
+Answer: 10*x + 6*y
 
-#Langkah 3 [Ekspresi & Jawaban]: Ruas kanan setelah dikali 2
-Tipe Langkah: step-by-step
-Ekspresi: 2*31
-Jawaban: 62
+#Step 3 [Ekspresi & Jawaban]: Ruas kanan setelah dikali 2
+Step Type: step-by-step
+Expression: 2*31
+Answer: 62
 
-#Langkah 4 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 3
-Tipe Langkah: step-by-step
-Ekspresi: 3*(7*x - 2*y)
-Jawaban: 21*x - 6*y
+#Step 4 [Ekspresi & Jawaban]: Kalikan persamaan kedua dengan 3
+Step Type: step-by-step
+Expression: 3*(7*x - 2*y)
+Answer: 21*x - 6*y
 
-#Langkah 5 [Ekspresi & Jawaban]: Ruas kanan setelah dikali 3
-Tipe Langkah: step-by-step
-Ekspresi: 3*20
-Jawaban: 60
+#Step 5 [Ekspresi & Jawaban]: Ruas kanan setelah dikali 3
+Step Type: step-by-step
+Expression: 3*20
+Answer: 60
 
-#Langkah 6 [Ekspresi & Jawaban]: Jumlahkan kedua persamaan baru
-Tipe Langkah: step-by-step
-Ekspresi: (10*x + 6*y) + (21*x - 6*y)
-Jawaban: 62 + 60
+#Step 6 [Ekspresi & Jawaban]: Jumlahkan kedua persamaan baru
+Step Type: step-by-step
+Expression: (10*x + 6*y) + (21*x - 6*y)
+Answer: 62 + 60
 
-#Langkah 7 [Ekspresi & Jawaban]: Sederhanakan untuk x
-Tipe Langkah: step-by-step
-Ekspresi: 31*x
-Jawaban: 122
+#Step 7 [Ekspresi & Jawaban]: Sederhanakan untuk x
+Step Type: step-by-step
+Expression: 31*x
+Answer: 122
 
-#Langkah 8 [Ekspresi & Jawaban]: Hitung nilai x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 122/31
+#Step 8 [Ekspresi & Jawaban]: Hitung nilai x
+Step Type: step-by-step
+Expression: x
+Answer: 122/31
 
-#Langkah 9 [Ekspresi & Jawaban]: Sederhanakan x
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 4
+#Step 9 [Ekspresi & Jawaban]: Sederhanakan x
+Step Type: step-by-step
+Expression: x
+Answer: 4
 
-#Langkah 10 [Ekspresi & Jawaban]: Substitusi x = 4 ke 5x + 3y = 31
-Tipe Langkah: step-by-step
-Ekspresi: 5*4 + 3*y
-Jawaban: 31
+#Step 10 [Ekspresi & Jawaban]: Substitusi x = 4 ke 5x + 3y = 31
+Step Type: step-by-step
+Expression: 5*4 + 3*y
+Answer: 31
 
-#Langkah 11 [Ekspresi & Jawaban]: Selesaikan untuk y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: (31-20)/3
+#Step 11 [Ekspresi & Jawaban]: Selesaikan untuk y
+Step Type: step-by-step
+Expression: y
+Answer: (31-20)/3
 
-#Langkah 12 [Ekspresi & Jawaban]: Hitung nilai y
-Tipe Langkah: step-by-step
-Ekspresi: y
-Jawaban: 11/3
-
-
-###Judul Soal: Verifikasi Solusi Sistem
-Deskripsi Soal: Periksa apakah (2,1,3) adalah solusi dari sistem x + y + z = 6, 2x - y = 3, dan x + 2z = 8
-
-#Langkah 1 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
-Tipe Langkah: step-by-step
-Ekspresi: 2 + 1 + 3
-Jawaban: 6
-
-#Langkah 2 [Benar/Salah]: Persamaan pertama terpenuhi
-Tipe Langkah: true-false
-Pertanyaan: Karena 2 + 1 + 3 = 6, persamaan pertama terpenuhi
-Jawaban Benar: Benar
-
-#Langkah 3 [Ekspresi & Jawaban]: Substitusi ke persamaan kedua
-Tipe Langkah: step-by-step
-Ekspresi: 2*2 - 1
-Jawaban: 3
-
-#Langkah 4 [Benar/Salah]: Persamaan kedua terpenuhi
-Tipe Langkah: true-false
-Pertanyaan: Karena 2(2) - 1 = 3, persamaan kedua terpenuhi
-Jawaban Benar: Benar
-
-#Langkah 5 [Ekspresi & Jawaban]: Substitusi ke persamaan ketiga
-Tipe Langkah: step-by-step
-Ekspresi: 2 + 2*3
-Jawaban: 8
-
-#Langkah 6 [Benar/Salah]: Kesimpulan
-Tipe Langkah: true-false
-Pertanyaan: Karena semua persamaan terpenuhi, (2,1,3) adalah solusi sistem
-Jawaban Benar: Benar
+#Step 12 [Ekspresi & Jawaban]: Hitung nilai y
+Step Type: step-by-step
+Expression: y
+Answer: 11/3
 
 
-###Judul Soal: Sistem Linear dalam Konteks Ekonomi
-Deskripsi Soal: Perusahaan memproduksi produk A dan B. Produk A memerlukan 2 jam mesin dan 1 jam tenaga kerja. Produk B memerlukan 1 jam mesin dan 2 jam tenaga kerja. Tersedia 100 jam mesin dan 80 jam tenaga kerja. Berapa maksimal produk A jika semua waktu mesin digunakan dan produk B tidak diproduksi?
+###Problem Title: Verifikasi Solusi Sistem
+Problem Description: Periksa apakah (2,1,3) adalah solusi dari sistem x + y + z = 6, 2x - y = 3, dan x + 2z = 8
 
-#Langkah 1 [Isi Titik-Titik]: Definisi variabel
-Tipe Langkah: fill-blank
-Pertanyaan: Misalkan x = jumlah produk {blank}
-Jawaban Benar: A
+#Step 1 [Ekspresi & Jawaban]: Substitusi ke persamaan pertama
+Step Type: step-by-step
+Expression: 2 + 1 + 3
+Answer: 6
 
-#Langkah 2 [Ekspresi & Jawaban]: Jika hanya produk A diproduksi (y = 0), persamaan waktu mesin
-Tipe Langkah: step-by-step
-Ekspresi: 2*x
-Jawaban: 100
+#Step 2 [Benar/Salah]: Persamaan pertama terpenuhi
+Step Type: true-false
+Question: Karena 2 + 1 + 3 = 6, persamaan pertama terpenuhi
+Correct Answer: Benar
 
-#Langkah 3 [Ekspresi & Jawaban]: Maksimal produk A
-Tipe Langkah: step-by-step
-Ekspresi: x
-Jawaban: 50
+#Step 3 [Ekspresi & Jawaban]: Substitusi ke persamaan kedua
+Step Type: step-by-step
+Expression: 2*2 - 1
+Answer: 3
 
-#Langkah 4 [Ekspresi & Jawaban]: Verifikasi dengan waktu tenaga kerja: 1 jam × 50 produk
-Tipe Langkah: step-by-step
-Ekspresi: 1*50
-Jawaban: 50
+#Step 4 [Benar/Salah]: Persamaan kedua terpenuhi
+Step Type: true-false
+Question: Karena 2(2) - 1 = 3, persamaan kedua terpenuhi
+Correct Answer: Benar
 
-#Langkah 5 [Benar/Salah]: Kelayakan solusi
-Tipe Langkah: true-false
-Pertanyaan: Karena 50 jam tenaga kerja < 80 jam tersedia, produksi 50 unit produk A layak
-Jawaban Benar: Benar
+#Step 5 [Ekspresi & Jawaban]: Substitusi ke persamaan ketiga
+Step Type: step-by-step
+Expression: 2 + 2*3
+Answer: 8
+
+#Step 6 [Benar/Salah]: Kesimpulan
+Step Type: true-false
+Question: Karena semua persamaan terpenuhi, (2,1,3) adalah solusi sistem
+Correct Answer: Benar
+
+
+###Problem Title: Sistem Linear dalam Konteks Ekonomi
+Problem Description: Perusahaan memproduksi produk A dan B. Produk A memerlukan 2 jam mesin dan 1 jam tenaga kerja. Produk B memerlukan 1 jam mesin dan 2 jam tenaga kerja. Tersedia 100 jam mesin dan 80 jam tenaga kerja. Berapa maksimal produk A jika semua waktu mesin digunakan dan produk B tidak diproduksi?
+
+#Step 1 [Isi Titik-Titik]: Definisi variabel
+Step Type: fill-blank
+Question: Misalkan x = jumlah produk {blank}
+Correct Answer: A
+
+#Step 2 [Ekspresi & Jawaban]: Jika hanya produk A diproduksi (y = 0), persamaan waktu mesin
+Step Type: step-by-step
+Expression: 2*x
+Answer: 100
+
+#Step 3 [Ekspresi & Jawaban]: Maksimal produk A
+Step Type: step-by-step
+Expression: x
+Answer: 50
+
+#Step 4 [Ekspresi & Jawaban]: Verifikasi dengan waktu tenaga kerja: 1 jam × 50 produk
+Step Type: step-by-step
+Expression: 1*50
+Answer: 50
+
+#Step 5 [Benar/Salah]: Kelayakan solusi
+Step Type: true-false
+Question: Karena 50 jam tenaga kerja < 80 jam tersedia, produksi 50 unit produk A layak
+Correct Answer: Benar
