@@ -2291,6 +2291,20 @@ CIRC: "\\circ"
       if s != before:
           fixes_applied.append("Removed trailing operator")
 
+      # 9. Remove dangling power operators (forgotten exponent)
+      #    2^ → 2,  x^ → x,  (2+3)^ → (2+3)
+      before = s
+      s = re.sub(r'\^(?=\s*[,\]\)|\|]|\s*$)', '', s)  # Remove ^ before comma, ], ), |, or end
+      if s != before:
+          fixes_applied.append("Removed incomplete power notation (missing exponent)")
+
+      # 10. Fix empty exponents in braces
+      #    x^{} → x,  2^{} → 2
+      before = s
+      s = re.sub(r'\^\{\s*\}', '', s)
+      if s != before:
+          fixes_applied.append("Removed empty exponent braces")
+
       return (s, fixes_applied)
 
     def parse_latex(self, latex):
