@@ -1392,11 +1392,16 @@ print("✅ pyscript module created and registered")
                     <button class="input-btn special" data-action=")">)</button>
                     <button class="input-btn special" data-action=".">.</button>
                     <button class="input-btn special" data-action="=">=</button>
-                    <button class="input-btn delete" data-action="BACKSPACE">⌫</button>
+                    <button class="input-btn special" data-action="[">[</button>
+                    <button class="input-btn special" data-action=",">,</button>
+                    <button class="input-btn special" data-action="]">]</button>
+                    <button class="input-btn symbol" data-action="x"><span class="math-var">x</span></button>
+                    <button class="input-btn navigation keyboard-toggle" data-action="TOGGLE_KEYBOARD" id="freestyleToggleKeyboard" title="Toggle Soft Keyboard"></button>
+                    <button class="input-btn navigation" data-action="SELECT_LEFT" id="freestyleSelectLeft"></button>
                     <button class="input-btn navigation" data-action="MOVE_LEFT" id="freestyleMoveLeft"></button>
                     <button class="input-btn navigation" data-action="MOVE_RIGHT" id="freestyleMoveRight"></button>
                     <button class="input-btn delete" data-action="CLEAR">Clear</button>
-                    <button class="input-btn symbol" data-action="x"><span class="math-var">x</span></button>
+                    <button class="input-btn delete" data-action="BACKSPACE">⌫</button>
                   </div>
                 </div>
               </div>
@@ -1701,8 +1706,13 @@ start: equation
    | trig_function
    | log_function
    | limit
+   | integral
+   | summation
+   | product_notation
+   | sqrt_function
    | fraction
    | abs_function
+   | matrix_ops
    | matrix
    | matrix_env
    | "(" expr ")"              -> paren_expr
@@ -1716,9 +1726,29 @@ scalar: NUMBER | SYMBOL
 
 trig_function: TRIG_NAME "(" expr ")"    -> trig_func
 
-log_function: LOG_NAME "(" expr ")"      -> log_func
+log_function: "\\log" "_" "{" expr "}" expr     -> log_func_with_base
+            | "\\log" "_" NUMBER expr               -> log_func_with_base_no_braces
+            | LOG_NAME "(" expr ")"                 -> log_func
 
 limit: "\\lim" "_" "{" SYMBOL "\\to" expr "}" expr -> limit_expr
+
+integral: "\\int" "_" "{" expr "}" "^" "{" expr "}" expr -> integral_definite
+        | "\\int" "_" NUMBER "^" NUMBER expr             -> integral_definite_no_braces
+        | "\\int" "_" "{" "}" "^" "{" "}" expr           -> integral_indefinite
+        | "\\int" expr                                    -> integral_indefinite_simple
+
+summation: "\\sum" "_" "{" SYMBOL "=" expr "}" "^" "{" expr "}" expr -> sum_expr
+         | "\\sum" "_" "{" SYMBOL "=" expr "}" "^" "{" expr "}"      -> sum_expr_no_body
+         | "\\sum" "_" SYMBOL "=" NUMBER "^" NUMBER expr             -> sum_expr_no_braces
+         | "\\sum" "_" SYMBOL "=" NUMBER "^" NUMBER                  -> sum_expr_no_braces_no_body
+
+product_notation: "\\prod" "_" "{" SYMBOL "=" expr "}" "^" "{" expr "}" expr -> prod_expr
+                | "\\prod" "_" "{" SYMBOL "=" expr "}" "^" "{" expr "}"      -> prod_expr_no_body
+                | "\\prod" "_" SYMBOL "=" NUMBER "^" NUMBER expr             -> prod_expr_no_braces
+                | "\\prod" "_" SYMBOL "=" NUMBER "^" NUMBER                  -> prod_expr_no_braces_no_body
+
+sqrt_function: "\\sqrt" "{" expr "}"           -> sqrt_func
+             | "\\sqrt" "[" expr "]" "{" expr "}" -> nthroot_func
 
 derivative_function: "__derivative" "(" SYMBOL "," expr ")" -> derivative_func
 
@@ -1765,7 +1795,7 @@ NUMBER: /[+-]?\d+(\.\d*)?|\.\d+/
 INT: /\d+/
 PI.2: "\\pi"
 INFTY.2: "\\infty"
-SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|frac|left|right|begin|end|pi|infty|lim|lvert|rvert)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
+SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
 CIRC: "\\circ"
 
 %import common.WS_INLINE
@@ -1943,6 +1973,24 @@ CIRC: "\\circ"
         Normalizes matrix numbers separately so matrix content is not mangled.
         """
         import re
+
+        # ✅ VALIDATION: Check for balanced brackets in row operations
+        # Row operations should be in format: [[matrix]]|ops| or [[matrix]]|ops
+        if '|' in latex_str and 'R_' in latex_str:
+            # Count pipes
+            pipe_count = latex_str.count('|') + latex_str.count(r'\left|') + latex_str.count(r'\right|')
+            # For proper row operations, we expect either:
+            # 1. Two pipes: \left[\matrix\right]\left|ops\right|
+            # 2. One pipe (lenient): \left[\matrix\right|ops (missing closing)
+            # Warn if structure looks wrong
+            if pipe_count == 1:
+                window.console.warn("⚠️ Row operation may be missing closing pipe |")
+
+            # Check for balanced brackets
+            open_brackets = latex_str.count('[') + latex_str.count(r'\left[')
+            close_brackets = latex_str.count(']') + latex_str.count(r'\right]')
+            if open_brackets != close_brackets:
+                window.console.warn(f"⚠️ Unbalanced brackets: {open_brackets} open, {close_brackets} close")
 
         # 0. Quick generic cleanups that are safe everywhere
         s = latex_str.replace(r'\ ', ' ')
@@ -2221,13 +2269,15 @@ CIRC: "\\circ"
       t = re.sub(r'\)([a-zA-Z])', r')*\1', t)
 
       # 4. Between digit and opening paren: 2( -> 2*(
-      t = re.sub(r'(\d)\(', r'\1*(', t)
+      # BUT NOT after integral bounds: \int_1^3( should stay as is
+      t = re.sub(r'(?<![\^])(\d)\(', r'\1*(', t)
 
       # 5. Between single letter and opening paren: x( -> x*(, but not for function names like sin(
       t = re.sub(r'(?<![a-zA-Z])([a-zA-Z])\(', r'\1*(', t)
 
       # 6. Between digit and letter: 2x -> 2*x (original rule, kept last)
-      t = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', t)
+      # BUT NOT after integral bounds: \int_1^3x should stay as is for cases like \int_0^1x
+      t = re.sub(r'(?<![\^])(\d)([a-zA-Z])', r'\1*\2', t)
 
       return t.strip()
 
@@ -2342,8 +2392,123 @@ CIRC: "\\circ"
                     return sp.exp(expr)
                 return sp.Function(func_str)(expr)
 
+            def log_func_with_base(self, base, expr):
+                """Handle logarithm with base like \log_{10}100"""
+                return sp.log(expr, base)
+
+            def log_func_with_base_no_braces(self, base, expr):
+                """Handle logarithm with base without braces like \log_10 100"""
+                base_val = sp.sympify(str(base))
+                return sp.log(expr, base_val)
+
             def limit_expr(self, var, value, expr):
                 return sp.Limit(expr, sp.Symbol(str(var)), value)
+
+            def integral_definite(self, lower, upper, integrand):
+                """Handle definite integrals like \int_{1}^{3}(2x) dx with braces"""
+                # Extract the integration variable from the integrand
+                # Usually it's the free symbol in the expression
+                free_symbols = integrand.free_symbols
+                if free_symbols:
+                    # Use the first free symbol as the integration variable
+                    # For more complex cases, we might need smarter heuristics
+                    var = sorted(free_symbols, key=str)[0]
+                else:
+                    # If no free symbols, use x as default
+                    var = sp.Symbol('x')
+                return sp.Integral(integrand, (var, lower, upper))
+
+            def integral_definite_no_braces(self, lower, upper, integrand):
+                """Handle definite integrals like \int _1^3(2x) dx without braces around bounds"""
+                # Convert NUMBER tokens to SymPy expressions
+                lower_val = sp.sympify(str(lower))
+                upper_val = sp.sympify(str(upper))
+
+                # Extract the integration variable from the integrand
+                free_symbols = integrand.free_symbols
+                if free_symbols:
+                    var = sorted(free_symbols, key=str)[0]
+                else:
+                    var = sp.Symbol('x')
+                return sp.Integral(integrand, (var, lower_val, upper_val))
+
+            def integral_indefinite(self, integrand):
+                """Handle indefinite integrals like \int _{ }^{ }(2x) dx with empty braces"""
+                # Extract the integration variable from the integrand
+                free_symbols = integrand.free_symbols
+                if free_symbols:
+                    var = sorted(free_symbols, key=str)[0]
+                else:
+                    var = sp.Symbol('x')
+                return sp.Integral(integrand, var)
+
+            def integral_indefinite_simple(self, integrand):
+                """Handle indefinite integrals like \int (2x) dx without bounds"""
+                # Extract the integration variable from the integrand
+                free_symbols = integrand.free_symbols
+                if free_symbols:
+                    var = sorted(free_symbols, key=str)[0]
+                else:
+                    var = sp.Symbol('x')
+                return sp.Integral(integrand, var)
+
+            def sum_expr(self, var, lower, upper, body):
+                """Handle summation like \sum_{i=1}^{n} expr"""
+                var_sym = sp.Symbol(str(var))
+                return sp.Sum(body, (var_sym, lower, upper))
+
+            def sum_expr_no_body(self, var, lower, upper):
+                """Handle summation without body like \sum_{i=1}^{n}"""
+                # Return a symbolic sum with a placeholder variable
+                var_sym = sp.Symbol(str(var))
+                # Use the variable itself as the body when no body is provided
+                return sp.Sum(var_sym, (var_sym, lower, upper))
+
+            def sum_expr_no_braces(self, var, lower, upper, body):
+                """Handle summation like \sum _i=1^n expr without braces"""
+                var_sym = sp.Symbol(str(var))
+                lower_val = sp.sympify(str(lower))
+                upper_val = sp.sympify(str(upper))
+                return sp.Sum(body, (var_sym, lower_val, upper_val))
+
+            def sum_expr_no_braces_no_body(self, var, lower, upper):
+                """Handle summation like \sum _i=1^n without braces or body"""
+                var_sym = sp.Symbol(str(var))
+                lower_val = sp.sympify(str(lower))
+                upper_val = sp.sympify(str(upper))
+                return sp.Sum(var_sym, (var_sym, lower_val, upper_val))
+
+            def prod_expr(self, var, lower, upper, body):
+                """Handle product like \prod_{i=1}^{n} expr"""
+                var_sym = sp.Symbol(str(var))
+                return sp.Product(body, (var_sym, lower, upper))
+
+            def prod_expr_no_body(self, var, lower, upper):
+                """Handle product without body like \prod_{i=1}^{n}"""
+                var_sym = sp.Symbol(str(var))
+                return sp.Product(var_sym, (var_sym, lower, upper))
+
+            def prod_expr_no_braces(self, var, lower, upper, body):
+                """Handle product like \prod _i=1^n expr without braces"""
+                var_sym = sp.Symbol(str(var))
+                lower_val = sp.sympify(str(lower))
+                upper_val = sp.sympify(str(upper))
+                return sp.Product(body, (var_sym, lower_val, upper_val))
+
+            def prod_expr_no_braces_no_body(self, var, lower, upper):
+                """Handle product like \prod _i=1^n without braces or body"""
+                var_sym = sp.Symbol(str(var))
+                lower_val = sp.sympify(str(lower))
+                upper_val = sp.sympify(str(upper))
+                return sp.Product(var_sym, (var_sym, lower_val, upper_val))
+
+            def sqrt_func(self, expr):
+                """Handle square root like \sqrt{x}"""
+                return sp.sqrt(expr)
+
+            def nthroot_func(self, n, expr):
+                """Handle nth root like \sqrt[3]{x} for cube root"""
+                return sp.Pow(expr, sp.Rational(1, n))
 
             def implicit_mul(self, a, b):
                 if isinstance(a, sp.Matrix) or isinstance(b, sp.Matrix):
@@ -2690,9 +2855,33 @@ CIRC: "\\circ"
             if isinstance(a, sp.MatrixBase) and isinstance(b, sp.MatrixBase):
                 if a.shape != b.shape:
                     return False
+                # Define canonical_scalar locally if not available
+                def canonical_scalar_local(x):
+                    if not isinstance(x, sp.Basic):
+                        try:
+                            x = sp.sympify(x)
+                        except Exception:
+                            return x
+                    if isinstance(x, sp.Float):
+                        try:
+                            x = sp.Rational(str(x))
+                        except Exception:
+                            pass
+                    x = sp.simplify(x)
+                    try:
+                        x = x.doit()
+                    except Exception:
+                        pass
+                    return sp.simplify(x)
+
+                # Compare elements with canonical normalization
                 for i in range(a.rows):
                     for j in range(a.cols):
-                        if not sp.simplify(a[i, j] - b[i, j]) == 0:
+                        a_elem = canonical_scalar_local(a[i, j])
+                        b_elem = canonical_scalar_local(b[i, j])
+                        diff = sp.simplify(a_elem - b_elem)
+                        if diff != 0:
+                            window.console.log(f"Matrix element mismatch at [{i},{j}]: {a_elem} vs {b_elem}, diff={diff}")
                             return False
                 return True
             if isinstance(a, sp.MatrixBase) and isinstance(b, list):
@@ -2771,7 +2960,23 @@ CIRC: "\\circ"
             except:
                 pass
 
+            # All strategies failed - provide detailed diagnostic information
+            window.console.log("=" * 60)
             window.console.log("✗ All comparison strategies failed")
+            window.console.log("=" * 60)
+            window.console.log(f"Expression A: {a}")
+            window.console.log(f"Expression B: {b}")
+            window.console.log(f"Type A: {type(a)}")
+            window.console.log(f"Type B: {type(b)}")
+            window.console.log(f"srepr(A): {sp.srepr(a)}")
+            window.console.log(f"srepr(B): {sp.srepr(b)}")
+            try:
+                diff = sp.simplify(a - b)
+                window.console.log(f"Difference (A - B): {diff}")
+                window.console.log(f"srepr(diff): {sp.srepr(diff)}")
+            except Exception as diff_err:
+                window.console.log(f"Could not compute difference: {diff_err}")
+            window.console.log("=" * 60)
             return False
 
         except Exception as e:
@@ -3279,8 +3484,10 @@ class KeyboardInputHandler:
       elif action == "MOVE_RIGHT":
           mathquill_field.keystroke("Right")
       elif action == "SELECT_LEFT":
+          # Selection works but buttons were stealing focus - now fixed with preventDefault
           mathquill_field.keystroke("Shift-Left")
       elif action == "SELECT_RIGHT":
+          # Selection works but buttons were stealing focus - now fixed with preventDefault
           mathquill_field.keystroke("Shift-Right")
       elif action == "TOGGLE_KEYBOARD":
           # Special action: toggle keyboard mode
@@ -10515,6 +10722,60 @@ This demonstrates the complete format for creating your own problem sets!
               window.console.log(f"  Error in fix_row_operation_subscripts: {e}")
               return s
 
+      def fix_row_operation_pipes(s):
+          """Fix missing closing pipe in row operations like [[matrix]]|ops -> [[matrix]]|ops|"""
+          try:
+              if '|' in s and 'R_' in s:
+                  # Check if we have unbalanced pipes
+                  pipe_count = s.count('|') + s.count(r'\left|') + s.count(r'\right|')
+
+                  # Look for pattern: matrix followed by single pipe and row operation but no closing pipe
+                  # Pattern: ]]|R_... without closing |
+                  if pipe_count % 2 == 1:  # Odd number of pipes suggests missing closing
+                      # If ends with R_n or operation without closing pipe, add it
+                      if not s.rstrip().endswith('|') and not s.rstrip().endswith(r'\right|'):
+                          fixed = s + '|'
+                          window.console.log(f"  Fixed: Added missing closing pipe for row operation")
+                          return fixed
+              return s
+          except Exception as e:
+              window.console.log(f"  Error in fix_row_operation_pipes: {e}")
+              return s
+
+      def fix_row_operation_brackets(s):
+          """Fix unbalanced square brackets in row operations"""
+          try:
+              # Count square brackets (ignoring LaTeX commands like \left[ \right])
+              open_brackets = s.count('[')
+              close_brackets = s.count(']')
+
+              if open_brackets > close_brackets:
+                  # Add missing closing brackets before the pipe if there's a row operation
+                  if '|' in s and 'R_' in s:
+                      # Find the first pipe
+                      pipe_pos = s.find('|')
+                      if pipe_pos > 0:
+                          # Insert missing ] before the pipe
+                          missing = open_brackets - close_brackets
+                          fixed = s[:pipe_pos] + (']' * missing) + s[pipe_pos:]
+                          window.console.log(f"  Fixed: Added {missing} missing closing bracket(s)")
+                          return fixed
+                  else:
+                      # Just add at the end
+                      fixed = s + (']' * (open_brackets - close_brackets))
+                      window.console.log(f"  Fixed: Balanced square brackets")
+                      return fixed
+              elif close_brackets > open_brackets:
+                  # Remove extra closing brackets
+                  for _ in range(close_brackets - open_brackets):
+                      s = s.replace(']', '', 1)
+                  window.console.log(f"  Fixed: Removed extra closing bracket(s)")
+                  return s
+              return s
+          except Exception as e:
+              window.console.log(f"  Error in fix_row_operation_brackets: {e}")
+              return s
+
       # ===== LIST OF FIXES =====
 
       fixes = [
@@ -10523,6 +10784,8 @@ This demonstrates the complete format for creating your own problem sets!
           (fix_double_power_symbol, "Fixed double power symbol (^^)"),
           (remove_empty_power, "Removed empty power symbol"),
           (fix_row_operation_subscripts, "Fixed row operation subscripts"),
+          (fix_row_operation_brackets, "Fixed unbalanced brackets in row operations"),
+          (fix_row_operation_pipes, "Added missing closing pipe for row operation"),
           (smart_bracket_balance, "Balanced brackets and parentheses"),
       ]
 
@@ -10558,6 +10821,8 @@ This demonstrates the complete format for creating your own problem sets!
           combined = fix_double_power_symbol(combined)
           combined = remove_empty_power(combined)
           combined = fix_row_operation_subscripts(combined)
+          combined = fix_row_operation_brackets(combined)
+          combined = fix_row_operation_pipes(combined)
           combined = smart_bracket_balance(combined)
 
           if combined != latex_str:
@@ -10566,7 +10831,7 @@ This demonstrates the complete format for creating your own problem sets!
               parsed = self.math_parser.parse_latex(combined)
               if parsed is not None:
                   window.console.log(f"  ✅ Combined fix successful!")
-                  return (True, combined, "Fixed power symbols and brackets")
+                  return (True, combined, "Fixed brackets, pipes, and power symbols")
               else:
                   window.console.log(f"  ❌ Combined fix: Parser returned None")
       except Exception as e:
@@ -11263,15 +11528,32 @@ This demonstrates the complete format for creating your own problem sets!
 
         # Parse answer
         try:
+            import sympy as sp
+
             parsed_answer = self.math_parser.parse_latex(answer_latex)
 
             if parsed_answer is None:
                 window.alert("⚠️ Could not parse your answer")
                 return
 
+            # For row operations, we need to parse the problem LaTeX to get the expected result
+            if self.freestyle_problem.get("is_row_operation"):
+                window.console.log("🔧 Row operation problem: parsing LaTeX to get expected result")
+                expected_parsed = self.math_parser.parse_latex(self.freestyle_problem["latex"])
+                if expected_parsed is None:
+                    window.alert("⚠️ Could not parse problem")
+                    return
+            else:
+                expected_parsed = self.freestyle_problem["parsed"]
+
             # Normalize both for comparison
-            expected_normalized = self.math_parser.normalize_expr(self.freestyle_problem["parsed"])
+            expected_normalized = self.math_parser.normalize_expr(expected_parsed)
             answer_normalized = self.math_parser.normalize_expr(parsed_answer)
+
+            window.console.log(f"🔍 Expected normalized: {expected_normalized}")
+            window.console.log(f"🔍 Expected srepr: {sp.srepr(expected_normalized)}")
+            window.console.log(f"🔍 Answer normalized: {answer_normalized}")
+            window.console.log(f"🔍 Answer srepr: {sp.srepr(answer_normalized)}")
 
             # Check correctness
             is_correct = self.math_parser.final_eq(answer_normalized, expected_normalized)
@@ -11344,7 +11626,17 @@ This demonstrates the complete format for creating your own problem sets!
           window.console.log(f"Answer srepr: {sp.srepr(answer_expr)}")
 
           # Get the expected simplest form by normalizing the original problem
-          expected_simplest = self.math_parser.normalize_expr(self.freestyle_problem["parsed"])
+          # For row operations, we need to parse the problem LaTeX to get the expected result
+          if self.freestyle_problem.get("is_row_operation"):
+              window.console.log("🔧 Row operation problem: parsing LaTeX for simplest form check")
+              expected_parsed = self.math_parser.parse_latex(self.freestyle_problem["latex"])
+              if expected_parsed is None:
+                  window.alert("⚠️ Could not parse problem for simplest form check")
+                  return
+              expected_simplest = self.math_parser.normalize_expr(expected_parsed)
+          else:
+              expected_simplest = self.math_parser.normalize_expr(self.freestyle_problem["parsed"])
+
           window.console.log(f"Expected simplest form: {expected_simplest}")
           window.console.log(f"Expected srepr: {sp.srepr(expected_simplest)}")
 
@@ -11890,9 +12182,37 @@ This demonstrates the complete format for creating your own problem sets!
         """Convert SymPy expression to LaTeX, preserving order and converting matrices properly"""
         import sympy as sp
 
-        # Matrix: convert to proper LaTeX format
+        # Helper function to normalize matrix elements
+        def normalize_element(elem):
+            """Normalize element to canonical form (e.g., 1*(1/2) -> 1/2)"""
+            if isinstance(elem, sp.Mul):
+                # Check if this is just 1 * fraction
+                args = elem.args
+                if len(args) == 2:
+                    if args[0] == 1 and isinstance(args[1], sp.Pow):
+                        # This is 1 * (something^-1), simplify to Rational
+                        if isinstance(args[1].base, sp.Integer) and args[1].exp == -1:
+                            return sp.Rational(1, args[1].base)
+                    elif isinstance(args[0], sp.Integer) and isinstance(args[1], sp.Pow):
+                        # This is n * (m^-1), simplify to Rational
+                        if isinstance(args[1].base, sp.Integer) and args[1].exp == -1:
+                            return sp.Rational(args[0], args[1].base)
+            # Try general simplification
+            try:
+                simplified = sp.simplify(elem)
+                # If it's a rational, return it
+                if isinstance(simplified, sp.Rational):
+                    return simplified
+                # Otherwise return original
+                return elem
+            except:
+                return elem
+
+        # Matrix: normalize elements first, then convert to proper LaTeX format
         if isinstance(expr, (sp.Matrix, sp.MutableDenseMatrix, sp.ImmutableDenseMatrix)):
-            return sp.latex(expr)
+            # Normalize all matrix elements before converting to LaTeX
+            normalized_matrix = expr.applyfunc(normalize_element)
+            return sp.latex(normalized_matrix)
 
         # Simple types: direct conversion
         elif isinstance(expr, sp.Symbol):
@@ -12743,8 +13063,21 @@ This demonstrates the complete format for creating your own problem sets!
               problem_input.innerHTML = ""
               self.freestyle_problem_mf = self.MQ.MathField(problem_input)  # ← Just this
               window.console.log("✅ Problem MathField initialized")
-              # Disable soft keyboard for touch devices
-              self.disable_soft_keyboard(self.freestyle_problem_mf)
+              # Apply initial keyboard state based on toggle
+              if self.soft_keyboard_enabled:
+                  self.enable_soft_keyboard(self.freestyle_problem_mf)
+              else:
+                  self.disable_soft_keyboard(self.freestyle_problem_mf)
+
+              # Add focus event listener to apply keyboard state when focused
+              def problem_focus_handler():
+                  if self.soft_keyboard_enabled:
+                      self.enable_soft_keyboard(self.freestyle_problem_mf)
+                  else:
+                      self.disable_soft_keyboard(self.freestyle_problem_mf)
+                  window.console.log(f"✅ Problem field focused - keyboard mode: {'soft' if self.soft_keyboard_enabled else 'minimal'}")
+
+              problem_input.addEventListener("focus", create_proxy(problem_focus_handler), True)
               window.setTimeout(create_proxy(lambda: self.freestyle_problem_mf.focus()), 100)
             else:
                 window.console.error("❌ Problem input element not found")
@@ -12754,8 +13087,21 @@ This demonstrates the complete format for creating your own problem sets!
               answer_input.innerHTML = ""
               self.freestyle_answer_mf = self.MQ.MathField(answer_input)
               window.console.log("✅ Answer MathField initialized")
-              # Disable soft keyboard for touch devices
-              self.disable_soft_keyboard(self.freestyle_answer_mf)
+              # Apply initial keyboard state based on toggle
+              if self.soft_keyboard_enabled:
+                  self.enable_soft_keyboard(self.freestyle_answer_mf)
+              else:
+                  self.disable_soft_keyboard(self.freestyle_answer_mf)
+
+              # Add focus event listener to apply keyboard state when focused
+              def answer_focus_handler():
+                  if self.soft_keyboard_enabled:
+                      self.enable_soft_keyboard(self.freestyle_answer_mf)
+                  else:
+                      self.disable_soft_keyboard(self.freestyle_answer_mf)
+                  window.console.log(f"✅ Answer field focused - keyboard mode: {'soft' if self.soft_keyboard_enabled else 'minimal'}")
+
+              answer_input.addEventListener("focus", create_proxy(answer_focus_handler), True)
             else:
                 window.console.error("❌ Answer input element not found")
 
@@ -12909,44 +13255,58 @@ This demonstrates the complete format for creating your own problem sets!
         </svg>"""
 
     def get_keyboard_toggle_svg(self, size="24", is_enabled=True, color="currentColor"):
-        """SVG: Keyboard icon with indicator light
+        """SVG: Keyboard icon with indicator light - bigger and more prominent
 
         Args:
             size: SVG size
-            is_enabled: If True, shows green light (soft keyboard on), else red light (minimal mode)
+            is_enabled: If True, light is ON (soft keyboard enabled), else light is OFF (minimal mode)
             color: Icon color
         """
-        light_color = "#10b981" if is_enabled else "#ef4444"  # Green if enabled, red if disabled
-        light_glow = "0 0 4px rgba(16, 185, 129, 0.8)" if is_enabled else "0 0 4px rgba(239, 68, 68, 0.8)"
+        # Light is always green, but opacity changes: visible when ON, hidden when OFF
+        light_opacity = "1" if is_enabled else "0.1"
+        light_glow = "0 0 10px rgba(16, 185, 129, 1)" if is_enabled else "none"
 
-        return f"""<svg width="{size}" height="{size}" viewBox="0 0 24 24" fill="none"
+        return f"""<svg width="{size}" height="{size}" viewBox="0 0 64 64" fill="none"
             xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-          <!-- Keyboard base -->
-          <rect x="2" y="6" width="20" height="12" rx="2"
-                stroke="{color}" stroke-width="2" fill="none"/>
-
-          <!-- Keys (3 rows) -->
-          <!-- Top row -->
-          <rect x="4" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="7" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="10" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="13" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="16" y="8" width="2" height="1.5" rx="0.3" fill="{color}"/>
-
-          <!-- Middle row -->
-          <rect x="4" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="7" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="10" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="13" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
-          <rect x="16" y="11" width="2" height="1.5" rx="0.3" fill="{color}"/>
-
-          <!-- Bottom row (spacebar) -->
-          <rect x="7" y="14" width="10" height="1.5" rx="0.3" fill="{color}"/>
-
-          <!-- Indicator light (top right) -->
-          <circle cx="20" cy="4" r="2" fill="{light_color}"
+          <!-- Indicator light (very top-left corner) -->
+          <circle cx="6" cy="6" r="10" fill="#10b981" opacity="{light_opacity}"
                   style="filter: drop-shadow({light_glow})"/>
-          <circle cx="20" cy="4" r="1.2" fill="white" opacity="0.6"/>
+          <circle cx="6" cy="6" r="6" fill="white" opacity="{light_opacity}" style="opacity: calc({light_opacity} * 0.7)"/>
+
+          <!-- Keyboard base - larger and more prominent -->
+          <rect x="4" y="22" width="56" height="38" rx="4"
+                stroke="{color}" stroke-width="3" fill="none"/>
+
+          <!-- Keys layout - more realistic and prominent -->
+          <!-- Top row (7 keys) -->
+          <rect x="8" y="27" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="16" y="27" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="24" y="27" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="32" y="27" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="40" y="27" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="48" y="27" width="6" height="5" rx="0.8" fill="{color}"/>
+
+          <!-- Middle row (6 keys) -->
+          <rect x="8" y="34" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="16" y="34" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="24" y="34" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="32" y="34" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="40" y="34" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="48" y="34" width="6" height="5" rx="0.8" fill="{color}"/>
+
+          <!-- Third row (5 keys) -->
+          <rect x="10" y="41" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="18" y="41" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="26" y="41" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="34" y="41" width="6" height="5" rx="0.8" fill="{color}"/>
+          <rect x="42" y="41" width="6" height="5" rx="0.8" fill="{color}"/>
+
+          <!-- Bottom row (spacebar - wide) -->
+          <rect x="18" y="48" width="28" height="5" rx="0.8" fill="{color}"/>
+
+          <!-- Side modifier keys -->
+          <rect x="8" y="48" width="8" height="5" rx="0.8" fill="{color}"/>
+          <rect x="48" y="48" width="8" height="5" rx="0.8" fill="{color}"/>
         </svg>"""
 
     def detect_handheld_device(self):
@@ -13027,18 +13387,16 @@ This demonstrates the complete format for creating your own problem sets!
             self.soft_keyboard_enabled = not self.soft_keyboard_enabled
             window.console.log(f"⌨️ Toggled keyboard: soft_keyboard_enabled={self.soft_keyboard_enabled}")
 
-            # Update button appearance with SVG
+            # Update button appearance with SVG - only change the indicator light, not button color
             toggle_btns = document.querySelectorAll('[data-action="TOGGLE_KEYBOARD"]')
             for i in range(toggle_btns.length):
                 btn = toggle_btns[i]
                 if self.soft_keyboard_enabled:
-                    btn.innerHTML = self.get_keyboard_toggle_svg("20", is_enabled=True, color="white")
+                    btn.innerHTML = self.get_keyboard_toggle_svg("60", is_enabled=True, color="white")
                     btn.title = 'Soft Keyboard ON - Click to use Minimal Keyboard'
-                    btn.style.background = '#10b981'  # Green when enabled
                 else:
-                    btn.innerHTML = self.get_keyboard_toggle_svg("20", is_enabled=False, color="white")
+                    btn.innerHTML = self.get_keyboard_toggle_svg("60", is_enabled=False, color="white")
                     btn.title = 'Minimal Keyboard - Click to enable Soft Keyboard'
-                    btn.style.background = '#64748b'  # Gray when minimal
 
             # Apply to all existing MathQuill fields
             answer_fields = document.querySelectorAll('.step-answer')
@@ -13050,6 +13408,21 @@ This demonstrates the complete format for creating your own problem sets!
                         self.enable_soft_keyboard(field.mathquill)
                     else:
                         self.disable_soft_keyboard(field.mathquill)
+
+            # Also apply to freestyle fields if they exist
+            if hasattr(self, 'freestyle_answer_mf') and self.freestyle_answer_mf:
+                if self.soft_keyboard_enabled:
+                    self.enable_soft_keyboard(self.freestyle_answer_mf)
+                else:
+                    self.disable_soft_keyboard(self.freestyle_answer_mf)
+                window.console.log("✅ Applied keyboard toggle to freestyle answer field")
+
+            if hasattr(self, 'freestyle_problem_mf') and self.freestyle_problem_mf:
+                if self.soft_keyboard_enabled:
+                    self.enable_soft_keyboard(self.freestyle_problem_mf)
+                else:
+                    self.disable_soft_keyboard(self.freestyle_problem_mf)
+                window.console.log("✅ Applied keyboard toggle to freestyle problem field")
 
             # Show notification
             msg = "Soft keyboard enabled" if self.soft_keyboard_enabled else "Minimal keyboard mode"
@@ -13204,8 +13577,8 @@ This demonstrates the complete format for creating your own problem sets!
             # R is already added above for row operations
             pass
 
-        # Always include basic controls (navigation first, then backspace at end)
-        buttons.extend(['TOGGLE_KEYBOARD', '(', ')', 'MOVE_LEFT', 'MOVE_RIGHT', 'SELECT_LEFT', 'SELECT_RIGHT', 'CLEAR', 'BACKSPACE'])
+        # Always include basic controls (navigation and backspace at end)
+        buttons.extend(['(', ')', 'MOVE_LEFT', 'MOVE_RIGHT', 'SELECT_LEFT', 'SELECT_RIGHT', 'CLEAR', 'BACKSPACE'])
 
         # Remove duplicates while preserving order
         seen = set()
@@ -13214,6 +13587,9 @@ This demonstrates the complete format for creating your own problem sets!
             if b not in seen:
                 seen.add(b)
                 unique_buttons.append(b)
+
+        # Insert TOGGLE_KEYBOARD as the very first button
+        unique_buttons.insert(0, 'TOGGLE_KEYBOARD')
 
         window.console.log(f"Final buttons: {unique_buttons}")
         return unique_buttons
@@ -13275,16 +13651,14 @@ This demonstrates the complete format for creating your own problem sets!
             label = '→'
         elif action == 'TOGGLE_KEYBOARD':
             btn_class += ' navigation keyboard-toggle'
-            # Set initial SVG based on current state
+            # Set initial SVG based on current state - button color stays same, only light changes
             if self.soft_keyboard_enabled:
-                label = self.get_keyboard_toggle_svg("20", is_enabled=True, color="white")
+                label = self.get_keyboard_toggle_svg("90", is_enabled=True, color="white")
                 title = 'Soft Keyboard ON - Click to use Minimal Keyboard'
-                bg_color = '#10b981'  # Green when enabled
             else:
-                label = self.get_keyboard_toggle_svg("20", is_enabled=False, color="white")
+                label = self.get_keyboard_toggle_svg("90", is_enabled=False, color="white")
                 title = 'Minimal Keyboard - Click to enable Soft Keyboard'
-                bg_color = '#64748b'  # Gray when minimal
-            return f'<button class="{btn_class}" data-action="{action}" title="{title}" style="background:{bg_color};padding:8px;">{label}</button>'
+            return f'<button class="{btn_class}" data-action="{action}" title="{title}" style="background:#3b82f6;padding:8px;">{label}</button>'
         else:
             btn_class += ' special'
             label = action
@@ -13322,6 +13696,20 @@ This demonstrates the complete format for creating your own problem sets!
                 subscript_matrix_btn.innerHTML = self.get_subscript_svg("24")
                 window.console.log("✅ Injected subscript matrix SVG")
 
+            # Inject keyboard toggle SVG
+            toggle_keyboard_btn = document.querySelector("#freestyleToggleKeyboard")
+            if toggle_keyboard_btn:
+                toggle_keyboard_btn.innerHTML = self.get_keyboard_toggle_svg("60", is_enabled=self.soft_keyboard_enabled, color="white")
+                toggle_keyboard_btn.style.background = "#3b82f6"
+                toggle_keyboard_btn.style.padding = "8px"
+                window.console.log("✅ Injected keyboard toggle SVG")
+
+            # Inject select left SVG
+            select_left_btn = document.querySelector("#freestyleSelectLeft")
+            if select_left_btn:
+                select_left_btn.innerHTML = self.get_select_left_svg("24")
+                window.console.log("✅ Injected select left SVG")
+
             window.console.log("✅ All freestyle SVGs injected")
 
         except Exception as e:
@@ -13330,27 +13718,32 @@ This demonstrates the complete format for creating your own problem sets!
     def _setup_freestyle_keyboard(self):
         """Setup keyboard event handlers for freestyle page"""
         try:
-            # Inject SVG icons first
-            self.inject_freestyle_svgs()
-
-            # Setup keyboard button handlers for freestyle accordion keyboard
-            keyboard_btns = document.querySelectorAll("#freestyleKeyboard .input-btn")
-            window.console.log(f"Found {keyboard_btns.length} keyboard buttons")
+            # Setup keyboard buttons - like version 21
+            keyboard_btns = document.querySelectorAll(".keyboard-accordion-body .input-btn")
+            window.console.log(f"🔍 Found {keyboard_btns.length} keyboard buttons in accordion")
 
             for i in range(keyboard_btns.length):
                 btn = keyboard_btns[i]
                 action = btn.getAttribute("data-action")
 
-                if action and not hasattr(btn, '_handler_attached'):
-                    def make_handler(act):
+                if action:
+                    def make_keyboard_handler(act):
                         def handler(e):
+                            # Prevent default to stop focus change
                             e.preventDefault()
+                            # Prevent button from taking focus
+                            e.stopPropagation()
                             self.handle_freestyle_input(act)
                         return handler
-                    btn.addEventListener("click", create_proxy(make_handler(action)))
-                    btn._handler_attached = True
 
-            window.console.log("✅ Keyboard button handlers attached")
+                    btn.addEventListener("click", create_proxy(make_keyboard_handler(action)))
+                    # Also prevent mousedown from taking focus
+                    btn.addEventListener("mousedown", create_proxy(lambda e: e.preventDefault()))
+
+            window.console.log(f"✅ Keyboard button handlers attached")
+
+            # Inject SVG icons
+            self.inject_freestyle_svgs()
 
             # Setup keyboard accordion headers
             headers = document.querySelectorAll("#freestyleKeyboard .keyboard-accordion-header")
@@ -13376,52 +13769,26 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.error(traceback.format_exc())
 
     def handle_freestyle_input(self, action):
-        """Handle keyboard input for freestyle practice"""
-        try:
-            # Determine which field to target
-            if self.freestyle_problem:
-                target_field = self.freestyle_answer_mf
-            else:
-                target_field = self.freestyle_problem_mf
+        """Handle keyboard input for freestyle fields (problem or answer)"""
+        window.console.log(f"🎹 handle_freestyle_input called with action: {action}")
 
-            if not target_field:
-                window.console.error("❌ No MathQuill field available")
-                return
+        # Determine which field to use
+        if self.freestyle_problem:
+            # Problem is set, input goes to answer
+            target_field = self.freestyle_answer_mf
+            window.console.log("📍 Target: Answer field")
+        else:
+            # No problem yet, input goes to problem input
+            target_field = self.freestyle_problem_mf
+            window.console.log("📍 Target: Problem field")
 
-            # Handle special actions
-            if action == "BACKSPACE":
-                target_field.keystroke("Backspace")
-            elif action == "CLEAR":
-                target_field.latex("")
-            elif action == "MOVE_LEFT":
-                target_field.keystroke("Left")
-            elif action == "MOVE_RIGHT":
-                target_field.keystroke("Right")
-            elif action == "SELECT_LEFT":
-                target_field.keystroke("Shift-Left")
-            elif action == "SELECT_RIGHT":
-                target_field.keystroke("Shift-Right")
-            elif action.startswith("SEQ:"):
-                # Handle sequences like "SEQ:d,/,d,x" or "SEQ:\lim,_,x,\to,0,{Right},{Right}"
-                parts = action[4:].split(",")
-                for part in parts:
-                    part = part.strip()
-                    if part.startswith("{") and part.endswith("}"):
-                        # Keystroke like {Right}, {Left}
-                        target_field.keystroke(part[1:-1])
-                    else:
-                        # Regular text
-                        target_field.write(part)
-            else:
-                target_field.write(action)
+        if not target_field:
+            window.console.error("❌ No target field available")
+            return
 
-            # Always refocus after action
-            target_field.focus()
-
-        except Exception as e:
-            window.console.error(f"Input handler error: {e}")
-            import traceback
-            window.console.error(traceback.format_exc())
+        window.console.log(f"✅ Calling KeyboardInputHandler.handle_action")
+        # Use the common KeyboardInputHandler
+        KeyboardInputHandler.handle_action(target_field, action)
 
 # ========================================
 # REMOVE THIS METHOD FROM YOUR CODE:
