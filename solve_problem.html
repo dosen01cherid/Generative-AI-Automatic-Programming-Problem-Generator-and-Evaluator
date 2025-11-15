@@ -2289,7 +2289,8 @@ CIRC: "\\circ"
 
       # 6. Between digit and letter: 2x -> 2*x (original rule, kept last)
       # BUT NOT after integral bounds: \int_1^3x should stay as is for cases like \int_0^1x
-      t = re.sub(r'(?<![\^])(\d)([a-zA-Z])', r'\1*\2', t)
+      # IMPORTANT: Do NOT add * before R_ (row references like 2R_1 must stay as implicit multiplication)
+      t = re.sub(r'(?<![\^])(\d)([a-zA-Z])(?!_)', r'\1*\2', t)
 
       return t.strip()
 

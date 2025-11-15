@@ -2161,8 +2161,9 @@ CIRC: "\\circ"
         # Examples:
         #   4x -> 4*x
         #   2x -> 2*x
+        # IMPORTANT: Do NOT add * before R_ (row references like 2R_1 must stay as implicit multiplication)
         # This pattern uses a positive lookbehind to ensure we have a digit before the letter
-        t = re.sub(r'(\d)([a-zA-Z])', r'\1*\2', t)
+        t = re.sub(r'(\d)([a-zA-Z])(?!_)', r'\1*\2', t)
 
         return t.strip()
 
