@@ -1,0 +1,871 @@
+SET SOAL SESI 02 - MATRIKS DAN OPERASI PADA MATRIKS
+Aljabar Linear - Teknik Informatika
+Universitas Mercu Buana
+
+
+###Judul Soal: Penjumlahan Matriks 2x2
+Deskripsi Soal: Diberikan matriks A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], cari A + B
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Berapa dimensi hasil penjumlahan A + B?
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Jika A berukuran 2x2 dan B berukuran 2x2, hasil A + B berukuran?
+Pilihan:
+  A) 2x2
+  B) 2x4
+  C) 4x2
+  D) 4x4
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Tulis penjumlahan matriks
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] + [[5,6],[7,8]]
+Hasil yang Diharapkan: [[1,2],[3,4]] + [[5,6],[7,8]]
+
+#Langkah 3 [Benar/Salah]: Apakah penjumlahan matriks dilakukan per elemen?
+Tipe Langkah: true-false
+Pertanyaan: Dalam penjumlahan matriks, kita menjumlahkan elemen yang bersesuaian posisinya. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 4 [Ekspresi & Jawaban]: Jumlahkan elemen yang bersesuaian
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] + [[5,6],[7,8]]
+Hasil yang Diharapkan: [[6,8],[10,12]]
+
+
+###Judul Soal: Perkalian Matriks Sederhana 2x2
+Deskripsi Soal: Diberikan A = [[2,1],[0,3]] dan B = [[1,2],[4,0]], cari AB
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Syarat perkalian matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Agar AB dapat dihitung, syarat yang harus dipenuhi adalah?
+Pilihan:
+  A) Jumlah kolom A sama dengan jumlah baris B
+  B) Jumlah baris A sama dengan jumlah kolom B
+  C) A dan B harus berukuran sama
+  D) A dan B harus matriks persegi
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Tentukan dimensi hasil
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2
+Hasil yang Diharapkan: 2
+
+#Langkah 3 [Isi Titik-Titik]: Rumus elemen baris 1 kolom 1
+Tipe Langkah: fill-blank
+Pertanyaan: Elemen baris 1 kolom 1 dari AB = A[1,1] times B[1,1] + A[1,2] times __
+Titik-Titik:
+  - Titik 1: B[2,1]
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*1 + 1*4
+Hasil yang Diharapkan: 6
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*2 + 1*0
+Hasil yang Diharapkan: 4
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*1 + 3*4
+Hasil yang Diharapkan: 12
+
+#Langkah 7 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*2 + 3*0
+Hasil yang Diharapkan: 0
+
+#Langkah 8 [Ekspresi & Jawaban]: Bentuk matriks hasil AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,1],[0,3]] * [[1,2],[4,0]]
+Hasil yang Diharapkan: [[6,4],[12,0]]
+
+
+###Judul Soal: Penjumlahan Matriks 3x3
+Deskripsi Soal: Diberikan A = [[1,0,2],[3,1,4],[2,1,0]] dan B = [[2,3,1],[1,2,3],[4,0,1]], cari A + B
+
+#Langkah 1 [Benar/Salah]: Dua matriks dapat dijumlahkan jika berukuran sama
+Tipe Langkah: true-false
+Pertanyaan: Dua matriks hanya dapat dijumlahkan jika memiliki ukuran yang sama. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Jumlahkan matriks
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,0,2],[3,1,4],[2,1,0]] + [[2,3,1],[1,2,3],[4,0,1]]
+Hasil yang Diharapkan: [[3,3,3],[4,3,7],[6,1,1]]
+
+
+###Judul Soal: Pengurangan Matriks 2x2
+Deskripsi Soal: Diberikan A = [[5,7],[2,9]] dan B = [[3,4],[1,6]], cari A - B
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat pengurangan matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apakah A - B = B - A untuk matriks A dan B?
+Pilihan:
+  A) Ya, selalu sama
+  B) Tidak, pengurangan matriks tidak komutatif
+  C) Ya, jika A dan B berukuran sama
+  D) Tergantung nilai elemennya
+Jawaban Benar: B
+
+#Langkah 2 [Ekspresi & Jawaban]: Tulis pengurangan matriks
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[5,7],[2,9]] - [[3,4],[1,6]]
+Hasil yang Diharapkan: [[5,7],[2,9]] - [[3,4],[1,6]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Kurangkan elemen yang bersesuaian
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[5,7],[2,9]] - [[3,4],[1,6]]
+Hasil yang Diharapkan: [[2,3],[1,3]]
+
+
+###Judul Soal: Pengurangan Matriks 3x2
+Deskripsi Soal: Diberikan A = [[8,5],[3,7],[6,2]] dan B = [[2,1],[1,3],[4,0]], cari A - B
+
+#Langkah 1 [Ekspresi & Jawaban]: Kurangkan matriks
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[8,5],[3,7],[6,2]] - [[2,1],[1,3],[4,0]]
+Hasil yang Diharapkan: [[6,4],[2,4],[2,2]]
+
+
+###Judul Soal: Perkalian Skalar 2x2
+Deskripsi Soal: Diberikan matriks A = [[2,3],[4,5]], cari 3A
+
+#Langkah 1 [Isi Titik-Titik]: Definisi perkalian skalar
+Tipe Langkah: fill-blank
+Pertanyaan: Perkalian skalar k dengan matriks A dilakukan dengan mengalikan setiap __ matriks dengan k
+Titik-Titik:
+  - Titik 1: elemen
+
+#Langkah 2 [Ekspresi & Jawaban]: Tulis perkalian skalar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*[[2,3],[4,5]]
+Hasil yang Diharapkan: 3*[[2,3],[4,5]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Kalikan setiap elemen dengan skalar
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*[[2,3],[4,5]]
+Hasil yang Diharapkan: [[6,9],[12,15]]
+
+
+###Judul Soal: Perkalian Skalar 3x3
+Deskripsi Soal: Diberikan A = [[1,2,0],[3,-1,4],[2,1,-2]], cari -2A
+
+#Langkah 1 [Benar/Salah]: Perkalian dengan skalar negatif
+Tipe Langkah: true-false
+Pertanyaan: Ketika matriks dikalikan dengan skalar negatif, semua elemen berubah tanda. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Kalikan matriks dengan -2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: -2*[[1,2,0],[3,-1,4],[2,1,-2]]
+Hasil yang Diharapkan: [[-2,-4,0],[-6,2,-8],[-4,-2,4]]
+
+
+###Judul Soal: Operasi Matriks Gabungan
+Deskripsi Soal: Diberikan A = [[2,1],[3,4]] dan B = [[1,2],[2,1]], cari 2A + 3B
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Urutan operasi
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk menghitung 2A + 3B, langkah pertama adalah?
+Pilihan:
+  A) Jumlahkan A dan B dulu
+  B) Kalikan A dengan 2 dan B dengan 3 dulu
+  C) Kalikan hasil A + B dengan 5
+  D) Tidak ada yang benar
+Jawaban Benar: B
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung 2A
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*[[2,1],[3,4]]
+Hasil yang Diharapkan: [[4,2],[6,8]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung 3B
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*[[1,2],[2,1]]
+Hasil yang Diharapkan: [[3,6],[6,3]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Jumlahkan hasilnya
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[4,2],[6,8]] + [[3,6],[6,3]]
+Hasil yang Diharapkan: [[7,8],[12,11]]
+
+
+###Judul Soal: Perkalian Matriks 2x3 dan 3x2
+Deskripsi Soal: Diberikan A = [[1,2,3],[4,5,6]] dan B = [[1,4],[2,5],[3,6]], cari AB
+
+#Langkah 1 [Isi Titik-Titik]: Dimensi hasil perkalian
+Tipe Langkah: fill-blank
+Pertanyaan: Jika A berukuran 2x3 dan B berukuran 3x2, maka AB berukuran __ x __
+Titik-Titik:
+  - Titik 1: 2
+  - Titik 2: 2
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Jumlah perkalian per elemen
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk menghitung satu elemen dalam AB, berapa kali perkalian yang dilakukan?
+Pilihan:
+  A) 2
+  B) 3
+  C) 4
+  D) 6
+Jawaban Benar: B
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*1 + 2*2 + 3*3
+Hasil yang Diharapkan: 14
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*4 + 2*5 + 3*6
+Hasil yang Diharapkan: 32
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 1
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 4*1 + 5*2 + 6*3
+Hasil yang Diharapkan: 32
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 4*4 + 5*5 + 6*6
+Hasil yang Diharapkan: 77
+
+#Langkah 7 [Ekspresi & Jawaban]: Bentuk matriks hasil AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2,3],[4,5,6]] * [[1,4],[2,5],[3,6]]
+Hasil yang Diharapkan: [[14,32],[32,77]]
+
+
+###Judul Soal: Kompatibilitas Perkalian Matriks
+Deskripsi Soal: Diberikan C matriks 2x3 dan D matriks 2x4, apakah CD dapat dihitung?
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Syarat perkalian matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks C (2x3) dan D (2x4) dapat dikalikan menjadi CD jika?
+Pilihan:
+  A) Ya, karena keduanya punya 2 baris
+  B) Tidak, karena jumlah kolom C tidak sama dengan jumlah baris D
+  C) Ya, hasilnya 2x4
+  D) Ya, hasilnya 3x4
+Jawaban Benar: B
+
+#Langkah 2 [Isi Titik-Titik]: Jumlah kolom dan baris
+Tipe Langkah: fill-blank
+Pertanyaan: Jumlah kolom C adalah __ dan jumlah baris D adalah __
+Titik-Titik:
+  - Titik 1: 3
+  - Titik 2: 2
+
+#Langkah 3 [Benar/Salah]: Kesimpulan kompatibilitas
+Tipe Langkah: true-false
+Pertanyaan: Karena 3 tidak sama dengan 2, maka CD tidak dapat dihitung. Benar atau Salah?
+Jawaban: Benar
+
+
+###Judul Soal: Perkalian Matriks Tidak Komutatif
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]] dan B = [[2,0],[1,3]], bandingkan AB dan BA
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat komutatif perkalian matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apakah AB selalu sama dengan BA untuk sembarang matriks A dan B?
+Pilihan:
+  A) Ya, selalu sama
+  B) Tidak, perkalian matriks tidak komutatif
+  C) Ya, jika A dan B persegi
+  D) Ya, jika A = B
+Jawaban Benar: B
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*2 + 2*1
+Hasil yang Diharapkan: 4
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*0 + 2*3
+Hasil yang Diharapkan: 6
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*2 + 4*1
+Hasil yang Diharapkan: 10
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*0 + 4*3
+Hasil yang Diharapkan: 12
+
+#Langkah 6 [Ekspresi & Jawaban]: Bentuk matriks AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] * [[2,0],[1,3]]
+Hasil yang Diharapkan: [[4,6],[10,12]]
+
+#Langkah 7 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari BA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*1 + 0*3
+Hasil yang Diharapkan: 2
+
+#Langkah 8 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari BA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2*2 + 0*4
+Hasil yang Diharapkan: 4
+
+#Langkah 9 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari BA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*1 + 3*3
+Hasil yang Diharapkan: 10
+
+#Langkah 10 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari BA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*2 + 3*4
+Hasil yang Diharapkan: 14
+
+#Langkah 11 [Ekspresi & Jawaban]: Bentuk matriks BA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,0],[1,3]] * [[1,2],[3,4]]
+Hasil yang Diharapkan: [[2,4],[10,14]]
+
+#Langkah 12 [Benar/Salah]: Kesimpulan
+Tipe Langkah: true-false
+Pertanyaan: Dari hasil di atas, AB tidak sama dengan BA. Benar atau Salah?
+Jawaban: Benar
+
+
+###Judul Soal: Transpose Matriks 2x2
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]], cari A^T
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi transpose
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Transpose matriks adalah operasi yang?
+Pilihan:
+  A) Menukar baris menjadi kolom
+  B) Mengalikan semua elemen dengan -1
+  C) Membalik urutan elemen
+  D) Menjumlahkan diagonal utama
+Jawaban Benar: A
+
+#Langkah 2 [Isi Titik-Titik]: Dimensi hasil transpose
+Tipe Langkah: fill-blank
+Pertanyaan: Jika A berukuran 2x2, maka A^T berukuran __ x __
+Titik-Titik:
+  - Titik 1: 2
+  - Titik 2: 2
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung transpose
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[1,2],[3,4]])
+Hasil yang Diharapkan: [[1,3],[2,4]]
+
+
+###Judul Soal: Transpose Matriks 3x2
+Deskripsi Soal: Diberikan A = [[1,2],[3,4],[5,6]], cari A^T
+
+#Langkah 1 [Isi Titik-Titik]: Dimensi transpose
+Tipe Langkah: fill-blank
+Pertanyaan: Jika A berukuran 3x2, maka A^T berukuran __ x __
+Titik-Titik:
+  - Titik 1: 2
+  - Titik 2: 3
+
+#Langkah 2 [Ekspresi & Jawaban]: Transpose matriks
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[1,2],[3,4],[5,6]])
+Hasil yang Diharapkan: [[1,3,5],[2,4,6]]
+
+
+###Judul Soal: Sifat Transpose
+Deskripsi Soal: Diberikan A = [[2,3],[1,4]], verifikasi (A^T)^T = A
+
+#Langkah 1 [Benar/Salah]: Sifat transpose ganda
+Tipe Langkah: true-false
+Pertanyaan: Transpose dari transpose suatu matriks akan menghasilkan matriks semula. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung A^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[2,3],[1,4]])
+Hasil yang Diharapkan: [[2,1],[3,4]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung (A^T)^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[2,1],[3,4]])
+Hasil yang Diharapkan: [[2,3],[1,4]]
+
+
+###Judul Soal: Transpose dari Jumlah
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], verifikasi (A+B)^T = A^T + B^T
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat distributif transpose
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apakah (A+B)^T = A^T + B^T untuk sembarang matriks A dan B?
+Pilihan:
+  A) Ya, transpose bersifat distributif terhadap penjumlahan
+  B) Tidak, harus dihitung satu per satu
+  C) Ya, hanya untuk matriks persegi
+  D) Tergantung ukuran matriks
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung A + B
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] + [[5,6],[7,8]]
+Hasil yang Diharapkan: [[6,8],[10,12]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung (A+B)^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[6,8],[10,12]])
+Hasil yang Diharapkan: [[6,10],[8,12]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung A^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[1,2],[3,4]])
+Hasil yang Diharapkan: [[1,3],[2,4]]
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung B^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[5,6],[7,8]])
+Hasil yang Diharapkan: [[5,7],[6,8]]
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung A^T + B^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,3],[2,4]] + [[5,7],[6,8]]
+Hasil yang Diharapkan: [[6,10],[8,12]]
+
+
+###Judul Soal: Matriks Identitas 2x2
+Deskripsi Soal: Diberikan A = [[3,4],[5,6]], verifikasi AI = IA = A dengan I matriks identitas 2x2
+
+#Langkah 1 [Isi Titik-Titik]: Bentuk matriks identitas
+Tipe Langkah: fill-blank
+Pertanyaan: Matriks identitas 2x2 adalah I = [[__,0],[0,__]]
+Titik-Titik:
+  - Titik 1: 1
+  - Titik 2: 1
+
+#Langkah 2 [Benar/Salah]: Sifat matriks identitas
+Tipe Langkah: true-false
+Pertanyaan: Untuk sembarang matriks persegi A, berlaku AI = IA = A. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari AI
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*1 + 4*0
+Hasil yang Diharapkan: 3
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari AI
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*0 + 4*1
+Hasil yang Diharapkan: 4
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari AI
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 5*1 + 6*0
+Hasil yang Diharapkan: 5
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari AI
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 5*0 + 6*1
+Hasil yang Diharapkan: 6
+
+#Langkah 7 [Ekspresi & Jawaban]: Bentuk AI
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,4],[5,6]] * [[1,0],[0,1]]
+Hasil yang Diharapkan: [[3,4],[5,6]]
+
+
+###Judul Soal: Matriks Nol
+Deskripsi Soal: Diberikan A = [[2,3],[4,5]], verifikasi A + O = A dengan O matriks nol
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat matriks nol
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks nol terhadap operasi penjumlahan matriks berfungsi seperti?
+Pilihan:
+  A) Angka 1 pada perkalian
+  B) Angka 0 pada penjumlahan
+  C) Angka -1 pada pengurangan
+  D) Tidak ada padanan
+Jawaban Benar: B
+
+#Langkah 2 [Ekspresi & Jawaban]: Jumlahkan dengan matriks nol
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,3],[4,5]] + [[0,0],[0,0]]
+Hasil yang Diharapkan: [[2,3],[4,5]]
+
+
+###Judul Soal: Perkalian dengan Matriks Nol
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]], verifikasi A * O = O dengan O matriks nol 2x2
+
+#Langkah 1 [Benar/Salah]: Hasil perkalian dengan matriks nol
+Tipe Langkah: true-false
+Pertanyaan: Perkalian sembarang matriks dengan matriks nol akan menghasilkan matriks nol. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung perkalian dengan matriks nol
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] * [[0,0],[0,0]]
+Hasil yang Diharapkan: [[0,0],[0,0]]
+
+
+###Judul Soal: Matriks Diagonal
+Deskripsi Soal: Diberikan matriks diagonal D = [[3,0,0],[0,5,0],[0,0,2]] dan A = [[1,2,3],[4,5,6],[7,8,9]], cari DA
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Karakteristik matriks diagonal
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks diagonal adalah matriks yang?
+Pilihan:
+  A) Semua elemen bernilai sama
+  B) Elemen di luar diagonal utama bernilai 0
+  C) Berbentuk persegi panjang
+  D) Transpose-nya sama dengan matriks asli
+Jawaban Benar: B
+
+#Langkah 2 [Isi Titik-Titik]: Efek perkalian matriks diagonal
+Tipe Langkah: fill-blank
+Pertanyaan: Mengalikan matriks diagonal D dari kiri ke matriks A akan mengalikan setiap __ A dengan elemen diagonal D yang bersesuaian
+Titik-Titik:
+  - Titik 1: baris
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*1 + 0*4 + 0*7
+Hasil yang Diharapkan: 3
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*2 + 0*5 + 0*8
+Hasil yang Diharapkan: 6
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen (1,3) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*3 + 0*6 + 0*9
+Hasil yang Diharapkan: 9
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*1 + 5*4 + 0*7
+Hasil yang Diharapkan: 20
+
+#Langkah 7 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*2 + 5*5 + 0*8
+Hasil yang Diharapkan: 25
+
+#Langkah 8 [Ekspresi & Jawaban]: Hitung elemen (2,3) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*3 + 5*6 + 0*9
+Hasil yang Diharapkan: 30
+
+#Langkah 9 [Ekspresi & Jawaban]: Hitung elemen (3,1) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*1 + 0*4 + 2*7
+Hasil yang Diharapkan: 14
+
+#Langkah 10 [Ekspresi & Jawaban]: Hitung elemen (3,2) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*2 + 0*5 + 2*8
+Hasil yang Diharapkan: 16
+
+#Langkah 11 [Ekspresi & Jawaban]: Hitung elemen (3,3) dari DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*3 + 0*6 + 2*9
+Hasil yang Diharapkan: 18
+
+#Langkah 12 [Ekspresi & Jawaban]: Bentuk matriks hasil DA
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,0,0],[0,5,0],[0,0,2]] * [[1,2,3],[4,5,6],[7,8,9]]
+Hasil yang Diharapkan: [[3,6,9],[20,25,30],[14,16,18]]
+
+
+###Judul Soal: Matriks Simetris
+Deskripsi Soal: Tentukan apakah A = [[1,2,3],[2,4,5],[3,5,6]] adalah matriks simetris (A = A^T)
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Definisi matriks simetris
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Matriks A disebut simetris jika?
+Pilihan:
+  A) A = -A
+  B) A = A^T
+  C) A = A^(-1)
+  D) A adalah matriks diagonal
+Jawaban Benar: B
+
+#Langkah 2 [Benar/Salah]: Syarat matriks simetris
+Tipe Langkah: true-false
+Pertanyaan: Matriks simetris harus berbentuk persegi. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung A^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[1,2,3],[2,4,5],[3,5,6]])
+Hasil yang Diharapkan: [[1,2,3],[2,4,5],[3,5,6]]
+
+#Langkah 4 [Benar/Salah]: Kesimpulan
+Tipe Langkah: true-false
+Pertanyaan: Karena A^T = A, maka A adalah matriks simetris. Benar atau Salah?
+Jawaban: Benar
+
+
+###Judul Soal: Pangkat Matriks
+Deskripsi Soal: Diberikan A = [[1,1],[0,1]], cari A^2
+
+#Langkah 1 [Isi Titik-Titik]: Definisi pangkat matriks
+Tipe Langkah: fill-blank
+Pertanyaan: A^2 = A __ A
+Titik-Titik:
+  - Titik 1: *
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari A^2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*1 + 1*0
+Hasil yang Diharapkan: 1
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari A^2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*1 + 1*1
+Hasil yang Diharapkan: 2
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari A^2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*1 + 1*0
+Hasil yang Diharapkan: 0
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari A^2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 0*1 + 1*1
+Hasil yang Diharapkan: 1
+
+#Langkah 6 [Ekspresi & Jawaban]: Bentuk A^2
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,1],[0,1]] * [[1,1],[0,1]]
+Hasil yang Diharapkan: [[1,2],[0,1]]
+
+
+###Judul Soal: Sifat Distributif
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]], B = [[2,1],[1,2]], C = [[1,0],[0,1]], verifikasi A(B+C) = AB + AC
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat distributif perkalian matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Apakah A(B+C) = AB + AC untuk sembarang matriks A, B, C yang kompatibel?
+Pilihan:
+  A) Ya, perkalian matriks distributif terhadap penjumlahan
+  B) Tidak, harus dihitung langsung
+  C) Ya, hanya untuk matriks persegi
+  D) Tergantung ukurannya
+Jawaban Benar: A
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung B + C
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,1],[1,2]] + [[1,0],[0,1]]
+Hasil yang Diharapkan: [[3,1],[1,3]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari A(B+C)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*3 + 2*1
+Hasil yang Diharapkan: 5
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari A(B+C)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1*1 + 2*3
+Hasil yang Diharapkan: 7
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari A(B+C)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*3 + 4*1
+Hasil yang Diharapkan: 13
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari A(B+C)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3*1 + 4*3
+Hasil yang Diharapkan: 15
+
+#Langkah 7 [Ekspresi & Jawaban]: Bentuk A(B+C)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] * [[3,1],[1,3]]
+Hasil yang Diharapkan: [[5,7],[13,15]]
+
+#Langkah 8 [Ekspresi & Jawaban]: Hitung AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] * [[2,1],[1,2]]
+Hasil yang Diharapkan: [[4,5],[10,11]]
+
+#Langkah 9 [Ekspresi & Jawaban]: Hitung AC
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] * [[1,0],[0,1]]
+Hasil yang Diharapkan: [[1,2],[3,4]]
+
+#Langkah 10 [Ekspresi & Jawaban]: Hitung AB + AC
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[4,5],[10,11]] + [[1,2],[3,4]]
+Hasil yang Diharapkan: [[5,7],[13,15]]
+
+
+###Judul Soal: Sifat Asosiatif Penjumlahan
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]], B = [[2,3],[4,5]], C = [[1,1],[1,1]], verifikasi (A+B)+C = A+(B+C)
+
+#Langkah 1 [Benar/Salah]: Sifat asosiatif
+Tipe Langkah: true-false
+Pertanyaan: Penjumlahan matriks bersifat asosiatif. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung A + B
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] + [[2,3],[4,5]]
+Hasil yang Diharapkan: [[3,5],[7,9]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung (A+B) + C
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[3,5],[7,9]] + [[1,1],[1,1]]
+Hasil yang Diharapkan: [[4,6],[8,10]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung B + C
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,3],[4,5]] + [[1,1],[1,1]]
+Hasil yang Diharapkan: [[3,4],[5,6]]
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung A + (B+C)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] + [[3,4],[5,6]]
+Hasil yang Diharapkan: [[4,6],[8,10]]
+
+
+###Judul Soal: Transpose dari Hasil Kali
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]] dan B = [[2,1],[0,3]], verifikasi (AB)^T = B^T A^T
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Sifat transpose hasil kali
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk matriks A dan B yang kompatibel, (AB)^T sama dengan?
+Pilihan:
+  A) A^T B^T
+  B) B^T A^T
+  C) AB
+  D) BA
+Jawaban Benar: B
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung AB
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] * [[2,1],[0,3]]
+Hasil yang Diharapkan: [[2,7],[6,15]]
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung (AB)^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[2,7],[6,15]])
+Hasil yang Diharapkan: [[2,6],[7,15]]
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung A^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[1,2],[3,4]])
+Hasil yang Diharapkan: [[1,3],[2,4]]
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung B^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: transpose([[2,1],[0,3]])
+Hasil yang Diharapkan: [[2,0],[1,3]]
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung B^T A^T
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[2,0],[1,3]] * [[1,3],[2,4]]
+Hasil yang Diharapkan: [[2,6],[7,15]]
+
+
+###Judul Soal: Trace Matriks
+Deskripsi Soal: Cari trace (jumlah elemen diagonal) dari A = [[2,3,4],[1,5,6],[7,8,9]]
+
+#Langkah 1 [Isi Titik-Titik]: Definisi trace
+Tipe Langkah: fill-blank
+Pertanyaan: Trace matriks adalah jumlah dari elemen-elemen pada __ utama
+Titik-Titik:
+  - Titik 1: diagonal
+
+#Langkah 2 [Pilihan Ganda - Tunggal]: Elemen diagonal
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Elemen diagonal utama dari matriks 3x3 adalah?
+Pilihan:
+  A) a[1,1], a[2,2], a[3,3]
+  B) a[1,3], a[2,2], a[3,1]
+  C) Semua elemen baris pertama
+  D) Semua elemen kolom pertama
+Jawaban Benar: A
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung trace
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 2 + 5 + 9
+Hasil yang Diharapkan: 16
+
+
+###Judul Soal: Sifat Trace
+Deskripsi Soal: Diberikan A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], verifikasi tr(A+B) = tr(A) + tr(B)
+
+#Langkah 1 [Benar/Salah]: Sifat trace terhadap penjumlahan
+Tipe Langkah: true-false
+Pertanyaan: Trace dari jumlah dua matriks sama dengan jumlah trace keduanya. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 2 [Ekspresi & Jawaban]: Hitung trace A
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 1 + 4
+Hasil yang Diharapkan: 5
+
+#Langkah 3 [Ekspresi & Jawaban]: Hitung trace B
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 5 + 8
+Hasil yang Diharapkan: 13
+
+#Langkah 4 [Ekspresi & Jawaban]: Hitung tr(A) + tr(B)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 5 + 13
+Hasil yang Diharapkan: 18
+
+#Langkah 5 [Ekspresi & Jawaban]: Hitung A + B
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[1,2],[3,4]] + [[5,6],[7,8]]
+Hasil yang Diharapkan: [[6,8],[10,12]]
+
+#Langkah 6 [Ekspresi & Jawaban]: Hitung tr(A+B)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 6 + 12
+Hasil yang Diharapkan: 18
+
+
+###Judul Soal: Persamaan Matriks
+Deskripsi Soal: Selesaikan X pada persamaan X + [[1,2],[3,4]] = [[5,7],[8,10]]
+
+#Langkah 1 [Pilihan Ganda - Tunggal]: Cara menyelesaikan persamaan matriks
+Tipe Langkah: multiple-choice-single
+Pertanyaan: Untuk menyelesaikan X + A = B, kita harus?
+Pilihan:
+  A) Kalikan kedua ruas dengan A
+  B) Kurangkan A dari kedua ruas
+  C) Bagi kedua ruas dengan A
+  D) Transpose kedua ruas
+Jawaban Benar: B
+
+#Langkah 2 [Ekspresi & Jawaban]: Isolasi X
+Tipe Langkah: step-by-step
+Ekspresi Langkah: [[5,7],[8,10]] - [[1,2],[3,4]]
+Hasil yang Diharapkan: [[4,5],[5,6]]
+
+
+###Judul Soal: Persamaan Skalar
+Deskripsi Soal: Selesaikan k jika k * [[2,4],[6,8]] = [[6,12],[18,24]]
+
+#Langkah 1 [Isi Titik-Titik]: Persamaan dari elemen pertama
+Tipe Langkah: fill-blank
+Pertanyaan: Dari elemen (1,1): k times __ = 6
+Titik-Titik:
+  - Titik 1: 2
+
+#Langkah 2 [Ekspresi & Jawaban]: Selesaikan untuk k
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 6/2
+Hasil yang Diharapkan: 3
+
+#Langkah 3 [Benar/Salah]: Verifikasi dengan elemen lain
+Tipe Langkah: true-false
+Pertanyaan: Untuk memverifikasi, kita harus memeriksa apakah k = 3 berlaku untuk semua elemen. Benar atau Salah?
+Jawaban: Benar
+
+#Langkah 4 [Ekspresi & Jawaban]: Verifikasi dengan elemen (1,2)
+Tipe Langkah: step-by-step
+Ekspresi Langkah: 3 * 4
+Hasil yang Diharapkan: 12
