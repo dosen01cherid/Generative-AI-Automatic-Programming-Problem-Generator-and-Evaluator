@@ -3,7 +3,7 @@ Problem Description: Pahami definisi baris dalam konteks matriks dan sistem pers
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi baris
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam matriks [[2,3,1],[4,5,2],[1,0,3]], baris adalah:
 Options:
   A) Susunan elemen horizontal, misalnya [2,3,1]
@@ -14,7 +14,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Jumlah baris
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Berapa banyak baris dalam matriks [[1,2,3,4],[5,6,7,8],[9,10,11,12]]?
 Options:
   A) 3 baris
@@ -25,13 +25,13 @@ Correct Answer: A
 
 #Step 3 [Benar/Salah]: Hubungan baris dan persamaan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam matriks augmented untuk sistem persamaan linear, setiap baris mewakili satu persamaan
 Correct Answer: Benar
 
 #Step 4 [Isi Titik-Titik]: Identifikasi baris
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam matriks [[a,b,c],[d,e,f]], baris kedua adalah [{blank},{blank},{blank}]
 Correct Answer: d,e,f
 
@@ -41,7 +41,7 @@ Problem Description: Pahami apa itu elemen pivot dan mengapa pivot penting dalam
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu pivot?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Elemen pivot dalam eliminasi Gauss-Jordan adalah:
 Options:
   A) Elemen bukan nol pertama (dari kiri) dalam suatu baris
@@ -52,7 +52,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Identifikasi pivot
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam baris [0,0,3,2,1], elemen pivot adalah:
 Options:
   A) 3 (elemen bukan nol pertama)
@@ -63,19 +63,19 @@ Correct Answer: A
 
 #Step 3 [Benar/Salah]: Posisi pivot
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam bentuk eselon baris tereduksi, setiap pivot harus bernilai 1
 Correct Answer: Benar
 
 #Step 4 [Benar/Salah]: Peran pivot
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Pivot digunakan untuk mengeliminasi elemen-elemen lain dalam kolomnya menjadi nol
 Correct Answer: Benar
 
 #Step 5 [Pilihan Ganda - Tunggal]: Identifikasi pivot dalam matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam matriks [[1,2,3],[0,5,4],[0,0,2]], elemen-elemen pivot berada pada posisi:
 Options:
   A) Baris 1 kolom 1; Baris 2 kolom 2; Baris 3 kolom 3
@@ -90,7 +90,7 @@ Problem Description: Pahami prinsip dan filosofi di balik pemilihan posisi pivot
 
 #Step 1 [Pilihan Ganda - Tunggal]: Tujuan pemilihan pivot
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Mengapa kita memilih elemen bukan nol pertama sebagai pivot?
 Options:
   A) Untuk membentuk struktur tangga (echelon) yang sistematis dan menghindari baris nol di tengah
@@ -101,13 +101,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Pivot dan eliminasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Memilih pivot yang tepat membantu kita mengeliminasi elemen di bawah dan di atas pivot secara sistematis
 Correct Answer: Benar
 
 #Step 3 [Pilihan Ganda - Berganda]: Karakteristik pivot yang baik
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam eliminasi Gauss-Jordan, pivot yang baik memiliki karakteristik:
 Options:
   A) Bukan nol (tidak boleh nol)
@@ -118,7 +118,7 @@ Correct Answer: A, B, C
 
 #Step 4 [Benar/Salah]: Strategi pivot
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Jika elemen yang seharusnya menjadi pivot bernilai nol, kita dapat menukar baris untuk mendapatkan pivot bukan nol
 Correct Answer: Benar
 
@@ -128,7 +128,7 @@ Problem Description: Pahami prinsip pemilihan posisi pivot untuk membentuk reduc
 
 #Step 1 [Pilihan Ganda - Tunggal]: Posisi pivot dalam RREF
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam bentuk eselon baris tereduksi (RREF), posisi pivot pada baris ke-2 harus:
 Options:
   A) Lebih ke kanan dari posisi pivot pada baris ke-1
@@ -139,13 +139,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Struktur pivot
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam RREF yang benar, pivot membentuk pola "tangga" dari kiri atas ke kanan bawah
 Correct Answer: Benar
 
 #Step 3 [Pilihan Ganda - Tunggal]: Contoh posisi pivot
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks mana yang memiliki struktur pivot yang benar untuk bentuk eselon?
 Options:
   A) [[1,2,0],[0,0,1],[0,0,0]] - pivot di kolom 1 dan 3
@@ -156,13 +156,13 @@ Correct Answer: A
 
 #Step 4 [Benar/Salah]: Kolom pivot
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam RREF, selain pivot (yang bernilai 1), semua elemen lain dalam kolom pivot harus bernilai 0
 Correct Answer: Benar
 
 #Step 5 [Pilihan Ganda - Tunggal]: Strategi pivot optimal
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa strategi terbaik dalam memilih pivot?
 Options:
   A) Mulai dari baris paling atas, pilih elemen bukan nol pertama, lalu turun ke baris berikutnya dengan pivot lebih ke kanan
@@ -177,7 +177,7 @@ Problem Description: Pahami konsep dasar operasi baris elementer pada matriks
 
 #Step 1 [Pilihan Ganda - Tunggal]: Tujuan operasi baris
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa tujuan utama dari operasi baris elementer?
 Options:
   A) Mengubah matriks menjadi bentuk yang lebih sederhana tanpa mengubah solusi sistem
@@ -188,7 +188,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Jenis operasi baris elementer
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Ada tiga jenis operasi baris elementer. Pilih semua yang benar:
 Options:
   A) Mengalikan satu baris dengan konstanta bukan nol
@@ -199,7 +199,7 @@ Correct Answer: A, B, C
 
 #Step 3 [Benar/Salah]: Sifat operasi baris
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi baris elementer tidak mengubah himpunan solusi dari sistem persamaan linear
 Correct Answer: Benar
 
@@ -209,25 +209,25 @@ Problem Description: Pelajari notasi standar untuk operasi baris
 
 #Step 1 [Isi Titik-Titik]: Notasi perkalian skalar
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mengalikan baris 2 dengan 3, kita tulis R_2 → {blank}R_2
 Correct Answer: 3
 
 #Step 2 [Isi Titik-Titik]: Notasi pertukaran baris
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk menukar baris 1 dan baris 3, kita tulis R_1 {blank} R_3
 Correct Answer: \leftrightarrow
 
 #Step 3 [Isi Titik-Titik]: Notasi penjumlahan baris
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mengganti baris 2 dengan "baris 2 dikurangi 2 kali baris 1", kita tulis R_2 → R_2 {blank} 2R_1
 Correct Answer: -
 
 #Step 4 [Benar/Salah]: Arti notasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Notasi R_3 → R_3 + 5R_1 berarti "ganti baris 3 dengan baris 3 ditambah 5 kali baris 1"
 Correct Answer: Benar
 
@@ -237,7 +237,7 @@ Problem Description: Matriks berubah dari `[[2,4,6],[1,2,3]]` menjadi `[[1,2,3],
 
 #Step 1 [Pilihan Ganda - Tunggal]: Baris mana yang berubah?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Baris mana yang mengalami perubahan?
 Options:
   A) Baris 1
@@ -248,7 +248,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Jenis operasi
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Jenis operasi apa yang dilakukan?
 Options:
   A) Perkalian baris dengan skalar
@@ -259,13 +259,13 @@ Correct Answer: A
 
 #Step 3 [Isi Titik-Titik]: Skalar yang digunakan
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Baris 1 dikalikan dengan berapa? Jawab dalam bentuk pecahan jika perlu: {blank}
 Correct Answer: 1/2
 
 #Step 4 [Ekspresi & Jawaban]: Tuliskan notasi operasi baris
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,4,6],[1,2,3]]|R_1\to (1/2)R_1
 Expected Answer: [[1,2,3],[1,2,3]]
 
@@ -275,13 +275,13 @@ Problem Description: Lakukan operasi: kalikan baris pertama dengan `1/2` pada ma
 
 #Step 1 [Benar/Salah]: Efek pada baris lain
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Ketika mengalikan satu baris dengan skalar, baris-baris lain tidak berubah
 Correct Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Kalikan baris 1 dengan 1/2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[4,8,12],[2,3,5]]|R_1\to (1/2)R_1
 Expected Answer: [[2,4,6],[2,3,5]]
 
@@ -291,7 +291,7 @@ Problem Description: Matriks berubah dari `[[0,1,2],[1,0,3]]` menjadi `[[1,0,3],
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa yang terjadi?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang terjadi pada matriks?
 Options:
   A) Baris 1 dan baris 2 ditukar posisinya
@@ -302,13 +302,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Verifikasi pertukaran
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Setelah pertukaran, baris 1 baru sama dengan baris 2 lama
 Correct Answer: Benar
 
 #Step 3 [Ekspresi & Jawaban]: Tuliskan notasi operasi baris
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[0,1,2],[1,0,3]]|R_1\leftrightarrow R_2
 Expected Answer: [[1,0,3],[0,1,2]]
 
@@ -318,7 +318,7 @@ Problem Description: Tukar baris 1 dan baris 2 pada matriks `[[3,4,5],[1,2,3]]`
 
 #Step 1 [Pilihan Ganda - Tunggal]: Hasil pertukaran
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Setelah menukar R_1 dan R_2, baris pertama menjadi:
 Options:
   A) [[1,2,3]]
@@ -329,7 +329,7 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Tukar baris 1 dan baris 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,4,5],[1,2,3]]|R_1\leftrightarrow R_2
 Expected Answer: [[1,2,3],[3,4,5]]
 
@@ -339,7 +339,7 @@ Problem Description: Matriks berubah dari `[[1,2,3],[2,4,7]]` menjadi `[[1,2,3],
 
 #Step 1 [Pilihan Ganda - Tunggal]: Baris mana yang berubah?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Baris mana yang berubah?
 Options:
   A) Hanya baris 2
@@ -350,13 +350,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Jenis operasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Ini adalah operasi penjumlahan/pengurangan baris (Tipe 3)
 Correct Answer: Benar
 
 #Step 3 [Pilihan Ganda - Tunggal]: Operasi yang tepat
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi mana yang menghasilkan perubahan ini?
 Options:
   A) R_2 → R_2 - R_1
@@ -367,7 +367,7 @@ Correct Answer: A
 
 #Step 4 [Ekspresi & Jawaban]: Tuliskan notasi dan hasil
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3],[2,4,7]]|R_2\to R_2-R_1
 Expected Answer: [[1,2,3],[1,2,4]]
 
@@ -377,19 +377,19 @@ Problem Description: Lakukan operasi: ganti baris 2 dengan `R_2 - R_1` pada matr
 
 #Step 1 [Isi Titik-Titik]: Hitung elemen pertama baris 2 baru
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Elemen pertama baris 2 baru = 3 - 1 = {blank}
 Correct Answer: 2
 
 #Step 2 [Isi Titik-Titik]: Hitung elemen kedua baris 2 baru
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Elemen kedua baris 2 baru = 4 - 1 = {blank}
 Correct Answer: 3
 
 #Step 3 [Ekspresi & Jawaban]: Hasil operasi lengkap
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1,2],[3,4,8]]|R_2\to R_2-R_1
 Expected Answer: [[1,1,2],[2,3,6]]
 
@@ -399,7 +399,7 @@ Problem Description: Matriks berubah dari `[[1,1,2],[2,3,5]]` menjadi `[[1,1,2],
 
 #Step 1 [Pilihan Ganda - Tunggal]: Operasi apa yang dilakukan?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi mana yang mengubah baris 2?
 Options:
   A) R_2 → R_2 - 2R_1
@@ -410,13 +410,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Verifikasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk memverifikasi, kita hitung: [[2,3,5]] - 2[[1,1,2]] = [[0,1,1]]
 Correct Answer: Benar
 
 #Step 3 [Ekspresi & Jawaban]: Tuliskan operasi lengkap
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1,2],[2,3,5]]|R_2\to R_2-2R_1
 Expected Answer: [[1,1,2],[0,1,1]]
 
@@ -426,7 +426,7 @@ Problem Description: Lakukan operasi R_2 → R_2 - 3R_1 pada matriks `[[1,2,3],[
 
 #Step 1 [Pilihan Ganda - Tunggal]: Langkah pertama
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk melakukan R_2 - 3R_1, langkah pertama adalah:
 Options:
   A) Hitung 3R_1 terlebih dahulu
@@ -437,13 +437,13 @@ Correct Answer: A
 
 #Step 2 [Isi Titik-Titik]: Hitung 3R_1
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: 3R_1 = 3[[1,2,3]] = [[3,{blank},9]]
 Correct Answer: 6
 
 #Step 3 [Ekspresi & Jawaban]: Hasil operasi
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3],[3,7,12]]|R_2\to R_2-3R_1
 Expected Answer: [[1,2,3],[0,1,3]]
 
@@ -453,19 +453,19 @@ Problem Description: Ubah `[[2,4,8],[1,3,7]]` dengan dua operasi: (1) R_1 → (1
 
 #Step 1 [Benar/Salah]: Urutan operasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Urutan operasi baris penting - melakukan operasi dalam urutan berbeda bisa memberi hasil berbeda
 Correct Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Operasi pertama
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,4,8],[1,3,7]]|R_1\to (1/2)R_1
 Expected Answer: [[1,2,4],[1,3,7]]
 
 #Step 3 [Pilihan Ganda - Tunggal]: Mengapa operasi 1 dulu?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Mengapa kita lakukan R_1 → (1/2)R_1 terlebih dahulu?
 Options:
   A) Agar pivot (elemen kiri atas) menjadi 1, memudahkan eliminasi selanjutnya
@@ -476,7 +476,7 @@ Correct Answer: A
 
 #Step 4 [Ekspresi & Jawaban]: Operasi kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,4],[1,3,7]]|R_2\to R_2-R_1
 Expected Answer: [[1,2,4],[0,1,3]]
 
@@ -486,7 +486,7 @@ Problem Description: Matriks berubah dari `[[3,6,9],[1,3,6]]` menjadi `[[1,2,3],
 
 #Step 1 [Pilihan Ganda - Tunggal]: Operasi pertama
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi pertama yang dilakukan adalah:
 Options:
   A) R_1 → (1/3)R_1
@@ -497,7 +497,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Operasi kedua
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Setelah R_1 → (1/3)R_1 menghasilkan [[1,2,3],[1,3,6]], operasi selanjutnya adalah:
 Options:
   A) R_2 → R_2 - R_1
@@ -508,7 +508,7 @@ Correct Answer: A
 
 #Step 3 [Benar/Salah]: Hasil akhir
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dengan urutan R_1 → (1/3)R_1 kemudian R_2 → R_2 - R_1, kita dapatkan [[1,2,3],[0,1,3]]
 Correct Answer: Benar
 
@@ -518,7 +518,7 @@ Problem Description: Pahami apa itu bentuk eselon baris (row echelon form)
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi pivot
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang dimaksud dengan "pivot" dalam matriks?
 Options:
   A) Elemen bukan nol pertama (dari kiri) di setiap baris
@@ -529,7 +529,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Syarat bentuk eselon baris
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks dalam bentuk eselon baris jika memenuhi syarat berikut (pilih semua yang benar):
 Options:
   A) Semua baris nol (jika ada) berada di bawah
@@ -540,13 +540,13 @@ Correct Answer: A, B, C
 
 #Step 3 [Benar/Salah]: Contoh bentuk eselon
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,3],[0,1,4],[0,0,1]] adalah dalam bentuk eselon baris
 Correct Answer: Benar
 
 #Step 4 [Benar/Salah]: Bukan bentuk eselon
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,3],[2,1,4],[0,0,1]] BUKAN dalam bentuk eselon baris karena ada elemen bukan nol di bawah pivot pertama
 Correct Answer: Benar
 
@@ -556,7 +556,7 @@ Problem Description: Pahami bentuk eselon baris tereduksi (reduced row echelon f
 
 #Step 1 [Pilihan Ganda - Berganda]: Syarat tambahan untuk bentuk tereduksi
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Selain syarat eselon baris biasa, bentuk tereduksi juga memerlukan:
 Options:
   A) Setiap pivot bernilai 1
@@ -567,13 +567,13 @@ Correct Answer: A, B
 
 #Step 2 [Benar/Salah]: Contoh tereduksi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,0,0],[0,1,0],[0,0,1]] adalah bentuk eselon baris tereduksi (ini adalah matriks identitas)
 Correct Answer: Benar
 
 #Step 3 [Benar/Salah]: Bukan tereduksi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,3],[0,1,4],[0,0,1]] adalah eselon baris tetapi BUKAN tereduksi karena ada elemen bukan nol di atas pivot
 Correct Answer: Benar
 
@@ -583,37 +583,37 @@ Problem Description: Selesaikan sistem `[[2,4,16],[1,3,11]]` hingga bentuk eselo
 
 #Step 1 [Ekspresi & Jawaban]: Jadikan pivot pertama = 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,4,16],[1,3,11]]|R_1\to (1/2)R_1
 Expected Answer: [[1,2,8],[1,3,11]]
 
 #Step 2 [Ekspresi & Jawaban]: Eliminasi di bawah pivot pertama
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,8],[1,3,11]]|R_2\to R_2-R_1
 Expected Answer: [[1,2,8],[0,1,3]]
 
 #Step 3 [Benar/Salah]: Sudah eselon baris?
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,8],[0,1,3]] sudah dalam bentuk eselon baris
 Correct Answer: Benar
 
 #Step 4 [Benar/Salah]: Sudah tereduksi?
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,8],[0,1,3]] BELUM dalam bentuk tereduksi karena ada elemen 2 di atas pivot kedua
 Correct Answer: Benar
 
 #Step 5 [Ekspresi & Jawaban]: Eliminasi di atas pivot kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,8],[0,1,3]]|R_1\to R_1-2R_2
 Expected Answer: [[1,0,2],[0,1,3]]
 
 #Step 6 [Pilihan Ganda - Tunggal]: Solusi sistem
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dari [[1,0,2],[0,1,3]], solusi sistem adalah:
 Options:
   A) x = 2, y = 3
@@ -628,19 +628,19 @@ Problem Description: Seseorang mengklaim melakukan R_2 → R_2 - 2R_1 pada `[[1,
 
 #Step 1 [Isi Titik-Titik]: Hitung yang benar
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: 2R_1 = 2[[1,2,3]] = [[2,4,{blank}]]
 Correct Answer: 6
 
 #Step 2 [Isi Titik-Titik]: Hasil yang benar
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: R_2 - 2R_1 = [[4,5,6]] - [[2,4,6]] = [[2,1,{blank}]]
 Correct Answer: 0
 
 #Step 3 [Benar/Salah]: Verifikasi kesalahan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Hasil [[1,2,3],[2,1,0]] adalah BENAR untuk operasi R_2 → R_2 - 2R_1
 Correct Answer: Benar
 
@@ -650,13 +650,13 @@ Problem Description: Selesaikan `[[4,2,10],[2,3,11]]` menggunakan eliminasi Gaus
 
 #Step 1 [Ekspresi & Jawaban]: Jadikan pivot pertama = 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[4,2,10],[2,3,11]]|R_1\to (1/4)R_1
 Expected Answer: [[1,1/2,5/2],[2,3,11]]
 
 #Step 2 [Pilihan Ganda - Tunggal]: Operasi selanjutnya
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mengeliminasi elemen di bawah pivot pertama, operasi yang tepat adalah:
 Options:
   A) R_2 → R_2 - 2R_1
@@ -667,19 +667,19 @@ Correct Answer: A
 
 #Step 3 [Ekspresi & Jawaban]: Eliminasi di bawah pivot pertama
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1/2,5/2],[2,3,11]]|R_2\to R_2-2R_1
 Expected Answer: [[1,1/2,5/2],[0,2,6]]
 
 #Step 4 [Ekspresi & Jawaban]: Jadikan pivot kedua = 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1/2,5/2],[0,2,6]]|R_2\to (1/2)R_2
 Expected Answer: [[1,1/2,5/2],[0,1,3]]
 
 #Step 5 [Ekspresi & Jawaban]: Eliminasi di atas pivot kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1/2,5/2],[0,1,3]]|R_1\to R_1-(1/2)R_2
 Expected Answer: [[1,0,1],[0,1,3]]
 
@@ -689,7 +689,7 @@ Problem Description: Matriks `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` menjadi `[[1,2
 
 #Step 1 [Pilihan Ganda - Tunggal]: Baris yang berubah
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Baris mana yang berubah?
 Options:
   A) Baris 2
@@ -700,7 +700,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Operasi yang dilakukan
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi apa yang mengubah baris 2?
 Options:
   A) R_2 → R_2 - 2R_1
@@ -711,7 +711,7 @@ Correct Answer: A
 
 #Step 3 [Ekspresi & Jawaban]: Verifikasi operasi
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[2,5,7,31],[3,1,2,11]]|R_2\to R_2-2R_1
 Expected Answer: [[1,2,3,14],[0,1,1,3],[3,1,2,11]]
 
@@ -721,37 +721,37 @@ Problem Description: Selesaikan `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` sampai bent
 
 #Step 1 [Benar/Salah]: Pivot pertama sudah 1?
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Pivot pertama sudah bernilai 1, jadi kita bisa langsung eliminasi di bawahnya
 Correct Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Eliminasi baris 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[2,5,7,31],[3,1,2,11]]|R_2\to R_2-2R_1
 Expected Answer: [[1,2,3,14],[0,1,1,3],[3,1,2,11]]
 
 #Step 3 [Ekspresi & Jawaban]: Eliminasi baris 3
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[0,1,1,3],[3,1,2,11]]|R_3\to R_3-3R_1
 Expected Answer: [[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]
 
 #Step 4 [Ekspresi & Jawaban]: Eliminasi di bawah pivot kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]|R_3\to R_3+5R_2
 Expected Answer: [[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]
 
 #Step 5 [Ekspresi & Jawaban]: Jadikan pivot ketiga = 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]|R_3\to (-1/2)R_3
 Expected Answer: [[1,2,3,14],[0,1,1,3],[0,0,1,8]]
 
 #Step 6 [Benar/Salah]: Bentuk eselon baris tercapai?
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,3,14],[0,1,1,3],[0,0,1,8]] sudah dalam bentuk eselon baris
 Correct Answer: Benar
 
@@ -761,7 +761,7 @@ Problem Description: Lanjutkan dari `[[1,2,3,14],[0,1,1,3],[0,0,1,8]]` ke bentuk
 
 #Step 1 [Pilihan Ganda - Tunggal]: Strategi eliminasi mundur
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mendapat bentuk tereduksi, kita eliminasi:
 Options:
   A) Dari bawah ke atas, menghilangkan elemen di atas setiap pivot
@@ -772,25 +772,25 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Eliminasi di atas pivot ketiga (baris 2)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[0,1,1,3],[0,0,1,8]]|R_2\to R_2-R_3
 Expected Answer: [[1,2,3,14],[0,1,0,-5],[0,0,1,8]]
 
 #Step 3 [Ekspresi & Jawaban]: Eliminasi di atas pivot ketiga (baris 1)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3,14],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-3R_3
 Expected Answer: [[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]
 
 #Step 4 [Ekspresi & Jawaban]: Eliminasi di atas pivot kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-2R_2
 Expected Answer: [[1,0,0,0],[0,1,0,-5],[0,0,1,8]]
 
 #Step 5 [Pilihan Ganda - Tunggal]: Solusi sistem
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dari bentuk tereduksi, solusi sistem adalah:
 Options:
   A) x = 0, y = -5, z = 8
@@ -805,7 +805,7 @@ Problem Description: Selesaikan `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]` yang memerluk
 
 #Step 1 [Pilihan Ganda - Tunggal]: Masalah dengan matriks awal
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Mengapa kita perlu menukar baris?
 Options:
   A) Elemen kiri atas (posisi pivot pertama) adalah nol
@@ -816,7 +816,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Baris mana yang ditukar?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mendapat pivot pertama bukan nol, kita tukar:
 Options:
   A) R_1 dengan R_2 (atau R_3)
@@ -827,31 +827,31 @@ Correct Answer: A
 
 #Step 3 [Ekspresi & Jawaban]: Tukar baris 1 dan 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[0,2,1,5],[1,1,2,7],[2,1,3,10]]|R_1\leftrightarrow R_2
 Expected Answer: [[1,1,2,7],[0,2,1,5],[2,1,3,10]]
 
 #Step 4 [Ekspresi & Jawaban]: Eliminasi baris 3
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1,2,7],[0,2,1,5],[2,1,3,10]]|R_3\to R_3-2R_1
 Expected Answer: [[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]
 
 #Step 5 [Ekspresi & Jawaban]: Jadikan pivot kedua = 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]|R_2\to (1/2)R_2
 Expected Answer: [[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]
 
 #Step 6 [Ekspresi & Jawaban]: Eliminasi di bawah pivot kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]|R_3\to R_3+R_2
 Expected Answer: [[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]
 
 #Step 7 [Ekspresi & Jawaban]: Jadikan pivot ketiga = 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]|R_3\to -2R_3
 Expected Answer: [[1,1,2,7],[0,1,1/2,5/2],[0,0,1,3]]
 
@@ -861,7 +861,7 @@ Problem Description: Diberikan transformasi `[[2,4,6],[3,5,8]]` → `[[1,2,3],[3
 
 #Step 1 [Pilihan Ganda - Tunggal]: Operasi pertama
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi dari [[2,4,6],[3,5,8]] ke [[1,2,3],[3,5,8]] adalah:
 Options:
   A) R_1 → (1/2)R_1
@@ -872,7 +872,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Operasi kedua
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi dari [[1,2,3],[3,5,8]] ke [[1,2,3],[0,-1,-1]] adalah:
 Options:
   A) R_2 → R_2 - 3R_1
@@ -883,7 +883,7 @@ Correct Answer: A
 
 #Step 3 [Benar/Salah]: Verifikasi urutan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dengan operasi R_1 → (1/2)R_1 diikuti R_2 → R_2 - 3R_1, kita mengubah [[2,4,6],[3,5,8]] menjadi [[1,2,3],[0,-1,-1]]
 Correct Answer: Benar
 
@@ -893,7 +893,7 @@ Problem Description: Untuk mengubah `[[3,6,9],[6,13,21]]` ke bentuk eselon baris
 
 #Step 1 [Pilihan Ganda - Tunggal]: Langkah pertama yang baik
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Langkah pertama yang paling efisien adalah:
 Options:
   A) R_1 → (1/3)R_1 untuk membuat pivot = 1
@@ -904,13 +904,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Alasan strategi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Lebih baik jadikan pivot = 1 terlebih dahulu karena memudahkan perhitungan eliminasi selanjutnya
 Correct Answer: Benar
 
 #Step 3 [Pilihan Ganda - Tunggal]: Setelah R_1 → (1/3)R_1 menghasilkan [[1,2,3],[6,13,21]], langkah selanjutnya:
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Operasi selanjutnya yang tepat adalah:
 Options:
   A) R_2 → R_2 - 6R_1

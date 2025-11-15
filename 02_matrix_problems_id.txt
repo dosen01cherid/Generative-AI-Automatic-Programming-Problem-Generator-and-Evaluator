@@ -8,7 +8,7 @@ Problem Description: Pahami definisi matriks sebagai susunan bilangan dalam bent
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks adalah:
 Options:
   A) Susunan bilangan dalam baris dan kolom yang berbentuk persegi panjang
@@ -19,7 +19,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Representasi matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[1,2,3],[4,5,6]] memiliki struktur:
 Options:
   A) 2 baris dan 3 kolom
@@ -30,13 +30,13 @@ Correct Answer: A
 
 #Step 3 [Benar/Salah]: Elemen matriks
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Setiap angka dalam matriks disebut elemen atau entri matriks
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Notasi matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks biasanya dilambangkan dengan:
 Options:
   A) Huruf kapital, misalnya A, B, C
@@ -51,7 +51,7 @@ Problem Description: Pahami konsep baris, kolom, dan dimensi dalam matriks
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi baris
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Baris dalam matriks adalah:
 Options:
   A) Susunan elemen horizontal (dari kiri ke kanan)
@@ -62,7 +62,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Tunggal]: Definisi kolom
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Kolom dalam matriks adalah:
 Options:
   A) Susunan elemen vertikal (dari atas ke bawah)
@@ -73,13 +73,13 @@ Correct Answer: A
 
 #Step 3 [Isi Titik-Titik]: Ukuran matriks
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks [[a,b],[c,d],[e,f]] memiliki {blank} baris dan {blank} kolom
 Correct Answer: 3,2
 
 #Step 4 [Pilihan Ganda - Tunggal]: Notasi dimensi
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks berukuran 3x4 berarti:
 Options:
   A) 3 baris dan 4 kolom
@@ -90,7 +90,7 @@ Correct Answer: A
 
 #Step 5 [Benar/Salah]: Urutan notasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam notasi m x n, m selalu menyatakan jumlah baris dan n jumlah kolom
 Correct Answer: Benar
 
@@ -100,7 +100,7 @@ Problem Description: Pahami cara mengidentifikasi dan merujuk elemen tertentu da
 
 #Step 1 [Pilihan Ganda - Tunggal]: Notasi elemen
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Notasi a_(i,j) atau a_ij dalam matriks A berarti:
 Options:
   A) Elemen di baris ke-i dan kolom ke-j
@@ -111,13 +111,13 @@ Correct Answer: A
 
 #Step 2 [Isi Titik-Titik]: Identifikasi elemen
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam matriks A = [[1,2,3],[4,5,6]], elemen a_(2,3) = {blank}
 Correct Answer: 6
 
 #Step 3 [Pilihan Ganda - Tunggal]: Posisi elemen
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam matriks [[7,8],[9,10],[11,12]], elemen 10 berada di posisi:
 Options:
   A) Baris 2, kolom 2
@@ -128,7 +128,7 @@ Correct Answer: A
 
 #Step 4 [Benar/Salah]: Konvensi indeks
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Indeks baris dan kolom dimulai dari 1 (bukan 0) dalam notasi matematis standar
 Correct Answer: Benar
 
@@ -138,7 +138,7 @@ Problem Description: Pahami pentingnya matriks dalam matematika, sains, dan tekn
 
 #Step 1 [Pilihan Ganda - Tunggal]: Kegunaan matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Mengapa matriks penting dalam matematika dan aplikasinya?
 Options:
   A) Matriks mengorganisir data dan merepresentasikan transformasi linear secara efisien
@@ -149,7 +149,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Aplikasi matriks
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Di bidang mana matriks banyak digunakan?
 Options:
   A) Computer graphics (transformasi 3D, rendering)
@@ -160,13 +160,13 @@ Correct Answer: A, B, C
 
 #Step 3 [Benar/Salah]: Matriks dan transformasi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks dapat merepresentasikan transformasi geometri seperti rotasi, refleksi, dan penskalaan
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Matriks dalam data
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam analisis data dan machine learning, mengapa matriks sangat berguna?
 Options:
   A) Matriks memungkinkan operasi pada banyak data sekaligus secara efisien
@@ -181,7 +181,7 @@ Problem Description: Diberikan matriks A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], 
 
 #Step 1 [Pilihan Ganda - Tunggal]: Berapa dimensi hasil penjumlahan A + B?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Jika A berukuran 2x2 dan B berukuran 2x2, hasil A + B berukuran?
 Options:
   A) 2x2
@@ -192,19 +192,19 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Tulis penjumlahan matriks
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
 Expected Answer: [[1,2],[3,4]] + [[5,6],[7,8]]
 
 #Step 3 [Benar/Salah]: Apakah penjumlahan matriks dilakukan per elemen?
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam penjumlahan matriks, kita menjumlahkan elemen yang bersesuaian posisinya. Benar atau Salah?
 Answer: Benar
 
 #Step 4 [Ekspresi & Jawaban]: Jumlahkan elemen yang bersesuaian
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
 Expected Answer: [[6,8],[10,12]]
 
@@ -214,7 +214,7 @@ Problem Description: Diberikan A = [[2,1],[0,3]] dan B = [[1,2],[4,0]], cari AB
 
 #Step 1 [Pilihan Ganda - Tunggal]: Syarat perkalian matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Agar AB dapat dihitung, syarat yang harus dipenuhi adalah?
 Options:
   A) Jumlah kolom A sama dengan jumlah baris B
@@ -225,44 +225,44 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Tentukan dimensi hasil
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2
 Expected Answer: 2
 
 #Step 3 [Isi Titik-Titik]: Rumus elemen baris 1 kolom 1
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Elemen baris 1 kolom 1 dari AB = A[1,1] times B[1,1] + A[1,2] times __
 Blanks:
   - Titik 1: B[2,1]
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*1 + 1*4
 Expected Answer: 6
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*2 + 1*0
 Expected Answer: 4
 
 #Step 6 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*1 + 3*4
 Expected Answer: 12
 
 #Step 7 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*2 + 3*0
 Expected Answer: 0
 
 #Step 8 [Ekspresi & Jawaban]: Bentuk matriks hasil AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,1],[0,3]] * [[1,2],[4,0]]
 Expected Answer: [[6,4],[12,0]]
 
@@ -272,13 +272,13 @@ Problem Description: Diberikan A = [[1,0,2],[3,1,4],[2,1,0]] dan B = [[2,3,1],[1
 
 #Step 1 [Benar/Salah]: Dua matriks dapat dijumlahkan jika berukuran sama
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dua matriks hanya dapat dijumlahkan jika memiliki ukuran yang sama. Benar atau Salah?
 Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Jumlahkan matriks
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,0,2],[3,1,4],[2,1,0]] + [[2,3,1],[1,2,3],[4,0,1]]
 Expected Answer: [[3,3,3],[4,3,7],[6,1,1]]
 
@@ -288,7 +288,7 @@ Problem Description: Diberikan A = [[5,7],[2,9]] dan B = [[3,4],[1,6]], cari A -
 
 #Step 1 [Pilihan Ganda - Tunggal]: Sifat pengurangan matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apakah A - B = B - A untuk matriks A dan B?
 Options:
   A) Ya, selalu sama
@@ -299,13 +299,13 @@ Correct Answer: B
 
 #Step 2 [Ekspresi & Jawaban]: Tulis pengurangan matriks
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[5,7],[2,9]] - [[3,4],[1,6]]
 Expected Answer: [[5,7],[2,9]] - [[3,4],[1,6]]
 
 #Step 3 [Ekspresi & Jawaban]: Kurangkan elemen yang bersesuaian
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[5,7],[2,9]] - [[3,4],[1,6]]
 Expected Answer: [[2,3],[1,3]]
 
@@ -315,7 +315,7 @@ Problem Description: Diberikan A = [[8,5],[3,7],[6,2]] dan B = [[2,1],[1,3],[4,0
 
 #Step 1 [Ekspresi & Jawaban]: Kurangkan matriks
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[8,5],[3,7],[6,2]] - [[2,1],[1,3],[4,0]]
 Expected Answer: [[6,4],[2,4],[2,2]]
 
@@ -325,20 +325,20 @@ Problem Description: Diberikan matriks A = [[2,3],[4,5]], cari 3A
 
 #Step 1 [Isi Titik-Titik]: Definisi perkalian skalar
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Perkalian skalar k dengan matriks A dilakukan dengan mengalikan setiap __ matriks dengan k
 Blanks:
   - Titik 1: elemen
 
 #Step 2 [Ekspresi & Jawaban]: Tulis perkalian skalar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*[[2,3],[4,5]]
 Expected Answer: 3*[[2,3],[4,5]]
 
 #Step 3 [Ekspresi & Jawaban]: Kalikan setiap elemen dengan skalar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*[[2,3],[4,5]]
 Expected Answer: [[6,9],[12,15]]
 
@@ -348,13 +348,13 @@ Problem Description: Diberikan A = [[1,2,0],[3,-1,4],[2,1,-2]], cari -2A
 
 #Step 1 [Benar/Salah]: Perkalian dengan skalar negatif
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Ketika matriks dikalikan dengan skalar negatif, semua elemen berubah tanda. Benar atau Salah?
 Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Kalikan matriks dengan -2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: -2*[[1,2,0],[3,-1,4],[2,1,-2]]
 Expected Answer: [[-2,-4,0],[-6,2,-8],[-4,-2,4]]
 
@@ -364,7 +364,7 @@ Problem Description: Diberikan A = [[2,1],[3,4]] dan B = [[1,2],[2,1]], cari 2A 
 
 #Step 1 [Pilihan Ganda - Tunggal]: Urutan operasi
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk menghitung 2A + 3B, langkah pertama adalah?
 Options:
   A) Jumlahkan A dan B dulu
@@ -375,19 +375,19 @@ Correct Answer: B
 
 #Step 2 [Ekspresi & Jawaban]: Hitung 2A
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*[[2,1],[3,4]]
 Expected Answer: [[4,2],[6,8]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung 3B
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*[[1,2],[2,1]]
 Expected Answer: [[3,6],[6,3]]
 
 #Step 4 [Ekspresi & Jawaban]: Jumlahkan hasilnya
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[4,2],[6,8]] + [[3,6],[6,3]]
 Expected Answer: [[7,8],[12,11]]
 
@@ -397,7 +397,7 @@ Problem Description: Diberikan A = [[1,2,3],[4,5,6]] dan B = [[1,4],[2,5],[3,6]]
 
 #Step 1 [Isi Titik-Titik]: Dimensi hasil perkalian
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Jika A berukuran 2x3 dan B berukuran 3x2, maka AB berukuran __ x __
 Blanks:
   - Titik 1: 2
@@ -405,7 +405,7 @@ Blanks:
 
 #Step 2 [Pilihan Ganda - Tunggal]: Jumlah perkalian per elemen
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk menghitung satu elemen dalam AB, berapa kali perkalian yang dilakukan?
 Options:
   A) 2
@@ -416,31 +416,31 @@ Correct Answer: B
 
 #Step 3 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*1 + 2*2 + 3*3
 Expected Answer: 14
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen baris 1 kolom 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*4 + 2*5 + 3*6
 Expected Answer: 32
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 4*1 + 5*2 + 6*3
 Expected Answer: 32
 
 #Step 6 [Ekspresi & Jawaban]: Hitung elemen baris 2 kolom 2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 4*4 + 5*5 + 6*6
 Expected Answer: 77
 
 #Step 7 [Ekspresi & Jawaban]: Bentuk matriks hasil AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2,3],[4,5,6]] * [[1,4],[2,5],[3,6]]
 Expected Answer: [[14,32],[32,77]]
 
@@ -450,7 +450,7 @@ Problem Description: Diberikan C matriks 2x3 dan D matriks 2x4, apakah CD dapat 
 
 #Step 1 [Pilihan Ganda - Tunggal]: Syarat perkalian matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks C (2x3) dan D (2x4) dapat dikalikan menjadi CD jika?
 Options:
   A) Ya, karena keduanya punya 2 baris
@@ -461,7 +461,7 @@ Correct Answer: B
 
 #Step 2 [Isi Titik-Titik]: Jumlah kolom dan baris
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Jumlah kolom C adalah __ dan jumlah baris D adalah __
 Blanks:
   - Titik 1: 3
@@ -469,7 +469,7 @@ Blanks:
 
 #Step 3 [Benar/Salah]: Kesimpulan kompatibilitas
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Karena 3 tidak sama dengan 2, maka CD tidak dapat dihitung. Benar atau Salah?
 Answer: Benar
 
@@ -479,7 +479,7 @@ Problem Description: Diberikan A = [[1,2],[3,4]] dan B = [[2,0],[1,3]], bandingk
 
 #Step 1 [Pilihan Ganda - Tunggal]: Sifat komutatif perkalian matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apakah AB selalu sama dengan BA untuk sembarang matriks A dan B?
 Options:
   A) Ya, selalu sama
@@ -490,67 +490,67 @@ Correct Answer: B
 
 #Step 2 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*2 + 2*1
 Expected Answer: 4
 
 #Step 3 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*0 + 2*3
 Expected Answer: 6
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*2 + 4*1
 Expected Answer: 10
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*0 + 4*3
 Expected Answer: 12
 
 #Step 6 [Ekspresi & Jawaban]: Bentuk matriks AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] * [[2,0],[1,3]]
 Expected Answer: [[4,6],[10,12]]
 
 #Step 7 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari BA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*1 + 0*3
 Expected Answer: 2
 
 #Step 8 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari BA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*2 + 0*4
 Expected Answer: 4
 
 #Step 9 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari BA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*1 + 3*3
 Expected Answer: 10
 
 #Step 10 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari BA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*2 + 3*4
 Expected Answer: 14
 
 #Step 11 [Ekspresi & Jawaban]: Bentuk matriks BA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,0],[1,3]] * [[1,2],[3,4]]
 Expected Answer: [[2,4],[10,14]]
 
 #Step 12 [Benar/Salah]: Kesimpulan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dari hasil di atas, AB tidak sama dengan BA. Benar atau Salah?
 Answer: Benar
 
@@ -560,7 +560,7 @@ Problem Description: Diberikan A = [[1,2],[3,4]], cari A^T
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi transpose
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Transpose matriks adalah operasi yang?
 Options:
   A) Menukar baris menjadi kolom
@@ -571,7 +571,7 @@ Correct Answer: A
 
 #Step 2 [Isi Titik-Titik]: Dimensi hasil transpose
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Jika A berukuran 2x2, maka A^T berukuran __ x __
 Blanks:
   - Titik 1: 2
@@ -579,7 +579,7 @@ Blanks:
 
 #Step 3 [Ekspresi & Jawaban]: Hitung transpose
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[1,2],[3,4]])
 Expected Answer: [[1,3],[2,4]]
 
@@ -589,7 +589,7 @@ Problem Description: Diberikan A = [[1,2],[3,4],[5,6]], cari A^T
 
 #Step 1 [Isi Titik-Titik]: Dimensi transpose
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Jika A berukuran 3x2, maka A^T berukuran __ x __
 Blanks:
   - Titik 1: 2
@@ -597,7 +597,7 @@ Blanks:
 
 #Step 2 [Ekspresi & Jawaban]: Transpose matriks
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[1,2],[3,4],[5,6]])
 Expected Answer: [[1,3,5],[2,4,6]]
 
@@ -607,19 +607,19 @@ Problem Description: Diberikan A = [[2,3],[1,4]], verifikasi (A^T)^T = A
 
 #Step 1 [Benar/Salah]: Sifat transpose ganda
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Transpose dari transpose suatu matriks akan menghasilkan matriks semula. Benar atau Salah?
 Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Hitung A^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[2,3],[1,4]])
 Expected Answer: [[2,1],[3,4]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung (A^T)^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[2,1],[3,4]])
 Expected Answer: [[2,3],[1,4]]
 
@@ -629,7 +629,7 @@ Problem Description: Diberikan A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], verifika
 
 #Step 1 [Pilihan Ganda - Tunggal]: Sifat distributif transpose
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apakah (A+B)^T = A^T + B^T untuk sembarang matriks A dan B?
 Options:
   A) Ya, transpose bersifat distributif terhadap penjumlahan
@@ -640,31 +640,31 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Hitung A + B
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
 Expected Answer: [[6,8],[10,12]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung (A+B)^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[6,8],[10,12]])
 Expected Answer: [[6,10],[8,12]]
 
 #Step 4 [Ekspresi & Jawaban]: Hitung A^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[1,2],[3,4]])
 Expected Answer: [[1,3],[2,4]]
 
 #Step 5 [Ekspresi & Jawaban]: Hitung B^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[5,6],[7,8]])
 Expected Answer: [[5,7],[6,8]]
 
 #Step 6 [Ekspresi & Jawaban]: Hitung A^T + B^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,3],[2,4]] + [[5,7],[6,8]]
 Expected Answer: [[6,10],[8,12]]
 
@@ -674,7 +674,7 @@ Problem Description: Diberikan A = [[3,4],[5,6]], verifikasi AI = IA = A dengan 
 
 #Step 1 [Isi Titik-Titik]: Bentuk matriks identitas
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks identitas 2x2 adalah I = [[__,0],[0,__]]
 Blanks:
   - Titik 1: 1
@@ -682,37 +682,37 @@ Blanks:
 
 #Step 2 [Benar/Salah]: Sifat matriks identitas
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk sembarang matriks persegi A, berlaku AI = IA = A. Benar atau Salah?
 Answer: Benar
 
 #Step 3 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari AI
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*1 + 4*0
 Expected Answer: 3
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari AI
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*0 + 4*1
 Expected Answer: 4
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari AI
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 5*1 + 6*0
 Expected Answer: 5
 
 #Step 6 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari AI
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 5*0 + 6*1
 Expected Answer: 6
 
 #Step 7 [Ekspresi & Jawaban]: Bentuk AI
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,4],[5,6]] * [[1,0],[0,1]]
 Expected Answer: [[3,4],[5,6]]
 
@@ -722,7 +722,7 @@ Problem Description: Diberikan A = [[2,3],[4,5]], verifikasi A + O = A dengan O 
 
 #Step 1 [Pilihan Ganda - Tunggal]: Sifat matriks nol
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks nol terhadap operasi penjumlahan matriks berfungsi seperti?
 Options:
   A) Angka 1 pada perkalian
@@ -733,7 +733,7 @@ Correct Answer: B
 
 #Step 2 [Ekspresi & Jawaban]: Jumlahkan dengan matriks nol
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,3],[4,5]] + [[0,0],[0,0]]
 Expected Answer: [[2,3],[4,5]]
 
@@ -743,13 +743,13 @@ Problem Description: Diberikan A = [[1,2],[3,4]], verifikasi A * O = O dengan O 
 
 #Step 1 [Benar/Salah]: Hasil perkalian dengan matriks nol
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Perkalian sembarang matriks dengan matriks nol akan menghasilkan matriks nol. Benar atau Salah?
 Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Hitung perkalian dengan matriks nol
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] * [[0,0],[0,0]]
 Expected Answer: [[0,0],[0,0]]
 
@@ -759,7 +759,7 @@ Problem Description: Diberikan matriks diagonal D = [[3,0,0],[0,5,0],[0,0,2]] da
 
 #Step 1 [Pilihan Ganda - Tunggal]: Karakteristik matriks diagonal
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks diagonal adalah matriks yang?
 Options:
   A) Semua elemen bernilai sama
@@ -770,68 +770,68 @@ Correct Answer: B
 
 #Step 2 [Isi Titik-Titik]: Efek perkalian matriks diagonal
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Mengalikan matriks diagonal D dari kiri ke matriks A akan mengalikan setiap __ A dengan elemen diagonal D yang bersesuaian
 Blanks:
   - Titik 1: baris
 
 #Step 3 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*1 + 0*4 + 0*7
 Expected Answer: 3
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*2 + 0*5 + 0*8
 Expected Answer: 6
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen (1,3) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*3 + 0*6 + 0*9
 Expected Answer: 9
 
 #Step 6 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*1 + 5*4 + 0*7
 Expected Answer: 20
 
 #Step 7 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*2 + 5*5 + 0*8
 Expected Answer: 25
 
 #Step 8 [Ekspresi & Jawaban]: Hitung elemen (2,3) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*3 + 5*6 + 0*9
 Expected Answer: 30
 
 #Step 9 [Ekspresi & Jawaban]: Hitung elemen (3,1) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*1 + 0*4 + 2*7
 Expected Answer: 14
 
 #Step 10 [Ekspresi & Jawaban]: Hitung elemen (3,2) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*2 + 0*5 + 2*8
 Expected Answer: 16
 
 #Step 11 [Ekspresi & Jawaban]: Hitung elemen (3,3) dari DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*3 + 0*6 + 2*9
 Expected Answer: 18
 
 #Step 12 [Ekspresi & Jawaban]: Bentuk matriks hasil DA
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,0,0],[0,5,0],[0,0,2]] * [[1,2,3],[4,5,6],[7,8,9]]
 Expected Answer: [[3,6,9],[20,25,30],[14,16,18]]
 
@@ -841,7 +841,7 @@ Problem Description: Tentukan apakah A = [[1,2,3],[2,4,5],[3,5,6]] adalah matrik
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi matriks simetris
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks A disebut simetris jika?
 Options:
   A) A = -A
@@ -852,19 +852,19 @@ Correct Answer: B
 
 #Step 2 [Benar/Salah]: Syarat matriks simetris
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Matriks simetris harus berbentuk persegi. Benar atau Salah?
 Answer: Benar
 
 #Step 3 [Ekspresi & Jawaban]: Hitung A^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[1,2,3],[2,4,5],[3,5,6]])
 Expected Answer: [[1,2,3],[2,4,5],[3,5,6]]
 
 #Step 4 [Benar/Salah]: Kesimpulan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Karena A^T = A, maka A adalah matriks simetris. Benar atau Salah?
 Answer: Benar
 
@@ -874,38 +874,38 @@ Problem Description: Diberikan A = [[1,1],[0,1]], cari A^2
 
 #Step 1 [Isi Titik-Titik]: Definisi pangkat matriks
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: A^2 = A __ A
 Blanks:
   - Titik 1: *
 
 #Step 2 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari A^2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*1 + 1*0
 Expected Answer: 1
 
 #Step 3 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari A^2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*1 + 1*1
 Expected Answer: 2
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari A^2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*1 + 1*0
 Expected Answer: 0
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari A^2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 0*1 + 1*1
 Expected Answer: 1
 
 #Step 6 [Ekspresi & Jawaban]: Bentuk A^2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,1],[0,1]] * [[1,1],[0,1]]
 Expected Answer: [[1,2],[0,1]]
 
@@ -915,7 +915,7 @@ Problem Description: Diberikan A = [[1,2],[3,4]], B = [[2,1],[1,2]], C = [[1,0],
 
 #Step 1 [Pilihan Ganda - Tunggal]: Sifat distributif perkalian matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apakah A(B+C) = AB + AC untuk sembarang matriks A, B, C yang kompatibel?
 Options:
   A) Ya, perkalian matriks distributif terhadap penjumlahan
@@ -926,55 +926,55 @@ Correct Answer: A
 
 #Step 2 [Ekspresi & Jawaban]: Hitung B + C
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,1],[1,2]] + [[1,0],[0,1]]
 Expected Answer: [[3,1],[1,3]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung elemen (1,1) dari A(B+C)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*3 + 2*1
 Expected Answer: 5
 
 #Step 4 [Ekspresi & Jawaban]: Hitung elemen (1,2) dari A(B+C)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*1 + 2*3
 Expected Answer: 7
 
 #Step 5 [Ekspresi & Jawaban]: Hitung elemen (2,1) dari A(B+C)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*3 + 4*1
 Expected Answer: 13
 
 #Step 6 [Ekspresi & Jawaban]: Hitung elemen (2,2) dari A(B+C)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*1 + 4*3
 Expected Answer: 15
 
 #Step 7 [Ekspresi & Jawaban]: Bentuk A(B+C)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] * [[3,1],[1,3]]
 Expected Answer: [[5,7],[13,15]]
 
 #Step 8 [Ekspresi & Jawaban]: Hitung AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] * [[2,1],[1,2]]
 Expected Answer: [[4,5],[10,11]]
 
 #Step 9 [Ekspresi & Jawaban]: Hitung AC
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] * [[1,0],[0,1]]
 Expected Answer: [[1,2],[3,4]]
 
 #Step 10 [Ekspresi & Jawaban]: Hitung AB + AC
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[4,5],[10,11]] + [[1,2],[3,4]]
 Expected Answer: [[5,7],[13,15]]
 
@@ -984,31 +984,31 @@ Problem Description: Diberikan A = [[1,2],[3,4]], B = [[2,3],[4,5]], C = [[1,1],
 
 #Step 1 [Benar/Salah]: Sifat asosiatif
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Penjumlahan matriks bersifat asosiatif. Benar atau Salah?
 Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Hitung A + B
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] + [[2,3],[4,5]]
 Expected Answer: [[3,5],[7,9]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung (A+B) + C
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,5],[7,9]] + [[1,1],[1,1]]
 Expected Answer: [[4,6],[8,10]]
 
 #Step 4 [Ekspresi & Jawaban]: Hitung B + C
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,3],[4,5]] + [[1,1],[1,1]]
 Expected Answer: [[3,4],[5,6]]
 
 #Step 5 [Ekspresi & Jawaban]: Hitung A + (B+C)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] + [[3,4],[5,6]]
 Expected Answer: [[4,6],[8,10]]
 
@@ -1018,7 +1018,7 @@ Problem Description: Diberikan A = [[1,2],[3,4]] dan B = [[2,1],[0,3]], verifika
 
 #Step 1 [Pilihan Ganda - Tunggal]: Sifat transpose hasil kali
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk matriks A dan B yang kompatibel, (AB)^T sama dengan?
 Options:
   A) A^T B^T
@@ -1029,31 +1029,31 @@ Correct Answer: B
 
 #Step 2 [Ekspresi & Jawaban]: Hitung AB
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] * [[2,1],[0,3]]
 Expected Answer: [[2,7],[6,15]]
 
 #Step 3 [Ekspresi & Jawaban]: Hitung (AB)^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[2,7],[6,15]])
 Expected Answer: [[2,6],[7,15]]
 
 #Step 4 [Ekspresi & Jawaban]: Hitung A^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[1,2],[3,4]])
 Expected Answer: [[1,3],[2,4]]
 
 #Step 5 [Ekspresi & Jawaban]: Hitung B^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: transpose([[2,1],[0,3]])
 Expected Answer: [[2,0],[1,3]]
 
 #Step 6 [Ekspresi & Jawaban]: Hitung B^T A^T
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[2,0],[1,3]] * [[1,3],[2,4]]
 Expected Answer: [[2,6],[7,15]]
 
@@ -1063,14 +1063,14 @@ Problem Description: Cari trace (jumlah elemen diagonal) dari A = [[2,3,4],[1,5,
 
 #Step 1 [Isi Titik-Titik]: Definisi trace
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Trace matriks adalah jumlah dari elemen-elemen pada __ utama
 Blanks:
   - Titik 1: diagonal
 
 #Step 2 [Pilihan Ganda - Tunggal]: Elemen diagonal
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Elemen diagonal utama dari matriks 3x3 adalah?
 Options:
   A) a[1,1], a[2,2], a[3,3]
@@ -1081,7 +1081,7 @@ Correct Answer: A
 
 #Step 3 [Ekspresi & Jawaban]: Hitung trace
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2 + 5 + 9
 Expected Answer: 16
 
@@ -1091,37 +1091,37 @@ Problem Description: Diberikan A = [[1,2],[3,4]] dan B = [[5,6],[7,8]], verifika
 
 #Step 1 [Benar/Salah]: Sifat trace terhadap penjumlahan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Trace dari jumlah dua matriks sama dengan jumlah trace keduanya. Benar atau Salah?
 Answer: Benar
 
 #Step 2 [Ekspresi & Jawaban]: Hitung trace A
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1 + 4
 Expected Answer: 5
 
 #Step 3 [Ekspresi & Jawaban]: Hitung trace B
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 5 + 8
 Expected Answer: 13
 
 #Step 4 [Ekspresi & Jawaban]: Hitung tr(A) + tr(B)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 5 + 13
 Expected Answer: 18
 
 #Step 5 [Ekspresi & Jawaban]: Hitung A + B
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
 Expected Answer: [[6,8],[10,12]]
 
 #Step 6 [Ekspresi & Jawaban]: Hitung tr(A+B)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 6 + 12
 Expected Answer: 18
 
@@ -1131,7 +1131,7 @@ Problem Description: Selesaikan X pada persamaan X + [[1,2],[3,4]] = [[5,7],[8,1
 
 #Step 1 [Pilihan Ganda - Tunggal]: Cara menyelesaikan persamaan matriks
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk menyelesaikan X + A = B, kita harus?
 Options:
   A) Kalikan kedua ruas dengan A
@@ -1142,7 +1142,7 @@ Correct Answer: B
 
 #Step 2 [Ekspresi & Jawaban]: Isolasi X
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[5,7],[8,10]] - [[1,2],[3,4]]
 Expected Answer: [[4,5],[5,6]]
 
@@ -1152,25 +1152,25 @@ Problem Description: Selesaikan k jika k * [[2,4],[6,8]] = [[6,12],[18,24]]
 
 #Step 1 [Isi Titik-Titik]: Persamaan dari elemen pertama
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Dari elemen (1,1): k times __ = 6
 Blanks:
   - Titik 1: 2
 
 #Step 2 [Ekspresi & Jawaban]: Selesaikan untuk k
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 6/2
 Expected Answer: 3
 
 #Step 3 [Benar/Salah]: Verifikasi dengan elemen lain
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk memverifikasi, kita harus memeriksa apakah k = 3 berlaku untuk semua elemen. Benar atau Salah?
 Answer: Benar
 
 #Step 4 [Ekspresi & Jawaban]: Verifikasi dengan elemen (1,2)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3 * 4
 Expected Answer: 12

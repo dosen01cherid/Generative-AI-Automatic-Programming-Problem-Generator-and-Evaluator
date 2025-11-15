@@ -9,7 +9,7 @@ Problem Description: Pahami definisi vektor dan representasinya dalam matematika
 
 #Step 1 [Pilihan Ganda - Tunggal]: Definisi vektor
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Vektor adalah:
 Options:
   A) Besaran yang memiliki magnitude (besar) dan arah
@@ -20,7 +20,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Contoh besaran vektor
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Pilih semua yang merupakan besaran vektor dalam fisika:
 Options:
   A) Kecepatan (memiliki besar dan arah)
@@ -31,13 +31,13 @@ Correct Answer: A, B, D
 
 #Step 3 [Benar/Salah]: Representasi vektor
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Vektor dapat direpresentasikan sebagai deretan angka dalam kurung siku, misalnya [3,4]
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Notasi vektor
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Vektor [2,5] dalam RR^2 berarti:
 Options:
   A) Vektor di ruang 2 dimensi dengan komponen x=2 dan y=5
@@ -52,7 +52,7 @@ Problem Description: Pahami apa itu komponen atau elemen dalam vektor
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu komponen vektor?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam vektor v = [7,3,-2], komponen adalah:
 Options:
   A) Nilai-nilai individual 7, 3, dan -2
@@ -63,13 +63,13 @@ Correct Answer: A
 
 #Step 2 [Isi Titik-Titik]: Identifikasi komponen
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam vektor [5,8,1], komponen kedua adalah {blank}
 Correct Answer: 8
 
 #Step 3 [Pilihan Ganda - Tunggal]: Dimensi vektor
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Vektor [4,2,9,1] berada di ruang dimensi berapa?
 Options:
   A) RR^4 (ruang 4 dimensi)
@@ -80,7 +80,7 @@ Correct Answer: A
 
 #Step 4 [Benar/Salah]: Jumlah komponen
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Jumlah komponen dalam vektor menentukan dimensi ruang vektor tersebut
 Correct Answer: Benar
 
@@ -90,7 +90,7 @@ Problem Description: Pahami dua cara pandang terhadap vektor: geometris (visual)
 
 #Step 1 [Pilihan Ganda - Tunggal]: Interpretasi geometris
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Secara geometris, vektor [3,4] dapat digambarkan sebagai:
 Options:
   A) Anak panah dari titik asal (0,0) ke titik (3,4)
@@ -101,13 +101,13 @@ Correct Answer: A
 
 #Step 2 [Benar/Salah]: Posisi vs arah
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam interpretasi geometris, yang penting dari vektor adalah arah dan panjangnya, bukan posisi titik awalnya
 Correct Answer: Benar
 
 #Step 3 [Pilihan Ganda - Tunggal]: Interpretasi aljabar
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Secara aljabar, vektor [2,5] diperlakukan sebagai:
 Options:
   A) Pasangan terurut angka yang dapat dioperasikan secara aritmatika
@@ -118,7 +118,7 @@ Correct Answer: A
 
 #Step 4 [Pilihan Ganda - Berganda]: Kegunaan dua interpretasi
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Mengapa kita perlu dua interpretasi (geometris dan aljabar)?
 Options:
   A) Interpretasi geometris membantu visualisasi dan intuisi
@@ -133,7 +133,7 @@ Problem Description: Pahami pentingnya dan aplikasi vektor dalam berbagai bidang
 
 #Step 1 [Pilihan Ganda - Tunggal]: Kegunaan vektor
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Mengapa vektor penting dalam sains dan teknik?
 Options:
   A) Vektor merepresentasikan besaran yang memiliki arah, seperti gaya, kecepatan, dan percepatan
@@ -144,7 +144,7 @@ Correct Answer: A
 
 #Step 2 [Pilihan Ganda - Berganda]: Aplikasi vektor
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Di bidang mana vektor banyak digunakan?
 Options:
   A) Fisika (gaya, kecepatan, medan)
@@ -155,13 +155,13 @@ Correct Answer: A, B, C
 
 #Step 3 [Benar/Salah]: Vektor dalam data
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam machine learning, data sering direpresentasikan sebagai vektor di ruang berdimensi tinggi
 Correct Answer: Benar
 
 #Step 4 [Pilihan Ganda - Tunggal]: Kelebihan representasi vektor
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa keuntungan utama merepresentasikan besaran sebagai vektor?
 Options:
   A) Memungkinkan operasi matematika sistematis dan analisis yang konsisten
@@ -176,7 +176,7 @@ Problem Description: Diberikan vektor u = [[3,5]] dan v = [[2,-1]], eksplorasi p
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan penjumlahan vektor secara geometris?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang dimaksud dengan penjumlahan dua vektor secara geometris?
 Options:
   A) Menempatkan vektor ujung-ke-ekor dan menggambar dari ekor pertama ke ujung terakhir
@@ -188,20 +188,20 @@ Explanation: Penjumlahan vektor mengikuti hukum jajaran genjang atau metode ujun
 
 #Step 2 [Ekspresi & Jawaban]: Tulis bentuk komponen u + v
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,5]] + [[2,-1]]
 Expected Answer: [[3,5]] + [[2,-1]]
 
 #Step 3 [Benar/Salah]: Verifikasi bahwa penjumlahan bersifat komutatif
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Apakah u + v = v + u untuk setiap vektor u dan v?
 Answer: Benar
 Explanation: Penjumlahan vektor bersifat komutatif. Menjumlahkan vektor dalam urutan apa pun menghasilkan hasil yang sama.
 
 #Step 4 [Ekspresi & Jawaban]: Jumlahkan komponen yang bersesuaian
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,5]] + [[2,-1]]
 Expected Answer: [[5,4]]
 
@@ -211,7 +211,7 @@ Problem Description: Diberikan vektor a = [[7,3]] dan b = [[4,8]], cari a - b da
 
 #Step 1 [Isi Titik-Titik]: Lengkapi rumus pengurangan
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk vektor a = (a_1, a_2) dan b = (b_1, b_2), pengurangan a - b = (__, __)
 Blanks:
   - Titik 1: a_1 - b_1
@@ -220,19 +220,19 @@ Explanation: Pengurangan vektor dilakukan per komponen.
 
 #Step 2 [Ekspresi & Jawaban]: Tulis bentuk komponen a - b
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[7,3]] - [[4,8]]
 Expected Answer: [[7,3]] - [[4,8]]
 
 #Step 3 [Ekspresi & Jawaban]: Kurangkan komponen yang bersesuaian
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[7,3]] - [[4,8]]
 Expected Answer: [[3,-5]]
 
 #Step 4 [Benar/Salah]: Periksa apakah pengurangan bersifat komutatif
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Apakah a - b = b - a untuk semua vektor a dan b?
 Answer: Salah
 Explanation: Pengurangan vektor TIDAK bersifat komutatif. Sebenarnya, a - b = -(b - a).
@@ -243,7 +243,7 @@ Problem Description: Diberikan vektor v = [[2,-3,4]], cari 3v dan pahami perkali
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa yang dilakukan perkalian skalar?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Ketika Anda mengalikan vektor dengan skalar k, apa yang terjadi pada vektor tersebut?
 Options:
   A) Vektor berputar sebesar k derajat
@@ -255,13 +255,13 @@ Explanation: Perkalian skalar mengubah besar vektor dengan faktor |k| dan membal
 
 #Step 2 [Ekspresi & Jawaban]: Tulis perkalian skalar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*[[2,-3,4]]
 Expected Answer: 3*[[2,-3,4]]
 
 #Step 3 [Pilihan Ganda - Berganda]: Pilih semua pernyataan yang benar tentang 3v
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Pernyataan mana yang benar tentang 3v dibandingkan dengan v?
 Options:
   A) 3v tiga kali lebih panjang dari v
@@ -273,7 +273,7 @@ Explanation: Perkalian skalar positif mempertahankan arah dan menskalakan semua 
 
 #Step 4 [Ekspresi & Jawaban]: Kalikan setiap komponen dengan skalar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*[[2,-3,4]]
 Expected Answer: [[6,-9,12]]
 
@@ -283,7 +283,7 @@ Problem Description: Diberikan vektor u = [[3,4]] dan v = [[2,5]], hitung dan pa
 
 #Step 1 [Isi Titik-Titik]: Lengkapi rumus hasil kali titik
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk vektor u = (u_1, u_2) dan v = (v_1, v_2), hasil kali titik u cdot v = __ kali __ + __ kali __
 Blanks:
   - Titik 1: u_1
@@ -294,13 +294,13 @@ Explanation: Hasil kali titik mengalikan komponen yang bersesuaian dan menjumlah
 
 #Step 2 [Ekspresi & Jawaban]: Terapkan rumus hasil kali titik
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*2 + 4*5
 Expected Answer: 3*2 + 4*5
 
 #Step 3 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan hasil kali titik?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang diberitahukan u cdot v tentang hubungan antara u dan v?
 Options:
   A) Hanya sudut di antara keduanya
@@ -312,13 +312,13 @@ Explanation: Hasil kali titik mengukur seberapa banyak dua vektor sejajar, mengg
 
 #Step 4 [Ekspresi & Jawaban]: Hitung hasilnya
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*2 + 4*5
 Expected Answer: 26
 
 #Step 5 [Benar/Salah]: Periksa apakah hasilnya positif
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Karena u cdot v = 26 > 0, sudut antara u dan v adalah lancip (kurang dari 90 derajat). Benar atau Salah?
 Answer: Benar
 Explanation: Hasil kali titik positif menunjukkan sudut lancip; negatif berarti tumpul; nol berarti tegak lurus.
@@ -329,7 +329,7 @@ Problem Description: Tentukan apakah vektor u = [[2,3]] dan v = [[-6,4]] ortogon
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan ortogonal?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa artinya dua vektor ortogonal?
 Options:
   A) Keduanya memiliki besar yang sama
@@ -341,7 +341,7 @@ Explanation: Vektor ortogonal adalah vektor yang tegak lurus, membentuk sudut 90
 
 #Step 2 [Isi Titik-Titik]: Nyatakan syarat ortogonalitas
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Dua vektor u dan v ortogonal jika dan hanya jika hasil kali titik u cdot v = __
 Blanks:
   - Titik 1: 0
@@ -349,25 +349,25 @@ Explanation: Hasil kali titik sama dengan nol ketika vektor tegak lurus.
 
 #Step 3 [Ekspresi & Jawaban]: Hitung hasil kali titik
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*(-6) + 3*4
 Expected Answer: 2*(-6) + 3*4
 
 #Step 4 [Ekspresi & Jawaban]: Evaluasi hasilnya
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*(-6) + 3*4
 Expected Answer: 0
 
 #Step 5 [Ekspresi & Jawaban]: Periksa syarat ortogonalitas
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*(-6) + 3*4 == 0
 Expected Answer: True
 
 #Step 6 [Benar/Salah]: Konfirmasi ortogonalitas
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Berdasarkan perhitungan, vektor u dan v adalah ortogonal. Benar atau Salah?
 Answer: Benar
 Explanation: Karena u cdot v = 0, vektor-vektor tersebut tegak lurus.
@@ -378,7 +378,7 @@ Problem Description: Cari besar (panjang) vektor v = [[3,4]] dan pahami artinya
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa yang dimaksud dengan besar?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang dimaksud dengan besar ||v|| dari sebuah vektor?
 Options:
   A) Arah vektor
@@ -390,7 +390,7 @@ Explanation: Besar adalah panjang vektor, dihitung menggunakan teorema Pythagora
 
 #Step 2 [Isi Titik-Titik]: Lengkapi rumus besar
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk vektor v = (x, y), besar ||v|| = sqrt(__^2 + __^2)
 Blanks:
   - Titik 1: x
@@ -399,26 +399,26 @@ Explanation: Rumus besar berasal dari teorema Pythagoras.
 
 #Step 3 [Ekspresi & Jawaban]: Terapkan rumus besar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: sqrt(3^2 + 4^2)
 Expected Answer: sqrt(3^2 + 4^2)
 
 #Step 4 [Benar/Salah]: Kenali tripel Pythagoras
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Vektor [[3,4]] membentuk tripel Pythagoras dengan besar 5. Benar atau Salah?
 Answer: Benar
 Explanation: 3^2 + 4^2 = 9 + 16 = 25 = 5^2, menjadikan ini tripel Pythagoras klasik 3-4-5.
 
 #Step 5 [Ekspresi & Jawaban]: Hitung kuadrat
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: sqrt(3^2 + 4^2)
 Expected Answer: sqrt(25)
 
 #Step 6 [Ekspresi & Jawaban]: Sederhanakan
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: sqrt(25)
 Expected Answer: 5
 
@@ -428,7 +428,7 @@ Problem Description: Cari vektor satuan dalam arah v = [[3,4]]
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu vektor satuan?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa itu vektor satuan?
 Options:
   A) Vektor dengan semua komponen sama dengan 1
@@ -440,7 +440,7 @@ Explanation: Vektor satuan memiliki besar 1 dan hanya menunjukkan arah.
 
 #Step 2 [Isi Titik-Titik]: Lengkapi rumus vektor satuan
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mencari vektor satuan u-topi dalam arah v, kita hitung u-topi = v / __
 Blanks:
   - Titik 1: ||v||
@@ -448,19 +448,19 @@ Explanation: Membagi vektor dengan besarnya menghasilkan vektor satuan dengan ar
 
 #Step 3 [Ekspresi & Jawaban]: Cari besar v
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: sqrt(3^2 + 4^2)
 Expected Answer: 5
 
 #Step 4 [Ekspresi & Jawaban]: Bagi v dengan besarnya
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,4]]/5
 Expected Answer: [[3/5, 4/5]]
 
 #Step 5 [Benar/Salah]: Verifikasi sifat vektor satuan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Besar dari [[3/5, 4/5]] sama dengan 1. Benar atau Salah?
 Answer: Benar
 Explanation: sqrt((3/5)^2 + (4/5)^2) = sqrt(9/25 + 16/25) = sqrt(25/25) = 1
@@ -471,7 +471,7 @@ Problem Description: Diberikan a = [[1,2,3]] dan b = [[4,5,6]], cari a xx b
 
 #Step 1 [Pilihan Ganda - Berganda]: Pilih sifat hasil kali silang
 Step Type: multiple-choice-multiple
-Requires Correct: True
+Must Be Correct: True
 Question: Pernyataan mana yang benar tentang hasil kali silang a xx b?
 Options:
   A) a xx b tegak lurus terhadap a dan b
@@ -483,7 +483,7 @@ Explanation: Hasil kali silang tegak lurus terhadap kedua vektor input, dan besa
 
 #Step 2 [Isi Titik-Titik]: Nyatakan rumus komponen i
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk a = (a_1, a_2, a_3) dan b = (b_1, b_2, b_3), komponen i dari a xx b = __ kali __ - __ kali __
 Blanks:
   - Titik 1: a_2
@@ -494,31 +494,31 @@ Explanation: Komponen i menggunakan determinan matriks 2x2 dengan komponen j dan
 
 #Step 3 [Ekspresi & Jawaban]: Hitung komponen i
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*6 - 3*5
 Expected Answer: -3
 
 #Step 4 [Ekspresi & Jawaban]: Hitung komponen j (negatif)
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: -(1*6 - 3*4)
 Expected Answer: 6
 
 #Step 5 [Ekspresi & Jawaban]: Hitung komponen k
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1*5 - 2*4
 Expected Answer: -3
 
 #Step 6 [Ekspresi & Jawaban]: Gabungkan komponen
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[-3, 6, -3]]
 Expected Answer: [[-3, 6, -3]]
 
 #Step 7 [Benar/Salah]: Verifikasi ketegaklurusan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk memverifikasi a xx b tegak lurus terhadap a, kita harus memeriksa apakah (a xx b) cdot a = 0. Benar atau Salah?
 Answer: Benar
 Explanation: Dua vektor tegak lurus jika dan hanya jika hasil kali titik mereka adalah nol.
@@ -529,7 +529,7 @@ Problem Description: Cari proyeksi u = [[3,4]] pada v = [[1,0]]
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu proyeksi?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang dimaksud dengan proyeksi u pada v secara geometris?
 Options:
   A) Komponen u dalam arah v
@@ -541,7 +541,7 @@ Explanation: Proyeksi mencari seberapa banyak vektor u mengarah ke arah vektor v
 
 #Step 2 [Isi Titik-Titik]: Lengkapi rumus proyeksi
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Proyeksi skalar dari u pada v = (u cdot v) / __
 Blanks:
   - Titik 1: ||v||
@@ -549,19 +549,19 @@ Explanation: Kita membagi hasil kali titik dengan besar v untuk mendapatkan proy
 
 #Step 3 [Ekspresi & Jawaban]: Hitung hasil kali titik u cdot v
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*1 + 4*0
 Expected Answer: 3
 
 #Step 4 [Ekspresi & Jawaban]: Hitung ||v||^2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 1^2 + 0^2
 Expected Answer: 1
 
 #Step 5 [Pilihan Ganda - Tunggal]: Apa langkah selanjutnya?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mencari proyeksi vektor, apa yang harus kita lakukan dengan proyeksi skalar 3?
 Options:
   A) Menambahkannya ke v
@@ -573,13 +573,13 @@ Explanation: Proyeksi vektor = (proyeksi skalar) kali (vektor satuan dalam arah 
 
 #Step 6 [Ekspresi & Jawaban]: Hitung faktor skalar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3/1
 Expected Answer: 3
 
 #Step 7 [Ekspresi & Jawaban]: Kalikan v dengan faktor skalar
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*[[1,0]]
 Expected Answer: [[3,0]]
 
@@ -589,7 +589,7 @@ Problem Description: Dua gaya F_1 = [[3,4]] N dan F_2 = [[-1,5]] N bekerja pada 
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu gaya resultan?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa yang dimaksud dengan gaya resultan?
 Options:
   A) Selisih antara kedua gaya
@@ -601,26 +601,26 @@ Explanation: Resultan adalah jumlah vektor dari semua gaya, mewakili efek gabung
 
 #Step 2 [Ekspresi & Jawaban]: Hitung resultan F_1 + F_2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: [[3,4]] + [[-1,5]]
 Expected Answer: [[2,9]]
 
 #Step 3 [Benar/Salah]: Arah penting dalam gaya
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Dalam fisika, arah gaya sama pentingnya dengan besarnya. Benar atau Salah?
 Answer: Benar
 Explanation: Gaya adalah vektor - baik besar maupun arah menentukan efeknya.
 
 #Step 4 [Ekspresi & Jawaban]: Hitung besar resultan
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: sqrt(2^2 + 9^2)
 Expected Answer: sqrt(85)
 
 #Step 5 [Pilihan Ganda - Tunggal]: Interpretasikan hasilnya
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Besar gaya resultan sqrt(85) approx 9.22 N. Bagaimana ini dibandingkan dengan gaya individu?
 Options:
   A) Lebih kecil dari kedua gaya (pembatalan vektor)
@@ -636,7 +636,7 @@ Problem Description: Nyatakan w = [[7,1]] sebagai c_1*u + c_2*v di mana u = [[2,
 
 #Step 1 [Pilihan Ganda - Tunggal]: Apa itu kombinasi linear?
 Step Type: multiple-choice-single
-Requires Correct: True
+Must Be Correct: True
 Question: Apa artinya menyatakan w sebagai kombinasi linear dari u dan v?
 Options:
   A) Menambahkan u dan v untuk mendapatkan w
@@ -648,26 +648,26 @@ Explanation: Kombinasi linear berarti mencari koefisien skalar yang ketika diter
 
 #Step 2 [Benar/Salah]: Sistem persamaan diperlukan
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Untuk mencari c_1 dan c_2, kita perlu menyusun sistem persamaan dengan menyamakan komponen. Benar atau Salah?
 Answer: Benar
 Explanation: Kita menyamakan komponen: c_1*(2) + c_2*(1) = 7 dan c_1*(1) + c_2*(-1) = 1
 
 #Step 3 [Ekspresi & Jawaban]: Persamaan komponen pertama
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*c1 + c2
 Expected Answer: 7
 
 #Step 4 [Ekspresi & Jawaban]: Persamaan komponen kedua
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: c1 - c2
 Expected Answer: 1
 
 #Step 5 [Isi Titik-Titik]: Selesaikan untuk c_1
 Step Type: fill-blank
-Requires Correct: True
+Must Be Correct: True
 Question: Dari persamaan kedua c_1 - c_2 = 1, kita dapatkan c_1 = __ + 1
 Blanks:
   - Titik 1: c2
@@ -675,31 +675,31 @@ Explanation: Menambahkan c_2 ke kedua sisi memberikan c_1 = c_2 + 1
 
 #Step 6 [Ekspresi & Jawaban]: Substitusikan ke persamaan pertama
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 2*(c2 + 1) + c2
 Expected Answer: 7
 
 #Step 7 [Ekspresi & Jawaban]: Sederhanakan
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 3*c2 + 2
 Expected Answer: 7
 
 #Step 8 [Ekspresi & Jawaban]: Selesaikan untuk c_2
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: c2
 Expected Answer: 5/3
 
 #Step 9 [Ekspresi & Jawaban]: Selesaikan untuk c_1
 Step Type: step-by-step
-Requires Correct: True
+Must Be Correct: True
 Step Expression: 5/3 + 1
 Expected Answer: 8/3
 
 #Step 10 [Benar/Salah]: Verifikasi solusi
 Step Type: true-false
-Requires Correct: True
+Must Be Correct: True
 Question: Kita harus memverifikasi: (8/3)*[[2,1]] + (5/3)*[[1,-1]] = [[7,1]]. Benar atau Salah?
 Answer: Benar
 Explanation: Selalu verifikasi solusi Anda dengan mensubstitusikan kembali ke persamaan asli.
