@@ -1937,12 +1937,134 @@ CIRC: "\\circ"
         # ... rest of method unchanged            
         # window.console.log(f"🔍 Parse tree: {tree.pretty()}")
     # -----------------------------------------------------
+    def auto_fix_common_errors(self, latex_str):
+      """
+      Attempt to automatically fix common LaTeX syntax errors.
+      Returns (fixed_string, list_of_fixes_applied)
+      """
+      import re
+
+      fixes_applied = []
+      original = latex_str
+      s = latex_str
+
+      # 1. Fix missing commas between numbers in matrices (space-separated)
+      #    [[1 2 3],[4 5 6]] → [[1,2,3],[4,5,6]]
+      before = s
+      s = re.sub(r'(\d)\s+(\d)', r'\1,\2', s)
+      if s != before:
+          fixes_applied.append("Added missing commas between numbers")
+
+      # 2. Fix unbalanced square brackets in matrices
+      #    Count opening and closing brackets, add missing ones
+      open_count = s.count('[')
+      close_count = s.count(']')
+      if open_count > close_count:
+          s = s + (']' * (open_count - close_count))
+          fixes_applied.append(f"Added {open_count - close_count} missing closing bracket(s)")
+      elif close_count > open_count:
+          s = ('[' * (close_count - open_count)) + s
+          fixes_applied.append(f"Added {close_count - open_count} missing opening bracket(s)")
+
+      # 3. Fix mismatched brackets in matrices (curly/square)
+      #    [[1,2,3},[4,5,6]] → [[1,2,3],[4,5,6]]
+      before = s
+      # Replace } with ] if it appears after [ and before ]
+      s = re.sub(r'\[([^[\]]*)\}', r'[\1]', s)
+      # Replace { with [ if it appears in matrix context
+      s = re.sub(r'\{([^[\]{}]*)\]', r'[\1]', s)
+      if s != before:
+          fixes_applied.append("Fixed mismatched brackets (changed {} to [])")
+
+      # 4. Fix missing pipe before row operations
+      #    [[1,2]]R_1 → [[1,2]]|R_1
+      before = s
+      s = re.sub(r'\]\](\s*R_\d+)', r']]|\1', s)
+      if s != before:
+          fixes_applied.append("Added missing pipe before row operation")
+
+      # 5. Fix double operators
+      #    2+-3 → 2-3,  2-+3 → 2-3,  2--3 → 2+3,  2++3 → 2+3
+      before = s
+      s = re.sub(r'\+\s*-', '-', s)
+      s = re.sub(r'-\s*\+', '-', s)
+      s = re.sub(r'-\s*-', '+', s)
+      s = re.sub(r'\+\s*\+', '+', s)
+      if s != before:
+          fixes_applied.append("Fixed double operators")
+
+      # 6. Fix unbalanced parentheses
+      open_paren = s.count('(')
+      close_paren = s.count(')')
+      if open_paren > close_paren:
+          s = s + (')' * (open_paren - close_paren))
+          fixes_applied.append(f"Added {open_paren - close_paren} missing closing parenthesis")
+      elif close_paren > open_paren:
+          s = ('(' * (close_paren - open_paren)) + s
+          fixes_applied.append(f"Added {close_paren - open_paren} missing opening parenthesis")
+
+      # 7. Fix missing asterisk in fraction notation
+      #    \frac12 → \frac{1}{2}
+      before = s
+      s = re.sub(r'\\frac(\d)(\d)', r'\\frac{\1}{\2}', s)
+      if s != before:
+          fixes_applied.append("Fixed fraction notation (added braces)")
+
+      # 8. Remove stray trailing operators
+      #    2+3+ → 2+3,  5*7* → 5*7
+      before = s
+      s = re.sub(r'[+\-*/]\s*$', '', s)
+      if s != before:
+          fixes_applied.append("Removed trailing operator")
+
+      # 9. Remove dangling power operators (forgotten exponent)
+      #    2^ → 2,  x^ → x,  (2+3)^ → (2+3)
+      before = s
+      s = re.sub(r'\^(?=\s*[,\]\)|\|]|\s*$)', '', s)  # Remove ^ before comma, ], ), |, or end
+      if s != before:
+          fixes_applied.append("Removed incomplete power notation (missing exponent)")
+
+      # 10. Fix empty exponents in braces
+      #    x^{} → x,  2^{} → 2
+      before = s
+      s = re.sub(r'\^\{\s*\}', '', s)
+      if s != before:
+          fixes_applied.append("Removed empty exponent braces")
+
+      # 11. Fix missing underscore in row operations
+      #    R1 → R_1,  R2 → R_2,  R123 → R_123
+      before = s
+      s = re.sub(r'R(\d+)', r'R_\1', s)
+      if s != before:
+          fixes_applied.append("Added missing underscore in row notation (R1 → R_1)")
+
+      # 12. Normalize arrow notation in row operations
+      #    -> → \to,  <- → \leftarrow
+      before = s
+      # Only replace arrows that appear in row operation context (after R_digit)
+      s = re.sub(r'(R_\d+)\s*->\s*', r'\1\\to ', s)
+      s = re.sub(r'(R_\d+)\s*<->\s*', r'\1\\leftrightarrow ', s)
+      s = re.sub(r'(R_\d+)\s*<-\s*', r'\1\\leftarrow ', s)
+      if s != before:
+          fixes_applied.append("Normalized arrow notation (-> → \\to)")
+
+      return (s, fixes_applied)
+
     def parse_latex(self, latex):
-        """Parse LaTeX to SymPy expression with error popup display"""
+        """Parse LaTeX to SymPy expression with error popup display and auto-fix"""
         import re
         from lark.exceptions import UnexpectedToken, UnexpectedCharacters, UnexpectedEOF
 
         window.console.log(f"🔍 [DEBUG 1] Original LaTeX: {latex}")
+
+        # 🆕 AUTO-FIX: Try to fix common errors first
+        fixed_latex, fixes = self.auto_fix_common_errors(latex)
+        if fixes:
+            window.console.log(f"🔧 Auto-fixes applied: {', '.join(fixes)}")
+            window.console.log(f"🔧 Fixed LaTeX: {fixed_latex}")
+            # Show a subtle notification to user
+            self._show_info_popup(f"✨ Auto-corrected: {', '.join(fixes)}")
+            latex = fixed_latex
 
         cleaned = self.clean_latex(latex)
         window.console.log(f"🔍 [DEBUG 2] After clean_latex: {cleaned}")
@@ -1966,23 +2088,53 @@ CIRC: "\\circ"
             return result
 
         except (UnexpectedToken, UnexpectedCharacters, UnexpectedEOF) as e:
+            # 🆕 RETRY: Try more aggressive fixes on first failure
+            window.console.log("⚠️ Initial parse failed, attempting aggressive auto-fix...")
+
+            # Try removing extra spaces around operators
+            retry_clean = re.sub(r'\s*([+\-*/=])\s*', r'\1', clean)
+
+            # Try fixing common matrix issues in the cleaned string
+            retry_clean = re.sub(r',\s*,', ',', retry_clean)  # Remove double commas
+            retry_clean = re.sub(r'\[\s*,', '[', retry_clean)  # Remove leading comma in row
+            retry_clean = re.sub(r',\s*\]', ']', retry_clean)  # Remove trailing comma in row
+
+            if retry_clean != clean:
+                try:
+                    window.console.log(f"🔧 Retry with aggressive fixes: {retry_clean}")
+                    tree = self.parser.parse(retry_clean)
+                    result = self.transformer.transform(tree)
+                    self._show_info_popup("✨ Fixed parsing error with aggressive corrections")
+                    window.console.log(f"✅ Retry successful: {result}")
+                    return result
+                except Exception as retry_error:
+                    window.console.log(f"❌ Retry also failed: {retry_error}")
+
+            # If retry also failed, show original error with visual highlighting
             pos = getattr(e, "pos_in_stream", None)
             line = getattr(e, "line", "?")
             col = getattr(e, "column", "?")
+
             # Remove "Expected …" section from Lark message
             raw_msg = str(e)
             simplified_msg = re.sub(r"Expected one of:.*", "", raw_msg, flags=re.DOTALL).strip()
-            # Build context with caret (FIXED: use 'clean' instead of 't')
+
+            # Build context with caret
             try:
                 span = 35
                 start = max(0, (pos or 0) - span)
-                end = min(len(clean), (pos or 0) + span)  # FIXED: was 't'
-                snippet = clean[start:end]  # FIXED: was 't'
+                end = min(len(clean), (pos or 0) + span)
+                snippet = clean[start:end]
                 caret_pos = (pos or 0) - start
                 caret_line = " " * caret_pos + "↑"
                 context = f"{snippet}\n{caret_line}"
             except Exception:
-                context = clean  # FIXED: was 't'
+                context = clean
+
+            # 🆕 Show enhanced error with MathJax rendering and highlighting
+            self._show_enhanced_error_popup(clean, pos, type(e).__name__, simplified_msg)
+
+            # Also log to console
             msg = (
                 f"❌ Parse error in LaTeX:\n\n"
                 f"Line: {line}, Column: {col}\n"
@@ -1990,7 +2142,6 @@ CIRC: "\\circ"
                 f"Message: {simplified_msg}\n\n"
                 f"Context:\n{context}"
             )
-            self._show_error_popup(msg)
             window.console.error(msg)
             return None
 
@@ -2113,7 +2264,243 @@ CIRC: "\\circ"
             }})();
         """
         window.eval(js_code)
-    
+
+    def _show_info_popup(self, message):
+        """Display auto-dismiss info toast for auto-corrections"""
+        safe_msg = message.replace("`", "'").replace("\\", "\\\\").replace('"', '\\"')
+        js_code = f"""
+            (function(){{
+                let existing = document.querySelector('#autoFixToast');
+                if(existing) existing.remove();
+
+                let toast = document.createElement('div');
+                toast.id = 'autoFixToast';
+                toast.style.cssText = `
+                    position:fixed;
+                    top:20px;
+                    left:50%;
+                    transform:translateX(-50%);
+                    background:#10b981;
+                    color:white;
+                    font-family:system-ui, -apple-system, sans-serif;
+                    padding:12px 24px;
+                    border-radius:8px;
+                    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+                    z-index:10000;
+                    font-size:14px;
+                    font-weight:500;
+                    max-width:90%;
+                    text-align:center;
+                    animation:slideDown 0.3s ease;
+                `;
+
+                // Add animation keyframes if not already present
+                if(!document.querySelector('#toastAnimationStyle')){{
+                    let style = document.createElement('style');
+                    style.id = 'toastAnimationStyle';
+                    style.textContent = `
+                        @keyframes slideDown {{
+                            from {{ transform:translateX(-50%) translateY(-20px); opacity:0; }}
+                            to {{ transform:translateX(-50%) translateY(0); opacity:1; }}
+                        }}
+                        @keyframes slideUp {{
+                            from {{ transform:translateX(-50%) translateY(0); opacity:1; }}
+                            to {{ transform:translateX(-50%) translateY(-20px); opacity:0; }}
+                        }}
+                    `;
+                    document.head.appendChild(style);
+                }}
+
+                toast.textContent = `{safe_msg}`;
+                document.body.appendChild(toast);
+
+                // Auto-dismiss after 3 seconds with fade-out animation
+                setTimeout(() => {{
+                    toast.style.animation = 'slideUp 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }}, 3000);
+            }})();
+        """
+        window.eval(js_code)
+
+    def _show_enhanced_error_popup(self, latex_expr, error_pos, error_type, error_msg):
+        """Display enhanced error popup with MathJax rendering and error highlighting"""
+        # Escape strings for JavaScript
+        safe_latex = latex_expr.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+        safe_error_type = error_type.replace("\\", "\\\\").replace("`", "'")
+        safe_error_msg = error_msg.replace("\\", "\\\\").replace("`", "'").replace("\n", " ")
+
+        # Split LaTeX at error position for highlighting
+        error_pos = error_pos if error_pos is not None else len(latex_expr)
+        error_pos = max(0, min(error_pos, len(latex_expr)))
+
+        # Create a highlighted version - insert red box around error position
+        before_error = latex_expr[:error_pos]
+        at_error = latex_expr[error_pos:error_pos+1] if error_pos < len(latex_expr) else ""
+        after_error = latex_expr[error_pos+1:] if error_pos < len(latex_expr) else ""
+
+        # Escape for display
+        safe_before = before_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+        safe_at = at_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+        safe_after = after_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
+
+        js_code = f"""
+            (function(){{
+                let existing = document.querySelector('#enhancedParseErrorPopup');
+                if(existing) existing.remove();
+
+                let popup = document.createElement('div');
+                popup.id = 'enhancedParseErrorPopup';
+
+                let isMobile = window.innerWidth <= 768;
+
+                popup.style.cssText = `
+                    position:fixed;
+                    ${{isMobile ? 'top:0;left:0;right:0;bottom:0;' : 'top:50%;left:50%;transform:translate(-50%,-50%);max-width:700px;'}}
+                    background:#fff;
+                    border:2px solid #ef4444;
+                    border-radius:${{isMobile ? '0' : '12px'}};
+                    box-shadow:0 12px 40px rgba(0,0,0,0.2);
+                    z-index:9999;
+                    overflow:auto;
+                    -webkit-overflow-scrolling:touch;
+                    padding:${{isMobile ? '60px 16px 16px' : '24px'}};
+                `;
+
+                // Close button
+                let closeBtn = document.createElement('button');
+                closeBtn.textContent = '×';
+                closeBtn.style.cssText = `
+                    position:absolute;
+                    top:${{isMobile ? '10px' : '16px'}};
+                    right:${{isMobile ? '10px' : '16px'}};
+                    background:#ef4444;
+                    color:white;
+                    border:none;
+                    border-radius:50%;
+                    width:${{isMobile ? '44px' : '32px'}};
+                    height:${{isMobile ? '44px' : '32px'}};
+                    font-size:${{isMobile ? '28px' : '24px'}};
+                    cursor:pointer;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    line-height:1;
+                `;
+                closeBtn.onclick = () => popup.remove();
+
+                // Title
+                let title = document.createElement('div');
+                title.textContent = '⚠️ Parse Error';
+                title.style.cssText = `
+                    font-size:${{isMobile ? '22px' : '20px'}};
+                    font-weight:bold;
+                    color:#ef4444;
+                    margin-bottom:16px;
+                    font-family:system-ui,-apple-system,sans-serif;
+                `;
+
+                // Error type and message
+                let errorInfo = document.createElement('div');
+                errorInfo.style.cssText = `
+                    background:#fee2e2;
+                    padding:12px;
+                    border-radius:8px;
+                    margin-bottom:16px;
+                    font-family:system-ui,-apple-system,sans-serif;
+                    font-size:14px;
+                `;
+                errorInfo.innerHTML = `
+                    <div style='font-weight:600;color:#991b1b;margin-bottom:4px;'>{safe_error_type}</div>
+                    <div style='color:#7f1d1d;'>{safe_error_msg}</div>
+                `;
+
+                // Section label
+                let label = document.createElement('div');
+                label.textContent = 'Your expression with error highlighted:';
+                label.style.cssText = `
+                    font-size:14px;
+                    font-weight:600;
+                    margin-bottom:8px;
+                    color:#374151;
+                    font-family:system-ui,-apple-system,sans-serif;
+                `;
+
+                // Math display container
+                let mathContainer = document.createElement('div');
+                mathContainer.style.cssText = `
+                    background:#f9fafb;
+                    padding:16px;
+                    border-radius:8px;
+                    margin-bottom:16px;
+                    overflow-x:auto;
+                    border:1px solid #e5e7eb;
+                `;
+
+                // Create highlighted LaTeX - use \\colorbox for highlighting
+                let highlightedLatex = "{safe_before}\\\\colorbox{{#fecaca}}{{{safe_at}}}{safe_after}";
+
+                mathContainer.innerHTML = `
+                    <div style='font-size:18px;text-align:left;'>
+                        $$${highlightedLatex}$$
+                    </div>
+                    <div style='margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;'>
+                        <div style='font-size:12px;color:#6b7280;font-family:monospace;word-break:break-all;'>
+                            {safe_latex}
+                        </div>
+                        <div style='margin-top:4px;font-size:11px;color:#ef4444;font-family:monospace;'>
+                            ${"".padStart(error_pos, " ")}↑ Error here (position {error_pos})
+                        </div>
+                    </div>
+                `;
+
+                // Hint section
+                let hint = document.createElement('div');
+                hint.style.cssText = `
+                    background:#dbeafe;
+                    padding:12px;
+                    border-radius:8px;
+                    font-size:13px;
+                    color:#1e40af;
+                    font-family:system-ui,-apple-system,sans-serif;
+                `;
+                hint.innerHTML = `
+                    <div style='font-weight:600;margin-bottom:4px;'>💡 Common fixes:</div>
+                    <ul style='margin:4px 0 0 20px;padding:0;'>
+                        <li>Check for unmatched brackets or parentheses</li>
+                        <li>Ensure all fractions have numerator and denominator</li>
+                        <li>Remove incomplete power notation (like x^)</li>
+                        <li>Check matrix format: [[row1],[row2]]</li>
+                    </ul>
+                `;
+
+                popup.appendChild(closeBtn);
+                popup.appendChild(title);
+                popup.appendChild(errorInfo);
+                popup.appendChild(label);
+                popup.appendChild(mathContainer);
+                popup.appendChild(hint);
+                document.body.appendChild(popup);
+
+                // Render MathJax
+                if(window.MathJax && window.MathJax.typesetPromise) {{
+                    window.MathJax.typesetPromise([mathContainer]).catch(err => {{
+                        console.warn('MathJax rendering failed:', err);
+                        // Fallback: show without MathJax
+                        mathContainer.innerHTML = `
+                            <div style='font-family:monospace;font-size:14px;color:#1f2937;'>
+                                {safe_latex}
+                            </div>
+                            <div style='margin-top:4px;font-size:11px;color:#ef4444;font-family:monospace;'>
+                                ${"".padStart(error_pos, " ")}↑ Error at position {error_pos}
+                            </div>
+                        `;
+                    }});
+                }}
+            }})();
+        """
+        window.eval(js_code)
+
     # -----------------------------------------------------
     # ✅ Clean LaTeX
     # -----------------------------------------------------
