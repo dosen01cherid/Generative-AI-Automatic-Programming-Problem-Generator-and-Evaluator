@@ -1962,6 +1962,21 @@ CIRC: "\\circ"
       if s != before:
           fixes_applied.append("Fixed period to comma between matrix rows")
 
+      # 0.6. Fix missing outer brackets for comma-separated matrix rows
+      #    [1,0],[0,1] → [[1,0],[0,1]]
+      #    \left[1,0\right],\left[0,1\right] → \left[\left[1,0\right],\left[0,1\right]\right]
+      before = s
+      # For \left\right notation
+      if s.startswith(r'\left[') and not s.startswith(r'\left[\left['):
+          if re.search(r'\\right\]\s*,\s*\\left\[', s):
+              s = r'\left[' + s + r'\right]'
+              fixes_applied.append("Added outer brackets for matrix rows (\\left notation)")
+      # For simple bracket notation
+      elif s.startswith('[') and not s.startswith('[['):
+          if '],[' in s:
+              s = '[' + s + ']'
+              fixes_applied.append("Added outer brackets for matrix rows")
+
       # 1. Fix missing commas between numbers in matrices (space-separated)
       #    [[1 2 3],[4 5 6]] → [[1,2,3],[4,5,6]]
       before = s
