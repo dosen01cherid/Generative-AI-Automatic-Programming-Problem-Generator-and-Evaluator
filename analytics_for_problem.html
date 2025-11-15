@@ -1905,6 +1905,15 @@ class ProgressAnalyzer:
             window.console.log(f"📚 Problem set length: {len(problem_set)}")
             window.console.log(f"📊 Problem states keys: {list(problem_states.keys())}")
 
+            # ⭐ Calculate total steps across ALL problems in the problem set
+            total_available_steps = 0
+            for prob_def in problem_set:
+                prob_steps = prob_def.get("steps", [])
+                total_available_steps += len(prob_steps)
+
+            window.console.log(f"📊 Total available steps in problem set: {total_available_steps}")
+            window.console.log(f"📊 Total problems in problem set: {len(problem_set)}")
+
             # Determine phone number
             phone = phone_from_message if phone_from_message else "anonymous"
             window.console.log(f"📱 Phone: {phone}")
@@ -2060,7 +2069,10 @@ class ProgressAnalyzer:
                         "export_date": export_date,
                         "format_version": "2.0",
                         "student_phone": phone,
-                        "student_name": "Unknown"
+                        "student_name": "Unknown",
+                        # ⭐ NEW: Store problem set metadata for accurate scoring
+                        "total_problems_in_set": len(problem_set),
+                        "total_steps_in_set": total_available_steps
                     },
                     "student_phone": phone,
                     "student_name": "Unknown",
@@ -2124,14 +2136,35 @@ class ProgressAnalyzer:
     # SCORE HELPERS
     # ============================================================
     def calculate_student_score(self, student_subs):
-        total_steps = sum(s.get("summary", {}).get("total_steps", 0) for s in student_subs)
+        """
+        Calculate student score based on ALL available steps in the problem set,
+        not just the steps in problems they attempted.
+        """
+        # Get total finalized steps from attempted problems
         finalized = sum(s.get("summary", {}).get("finalized_steps", 0) for s in student_subs)
 
-        if total_steps == 0:
+        # Try to get total steps from problem set metadata (if available)
+        total_steps_in_set = None
+        for s in student_subs:
+            export_meta = s.get("export_metadata", {})
+            if "total_steps_in_set" in export_meta:
+                total_steps_in_set = export_meta["total_steps_in_set"]
+                break
+
+        # If problem set metadata is available, use it (NEW behavior)
+        if total_steps_in_set is not None and total_steps_in_set > 0:
+            try:
+                return round((finalized / total_steps_in_set) * 100, 2)
+            except:
+                return 0.0
+
+        # Fallback: use only attempted steps (OLD behavior for backward compatibility)
+        total_attempted_steps = sum(s.get("summary", {}).get("total_steps", 0) for s in student_subs)
+        if total_attempted_steps == 0:
             return 0.0
 
         try:
-            return round((finalized / total_steps) * 100, 2)
+            return round((finalized / total_attempted_steps) * 100, 2)
         except:
             return 0.0
 
