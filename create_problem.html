@@ -7826,7 +7826,7 @@ class DataManager:
                                 js_code = """
                                 (function(editor) {
                                     return editor.session.getLength();
-                                })(arguments[0]);
+                                })
                                 """
                                 line_count = window.eval(js_code)(editor)
                                 line_count_info.textContent = f"📄 {line_count} lines"
@@ -7839,7 +7839,7 @@ class DataManager:
                             editor.session.on('change', function() {
                                 callback();
                             });
-                        })(arguments[0], arguments[1]);
+                        })
                         """
                         window.eval(js_code)(editor, create_proxy(update_line_count))
                         window.console.log("✓ Editor initialized successfully")
@@ -8046,7 +8046,7 @@ class DataManager:
                 console.error('Error creating Ace editor:', error);
                 return null;
             }
-        })(arguments[0], arguments[1]);
+        })
         """
         return window.eval(js_code)(container, initial_text)
 
