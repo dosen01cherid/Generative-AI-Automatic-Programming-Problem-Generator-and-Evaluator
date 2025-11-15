@@ -1,82 +1,130 @@
-###Problem Title: Gauss-Jordan Elimination - 2x2 System
-Problem Description: Solve `[[2,4,16],[1,3,11]]` using Gauss-Jordan elimination
+###Problem Title: Eliminasi Gauss-Jordan - Sistem 2x2 Sederhana
+Problem Description: Selesaikan sistem persamaan linear `[[2,4,16],[1,3,11]]` menggunakan metode eliminasi Gauss-Jordan
 
-#Step Description: Make the first pivot equal to 1 by dividing R_1 by 2
+#Step Description: Jadikan pivot pertama sama dengan 1
 Step Expression: `[[2,4,16],[1,3,11]]|R_1\to (1/2)R_1`
 Step Expected: `[[1,2,8],[1,3,11]]`
 
-#Step Description: Eliminate below the first pivot
+#Step Description: Eliminasi elemen di bawah pivot pertama
 Step Expression: `[[1,2,8],[1,3,11]]|R_2\to R_2-R_1`
 Step Expected: `[[1,2,8],[0,1,3]]`
 
-#Step Description: Eliminate above the second pivot
+#Step Description: Eliminasi elemen di atas pivot kedua
 Step Expression: `[[1,2,8],[0,1,3]]|R_1\to R_1-2R_2`
 Step Expected: `[[1,0,2],[0,1,3]]`
 
 
-###Problem Title: Gauss-Jordan Elimination - 3x3 System
-Problem Description: Solve `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` using Gauss-Jordan elimination
+###Problem Title: Eliminasi Gauss-Jordan - Sistem 3x3
+Problem Description: Selesaikan sistem persamaan linear `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]` menggunakan metode eliminasi Gauss-Jordan
 
-#Step Description: Eliminate below first pivot in column 1
+#Step Description: Eliminasi elemen di bawah pivot pertama pada baris 2
 Step Expression: `[[1,2,3,14],[2,5,7,31],[3,1,2,11]]|R_2\to R_2-2R_1`
 Step Expected: `[[1,2,3,14],[0,1,1,3],[3,1,2,11]]`
 
-#Step Description: Continue eliminating below first pivot
+#Step Description: Eliminasi elemen di bawah pivot pertama pada baris 3
 Step Expression: `[[1,2,3,14],[0,1,1,3],[3,1,2,11]]|R_3\to R_3-3R_1`
 Step Expected: `[[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]`
 
-#Step Description: Eliminate below second pivot in column 2
+#Step Description: Eliminasi elemen di bawah pivot kedua
 Step Expression: `[[1,2,3,14],[0,1,1,3],[0,-5,-7,-31]]|R_3\to R_3+5R_2`
 Step Expected: `[[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]`
 
-#Step Description: Make third pivot equal to 1
+#Step Description: Jadikan pivot ketiga sama dengan 1
 Step Expression: `[[1,2,3,14],[0,1,1,3],[0,0,-2,-16]]|R_3\to (-1/2)R_3`
 Step Expected: `[[1,2,3,14],[0,1,1,3],[0,0,1,8]]`
 
-#Step Description: Eliminate above third pivot in row 2
+#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 2
 Step Expression: `[[1,2,3,14],[0,1,1,3],[0,0,1,8]]|R_2\to R_2-R_3`
 Step Expected: `[[1,2,3,14],[0,1,0,-5],[0,0,1,8]]`
 
-#Step Description: Eliminate above third pivot in row 1
+#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 1
 Step Expression: `[[1,2,3,14],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-3R_3`
 Step Expected: `[[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]`
 
-#Step Description: Eliminate above second pivot in row 1
+#Step Description: Eliminasi elemen di atas pivot kedua
 Step Expression: `[[1,2,0,-10],[0,1,0,-5],[0,0,1,8]]|R_1\to R_1-2R_2`
 Step Expected: `[[1,0,0,0],[0,1,0,-5],[0,0,1,8]]`
 
 
-###Problem Title: Gauss-Jordan with Row Swap
-Problem Description: Solve `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]` using Gauss-Jordan elimination
+###Problem Title: Eliminasi Gauss-Jordan dengan Pertukaran Baris
+Problem Description: Selesaikan sistem persamaan linear `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]` menggunakan metode eliminasi Gauss-Jordan
 
-#Step Description: Swap rows to get non-zero pivot
+#Step Description: Tukar baris untuk mendapatkan pivot bukan nol
 Step Expression: `[[0,2,1,5],[1,1,2,7],[2,1,3,10]]|R_1\leftrightarrow R_2`
 Step Expected: `[[1,1,2,7],[0,2,1,5],[2,1,3,10]]`
 
-#Step Description: Eliminate below first pivot
+#Step Description: Eliminasi elemen di bawah pivot pertama
 Step Expression: `[[1,1,2,7],[0,2,1,5],[2,1,3,10]]|R_3\to R_3-2R_1`
 Step Expected: `[[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]`
 
-#Step Description: Make second pivot equal to 1
+#Step Description: Jadikan pivot kedua sama dengan 1
 Step Expression: `[[1,1,2,7],[0,2,1,5],[0,-1,-1,-4]]|R_2\to (1/2)R_2`
 Step Expected: `[[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]`
 
-#Step Description: Eliminate below second pivot
+#Step Description: Eliminasi elemen di bawah pivot kedua
 Step Expression: `[[1,1,2,7],[0,1,1/2,5/2],[0,-1,-1,-4]]|R_3\to R_3+R_2`
 Step Expected: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]`
 
-#Step Description: Make third pivot equal to 1
+#Step Description: Jadikan pivot ketiga sama dengan 1
 Step Expression: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,-1/2,-3/2]]|R_3\to -2R_3`
 Step Expected: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,1,3]]`
 
-#Step Description: Back substitution - eliminate above third pivot in row 2
+#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 2
 Step Expression: `[[1,1,2,7],[0,1,1/2,5/2],[0,0,1,3]]|R_2\to R_2-(1/2)R_3`
 Step Expected: `[[1,1,2,7],[0,1,0,1],[0,0,1,3]]`
 
-#Step Description: Back substitution - eliminate above third pivot in row 1
+#Step Description: Eliminasi elemen di atas pivot ketiga pada baris 1
 Step Expression: `[[1,1,2,7],[0,1,0,1],[0,0,1,3]]|R_1\to R_1-2R_3`
 Step Expected: `[[1,1,0,1],[0,1,0,1],[0,0,1,3]]`
 
-#Step Description: Final step - eliminate above second pivot
+#Step Description: Eliminasi elemen di atas pivot kedua
 Step Expression: `[[1,1,0,1],[0,1,0,1],[0,0,1,3]]|R_1\to R_1-R_2`
 Step Expected: `[[1,0,0,0],[0,1,0,1],[0,0,1,3]]`
+
+
+###Problem Title: Eliminasi Gauss-Jordan - Identifikasi Operasi Baris
+Problem Description: Tentukan operasi baris yang digunakan untuk transformasi `[[2,6,4],[0,3,9]]` menjadi `[[1,3,2],[0,3,9]]`
+
+#Step Description: Identifikasi operasi baris yang tepat
+Step Expression: `[[2,6,4],[0,3,9]]|R_1\to (1/2)R_1`
+Step Expected: `[[1,3,2],[0,3,9]]`
+
+
+###Problem Title: Eliminasi Gauss-Jordan - Sistem dengan Bilangan Negatif
+Problem Description: Selesaikan sistem persamaan linear `[[3,-6,9],[1,-2,5]]` menggunakan metode eliminasi Gauss-Jordan
+
+#Step Description: Jadikan pivot pertama sama dengan 1
+Step Expression: `[[3,-6,9],[1,-2,5]]|R_1\to (1/3)R_1`
+Step Expected: `[[1,-2,3],[1,-2,5]]`
+
+#Step Description: Eliminasi elemen di bawah pivot pertama
+Step Expression: `[[1,-2,3],[1,-2,5]]|R_2\to R_2-R_1`
+Step Expected: `[[1,-2,3],[0,0,2]]`
+
+#Step Description: Jadikan pivot kedua sama dengan 1
+Step Expression: `[[1,-2,3],[0,0,2]]|R_2\to (1/2)R_2`
+Step Expected: `[[1,-2,3],[0,0,1]]`
+
+#Step Description: Eliminasi elemen di atas pivot kedua
+Step Expression: `[[1,-2,3],[0,0,1]]|R_1\to R_1-3R_2`
+Step Expected: `[[1,-2,0],[0,0,1]]`
+
+
+###Problem Title: Eliminasi Gauss-Jordan - Sistem 2x2 dengan Pecahan
+Problem Description: Selesaikan sistem persamaan linear `[[4,2,10],[2,3,11]]` menggunakan metode eliminasi Gauss-Jordan
+
+#Step Description: Jadikan pivot pertama sama dengan 1
+Step Expression: `[[4,2,10],[2,3,11]]|R_1\to (1/4)R_1`
+Step Expected: `[[1,1/2,5/2],[2,3,11]]`
+
+#Step Description: Eliminasi elemen di bawah pivot pertama
+Step Expression: `[[1,1/2,5/2],[2,3,11]]|R_2\to R_2-2R_1`
+Step Expected: `[[1,1/2,5/2],[0,2,6]]`
+
+#Step Description: Jadikan pivot kedua sama dengan 1
+Step Expression: `[[1,1/2,5/2],[0,2,6]]|R_2\to (1/2)R_2`
+Step Expected: `[[1,1/2,5/2],[0,1,3]]`
+
+#Step Description: Eliminasi elemen di atas pivot kedua
+Step Expression: `[[1,1/2,5/2],[0,1,3]]|R_1\to R_1-(1/2)R_2`
+Step Expected: `[[1,0,1],[0,1,3]]`
