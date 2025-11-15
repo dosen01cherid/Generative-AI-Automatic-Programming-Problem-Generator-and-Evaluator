@@ -2069,9 +2069,13 @@ CIRC: "\\circ"
         if fixes:
             window.console.log(f"🔧 Auto-fixes applied: {', '.join(fixes)}")
             window.console.log(f"🔧 Fixed LaTeX: {fixed_latex}")
+            # Store corrected latex for caller to update MathQuill field
+            self.last_corrected_latex = fixed_latex
             # Show a subtle notification to user
             self._show_info_popup(f"✨ Auto-corrected: {', '.join(fixes)}")
             latex = fixed_latex
+        else:
+            self.last_corrected_latex = None
 
         cleaned = self.clean_latex(latex)
         window.console.log(f"🔍 [DEBUG 2] After clean_latex: {cleaned}")
@@ -4151,7 +4155,12 @@ class Step:
             
             # Parse the expression
             parsed = self.math_parser.parse_latex(latex)
-            
+
+            # 🆕 Update MathQuill field with corrected LaTeX if auto-fixes were applied
+            if self.math_parser.last_corrected_latex and self.expected_mf:
+                window.console.log(f"📝 Updating MathQuill with corrected LaTeX: {self.math_parser.last_corrected_latex}")
+                self.expected_mf.latex(self.math_parser.last_corrected_latex)
+
             if parsed is None:
                 self.parse_preview_el.innerText = "❌ Could not parse expected answer"
                 self._animate_glow(self.dom_element.querySelector(".step-expected"), "#dc2626")

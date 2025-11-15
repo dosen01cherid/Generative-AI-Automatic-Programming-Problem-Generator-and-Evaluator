@@ -2521,9 +2521,13 @@ CIRC: "\\circ"
       if fixes:
           window.console.log(f"🔧 Auto-fixes applied: {', '.join(fixes)}")
           window.console.log(f"🔧 Fixed LaTeX: {fixed_latex}")
+          # Store corrected latex for caller to update MathQuill field
+          self.last_corrected_latex = fixed_latex
           # Show a subtle notification to user
           self._show_info_popup(f"✨ Auto-corrected: {', '.join(fixes)}")
           latex = fixed_latex
+      else:
+          self.last_corrected_latex = None
 
       cleaned = self.clean_latex(latex)
       window.console.log(f"🔍 [DEBUG 2] After clean_latex: {cleaned}")
@@ -10681,6 +10685,11 @@ This demonstrates the complete format for creating your own problem sets!
       try:
           window.console.log("Attempting to parse user expression...")
           user_expr = self.math_parser.parse_latex(user_latex)
+
+          # 🆕 Update MathQuill field with corrected LaTeX if auto-fixes were applied
+          if self.math_parser.last_corrected_latex and answer_mf:
+              window.console.log(f"📝 Updating MathQuill with corrected LaTeX: {self.math_parser.last_corrected_latex}")
+              answer_mf.latex(self.math_parser.last_corrected_latex)
 
           if user_expr is None:
               window.console.log("❌ Parser returned None, attempting recovery...")
