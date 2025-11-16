@@ -8602,12 +8602,20 @@ class ProblemCreator:
                     window.console.log("✗ User declined restoration")
                     # Add initial problem if user declined
                     if len(self.problems) == 0:
+                        # ✅ Disable autosave during initial problem creation
+                        self.data_manager.is_restoring = True
                         window.setTimeout(create_proxy(lambda: self.add_problem()), 200)
+                        # Re-enable autosave after editors have time to initialize
+                        window.setTimeout(create_proxy(lambda: setattr(self.data_manager, 'is_restoring', False)), 1500)
             else:
                 window.console.log("ℹ️ No autosaved data found")
                 # Add initial problem if none exist
                 if len(self.problems) == 0:
+                    # ✅ Disable autosave during initial problem creation
+                    self.data_manager.is_restoring = True
                     window.setTimeout(create_proxy(lambda: self.add_problem()), 200)
+                    # Re-enable autosave after editors have time to initialize
+                    window.setTimeout(create_proxy(lambda: setattr(self.data_manager, 'is_restoring', False)), 1500)
 
       # Delay restoration to ensure Quill and MathQuill are ready
       window.setTimeout(create_proxy(delayed_restore), 800)
