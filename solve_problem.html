@@ -8767,7 +8767,7 @@ This demonstrates the complete format for creating your own problem sets!
               for opt in options:
                   options_html += f"<option value='{opt}'>{opt}</option>"
 
-              dropdown_html = f"""<select class='multi-mc-dropdown' data-blank-label='{label}' style='padding:4px 8px; border:2px solid #0b6efd; border-radius:4px; font-size:14px; background:white;'>{options_html}</select>"""
+              dropdown_html = f"""<select class='multi-mc-dropdown' data-blank-label='{label}' data-step-idx='{step_idx}' style='padding:4px 8px; border:2px solid #0b6efd; border-radius:4px; font-size:14px; background:white;'>{options_html}</select>"""
 
               # Replace first occurrence of {blank}
               modified_desc = modified_desc.replace('{blank}', dropdown_html, 1)
@@ -9819,8 +9819,9 @@ This demonstrates the complete format for creating your own problem sets!
         blanks = step_data.get("blanks", {})
         window.console.log(f"📋 Blanks: {blanks}")
 
-        dropdowns = document.querySelectorAll(".multi-mc-dropdown")
-        window.console.log(f"📋 Found {dropdowns.length} dropdowns")
+        # Query for dropdowns specific to this step only
+        dropdowns = document.querySelectorAll(f'.multi-mc-dropdown[data-step-idx="{step_idx}"]')
+        window.console.log(f"📋 Found {dropdowns.length} dropdowns for step {step_idx}")
 
         # Collect user answers
         user_answers = {}
