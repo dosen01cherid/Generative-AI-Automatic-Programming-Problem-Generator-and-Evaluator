@@ -7730,24 +7730,35 @@ class DataManager:
                 # Remaining parts are steps
                 steps = []
                 for step_index, step_section in enumerate(parts[1:]):
+                    print(f"   🔧 Processing step {step_index + 1}")
+                    print(f"      Step section preview: {step_section[:150]}")
+
                     step_lines = step_section.split('\n')
+                    print(f"      Step has {len(step_lines)} lines")
 
                     # Filter out comments from step lines
                     step_lines_clean, step_comments = filter_comments(step_lines)
+                    print(f"      After filtering: {len(step_lines_clean)} lines")
 
                     step_desc = extract_field(step_lines_clean, 'Step Description:')
                     step_type = extract_field(step_lines_clean, 'Step Type:')
+
+                    print(f"      📋 Step Description: {step_desc}")
+                    print(f"      📋 Step Type: {step_type}")
 
                     # Validation: Check for missing step description
                     if not step_desc:
                         add_validation_comment('warning', f'Step {step_index + 1}: Missing Step Description - adding default')
                         step_desc = f"Step {step_index + 1}"
+                        print(f"      ⚠️ Missing step description, using default")
 
                     # Default to step-by-step if no type specified
                     if not step_type:
                         step_type = "step-by-step"
+                        print(f"      ⚠️ No step type, defaulting to step-by-step")
                     else:
                         step_type = step_type.strip().lower()
+                        print(f"      ✓ Step type: {step_type}")
 
                     # Parse step description
                     step_desc_blocks = parse_mixed_content(step_desc) if step_desc else []
