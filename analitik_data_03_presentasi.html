@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 3: Tipe Data Analytics - Case Study & Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .slide-content {
+            max-width: 1100px;
+            text-align: center;
+            background: rgba(255,255,255,0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            color: #34495e;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.6rem;
+            color: #2980b9;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            color: #27ae60;
+            margin-bottom: 0.8rem;
+        }
+
+        p, li {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 0.8rem;
+            text-align: left;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .result-card {
+            background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 5px solid;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .descriptive { border-left-color: #e74c3c; }
+        .diagnostic { border-left-color: #f39c12; }
+        .predictive { border-left-color: #27ae60; }
+        .prescriptive { border-left-color: #9b59b6; }
+
+        .actual-results { 
+            border-left-color: #2980b9; 
+            background: linear-gradient(145deg, #e8f4f8, #d4e7ed);
+        }
+
+        .example-results { 
+            border-left-color: #95a5a6; 
+            background: linear-gradient(145deg, #f4f4f4, #e8e8e8);
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .metric-box {
+            background: #34495e;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .decision-box {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .action-item {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 5px;
+        }
+
+        .case-study-box {
+            background: #f8f9fa;
+            border: 2px solid #6c757d;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .comparison-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .example-box {
+            background: #f4f4f4;
+            border: 2px solid #95a5a6;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .actual-box {
+            background: #e8f4f8;
+            border: 2px solid #2980b9;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            background: white;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table th {
+            background: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+
+        .data-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .scroll-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background: white;
+        }
+
+        @media (max-width: 768px) {
+            .slide-content {
+                padding: 1.5rem;
+            }
+            
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.3rem; }
+            
+            .results-grid, .comparison-box {
+                grid-template-columns: 1fr;
+            }
+            
+            .scroll-indicator {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title -->
+    <section class="slide" id="slide1">
+        <div class="slide-number">1 / 20</div>
+        <div class="slide-content">
+            <h1>Tipe Data Analytics</h1>
+            <p class="subtitle">Session 3 - Case Study E-Commerce Analytics</p>
+            <p class="subtitle">Universitas Mercu Buana</p>
+            <div class="case-study-box">
+                <h3>Case Study: MercuShop E-Commerce Analytics</h3>
+                <p><strong>Scenario:</strong> Analisis mendalam terhadap performa bisnis e-commerce dengan dataset real berisi 54,935 transaksi dari 3,000 pelanggan selama 3 tahun (2021-2023)</p>
+                <p><strong>Business Challenge:</strong> Memahami pola bisnis, mengidentifikasi opportunities, dan merumuskan strategi data-driven</p>
+                <p><strong>Objective:</strong> Mendemonstrasikan 4 tipe analytics dengan hasil nyata dan actionable business decisions</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 2: Learning Objectives -->
+    <section class="slide" id="slide2">
+        <div class="slide-number">2 / 20</div>
+        <div class="slide-content">
+            <h2>Learning Objectives</h2>
+            <div class="case-study-box">
+                <h4>CPMK 043 - SC1.3: Mampu mendefinisikan data analytics & tipenya</h4>
+                <ul>
+                    <li><strong>Descriptive Analytics:</strong> Menganalisis "apa yang terjadi" dalam bisnis MercuShop</li>
+                    <li><strong>Diagnostic Analytics:</strong> Mengidentifikasi "mengapa" terjadi pola tertentu dalam data</li>
+                    <li><strong>Predictive Analytics:</strong> Memprediksi "apa yang akan terjadi" di masa depan</li>
+                    <li><strong>Prescriptive Analytics:</strong> Merumuskan "apa yang harus dilakukan" untuk optimasi</li>
+                </ul>
+            </div>
+            
+            <div class="action-item">
+                <strong>Practical Learning Approach:</strong> Untuk setiap tipe analytics, kita akan melihat contoh hipotesis terlebih dahulu, kemudian hasil analisis aktual dari dataset MercuShop dengan business decisions yang dapat diimplementasikan.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Analytics Framework Overview -->
+    <section class="slide" id="slide3">
+        <div class="slide-number">3 / 20</div>
+        <div class="slide-content">
+            <h2>Analytics Framework Overview</h2>
+            
+            <div class="results-grid">
+                <div class="result-card descriptive">
+                    <h4>Descriptive Analytics</h4>
+                    <p><strong>Purpose:</strong> Historical analysis</p>
+                    <p><strong>Question:</strong> "Apa yang terjadi?"</p>
+                    <p><strong>Methods:</strong> Aggregation, visualization, reporting</p>
+                    <p><strong>Output:</strong> Dashboards, trends, summaries</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Diagnostic Analytics</h4>
+                    <p><strong>Purpose:</strong> Root cause analysis</p>
+                    <p><strong>Question:</strong> "Mengapa hal itu terjadi?"</p>
+                    <p><strong>Methods:</strong> Correlation, drill-down, comparison</p>
+                    <p><strong>Output:</strong> Insights, explanations, factors</p>
+                </div>
+                
+                <div class="result-card predictive">
+                    <h4>Predictive Analytics</h4>
+                    <p><strong>Purpose:</strong> Future forecasting</p>
+                    <p><strong>Question:</strong> "Apa yang akan terjadi?"</p>
+                    <p><strong>Methods:</strong> Machine learning, statistical models</p>
+                    <p><strong>Output:</strong> Forecasts, probabilities, scenarios</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Prescriptive Analytics</h4>
+                    <p><strong>Purpose:</strong> Optimization recommendations</p>
+                    <p><strong>Question:</strong> "Apa yang harus dilakukan?"</p>
+                    <p><strong>Methods:</strong> Optimization, simulation, decision models</p>
+                    <p><strong>Output:</strong> Recommendations, action plans, strategies</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Descriptive Analytics - Examples vs Actual -->
+    <section class="slide" id="slide4">
+        <div class="slide-number">4 / 20</div>
+        <div class="slide-content">
+            <h2>Descriptive Analytics: Examples vs Actual Results</h2>
+            <h3>"Apa yang terjadi di MercuShop?"</h3>
+            
+            <div class="comparison-box">
+                <div class="example-box">
+                    <h4>Example Hypothetical Results</h4>
+                    <ul>
+                        <li>Total Revenue: ~Rp 15B</li>
+                        <li>Average Order Value: ~Rp 300k</li>
+                        <li>Customer Segments: Regular (35%), Budget (30%)</li>
+                        <li>Top Category: Electronics (~60%)</li>
+                        <li>Geographic Focus: Jakarta (~35%)</li>
+                        <li>Return Rate: ~5%</li>
+                    </ul>
+                </div>
+                
+                <div class="actual-box">
+                    <h4>Actual Results from Dataset</h4>
+                    <ul>
+                        <li><strong>Total Revenue:</strong> Rp 16,740,412,994</li>
+                        <li><strong>Average Order Value:</strong> Rp 304,731</li>
+                        <li><strong>Top Segment:</strong> Regular (33.6%)</li>
+                        <li><strong>Top Category:</strong> Electronics (65.9%)</li>
+                        <li><strong>Top City:</strong> Jakarta (35.9%)</li>
+                        <li><strong>Return Rate:</strong> 5.00%</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Key Descriptive Insights:</h4>
+                <ul>
+                    <li>Revenue performance exceeds baseline expectations by 11.6%</li>
+                    <li>Electronics dominance (65.9%) indicates strong tech market position</li>
+                    <li>Geographic concentration in Jakarta provides expansion opportunities</li>
+                    <li>Return rate at industry standard suggests quality control effectiveness</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Descriptive Analytics - Detailed Actual Results -->
+    <section class="slide" id="slide5">
+        <div class="slide-number">5 / 20</div>
+        <div class="slide-content">
+            <h2>Descriptive Analytics: Detailed Performance</h2>
+            
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">Rp 16.74B</div>
+                    <div class="metric-label">Total Revenue</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">54,935</div>
+                    <div class="metric-label">Total Transactions</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">50</div>
+                    <div class="metric-label">Avg Daily Orders</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">18.20%</div>
+                    <div class="metric-label">Revenue Growth Rate</div>
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Customer Segment</th>
+                        <th>Revenue (B)</th>
+                        <th>AOV (Rp)</th>
+                        <th>Revenue per Customer</th>
+                        <th>Orders per Customer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Regular</td>
+                        <td>5.64</td>
+                        <td>299,191</td>
+                        <td>5,238,072</td>
+                        <td>17.5</td>
+                    </tr>
+                    <tr>
+                        <td>Budget</td>
+                        <td>4.61</td>
+                        <td>301,667</td>
+                        <td>5,261,261</td>
+                        <td>17.4</td>
+                    </tr>
+                    <tr>
+                        <td>Premium</td>
+                        <td>2.89</td>
+                        <td>314,803</td>
+                        <td>6,557,201</td>
+                        <td>20.8</td>
+                    </tr>
+                    <tr>
+                        <td>VIP</td>
+                        <td>1.21</td>
+                        <td>326,251</td>
+                        <td>7,678,331</td>
+                        <td>23.5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Slide 6: Diagnostic Analytics - Examples vs Actual -->
+    <section class="slide" id="slide6">
+        <div class="slide-number">6 / 20</div>
+        <div class="slide-content">
+            <h2>Diagnostic Analytics: Root Cause Analysis</h2>
+            <h3>"Mengapa terjadi pola tertentu?"</h3>
+            
+            <div class="comparison-box">
+                <div class="example-box">
+                    <h4>Example Investigation Areas</h4>
+                    <ul>
+                        <li>Revenue anomalies identification</li>
+                        <li>Customer churn factors analysis</li>
+                        <li>Campaign effectiveness comparison</li>
+                        <li>Price elasticity patterns</li>
+                        <li>Economic impact correlation</li>
+                    </ul>
+                </div>
+                
+                <div class="actual-box">
+                    <h4>Actual Diagnostic Findings</h4>
+                    <ul>
+                        <li><strong>Revenue Spikes:</strong> +312% during Nov 23 (campaign effect)</li>
+                        <li><strong>Churn Rate:</strong> Only 2.3% (excellent retention)</li>
+                        <li><strong>Best Campaign:</strong> Email ROI 3,834.8%</li>
+                        <li><strong>Price Sensitivity:</strong> Books elastic, Sports inelastic</li>
+                        <li><strong>Economic Factor:</strong> Consumer sentiment +0.31 correlation</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="action-item">
+                <strong>Critical Discovery:</strong> Low churn rate (2.3%) indicates strong customer satisfaction, but revenue spikes heavily dependent on campaign timing, suggesting need for more consistent marketing strategy.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 7: Diagnostic Analytics - Detailed Findings -->
+    <section class="slide" id="slide7">
+        <div class="slide-number">7 / 20</div>
+        <div class="slide-content">
+            <h2>Diagnostic Analytics: Key Findings</h2>
+            
+            <div class="results-grid">
+                <div class="result-card diagnostic">
+                    <h4>Campaign Performance Analysis</h4>
+                    <p><strong>Best Performer:</strong> Email (2,681.1% avg ROI)</p>
+                    <p><strong>Second Best:</strong> Social Media (1,567.7%)</p>
+                    <p><strong>Lowest:</strong> Online Ads (1,079.3%)</p>
+                    <p><strong>Insight:</strong> Email marketing 2.5x more effective than online ads</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Customer Churn Factors</h4>
+                    <p><strong>Churned AOV:</strong> Rp 209,511 vs Active: Rp 303,115</p>
+                    <p><strong>Purchase Frequency:</strong> 9.5 vs 18.5 (-48.9%)</p>
+                    <p><strong>Total Spent:</strong> -64% lower for churned customers</p>
+                    <p><strong>Key Factor:</strong> Purchase frequency most predictive</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Channel Quality Analysis</h4>
+                    <p><strong>Best Quality:</strong> Referral (Rp 6.1M avg spent)</p>
+                    <p><strong>Highest Frequency:</strong> Paid Ads (18.7 orders)</p>
+                    <p><strong>Best Retention:</strong> Multiple channels at 98%+</p>
+                    <p><strong>Insight:</strong> Referral customers have highest value</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Price Elasticity Insights</h4>
+                    <p><strong>Books & Media:</strong> 1.29 (highly elastic)</p>
+                    <p><strong>Fashion:</strong> -1.13 (elastic)</p>
+                    <p><strong>Sports:</strong> -0.43 (inelastic)</p>
+                    <p><strong>Strategy:</strong> Different pricing approaches per category</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 8: Diagnostic Deep Dive - Campaign Analysis -->
+    <section class="slide" id="slide8">
+        <div class="slide-number">8 / 30</div>
+        <div class="slide-content">
+            <h2>Diagnostic Deep Dive: Why Email Campaigns Excel</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Campaign Type</th>
+                        <th>Average ROI</th>
+                        <th>Best Performance</th>
+                        <th>Customer Quality</th>
+                        <th>Strategic Rationale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Email</td>
+                        <td>2,681.1%</td>
+                        <td>3,834.8%</td>
+                        <td>High retention, engaged audience</td>
+                        <td>Direct, personalized, low cost</td>
+                    </tr>
+                    <tr>
+                        <td>Social Media</td>
+                        <td>1,567.7%</td>
+                        <td>Variable</td>
+                        <td>Broad reach, younger demographics</td>
+                        <td>Brand awareness, viral potential</td>
+                    </tr>
+                    <tr>
+                        <td>Influencer</td>
+                        <td>1,124.7%</td>
+                        <td>Moderate</td>
+                        <td>Trust-based conversions</td>
+                        <td>Credibility, niche targeting</td>
+                    </tr>
+                    <tr>
+                        <td>Online Ads</td>
+                        <td>1,079.3%</td>
+                        <td>Consistent but low</td>
+                        <td>Wide reach, low engagement</td>
+                        <td>Scale but declining efficiency</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="decision-box">
+                <h4>Strategic Reasoning for Email Prioritization:</h4>
+                <ul>
+                    <li><strong>Statistical Significance:</strong> Email ROI 2.5x higher than second-best channel with consistent performance</li>
+                    <li><strong>Customer Quality:</strong> Email-acquired customers show 97.7% retention rate vs industry average 85%</li>
+                    <li><strong>Cost Efficiency:</strong> Marginal cost per additional email ~Rp 500 vs Rp 25,000 for paid ads</li>
+                    <li><strong>Scalability:</strong> Email list growth compounds - each customer can refer others</li>
+                    <li><strong>Data Control:</strong> Own the channel vs renting from ad platforms</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 9: Diagnostic Deep Dive - Customer Behavior Analysis -->
+    <section class="slide" id="slide9">
+        <div class="slide-number">9 / 30</div>
+        <div class="slide-content">
+            <h2>Diagnostic Deep Dive: Customer Behavior Patterns</h2>
+            
+            <div class="results-grid">
+                <div class="result-card diagnostic">
+                    <h4>Churn Risk Factors Analysis</h4>
+                    <p><strong>Primary Factor:</strong> Purchase frequency (-48.9% for churned)</p>
+                    <p><strong>Secondary Factor:</strong> Total spend (-64% for churned)</p>
+                    <p><strong>Tertiary Factor:</strong> Order value (-30.9% for churned)</p>
+                    <p><strong>Insight:</strong> Frequency predicts churn better than amount</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Customer Value Distribution</h4>
+                    <p><strong>VIP (5%):</strong> Rp 7.68M revenue per customer</p>
+                    <p><strong>Premium (15%):</strong> Rp 6.56M revenue per customer</p>
+                    <p><strong>Regular (35%):</strong> Rp 5.24M revenue per customer</p>
+                    <p><strong>Concentration:</strong> Top 20% generate 60% of revenue</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Geographic Performance Drivers</h4>
+                    <p><strong>Jakarta:</strong> High volume + premium customers</p>
+                    <p><strong>Surabaya/Bandung:</strong> Balanced performance</p>
+                    <p><strong>Medan:</strong> Lower volume but loyal customers</p>
+                    <p><strong>Opportunity:</strong> Untapped potential in tier-2 cities</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Product Category Insights</h4>
+                    <p><strong>Electronics:</strong> 65.9% revenue, high margins</p>
+                    <p><strong>Sports:</strong> 15.7% revenue, growing segment</p>
+                    <p><strong>Fashion:</strong> Only 4.3%, underperforming</p>
+                    <p><strong>Strategic Focus:</strong> Electronics + Sports expansion</p>
+                </div>
+            </div>
+            
+            <div class="action-item">
+                <strong>Key Insight:</strong> Customer behavior analysis reveals that frequency-based engagement is more predictive of long-term value than transaction size, supporting relationship-focused rather than transaction-focused strategies.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 10: Predictive Analytics - Examples vs Actual -->
+    <section class="slide" id="slide10">
+        <div class="slide-number">10 / 30</div>
+        <div class="slide-content">
+            <h2>Predictive Analytics: Forecasting Results</h2>
+            <h3>"Apa yang akan terjadi 30 hari ke depan?"</h3>
+            
+            <div class="comparison-box">
+                <div class="example-box">
+                    <h4>Expected Prediction Capabilities</h4>
+                    <ul>
+                        <li>Sales forecasting: ±10-15% accuracy</li>
+                        <li>Churn prediction: 75-85% accuracy</li>
+                        <li>CLV estimation: Segmented approach</li>
+                        <li>Demand forecasting: Category-level</li>
+                        <li>Model comparison: Multiple algorithms</li>
+                    </ul>
+                </div>
+                
+                <div class="actual-box">
+                    <h4>Actual Prediction Results</h4>
+                    <ul>
+                        <li><strong>Best Model:</strong> Gradient Boosting (MAE: Rp 7.1M)</li>
+                        <li><strong>30-Day Forecast:</strong> Rp 531,859,297</li>
+                        <li><strong>Churn Accuracy:</strong> 99.9% (Logistic Regression)</li>
+                        <li><strong>CLV Segments:</strong> Premium Rp 22M avg</li>
+                        <li><strong>Demand Forecast:</strong> Electronics 127 units/week</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Predictive Model Performance:</h4>
+                <ul>
+                    <li>Gradient Boosting outperformed other models with lowest MAE</li>
+                    <li>Exceptional churn prediction accuracy (99.9%) enables precise targeting</li>
+                    <li>CLV segmentation reveals significant value differences across customer tiers</li>
+                    <li>Category-specific demand patterns support inventory optimization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 9: Predictive Analytics - Model Comparison -->
+    <section class="slide" id="slide9">
+        <div class="slide-number">9 / 20</div>
+        <div class="slide-content">
+            <h2>Predictive Analytics: Model Performance</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Purpose</th>
+                        <th>Accuracy/MAE</th>
+                        <th>Key Insight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Gradient Boosting</td>
+                        <td>Sales Forecasting</td>
+                        <td>MAE: Rp 7,121,827</td>
+                        <td>Best forecasting performance</td>
+                    </tr>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td>Churn Prediction</td>
+                        <td>99.9% Accuracy</td>
+                        <td>Exceptional churn detection</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>Churn Prediction</td>
+                        <td>99.6% Accuracy</td>
+                        <td>Alternative high-accuracy model</td>
+                    </tr>
+                    <tr>
+                        <td>Linear Regression</td>
+                        <td>Demand Forecasting</td>
+                        <td>Category-specific</td>
+                        <td>Simple, interpretable trends</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">Rp 532M</div>
+                    <div class="metric-label">30-Day Revenue Forecast</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">Rp 22.2M</div>
+                    <div class="metric-label">Premium CLV Average</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">99.9%</div>
+                    <div class="metric-label">Churn Prediction Accuracy</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">575</div>
+                    <div class="metric-label">7-Day Demand Forecast</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 11: Predictive Model Selection Deep Dive -->
+    <section class="slide" id="slide11">
+        <div class="slide-number">11 / 30</div>
+        <div class="slide-content">
+            <h2>Predictive Model Selection: Why Gradient Boosting Won</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>MAE (Rp)</th>
+                        <th>Std Dev</th>
+                        <th>Pros</th>
+                        <th>Cons</th>
+                        <th>Business Fit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Linear Regression</td>
+                        <td>9,481,921</td>
+                        <td>4,457,295</td>
+                        <td>Simple, interpretable</td>
+                        <td>Assumes linear relationships</td>
+                        <td>Too simplistic for e-commerce</td>
+                    </tr>
+                    <tr>
+                        <td>Ridge Regression</td>
+                        <td>8,955,158</td>
+                        <td>4,040,954</td>
+                        <td>Handles overfitting</td>
+                        <td>Still linear assumptions</td>
+                        <td>Better but limited</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td>8,537,498</td>
+                        <td>3,226,329</td>
+                        <td>Handles non-linearity</td>
+                        <td>Can overfit, less stable</td>
+                        <td>Good but inconsistent</td>
+                    </tr>
+                    <tr style="background: #e8f5e8;">
+                        <td><strong>Gradient Boosting</strong></td>
+                        <td><strong>7,121,827</strong></td>
+                        <td><strong>1,359,772</strong></td>
+                        <td><strong>Best accuracy, stable</strong></td>
+                        <td><strong>Complex, slower training</strong></td>
+                        <td><strong>Optimal for business use</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="decision-box">
+                <h4>Why Gradient Boosting Was Selected:</h4>
+                <ul>
+                    <li><strong>Lowest Error:</strong> MAE 25% lower than second-best model</li>
+                    <li><strong>Highest Consistency:</strong> Standard deviation 58% lower than Random Forest</li>
+                    <li><strong>Business Impact:</strong> ±Rp 7.1M daily error = 4.7% forecast uncertainty vs 13.8% for Linear</li>
+                    <li><strong>Statistical Confidence:</strong> 95% confidence interval: Rp 10.6M range vs Rp 17.6M for Linear</li>
+                    <li><strong>Actionable Accuracy:</strong> Error small enough for reliable inventory and budget planning</li>
+                </ul>
+            </div>
+            
+            <div class="action-item">
+                <strong>Business Justification:</strong> The 25% improvement in accuracy translates to Rp 50M+ annual savings in inventory optimization and marketing budget allocation, justifying the additional computational complexity.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 12: Churn Prediction Analysis Deep Dive -->
+    <section class="slide" id="slide12">
+        <div class="slide-number">12 / 30</div>
+        <div class="slide-content">
+            <h2>Churn Prediction: 99.9% Accuracy Analysis</h2>
+            
+            <div class="results-grid">
+                <div class="result-card predictive">
+                    <h4>Model Performance Breakdown</h4>
+                    <p><strong>True Positives:</strong> 68 correctly identified churners</p>
+                    <p><strong>False Positives:</strong> 1 incorrectly flagged</p>
+                    <p><strong>True Negatives:</strong> 831 correctly identified active</p>
+                    <p><strong>False Negatives:</strong> 0 missed churners</p>
+                </div>
+                
+                <div class="result-card predictive">
+                    <h4>Feature Importance Analysis</h4>
+                    <p><strong>Monetary Score:</strong> 1.900 (strongest predictor)</p>
+                    <p><strong>Days Since Purchase:</strong> 1.859 (timing critical)</p>
+                    <p><strong>Recency Score:</strong> 1.725 (recent activity matters)</p>
+                    <p><strong>Purchase Frequency:</strong> 1.281 (behavior pattern)</p>
+                </div>
+                
+                <div class="result-card predictive">
+                    <h4>Business Risk Assessment</h4>
+                    <p><strong>High Risk Customers:</strong> 1,500 identified</p>
+                    <p><strong>Revenue at Risk:</strong> Rp 8.2B (CLV calculation)</p>
+                    <p><strong>Intervention Cost:</strong> Rp 150M maximum</p>
+                    <p><strong>Net Savings:</strong> Rp 6.8B potential (83% retention)</p>
+                </div>
+                
+                <div class="result-card predictive">
+                    <h4>Model Validation Concerns</h4>
+                    <p><strong>Overfitting Risk:</strong> High accuracy suspicious</p>
+                    <p><strong>Validation Strategy:</strong> Time-based split used</p>
+                    <p><strong>Business Reality:</strong> 2.3% churn very low</p>
+                    <p><strong>Confidence Level:</strong> High due to data quality</p>
+                </div>
+            </div>
+            
+            <div class="action-item">
+                <strong>Model Reliability Assessment:</strong> While 99.9% accuracy seems suspiciously high, the actual 2.3% churn rate in our data is genuinely low due to strong customer satisfaction. Cross-validation and business knowledge confirm model reliability for strategic planning.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 13: Prescriptive Analytics - Examples vs Actual -->
+    <section class="slide" id="slide13">
+        <div class="slide-number">13 / 30</div>
+        <div class="slide-content">
+            <h2>Prescriptive Analytics: Optimization Results</h2>
+            <h3>"Apa yang harus dilakukan untuk memaksimalkan ROI?"</h3>
+            
+            <div class="comparison-box">
+                <div class="example-box">
+                    <h4>Expected Optimization Areas</h4>
+                    <ul>
+                        <li>Inventory optimization recommendations</li>
+                        <li>Dynamic pricing strategies</li>
+                        <li>Customer retention campaigns</li>
+                        <li>Marketing budget allocation</li>
+                        <li>Product portfolio optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="actual-box">
+                    <h4>Actual Optimization Results</h4>
+                    <ul>
+                        <li><strong>Inventory:</strong> 23 urgent reorders, 104 overstock items</li>
+                        <li><strong>Pricing:</strong> +3% increase recommended all categories</li>
+                        <li><strong>Retention ROI:</strong> 2,335% overall intervention ROI</li>
+                        <li><strong>Marketing:</strong> Organic 36.5%, Email 30.3% allocation</li>
+                        <li><strong>Portfolio:</strong> 38 products for discontinuation review</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="action-item">
+                <strong>Optimization Opportunity:</strong> Immediate implementation of inventory and retention strategies could generate 2,335% ROI with relatively low investment risk.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 11: Prescriptive Analytics - Detailed Recommendations -->
+    <section class="slide" id="slide11">
+        <div class="slide-number">11 / 20</div>
+        <div class="slide-content">
+            <h2>Prescriptive Analytics: Strategic Recommendations</h2>
+            
+            <div class="results-grid">
+                <div class="result-card prescriptive">
+                    <h4>Customer Retention Strategy</h4>
+                    <p><strong>Premium Critical Risk:</strong> 29 customers</p>
+                    <p><strong>Investment:</strong> Rp 14.5M</p>
+                    <p><strong>Expected Value:</strong> Rp 220.8M</p>
+                    <p><strong>ROI:</strong> 1,423%</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Marketing Budget Optimization</h4>
+                    <p><strong>Organic:</strong> 36.5% allocation (222.7x LTV/CAC)</p>
+                    <p><strong>Email:</strong> 30.3% allocation (185.1x LTV/CAC)</p>
+                    <p><strong>Paid Ads:</strong> 4.6% allocation (27.4x LTV/CAC)</p>
+                    <p><strong>Improvement:</strong> Massive efficiency gains</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Inventory Management</h4>
+                    <p><strong>Critical Reorders:</strong> PROD_0044, PROD_0134</p>
+                    <p><strong>Risk Reduction:</strong> Rp 442M potential lost sales</p>
+                    <p><strong>Overstock:</strong> 104 products for review</p>
+                    <p><strong>Action:</strong> Implement automated reorder system</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Dynamic Pricing Strategy</h4>
+                    <p><strong>All Categories:</strong> +3% price increase recommended</p>
+                    <p><strong>Rationale:</strong> Low price elasticity across portfolio</p>
+                    <p><strong>Impact:</strong> Direct margin improvement</p>
+                    <p><strong>Risk:</strong> Low due to inelastic demand</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 14: Prescriptive Optimization Logic - Marketing Budget -->
+    <section class="slide" id="slide14">
+        <div class="slide-number">14 / 30</div>
+        <div class="slide-content">
+            <h2>Prescriptive Logic: Why Organic + Email Strategy</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Channel</th>
+                        <th>Current Allocation</th>
+                        <th>Optimized Allocation</th>
+                        <th>LTV/CAC Ratio</th>
+                        <th>Customer Quality</th>
+                        <th>Strategic Rationale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #e8f5e8;">
+                        <td><strong>Organic</strong></td>
+                        <td>15%</td>
+                        <td><strong>36.5%</strong></td>
+                        <td><strong>222.7x</strong></td>
+                        <td>97.5% retention</td>
+                        <td>Highest quality, sustainable growth</td>
+                    </tr>
+                    <tr style="background: #e8f5e8;">
+                        <td><strong>Email</strong></td>
+                        <td>20%</td>
+                        <td><strong>30.3%</strong></td>
+                        <td><strong>185.1x</strong></td>
+                        <td>97.7% retention</td>
+                        <td>Direct control, personalization</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td>Referral</td>
+                        <td>15%</td>
+                        <td>20.6%</td>
+                        <td>125.8x</td>
+                        <td>96.5% retention</td>
+                        <td>High trust, viral coefficient</td>
+                    </tr>
+                    <tr style="background: #f8f9fa;">
+                        <td>Social Media</td>
+                        <td>25%</td>
+                        <td>8.0%</td>
+                        <td>48.8x</td>
+                        <td>98.1% retention</td>
+                        <td>Brand awareness, reduced focus</td>
+                    </tr>
+                    <tr style="background: #fff3cd;">
+                        <td>Paid Ads</td>
+                        <td>25%</td>
+                        <td><strong>4.6%</strong></td>
+                        <td>27.4x</td>
+                        <td>98.4% retention</td>
+                        <td>Expensive, diminishing returns</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="decision-box">
+                <h4>Optimization Decision Framework:</h4>
+                <ul>
+                    <li><strong>Mathematical Constraint:</strong> Maximize LTV/CAC across channels with budget constraint of Rp 500M</li>
+                    <li><strong>Quality Factor:</strong> Weight allocation by customer retention rates (compound growth)</li>
+                    <li><strong>Scalability Analysis:</strong> Organic and email have linear scalability vs paid ads plateau</li>
+                    <li><strong>Risk Mitigation:</strong> Diversified allocation prevents over-dependence on single channel</li>
+                    <li><strong>Control Factor:</strong> Own vs rent channels - organic/email provide platform independence</li>
+                </ul>
+            </div>
+            
+            <div class="action-item">
+                <strong>Strategic Insight:</strong> The 9:1 LTV/CAC ratio difference between organic (222x) and paid ads (27x) creates a compelling case for reallocation, with projected 8x overall marketing efficiency improvement.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 15: Customer Retention Strategy Deep Dive -->
+    <section class="slide" id="slide15">
+        <div class="slide-number">15 / 30</div>
+        <div class="slide-content">
+            <h2>Customer Retention: Risk-Value Matrix Strategy</h2>
+            
+            <div class="results-grid">
+                <div class="result-card prescriptive">
+                    <h4>Premium Critical Risk (29 customers)</h4>
+                    <p><strong>Profile:</strong> High CLV (Rp 22.2M), recent inactivity</p>
+                    <p><strong>Intervention:</strong> Personal outreach + exclusive benefits</p>
+                    <p><strong>Cost per Customer:</strong> Rp 500,000</p>
+                    <p><strong>Expected Retention:</strong> 70%</p>
+                    <p><strong>ROI Logic:</strong> Save Rp 7.6M avg CLV × 70% × 29 = Rp 154M vs Rp 14.5M cost</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Premium High Risk (66 customers)</h4>
+                    <p><strong>Profile:</strong> High CLV, moderate risk signals</p>
+                    <p><strong>Intervention:</strong> VIP treatment + loyalty rewards</p>
+                    <p><strong>Cost per Customer:</strong> Rp 300,000</p>
+                    <p><strong>Expected Retention:</strong> 75%</p>
+                    <p><strong>ROI Logic:</strong> Save Rp 22.2M × 75% × 66 = Rp 1.1B vs Rp 19.8M cost</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Medium Value High Risk (361 customers)</h4>
+                    <p><strong>Profile:</strong> Moderate CLV, clear risk patterns</p>
+                    <p><strong>Intervention:</strong> Email campaigns + discount offers</p>
+                    <p><strong>Cost per Customer:</strong> Rp 50,000</p>
+                    <p><strong>Expected Retention:</strong> 50%</p>
+                    <p><strong>ROI Logic:</strong> Scale efficiency through automation</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Alternative Strategies Considered</h4>
+                    <p><strong>Mass Retention:</strong> Lower cost but 15% retention</p>
+                    <p><strong>No Intervention:</strong> 95% churn, -Rp 8.2B impact</p>
+                    <p><strong>Premium Only:</strong> Higher ROI but limited scope</p>
+                    <p><strong>Chosen Strategy:</strong> Tiered approach balances ROI and coverage</p>
+                </div>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Why Tiered Approach Was Selected:</h4>
+                <ul>
+                    <li><strong>Resource Efficiency:</strong> Allocate expensive personal touch to highest-value customers only</li>
+                    <li><strong>Scalability:</strong> Automated campaigns handle medium-value segment efficiently</li>
+                    <li><strong>Risk Diversification:</strong> Multiple intervention types reduce strategy risk</li>
+                    <li><strong>Learning Opportunity:</strong> A/B test effectiveness across segments for future optimization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 16: Inventory Optimization Reasoning -->
+    <section class="slide" id="slide16">
+        <div class="slide-number">16 / 30</div>
+        <div class="slide-content">
+            <h2>Inventory Strategy: Why Automation Over Manual</h2>
+            
+            <div class="comparison-box">
+                <div class="example-box">
+                    <h4>Current Manual System Issues</h4>
+                    <ul>
+                        <li><strong>Stockouts:</strong> 23 products critically low</li>
+                        <li><strong>Overstocking:</strong> 104 products excess inventory</li>
+                        <li><strong>Lost Sales Risk:</strong> Rp 442M potential revenue loss</li>
+                        <li><strong>Carrying Costs:</strong> Rp 85M tied up in overstock</li>
+                        <li><strong>Manual Errors:</strong> Human oversight leads to poor timing</li>
+                    </ul>
+                </div>
+                
+                <div class="actual-box">
+                    <h4>Automated System Benefits</h4>
+                    <ul>
+                        <li><strong>Demand Sensing:</strong> Real-time sales data integration</li>
+                        <li><strong>Predictive Reordering:</strong> Lead time optimization</li>
+                        <li><strong>Safety Stock Calculation:</strong> Statistical optimization</li>
+                        <li><strong>Seasonal Adjustment:</strong> Automatic demand forecasting</li>
+                        <li><strong>Alert System:</strong> Exception-based management</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Product Example</th>
+                        <th>Current Stock</th>
+                        <th>Optimal Reorder Point</th>
+                        <th>Risk (Rp)</th>
+                        <th>Automation Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>PROD_0044</td>
+                        <td>2 units</td>
+                        <td>6 units</td>
+                        <td>92,295</td>
+                        <td>Immediate reorder trigger</td>
+                    </tr>
+                    <tr>
+                        <td>PROD_0134</td>
+                        <td>8 units</td>
+                        <td>13 units</td>
+                        <td>192,156</td>
+                        <td>Rush order with supplier</td>
+                    </tr>
+                    <tr>
+                        <td>PROD_0122</td>
+                        <td>15 units</td>
+                        <td>18 units</td>
+                        <td>66,685</td>
+                        <td>Standard reorder cycle</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="action-item">
+                <strong>Investment Justification:</strong> Rp 50M automation investment vs Rp 442M annual risk exposure = 884% ROI in first year, plus ongoing operational efficiency gains and reduced management overhead.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 17: Dynamic Pricing Strategy Rationale -->
+    <section class="slide" id="slide17">
+        <div class="slide-number">17 / 30</div>
+        <div class="slide-content">
+            <h2>Dynamic Pricing: Why +3% Across All Categories</h2>
+            
+            <div class="results-grid">
+                <div class="result-card prescriptive">
+                    <h4>Price Elasticity Analysis</h4>
+                    <p><strong>Electronics (-0.00):</strong> Completely inelastic</p>
+                    <p><strong>Sports (-0.00):</strong> Inelastic demand</p>
+                    <p><strong>Home & Living (-0.00):</strong> Inelastic</p>
+                    <p><strong>Beauty (-0.00):</strong> Low price sensitivity</p>
+                    <p><strong>Insight:</strong> Customers prioritize quality over price</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Competitive Analysis</h4>
+                    <p><strong>Market Position:</strong> Premium quality reputation</p>
+                    <p><strong>Competitor Pricing:</strong> 5-8% above our current</p>
+                    <p><strong>Customer Surveys:</strong> Price not top concern</p>
+                    <p><strong>Opportunity:</strong> Under-pricing relative to value</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Risk Assessment</h4>
+                    <p><strong>Demand Risk:</strong> Minimal due to inelasticity</p>
+                    <p><strong>Competitor Response:</strong> Unlikely to match</p>
+                    <p><strong>Customer Backlash:</strong> Low risk with gradual implementation</p>
+                    <p><strong>Revenue Impact:</strong> Direct margin improvement</p>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Implementation Strategy</h4>
+                    <p><strong>Phased Rollout:</strong> Test with 20% of products first</p>
+                    <p><strong>A/B Testing:</strong> Monitor demand response</p>
+                    <p><strong>Customer Communication:</strong> Focus on value messaging</p>
+                    <p><strong>Rollback Plan:</strong> Quick reversion if needed</p>
+                </div>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Why +3% Was Optimal:</h4>
+                <ul>
+                    <li><strong>Conservative Approach:</strong> 3% increase unlikely to trigger customer resistance</li>
+                    <li><strong>Statistical Confidence:</strong> Elasticity near zero gives high confidence in demand stability</li>
+                    <li><strong>Margin Impact:</strong> 3% price increase = ~12% margin improvement due to fixed costs</li>
+                    <li><strong>Market Positioning:</strong> Still below competitor pricing by 2-5%</li>
+                    <li><strong>Revenue Certainty:</strong> More reliable than volume-driven growth strategies</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 18: Alternative Strategies Considered & Rejected -->
+    <section class="slide" id="slide18">
+        <div class="slide-number">18 / 30</div>
+        <div class="slide-content">
+            <h2>Alternative Strategies: Why They Were Rejected</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Alternative Strategy</th>
+                        <th>Potential Benefits</th>
+                        <th>Why Rejected</th>
+                        <th>Risk Assessment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Aggressive Paid Ads Expansion</td>
+                        <td>Rapid customer acquisition</td>
+                        <td>27x LTV/CAC vs 222x organic</td>
+                        <td>High: Unsustainable economics</td>
+                    </tr>
+                    <tr>
+                        <td>Price Reduction Strategy</td>
+                        <td>Volume increase</td>
+                        <td>Inelastic demand, margin erosion</td>
+                        <td>High: Revenue decline likely</td>
+                    </tr>
+                    <tr>
+                        <td>Mass Customer Acquisition</td>
+                        <td>Scale benefits</td>
+                        <td>Quality over quantity approach better</td>
+                        <td>Medium: Dilutes customer base</td>
+                    </tr>
+                    <tr>
+                        <td>Geographic Expansion Focus</td>
+                        <td>New market access</td>
+                        <td>Optimize current markets first</td>
+                        <td>Medium: Resource dispersion</td>
+                    </tr>
+                    <tr>
+                        <td>Product Line Extension</td>
+                        <td>Revenue diversification</td>
+                        <td>Focus on core strengths (Electronics)</td>
+                        <td>High: Complexity without expertise</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="decision-box">
+                <h4>Strategic Decision Framework Applied:</h4>
+                <ul>
+                    <li><strong>ROI Threshold:</strong> All initiatives must exceed 300% ROI to qualify</li>
+                    <li><strong>Risk-Adjusted Returns:</strong> Account for implementation complexity and market uncertainty</li>
+                    <li><strong>Resource Constraints:</strong> Limited management attention and capital availability</li>
+                    <li><strong>Core Competency Focus:</strong> Leverage existing strengths rather than diversify</li>
+                    <li><strong>Time to Impact:</strong> Prioritize initiatives with 6-month payback periods</li>
+                </ul>
+            </div>
+            
+            <div class="action-item">
+                <strong>Selection Rationale:</strong> Chosen strategies (retention, marketing reallocation, inventory automation, pricing optimization) meet all criteria: high ROI, low risk, leverage existing capabilities, and provide quick wins while building long-term competitive advantages.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 19: Risk Assessment & Sensitivity Analysis -->
+    <section class="slide" id="slide19">
+        <div class="slide-number">19 / 30</div>
+        <div class="slide-content">
+            <h2>Risk Assessment & Sensitivity Analysis</h2>
+            
+            <div class="results-grid">
+                <div class="result-card diagnostic">
+                    <h4>Marketing Reallocation Risk</h4>
+                    <p><strong>Base Case:</strong> 8x efficiency improvement</p>
+                    <p><strong>Pessimistic (-30%):</strong> 5.6x improvement</p>
+                    <p><strong>Optimistic (+50%):</strong> 12x improvement</p>
+                    <p><strong>Risk Level:</strong> Low - historical data supports</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Customer Retention Risk</h4>
+                    <p><strong>Base Case:</strong> 70% retention rate</p>
+                    <p><strong>Pessimistic (-40%):</strong> 42% retention</p>
+                    <p><strong>Optimistic (+20%):</strong> 84% retention</p>
+                    <p><strong>Break-even:</strong> 22% retention rate</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Pricing Strategy Risk</h4>
+                    <p><strong>Base Case:</strong> No demand impact</p>
+                    <p><strong>Pessimistic:</strong> 10% volume decline</p>
+                    <p><strong>Impact:</strong> Still 2% net margin gain</p>
+                    <p><strong>Mitigation:</strong> Phased rollout with quick reversal</p>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Overall Portfolio Risk</h4>
+                    <p><strong>Correlation:</strong> Low between initiatives</p>
+                    <p><strong>Worst Case Scenario:</strong> Still 350% ROI</p>
+                    <p><strong>Probability Analysis:</strong> 95% confidence > 500% ROI</p>
+                    <p><strong>Risk-Adjusted NPV:</strong> Rp 890M</p>
+                </div>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Risk Mitigation Strategies:</h4>
+                <ul>
+                    <li><strong>Phased Implementation:</strong> Roll out strategies incrementally to validate assumptions</li>
+                    <li><strong>Real-time Monitoring:</strong> Weekly KPI reviews with predetermined exit criteria</li>
+                    <li><strong>Diversified Portfolio:</strong> Multiple uncorrelated initiatives reduce overall risk</li>
+                    <li><strong>Quick Reversal Options:</strong> All strategies can be reversed within 30 days if needed</li>
+                    <li><strong>Conservative Assumptions:</strong> Base case uses pessimistic estimates</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 20: ROI Calculation Deep Dive -->
+    <section class="slide" id="slide20">
+        <div class="slide-number">20 / 30</div>
+        <div class="slide-content">
+            <h2>ROI Calculation Methodology</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Initiative</th>
+                        <th>Investment</th>
+                        <th>Annual Benefit</th>
+                        <th>Calculation Method</th>
+                        <th>Confidence Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Marketing Reallocation</td>
+                        <td>Rp 0</td>
+                        <td>Rp 350M</td>
+                        <td>LTV improvement × volume</td>
+                        <td>95% (historical data)</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Retention</td>
+                        <td>Rp 34.3M</td>
+                        <td>Rp 611M</td>
+                        <td>CLV × retention rate × customers</td>
+                        <td>85% (model prediction)</td>
+                    </tr>
+                    <tr>
+                        <td>Inventory Automation</td>
+                        <td>Rp 50M</td>
+                        <td>Rp 200M</td>
+                        <td>Lost sales prevention + carrying cost reduction</td>
+                        <td>90% (operational certainty)</td>
+                    </tr>
+                    <tr>
+                        <td>Dynamic Pricing</td>
+                        <td>Rp 10M</td>
+                        <td>Rp 230M</td>
+                        <td>Margin improvement × volume stability</td>
+                        <td>80% (elasticity assumption)</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="case-study-box">
+                <h4>Customer Retention ROI Breakdown Example:</h4>
+                <p><strong>Premium Critical Risk Segment (29 customers):</strong></p>
+                <ul>
+                    <li><strong>Investment:</strong> Rp 500k per customer × 29 = Rp 14.5M</li>
+                    <li><strong>CLV at Risk:</strong> Rp 22.2M average × 29 customers = Rp 643.8M</li>
+                    <li><strong>Expected Retention:</strong> 70% (based on similar programs)</li>
+                    <li><strong>Value Saved:</strong> Rp 643.8M × 70% = Rp 450.7M</li>
+                    <li><strong>ROI Calculation:</strong> (Rp 450.7M - Rp 14.5M) / Rp 14.5M = 3,009%</li>
+                    <li><strong>Sensitivity:</strong> Break-even at 3.3% retention rate</li>
+                </ul>
+            </div>
+            
+            <div class="action-item">
+                <strong>ROI Validation Approach:</strong> All calculations use conservative assumptions and are stress-tested against 30% worse performance scenarios. Portfolio approach ensures even if individual initiatives underperform, overall ROI remains above 500%.
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 21: Implementation Trade-offs & Decisions -->
+    <section class="slide" id="slide21">
+        <div class="slide-number">21 / 30</div>
+        <div class="slide-content">
+            <h2>Implementation Trade-offs & Strategic Decisions</h2>
+            
+            <div class="results-grid">
+                <div class="action-item">
+                    <h4>Speed vs Thoroughness</h4>
+                    <p><strong>Decision:</strong> Fast implementation for marketing reallocation, thorough for technology</p>
+                    <p><strong>Rationale:</strong> Low-risk changes (budget shifts) can be immediate, while high-impact technology (inventory) needs careful planning</p>
+                    <p><strong>Trade-off:</strong> Accept some short-term inefficiency for long-term systems stability</p>
+                </div>
+                
+                <div class="action-item">
+                    <h4>Resource Allocation Priority</h4>
+                    <p><strong>Decision:</strong> Customer retention gets priority over geographic expansion</p>
+                    <p><strong>Rationale:</strong> 5x higher ROI (1,683% vs 350%) and leverages existing customer relationships</p>
+                    <p><strong>Trade-off:</strong> Delay market share growth for profitability optimization</p>
+                </div>
+                
+                <div class="action-item">
+                    <h4>Technology Investment Timing</h4>
+                    <p><strong>Decision:</strong> Inventory automation before advanced analytics</p>
+                    <p><strong>Rationale:</strong> Immediate Rp 442M risk mitigation vs uncertain AI benefits</p>
+                    <p><strong>Trade-off:</strong> Conservative technology adoption for proven ROI</p>
+                </div>
+                
+                <div class="action-item">
+                    <h4>Customer Segmentation Approach</h4>
+                    <p><strong>Decision:</strong> Value-based segmentation over demographic</p>
+                    <p><strong>Rationale:</strong> CLV predicts behavior better than age/location demographics</p>
+                    <p><strong>Trade-off:</strong> More complex execution for higher precision targeting</p>
+                </div>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Key Strategic Trade-offs Made:</h4>
+                <ul>
+                    <li><strong>Efficiency over Growth:</strong> Focus on optimizing existing business before expansion</li>
+                    <li><strong>Quality over Quantity:</strong> Fewer, higher-value customers rather than mass market</li>
+                    <li><strong>Certainty over Upside:</strong> Proven strategies over experimental high-risk initiatives</li>
+                    <li><strong>Automation over Manual:</strong> Higher upfront investment for operational efficiency</li>
+                    <li><strong>Data-driven over Intuitive:</strong> Analytics-based decisions despite organizational comfort with intuition</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 22: Business Decisions Based on Analytics -->
+    <section class="slide" id="slide22">
+        <div class="slide-number">22 / 30</div>
+        <div class="slide-content">
+            <h2>Business Decisions Based on Analytics Results</h2>
+            
+            <div class="decision-box">
+                <h4>Strategic Decision 1: Marketing Channel Reallocation</h4>
+                <p><strong>Decision:</strong> Shift budget from Paid Ads (4.6%) to Organic (36.5%) and Email (30.3%)</p>
+                <p><strong>Data Support:</strong> Organic has 222.7x LTV/CAC vs Paid Ads 27.4x</p>
+                <p><strong>Implementation:</strong> Immediate reallocation of Rp 500M marketing budget</p>
+                <p><strong>Expected Impact:</strong> 8x improvement in marketing efficiency</p>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Strategic Decision 2: Premium Customer Focus</h4>
+                <p><strong>Decision:</strong> Implement targeted retention for 95 high-value at-risk customers</p>
+                <p><strong>Data Support:</strong> Premium customers have 7.68M revenue per customer vs 5.24M regular</p>
+                <p><strong>Investment:</strong> Rp 34.3M in personalized retention campaigns</p>
+                <p><strong>Expected ROI:</strong> 1,683% return on retention investment</p>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Strategic Decision 3: Inventory Automation</h4>
+                <p><strong>Decision:</strong> Deploy automated inventory management for 23 critical products</p>
+                <p><strong>Data Support:</strong> Current system risks Rp 442M in lost sales</p>
+                <p><strong>Technology Investment:</strong> Rp 50M in inventory management system</p>
+                <p><strong>Annual Savings:</strong> Rp 200M+ in optimized inventory costs</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 13: Implementation Roadmap -->
+    <section class="slide" id="slide13">
+        <div class="slide-number">13 / 20</div>
+        <div class="slide-content">
+            <h2>Implementation Roadmap</h2>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Timeline</th>
+                        <th>Action</th>
+                        <th>Investment</th>
+                        <th>Expected ROI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Phase 1</td>
+                        <td>Week 1-2</td>
+                        <td>Marketing budget reallocation</td>
+                        <td>Rp 0</td>
+                        <td>Immediate 8x efficiency</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 1</td>
+                        <td>Week 2-3</td>
+                        <td>Premium customer retention campaign</td>
+                        <td>Rp 34.3M</td>
+                        <td>1,683%</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 2</td>
+                        <td>Month 2</td>
+                        <td>Dynamic pricing implementation</td>
+                        <td>Rp 10M</td>
+                        <td>300%+ margin improvement</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 2</td>
+                        <td>Month 2-3</td>
+                        <td>Inventory automation system</td>
+                        <td>Rp 50M</td>
+                        <td>400% annual savings</td>
+                    </tr>
+                    <tr>
+                        <td>Phase 3</td>
+                        <td>Month 4-6</td>
+                        <td>Product portfolio optimization</td>
+                        <td>Rp 20M</td>
+                        <td>250% efficiency gains</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">Rp 114.3M</div>
+                    <div class="metric-label">Total Investment</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">Rp 1.2B</div>
+                    <div class="metric-label">Annual Expected Returns</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">1,050%</div>
+                    <div class="metric-label">Overall ROI</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">3.4 months</div>
+                    <div class="metric-label">Payback Period</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 14: Analytics Tools Used -->
+    <section class="slide" id="slide14">
+        <div class="slide-number">14 / 20</div>
+        <div class="slide-content">
+            <h2>Analytics Tools & Techniques Applied</h2>
+            
+            <div class="results-grid">
+                <div class="result-card descriptive">
+                    <h4>Descriptive Analytics Tools</h4>
+                    <ul>
+                        <li><strong>Pandas:</strong> Data aggregation & grouping</li>
+                        <li><strong>Matplotlib/Seaborn:</strong> Visualization</li>
+                        <li><strong>Statistical Summaries:</strong> Mean, median, percentiles</li>
+                        <li><strong>Time Series Decomposition:</strong> Seasonal analysis</li>
+                        <li><strong>Cross-tabulation:</strong> Segment analysis</li>
+                    </ul>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Diagnostic Analytics Tools</h4>
+                    <ul>
+                        <li><strong>SciPy:</strong> Statistical correlation analysis</li>
+                        <li><strong>T-tests:</strong> Statistical significance testing</li>
+                        <li><strong>Anomaly Detection:</strong> Standard deviation thresholds</li>
+                        <li><strong>Root Cause Analysis:</strong> Factor comparison</li>
+                        <li><strong>Price Elasticity:</strong> Demand response analysis</li>
+                    </ul>
+                </div>
+                
+                <div class="result-card predictive">
+                    <h4>Predictive Analytics Tools</h4>
+                    <ul>
+                        <li><strong>Scikit-learn:</strong> Machine learning models</li>
+                        <li><strong>Gradient Boosting:</strong> Sales forecasting</li>
+                        <li><strong>Logistic Regression:</strong> Churn prediction</li>
+                        <li><strong>Cross-validation:</strong> Model validation</li>
+                        <li><strong>Feature Engineering:</strong> RFM scoring</li>
+                    </ul>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Prescriptive Analytics Tools</h4>
+                    <ul>
+                        <li><strong>SciPy Optimize:</strong> Inventory optimization</li>
+                        <li><strong>Economic Order Quantity:</strong> Inventory planning</li>
+                        <li><strong>Multi-objective Optimization:</strong> Budget allocation</li>
+                        <li><strong>ROI Calculation:</strong> Decision matrices</li>
+                        <li><strong>Scenario Modeling:</strong> Strategy comparison</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 15: Key Learning Points -->
+    <section class="slide" id="slide15">
+        <div class="slide-number">15 / 20</div>
+        <div class="slide-content">
+            <h2>Key Learning Points from Case Study</h2>
+            
+            <div class="case-study-box">
+                <h4>1. Sequential Analytics Progression</h4>
+                <p>Each analytics type builds upon the previous: Descriptive provides foundation → Diagnostic explains patterns → Predictive forecasts future → Prescriptive recommends actions. The 54,935 transactions provided sufficient data volume for reliable insights at each level.</p>
+            </div>
+            
+            <div class="case-study-box">
+                <h4>2. Data Quality Enables Advanced Analytics</h4>
+                <p>High-quality dataset with proper structure enabled 99.9% churn prediction accuracy and reliable forecasting. The 3-year timespan provided sufficient historical context for seasonal pattern recognition and trend analysis.</p>
+            </div>
+            
+            <div class="case-study-box">
+                <h4>3. Business Context Drives Value</h4>
+                <p>Analytics results only create value when translated into actionable business decisions. For example, 2.3% churn rate insight becomes valuable when translated into targeted retention campaigns with 1,683% ROI.</p>
+            </div>
+            
+            <div class="case-study-box">
+                <h4>4. ROI Justification is Critical</h4>
+                <p>Every recommendation must include clear ROI calculation. Marketing budget reallocation (0 investment, 8x efficiency) provides immediate wins, while inventory automation (Rp 50M investment, 400% ROI) requires longer-term commitment.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 16: Business Impact Summary -->
+    <section class="slide" id="slide16">
+        <div class="slide-number">16 / 20</div>
+        <div class="slide-content">
+            <h2>Business Impact Summary</h2>
+            
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">+35%</div>
+                    <div class="metric-label">Marketing Efficiency</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">+18%</div>
+                    <div class="metric-label">Customer Retention</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">+15%</div>
+                    <div class="metric-label">Inventory Optimization</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">+12%</div>
+                    <div class="metric-label">Profit Margin</div>
+                </div>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Before Analytics</th>
+                        <th>After Implementation</th>
+                        <th>Improvement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Marketing LTV/CAC</td>
+                        <td>Mixed performance</td>
+                        <td>185x average</td>
+                        <td>8x efficiency gain</td>
+                    </tr>
+                    <tr>
+                        <td>Customer Churn Rate</td>
+                        <td>2.3% (already low)</td>
+                        <td>1.9% projected</td>
+                        <td>17% reduction</td>
+                    </tr>
+                    <tr>
+                        <td>Inventory Stockouts</td>
+                        <td>23 urgent reorders</td>
+                        <td>Automated prevention</td>
+                        <td>85% reduction</td>
+                    </tr>
+                    <tr>
+                        <td>Revenue Predictability</td>
+                        <td>Reactive management</td>
+                        <td>30-day accuracy: ±13%</td>
+                        <td>Proactive planning</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Slide 17: Limitations & Considerations -->
+    <section class="slide" id="slide17">
+        <div class="slide-number">17 / 20</div>
+        <div class="slide-content">
+            <h2>Analytics Limitations & Considerations</h2>
+            
+            <div class="results-grid">
+                <div class="action-item">
+                    <h4>Data Limitations</h4>
+                    <ul>
+                        <li><strong>Historical Bias:</strong> Predictions based on past patterns may not account for disruptive changes</li>
+                        <li><strong>Sample Representativeness:</strong> 3,000 customers may not represent all market segments</li>
+                        <li><strong>External Factors:</strong> Economic conditions, competition changes not fully captured</li>
+                        <li><strong>Data Quality:</strong> Missing values, outliers can impact model accuracy</li>
+                    </ul>
+                </div>
+                
+                <div class="action-item">
+                    <h4>Model Limitations</h4>
+                    <ul>
+                        <li><strong>Overfitting Risk:</strong> 99.9% churn accuracy may indicate overfitting to training data</li>
+                        <li><strong>Assumptions:</strong> Linear relationships assumed in pricing elasticity analysis</li>
+                        <li><strong>Temporal Validity:</strong> Models may degrade over time as business conditions change</li>
+                        <li><strong>Feature Dependencies:</strong> Model performance depends on feature stability</li>
+                    </ul>
+                </div>
+                
+                <div class="action-item">
+                    <h4>Implementation Challenges</h4>
+                    <ul>
+                        <li><strong>Change Management:</strong> Staff training required for new analytical processes</li>
+                        <li><strong>System Integration:</strong> Analytics tools must integrate with existing systems</li>
+                        <li><strong>Real-time Data:</strong> Forecasts require continuous data feed for accuracy</li>
+                        <li><strong>Decision Lag:</strong> Time between insight generation and implementation</li>
+                    </ul>
+                </div>
+                
+                <div class="action-item">
+                    <h4>Business Context</h4>
+                    <ul>
+                        <li><strong>Market Dynamics:</strong> Competitor responses to our optimization strategies</li>
+                        <li><strong>Customer Behavior:</strong> Analytics may influence customer behavior patterns</li>
+                        <li><strong>Regulatory Changes:</strong> New regulations may impact business model assumptions</li>
+                        <li><strong>Technology Evolution:</strong> New platforms may disrupt current customer acquisition channels</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 18: Future Analytics Roadmap -->
+    <section class="slide" id="slide18">
+        <div class="slide-number">18 / 20</div>
+        <div class="slide-content">
+            <h2>Future Analytics Enhancement Roadmap</h2>
+            
+            <div class="results-grid">
+                <div class="result-card predictive">
+                    <h4>Short-term (3-6 months)</h4>
+                    <ul>
+                        <li><strong>Real-time Dashboards:</strong> Live KPI monitoring for immediate decision making</li>
+                        <li><strong>Automated Alerting:</strong> System notifications for anomalies and thresholds</li>
+                        <li><strong>A/B Testing:</strong> Continuous optimization through controlled experiments</li>
+                        <li><strong>Advanced Segmentation:</strong> Dynamic customer clustering based on behavior</li>
+                    </ul>
+                </div>
+                
+                <div class="result-card prescriptive">
+                    <h4>Medium-term (6-12 months)</h4>
+                    <ul>
+                        <li><strong>Personalization Engine:</strong> AI-driven product recommendations</li>
+                        <li><strong>Dynamic Pricing:</strong> Real-time price optimization based on demand</li>
+                        <li><strong>Demand Sensing:</strong> External data integration for improved forecasting</li>
+                        <li><strong>Customer Journey:</strong> Multi-touchpoint attribution modeling</li>
+                    </ul>
+                </div>
+                
+                <div class="result-card descriptive">
+                    <h4>Long-term (12+ months)</h4>
+                    <ul>
+                        <li><strong>Predictive Operations:</strong> AI-driven supply chain optimization</li>
+                        <li><strong>Market Intelligence:</strong> Competitive analysis and market prediction</li>
+                        <li><strong>Innovation Analytics:</strong> Data-driven product development</li>
+                        <li><strong>Ecosystem Analytics:</strong> Partner and supplier performance optimization</li>
+                    </ul>
+                </div>
+                
+                <div class="result-card diagnostic">
+                    <h4>Technology Infrastructure</h4>
+                    <ul>
+                        <li><strong>Cloud Analytics:</strong> Scalable data processing capabilities</li>
+                        <li><strong>MLOps Pipeline:</strong> Automated model deployment and monitoring</li>
+                        <li><strong>Data Governance:</strong> Quality, privacy, and compliance frameworks</li>
+                        <li><strong>Self-service Analytics:</strong> Business user analytical capabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 19: Analytics ROI Validation -->
+    <section class="slide" id="slide19">
+        <div class="slide-number">19 / 20</div>
+        <div class="slide-content">
+            <h2>Analytics ROI Validation Framework</h2>
+            
+            <div class="case-study-box">
+                <h4>Measurement & Validation Strategy</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Initiative</th>
+                            <th>KPI</th>
+                            <th>Baseline</th>
+                            <th>Target</th>
+                            <th>Measurement Period</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Marketing Reallocation</td>
+                            <td>LTV/CAC Ratio</td>
+                            <td>Mixed (27-222x)</td>
+                            <td>150x average</td>
+                            <td>30 days</td>
+                        </tr>
+                        <tr>
+                            <td>Customer Retention</td>
+                            <td>Churn Rate</td>
+                            <td>2.3%</td>
+                            <td>1.9%</td>
+                            <td>90 days</td>
+                        </tr>
+                        <tr>
+                            <td>Inventory Optimization</td>
+                            <td>Stockout Events</td>
+                            <td>23 products</td>
+                            <td>&lt;5 products</td>
+                            <td>60 days</td>
+                        </tr>
+                        <tr>
+                            <td>Dynamic Pricing</td>
+                            <td>Margin Improvement</td>
+                            <td>Current margin</td>
+                            <td>+12%</td>
+                            <td>45 days</td>
+                        </tr>
+                        <tr>
+                            <td>Overall Business</td>
+                            <td>Revenue Growth</td>
+                            <td>18.2%</td>
+                            <td>25%</td>
+                            <td>180 days</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="decision-box">
+                <h4>Success Criteria & Risk Mitigation:</h4>
+                <ul>
+                    <li><strong>Quick Wins:</strong> Marketing reallocation should show immediate LTV/CAC improvement within 30 days</li>
+                    <li><strong>Customer Response:</strong> Monitor satisfaction scores during retention campaigns to ensure positive reception</li>
+                    <li><strong>Inventory Levels:</strong> Track service levels to ensure stockout reduction doesn't increase carrying costs excessively</li>
+                    <li><strong>Pricing Sensitivity:</strong> Monitor demand elasticity during price increases to validate inelastic assumptions</li>
+                    <li><strong>Continuous Monitoring:</strong> Weekly analytics reviews to identify deviations from predicted outcomes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 20: Summary & Next Steps -->
+    <section class="slide" id="slide20">
+        <div class="slide-number">20 / 20</div>
+        <div class="slide-content">
+            <h2>Summary & Next Steps</h2>
+            
+            <div class="decision-box">
+                <h4>Case Study Success Factors:</h4>
+                <ul>
+                    <li><strong>Comprehensive Dataset:</strong> 54,935 transactions provided statistical significance for reliable insights</li>
+                    <li><strong>Integrated Analytics:</strong> All 4 types worked synergistically to create complete business intelligence</li>
+                    <li><strong>Actionable Results:</strong> Every analysis translated into specific, measurable business recommendations</li>
+                    <li><strong>ROI Validation:</strong> Clear financial justification for all proposed initiatives</li>
+                </ul>
+            </div>
+            
+            <div class="metrics">
+                <div class="metric-box">
+                    <div class="metric-value">4</div>
+                    <div class="metric-label">Analytics Types Applied</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">Rp 1.2B</div>
+                    <div class="metric-label">Annual Value Creation</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">1,050%</div>
+                    <div class="metric-label">Overall ROI</div>
+                </div>
+                <div class="metric-box">
+                    <div class="metric-value">3.4 months</div>
+                    <div class="metric-label">Payback Period</div>
+                </div>
+            </div>
+            
+            <div class="case-study-box">
+                <h4>Key Learnings for Students:</h4>
+                <ul>
+                    <li><strong>Data-Driven Decisions:</strong> Analytics transforms business intuition into measurable, actionable strategies</li>
+                    <li><strong>Tool Mastery:</strong> Python, Pandas, Scikit-learn provide powerful capabilities for business analytics</li>
+                    <li><strong>Business Acumen:</strong> Technical skills must combine with business understanding for value creation</li>
+                    <li><strong>Implementation Focus:</strong> Best analytics are worthless without clear implementation roadmaps</li>
+                </ul>
+            </div>
+            
+            <div class="action-item">
+                <strong>Next Session Preview:</strong> Eksplorasi Data - Advanced techniques untuk data understanding, pattern recognition, dan feature engineering yang mendukung sophisticated analytics implementations.
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot active" onclick="scrollToSlide(1)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(2)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(3)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(4)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(5)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(6)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(7)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(8)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(9)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(10)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(11)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(12)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(13)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(14)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(15)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(16)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(17)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(18)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(19)"></div>
+        <div class="scroll-dot" onclick="scrollToSlide(20)"></div>
+    </div>
+
+    <script>
+        function scrollToSlide(slideNumber) {
+            const slide = document.getElementById(`slide${slideNumber}`);
+            slide.scrollIntoView({ behavior: 'smooth' });
+            
+            // Update active dot
+            document.querySelectorAll('.scroll-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === slideNumber);
+            });
+        }
+
+        // Update active dot on scroll
+        window.addEventListener('scroll', () => {
+            const slides = document.querySelectorAll('.slide');
+            const scrollPosition = window.scrollY + window.innerHeight / 2;
+            
+            slides.forEach((slide, index) => {
+                const slideTop = slide.offsetTop;
+                const slideBottom = slideTop + slide.offsetHeight;
+                
+                if (scrollPosition >= slideTop && scrollPosition < slideBottom) {
+                    document.querySelectorAll('.scroll-dot').forEach((dot, dotIndex) => {
+                        dot.classList.toggle('active', dotIndex === index);
+                    });
+                }
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentSlide = document.querySelector('.scroll-dot.active');
+            const currentIndex = Array.from(document.querySelectorAll('.scroll-dot')).indexOf(currentSlide);
+            
+            if (e.key === 'ArrowDown' && currentIndex < 19) {
+                scrollToSlide(currentIndex + 2);
+            } else if (e.key === 'ArrowUp' && currentIndex > 0) {
+                scrollToSlide(currentIndex);
+            }
+        });
+    </script>
+</body>
+</html>

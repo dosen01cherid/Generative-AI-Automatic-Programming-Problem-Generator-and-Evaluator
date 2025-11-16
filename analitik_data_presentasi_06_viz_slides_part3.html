@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualisasi Data Dasar - Bagian 3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .slide {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 80px 60px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #667eea;
+            margin-bottom: 30px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin: 30px 0 20px 0;
+        }
+
+        h4 {
+            font-size: 1.4em;
+            color: #667eea;
+            margin: 20px 0 15px 0;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #5eead4;
+        }
+
+        .good-example {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            color: #333;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #28a745;
+        }
+
+        .bad-example {
+            background: linear-gradient(135deg, #ffa07a 0%, #ff6b6b 100%);
+            color: #333;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #dc3545;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #764ba2;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #fa709a;
+            font-weight: 500;
+        }
+
+        .report-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+
+        .answer-field {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border: 2px dashed #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .chart-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-size: 1.05em;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            background: white;
+        }
+
+        tr:hover td {
+            background: #f8f9fa;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #856404;
+        }
+
+        .label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .label-good {
+            background: #28a745;
+            color: white;
+        }
+
+        .label-bad {
+            background: #dc3545;
+            color: white;
+        }
+
+        .label-neutral {
+            background: #6c757d;
+            color: white;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 15px;
+        }
+
+        li {
+            margin: 12px 0;
+            font-size: 1.05em;
+        }
+
+        .visual-flow {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .flow-step {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 30px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .visual-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- SLIDE: Title -->
+        <div class="slide-header">
+            <h1>📝 CONTOH JAWABAN LAB REPORT</h1>
+            <div class="subtitle">Session 6: Practical Examples & Templates</div>
+            <div class="subtitle">Universitas Mercu Buana - Analitik Data</div>
+            <div class="subtitle" style="margin-top: 30px; font-size: 1.2em;">BAGIAN 3 dari 3</div>
+            <div class="subtitle" style="margin-top: 20px; font-size: 1.1em;">Complete Answer Examples & Common Mistakes</div>
+        </div>
+
+        <!-- SLIDE: Introduction -->
+        <div class="slide">
+            <h2>🎯 Tentang Bagian 3</h2>
+            
+            <p style="font-size: 1.3em; margin: 20px 0;">
+                Bagian ini menyediakan <strong>contoh konkret</strong> cara mengisi lab report untuk setiap 
+                jenis visualisasi. Setiap contoh menunjukkan alur lengkap dari data → tabel → jawaban → 
+                penjelasan → insight bisnis.
+            </p>
+
+            <div class="visual-flow">
+                <div class="flow-step">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📊</div>
+                    <strong>1. Visualisasi</strong>
+                    <p style="font-size: 0.9em; margin-top: 5px;">Chart dari Python</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div style="font-size: 2em; margin-bottom: 10px;">📋</div>
+                    <strong>2. Ekstraksi Data</strong>
+                    <p style="font-size: 0.9em; margin-top: 5px;">Isi tabel (A), (B), (C)...</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div style="font-size: 2em; margin-bottom: 10px;">✍️</div>
+                    <strong>3. Penjelasan</strong>
+                    <p style="font-size: 0.9em; margin-top: 5px;">Interpretasi mendalam</p>
+                </div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">
+                    <div style="font-size: 2em; margin-bottom: 10px;">💡</div>
+                    <strong>4. Insight Bisnis</strong>
+                    <p style="font-size: 0.9em; margin-top: 5px;">Rekomendasi actionable</p>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3 style="color: white; margin-top: 0;">📚 Struktur Setiap Contoh</h3>
+                <p style="font-size: 1.1em; margin-top: 15px;">Setiap contoh dalam bagian ini akan menampilkan:</p>
+                <ol style="margin-left: 20px; margin-top: 15px; font-size: 1.05em;">
+                    <li><strong>Visualisasi Sample:</strong> Chart contoh dengan data spesifik</li>
+                    <li><strong>Tabel yang Diisi:</strong> Cara mengekstrak data dari chart ke tabel</li>
+                    <li><strong>Jawaban Lengkap:</strong> Format jawaban untuk field (A), (B), dst.</li>
+                    <li><strong>Penjelasan Temuan:</strong> <span class="label-good label">CONTOH BAGUS</span> vs <span class="label-bad label">CONTOH BURUK</span></li>
+                    <li><strong>Interpretasi Bisnis:</strong> Cara menghubungkan dengan strategi bisnis</li>
+                    <li><strong>Rekomendasi:</strong> Action items yang konkret</li>
+                </ol>
+            </div>
+
+            <div class="tip-box">
+                <h3 style="color: white; margin-top: 0;">💡 Cara Menggunakan Bagian Ini</h3>
+                <ul style="margin-left: 20px; font-size: 1.05em;">
+                    <li><strong>Jangan copy-paste!</strong> Gunakan sebagai template struktur, tapi isi dengan data Anda sendiri</li>
+                    <li><strong>Perhatikan pola:</strong> Struktur kalimat, flow analisis, depth of explanation</li>
+                    <li><strong>Adapt, don't adopt:</strong> Sesuaikan dengan konteks data Anda yang unik</li>
+                    <li><strong>Learn from mistakes:</strong> Contoh buruk menunjukkan apa yang TIDAK boleh dilakukan</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SLIDE: Example 1 - Bar Chart -->
+        <div class="slide">
+            <h2>📊 Contoh 1: BAR CHART - Penjualan per Kategori</h2>
+            
+            <div class="chart-container">
+                <h3 style="text-align: center; color: #667eea;">Sample Visualisasi</h3>
+                <div id="barChartExample"></div>
+            </div>
+
+            <div class="example-box">
+                <h3 style="margin-top: 0;">📋 Step 1: Ekstraksi Data ke Tabel</h3>
+                <p style="font-size: 1.1em; margin-top: 15px;">Dari visualisasi di atas, ekstrak data berikut:</p>
+                
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Metrik</th>
+                            <th>Nilai</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kategori penjualan tertinggi</td>
+                            <td><span class="highlight">(A)</span> Fashion</td>
+                        </tr>
+                        <tr>
+                            <td>Total penjualan tertinggi</td>
+                            <td><span class="highlight">(B)</span> Rp 920M</td>
+                        </tr>
+                        <tr>
+                            <td>Kategori penjualan terendah</td>
+                            <td><span class="highlight">(C)</span> Beauty</td>
+                        </tr>
+                        <tr>
+                            <td>Total penjualan terendah</td>
+                            <td><span class="highlight">(D)</span> Rp 465M</td>
+                        </tr>
+                        <tr>
+                            <td>Selisih penjualan</td>
+                            <td><span class="highlight">(E)</span> Rp 455M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section">
+                <h3>✍️ Step 2: Isi Field Jawaban di Lab Report</h3>
+                
+                <div class="answer-field">
+<strong>Jawaban (A):</strong> Fashion merupakan kategori dengan penjualan tertinggi berdasarkan visualisasi bar chart yang dihasilkan dari dataset e-commerce dengan Run ID 20241020_143052.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (B):</strong> Total penjualan kategori Fashion mencapai Rp 920 juta, menunjukkan dominasi yang signifikan dibandingkan kategori lainnya dengan kontribusi sekitar 28.7% dari total penjualan.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (C):</strong> Beauty adalah kategori dengan penjualan terendah dalam periode analisis, mengindikasikan bahwa produk kecantikan memiliki penetrasi pasar yang lebih rendah atau price point yang lebih kecil dibandingkan kategori lain.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (D):</strong> Penjualan kategori Beauty sebesar Rp 465 juta, yang merepresentasikan sekitar 14.5% dari total revenue, menunjukkan bahwa kategori ini memiliki potensi untuk dikembangkan lebih lanjut.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (E):</strong> Gap penjualan antara kategori tertinggi (Fashion) dan terendah (Beauty) adalah Rp 455 juta atau sekitar 97.8%, menandakan disparitas yang cukup besar dalam performa antar kategori yang perlu menjadi perhatian strategis.
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">📝 Step 3: Penjelasan Temuan</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    Dari visualisasi bar chart terlihat bahwa kategori <strong>Fashion memiliki penjualan tertinggi sebesar Rp 920M</strong>, 
+                    menguasai hampir 29% dari total revenue perusahaan. Hal ini mengindikasikan bahwa <strong>produk fashion memiliki 
+                    demand yang tinggi dan market fit yang baik</strong> dengan target customer e-commerce. Di sisi lain, 
+                    <strong>kategori Beauty dengan penjualan Rp 465M menunjukkan gap signifikan sebesar Rp 455M (98%)</strong> 
+                    dari kategori tertinggi. Disparitas ini bisa disebabkan oleh beberapa faktor: (1) average order value produk 
+                    beauty yang lebih rendah, (2) kompetisi yang lebih ketat di segmen ini, atau (3) brand awareness yang masih 
+                    perlu ditingkatkan. Kategori Electronics (Rp 780M) dan Home & Living (Rp 625M) berada di posisi tengah, 
+                    menunjukkan performa yang stabil namun masih ada ruang untuk growth. <strong>Pola distribusi penjualan ini 
+                    mengindikasikan portfolio yang tidak seimbang</strong>, dimana perusahaan terlalu bergantung pada satu kategori utama.
+                </p>
+            </div>
+
+            <div class="bad-example">
+                <span class="label label-bad">✗ CONTOH BURUK (Jangan Ditiru!)</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    Fashion paling tinggi, Beauty paling rendah. Selisihnya besar.
+                </p>
+                <div style="margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 8px;">
+                    <strong>❌ Masalah:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Terlalu singkat, tidak ada analisis mendalam</li>
+                        <li>Tidak menyebutkan angka spesifik</li>
+                        <li>Tidak ada interpretasi "mengapa"</li>
+                        <li>Tidak menghubungkan dengan konteks bisnis</li>
+                        <li>Tidak menunjukkan critical thinking</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">💼 Step 4: Interpretasi Bisnis</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Implikasi Strategis:</strong> Dominasi kategori Fashion mengindikasikan core strength perusahaan, 
+                    namun juga menimbulkan risiko over-dependency. Jika terjadi perubahan tren atau increased competition di 
+                    segmen fashion, revenue perusahaan akan sangat terpengaruh. <strong>Untuk sustainability jangka panjang, 
+                    perlu diversifikasi portfolio</strong> dengan cara: (1) mengalokasikan marketing budget lebih besar ke 
+                    kategori underperforming seperti Beauty dan Sports, (2) melakukan market research untuk memahami mengapa 
+                    Beauty underperform - apakah masalah product selection, pricing, atau customer acquisition?, dan 
+                    (3) mengembangkan sub-kategori baru dalam Fashion untuk mempertahankan market leadership sambil 
+                    mengurangi risiko konsentrasi.
+                </p>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Growth Opportunities:</strong> Gap Rp 455M antara Fashion dan Beauty bukan hanya challenge, 
+                    tapi juga opportunity. Jika kita bisa meningkatkan Beauty sales hanya 50%, itu berarti additional 
+                    revenue Rp 232.5M dengan relatively lower acquisition cost (customer sudah ada di platform). 
+                    <strong>Beauty category memiliki high repeat purchase rate dan customer lifetime value yang bagus</strong>, 
+                    sehingga investasi di kategori ini bisa memberikan ROI yang menarik dalam jangka menengah.
+                </p>
+            </div>
+
+            <div class="tip-box">
+                <h3 style="color: white; margin-top: 0;">🎯 Rekomendasi Actionable</h3>
+                <ol style="margin-left: 20px; font-size: 1.05em; margin-top: 15px;">
+                    <li><strong>Short-term (1-3 bulan):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Launch campaign khusus untuk Beauty products dengan discount 15-20%</li>
+                            <li>A/B testing untuk product placement dan merchandising Beauty di homepage</li>
+                            <li>Collaborate dengan beauty influencers untuk increase brand awareness</li>
+                        </ul>
+                    </li>
+                    <li style="margin-top: 15px;"><strong>Medium-term (3-6 bulan):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Expand product selection di kategori Beauty dengan data-driven approach</li>
+                            <li>Develop loyalty program khusus beauty enthusiasts</li>
+                            <li>Create content marketing strategy (tutorials, reviews) untuk Beauty</li>
+                        </ul>
+                    </li>
+                    <li style="margin-top: 15px;"><strong>Long-term (6-12 bulan):</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>Establish private label Beauty products untuk margin improvement</li>
+                            <li>Diversifikasi ke sub-kategori Fashion yang complementary</li>
+                            <li>Monitor dan adjust portfolio mix untuk optimal revenue distribution</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- SLIDE: Example 2 - Pie Chart -->
+        <div class="slide">
+            <h2>🥧 Contoh 2: PIE CHART - Distribusi Metode Pembayaran</h2>
+            
+            <div class="chart-container">
+                <h3 style="text-align: center; color: #667eea;">Sample Visualisasi</h3>
+                <div id="pieChartExample"></div>
+            </div>
+
+            <div class="example-box">
+                <h3 style="margin-top: 0;">📋 Step 1: Ekstraksi Data ke Tabel</h3>
+                
+                <table style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Metode Pembayaran</th>
+                            <th>Jumlah</th>
+                            <th>Persentase</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Credit Card</td>
+                            <td><span class="highlight">(A)</span> 365 transaksi</td>
+                            <td><span class="highlight">(B)</span> 36.5%</td>
+                        </tr>
+                        <tr>
+                            <td>E-Wallet</td>
+                            <td><span class="highlight">(C)</span> 290 transaksi</td>
+                            <td><span class="highlight">(D)</span> 29.0%</td>
+                        </tr>
+                        <tr>
+                            <td>Debit Card</td>
+                            <td><span class="highlight">(E)</span> 245 transaksi</td>
+                            <td><span class="highlight">(F)</span> 24.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Bank Transfer</td>
+                            <td><span class="highlight">(G)</span> 100 transaksi</td>
+                            <td><span class="highlight">(H)</span> 10.0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section">
+                <h3>✍️ Step 2: Isi Field Jawaban</h3>
+                
+                <div class="answer-field">
+<strong>Jawaban (A):</strong> Credit Card digunakan dalam 365 transaksi dari total 1,000 transaksi yang dianalisis dalam dataset e-commerce periode 2024.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (B):</strong> Proporsi penggunaan Credit Card adalah 36.5%, menjadikannya metode pembayaran paling dominan di platform dengan margin yang cukup signifikan dibanding metode lainnya.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (C):</strong> E-Wallet tercatat sebanyak 290 transaksi, menunjukkan adopsi yang cukup tinggi untuk metode pembayaran digital modern ini di kalangan customer.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (D):</strong> Dengan persentase 29.0%, E-Wallet berada di posisi kedua dan menunjukkan tren positif penggunaan payment digital yang semakin populer.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (E):</strong> Debit Card digunakan dalam 245 transaksi, menempati posisi ketiga dalam preferensi metode pembayaran customer.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (F):</strong> Kontribusi Debit Card sebesar 24.5% menunjukkan bahwa masih ada segmen customer yang prefer traditional card payment methods.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (G):</strong> Bank Transfer hanya digunakan dalam 100 transaksi, yang merupakan jumlah terendah dibandingkan metode pembayaran lainnya.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (H):</strong> Persentase Bank Transfer hanya 10.0%, mengindikasikan bahwa metode ini kurang populer, kemungkinan karena prosesnya yang less convenient dibanding alternatif digital.
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">📝 Step 3: Temuan Utama & Analisis</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Metode pembayaran paling populer: Credit Card (36.5%, 365 transaksi)</strong><br>
+                    Dominasi Credit Card mengindikasikan bahwa mayoritas customer base kita adalah <strong>middle-to-upper class 
+                    dengan akses ke credit facilities</strong>. Ini positive signal karena credit card users typically memiliki 
+                    higher purchasing power dan spending capacity. Namun, perlu diperhatikan bahwa credit card transactions 
+                    biasanya memiliki <strong>merchant fee yang lebih tinggi (2-3%)</strong> yang impact bottom line.
+                </p>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Metode pembayaran paling tidak populer: Bank Transfer (10.0%, 100 transaksi)</strong><br>
+                    Low adoption rate Bank Transfer adalah expected behavior karena metode ini requires manual confirmation, 
+                    tidak instant, dan kurang convenient. Hanya 10% customer yang willing to use this method, likely untuk 
+                    high-value transactions atau customer yang tidak memiliki digital payment options. <strong>Ini bukan concern 
+                    utama karena Bank Transfer typically zero merchant fee</strong>, jadi profitable walaupun volume rendah.
+                </p>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Tingkat adopsi pembayaran digital (E-Wallet): 29.0%</strong><br>
+                    E-Wallet adoption rate 29% adalah <strong>very encouraging sign</strong>. Combined dengan Debit Card (24.5%), 
+                    total non-credit card digital payment adalah 53.5%, menunjukkan bahwa lebih dari setengah customer prefer 
+                    modern payment methods. E-Wallet trend shows strong growth potential karena: (1) lower merchant fees 
+                    (1-1.5%), (2) faster checkout process, (3) popular among younger demographics (18-35 years), dan 
+                    (4) government push untuk cashless society.
+                </p>
+            </div>
+
+            <h3 style="margin-top: 40px;">💼 Step 4: Penjelasan dan Analisis Mendalam</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Payment Mix Analysis:</strong> Distribusi payment methods menunjukkan healthy diversity dengan 
+                    dominasi Credit Card yang reasonable. <strong>Top 2 payment methods (Credit Card + E-Wallet) account untuk 
+                    65.5% dari total transactions</strong>, yang adalah good balance - tidak terlalu concentrated on one method, 
+                    tapi juga tidak terlalu fragmented. Jika kita breakdown by demographics (assuming data available), likely 
+                    scenario adalah: Credit Card dominated by 30+ age group dengan established credit history, E-Wallet popular 
+                    among 18-30 millennials dan Gen-Z, Debit Card sebagai middle ground, dan Bank Transfer untuk risk-averse 
+                    atau older customers.
+                </p>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Cost-Benefit Perspective:</strong> Dari cost perspective, ada trade-off antara convenience dan 
+                    merchant fees. Credit Card transactions dengan 36.5% volume dan assumed average fee 2.5% berarti significant 
+                    cost. Jika average transaction value adalah Rp 3.2M (dari total revenue Rp 3.2B / 1000 transactions), maka 
+                    Credit Card transactions value sekitar Rp 1.168B, dengan merchant fee approximately Rp 29.2M. Compare dengan 
+                    E-Wallet (29% volume, ~Rp 928M value) dengan fee 1.2% = Rp 11.1M. <strong>Shifting 10% dari Credit Card ke 
+                    E-Wallet could save approximately Rp 4M annually dalam merchant fees</strong> without sacrificing customer 
+                    experience significantly.
+                </p>
+            </div>
+
+            <h3 style="margin-top: 40px;">🎯 Rekomendasi Bisnis</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <div style="margin-top: 15px;">
+                    <p style="font-size: 1.05em; line-height: 1.8;"><strong>1. Incentivize E-Wallet Usage (Target: Increase to 35% dalam 6 bulan)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Cashback program:</strong> 2-3% cashback untuk E-Wallet transactions (still cheaper than Credit Card merchant fee)</li>
+                        <li><strong>Express checkout:</strong> One-click payment untuk E-Wallet users</li>
+                        <li><strong>Exclusive deals:</strong> Flash sales accessible only via E-Wallet payment</li>
+                        <li><strong>Partnership:</strong> Collaborate dengan E-Wallet providers untuk co-marketing campaigns</li>
+                    </ul>
+
+                    <p style="font-size: 1.05em; line-height: 1.8; margin-top: 20px;"><strong>2. Optimize Credit Card Processing (Maintain volume, reduce cost)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Negotiate fees:</strong> Dengan volume 365 transactions/month, negotiate better rates dengan acquiring bank</li>
+                        <li><strong>Installment options:</strong> Offer 0% installments untuk high-value items (cost shared with bank/brand)</li>
+                        <li><strong>Co-branded cards:</strong> Long-term strategy untuk reduce merchant fees</li>
+                    </ul>
+
+                    <p style="font-size: 1.05em; line-height: 1.8; margin-top: 20px;"><strong>3. Gradual Phase-Out Bank Transfer (Target: Reduce to <5%)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Gentle nudging:</strong> Make Bank Transfer option less prominent in checkout flow</li>
+                        <li><strong>No incentives:</strong> Remove free shipping promos untuk Bank Transfer</li>
+                        <li><strong>Education:</strong> Highlight convenience dan instant confirmation dari digital methods</li>
+                        <li><strong>Exception handling:</strong> Keep available untuk high-value B2B atau corporate transactions</li>
+                    </ul>
+
+                    <p style="font-size: 1.05em; line-height: 1.8; margin-top: 20px;"><strong>Expected Impact:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Merchant fee reduction: ~15-20% (Rp 5-7M annually)</li>
+                        <li>Faster payment confirmation: +10% reduction in payment issues</li>
+                        <li>Better customer experience: Higher NPS scores dari faster checkout</li>
+                        <li>Competitive advantage: Position as modern, digital-first platform</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE: Example 3 - Scatter Plot -->
+        <div class="slide">
+            <h2>📍 Contoh 3: SCATTER PLOT - Korelasi Harga vs Kuantitas</h2>
+            
+            <div class="chart-container">
+                <h3 style="text-align: center; color: #667eea;">Sample Visualisasi</h3>
+                <div id="scatterExample"></div>
+            </div>
+
+            <div class="example-box">
+                <h3 style="margin-top: 0;">📋 Step 1: Ekstraksi Data</h3>
+                <p style="font-size: 1.1em; margin-top: 15px;"><strong>Koefisien korelasi:</strong> <span class="highlight">(A)</span> r = -0.68</p>
+                <p style="font-size: 1.05em; margin-top: 10px;">
+                    <strong>Interpretasi:</strong><br>
+                    Kekuatan hubungan: <span class="highlight">Sedang menuju kuat</span> (|r| = 0.68 mendekati 0.7)<br>
+                    Arah hubungan: <span class="highlight">Negatif</span> (r < 0)
+                </p>
+            </div>
+
+            <div class="report-section">
+                <h3>✍️ Step 2: Isi Field Jawaban</h3>
+                
+                <div class="answer-field">
+<strong>Jawaban (A):</strong> Koefisien korelasi Pearson antara Unit Price dan Quantity adalah r = -0.68, yang mengindikasikan hubungan negatif dengan kekuatan sedang-kuat (mendekati threshold kuat di 0.7). Nilai negatif menunjukkan bahwa semakin tinggi harga satuan produk, cenderung semakin rendah kuantitas yang terjual, dan sebaliknya.
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">📝 Step 3: Penjelasan Korelasi</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Analisis Korelasi r = -0.68:</strong> Koefisien korelasi -0.68 menunjukkan <strong>moderate-to-strong 
+                    negative relationship</strong> antara harga satuan dan kuantitas terjual. Dalam konteks ekonomi, ini adalah 
+                    manifestasi dari <strong>law of demand</strong> - ketika harga naik, quantity demanded turun, ceteris paribus. 
+                    Nilai |0.68| mengindikasikan bahwa <strong>46.24% variasi dalam quantity (R² = 0.68² = 0.46)</strong> dapat 
+                    dijelaskan oleh perubahan dalam unit price. Ini substantial relationship, namun bukan perfect correlation, 
+                    yang berarti ada faktor-faktor lain (53.76%) yang juga mempengaruhi kuantitas pembelian seperti brand 
+                    preference, product quality perception, seasonality, marketing efforts, dan competitor pricing.
+                </p>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <strong>Price Elasticity Interpretation:</strong> Negative correlation yang cukup kuat ini menunjukkan bahwa 
+                    customer base kita adalah <strong>moderately price-sensitive</strong>. Bukan extremely elastic (r mendekati -1) 
+                    dimana price change menyebabkan drastic quantity change, tapi juga bukan inelastic (r mendekati 0) dimana price 
+                    doesn't matter. This suggests bahwa kita punya <strong>some pricing power</strong> namun harus careful dengan 
+                    price increases karena will impact volume significantly. For example, 10% price increase might result in 
+                    approximately 6-7% decrease in quantity sold based on this correlation strength.
+                </p>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔍 Step 4: Pengamatan Pola</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <p style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    Dari scatter plot terlihat beberapa pola menarik:
+                </p>
+                <ol style="margin-left: 20px; margin-top: 10px; font-size: 1.05em;">
+                    <li><strong>Downward trend yang jelas:</strong> Trend line menunjukkan slope negatif, confirming negative 
+                    correlation. Produk dengan harga <Rp 1M cenderung terjual dalam quantity 3-5 units, sedangkan produk 
+                    >Rp 2M mostly sold in quantity 1-2 units.</li>
+                    
+                    <li style="margin-top: 15px;"><strong>Data clustering:</strong> Ada konsentrasi data points di area 
+                    Rp 800K-1.5M dengan quantity 3-4. Ini likely adalah "sweet spot" dimana price dan volume optimal - 
+                    tidak terlalu mahal untuk discourage purchases, tapi juga tidak terlalu murah untuk sacrifice margin.</li>
+                    
+                    <li style="margin-top: 15px;"><strong>Outliers:</strong> Beberapa outliers menarik:
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>High-price, high-quantity (top-right area): Bundle deals atau bulk purchases dengan discount</li>
+                            <li>Low-price, low-quantity (bottom-left): Possibly slow-moving items atau seasonal products</li>
+                            <li>These outliers slightly reduce correlation dari potentially -0.75 ke -0.68</li>
+                        </ul>
+                    </li>
+                    
+                    <li style="margin-top: 15px;"><strong>No perfect linear relationship:</strong> Scatter tidak perfectly 
+                    follow trend line, mengindikasikan non-price factors. Beberapa produk dengan similar price memiliki 
+                    significantly different quantities, suggesting brand power, product differentiation, atau promotional 
+                    effectiveness plays a role.</li>
+                </ol>
+            </div>
+
+            <h3 style="margin-top: 40px;">💼 Step 5: Implikasi Strategi Pemasaran</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <div style="margin-top: 15px;">
+                    <p style="font-size: 1.05em; line-height: 1.8;"><strong>1. Pricing Strategy Optimization</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Value-based pricing untuk premium products:</strong> Untuk produk >Rp 2M yang typically sold 
+                        in low quantity, focus on value proposition dan quality perception daripada volume. Invest in product 
+                        photography, detailed descriptions, dan reviews untuk justify price.</li>
+                        <li><strong>Volume-based pricing untuk mid-range:</strong> Produk Rp 800K-1.5M (sweet spot area) bisa 
+                        benefit dari "buy 2 get 5% off" atau quantity discounts untuk push volume while maintaining decent margin.</li>
+                        <li><strong>Competitive pricing untuk entry-level:</strong> Produk <Rp 800K should be aggressively priced 
+                        untuk maximize penetration dan customer acquisition, accepting lower margin untuk higher volume.</li>
+                    </ul>
+
+                    <p style="font-size: 1.05em; line-height: 1.8; margin-top: 20px;"><strong>2. Product Mix Management</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>80/20 rule application:</strong> Given correlation, likely 80% revenue comes dari ~40-50% products 
+                        (high-price items even dengan low quantity). Identify these key SKUs dan ensure inventory availability.</li>
+                        <li><strong>Portfolio balance:</strong> Maintain mix dari high-margin/low-volume premium products DAN 
+                        low-margin/high-volume mass products untuk optimize total profit.</li>
+                        <li><strong>Bundling strategy:</strong> Create bundles combining high-price item dengan complementary 
+                        low-price items untuk increase average order value while maintaining perceived value.</li>
+                    </ul>
+
+                    <p style="font-size: 1.05em; line-height: 1.8; margin-top: 20px;"><strong>3. Dynamic Pricing Consideration</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Demand-based adjustment:</strong> For products showing elastic demand (strong negative correlation), 
+                        implement dynamic pricing based on inventory levels, seasonality, dan competitor prices.</li>
+                        <li><strong>Psychological pricing:</strong> Rp 999K vs Rp 1M can make significant difference in quantity 
+                        sold while minimally impacting margin - test anchor prices di different price points.</li>
+                        <li><strong>Markdown strategy:</strong> When clearing inventory, correlation suggests aggressive markdowns 
+                        will be effective dalam moving volume. 20-30% discount can potentially double quantity sold.</li>
+                    </ul>
+
+                    <p style="font-size: 1.05em; line-height: 1.8; margin-top: 20px;"><strong>4. Marketing Budget Allocation</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Premium products (>Rp 2M):</strong> Allocate marketing untuk build brand prestige, showcase 
+                        quality, influencer partnerships. Goal: Justify price, bukan increase volume dramatically.</li>
+                        <li><strong>Mid-range products (Rp 800K-1.5M):</strong> Focus on promotional campaigns, limited-time offers, 
+                        FOMO tactics untuk push volume di sweet spot area.</li>
+                        <li><strong>Entry products (<Rp 800K):</strong> Mass marketing, social media ads, affiliate marketing untuk 
+                        maximize reach dan volume. Use as loss leaders if needed.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h3 style="margin-top: 0;">⚠️ CRITICAL: Correlation ≠ Causation</h3>
+                <p style="font-size: 1.1em; margin-top: 15px;">
+                    <strong>Penting untuk diingat:</strong> Meskipun ada korelasi -0.68, ini TIDAK berarti bahwa "menaikkan harga 
+                    MENYEBABKAN penurunan kuantitas" secara absolut. Correlation menunjukkan relationship, bukan causation. 
+                    Ada kemungkinan:
+                </p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Reverse causality:</strong> Produk yang naturally dibeli dalam low quantity (e.g., luxury items, 
+                    large appliances) memang di-price higher because of their nature.</li>
+                    <li><strong>Confounding variables:</strong> Product category, brand, quality, customer segment might be the 
+                    real driver dari both price DAN quantity.</li>
+                    <li><strong>Spurious correlation:</strong> Possible bahwa relationship is driven by unmeasured third variable.</li>
+                </ul>
+                <p style="margin-top: 15px; font-size: 1.05em;">
+                    <strong>Action item:</strong> Sebelum implement price changes based solely on correlation, conduct controlled 
+                    experiments (A/B testing), analyze by product category separately, dan consider qualitative factors.
+                </p>
+            </div>
+        </div>
+
+        <!-- SLIDE: Example 4 - Box Plot -->
+        <div class="slide">
+            <h2>📦 Contoh 4: BOX PLOT - Distribusi Penjualan per Kategori</h2>
+            
+            <div class="chart-container">
+                <h3 style="text-align: center; color: #667eea;">Sample Visualisasi</h3>
+                <div id="boxPlotExample"></div>
+            </div>
+
+            <div class="example-box">
+                <h3 style="margin-top: 0;">📋 Step 1: Ekstraksi Data ke Tabel</h3>
+                
+                <table style="margin-top: 20px; font-size: 0.9em;">
+                    <thead>
+                        <tr>
+                            <th>Kategori</th>
+                            <th>Median</th>
+                            <th>Q1</th>
+                            <th>Q3</th>
+                            <th>IQR</th>
+                            <th>Outliers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Electronics</td>
+                            <td>(A) Rp 1.8M</td>
+                            <td>(B) Rp 1.4M</td>
+                            <td>(C) Rp 2.3M</td>
+                            <td>(D) Rp 0.9M</td>
+                            <td>(E) ☑ Ya</td>
+                        </tr>
+                        <tr>
+                            <td>Fashion</td>
+                            <td>(F) Rp 1.1M</td>
+                            <td>(G) Rp 0.8M</td>
+                            <td>(H) Rp 1.5M</td>
+                            <td>(I) Rp 0.7M</td>
+                            <td>(J) ☐ Tidak</td>
+                        </tr>
+                        <tr>
+                            <td>Home & Living</td>
+                            <td>(K) Rp 1.4M</td>
+                            <td>(L) Rp 1.0M</td>
+                            <td>(M) Rp 1.9M</td>
+                            <td>(N) Rp 0.9M</td>
+                            <td>(O) ☑ Ya</td>
+                        </tr>
+                        <tr>
+                            <td>Beauty</td>
+                            <td>(P) Rp 0.4M</td>
+                            <td>(Q) Rp 0.3M</td>
+                            <td>(R) Rp 0.5M</td>
+                            <td>(S) Rp 0.2M</td>
+                            <td>(T) ☐ Tidak</td>
+                        </tr>
+                        <tr>
+                            <td>Sports</td>
+                            <td>(U) Rp 1.0M</td>
+                            <td>(V) Rp 0.7M</td>
+                            <td>(W) Rp 1.3M</td>
+                            <td>(X) Rp 0.6M</td>
+                            <td>(Y) ☑ Ya</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section">
+                <h3>✍️ Step 2: Isi Field Jawaban (Contoh untuk Electronics)</h3>
+                
+                <div class="answer-field">
+<strong>Jawaban (A):</strong> Median penjualan kategori Electronics adalah Rp 1.8M, yang merepresentasikan nilai tengah dari distribusi penjualan. Nilai median lebih robust terhadap outliers dibandingkan mean, sehingga memberikan gambaran yang lebih akurat tentang "typical" transaction value untuk Electronics.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (B):</strong> Q1 (quartile pertama) berada di Rp 1.4M, menunjukkan bahwa 25% dari transaksi Electronics memiliki nilai di bawah Rp 1.4M. Ini mengindikasikan floor price atau entry-level products di kategori ini.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (C):</strong> Q3 (quartile ketiga) adalah Rp 2.3M, berarti 75% transaksi berada di bawah nilai ini. Gap antara Q3 dan median (Rp 0.5M) lebih besar dibanding median ke Q1 (Rp 0.4M), mengindikasikan slight positive skew dalam distribusi.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (D):</strong> IQR (Interquartile Range) sebesar Rp 0.9M menunjukkan spread dari middle 50% data. IQR yang cukup besar ini mengindikasikan considerable variability dalam harga produk Electronics, likely karena kategori ini mencakup range dari accessories kecil hingga gadgets premium.
+                </div>
+
+                <div class="answer-field">
+<strong>Jawaban (E):</strong> Ya, terdapat outliers di kategori Electronics. Outliers ini kemungkinan adalah high-end electronics seperti laptops premium, smart TVs, atau home theater systems yang significantly more expensive than typical items. Presence of outliers consistent dengan nature dari Electronics category yang memiliki extreme price diversity.
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">📊 Step 3: Analisis Distribusi Komparatif</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS - Analisis Lengkap</span>
+                <div style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <p><strong>Perbandingan Antar Kategori:</strong></p>
+                    
+                    <p style="margin-top: 15px;"><strong>1. Electronics (Median: Rp 1.8M, IQR: Rp 0.9M) - HIGHEST VARIABILITY</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Karakteristik:</strong> Median tertinggi kedua, IQR terbesar bersama Home & Living, ada outliers signifikan</li>
+                        <li><strong>Interpretasi:</strong> Kategori dengan highest price diversity. Box yang lebar mengindikasikan wide product range 
+                        dari budget accessories (<Rp 500K) hingga premium gadgets (>Rp 5M). Outliers di upper end likely adalah flagship products.</li>
+                        <li><strong>Implikasi:</strong> Perlu segmentation strategy yang jelas. Jangan treat semua Electronics products sama - 
+                        different segments need different marketing approaches, inventory management, dan customer service levels.</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>2. Fashion (Median: Rp 1.1M, IQR: Rp 0.7M) - MOST CONSISTENT</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Karakteristik:</strong> No outliers, relatively narrow box, symmetric distribution</li>
+                        <li><strong>Interpretasi:</strong> Most predictable category dengan consistent pricing. Absence of outliers menunjukkan 
+                        tight quality control dan clear positioning. Box yang narrow indicates well-defined target price point dan customer segment.</li>
+                        <li><strong>Implikasi:</strong> Fashion adalah "steady performer" - reliable revenue stream dengan predictable margins. 
+                        Risk is LOW karena minimal variability, tapi growth potential might be limited without expanding price range atau introducing 
+                        new sub-categories.</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>3. Home & Living (Median: Rp 1.4M, IQR: Rp 0.9M) - BALANCED</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Karakteristik:</strong> Medium median, large IQR, ada outliers, slight positive skew</li>
+                        <li><strong>Interpretasi:</strong> Similar pattern dengan Electronics tapi dengan median slightly lower. Wide IQR reflects 
+                        diversity dari home accessories hingga furniture sets. Outliers likely adalah large furniture atau appliances.</li>
+                        <li><strong>Implikasi:</strong> Need flexible inventory strategy - fast-moving small items vs. slow-moving big-ticket items. 
+                        Consider separate treatment untuk furniture (high-value, low-frequency) vs. decor (lower-value, higher-frequency).</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>4. Beauty (Median: Rp 0.4M, IQR: Rp 0.2M) - LOWEST PRICE POINT</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Karakteristik:</strong> Lowest median, smallest IQR, no outliers, very tight distribution</li>
+                        <li><strong>Interpretasi:</strong> Most affordable category dengan narrow price range. Compact box menunjukkan limited 
+                        price differentiation. No outliers means no premium/luxury beauty products in current portfolio.</li>
+                        <li><strong>Implikasi:</strong> OPPORTUNITY untuk expansion! Currently missing premium beauty segment. Low IQR indicates 
+                        we're only serving mass-market. <strong>Adding luxury beauty brands (Rp 1-3M range) could significantly increase revenue 
+                        without alienating current customers.</strong></li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>5. Sports (Median: Rp 1.0M, IQR: Rp 0.6M) - MODERATE</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Karakteristik:</strong> Middle-range median, moderate IQR, ada outliers</li>
+                        <li><strong>Interpretasi:</strong> Balanced category dengan reasonable variety. Outliers likely adalah specialized equipment 
+                        (bikes, treadmills) atau team sports gear. Distribution slightly right-skewed indicated by longer upper whisker.</li>
+                        <li><strong>Implikasi:</strong> Healthy category tapi not standout performer. Consider expanding either to budget fitness 
+                        accessories untuk market penetration ATAU premium athletic gear untuk margin improvement.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">🔍 Step 4: Interpretasi Outliers</h3>
+
+            <div class="good-example">
+                <span class="label label-good">✓ CONTOH BAGUS</span>
+                <div style="margin-top: 15px; font-size: 1.05em; line-height: 1.8;">
+                    <p><strong>Outlier Analysis by Category:</strong></p>
+
+                    <p style="margin-top: 15px;"><strong>Electronics - Multiple outliers di upper range (>Rp 4M)</strong></p>
+                    <p style="margin-left: 20px; margin-top: 10px;">
+                        <strong>Possible products:</strong> Gaming laptops (Rp 20-30M), OLED TVs 55"+ (Rp 15-25M), Premium smartphones 
+                        (Rp 15-20M), Camera systems (Rp 10-40M)<br>
+                        <strong>Business perspective:</strong> These outliers contribute disproportionately to revenue despite low frequency. 
+                        Single sale Rp 25M laptop equals ~14 median Electronics transactions. <strong>Key insight: Protect dan grow premium 
+                        segment</strong> - white glove service, extended warranties, dedicated account managers untuk high-value customers.<br>
+                        <strong>Risk factor:</strong> High-value outliers mean high inventory risk. One unit unsold dapat tie up significant 
+                        capital. Need careful demand forecasting dan potentially consignment model for extreme high-end items.
+                    </p>
+
+                    <p style="margin-top: 20px;"><strong>Home & Living - Outliers both upper dan lower extremes</strong></p>
+                    <p style="margin-left: 20px; margin-top: 10px;">
+                        <strong>Upper outliers (>Rp 3.5M):</strong> Bedroom sets, dining tables, premium mattresses, smart home systems<br>
+                        <strong>Lower outliers (<Rp 200K):</strong> Small decor items, kitchenware, basic accessories<br>
+                        <strong>Insight:</strong> Presence of outliers on BOTH ends indicates we serve very different customer needs dalam 
+                        single category. <strong>Consider splitting into "Furniture" dan "Home Accessories"</strong> untuk better targeting. 
+                        Furniture needs: financing options, delivery/installation services, room visualization. Accessories needs: fast shipping, 
+                        bundle deals, trend-driven marketing.
+                    </p>
+
+                    <p style="margin-top: 20px;"><strong>Sports - Occasional outliers (>Rp 2.5M)</strong></p>
+                    <p style="margin-left: 20px; margin-top: 10px;">
+                        <strong>Likely products:</strong> Exercise bikes, treadmills, complete golf sets, professional gear<br>
+                        <strong>Observation:</strong> Outliers less extreme than Electronics/Home. Maximum outlier probably around Rp 5-7M 
+                        (home gym equipment). <strong>Strategic question:</strong> Should we go heavier into fitness equipment (growing market, 
+                        post-pandemic trend) or focus on apparel/accessories (higher turnover, lower risk)? Current data suggests we're 
+                        "dabbling" in both without clear commitment.
+                    </p>
+
+                    <p style="margin-top: 20px;"><strong>Fashion & Beauty - NO OUTLIERS</strong></p>
+                    <p style="margin-left: 20px; margin-top: 10px;">
+                        <strong>Fashion:</strong> Absence of outliers suggests missing luxury fashion segment. No designer bags, premium watches, 
+                        high-end fashion that could command Rp 5-15M. This is deliberate positioning (mass market focus) ATAU missed opportunity?<br>
+                        <strong>Beauty:</strong> No luxury cosmetics, high-end skincare, atau professional beauty devices. <strong>MAJOR OPPORTUNITY: 
+                        Luxury beauty market growing 15-20% annually in Indonesia.</strong> Adding premium lines (Rp 1-5M) could tap into affluent 
+                        segment without cannibalizing current mass-market base.
+                    </p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px;">💼 Strategic Recommendations Based on Distribution Analysis</h3>
+
+            <div class="tip-box">
+                <h3 style="color: white; margin-top: 0;">🎯 Portfolio Optimization Strategy</h3>
+                <div style="margin-top: 15px; font-size: 1.05em;">
+                    <p><strong>Priority 1: Expand Beauty Upmarket (Quick Win, 3-6 months)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Action:</strong> Add 20-30 SKUs di Rp 800K-3M range (premium Korean skincare, international brands, beauty devices)</li>
+                        <li><strong>Expected impact:</strong> Increase Beauty median from Rp 0.4M to Rp 0.6M, expand IQR dari 0.2M to 0.5M</li>
+                        <li><strong>Revenue projection:</strong> If 20% of Beauty customers trade up to premium (58 customers), average premium purchase 
+                        Rp 1.5M = additional Rp 87M revenue</li>
+                        <li><strong>Investment:</strong> Low risk karena beauty products non-seasonal, high margins (40-50%), fast turnover</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>Priority 2: Segment Home & Living (Medium-term, 6-12 months)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Action:</strong> Split category into "Furniture" (>Rp 2M, lower frequency, higher service) dan "Home Decor" 
+                        (<Rp 2M, higher frequency, mass market)</li>
+                        <li><strong>Operations:</strong> Different inventory strategies, shipping methods, customer service protocols</li>
+                        <li><strong>Marketing:</strong> Furniture - showroom partnerships, 3D visualization, financing. Decor - social media, 
+                        influencer collabs, frequent new arrivals</li>
+                        <li><strong>Expected outcome:</strong> Improve customer experience (more relevant), optimize costs (right service level for 
+                        each segment), potentially increase conversion by 15-25%</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>Priority 3: Double Down on Fashion Consistency (Ongoing)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Maintain:</strong> Current no-outlier strategy bekerja well - consistent quality, clear positioning</li>
+                        <li><strong>Optimize:</strong> Since Fashion most predictable, use it as cash cow untuk fund riskier ventures di other categories</li>
+                        <li><strong>Expand:</strong> Horizontal expansion - lebih SKUs dalam existing price range rather than going premium/budget</li>
+                        <li><strong>Innovation:</strong> Exclusive collaborations, limited editions within Rp 800K-1.5M sweet spot</li>
+                    </ul>
+
+                    <p style="margin-top: 20px;"><strong>Priority 4: Electronics Premium Service (High-value focus)</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Target outliers:</strong> Top 5-10% transactions (>Rp 3M) generate ~30-40% of Electronics revenue</li>
+                        <li><strong>VIP program:</strong> Dedicated hotline, extended warranties, priority shipping, trade-in options</li>
+                        <li><strong>Financing:</strong> 0% installments for 6-12 months untuk high-ticket items</li>
+                        <li><strong>ROI logic:</strong> Acquire one premium customer (LTV Rp 50-100M) > Acquire ten budget customers (LTV Rp 5-10M each)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE: Quick Reference -->
+        <div class="slide">
+            <h2>📚 Quick Reference: Struktur Jawaban untuk Semua Chart Types</h2>
+            
+            <div class="info-box">
+                <h3 style="color: white; margin-top: 0;">📋 Template Universal untuk Setiap Visualisasi</h3>
+                <p style="font-size: 1.1em; margin-top: 15px;">Gunakan struktur 4-layer ini untuk setiap penjelasan:</p>
+            </div>
+
+            <div class="report-section">
+                <h4>Layer 1: WHAT (Deskripsi Faktual)</h4>
+                <p style="margin-top: 10px; font-style: italic;">"Dari visualisasi [jenis chart] terlihat bahwa [observation spesifik dengan angka]..."</p>
+                <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.95em;">
+                    <li>State angka spesifik, percentages, rankings</li>
+                    <li>Describe pola visual (upward trend, clustering, gaps, outliers)</li>
+                    <li>Compare antar kategori/segments</li>
+                    <li>Minimal 2-3 kalimat</li>
+                </ul>
+            </div>
+
+            <div class="report-section" style="margin-top: 20px;">
+                <h4>Layer 2: WHY (Interpretasi & Analisis)</h4>
+                <p style="margin-top: 10px; font-style: italic;">"Hal ini mengindikasikan bahwa [interpretasi] karena [reasoning]..."</p>
+                <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.95em;">
+                    <li>Explain possible reasons behind the pattern</li>
+                    <li>Provide context (industry norms, consumer behavior, economic factors)</li>
+                    <li>Reference relevant theories (demand-supply, correlation, distribution)</li>
+                    <li>Show critical thinking - consider multiple explanations</li>
+                    <li>Minimal 3-4 kalimat</li>
+                </ul>
+            </div>
+
+            <div class="report-section" style="margin-top: 20px;">
+                <h4>Layer 3: SO WHAT (Implikasi Bisnis)</h4>
+                <p style="margin-top: 10px; font-style: italic;">"Implikasi dari temuan ini adalah [business impact]..."</p>
+                <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.95em;">
+                    <li>Connect data insights to business outcomes (revenue, costs, growth, risk)</li>
+                    <li>Identify opportunities DAN challenges</li>
+                    <li>Quantify impact when possible ("could increase revenue by X%")</li>
+                    <li>Consider multiple stakeholders (customers, operations, finance)</li>
+                    <li>Minimal 2-3 kalimat</li>
+                </ul>
+            </div>
+
+            <div class="report-section" style="margin-top: 20px;">
+                <h4>Layer 4: NOW WHAT (Rekomendasi Actionable)</h4>
+                <p style="margin-top: 10px; font-style: italic;">"Berdasarkan analisis, rekomendasi yang dapat dilakukan adalah [specific actions]..."</p>
+                <ul style="margin-left: 20px; margin-top: 10px; font-size: 0.95em;">
+                    <li>Provide 2-4 specific, actionable recommendations</li>
+                    <li>Prioritize (short-term vs long-term, quick wins vs strategic)</li>
+                    <li>Make them SMART (Specific, Measurable, Achievable, Relevant, Time-bound)</li>
+                    <li>Consider feasibility dan resources required</li>
+                    <li>Minimal 2-3 kalimat dengan bullet points</li>
+                </ul>
+            </div>
+
+            <div class="example-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">💡 Contoh Lengkap Menggunakan 4-Layer Structure</h3>
+                <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 15px; color: #333;">
+                    <p style="font-weight: bold; color: #667eea;">WHAT:</p>
+                    <p style="margin-top: 5px;">Dari visualisasi line chart terlihat bahwa penjualan mengalami peningkatan 
+                    consistent dari Januari (Rp 250M) hingga Desember (Rp 390M), dengan total growth 56% sepanjang tahun 2024. 
+                    Terdapat spike signifikan di bulan Juli (Rp 350M, +9% MoM) dan November (Rp 370M, +6% MoM).</p>
+
+                    <p style="font-weight: bold; color: #764ba2; margin-top: 15px;">WHY:</p>
+                    <p style="margin-top: 5px;">Tren positif ini mengindikasikan product-market fit yang semakin kuat dan efektivitas 
+                    strategi growth marketing. Spike di Juli kemungkinan disebabkan oleh campaign mid-year sale yang coincide dengan 
+                    gajian pertengahan tahun dan bonus periode, sementara spike November adalah typical pre-holiday shopping behavior 
+                    menjelang akhir tahun. Consistent growth tanpa major drops menunjukkan resilient business model yang tidak 
+                    over-dependent pada seasonal factors.</p>
+
+                    <p style="font-weight: bold; color: #f093fb; margin-top: 15px;">SO WHAT:</p>
+                    <p style="margin-top: 5px;">Implikasi positifnya adalah business trajectory sangat promising dengan YoY growth 
+                    56% yang significantly exceed industry average (~25%). Jika trend continues, projected 2025 revenue could reach 
+                    Rp 5.6B (42% growth). Namun, risk yang perlu diperhatikan adalah sustainability - apakah growth organic atau 
+                    heavily subsidized dengan discounts? Margin analysis diperlukan untuk validate profitability growth alongside 
+                    revenue growth.</p>
+
+                    <p style="font-weight: bold; color: #43e97b; margin-top: 15px;">NOW WHAT:</p>
+                    <p style="margin-top: 5px;">Rekomendasi strategis: (1) <strong>Capitalize momentum</strong> - increase marketing 
+                    budget 30% di Q1 2025 untuk maintain growth rate, focusing on proven channels yang drive Q4 growth; (2) 
+                    <strong>Optimize inventory</strong> - given predictable peaks at Juli dan November, prepare inventory 2 months 
+                    advance untuk avoid stockouts; (3) <strong>Expand capacity</strong> - assess whether current ops infrastructure 
+                    (warehouse, logistics, CS) dapat support 2x scale in next 18 months; (4) <strong>Margin protection</strong> - 
+                    gradually reduce discount dependency dengan building brand value dan introducing loyalty program.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE: Common Mistakes -->
+        <div class="slide">
+            <h2>❌ Common Mistakes dengan Contoh Spesifik</h2>
+            
+            <div class="warning-box">
+                <h3 style="margin-top: 0;">Mistake #1: Penjelasan Terlalu Singkat</h3>
+                
+                <div class="bad-example" style="margin-top: 20px;">
+                    <span class="label label-bad">✗ CONTOH BURUK</span>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>Penjelasan Temuan:</strong> Fashion tertinggi, Beauty terendah.
+                    </p>
+                    <p style="margin-top: 10px; font-size: 0.95em;">
+                        <strong>❌ Problems:</strong> No numbers, no context, no analysis, no insights. Hanya repeat what's obvious dari chart.
+                    </p>
+                </div>
+
+                <div class="good-example" style="margin-top: 15px;">
+                    <span class="label label-good">✓ DIPERBAIKI MENJADI</span>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>Penjelasan Temuan:</strong> Dari visualisasi bar chart terlihat bahwa kategori Fashion memiliki penjualan 
+                        tertinggi sebesar Rp 920M (28.7% dari total revenue), sementara Beauty di posisi terendah dengan Rp 465M (14.5%). 
+                        Gap sebesar Rp 455M atau 97.8% mengindikasikan disparitas performa yang signifikan. Fashion's dominance likely driven 
+                        oleh broader appeal, higher average order value, dan successful marketing campaigns. Di sisi lain, Beauty's 
+                        underperformance mungkin disebabkan limited product range, strong competition dari specialized beauty retailers, 
+                        atau insufficient brand awareness. Distribusi yang uneven ini menimbulkan opportunity cost - resources yang 
+                        dialokasikan ke Beauty might generate better ROI jika di-reallocate, ATAU conversely, Beauty adalah untapped 
+                        potential yang needs strategic investment untuk unlock growth.
+                    </p>
+                </div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">Mistake #2: Hanya Deskripsi, Tanpa Analisis</h3>
+                
+                <div class="bad-example" style="margin-top: 20px;">
+                    <span class="label label-bad">✗ CONTOH BURUK</span>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>Interpretasi Bisnis:</strong> Perusahaan harus meningkatkan penjualan Beauty agar sama dengan Fashion.
+                    </p>
+                    <p style="margin-top: 10px; font-size: 0.95em;">
+                        <strong>❌ Problems:</strong> Simplistic recommendation without considering why gap exists, whether it's feasible, 
+                        atau whether it's even desirable. No cost-benefit analysis.
+                    </p>
+                </div>
+
+                <div class="good-example" style="margin-top: 15px;">
+                    <span class="label label-good">✓ DIPERBAIKI MENJADI</span>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>Interpretasi Bisnis:</strong> Gap Rp 455M between Fashion dan Beauty presents both challenge dan opportunity. 
+                        Rather than forcing Beauty to match Fashion's absolute numbers (which may not be realistic given different market 
+                        sizes dan customer behaviors), strategic approach should be: (1) Analyze WHY gap exists - conduct market research, 
+                        competitive analysis, dan customer surveys untuk understand root causes; (2) Set realistic targets - aim untuk 50% 
+                        improvement (bringing Beauty to ~Rp 700M) rather than 100% parity, which is more achievable; (3) Focused investment - 
+                        allocate additional Rp 50M marketing budget specifically for Beauty (still smaller than Fashion's budget but 
+                        proportionally higher given current size), expand SKU selection by 40%, dan partner dengan 2-3 beauty influencers; 
+                        (4) Quick wins - launch limited-time promotions dan bundle deals untuk drive immediate volume while building 
+                        long-term brand presence; (5) Track leading indicators - monitor traffic to Beauty section, conversion rates, dan 
+                        repeat purchase rates monthly to validate whether investments are working. Success metrics should be relative 
+                        improvement (% growth) rather than absolute parity with Fashion, acknowledging that different categories naturally 
+                        have different scales.
+                    </p>
+                </div>
+            </div>
+
+            <div class="warning-box" style="margin-top: 30px;">
+                <h3 style="margin-top: 0;">Mistake #3: Tidak Menghubungkan dengan Data</h3>
+                
+                <div class="bad-example" style="margin-top: 20px;">
+                    <span class="label label-bad">✗ CONTOH BURUK</span>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>Korelasi Analysis:</strong> Ada korelasi negatif yang kuat antara harga dan kuantitas.
+                    </p>
+                    <p style="margin-top: 10px; font-size: 0.95em;">
+                        <strong>❌ Problems:</strong> Tidak mention koefisien r, tidak explain apa artinya "kuat", tidak give examples.
+                    </p>
+                </div>
+
+                <div class="good-example" style="margin-top: 15px;">
+                    <span class="label label-good">✓ DIPERBAIKI MENJADI</span>
+                    <p style="margin-top: 15px; font-size: 1.05em;">
+                        <strong>Korelasi Analysis:</strong> Koefisien korelasi Pearson r = -0.68 menunjukkan moderate-to-strong negative 
+                        relationship (mendekati threshold -0.7 untuk "strong"). Secara statistik, 46.2% variasi dalam quantity 
+                        (R² = 0.68² = 0.462) dapat dijelaskan oleh perubahan price, sementara 53.8% sisanya dipengaruhi faktor lain. 
+                        Dalam praktik, ini berarti price increases memiliki substantial impact on demand - for example, increasing price 
+                        dari Rp 1M ke Rp 1.5M (50% increase) correlates dengan approximately 34% decrease in quantity dari 4 units ke 
+                        2.6 units, based on regression slope. However, correlation strength -0.68 (bukan -0.9 atau -1.0) mengindikasikan 
+                        we have some pricing power - customer tidak extremely price-sensitive, possibly due to brand loyalty, product 
+                        differentiation, atau lack of perfect substitutes. This moderate sensitivity suggests optimal strategy adalah 
+                        gradual price adjustments (5-10% annually) rather than aggressive increases, testing price elasticity by segment 
+                        before broad rollout, dan using value-added services (free shipping, extended warranty) to justify premium pricing 
+                        rather than competing solely on price.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE: Final Tips -->
+        <div class="slide">
+            <h2>🎓 Final Tips & Best Practices</h2>
+            
+            <div class="success-box">
+                <h3 style="margin-top: 0;">✨ The Golden Rules of Lab Report Writing</h3>
+                <ol style="margin-left: 20px; font-size: 1.1em; margin-top: 15px;">
+                    <li><strong>Be Specific:</strong> "Rp 920M" not "sangat tinggi". "56% growth" not "tumbuh pesat".</li>
+                    <li><strong>Be Analytical:</strong> Don't just describe, interpret. Always ask "Why?" dan "So what?"</li>
+                    <li><strong>Be Contextual:</strong> Connect data to business reality. Numbers alone meaningless tanpa context.</li>
+                    <li><strong>Be Honest:</strong> Use YOUR data. Every run is unique. Your analysis should reflect YOUR specific dataset.</li>
+                    <li><strong>Be Complete:</strong> Fill EVERY field, answer EVERY question, provide EVERY explanation required.</li>
+                    <li><strong>Be Professional:</strong> Grammar matters. Format matters. First impression matters.</li>
+                    <li><strong>Be Critical:</strong> Show critical thinking. Consider alternatives. Acknowledge limitations.</li>
+                    <li><strong>Be Actionable:</strong> End dengan concrete recommendations, not vague suggestions.</li>
+                </ol>
+            </div>
+
+            <div class="tip-box" style="margin-top: 30px;">
+                <h3 style="color: white; margin-top: 0;">📝 Writing Process Checklist</h3>
+                <table style="background: white; color: #333; margin-top: 15px;">
+                    <tr>
+                        <td style="width: 30%; font-weight: bold;">Before Writing</td>
+                        <td>
+                            <ul style="margin: 10px 0;">
+                                <li>Run Python script completely</li>
+                                <li>Save ALL visualizations with clear names</li>
+                                <li>Review slides Part 1, 2, dan 3</li>
+                                <li>Understand each chart type's purpose</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">During Writing</td>
+                        <td>
+                            <ul style="margin: 10px 0;">
+                                <li>Extract data accurately dari charts</li>
+                                <li>Use 4-layer structure (What-Why-SoWhat-NowWhat)</li>
+                                <li>Reference examples from Part 3</li>
+                                <li>Write 4-6 kalimat minimum per explanation</li>
+                                <li>Include specific numbers dan percentages</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold;">After Writing</td>
+                        <td>
+                            <ul style="margin: 10px 0;">
+                                <li>Read aloud - does it make sense?</li>
+                                <li>Check all (A), (B), (C) fields filled</li>
+                                <li>Verify calculations correct</li>
+                                <li>Grammar & spell check</li>
+                                <li>Format consistently</li>
+                                <li>Export to PDF</li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h3 style="color: white; margin-top: 0;">🎯 Grading Mindset: What Instructors Look For</h3>
+                <div class="two-column" style="margin-top: 15px;">
+                    <div>
+                        <p style="font-size: 1.1em;"><strong>High Scores (A):</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Complete dan thorough</li>
+                            <li>Deep analysis with insights</li>
+                            <li>Business-oriented thinking</li>
+                            <li>Specific, quantified statements</li>
+                            <li>Critical thinking evident</li>
+                            <li>Professional presentation</li>
+                            <li>Actionable recommendations</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p style="font-size: 1.1em;"><strong>Low Scores (C-D):</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>Incomplete sections</li>
+                            <li>Surface-level descriptions only</li>
+                            <li>No business connection</li>
+                            <li>Vague generalities</li>
+                            <li>No critical analysis</li>
+                            <li>Poor format/grammar</li>
+                            <li>Generic recommendations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE: Conclusion -->
+        <div class="slide-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h1>🎉 Anda Siap!</h1>
+            <div class="subtitle" style="margin-top: 30px;">
+                Dengan contoh-contoh di Bagian 3 ini, Anda memiliki semua tools yang dibutuhkan<br>
+                untuk membuat lab report yang excellent!
+            </div>
+            <div style="margin-top: 40px; font-size: 1.3em; background: rgba(255,255,255,0.2); padding: 30px; border-radius: 15px; max-width: 800px; margin: 40px auto;">
+                <p><strong>Remember the 4-Layer Structure:</strong></p>
+                <p style="margin-top: 15px;">WHAT you see → WHY it happens → SO WHAT it means → NOW WHAT to do</p>
+            </div>
+            <div style="margin-top: 40px; font-size: 1.2em;">
+                📊 Use your unique data<br>
+                💡 Show critical thinking<br>
+                🎯 Provide actionable insights<br>
+                ✨ Make it professional
+            </div>
+            <div style="margin-top: 40px; font-size: 1.3em; font-weight: bold;">
+                Good Luck! 🚀
+            </div>
+            <div style="margin-top: 20px; opacity: 0.9;">
+                Universitas Mercu Buana - Analitik Data (Semester 5)
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Bar Chart Example
+        const barData = [{
+            x: ['Fashion', 'Electronics', 'Home & Living', 'Sports', 'Beauty'],
+            y: [920, 780, 625, 550, 465],
+            type: 'bar',
+            marker: {
+                color: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b'],
+                line: { color: '#333', width: 2 }
+            },
+            text: ['Rp 920M', 'Rp 780M', 'Rp 625M', 'Rp 550M', 'Rp 465M'],
+            textposition: 'outside'
+        }];
+
+        const barLayout = {
+            title: 'Total Penjualan per Kategori Produk',
+            xaxis: { title: 'Kategori Produk' },
+            yaxis: { title: 'Total Penjualan (Juta IDR)' },
+            plot_bgcolor: '#f8f9fa',
+            paper_bgcolor: '#f8f9fa'
+        };
+
+        Plotly.newPlot('barChartExample', barData, barLayout, {responsive: true});
+
+        // Pie Chart Example
+        const pieData = [{
+            labels: ['Credit Card', 'E-Wallet', 'Debit Card', 'Bank Transfer'],
+            values: [365, 290, 245, 100],
+            type: 'pie',
+            hole: 0.3,
+            marker: {
+                colors: ['#667eea', '#f093fb', '#4facfe', '#43e97b']
+            },
+            textinfo: 'label+percent',
+            textposition: 'outside'
+        }];
+
+        const pieLayout = {
+            title: 'Distribusi Metode Pembayaran',
+            plot_bgcolor: '#f8f9fa',
+            paper_bgcolor: '#f8f9fa',
+            showlegend: true
+        };
+
+        Plotly.newPlot('pieChartExample', pieData, pieLayout, {responsive: true});
+
+        // Scatter Plot
