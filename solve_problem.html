@@ -4771,6 +4771,12 @@ class ProblemSolverApp:
             # Update with new answer
             self.problem_states[problem_idx][step_idx]["user_answers"] = new_answer
 
+            # ✅ Increment attempts counter if answer changed (edit session = new attempt)
+            if answer_changed:
+                attempts = self.problem_states[problem_idx][step_idx].get("attempts", 0)
+                self.problem_states[problem_idx][step_idx]["attempts"] = attempts + 1
+                window.console.log(f"✅ Incremented attempts: {attempts} → {attempts + 1} (edit session)")
+
             window.console.log(f"✅ Updated problem_states[{problem_idx}][{step_idx}]")
             window.console.log(f"   Old answer: {old_answer}")
             window.console.log(f"   New answer: {new_answer}")
