@@ -4632,6 +4632,36 @@ class ProblemSolverApp:
                     window.alert("❌ Error: Math field not properly initialized")
                     return
 
+            elif step_type == "multi-mc":
+                window.console.log("📝 Capturing multi-mc answer")
+                # Get all dropdowns for this step
+                dropdowns = container.querySelectorAll(f'.multi-mc-dropdown[data-step-idx="{step_idx}"]')
+                if dropdowns.length > 0:
+                    # Collect answers as a dictionary {label: value}
+                    user_answers = {}
+                    all_selected = True
+                    for i in range(dropdowns.length):
+                        dropdown = dropdowns[i]
+                        label = dropdown.getAttribute("data-blank-label")
+                        value = dropdown.value
+                        if not value or value == "":
+                            all_selected = False
+                            window.console.warn(f"⚠️ Blank {label} not selected")
+                        else:
+                            user_answers[label] = value
+
+                    if not all_selected:
+                        window.alert("⚠️ Please select an option for all blanks before saving")
+                        return
+
+                    # Store as dict in the answer
+                    new_answer = user_answers
+                    window.console.log(f"✅ Captured multi-mc answers: {new_answer}")
+                else:
+                    window.console.error("❌ No multi-mc dropdowns found")
+                    window.alert("❌ Error: Dropdowns not found")
+                    return
+
             else:
                 window.console.error(f"❌ Unknown step type: {step_type}")
                 window.alert(f"❌ Error: Unknown step type '{step_type}'")
