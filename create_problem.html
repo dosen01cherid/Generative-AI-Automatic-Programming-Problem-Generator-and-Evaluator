@@ -4976,7 +4976,7 @@ class Step:
 
             # Check mode
             blank_mode = getattr(self, 'blank_mode', 'single')
-            window.console.log(f"📝 Saving fill-blank in {blank_mode} mode")
+            print(f"📝 Saving fill-blank in {blank_mode} mode")
 
             if blank_mode == "multi":
                 # Multi-blank mode: save as object with A, B, C keys
@@ -5042,17 +5042,17 @@ class Step:
         
     def load_data(self, data):
         """Load step data based on type"""
-        window.console.log(f"📥 Step.load_data called for Step {self.step_index}")
-        window.console.log(f"📊 Data keys: {list(data.keys()) if isinstance(data, dict) else 'Not a dict'}")
+        print(f"📥 Step.load_data called for Step {self.step_index}")
+        print(f"📊 Data keys: {list(data.keys()) if isinstance(data, dict) else 'Not a dict'}")
 
         step_type = data.get("step_type", "step-by-step")
-        window.console.log(f"🔖 Step type from data: {step_type}, current type: {self.step_type}")
+        print(f"🔖 Step type from data: {step_type}, current type: {self.step_type}")
 
         # Debug for fill-blank
         if "blank_config" in data:
-            window.console.log(f"🔍 DEBUG: blank_config found in data:")
-            window.console.log(f"   - mode: {data['blank_config'].get('mode')}")
-            window.console.log(f"   - correct_answers type: {type(data.get('correct_answers'))}")
+            print(f"🔍 DEBUG: blank_config found in data:")
+            print(f"   - mode: {data['blank_config'].get('mode')}")
+            print(f"   - correct_answers type: {type(data.get('correct_answers'))}")
 
         # ✅ CRITICAL FIX: Update step type and render UI BEFORE loading data
         if self.step_type != step_type:
@@ -5227,16 +5227,16 @@ class Step:
             window.setTimeout(create_proxy(set_tf_answer), 200)
 
         elif step_type == "fill-blank":
-            window.console.log(f"🔧 ===== ENTERING FILL-BLANK LOAD BRANCH ===== Step {self.step_index}")
+            print(f"🔧 ===== ENTERING FILL-BLANK LOAD BRANCH ===== Step {self.step_index}")
 
             # Detect mode from data
             blank_config = data.get("blank_config", {})
             blank_mode = blank_config.get("mode", "single")
             current_mode = getattr(self, 'blank_mode', 'single')
 
-            window.console.log(f"🔍 Detected mode: {blank_mode}, current mode: {current_mode}")
-            window.console.log(f"🔍 blank_config: {blank_config}")
-            window.console.log(f"🔍 self.blank_mode before update: {getattr(self, 'blank_mode', 'NOT SET')}")
+            print(f"🔍 Detected mode: {blank_mode}, current mode: {current_mode}")
+            print(f"🔍 blank_config: {blank_config}")
+            print(f"🔍 self.blank_mode before update: {getattr(self, 'blank_mode', 'NOT SET')}")
 
             # Store data for render to access
             self._pending_data = data
@@ -5251,7 +5251,7 @@ class Step:
             def load_fill_blank_data():
                 correct_answers = data.get("correct_answers")
 
-                window.console.log(f"📋 Loading fill-blank in {blank_mode} mode")
+                print(f"📋 Loading fill-blank in {blank_mode} mode")
 
                 if blank_mode == "multi" and isinstance(correct_answers, dict):
                     # Multi-blank mode: load labeled sections
@@ -7613,21 +7613,21 @@ class DataManager:
         def detect_blank_mode(lines):
             """Detect if fill-blank is single or multi-blank mode"""
             import re
-            window.console.log(f"🔍 detect_blank_mode checking {len(lines)} lines:")
+            print(f"🔍 detect_blank_mode checking {len(lines)} lines:")
             for i, line in enumerate(lines):
-                window.console.log(f"  Line {i}: '{line.strip()}'")
+                print(f"  Line {i}: '{line.strip()}'")
 
             # Check for labeled correct answers (Correct Answer A:, B:, etc.)
             for line in lines:
                 if re.match(r'^Correct Answer [A-Z]:', line.strip()):
-                    window.console.log(f"✓ Found labeled answer, returning 'multi': {line.strip()}")
+                    print(f"✓ Found labeled answer, returning 'multi': {line.strip()}")
                     return 'multi'
             # Check for unlabeled Correct Answer:
             for line in lines:
                 if line.strip().startswith('Correct Answer:'):
-                    window.console.log(f"✓ Found unlabeled answer, returning 'single': {line.strip()}")
+                    print(f"✓ Found unlabeled answer, returning 'single': {line.strip()}")
                     return 'single'
-            window.console.log(f"⚠️ No Correct Answer found, returning None")
+            print(f"⚠️ No Correct Answer found, returning None")
             return None
 
         def is_comment_line(line):
@@ -7893,7 +7893,7 @@ class DataManager:
 
                         # Detect single vs multi-blank mode
                         blank_mode = detect_blank_mode(step_lines_clean)
-                        window.console.log(f"📦 Import parser: Step {step_index + 1}, detected blank_mode: {blank_mode}")
+                        print(f"📦 Import parser: Step {step_index + 1}, detected blank_mode: {blank_mode}")
 
                         if blank_mode == 'multi':
                             # Multi-blank mode: Correct Answer A, B, C, etc.
@@ -7975,10 +7975,10 @@ class DataManager:
                             step_data["requireCorrect"] = must_be_correct
 
                         # Debug log for fill-blank
-                        window.console.log(f"📦 Import parser: Step {step_index + 1} fill-blank data created:")
-                        window.console.log(f"   - step_type: {step_data.get('step_type')}")
-                        window.console.log(f"   - blank_config.mode: {step_data.get('blank_config', {}).get('mode')}")
-                        window.console.log(f"   - correct_answers type: {type(step_data.get('correct_answers'))}")
+                        print(f"📦 Import parser: Step {step_index + 1} fill-blank data created:")
+                        print(f"   - step_type: {step_data.get('step_type')}")
+                        print(f"   - blank_config.mode: {step_data.get('blank_config', {}).get('mode')}")
+                        print(f"   - correct_answers type: {type(step_data.get('correct_answers'))}")
 
                     # ========================================
                     # UNKNOWN STEP TYPE
@@ -10438,34 +10438,10 @@ MQ = None
 update_status("✓ PyScript loaded")
 update_status("⏳ Importing libraries...")
 
-# 🧪 TEST: Verify regex pattern for multi-blank detection
-window.console.log("="*60)
-window.console.log("🧪 TESTING REGEX PATTERN FOR MULTI-BLANK DETECTION")
-window.console.log("="*60)
-
-import re
-
-# Test the regex pattern that should match "Correct Answer A:", "Correct Answer B:", etc.
-test_lines = [
-    "Correct Answer A: Paris",
-    "Correct Answer B: Berlin",
-    "Correct Answer: Rome",  # Should NOT match (no letter)
-    "Alternative Answer A: paris",
-    "Step Description: Something"
-]
-
-for line in test_lines:
-    stripped = line.strip()
-    matches_multi = re.match(r'^Correct Answer [A-Z]:', stripped)
-    matches_single = stripped.startswith('Correct Answer:')
-    window.console.log(f"Line: '{line}'")
-    window.console.log(f"  Matches multi pattern (with letter): {matches_multi is not None}")
-    window.console.log(f"  Matches single pattern (no letter): {matches_single}")
-    window.console.log("")
-
-window.console.log("="*60)
-window.console.log("🧪 REGEX TEST COMPLETE - Check results above")
-window.console.log("="*60)
+# 🧪 SIMPLE TEST: Verify PyScript is executing
+print("="*60)
+print("🧪 PYSCRIPT IS RUNNING - TEST MESSAGE")
+print("="*60)
 
 # Create and store the main app instance
 window.problem_creator = ProblemCreator()
