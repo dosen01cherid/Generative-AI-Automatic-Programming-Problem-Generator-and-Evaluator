@@ -11872,23 +11872,23 @@ This demonstrates the complete format for creating your own problem sets!
             compressed = brotli.compress(json_str.encode('utf-8'))
             b64_str = base64.b64encode(compressed).decode('utf-8')
 
-            # Create message
-            message = f"🎓 Progress Report\n\nFrom Student\n\n{b64_str}\n\n---\nSent via Problem Solver"
+            # Create message with standard format (same as file export for analytics compatibility)
+            message = f"🎓 Student Progress Submission\n\n=== STUDENT PROGRESS EXPORT ===\n{b64_str}\n=== END EXPORT ===\n\nSubmitted via Problem Solver"
 
             # Check if message needs segmentation (WhatsApp limit: 3500 chars)
             MAX_LENGTH = 3500
             if len(message) > MAX_LENGTH:
-                # Segment the message
-                header = "🎓 Progress Report\n\nFrom Student\n\n"
-                footer = "\n\n---\nSent via Problem Solver"
+                # Segment the message - use standard multi-part format
+                header = "🎓 Student Progress Submission\n\n"
                 content = b64_str
+                footer = "\nSubmitted via Problem Solver"
 
-                # Calculate how much content fits in first segment
-                first_segment_size = MAX_LENGTH - len(header) - len(footer) - 20  # Reserve for part marker
+                # Calculate segment size
+                segment_marker_size = 50  # Reserve for part markers
+                first_segment_size = MAX_LENGTH - len(header) - len("=== STUDENT PROGRESS EXPORT (Part 1/X) ===\n") - segment_marker_size
 
                 segments = []
                 pos = 0
-                part_num = 1
                 while pos < len(content):
                     segment_content = content[pos:pos + first_segment_size]
                     segments.append(segment_content)
@@ -11896,8 +11896,8 @@ This demonstrates the complete format for creating your own problem sets!
 
                 total_parts = len(segments)
 
-                # Build first segment with part marker
-                first_msg = header + segments[0] + f"\n\n[Part 1/{total_parts}]" + footer
+                # Build first segment with standard multi-part format
+                first_msg = header + f"=== STUDENT PROGRESS EXPORT (Part 1/{total_parts}) ===\n{segments[0]}\n=== END PART 1 ===" + footer
 
                 # Open WhatsApp with first segment
                 url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(first_msg)}"
@@ -11907,10 +11907,11 @@ This demonstrates the complete format for creating your own problem sets!
                 if total_parts > 1:
                     remaining_parts = []
                     for i in range(1, total_parts):
-                        part_msg = header + segments[i] + f"\n\n[Part {i+1}/{total_parts}]" + footer
-                        remaining_parts.append(f"--- Part {i+1} ---\n{part_msg}")
+                        part_msg = header + f"=== STUDENT PROGRESS EXPORT (Part {i+1}/{total_parts}) ===\n{segments[i]}\n=== END PART {i+1} ===" + footer
+                        remaining_parts.append(part_msg)
 
-                    window.alert(f"✅ Message split into {total_parts} parts!\n\nPart 1 opened in WhatsApp.\n\nPlease copy and send remaining parts:\n\n" + "\n\n".join(remaining_parts))
+                    remaining_text = "\n\n".join([f"=== COPY THIS (Part {i+2}) ===\n{msg}\n" for i, msg in enumerate(remaining_parts)])
+                    window.alert(f"✅ Message split into {total_parts} parts!\n\nPart 1 opened in WhatsApp.\n\nCopy and send the remaining parts below:\n\n{remaining_text}")
             else:
                 # Message fits in one segment
                 url = f"https://wa.me/{teacher_number}?text={window.encodeURIComponent(message)}"
