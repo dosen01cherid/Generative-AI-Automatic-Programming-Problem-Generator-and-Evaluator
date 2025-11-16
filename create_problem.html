@@ -4054,6 +4054,21 @@ class Step:
     def _render_single_blank_ui(self):
         """Render single blank UI (backward compatible)"""
         self.type_content_el.innerHTML = """
+          <!-- Mode Selector -->
+          <div style="margin-bottom:16px; padding:12px; background:#f8fafc; border-radius:6px; border:2px solid #e6eef8;">
+            <label style="font-size:14px; font-weight:600; color:#334155; margin-bottom:8px; display:block;">Fill-Blank Mode</label>
+            <div style="display:flex; gap:16px;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                <input type="radio" name="blankMode" value="single" class="blankModeSingle" checked>
+                <span style="font-weight:500;">Single Blank (one answer field with alternatives)</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                <input type="radio" name="blankMode" value="multi" class="blankModeMulti">
+                <span style="font-weight:500;">Multi Blank (labeled blanks A, B, C, etc.)</span>
+              </label>
+            </div>
+          </div>
+
           <!-- ✅ Require Correct Answer Checkbox -->
           <div style="margin-top:8px; margin-bottom:12px;">
             <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
@@ -4071,6 +4086,22 @@ class Step:
         """
 
         self.fill_blank_container = self.type_content_el
+
+        # Wire mode selector
+        mode_single = self.type_content_el.querySelector(".blankModeSingle")
+        mode_multi = self.type_content_el.querySelector(".blankModeMulti")
+
+        def on_mode_change(e):
+            new_mode = e.target.value
+            self.blank_mode = new_mode
+            self._render_fill_blank_ui()
+            if hasattr(window, 'problem_creator'):
+                window.problem_creator.data_manager.save_to_storage()
+
+        if mode_single:
+            mode_single.addEventListener("change", create_proxy(on_mode_change))
+        if mode_multi:
+            mode_multi.addEventListener("change", create_proxy(on_mode_change))
 
         # Wire require correct checkbox
         require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
@@ -4094,6 +4125,21 @@ class Step:
             num_blanks = blank_config.get('num_blanks', 2)
 
         self.type_content_el.innerHTML = """
+          <!-- Mode Selector -->
+          <div style="margin-bottom:16px; padding:12px; background:#f8fafc; border-radius:6px; border:2px solid #e6eef8;">
+            <label style="font-size:14px; font-weight:600; color:#334155; margin-bottom:8px; display:block;">Fill-Blank Mode</label>
+            <div style="display:flex; gap:16px;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                <input type="radio" name="blankMode" value="single" class="blankModeSingle">
+                <span style="font-weight:500;">Single Blank (one answer field with alternatives)</span>
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                <input type="radio" name="blankMode" value="multi" class="blankModeMulti" checked>
+                <span style="font-weight:500;">Multi Blank (labeled blanks A, B, C, etc.)</span>
+              </label>
+            </div>
+          </div>
+
           <!-- ✅ Require Correct Answer Checkbox -->
           <div style="margin-top:8px; margin-bottom:12px;">
             <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
@@ -4112,6 +4158,22 @@ class Step:
         """
 
         self.fill_blank_container = self.type_content_el
+
+        # Wire mode selector
+        mode_single = self.type_content_el.querySelector(".blankModeSingle")
+        mode_multi = self.type_content_el.querySelector(".blankModeMulti")
+
+        def on_mode_change(e):
+            new_mode = e.target.value
+            self.blank_mode = new_mode
+            self._render_fill_blank_ui()
+            if hasattr(window, 'problem_creator'):
+                window.problem_creator.data_manager.save_to_storage()
+
+        if mode_single:
+            mode_single.addEventListener("change", create_proxy(on_mode_change))
+        if mode_multi:
+            mode_multi.addEventListener("change", create_proxy(on_mode_change))
 
         # Wire require correct checkbox
         require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
