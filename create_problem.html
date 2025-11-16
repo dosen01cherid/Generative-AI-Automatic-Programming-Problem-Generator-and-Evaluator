@@ -7630,33 +7630,6 @@ class DataManager:
             window.console.log(f"⚠️ No Correct Answer found, returning None")
             return None
 
-        # 🧪 TEST detect_blank_mode on page load
-        window.console.log("="*60)
-        window.console.log("🧪 TESTING detect_blank_mode FUNCTION")
-        window.console.log("="*60)
-        test_multi = [
-            "Step Description: Fill in the blanks",
-            "Step Type: fill-blank",
-            "Correct Answer A: Paris",
-            "Alternative Answer A: paris",
-            "Correct Answer B: Berlin"
-        ]
-        test_single = [
-            "Step Description: What is the capital?",
-            "Step Type: fill-blank",
-            "Correct Answer: Rome",
-            "Alternative Answer: rome"
-        ]
-        window.console.log("\n📋 Test 1: Multi-blank (should return 'multi'):")
-        result1 = detect_blank_mode(test_multi)
-        window.console.log(f"Result: {result1}")
-        window.console.log("\n📋 Test 2: Single-blank (should return 'single'):")
-        result2 = detect_blank_mode(test_single)
-        window.console.log(f"Result: {result2}")
-        window.console.log("="*60)
-        window.console.log("🧪 TEST COMPLETE")
-        window.console.log("="*60)
-
         def is_comment_line(line):
             """Check if a line is a comment"""
             stripped = line.strip()
@@ -10464,6 +10437,35 @@ MQ = None
 # Initialize the application
 update_status("✓ PyScript loaded")
 update_status("⏳ Importing libraries...")
+
+# 🧪 TEST: Verify regex pattern for multi-blank detection
+window.console.log("="*60)
+window.console.log("🧪 TESTING REGEX PATTERN FOR MULTI-BLANK DETECTION")
+window.console.log("="*60)
+
+import re
+
+# Test the regex pattern that should match "Correct Answer A:", "Correct Answer B:", etc.
+test_lines = [
+    "Correct Answer A: Paris",
+    "Correct Answer B: Berlin",
+    "Correct Answer: Rome",  # Should NOT match (no letter)
+    "Alternative Answer A: paris",
+    "Step Description: Something"
+]
+
+for line in test_lines:
+    stripped = line.strip()
+    matches_multi = re.match(r'^Correct Answer [A-Z]:', stripped)
+    matches_single = stripped.startswith('Correct Answer:')
+    window.console.log(f"Line: '{line}'")
+    window.console.log(f"  Matches multi pattern (with letter): {matches_multi is not None}")
+    window.console.log(f"  Matches single pattern (no letter): {matches_single}")
+    window.console.log("")
+
+window.console.log("="*60)
+window.console.log("🧪 REGEX TEST COMPLETE - Check results above")
+window.console.log("="*60)
 
 # Create and store the main app instance
 window.problem_creator = ProblemCreator()
