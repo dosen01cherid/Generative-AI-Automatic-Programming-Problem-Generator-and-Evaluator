@@ -4156,6 +4156,7 @@ class Step:
               💡 <strong>Multiple Blanks Mode:</strong> This step has multiple blanks. Add correct and alternative answers for each blank below.
             </div>
             <div class="multiBlankContainer"></div>
+            <button class="btn ghost addBlankBtn" style="margin-top:12px; font-size:12px;">➕ Add Blank</button>
           </div>
         """
 
@@ -4187,9 +4188,23 @@ class Step:
 
         # Render blank sections
         container = self.type_content_el.querySelector(".multiBlankContainer")
+        self.num_blanks = num_blanks  # Track number of blanks
         for i in range(num_blanks):
             label = chr(65 + i)  # A, B, C, etc.
             self._add_blank_section(container, label)
+
+        # Wire "Add Blank" button
+        add_blank_btn = self.type_content_el.querySelector(".addBlankBtn")
+        if add_blank_btn:
+            def on_add_blank(e):
+                container = self.type_content_el.querySelector(".multiBlankContainer")
+                if container:
+                    new_label = chr(65 + self.num_blanks)  # Next letter
+                    self._add_blank_section(container, new_label)
+                    self.num_blanks += 1
+                    if hasattr(window, 'problem_creator'):
+                        window.problem_creator.data_manager.save_to_storage()
+            add_blank_btn.addEventListener("click", create_proxy(on_add_blank))
 
     def _add_blank_section(self, container, label):
         """Add a section for one blank (A, B, C, etc.)"""
