@@ -4114,7 +4114,29 @@ class ProblemSolverApp:
         else:
             percentage = 0
 
-        window.console.log(f"Final score: {percentage:.1f}% ({total_score:.1f}/{max_score:.1f})")
+        # ✅ Check if score display should be deferred due to 5-minute timer
+        import js
+        should_defer_score = False
+        remaining_seconds = 0
+
+        if self.score_display_manager["pending_score_update"]:
+            last_edit = self.score_display_manager["last_edit_time"]
+            if last_edit:
+                current_time = js.Date.now()
+                elapsed_ms = current_time - last_edit
+                elapsed_minutes = elapsed_ms / 60000
+
+                if elapsed_minutes < 5:
+                    # Still within waiting period - defer score display
+                    should_defer_score = True
+                    remaining_seconds = int(300 - (elapsed_ms / 1000))
+                    window.console.log(f"⏱️ Deferring score display - {remaining_seconds}s remaining in waiting period")
+                else:
+                    # Waiting period complete - can show score
+                    window.console.log("✅ Waiting period complete - showing score")
+                    self.score_display_manager["pending_score_update"] = False
+
+        window.console.log(f"Final score: {percentage:.1f}% ({total_score:.1f}/{max_score:.1f}), deferred: {should_defer_score}")
 
         # Find or create review container
         review_container = document.querySelector("#reviewSectionContainer")
@@ -4165,25 +4187,75 @@ class ProblemSolverApp:
         score_msg_div.style.cssText = "margin-bottom: 16px;"
         review_section.appendChild(score_msg_div)
 
-        # Add overall score display with champion badge
+        # Add overall score display with champion badge OR pending message
         score_display = document.createElement("div")
         score_display.id = "overallScoreDisplay"
-        score_display.style.cssText = """
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            text-align: center;
-        """
-        score_display.innerHTML = f"""
-            <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px;">Overall Score</div>
-            <div style="font-size: 48px; font-weight: 700;">{percentage:.1f}%</div>
-            <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
-                {total_score:.1f} / {max_score:.1f} points
-            </div>
-        """
-        review_section.appendChild(score_display)
+
+        if should_defer_score:
+            # Show pending message with countdown
+            minutes = remaining_seconds // 60
+            seconds = remaining_seconds % 60
+            time_str = f"{minutes}:{seconds:02d}"
+
+            score_display.style.cssText = """
+                background: linear-gradient(135deg, #fef3c7, #fde68a);
+                border: 2px solid #f59e0b;
+                color: #92400e;
+                padding: 20px;
+                border-radius: 12px;
+                margin-bottom: 24px;
+                text-align: center;
+            """
+            score_display.innerHTML = f"""
+                <div style="font-size: 20px; margin-bottom: 8px;">⏱️</div>
+                <div style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Score Update Pending</div>
+                <div style="font-size: 14px; margin-bottom: 12px;">
+                    Waiting period active to prevent score gaming
+                </div>
+                <div style="font-size: 24px; font-weight: 700; padding: 12px; background: rgba(255,255,255,0.6); border-radius: 8px;">
+                    ⏳ Time remaining: <span class="countdown-timer-review" style="color: #d97706;">{time_str}</span>
+                </div>
+            """
+            review_section.appendChild(score_display)
+
+            # Add countdown updater
+            countdown_el = score_display.querySelector(".countdown-timer-review")
+            remaining_time = [remaining_seconds]
+
+            def update_countdown():
+                if remaining_time[0] > 0:
+                    remaining_time[0] -= 1
+                    mins = remaining_time[0] // 60
+                    secs = remaining_time[0] % 60
+
+                    if countdown_el:
+                        countdown_el.textContent = f"{mins}:{secs:02d}"
+
+                    window.setTimeout(create_proxy(update_countdown), 1000)
+                else:
+                    # Timer completed - reload to show score
+                    window.console.log("⏰ Timer completed - reloading review to show score")
+                    window.location.reload()
+
+            window.setTimeout(create_proxy(update_countdown), 1000)
+        else:
+            # Show actual score
+            score_display.style.cssText = """
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 20px;
+                border-radius: 12px;
+                margin-bottom: 24px;
+                text-align: center;
+            """
+            score_display.innerHTML = f"""
+                <div style="font-size: 14px; opacity: 0.9; margin-bottom: 4px;">Overall Score</div>
+                <div style="font-size: 48px; font-weight: 700;">{percentage:.1f}%</div>
+                <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">
+                    {total_score:.1f} / {max_score:.1f} points
+                </div>
+            """
+            review_section.appendChild(score_display)
 
         # Add each problem's review
         for prob_idx in sorted(self.problem_states.keys()):
