@@ -3240,6 +3240,7 @@ class Step:
                 <option value="step-by-step">Expression & Answer</option>
                 <option value="multiple-choice-single">Multiple Choice (Single)</option>
                 <option value="multiple-choice-multiple">Multiple Choice (Multiple)</option>
+                <option value="multi-mc">Multiple Choice (Multi-Question)</option>
                 <option value="true-false">True/False</option>
                 <option value="fill-blank">Fill in the Blank</option>
               </select>
@@ -3505,6 +3506,8 @@ class Step:
             self._render_mc_single_ui()
         elif self.step_type == "multiple-choice-multiple":
             self._render_mc_multiple_ui()
+        elif self.step_type == "multi-mc":
+            self._render_multi_mc_ui()
         elif self.step_type == "true-false":
             self._render_true_false_ui()
         elif self.step_type == "fill-blank":
@@ -3972,6 +3975,282 @@ class Step:
             label_div.appendChild(cb)
             label_div.appendChild(span)
             container.appendChild(label_div)
+
+    # ========================================
+    # Multi-MC UI (Multiple MC-Single Questions)
+    # ========================================
+
+    def _render_multi_mc_ui(self):
+        """Render multi-mc UI - multiple MC-single sub-questions in one step"""
+        num_questions = 2  # default
+        if hasattr(self, '_pending_data') and self._pending_data:
+            multi_mc_config = self._pending_data.get('multi_mc_config', {})
+            num_questions = multi_mc_config.get('num_questions', 2)
+
+        self.type_content_el.innerHTML = """
+          <!-- ✅ Require Correct Answer Checkbox -->
+          <div style="margin-top:8px; margin-bottom:12px;">
+            <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
+              <input type="checkbox" class="requireCorrectCheckbox"
+                     style="width:16px; height:16px; cursor:pointer;">
+              <span style="font-weight:600;">Require correct answer before proceeding to next step</span>
+            </label>
+          </div>
+
+          <div style="margin-top:12px;">
+            <div style="font-size:13px;color:#64748b;margin-bottom:12px;">
+              💡 <strong>Multi-Question Mode:</strong> This step contains multiple sub-questions. Each will be displayed as a dropdown selection box.
+            </div>
+            <div class="multiMcContainer"></div>
+            <button class="btn ghost addSubQuestion" style="margin-top:12px; font-size:12px;">➕ Add Sub-Question</button>
+          </div>
+        """
+
+        # Wire require correct checkbox
+        require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
+        if require_checkbox:
+            def on_require_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            require_checkbox.addEventListener("change", create_proxy(on_require_change))
+
+        # Initialize sub-questions storage
+        self.sub_questions = []
+        self.num_sub_questions = num_questions
+
+        # Render initial sub-questions
+        container = self.type_content_el.querySelector(".multiMcContainer")
+        for i in range(num_questions):
+            self._add_sub_question(container, i + 1)
+
+        # Wire "Add Sub-Question" button
+        add_btn = self.type_content_el.querySelector(".addSubQuestion")
+        if add_btn:
+            def on_add_sub_question(e):
+                container = self.type_content_el.querySelector(".multiMcContainer")
+                if container:
+                    self.num_sub_questions += 1
+                    self._add_sub_question(container, self.num_sub_questions)
+                    if hasattr(window, 'problem_creator'):
+                        window.problem_creator.data_manager.save_to_storage()
+            add_btn.addEventListener("click", create_proxy(on_add_sub_question))
+
+    def _add_sub_question(self, container, index):
+        """Add a sub-question section"""
+        section = document.createElement("div")
+        section.style.cssText = "margin-bottom:16px; padding:12px; border:2px solid #e6eef8; border-radius:8px; background:#f8fafc;"
+        section.setAttribute("data-sub-question-index", str(index))
+
+        section.innerHTML = f"""
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+            <strong style="font-size:15px; color:#0b6efd;">Sub-Question {index}</strong>
+            <button class="btn ghost removeSubQuestion" style="padding:4px 8px; font-size:11px;">🗑️ Remove</button>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:12px; font-weight:600;">Question Text:</label>
+            <input type="text" class="subQuestionText" placeholder="Enter the question..."
+                   style="width:100%; padding:8px; border:2px solid #e6eef8; border-radius:4px; margin-top:4px;">
+          </div>
+
+          <div class="subQuestionOptionsContainer_{index}" style="margin-top:10px;"></div>
+          <button class="btn ghost addSubQuestionOption" style="font-size:12px; margin-top:8px;">➕ Add Option</button>
+
+          <div style="margin-top:12px;">
+            <label style="font-size:12px; font-weight:600;">Correct Answer:</label>
+            <select class="subQuestionCorrectAnswer" style="width:100%; padding:6px; border:2px solid #e6eef8; border-radius:6px; margin-top:4px;">
+              <option value="">-- Select Correct Answer --</option>
+            </select>
+          </div>
+        """
+
+        container.appendChild(section)
+
+        # Store sub-question data
+        sub_question_data = {
+            'index': index,
+            'dom': section,
+            'options': []
+        }
+        self.sub_questions.append(sub_question_data)
+
+        # Wire question text input
+        text_input = section.querySelector(".subQuestionText")
+        if text_input:
+            def on_text_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            text_input.addEventListener("input", create_proxy(on_text_change))
+
+        # Wire remove button
+        remove_btn = section.querySelector(".removeSubQuestion")
+        if remove_btn:
+            def make_remove_handler(idx):
+                return lambda e: self._remove_sub_question(idx)
+            remove_btn.addEventListener("click", create_proxy(make_remove_handler(index)))
+
+        # Wire add option button
+        add_opt_btn = section.querySelector(".addSubQuestionOption")
+        if add_opt_btn:
+            def make_add_option_handler(idx):
+                return lambda e: self._add_sub_question_option(idx)
+            add_opt_btn.addEventListener("click", create_proxy(make_add_option_handler(index)))
+
+        # Wire correct answer dropdown
+        select = section.querySelector(".subQuestionCorrectAnswer")
+        if select:
+            def on_correct_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            select.addEventListener("change", create_proxy(on_correct_change))
+
+        # Add initial options (A, B)
+        self._add_sub_question_option(index, 'A')
+        self._add_sub_question_option(index, 'B')
+
+    def _add_sub_question_option(self, sub_q_index, label=None):
+        """Add an option to a sub-question"""
+        # Find the sub-question data
+        sub_q = None
+        for sq in self.sub_questions:
+            if sq['index'] == sub_q_index:
+                sub_q = sq
+                break
+
+        if not sub_q:
+            return
+
+        # Determine label
+        if label is None:
+            used_labels = [opt['label'] for opt in sub_q['options']]
+            all_labels = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+            for lbl in all_labels:
+                if lbl not in used_labels:
+                    label = lbl
+                    break
+
+        if label is None:
+            window.alert("Maximum 8 options allowed per sub-question")
+            return
+
+        # Find the options container
+        options_container = sub_q['dom'].querySelector(f".subQuestionOptionsContainer_{sub_q_index}")
+        if not options_container:
+            return
+
+        # Create option div
+        option_div = document.createElement("div")
+        option_div.className = "multi-mc-option"
+        option_div.setAttribute("data-label", label)
+        option_div.style.cssText = "margin-bottom:8px; padding:8px; border:1px solid #dbe9ff; border-radius:6px; background:white;"
+
+        option_div.innerHTML = f"""
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <strong style="font-size:13px; color:#0369a1;">Option {label}</strong>
+            <button class="btn ghost removeSubQuestionOption" style="padding:2px 6px; font-size:10px;">Remove</button>
+          </div>
+          <input type="text" class="subQuestionOptionText" placeholder="Enter option text..."
+                 style="width:100%; padding:6px; border:1px solid #e6eef8; border-radius:4px;">
+        """
+
+        options_container.appendChild(option_div)
+
+        # Store option data
+        option_data = {
+            'label': label,
+            'dom': option_div
+        }
+        sub_q['options'].append(option_data)
+
+        # Wire option text input
+        option_input = option_div.querySelector(".subQuestionOptionText")
+        if option_input:
+            def on_option_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            option_input.addEventListener("input", create_proxy(on_option_change))
+
+        # Wire remove option button
+        remove_btn = option_div.querySelector(".removeSubQuestionOption")
+        if remove_btn:
+            def make_remove_handler(sq_idx, lbl):
+                return lambda e: self._remove_sub_question_option(sq_idx, lbl)
+            remove_btn.addEventListener("click", create_proxy(make_remove_handler(sub_q_index, label)))
+
+        # Update correct answer dropdown
+        self._update_sub_question_correct_dropdown(sub_q_index)
+
+    def _remove_sub_question_option(self, sub_q_index, label):
+        """Remove an option from a sub-question"""
+        # Find the sub-question
+        sub_q = None
+        for sq in self.sub_questions:
+            if sq['index'] == sub_q_index:
+                sub_q = sq
+                break
+
+        if not sub_q:
+            return
+
+        # Find and remove the option
+        option_to_remove = None
+        for opt in sub_q['options']:
+            if opt['label'] == label:
+                option_to_remove = opt
+                break
+
+        if option_to_remove:
+            option_to_remove['dom'].remove()
+            sub_q['options'].remove(option_to_remove)
+            self._update_sub_question_correct_dropdown(sub_q_index)
+
+            if hasattr(window, 'problem_creator'):
+                window.problem_creator.data_manager.save_to_storage()
+
+    def _update_sub_question_correct_dropdown(self, sub_q_index):
+        """Update the correct answer dropdown for a sub-question"""
+        # Find the sub-question
+        sub_q = None
+        for sq in self.sub_questions:
+            if sq['index'] == sub_q_index:
+                sub_q = sq
+                break
+
+        if not sub_q:
+            return
+
+        select = sub_q['dom'].querySelector(".subQuestionCorrectAnswer")
+        if not select:
+            return
+
+        # Save current selection
+        current_value = select.value
+
+        # Rebuild options
+        select.innerHTML = '<option value="">-- Select Correct Answer --</option>'
+        for opt in sub_q['options']:
+            option = document.createElement("option")
+            option.value = opt['label']
+            option.textContent = f"Option {opt['label']}"
+            if opt['label'] == current_value:
+                option.selected = True
+            select.appendChild(option)
+
+    def _remove_sub_question(self, index):
+        """Remove a sub-question"""
+        # Find and remove the sub-question
+        sub_q_to_remove = None
+        for sq in self.sub_questions:
+            if sq['index'] == index:
+                sub_q_to_remove = sq
+                break
+
+        if sub_q_to_remove:
+            sub_q_to_remove['dom'].remove()
+            self.sub_questions.remove(sub_q_to_remove)
+
+            if hasattr(window, 'problem_creator'):
+                window.problem_creator.data_manager.save_to_storage()
 
     # ========================================
     # True/False UI
@@ -5117,6 +5396,57 @@ class Step:
                 })
                 window.console.log(f"📦 Single-blank data saved: {len(correct_answers)} answers")
 
+        elif self.step_type == "multi-mc":
+            # Get requireCorrect checkbox value
+            require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
+            require_correct = require_checkbox.checked if require_checkbox else False
+
+            # Collect all sub-questions data
+            sub_questions_data = []
+            sections = self.type_content_el.querySelectorAll('[data-sub-question-index]')
+
+            for section in sections:
+                index = int(section.getAttribute('data-sub-question-index'))
+
+                # Get question text
+                text_input = section.querySelector('.subQuestionText')
+                question_text = text_input.value.strip() if text_input else ""
+
+                # Get options
+                options = []
+                option_divs = section.querySelectorAll('.multi-mc-option')
+                for opt_div in option_divs:
+                    label = opt_div.getAttribute('data-label')
+                    opt_text_input = opt_div.querySelector('.subQuestionOptionText')
+                    opt_text = opt_text_input.value.strip() if opt_text_input else ""
+
+                    if opt_text:
+                        options.append({
+                            "label": label,
+                            "text": opt_text
+                        })
+
+                # Get correct answer
+                correct_select = section.querySelector('.subQuestionCorrectAnswer')
+                correct_answer = correct_select.value if correct_select else ""
+
+                if question_text or options:
+                    sub_questions_data.append({
+                        "index": index,
+                        "question": question_text,
+                        "options": options,
+                        "correct_answer": correct_answer
+                    })
+
+            base_data.update({
+                "multi_mc_config": {
+                    "num_questions": len(sub_questions_data)
+                },
+                "sub_questions": sub_questions_data,
+                "requireCorrect": require_correct
+            })
+            window.console.log(f"📦 Multi-MC data saved: {len(sub_questions_data)} sub-questions")
+
         return base_data
         
     def load_data(self, data):
@@ -5151,7 +5481,7 @@ class Step:
             window.console.log(f"✓ Description loaded")
 
         # ✅ NEW: Restore requireCorrect checkbox for applicable types
-        if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
+        if step_type in ["multiple-choice-single", "multiple-choice-multiple", "multi-mc", "true-false", "fill-blank"]:
             if "requireCorrect" in data:
                 # Wait a bit for UI to be ready
                 def restore_checkbox():
@@ -5379,6 +5709,85 @@ class Step:
                                 window.console.log(f"✓ Loaded text answer: {value}")
 
             window.setTimeout(create_proxy(load_fill_blank_data), 300)
+
+        elif step_type == "multi-mc":
+            window.console.log(f"🔧 Loading multi-mc data for Step {self.step_index}")
+
+            # Store data for render to access
+            self._pending_data = data
+
+            # Get sub-questions data
+            sub_questions_data = data.get("sub_questions", [])
+            multi_mc_config = data.get("multi_mc_config", {})
+
+            window.console.log(f"📋 Found {len(sub_questions_data)} sub-questions to load")
+
+            # Wait for UI to render
+            def load_multi_mc_data():
+                # Clear default sub-questions and re-create with loaded data
+                container = self.type_content_el.querySelector(".multiMcContainer")
+                if container:
+                    container.innerHTML = ""
+                    self.sub_questions = []
+
+                    # Load each sub-question
+                    for sq_data in sub_questions_data:
+                        index = sq_data.get("index", len(self.sub_questions) + 1)
+                        question_text = sq_data.get("question", "")
+                        options = sq_data.get("options", [])
+                        correct_answer = sq_data.get("correct_answer", "")
+
+                        # Add sub-question section
+                        self._add_sub_question(container, index)
+
+                        # Find the section we just added
+                        section = container.querySelector(f'[data-sub-question-index="{index}"]')
+                        if not section:
+                            window.console.warn(f"⚠️ Section for sub-question {index} not found")
+                            continue
+
+                        # Load question text
+                        text_input = section.querySelector('.subQuestionText')
+                        if text_input:
+                            text_input.value = question_text
+                            window.console.log(f"✓ Loaded question text for sub-question {index}")
+
+                        # Clear default options
+                        options_container = section.querySelector(f".subQuestionOptionsContainer_{index}")
+                        if options_container:
+                            options_container.innerHTML = ""
+
+                        # Find and clear the sub-question data
+                        for sq in self.sub_questions:
+                            if sq['index'] == index:
+                                sq['options'] = []
+                                break
+
+                        # Load options
+                        for opt_data in options:
+                            label = opt_data.get("label", "")
+                            opt_text = opt_data.get("text", "")
+
+                            # Add option
+                            self._add_sub_question_option(index, label)
+
+                            # Set option text
+                            opt_div = section.querySelector(f'.multi-mc-option[data-label="{label}"]')
+                            if opt_div:
+                                opt_input = opt_div.querySelector('.subQuestionOptionText')
+                                if opt_input:
+                                    opt_input.value = opt_text
+                                    window.console.log(f"✓ Loaded option {label} for sub-question {index}")
+
+                        # Set correct answer
+                        correct_select = section.querySelector('.subQuestionCorrectAnswer')
+                        if correct_select:
+                            correct_select.value = correct_answer
+                            window.console.log(f"✓ Set correct answer for sub-question {index}: {correct_answer}")
+
+                    window.console.log(f"✅ Multi-MC data loaded: {len(sub_questions_data)} sub-questions")
+
+            window.setTimeout(create_proxy(load_multi_mc_data), 300)
 
         else:
             window.console.warn(f"⚠️ Unknown or unhandled step_type in load_data: '{step_type}'")
@@ -7940,6 +8349,87 @@ class DataManager:
                             step_data["requireCorrect"] = must_be_correct
 
                     # ========================================
+                    # MULTI-MC (Multiple MC-Single Questions)
+                    # ========================================
+                    elif step_type == "multi-mc":
+                        import re
+
+                        # Extract all sub-questions using pattern: Sub-Question <index>:
+                        sub_questions_data = []
+                        sub_question_pattern = r'^Sub-Question\s+(\d+):'
+
+                        # Find all sub-questions
+                        sub_question_indices = []
+                        for line in step_lines_clean:
+                            match = re.match(sub_question_pattern, line.strip())
+                            if match:
+                                sub_question_indices.append(int(match.group(1)))
+
+                        if not sub_question_indices:
+                            add_validation_comment('error', f'Step {step_index + 1}: No sub-questions found for multi-mc - skipping step')
+                            continue
+
+                        # Process each sub-question
+                        for sq_index in sorted(set(sub_question_indices)):
+                            # Extract question text
+                            question_text = ""
+                            for line in step_lines_clean:
+                                if re.match(rf'^Sub-Question\s+{sq_index}:', line.strip()):
+                                    question_text = re.sub(rf'^Sub-Question\s+{sq_index}:\s*', '', line.strip())
+                                    break
+
+                            # Extract options for this sub-question: Option <index><letter>:
+                            options = []
+                            option_pattern = rf'^Option\s+{sq_index}([A-Z]):'
+                            for line in step_lines_clean:
+                                match = re.match(option_pattern, line.strip())
+                                if match:
+                                    label = match.group(1)
+                                    text = re.sub(option_pattern, '', line.strip()).strip()
+                                    if text:
+                                        options.append({
+                                            "label": label,
+                                            "text": text
+                                        })
+
+                            # Extract correct answer for this sub-question
+                            correct_answer = ""
+                            correct_pattern = rf'^Correct\s+Answer\s+{sq_index}:'
+                            for line in step_lines_clean:
+                                if re.match(correct_pattern, line.strip()):
+                                    correct_answer = re.sub(correct_pattern, '', line.strip()).strip()
+                                    break
+
+                            if not options:
+                                add_validation_comment('warning', f'Step {step_index + 1}, Sub-Question {sq_index}: No options found - skipping sub-question')
+                                continue
+
+                            if not correct_answer:
+                                add_validation_comment('warning', f'Step {step_index + 1}, Sub-Question {sq_index}: Missing Correct Answer - using A as default')
+                                correct_answer = 'A'
+
+                            sub_questions_data.append({
+                                "index": sq_index,
+                                "question": question_text,
+                                "options": options,
+                                "correct_answer": correct_answer
+                            })
+
+                        if not sub_questions_data:
+                            add_validation_comment('error', f'Step {step_index + 1}: No valid sub-questions for multi-mc - skipping step')
+                            continue
+
+                        step_data.update({
+                            "multi_mc_config": {
+                                "num_questions": len(sub_questions_data)
+                            },
+                            "sub_questions": sub_questions_data
+                        })
+
+                        if must_be_correct is not None:
+                            step_data["requireCorrect"] = must_be_correct
+
+                    # ========================================
                     # TRUE/FALSE
                     # ========================================
                     elif step_type == "true-false":
@@ -8396,11 +8886,11 @@ class DataManager:
                                 },
                                 {
                                     token: "support.function.problemset",
-                                    regex: "^(Problem Title|Problem Description|Step Description|Step Type|Step Expression|Step Expected|Option [A-H]|Correct Answer|Must Be Correct|Answer Type|Alternative Answer):"
+                                    regex: "^(Problem Title|Problem Description|Step Description|Step Type|Step Expression|Step Expected|Option [A-H]|Option \\\\d+[A-H]|Correct Answer|Correct Answer \\\\d+|Must Be Correct|Answer Type|Alternative Answer|Sub-Question \\\\d+):"
                                 },
                                 {
                                     token: "variable.language.problemset",
-                                    regex: "\\\\b(step-by-step|multiple-choice-single|multiple-choice-multiple|true-false|fill-blank)\\\\b"
+                                    regex: "\\\\b(step-by-step|multiple-choice-single|multiple-choice-multiple|multi-mc|true-false|fill-blank)\\\\b"
                                 },
                                 {
                                     token: "constant.language.boolean",

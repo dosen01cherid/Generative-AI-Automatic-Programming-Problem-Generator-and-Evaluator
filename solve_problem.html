@@ -8361,6 +8361,8 @@ This demonstrates the complete format for creating your own problem sets!
               self.create_mc_single_ui(step_div, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multiple-choice-multiple":
               self.create_mc_multiple_ui(step_div, step_idx, step_data, desc_html, len(steps))
+          elif step_type == "multi-mc":
+              self.create_multi_mc_ui(step_div, step_idx, step_data, desc_html, len(steps))
           elif step_type == "true-false":
               self.create_truefalse_ui(step_div, step_idx, step_data, desc_html, len(steps))
           elif step_type == "fill-blank":
@@ -8728,7 +8730,68 @@ This demonstrates the complete format for creating your own problem sets!
           def next_handler(e):
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
-    
+
+    def create_multi_mc_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+      """Create UI for multi-mc (multiple MC-single sub-questions as dropdowns)"""
+      sub_questions = step_data.get("sub_questions", [])
+      must_correct = step_data.get("requireCorrect", False)
+
+      # Badge for must_correct
+      must_correct_badge = ""
+      if must_correct:
+          must_correct_badge = "<span style='background:#fef3c7;color:#b45309;padding:4px 8px;border-radius:4px;font-size:12px;margin-left:8px;'>⚠️ Must be correct</span>"
+
+      # Build HTML for each sub-question
+      sub_questions_html = ""
+      for sq in sub_questions:
+          sq_index = sq.get("index", 1)
+          question_text = sq.get("question", "")
+          options = sq.get("options", [])
+
+          # Build options for dropdown
+          options_html = "<option value=''>-- Select an answer --</option>"
+          for opt in options:
+              label = opt.get("label", "")
+              text = opt.get("text", "")
+              options_html += f"<option value='{label}'>{label}. {text}</option>"
+
+          sub_questions_html += f"""
+          <div style='margin-bottom:16px; padding:12px; border:2px solid #e6eef8; border-radius:8px; background:#f8fafc;'>
+            <div style='font-weight:600; margin-bottom:8px;'>{sq_index}. {question_text}</div>
+            <select class='multi-mc-select' data-sub-question='{sq_index}' style='width:100%; padding:8px; border:2px solid #cbd5e1; border-radius:6px; font-size:14px;'>
+              {options_html}
+            </select>
+          </div>
+          """
+
+      step_div.innerHTML = f"""
+      <div style='font-weight:700;margin-bottom:8px;'>
+          Step <span class='step-number-display'>{step_idx+1}</span> of {total_steps} {must_correct_badge}
+      </div>
+      <div class='step-description'>{desc_html}</div>
+      <div style='margin-top:12px;'>
+        <div style='font-weight:700;margin-bottom:12px;'>Answer the following questions:</div>
+        {sub_questions_html}
+        <button class='btn submit-step' style='margin-top:12px;'>Submit Answers</button>
+        <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
+      </div>
+      <div class='step-feedback'></div>
+      """
+
+      # Submit button
+      submit_btn = step_div.querySelector(".submit-step")
+      if submit_btn:
+          def submit_handler(e):
+              self.submit_multi_mc(step_idx, step_data)
+          submit_btn.addEventListener("click", create_proxy(submit_handler))
+
+      # Next button
+      next_btn = step_div.querySelector(".next-step")
+      if next_btn:
+          def next_handler(e):
+              self.next_step(step_idx)
+          next_btn.addEventListener("click", create_proxy(next_handler))
+
     def create_truefalse_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
       """Create true/false UI"""
 
@@ -9734,6 +9797,148 @@ This demonstrates the complete format for creating your own problem sets!
         window.console.log("✅ Proceeding to check completion and show next step")
         self._check_problem_completion_and_show_next_step(step_idx)
 
+    def submit_multi_mc(self, step_idx, step_data):
+        """Submit multi-mc (multiple MC-single sub-questions) answers"""
+        current_prob_idx = self.current_problem_index
+        if current_prob_idx is None:
+            window.console.error("❌ No current problem index")
+            return
+
+        # Get all sub-questions
+        sub_questions = step_data.get("sub_questions", [])
+        selects = document.querySelectorAll(f".multi-mc-select")
+
+        # Collect user answers
+        user_answers = {}
+        all_answered = True
+        for i in range(selects.length):
+            select = selects[i]
+            sq_index = int(select.getAttribute("data-sub-question"))
+            selected_value = select.value
+
+            if not selected_value:
+                all_answered = False
+                break
+
+            user_answers[sq_index] = selected_value
+
+        # Check if all sub-questions are answered
+        if not all_answered or len(user_answers) < len(sub_questions):
+            window.console.warn("Not all sub-questions answered")
+
+            # Show warning
+            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if feedback_div:
+                feedback_div.innerHTML = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ⚠️ Please answer all sub-questions
+                    </div>
+                """
+            return
+
+        # Check correctness for each sub-question
+        all_correct = True
+        incorrect_sq = []
+        for sq in sub_questions:
+            sq_index = sq.get("index")
+            correct_answer = sq.get("correct_answer", "")
+            user_answer = user_answers.get(sq_index, "")
+
+            if user_answer != correct_answer:
+                all_correct = False
+                incorrect_sq.append(sq_index)
+
+        is_correct = all_correct
+        must_correct = step_data.get("requireCorrect", False)
+
+        window.console.log(f"Multi-MC: user_answers={user_answers}, is_correct={is_correct}, must_correct={must_correct}")
+
+        # ✅ CRITICAL: Update BOTH solve_state AND problem_states
+        if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+            self.solve_states[current_prob_idx][step_idx]["finished"] = True
+            self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.solve_states[current_prob_idx][step_idx]["user_answers"] = user_answers
+            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True")
+
+        # ✅ CRITICAL: Update problem_states (persisted state)
+        if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+            self.problem_states[current_prob_idx][step_idx]["finished"] = True
+            self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.problem_states[current_prob_idx][step_idx]["user_answers"] = user_answers
+            attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
+            self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
+            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}")
+
+        # Mark step as finished
+        window.console.log("==================================================")
+        window.console.log(f"✅ Step {step_idx} marked as finished")
+        window.console.log("Current solve_state status:")
+        for i, step in enumerate(self.solve_states[current_prob_idx]):
+            status = "✅ DONE" if step.get("finished") else "⏳ TODO"
+            window.console.log(f"  Step {i}: {status}")
+        window.console.log("==================================================")
+
+        # ✅ CRITICAL: Check requireCorrect BEFORE showing feedback
+        if not is_correct and must_correct:
+            window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
+            # Reset finished status if must be correct
+            if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                self.solve_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+            if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+                self.problem_states[current_prob_idx][step_idx]["finished"] = False
+                window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+            # ✅ ALWAYS show feedback - find or create feedback div
+            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            if not feedback_div:
+                # Try to find step container
+                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                    container = self.solve_states[current_prob_idx][step_idx].get("container")
+                    if container:
+                        # Create feedback div
+                        feedback_div = document.createElement("div")
+                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.className = "step-feedback"
+                        container.appendChild(feedback_div)
+                        window.console.log(f"✅ Created feedback div for step {step_idx}")
+
+            if feedback_div:
+                feedback_div.innerHTML = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                        ❌ Incorrect. This step requires all correct answers. Please try again.
+                    </div>
+                """
+                window.console.log("✅ Displayed requireCorrect error message to user")
+            else:
+                window.console.warn("⚠️ Could not display feedback - no container found")
+
+            self.save_to_storage()
+            window.console.log("🚫 RETURNING EARLY - User must submit correct answers to proceed")
+            return
+
+        # Show feedback
+        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        if feedback_div:
+            if is_correct:
+                feedback_div.innerHTML = """
+                    <div style='background:#dcfce7;color:#16a34a;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                        ✅ All correct!
+                    </div>
+                """
+            else:
+                # Show which sub-questions were incorrect
+                incorrect_msg = f"Sub-question(s) {', '.join(map(str, incorrect_sq))} incorrect"
+                feedback_div.innerHTML = f"""
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                        ❌ {incorrect_msg}
+                    </div>
+                """
+
+        # Save and check completion
+        self.save_to_storage()
+        window.console.log("✅ Proceeding to check completion and show next step")
+        self._check_problem_completion_and_show_next_step(step_idx)
 
     def submit_true_false(self, step_idx, step_data):
         """Submit true/false answer"""

@@ -1,0 +1,74 @@
+###
+Problem Title: Test Multi-MC Question Type
+Problem Description: Testing the new multi-mc question type with dropdown selection boxes
+
+#
+Step Description: Answer the following geography questions
+Step Type: multi-mc
+Sub-Question 1: What is the capital of France?
+Option 1A: Paris
+Option 1B: Berlin
+Option 1C: Madrid
+Option 1D: Rome
+Correct Answer 1: A
+Sub-Question 2: What is the capital of Japan?
+Option 2A: Seoul
+Option 2B: Tokyo
+Option 2C: Beijing
+Option 2D: Bangkok
+Correct Answer 2: B
+Must Be Correct: false
+
+#
+Step Description: Answer the following math questions
+Step Type: multi-mc
+Sub-Question 1: What is 2 + 2?
+Option 1A: 3
+Option 1B: 4
+Option 1C: 5
+Correct Answer 1: B
+Sub-Question 2: What is 10 × 10?
+Option 2A: 100
+Option 2B: 200
+Option 2C: 1000
+Correct Answer 2: A
+Sub-Question 3: What is the square root of 16?
+Option 3A: 2
+Option 3B: 4
+Option 3C: 8
+Correct Answer 3: B
+Must Be Correct: true
+
+###
+Problem Title: Mixed Question Types Test
+Problem Description: Testing multi-mc alongside other question types
+
+#
+Step Description: Select the correct answer:
+Step Type: multiple-choice-single
+Option A: First option
+Option B: Second option
+Option C: Third option
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Answer these programming questions:
+Step Type: multi-mc
+Sub-Question 1: Which language is used for web development?
+Option 1A: Python
+Option 1B: JavaScript
+Option 1C: Java
+Correct Answer 1: B
+Sub-Question 2: What does HTML stand for?
+Option 2A: Hyper Text Markup Language
+Option 2B: High Tech Modern Language
+Option 2C: Home Tool Management Language
+Correct Answer 2: A
+Must Be Correct: false
+
+#
+Step Description: Is Python a programming language?
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: false
