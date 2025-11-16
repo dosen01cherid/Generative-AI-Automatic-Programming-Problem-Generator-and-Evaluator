@@ -5048,6 +5048,12 @@ class Step:
         step_type = data.get("step_type", "step-by-step")
         window.console.log(f"🔖 Step type from data: {step_type}, current type: {self.step_type}")
 
+        # Debug for fill-blank
+        if "blank_config" in data:
+            window.console.log(f"🔍 DEBUG: blank_config found in data:")
+            window.console.log(f"   - mode: {data['blank_config'].get('mode')}")
+            window.console.log(f"   - correct_answers type: {type(data.get('correct_answers'))}")
+
         # ✅ CRITICAL FIX: Update step type and render UI BEFORE loading data
         if self.step_type != step_type:
             window.console.log(f"⚠️ Type mismatch! Changing from {self.step_type} to {step_type}")
@@ -5220,7 +5226,7 @@ class Step:
             window.setTimeout(create_proxy(set_tf_answer), 200)
 
         elif step_type == "fill-blank":
-            window.console.log(f"🔧 Loading fill-blank data for Step {self.step_index}")
+            window.console.log(f"🔧 ===== ENTERING FILL-BLANK LOAD BRANCH ===== Step {self.step_index}")
 
             # Detect mode from data
             blank_config = data.get("blank_config", {})
@@ -5228,6 +5234,8 @@ class Step:
             current_mode = getattr(self, 'blank_mode', 'single')
 
             window.console.log(f"🔍 Detected mode: {blank_mode}, current mode: {current_mode}")
+            window.console.log(f"🔍 blank_config: {blank_config}")
+            window.console.log(f"🔍 self.blank_mode before update: {getattr(self, 'blank_mode', 'NOT SET')}")
 
             # Store data for render to access
             self._pending_data = data
@@ -7874,6 +7882,7 @@ class DataManager:
 
                         # Detect single vs multi-blank mode
                         blank_mode = detect_blank_mode(step_lines_clean)
+                        window.console.log(f"📦 Import parser: Step {step_index + 1}, detected blank_mode: {blank_mode}")
 
                         if blank_mode == 'multi':
                             # Multi-blank mode: Correct Answer A, B, C, etc.
@@ -7953,6 +7962,12 @@ class DataManager:
 
                         if must_be_correct is not None:
                             step_data["requireCorrect"] = must_be_correct
+
+                        # Debug log for fill-blank
+                        window.console.log(f"📦 Import parser: Step {step_index + 1} fill-blank data created:")
+                        window.console.log(f"   - step_type: {step_data.get('step_type')}")
+                        window.console.log(f"   - blank_config.mode: {step_data.get('blank_config', {}).get('mode')}")
+                        window.console.log(f"   - correct_answers type: {type(step_data.get('correct_answers'))}")
 
                     # ========================================
                     # UNKNOWN STEP TYPE
