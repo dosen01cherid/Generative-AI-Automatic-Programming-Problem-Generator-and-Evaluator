@@ -7659,25 +7659,17 @@ class DataManager:
         def extract_all_fields_with_pattern(lines, pattern):
             """Extract all fields matching a pattern (e.g., 'Correct Answer X:')"""
             import re
-            print(f"🔍 extract_all_fields_with_pattern called with pattern: {pattern}")
-            print(f"   Checking {len(lines)} lines:")
             results = {}
-            for i, line in enumerate(lines):
+            for line in lines:
                 stripped = line.strip()
-                print(f"   Line {i}: '{stripped}'")
                 match = re.match(pattern, stripped)
                 if match:
-                    print(f"   ✓ MATCHED! Groups: {match.groups()}")
                     label = match.group(1) if match.groups() else None
                     value = stripped[match.end():].strip()
                     if label:
                         if label not in results:
                             results[label] = []
                         results[label].append(value)
-                        print(f"   ✓ Extracted: label={label}, value={value}")
-                else:
-                    print(f"   ✗ No match")
-            print(f"📊 Results: {results}")
             return results
 
         def detect_blank_mode(lines):
@@ -7732,10 +7724,6 @@ class DataManager:
             return comment
 
         try:
-            print(f"🚀 ===== IMPORT PARSER STARTED =====")
-            print(f"📝 Input text length: {len(text)} characters")
-            print(f"📝 First 200 chars: {text[:200]}")
-
             # Pre-process: split into lines and identify comments
             all_lines = text.strip().split('\n')
 
@@ -7743,22 +7731,14 @@ class DataManager:
             problem_sections = text.strip().split('###')
             problem_sections = [p.strip() for p in problem_sections if p.strip()]
 
-            print(f"📦 Found {len(problem_sections)} problem section(s)")
-
             problems = []
 
             for prob_index, prob_section in enumerate(problem_sections):
-                print(f"🔍 Processing problem {prob_index + 1}")
-                print(f"   Section preview: {prob_section[:100]}")
-
                 # Split by # to separate problem header from steps
                 parts = prob_section.split('#')
                 parts = [p.strip() for p in parts if p.strip()]
 
-                print(f"   Found {len(parts)} part(s) (1 header + {len(parts)-1} steps)")
-
                 if not parts:
-                    print(f"   ⚠️ No parts found, skipping")
                     continue
 
                 # First part is problem info
@@ -7792,35 +7772,24 @@ class DataManager:
                 # Remaining parts are steps
                 steps = []
                 for step_index, step_section in enumerate(parts[1:]):
-                    print(f"   🔧 Processing step {step_index + 1}")
-                    print(f"      Step section preview: {step_section[:150]}")
-
                     step_lines = step_section.split('\n')
-                    print(f"      Step has {len(step_lines)} lines")
 
                     # Filter out comments from step lines
                     step_lines_clean, step_comments = filter_comments(step_lines)
-                    print(f"      After filtering: {len(step_lines_clean)} lines")
 
                     step_desc = extract_field(step_lines_clean, 'Step Description:')
                     step_type = extract_field(step_lines_clean, 'Step Type:')
-
-                    print(f"      📋 Step Description: {step_desc}")
-                    print(f"      📋 Step Type: {step_type}")
 
                     # Validation: Check for missing step description
                     if not step_desc:
                         add_validation_comment('warning', f'Step {step_index + 1}: Missing Step Description - adding default')
                         step_desc = f"Step {step_index + 1}"
-                        print(f"      ⚠️ Missing step description, using default")
 
                     # Default to step-by-step if no type specified
                     if not step_type:
                         step_type = "step-by-step"
-                        print(f"      ⚠️ No step type, defaulting to step-by-step")
                     else:
                         step_type = step_type.strip().lower()
-                        print(f"      ✓ Step type: {step_type}")
 
                     # Parse step description
                     step_desc_blocks = parse_mixed_content(step_desc) if step_desc else []
