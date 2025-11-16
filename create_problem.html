@@ -5519,7 +5519,7 @@ class Problem:
                     const quill = window.quillEditors && window.quillEditors['{step.description_editor_id}'];
                     if (quill) {{{{
                         const delta = JSON.parse(deltaJson);
-                        quill.setContents(delta);
+                        quill.setContents(delta, 'silent');
                         return true;
                     }}}}
                     return false;
@@ -5565,7 +5565,7 @@ class Problem:
                                 const quill = window.quillEditors && window.quillEditors['{opt['editor_id']}'];
                                 if (quill) {{{{
                                     const delta = JSON.parse(deltaJson);
-                                    quill.setContents(delta);
+                                    quill.setContents(delta, 'silent');
                                     return true;
                                 }}}}
                                 return false;
@@ -5631,7 +5631,7 @@ class Problem:
                     const quill = window.quillEditors && window.quillEditors['{step.explanation_editor_id}'];
                     if (quill) {{{{
                         const delta = JSON.parse(deltaJson);
-                        quill.setContents(delta);
+                        quill.setContents(delta, 'silent');
                         return true;
                     }}}}
                     return false;
@@ -10377,9 +10377,9 @@ def restore_quill_content(editor_id, blocks):
                     console.error('❌ MathString blot not registered! Content may not restore properly.');
                 }
                 
-                // Restore content
+                // Restore content (use 'silent' to avoid triggering autosave during load)
                 try {
-                    quill.setContents(deltaOps);
+                    quill.setContents(deltaOps, 'silent');
                     console.log('✓ Content restored to', editorId);
                     
                     // Verify mathstring blots were created
