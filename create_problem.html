@@ -7613,14 +7613,21 @@ class DataManager:
         def detect_blank_mode(lines):
             """Detect if fill-blank is single or multi-blank mode"""
             import re
+            window.console.log(f"🔍 detect_blank_mode checking {len(lines)} lines:")
+            for i, line in enumerate(lines):
+                window.console.log(f"  Line {i}: '{line.strip()}'")
+
             # Check for labeled correct answers (Correct Answer A:, B:, etc.)
             for line in lines:
                 if re.match(r'^Correct Answer [A-Z]:', line.strip()):
+                    window.console.log(f"✓ Found labeled answer, returning 'multi': {line.strip()}")
                     return 'multi'
             # Check for unlabeled Correct Answer:
             for line in lines:
                 if line.strip().startswith('Correct Answer:'):
+                    window.console.log(f"✓ Found unlabeled answer, returning 'single': {line.strip()}")
                     return 'single'
+            window.console.log(f"⚠️ No Correct Answer found, returning None")
             return None
 
         def is_comment_line(line):
