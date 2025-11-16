@@ -7562,13 +7562,13 @@ class DataManager:
                     # Check if value continues on next lines (multi-line)
                     j = i + 1
                     while j < len(lines) and not any(
-                        lines[j].strip().startswith(p) for p in 
-                        ['Problem Title:', 'Problem Description:', 'Step Description:', 
-                         'Step Type:', 'Step Expression:', 'Step Expected:', 
-                         'Option A:', 'Option B:', 'Option C:', 'Option D:', 
+                        lines[j].strip().startswith(p) for p in
+                        ['Problem Title:', 'Problem Description:', 'Step Description:',
+                         'Step Type:', 'Step Expression:', 'Step Expected:',
+                         'Option A:', 'Option B:', 'Option C:', 'Option D:',
                          'Option E:', 'Option F:', 'Option G:', 'Option H:',
-                         'Correct Answer:', 'Must Be Correct:', 'Answer Type:', 
-                         'Alternative Answer:', 'Explanation:', '#', '###']
+                         'Correct Answer', 'Must Be Correct:', 'Answer Type:',
+                         'Alternative Answer', 'Explanation:', '#', '###']
                     ):
                         if lines[j].strip():
                             value += ' ' + lines[j].strip()
