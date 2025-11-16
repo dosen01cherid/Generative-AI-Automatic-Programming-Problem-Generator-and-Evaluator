@@ -5130,6 +5130,8 @@ class ProblemSolverApp:
               self._recreate_mc_single_step(container, step_idx, saved_step, original_step_data)
           elif step_type == "multiple-choice-multiple":
               self._recreate_mc_multiple_step(container, step_idx, saved_step, original_step_data)
+          elif step_type == "multi-mc":
+              self._recreate_multi_mc_step(container, step_idx, saved_step, original_step_data)
           elif step_type == "true-false":
               self._recreate_true_false_step(container, step_idx, saved_step, original_step_data)
           elif step_type == "fill-blank":
@@ -5333,6 +5335,8 @@ class ProblemSolverApp:
                     self._recreate_mc_single_step(container, step_idx, saved_step, original_step_data)
                 elif step_type == "multiple-choice-multiple":
                     self._recreate_mc_multiple_step(container, step_idx, saved_step, original_step_data)
+                elif step_type == "multi-mc":
+                    self._recreate_multi_mc_step(container, step_idx, saved_step, original_step_data)
                 elif step_type == "true-false":
                     self._recreate_true_false_step(container, step_idx, saved_step, original_step_data)
                 elif step_type == "fill-blank":
@@ -6018,6 +6022,55 @@ class ProblemSolverApp:
           container.appendChild(q_div)
           container.appendChild(input_field)
           return
+
+      container.appendChild(q_div)
+
+    def _recreate_multi_mc_step(self, container, step_idx, saved_step, original_step_data):
+      """Recreate a multi-mc step for editing with dropdowns"""
+      import re
+
+      window.console.log(f"📝 Recreating Multi-MC step {step_idx}")
+
+      # Get description blocks
+      desc_blocks = original_step_data.get("description", [])
+      desc_html = self.render_content_blocks(desc_blocks)
+
+      # Get blanks and user answers
+      blanks = original_step_data.get("blanks", {})
+      user_answers = saved_step.get("user_answers", {})
+
+      window.console.log(f"Blanks: {blanks}")
+      window.console.log(f"User answers: {user_answers}")
+
+      # Count {blank} placeholders
+      blank_count = len(re.findall(r'\{blank\}', desc_html))
+
+      # Replace each {blank} with a dropdown pre-filled with user's answer
+      modified_desc = desc_html
+      blank_labels = sorted(blanks.keys())
+
+      for i in range(blank_count):
+          if i < len(blank_labels):
+              label = blank_labels[i]
+              blank_data = blanks[label]
+              options = blank_data.get("options", [])
+              user_answer = user_answers.get(label, "")
+
+              # Build dropdown HTML
+              options_html = "<option value=''>--</option>"
+              for opt in options:
+                  selected = "selected" if opt == user_answer else ""
+                  options_html += f"<option value='{opt}' {selected}>{opt}</option>"
+
+              dropdown_html = f"""<select class='multi-mc-dropdown' data-blank-label='{label}' data-step-idx='{step_idx}' style='padding:4px 8px; border:2px solid #0b6efd; border-radius:4px; font-size:14px; background:white;'>{options_html}</select>"""
+
+              # Replace first occurrence of {blank}
+              modified_desc = modified_desc.replace('{blank}', dropdown_html, 1)
+
+      # Create div with dropdowns
+      q_div = document.createElement("div")
+      q_div.style.cssText = "margin-bottom:16px;font-size:16px;color:#334155;line-height:1.8;"
+      q_div.innerHTML = modified_desc
 
       container.appendChild(q_div)
 
@@ -10681,6 +10734,12 @@ This demonstrates the complete format for creating your own problem sets!
           window.console.log(f"   Score: {score} (fill-blank)")
           return score
 
+      # Multi-MC (proportional scoring like fill-blank)
+      elif step_type == "multi-mc":
+          score = self._calculate_multi_mc_score(step_data, step_state)
+          window.console.log(f"   Score: {score} (multi-mc)")
+          return score
+
       # Default
       window.console.log(f"   Score: 0 (unknown type)")
       return 0.0
@@ -10839,6 +10898,32 @@ This demonstrates the complete format for creating your own problem sets!
 
       window.console.log(f"Fill-Blank Score: 0% (no match found)")
       return 0.0
+
+
+    def _calculate_multi_mc_score(self, step_data, step_state):
+      """
+      Calculate score for multi-mc questions (fill-blank with dropdowns).
+      Proportional scoring: score = (correct_blanks / total_blanks) * 100
+      """
+      blanks = step_data.get("blanks", {})
+      user_answers = step_state.get("user_answers", {})
+
+      if not blanks:
+          return 0.0
+
+      total_blanks = len(blanks)
+      correct_count = 0
+
+      for label, blank_data in blanks.items():
+          correct_answer = blank_data.get("correct", "")
+          user_answer = user_answers.get(label, "")
+
+          if user_answer == correct_answer:
+              correct_count += 1
+
+      score = (correct_count / total_blanks) * 100.0 if total_blanks > 0 else 0.0
+      window.console.log(f"Multi-MC Score: {score:.1f}% ({correct_count}/{total_blanks} correct)")
+      return score
 
 
     def _check_math_expression_correctness(self, step_data, step_state):
