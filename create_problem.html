@@ -5222,13 +5222,24 @@ class Step:
         elif step_type == "fill-blank":
             window.console.log(f"🔧 Loading fill-blank data for Step {self.step_index}")
 
+            # Detect mode from data
+            blank_config = data.get("blank_config", {})
+            blank_mode = blank_config.get("mode", "single")
+            current_mode = getattr(self, 'blank_mode', 'single')
+
+            window.console.log(f"🔍 Detected mode: {blank_mode}, current mode: {current_mode}")
+
             # Store data for render to access
             self._pending_data = data
 
+            # If mode doesn't match, re-render UI
+            if blank_mode != current_mode:
+                window.console.log(f"⚠️ Mode mismatch! Re-rendering UI for {blank_mode} mode")
+                self.blank_mode = blank_mode  # Set mode before rendering
+                self._render_fill_blank_ui()
+
             # Wait for UI to render
             def load_fill_blank_data():
-                blank_config = data.get("blank_config", {})
-                blank_mode = blank_config.get("mode", "single")
                 correct_answers = data.get("correct_answers")
 
                 window.console.log(f"📋 Loading fill-blank in {blank_mode} mode")
