@@ -7597,17 +7597,25 @@ class DataManager:
         def extract_all_fields_with_pattern(lines, pattern):
             """Extract all fields matching a pattern (e.g., 'Correct Answer X:')"""
             import re
+            print(f"🔍 extract_all_fields_with_pattern called with pattern: {pattern}")
+            print(f"   Checking {len(lines)} lines:")
             results = {}
-            for line in lines:
+            for i, line in enumerate(lines):
                 stripped = line.strip()
+                print(f"   Line {i}: '{stripped}'")
                 match = re.match(pattern, stripped)
                 if match:
+                    print(f"   ✓ MATCHED! Groups: {match.groups()}")
                     label = match.group(1) if match.groups() else None
                     value = stripped[match.end():].strip()
                     if label:
                         if label not in results:
                             results[label] = []
                         results[label].append(value)
+                        print(f"   ✓ Extracted: label={label}, value={value}")
+                else:
+                    print(f"   ✗ No match")
+            print(f"📊 Results: {results}")
             return results
 
         def detect_blank_mode(lines):
