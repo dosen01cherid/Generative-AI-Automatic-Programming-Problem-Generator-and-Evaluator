@@ -4036,9 +4036,25 @@ class Step:
     # ========================================
 
     def _render_fill_blank_ui(self):
-        """Render fill-blank UI - text answers only"""
+        """Render fill-blank UI - supports single and multi-blank modes"""
+        # Detect mode from existing data if loading
+        blank_mode = "single"  # default
+        if hasattr(self, '_pending_data') and self._pending_data:
+            blank_config = self._pending_data.get('blank_config', {})
+            blank_mode = blank_config.get('mode', 'single')
+
+        self.blank_mode = blank_mode
+        self.blanks = {} if blank_mode == "multi" else []
+
+        if blank_mode == "multi":
+            self._render_multi_blank_ui()
+        else:
+            self._render_single_blank_ui()
+
+    def _render_single_blank_ui(self):
+        """Render single blank UI (backward compatible)"""
         self.type_content_el.innerHTML = """
-          <!-- ✅ NEW: Require Correct Answer Checkbox -->
+          <!-- ✅ Require Correct Answer Checkbox -->
           <div style="margin-top:8px; margin-bottom:12px;">
             <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
               <input type="checkbox" class="requireCorrectCheckbox"
@@ -4055,15 +4071,13 @@ class Step:
         """
 
         self.fill_blank_container = self.type_content_el
-        self.blanks = []
 
-        # ✅ Wire require correct checkbox to trigger autosave
+        # Wire require correct checkbox
         require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
         if require_checkbox:
             def on_require_change(e):
                 if hasattr(window, 'problem_creator'):
                     window.problem_creator.data_manager.save_to_storage()
-                    window.console.log(f"✓ Require correct changed to: {e.target.checked}")
             require_checkbox.addEventListener("change", create_proxy(on_require_change))
 
         add_btn = self.type_content_el.querySelector(".addAnswer")
@@ -4071,6 +4085,130 @@ class Step:
             add_btn.addEventListener("click", create_proxy(lambda e: self._add_fill_blank_answer()))
 
         self._add_fill_blank_answer()
+
+    def _render_multi_blank_ui(self):
+        """Render multi-blank UI with labeled sections (A, B, C, etc.)"""
+        num_blanks = 2  # default
+        if hasattr(self, '_pending_data') and self._pending_data:
+            blank_config = self._pending_data.get('blank_config', {})
+            num_blanks = blank_config.get('num_blanks', 2)
+
+        self.type_content_el.innerHTML = """
+          <!-- ✅ Require Correct Answer Checkbox -->
+          <div style="margin-top:8px; margin-bottom:12px;">
+            <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">
+              <input type="checkbox" class="requireCorrectCheckbox"
+                     style="width:16px; height:16px; cursor:pointer;">
+              <span style="font-weight:600;">Require correct answer before proceeding to next step</span>
+            </label>
+          </div>
+
+          <div style="margin-top:12px;">
+            <div style="font-size:13px;color:#64748b;margin-bottom:12px;">
+              💡 <strong>Multiple Blanks Mode:</strong> This step has multiple blanks. Add correct and alternative answers for each blank below.
+            </div>
+            <div class="multiBlankContainer"></div>
+          </div>
+        """
+
+        self.fill_blank_container = self.type_content_el
+
+        # Wire require correct checkbox
+        require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
+        if require_checkbox:
+            def on_require_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            require_checkbox.addEventListener("change", create_proxy(on_require_change))
+
+        # Render blank sections
+        container = self.type_content_el.querySelector(".multiBlankContainer")
+        for i in range(num_blanks):
+            label = chr(65 + i)  # A, B, C, etc.
+            self._add_blank_section(container, label)
+
+    def _add_blank_section(self, container, label):
+        """Add a section for one blank (A, B, C, etc.)"""
+        section = document.createElement("div")
+        section.style.cssText = "margin-bottom:16px; padding:12px; border:2px solid #e6eef8; border-radius:8px; background:#f8fafc;"
+        section.setAttribute("data-blank-label", label)
+
+        section.innerHTML = f"""
+          <div style="font-weight:600; margin-bottom:8px; color:#0b6efd;">Blank {label}</div>
+          <div style="margin-bottom:6px;">
+            <label style="font-size:12px; font-weight:600;">Correct Answer:</label>
+            <input type="text" class="blankCorrectAnswer" placeholder="Enter correct answer..."
+                   style="width:100%; padding:6px; border:2px solid #e6eef8; border-radius:4px; margin-top:4px;">
+          </div>
+          <div class="alternativesContainer_{label}" style="margin-top:8px;"></div>
+          <button class="btn ghost addAlternative" style="margin-top:6px; font-size:12px;">➕ Add Alternative for {label}</button>
+        """
+
+        container.appendChild(section)
+
+        # Initialize blanks dict for this label
+        if label not in self.blanks:
+            self.blanks[label] = []
+
+        # Wire correct answer input
+        correct_input = section.querySelector(".blankCorrectAnswer")
+        if correct_input:
+            def on_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            correct_input.addEventListener("input", create_proxy(on_change))
+
+        # Wire add alternative button
+        add_alt_btn = section.querySelector(".addAlternative")
+        if add_alt_btn:
+            def make_handler(lbl):
+                def handler(e):
+                    self._add_multi_blank_alternative(lbl)
+                return handler
+            add_alt_btn.addEventListener("click", create_proxy(make_handler(label)))
+
+    def _add_multi_blank_alternative(self, label):
+        """Add an alternative answer for a specific blank"""
+        section = self.type_content_el.querySelector(f'[data-blank-label="{label}"]')
+        if not section:
+            return
+
+        alt_container = section.querySelector(f".alternativesContainer_{label}")
+        if not alt_container:
+            return
+
+        alt_div = document.createElement("div")
+        alt_div.style.cssText = "margin-bottom:4px; display:flex; gap:6px; align-items:center;"
+
+        alt_div.innerHTML = f"""
+          <input type="text" class="altAnswer" placeholder="Alternative answer..."
+                 style="flex:1; padding:6px; border:2px solid #e6eef8; border-radius:4px;">
+          <button class="btn ghost removeAlt" style="padding:4px 8px; font-size:10px;">Remove</button>
+        """
+
+        alt_container.appendChild(alt_div)
+
+        # Wire input
+        alt_input = alt_div.querySelector(".altAnswer")
+        if alt_input:
+            def on_change(e):
+                if hasattr(window, 'problem_creator'):
+                    window.problem_creator.data_manager.save_to_storage()
+            alt_input.addEventListener("input", create_proxy(on_change))
+
+        # Wire remove button
+        remove_btn = alt_div.querySelector(".removeAlt")
+        if remove_btn:
+            def make_handler(div):
+                def handler(e):
+                    div.remove()
+                    if hasattr(window, 'problem_creator'):
+                        window.problem_creator.data_manager.save_to_storage()
+                return handler
+            remove_btn.addEventListener("click", create_proxy(make_handler(alt_div)))
+
+        # Track in blanks dict
+        self.blanks[label].append({'type': 'alternative', 'dom': alt_div, 'input': alt_input})
 
     def _add_fill_blank_answer(self):
         """Add text answer field"""
@@ -7359,6 +7497,35 @@ class DataManager:
 
             return options
 
+        def extract_all_fields_with_pattern(lines, pattern):
+            """Extract all fields matching a pattern (e.g., 'Correct Answer X:')"""
+            import re
+            results = {}
+            for line in lines:
+                stripped = line.strip()
+                match = re.match(pattern, stripped)
+                if match:
+                    label = match.group(1) if match.groups() else None
+                    value = stripped[match.end():].strip()
+                    if label:
+                        if label not in results:
+                            results[label] = []
+                        results[label].append(value)
+            return results
+
+        def detect_blank_mode(lines):
+            """Detect if fill-blank is single or multi-blank mode"""
+            import re
+            # Check for labeled correct answers (Correct Answer A:, B:, etc.)
+            for line in lines:
+                if re.match(r'^Correct Answer [A-Z]:', line.strip()):
+                    return 'multi'
+            # Check for unlabeled Correct Answer:
+            for line in lines:
+                if line.strip().startswith('Correct Answer:'):
+                    return 'single'
+            return None
+
         def is_comment_line(line):
             """Check if a line is a comment"""
             stripped = line.strip()
@@ -7618,48 +7785,86 @@ class DataManager:
                     # FILL IN THE BLANK
                     # ========================================
                     elif step_type == "fill-blank":
-                        answer_type = extract_field(step_lines_clean, 'Answer Type:')
-                        correct_answer = extract_field(step_lines_clean, 'Correct Answer:')
+                        import re
 
-                        if not correct_answer:
-                            add_validation_comment('error', f'Step {step_index + 1}: Missing Correct Answer for fill-blank - skipping step')
-                            continue
+                        # Detect single vs multi-blank mode
+                        blank_mode = detect_blank_mode(step_lines_clean)
 
-                        # Default to math if not specified
-                        if not answer_type:
-                            answer_type = "math"
+                        if blank_mode == 'multi':
+                            # Multi-blank mode: Correct Answer A, B, C, etc.
+                            correct_answers_labeled = extract_all_fields_with_pattern(
+                                step_lines_clean,
+                                r'^Correct Answer ([A-Z]):'
+                            )
+                            alternative_answers_labeled = extract_all_fields_with_pattern(
+                                step_lines_clean,
+                                r'^Alternative Answer ([A-Z]):'
+                            )
+
+                            if not correct_answers_labeled:
+                                add_validation_comment('error', f'Step {step_index + 1}: No labeled Correct Answers found for multi-blank fill-blank - skipping step')
+                                continue
+
+                            # Build multi-blank structure
+                            multi_blank_answers = {}
+                            for label in sorted(correct_answers_labeled.keys()):
+                                answers_for_blank = []
+                                # Add correct answer (first one if multiple)
+                                if correct_answers_labeled[label]:
+                                    answers_for_blank.append({
+                                        "value": correct_answers_labeled[label][0].strip(),
+                                        "display": correct_answers_labeled[label][0].strip()
+                                    })
+                                # Add alternative answers
+                                if label in alternative_answers_labeled:
+                                    for alt in alternative_answers_labeled[label]:
+                                        answers_for_blank.append({
+                                            "value": alt.strip(),
+                                            "display": alt.strip()
+                                        })
+                                multi_blank_answers[label] = answers_for_blank
+
+                            step_data.update({
+                                "blank_config": {
+                                    "content_type": "text",
+                                    "mode": "multi",
+                                    "num_blanks": len(multi_blank_answers)
+                                },
+                                "correct_answers": multi_blank_answers
+                            })
                         else:
-                            answer_type = answer_type.strip().lower()
+                            # Single blank mode (backward compatible)
+                            correct_answer = extract_field(step_lines_clean, 'Correct Answer:')
 
-                        # Collect all alternative answers
-                        correct_answers = []
+                            if not correct_answer:
+                                add_validation_comment('error', f'Step {step_index + 1}: Missing Correct Answer for fill-blank - skipping step')
+                                continue
 
-                        if correct_answer:
-                            # Handle math vs text
-                            if answer_type == "math":
-                                # Keep backticks for math answers or convert
-                                value = convert_math_to_latex(correct_answer)
-                                correct_answers.append({"value": value, "display": value})
-                            else:
-                                # Text answer
-                                correct_answers.append({"value": correct_answer.strip(), "display": correct_answer.strip()})
+                            # Collect all alternative answers (can have multiple)
+                            correct_answers = []
+                            correct_answers.append({
+                                "value": correct_answer.strip(),
+                                "display": correct_answer.strip()
+                            })
 
-                        # Check for alternative answers
-                        alt_answer = extract_field(step_lines_clean, 'Alternative Answer:')
-                        if alt_answer:
-                            if answer_type == "math":
-                                value = convert_math_to_latex(alt_answer)
-                                correct_answers.append({"value": value, "display": value})
-                            else:
-                                correct_answers.append({"value": alt_answer.strip(), "display": alt_answer.strip()})
+                            # Extract all Alternative Answer fields
+                            for line in step_lines_clean:
+                                if line.strip().startswith('Alternative Answer:'):
+                                    alt_value = line.strip()[len('Alternative Answer:'):].strip()
+                                    if alt_value:
+                                        correct_answers.append({
+                                            "value": alt_value,
+                                            "display": alt_value
+                                        })
 
-                        step_data.update({
-                            "blank_config": {
-                                "content_type": answer_type,
-                                "position": "end"
-                            },
-                            "correct_answers": correct_answers
-                        })
+                            step_data.update({
+                                "blank_config": {
+                                    "content_type": "text",
+                                    "mode": "single",
+                                    "position": "end"
+                                },
+                                "correct_answers": correct_answers
+                            })
 
                         if must_be_correct is not None:
                             step_data["requireCorrect"] = must_be_correct
