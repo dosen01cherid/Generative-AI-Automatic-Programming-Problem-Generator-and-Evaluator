@@ -7618,14 +7618,17 @@ class DataManager:
                 print(f"  Line {i}: '{line.strip()}'")
 
             # Check for labeled correct answers (Correct Answer A:, B:, etc.)
+            # Use \s+ to match one or more whitespace characters for flexibility
             for line in lines:
-                if re.match(r'^Correct Answer [A-Z]:', line.strip()):
-                    print(f"✓ Found labeled answer, returning 'multi': {line.strip()}")
+                stripped = line.strip()
+                if re.match(r'^Correct\s+Answer\s+[A-Z]:', stripped):
+                    print(f"✓ Found labeled answer, returning 'multi': {stripped}")
                     return 'multi'
             # Check for unlabeled Correct Answer:
             for line in lines:
-                if line.strip().startswith('Correct Answer:'):
-                    print(f"✓ Found unlabeled answer, returning 'single': {line.strip()}")
+                stripped = line.strip()
+                if re.match(r'^Correct\s+Answer:', stripped):
+                    print(f"✓ Found unlabeled answer, returning 'single': {stripped}")
                     return 'single'
             print(f"⚠️ No Correct Answer found, returning None")
             return None
@@ -7899,11 +7902,11 @@ class DataManager:
                             # Multi-blank mode: Correct Answer A, B, C, etc.
                             correct_answers_labeled = extract_all_fields_with_pattern(
                                 step_lines_clean,
-                                r'^Correct Answer ([A-Z]):'
+                                r'^Correct\s+Answer\s+([A-Z]):'
                             )
                             alternative_answers_labeled = extract_all_fields_with_pattern(
                                 step_lines_clean,
-                                r'^Alternative Answer ([A-Z]):'
+                                r'^Alternative\s+Answer\s+([A-Z]):'
                             )
 
                             if not correct_answers_labeled:
@@ -7953,9 +7956,13 @@ class DataManager:
                             })
 
                             # Extract all Alternative Answer fields
+                            import re
                             for line in step_lines_clean:
-                                if line.strip().startswith('Alternative Answer:'):
-                                    alt_value = line.strip()[len('Alternative Answer:'):].strip()
+                                stripped = line.strip()
+                                # Use regex to handle flexible whitespace
+                                match = re.match(r'^Alternative\s+Answer:\s*(.*)', stripped)
+                                if match:
+                                    alt_value = match.group(1).strip()
                                     if alt_value:
                                         correct_answers.append({
                                             "value": alt_value,
