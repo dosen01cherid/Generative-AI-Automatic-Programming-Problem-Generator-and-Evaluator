@@ -7670,6 +7670,10 @@ class DataManager:
             return comment
 
         try:
+            print(f"🚀 ===== IMPORT PARSER STARTED =====")
+            print(f"📝 Input text length: {len(text)} characters")
+            print(f"📝 First 200 chars: {text[:200]}")
+
             # Pre-process: split into lines and identify comments
             all_lines = text.strip().split('\n')
 
@@ -7677,14 +7681,22 @@ class DataManager:
             problem_sections = text.strip().split('###')
             problem_sections = [p.strip() for p in problem_sections if p.strip()]
 
+            print(f"📦 Found {len(problem_sections)} problem section(s)")
+
             problems = []
 
-            for prob_section in problem_sections:
+            for prob_index, prob_section in enumerate(problem_sections):
+                print(f"🔍 Processing problem {prob_index + 1}")
+                print(f"   Section preview: {prob_section[:100]}")
+
                 # Split by # to separate problem header from steps
                 parts = prob_section.split('#')
                 parts = [p.strip() for p in parts if p.strip()]
 
+                print(f"   Found {len(parts)} part(s) (1 header + {len(parts)-1} steps)")
+
                 if not parts:
+                    print(f"   ⚠️ No parts found, skipping")
                     continue
 
                 # First part is problem info
