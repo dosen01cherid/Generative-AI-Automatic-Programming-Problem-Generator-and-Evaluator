@@ -8735,7 +8735,11 @@ This demonstrates the complete format for creating your own problem sets!
       """Create UI for multi-mc (fill-blank with inline dropdown selectors)"""
       import re
 
+      window.console.log(f"🔧 Creating multi-mc UI for step {step_idx}")
+
       blanks = step_data.get("blanks", {})
+      window.console.log(f"📋 Blanks data: {blanks}")
+
       must_correct = step_data.get("requireCorrect", False)
 
       # Badge for must_correct
@@ -8782,10 +8786,13 @@ This demonstrates the complete format for creating your own problem sets!
 
       # Submit button
       submit_btn = step_div.querySelector(".submit-step")
+      window.console.log(f"📋 Submit button found: {submit_btn is not None}")
       if submit_btn:
           def submit_handler(e):
+              window.console.log(f"🖱️ Submit button clicked for step {step_idx}")
               self.submit_multi_mc(step_idx, step_data)
           submit_btn.addEventListener("click", create_proxy(submit_handler))
+          window.console.log(f"✅ Event handler attached to submit button")
 
       # Next button
       next_btn = step_div.querySelector(".next-step")
@@ -9801,6 +9808,8 @@ This demonstrates the complete format for creating your own problem sets!
 
     def submit_multi_mc(self, step_idx, step_data):
         """Submit multi-mc (fill-blank with dropdown answers)"""
+        window.console.log(f"🔧 submit_multi_mc called for step {step_idx}")
+
         current_prob_idx = self.current_problem_index
         if current_prob_idx is None:
             window.console.error("❌ No current problem index")
@@ -9808,7 +9817,10 @@ This demonstrates the complete format for creating your own problem sets!
 
         # Get all blanks
         blanks = step_data.get("blanks", {})
-        dropdowns = document.querySelectorAll(f".multi-mc-dropdown")
+        window.console.log(f"📋 Blanks: {blanks}")
+
+        dropdowns = document.querySelectorAll(".multi-mc-dropdown")
+        window.console.log(f"📋 Found {dropdowns.length} dropdowns")
 
         # Collect user answers
         user_answers = {}
