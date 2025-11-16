@@ -4970,34 +4970,73 @@ class Step:
             base_data["requireCorrect"] = require_correct  # ✅ NEW
 
         elif self.step_type == "fill-blank":
-            # Fill-in-the-blank is now text-only
-            correct_answers = []
-            window.console.log(f"📝 Collecting fill-blank answers for step {self.step_index}")
-            window.console.log(f"📝 self.blanks length: {len(self.blanks)}")
-
-            for i, blank in enumerate(self.blanks):
-                value = blank['text_input'].value.strip()
-                window.console.log(f"📝 Blank {i}: value = '{value}'")
-                if value:
-                    correct_answers.append({"value": value, "display": value})
-                    window.console.log(f"✅ Added answer: '{value}'")
-
-            window.console.log(f"📝 Total correct_answers collected: {len(correct_answers)}")
-
-            # ✅ Get requireCorrect checkbox value
+            # Get requireCorrect checkbox value
             require_checkbox = self.type_content_el.querySelector(".requireCorrectCheckbox")
             require_correct = require_checkbox.checked if require_checkbox else False
 
-            base_data.update({
-                "blank_config": {
-                    "content_type": "text",
-                    "position": "end"
-                },
-                "correct_answers": correct_answers,
-                "requireCorrect": require_correct
-            })
+            # Check mode
+            blank_mode = getattr(self, 'blank_mode', 'single')
+            window.console.log(f"📝 Saving fill-blank in {blank_mode} mode")
 
-            window.console.log(f"📦 Fill-blank data to save: blank_config={base_data.get('blank_config')}, correct_answers={correct_answers}, requireCorrect={require_correct}")
+            if blank_mode == "multi":
+                # Multi-blank mode: save as object with A, B, C keys
+                multi_blank_answers = {}
+                sections = self.type_content_el.querySelectorAll('[data-blank-label]')
+
+                for section in sections:
+                    label = section.getAttribute('data-blank-label')
+                    answers_for_blank = []
+
+                    # Get correct answer
+                    correct_input = section.querySelector('.blankCorrectAnswer')
+                    if correct_input and correct_input.value.strip():
+                        answers_for_blank.append({
+                            "value": correct_input.value.strip(),
+                            "display": correct_input.value.strip()
+                        })
+
+                    # Get alternatives
+                    alt_inputs = section.querySelectorAll('.altAnswer')
+                    for alt_input in alt_inputs:
+                        if alt_input.value.strip():
+                            answers_for_blank.append({
+                                "value": alt_input.value.strip(),
+                                "display": alt_input.value.strip()
+                            })
+
+                    if answers_for_blank:
+                        multi_blank_answers[label] = answers_for_blank
+
+                base_data.update({
+                    "blank_config": {
+                        "content_type": "text",
+                        "mode": "multi",
+                        "num_blanks": len(multi_blank_answers)
+                    },
+                    "correct_answers": multi_blank_answers,
+                    "requireCorrect": require_correct
+                })
+                window.console.log(f"📦 Multi-blank data saved: {len(multi_blank_answers)} blanks")
+            else:
+                # Single blank mode (backward compatible)
+                correct_answers = []
+                window.console.log(f"📝 self.blanks length: {len(self.blanks)}")
+
+                for i, blank in enumerate(self.blanks):
+                    value = blank['text_input'].value.strip()
+                    if value:
+                        correct_answers.append({"value": value, "display": value})
+
+                base_data.update({
+                    "blank_config": {
+                        "content_type": "text",
+                        "mode": "single",
+                        "position": "end"
+                    },
+                    "correct_answers": correct_answers,
+                    "requireCorrect": require_correct
+                })
+                window.console.log(f"📦 Single-blank data saved: {len(correct_answers)} answers")
 
         return base_data
         
@@ -5183,27 +5222,62 @@ class Step:
         elif step_type == "fill-blank":
             window.console.log(f"🔧 Loading fill-blank data for Step {self.step_index}")
 
+            # Store data for render to access
+            self._pending_data = data
+
             # Wait for UI to render
             def load_fill_blank_data():
-                # Load answers (text-only)
-                correct_answers = data.get("correct_answers", [])
-                window.console.log(f"📋 Found {len(correct_answers)} correct answers (text)")
+                blank_config = data.get("blank_config", {})
+                blank_mode = blank_config.get("mode", "single")
+                correct_answers = data.get("correct_answers")
 
-                # Clear default answer
-                container = self.type_content_el.querySelector(".answersContainer")
-                if container:
-                    container.innerHTML = ""
-                self.blanks = []
+                window.console.log(f"📋 Loading fill-blank in {blank_mode} mode")
 
-                # Add answer fields (text-only)
-                for ans_data in correct_answers:
-                    self._add_fill_blank_answer()
+                if blank_mode == "multi" and isinstance(correct_answers, dict):
+                    # Multi-blank mode: load labeled sections
+                    for label in sorted(correct_answers.keys()):
+                        section = self.type_content_el.querySelector(f'[data-blank-label="{label}"]')
+                        if not section:
+                            window.console.warn(f"⚠️ Section for blank {label} not found")
+                            continue
 
-                    if len(self.blanks) > 0:
-                        blank = self.blanks[-1]
-                        value = ans_data.get("value", "")
-                        blank['text_input'].value = value
-                        window.console.log(f"✓ Loaded text answer: {value}")
+                        answers_for_blank = correct_answers[label]
+                        if not answers_for_blank or len(answers_for_blank) == 0:
+                            continue
+
+                        # Load correct answer (first one)
+                        correct_input = section.querySelector('.blankCorrectAnswer')
+                        if correct_input and len(answers_for_blank) > 0:
+                            correct_input.value = answers_for_blank[0].get("value", "")
+                            window.console.log(f"✓ Loaded correct answer for {label}: {answers_for_blank[0].get('value')}")
+
+                        # Load alternatives (rest of answers)
+                        for i in range(1, len(answers_for_blank)):
+                            self._add_multi_blank_alternative(label)
+                            # Find the last added alternative input
+                            alt_inputs = section.querySelectorAll('.altAnswer')
+                            if alt_inputs and len(alt_inputs) > 0:
+                                last_alt = alt_inputs[len(alt_inputs) - 1]
+                                last_alt.value = answers_for_blank[i].get("value", "")
+                                window.console.log(f"✓ Loaded alternative for {label}: {answers_for_blank[i].get('value')}")
+                else:
+                    # Single blank mode (backward compatible)
+                    if isinstance(correct_answers, list):
+                        # Clear default answer
+                        container = self.type_content_el.querySelector(".answersContainer")
+                        if container:
+                            container.innerHTML = ""
+                        self.blanks = []
+
+                        # Add answer fields
+                        for ans_data in correct_answers:
+                            self._add_fill_blank_answer()
+
+                            if len(self.blanks) > 0:
+                                blank = self.blanks[-1]
+                                value = ans_data.get("value", "")
+                                blank['text_input'].value = value
+                                window.console.log(f"✓ Loaded text answer: {value}")
 
             window.setTimeout(create_proxy(load_fill_blank_data), 300)
 
