@@ -5086,6 +5086,7 @@ class Step:
                 window.setTimeout(create_proxy(restore_checkbox), 150)
 
         # Type-specific loading
+        window.console.log(f"🔀 About to check type-specific branches with step_type: '{step_type}' (type: {type(step_type)})")
         if step_type == "step-by-step":
             window.console.log(f"🔧 Loading step-by-step data for Step {self.step_index}")
             if hasattr(self, 'expr_mf') and self.expr_mf:
@@ -5299,6 +5300,9 @@ class Step:
                                 window.console.log(f"✓ Loaded text answer: {value}")
 
             window.setTimeout(create_proxy(load_fill_blank_data), 300)
+
+        else:
+            window.console.warn(f"⚠️ Unknown or unhandled step_type in load_data: '{step_type}'")
 
         window.console.log(f"✅ Step.load_data completed for Step {self.step_index}")
 
