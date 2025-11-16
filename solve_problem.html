@@ -3865,14 +3865,15 @@ class ScoreRecalculationTracker:
             elapsed = (datetime.datetime.now() - self.last_edit_time).total_seconds()
             remaining = max(0, int(5 * 60 - elapsed))
 
-            # Use unified timer message
-            self.app.show_unified_timer_message(remaining_seconds=remaining, context="in review mode")
+            # ✅ Only create unified timer message if one doesn't already exist
+            # The unified message has its own internal countdown, so we don't need to recreate it
+            review_section = document.querySelector("[id^='reviewSection_']")
+            existing_unified_msg = review_section.querySelector(".unified-timer-msg") if review_section else None
 
-            # Schedule next update
-            def update_countdown():
-                if len(self.first_time_edits_in_session) < 2:
-                    self.update_ui_message()
-            window.setTimeout(create_proxy(update_countdown), 1000)
+            if not existing_unified_msg:
+                # Create new unified timer message (it will handle its own countdown)
+                self.app.show_unified_timer_message(remaining_seconds=remaining, context="in review mode")
+            # else: message already exists with active countdown, don't create duplicate
 
 
 class KeyboardInputHandler:
@@ -4995,7 +4996,7 @@ class ProblemSolverApp:
             return
 
         # ✅ REMOVE ALL EXISTING TIMER MESSAGES to prevent duplicates
-        for class_name in [".score-deferred-msg", ".timer-restored-msg", "unified-timer-msg"]:
+        for class_name in [".score-deferred-msg", ".timer-restored-msg", ".unified-timer-msg"]:
             existing = review_section.querySelector(class_name)
             if existing:
                 existing.remove()
