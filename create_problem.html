@@ -4037,11 +4037,13 @@ class Step:
 
     def _render_fill_blank_ui(self):
         """Render fill-blank UI - supports single and multi-blank modes"""
-        # Detect mode from existing data if loading
-        blank_mode = "single"  # default
+        # Priority order: 1) existing blank_mode, 2) pending data, 3) default to single
+        blank_mode = getattr(self, 'blank_mode', 'single')
+
+        # If loading from import, use the mode from pending data
         if hasattr(self, '_pending_data') and self._pending_data:
             blank_config = self._pending_data.get('blank_config', {})
-            blank_mode = blank_config.get('mode', 'single')
+            blank_mode = blank_config.get('mode', blank_mode)
 
         self.blank_mode = blank_mode
         self.blanks = {} if blank_mode == "multi" else []
