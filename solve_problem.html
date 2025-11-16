@@ -8732,8 +8732,10 @@ This demonstrates the complete format for creating your own problem sets!
           next_btn.addEventListener("click", create_proxy(next_handler))
 
     def create_multi_mc_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
-      """Create UI for multi-mc (multiple MC-single sub-questions as dropdowns)"""
-      sub_questions = step_data.get("sub_questions", [])
+      """Create UI for multi-mc (fill-blank with inline dropdown selectors)"""
+      import re
+
+      blanks = step_data.get("blanks", {})
       must_correct = step_data.get("requireCorrect", False)
 
       # Badge for must_correct
@@ -8741,38 +8743,38 @@ This demonstrates the complete format for creating your own problem sets!
       if must_correct:
           must_correct_badge = "<span style='background:#fef3c7;color:#b45309;padding:4px 8px;border-radius:4px;font-size:12px;margin-left:8px;'>⚠️ Must be correct</span>"
 
-      # Build HTML for each sub-question
-      sub_questions_html = ""
-      for sq in sub_questions:
-          sq_index = sq.get("index", 1)
-          question_text = sq.get("question", "")
-          options = sq.get("options", [])
+      # Parse desc_html to find {blank} placeholders and replace with dropdowns
+      # Count blanks in description
+      blank_count = len(re.findall(r'\{blank\}', desc_html))
 
-          # Build options for dropdown
-          options_html = "<option value=''>-- Select an answer --</option>"
-          for opt in options:
-              label = opt.get("label", "")
-              text = opt.get("text", "")
-              options_html += f"<option value='{label}'>{label}. {text}</option>"
+      # Replace each {blank} with a dropdown
+      modified_desc = desc_html
+      blank_index = 0
+      blank_labels = sorted(blanks.keys())
 
-          sub_questions_html += f"""
-          <div style='margin-bottom:16px; padding:12px; border:2px solid #e6eef8; border-radius:8px; background:#f8fafc;'>
-            <div style='font-weight:600; margin-bottom:8px;'>{sq_index}. {question_text}</div>
-            <select class='multi-mc-select' data-sub-question='{sq_index}' style='width:100%; padding:8px; border:2px solid #cbd5e1; border-radius:6px; font-size:14px;'>
-              {options_html}
-            </select>
-          </div>
-          """
+      for i in range(blank_count):
+          if i < len(blank_labels):
+              label = blank_labels[i]
+              blank_data = blanks[label]
+              options = blank_data.get("options", [])
+
+              # Build dropdown HTML
+              options_html = "<option value=''>--</option>"
+              for opt in options:
+                  options_html += f"<option value='{opt}'>{opt}</option>"
+
+              dropdown_html = f"""<select class='multi-mc-dropdown' data-blank-label='{label}' style='padding:4px 8px; border:2px solid #0b6efd; border-radius:4px; font-size:14px; background:white;'>{options_html}</select>"""
+
+              # Replace first occurrence of {blank}
+              modified_desc = modified_desc.replace('{blank}', dropdown_html, 1)
 
       step_div.innerHTML = f"""
       <div style='font-weight:700;margin-bottom:8px;'>
           Step <span class='step-number-display'>{step_idx+1}</span> of {total_steps} {must_correct_badge}
       </div>
-      <div class='step-description'>{desc_html}</div>
-      <div style='margin-top:12px;'>
-        <div style='font-weight:700;margin-bottom:12px;'>Answer the following questions:</div>
-        {sub_questions_html}
-        <button class='btn submit-step' style='margin-top:12px;'>Submit Answers</button>
+      <div class='step-description' style='font-size:16px; line-height:1.8;'>{modified_desc}</div>
+      <div style='margin-top:20px;'>
+        <button class='btn submit-step'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
       <div class='step-feedback'></div>
@@ -9798,55 +9800,54 @@ This demonstrates the complete format for creating your own problem sets!
         self._check_problem_completion_and_show_next_step(step_idx)
 
     def submit_multi_mc(self, step_idx, step_data):
-        """Submit multi-mc (multiple MC-single sub-questions) answers"""
+        """Submit multi-mc (fill-blank with dropdown answers)"""
         current_prob_idx = self.current_problem_index
         if current_prob_idx is None:
             window.console.error("❌ No current problem index")
             return
 
-        # Get all sub-questions
-        sub_questions = step_data.get("sub_questions", [])
-        selects = document.querySelectorAll(f".multi-mc-select")
+        # Get all blanks
+        blanks = step_data.get("blanks", {})
+        dropdowns = document.querySelectorAll(f".multi-mc-dropdown")
 
         # Collect user answers
         user_answers = {}
         all_answered = True
-        for i in range(selects.length):
-            select = selects[i]
-            sq_index = int(select.getAttribute("data-sub-question"))
-            selected_value = select.value
+        for i in range(dropdowns.length):
+            dropdown = dropdowns[i]
+            label = dropdown.getAttribute("data-blank-label")
+            selected_value = dropdown.value
 
             if not selected_value:
                 all_answered = False
                 break
 
-            user_answers[sq_index] = selected_value
+            user_answers[label] = selected_value
 
-        # Check if all sub-questions are answered
-        if not all_answered or len(user_answers) < len(sub_questions):
-            window.console.warn("Not all sub-questions answered")
+        # Check if all blanks are filled
+        if not all_answered or len(user_answers) < len(blanks):
+            window.console.warn("Not all blanks answered")
 
             # Show warning
             feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ⚠️ Please answer all sub-questions
+                        ⚠️ Please fill in all blanks
                     </div>
                 """
             return
 
-        # Check correctness for each sub-question
+        # Check correctness for each blank
         all_correct = True
-        incorrect_sq = []
-        for sq in sub_questions:
-            sq_index = sq.get("index")
-            correct_answer = sq.get("correct_answer", "")
-            user_answer = user_answers.get(sq_index, "")
+        incorrect_blanks = []
+        for label in blanks.keys():
+            correct_answer = blanks[label].get("correct", "")
+            user_answer = user_answers.get(label, "")
 
             if user_answer != correct_answer:
                 all_correct = False
-                incorrect_sq.append(sq_index)
+                incorrect_blanks.append(label)
 
         is_correct = all_correct
         must_correct = step_data.get("requireCorrect", False)
@@ -9927,8 +9928,8 @@ This demonstrates the complete format for creating your own problem sets!
                     </div>
                 """
             else:
-                # Show which sub-questions were incorrect
-                incorrect_msg = f"Sub-question(s) {', '.join(map(str, incorrect_sq))} incorrect"
+                # Show which blanks were incorrect
+                incorrect_msg = f"Blank(s) {', '.join(incorrect_blanks)} incorrect"
                 feedback_div.innerHTML = f"""
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                         ❌ {incorrect_msg}
