@@ -2155,11 +2155,11 @@ class ProgressAnalyzer:
     # ============================================================
     def calculate_student_score(self, student_subs):
         """
-        Calculate student score based on ALL available steps in the problem set,
-        not just the steps in problems they attempted.
+        Calculate student score based on CORRECT steps, not just finalized.
+        Score = (correct steps / total steps) * 100
         """
-        # Get total finalized steps from attempted problems
-        finalized = sum(s.get("summary", {}).get("finalized_steps", 0) for s in student_subs)
+        # ✅ Get CORRECT steps (not finalized - finalized means submitted, correct means actually right)
+        correct_steps = sum(s.get("summary", {}).get("correct_steps", 0) for s in student_subs)
 
         # Try to get total steps from problem set metadata (if available)
         total_steps_in_set = None
@@ -2172,7 +2172,7 @@ class ProgressAnalyzer:
         # If problem set metadata is available, use it (NEW behavior)
         if total_steps_in_set is not None and total_steps_in_set > 0:
             try:
-                return round((finalized / total_steps_in_set) * 100, 2)
+                return round((correct_steps / total_steps_in_set) * 100, 2)
             except:
                 return 0.0
 
@@ -2182,7 +2182,7 @@ class ProgressAnalyzer:
             return 0.0
 
         try:
-            return round((finalized / total_attempted_steps) * 100, 2)
+            return round((correct_steps / total_attempted_steps) * 100, 2)
         except:
             return 0.0
 
