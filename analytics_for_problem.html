@@ -27,7 +27,7 @@ window.MathJax = {
     console.log('✅ Automatic version conflict detection and recovery enabled');
     console.log('✅ NEW: Browser Extension Auto-Inject - Real-time WhatsApp capture');
     console.log('✅ WhatsApp Integration - Manual import and extension support');
-    console.log('✅ Auto-finalize MC/TF/fill-blank questions when answered');
+    console.log('✅ Auto-finalize MC/TF/fill-blank/multi-mc questions when answered');
   </script>
 
   <!-- PyScript core -->
@@ -1948,11 +1948,12 @@ class ProgressAnalyzer:
 
                     # Special handling for non-math-expression types
                     step_type = s.get("step_type", "")
-                    if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
+                    if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank", "multi-mc"]:
                         # For these types, consider finalized if answered or correct
                         user_answers = s.get("user_answers", [])
                         is_correct = s.get("correct", False)
-                        has_answer = user_answers and len(user_answers) > 0
+                        # For multi-mc, user_answers is a dict; for others it's a list
+                        has_answer = user_answers and (len(user_answers) > 0 if isinstance(user_answers, (list, dict)) else False)
 
                         if is_correct or has_answer:
                             return True
@@ -1987,17 +1988,18 @@ class ProgressAnalyzer:
                     is_finalized = step_state.get("finalized", step_state.get("finished", False))
 
                     # ✅ SPECIAL HANDLING: For non-math-expression types, auto-finalize if answered
-                    # Non-math types (MC, T/F, fill-blank) are "done" once they submit an answer
+                    # Non-math types (MC, T/F, fill-blank, multi-mc) are "done" once they submit an answer
                     # Unlike math-expression which requires explicit finalization
                     step_type = step_state.get("step_type", "")
-                    if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank"]:
+                    if step_type in ["multiple-choice-single", "multiple-choice-multiple", "true-false", "fill-blank", "multi-mc"]:
                         # For these types, auto-finalize if:
                         # 1. Already marked as finished/finalized, OR
                         # 2. They answered correctly, OR
                         # 3. They have at least one answer (attempted the question)
                         user_answers = step_state.get("user_answers", [])
                         is_correct = step_state.get("correct", False)
-                        has_answer = user_answers and len(user_answers) > 0
+                        # For multi-mc, user_answers is a dict; for others it's a list
+                        has_answer = user_answers and (len(user_answers) > 0 if isinstance(user_answers, (list, dict)) else False)
 
                         if is_correct or has_answer:
                             is_finalized = True
@@ -2033,12 +2035,24 @@ class ProgressAnalyzer:
                                 "time_taken_seconds": attempt.get("time_taken_seconds", 0)
                             })
                     elif "user_answers" in step_state:
-                        # Desktop format with user_answers array
+                        # Desktop format with user_answers array or dict
                         user_answers = step_state.get("user_answers", [])
-                        window.console.log(f"      📝 Desktop format: {len(user_answers)} user answers")
 
+                        # ✅ SPECIAL HANDLING: For multi-mc, user_answers is a dict
+                        if step_type == "multi-mc" and user_answers:
+                            if isinstance(user_answers, dict):
+                                # Dictionary of {label: value} for multi-mc
+                                window.console.log(f"      📋 Multi-MC: treating {len(user_answers)} dropdown selections as 1 attempt")
+                                step_progress["attempts"].append({
+                                    "answer_latex": str(user_answers),  # Store all selections together
+                                    "expression": "",
+                                    "correct": step_state.get("correct", False),
+                                    "time_taken_seconds": 0
+                                })
+                            else:
+                                window.console.log(f"      ⚠️ Multi-MC has unexpected format: {type(user_answers)}")
                         # ✅ SPECIAL HANDLING: For MC-multiple, treat entire array as ONE attempt
-                        if step_type == "multiple-choice-multiple" and user_answers:
+                        elif step_type == "multiple-choice-multiple" and user_answers:
                             # All selected options in one submission = 1 attempt
                             window.console.log(f"      📋 MC-multiple: treating {len(user_answers)} selections as 1 attempt")
                             step_progress["attempts"].append({
@@ -2049,15 +2063,19 @@ class ProgressAnalyzer:
                             })
                         else:
                             # For other types, each user_answer is a separate attempt
-                            for att_idx, answer in enumerate(user_answers):
-                                # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
-                                is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
-                                step_progress["attempts"].append({
-                                    "answer_latex": answer if isinstance(answer, str) else str(answer),
-                                    "expression": "",
-                                    "correct": is_correct,
-                                    "time_taken_seconds": 0
-                                })
+                            if isinstance(user_answers, list):
+                                window.console.log(f"      📝 Desktop format: {len(user_answers)} user answers")
+                                for att_idx, answer in enumerate(user_answers):
+                                    # For desktop format, we only know the final answer is correct if step is correct and it's the last answer
+                                    is_correct = step_state.get("correct", False) and att_idx == len(user_answers) - 1
+                                    step_progress["attempts"].append({
+                                        "answer_latex": answer if isinstance(answer, str) else str(answer),
+                                        "expression": "",
+                                        "correct": is_correct,
+                                        "time_taken_seconds": 0
+                                    })
+                            else:
+                                window.console.log(f"      ⚠️ Unexpected user_answers format: {type(user_answers)}")
 
                     steps_progress.append(step_progress)
 
