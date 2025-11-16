@@ -3851,39 +3851,28 @@ class ScoreRecalculationTracker:
                 """
     
     def update_ui_message(self):
-        """Update the UI to show current status"""
+        """Update the UI to show current status - uses unified timer message"""
         import datetime
-        
-        count = len(self.edited_steps)
-        first_time_count = len(self.first_time_edits_in_session)
-        
-        msg_el = document.querySelector("#reviewScoreMessage")
-        if not msg_el:
-            return
-        
-        if self.last_edit_time:
-            elapsed = (datetime.datetime.now() - self.last_edit_time).total_seconds()
-            remaining = max(0, 5 * 60 - elapsed)
-            
-            if remaining > 60:
-                time_str = f"{int(remaining/60)}:{int(remaining%60):02d}"
-            else:
-                time_str = f"{int(remaining)} seconds"
-            
-            if first_time_count < 2:
-                msg_el.innerHTML = f"""
-                <div style='background:#fef3c7;color:#92400e;padding:12px;border-radius:6px;text-align:center;'>
-                    <div style='font-weight:600;margin-bottom:4px;'>📝 {first_time_count}/2 first-time edits made</div>
-                    <div style='font-size:14px;'>Edit another <strong>first-time</strong> step to update score immediately</div>
-                    <div style='font-size:13px;margin-top:4px;'>or wait {time_str} for automatic update</div>
-                    <div style='font-size:12px;margin-top:6px;color:#78350f;'>Total edits this session: {count} ({first_time_count} first-time, {count - first_time_count} re-edit)</div>
-                </div>
-                """
 
-                def update_countdown():
-                    if len(self.first_time_edits_in_session) < 2:
-                        self.update_ui_message()
-                window.setTimeout(create_proxy(update_countdown), 1000)
+        first_time_count = len(self.first_time_edits_in_session)
+
+        # Clear the old #reviewScoreMessage div since we're using unified display now
+        msg_el = document.querySelector("#reviewScoreMessage")
+        if msg_el:
+            msg_el.innerHTML = ""
+
+        if self.last_edit_time and first_time_count < 2:
+            elapsed = (datetime.datetime.now() - self.last_edit_time).total_seconds()
+            remaining = max(0, int(5 * 60 - elapsed))
+
+            # Use unified timer message
+            self.app.show_unified_timer_message(remaining_seconds=remaining, context="in review mode")
+
+            # Schedule next update
+            def update_countdown():
+                if len(self.first_time_edits_in_session) < 2:
+                    self.update_ui_message()
+            window.setTimeout(create_proxy(update_countdown), 1000)
 
 
 class KeyboardInputHandler:
@@ -4997,36 +4986,43 @@ class ProblemSolverApp:
         """Show a notification that the score was updated (deprecated - use show_notification)"""
         self.show_notification(message, "success")
 
-    def show_score_deferred_message(self, edited_count):
-        """Show a message that score display is deferred with live countdown"""
+    def show_unified_timer_message(self, remaining_seconds=None, context=""):
+        """Unified function to show timer/waiting period message - eliminates duplicates"""
         import js
-
-        needed = 2 - edited_count
 
         review_section = document.querySelector("[id^='reviewSection_']")
         if not review_section:
             return
 
-        existing_msg = review_section.querySelector(".score-deferred-msg")
-        if existing_msg:
-            existing_msg.remove()
+        # ✅ REMOVE ALL EXISTING TIMER MESSAGES to prevent duplicates
+        for class_name in [".score-deferred-msg", ".timer-restored-msg", "unified-timer-msg"]:
+            existing = review_section.querySelector(class_name)
+            if existing:
+                existing.remove()
 
-        # Calculate remaining time if timer is active
-        remaining_seconds = 300  # Default 5 minutes
-        if self.score_display_manager.get("last_edit_time"):
-            current_time = js.Date.now()
-            elapsed_ms = current_time - self.score_display_manager["last_edit_time"]
-            elapsed_seconds = elapsed_ms / 1000
-            remaining_seconds = max(0, int(300 - elapsed_seconds))
+        # Calculate remaining time if not provided
+        if remaining_seconds is None:
+            remaining_seconds = 300  # Default 5 minutes
+            if self.score_display_manager.get("last_edit_time"):
+                current_time = js.Date.now()
+                elapsed_ms = current_time - self.score_display_manager["last_edit_time"]
+                elapsed_seconds = elapsed_ms / 1000
+                remaining_seconds = max(0, int(300 - elapsed_seconds))
+
+        # Get edit count info
+        first_time_count = len(self.score_tracker.first_time_edits_in_session)
+        total_edits = len(self.score_tracker.edited_steps)
+        needed = max(0, 2 - first_time_count)
 
         # Format time string
         minutes = remaining_seconds // 60
         seconds = remaining_seconds % 60
         time_str = f"{minutes}:{seconds:02d}"
 
-        deferred_msg = document.createElement("div")
-        deferred_msg.className = "score-deferred-msg"
-        deferred_msg.style.cssText = """
+        # Create unified message
+        msg = document.createElement("div")
+        msg.className = "unified-timer-msg"
+        msg.style.cssText = """
             background: linear-gradient(135deg, #fef3c7, #fde68a);
             border: 2px solid #f59e0b;
             border-radius: 12px;
@@ -5034,48 +5030,57 @@ class ProblemSolverApp:
             margin: 16px 0;
         """
 
-        deferred_msg.innerHTML = f"""
+        context_text = f" ({context})" if context else ""
+
+        msg.innerHTML = f"""
             <div style="font-weight: 600; color: #92400e; margin-bottom: 8px;">
-                ⏱️ Waiting Period Active
+                ⏱️ Waiting Period Active{context_text}
+            </div>
+            <div style="font-size: 14px; color: #78350f; margin-bottom: 6px;">
+                <strong>{first_time_count}/2</strong> first-time edits made (Total: {total_edits} edits)
             </div>
             <div style="font-size: 14px; color: #78350f; margin-bottom: 8px;">
-                Score will display after editing <strong>{needed} more first-time step(s)</strong> or when timer completes
+                Score will update after <strong>{needed} more first-time edit(s)</strong> or when timer completes
             </div>
             <div style="font-size: 16px; color: #92400e; font-weight: 700; text-align: center; padding: 10px; background: rgba(255,255,255,0.6); border-radius: 8px;">
-                ⏳ Time remaining: <span class="countdown-timer-deferred" style="color: #d97706;">{time_str}</span>
+                ⏳ Time remaining: <span class="countdown-timer-unified" style="color: #d97706;">{time_str}</span>
             </div>
         """
 
-        review_section.insertBefore(deferred_msg, review_section.firstChild)
+        review_section.insertBefore(msg, review_section.firstChild)
 
         # Create countdown timer that updates every second
-        countdown_el = deferred_msg.querySelector(".countdown-timer-deferred")
-        remaining_time = [remaining_seconds]  # Use list to allow modification in closure
+        countdown_el = msg.querySelector(".countdown-timer-unified")
+        remaining_time = [remaining_seconds]
 
         def update_countdown():
             if remaining_time[0] > 0:
                 remaining_time[0] -= 1
-                minutes = remaining_time[0] // 60
-                seconds = remaining_time[0] % 60
+                mins = remaining_time[0] // 60
+                secs = remaining_time[0] % 60
 
                 if countdown_el:
-                    countdown_el.textContent = f"{minutes}:{seconds:02d}"
+                    countdown_el.textContent = f"{mins}:{secs:02d}"
 
-                # Continue countdown
                 window.setTimeout(create_proxy(update_countdown), 1000)
             else:
-                # Timer completed - remove message (score should be displayed by main timer)
-                window.console.log("⏰ Deferred countdown timer completed")
-                if deferred_msg and deferred_msg.parentNode:
-                    deferred_msg.style.opacity = "0"
-                    deferred_msg.style.transition = "opacity 0.5s"
+                # Timer completed - remove message
+                window.console.log("⏰ Unified timer completed")
+                if msg and msg.parentNode:
+                    msg.style.opacity = "0"
+                    msg.style.transition = "opacity 0.5s"
                     def final_remove():
-                        if deferred_msg and deferred_msg.parentNode:
-                            deferred_msg.remove()
+                        if msg and msg.parentNode:
+                            msg.remove()
                     window.setTimeout(create_proxy(final_remove), 500)
 
         # Start the countdown
         window.setTimeout(create_proxy(update_countdown), 1000)
+        window.console.log(f"✅ Unified timer message displayed: {remaining_seconds}s remaining{context_text}")
+
+    def show_score_deferred_message(self, edited_count):
+        """Legacy wrapper - calls unified function"""
+        self.show_unified_timer_message(context="after edit")
 
     def show_edit_success_message(self, container):
         """Show a success message after editing"""
@@ -8108,98 +8113,9 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.error(traceback.format_exc())
 
     def show_pending_timer_message_after_load(self, remaining_minutes):
-        """Show UI message about pending timer after app load/refresh with live countdown"""
-        try:
-            import js
-
-            # Get first-time edits count
-            first_time_count = len(self.score_tracker.first_time_edits_in_session)
-            total_edits = len(self.score_tracker.edited_steps)
-            needed = 2 - first_time_count
-
-            # Calculate remaining time in seconds
-            remaining_seconds = int(remaining_minutes * 60)
-
-            window.console.log(f"📋 Showing pending timer message with countdown: {first_time_count}/2 first-time edits, {remaining_seconds}s remaining")
-
-            # Try to find review section to display message
-            review_section = document.querySelector("[id^='reviewSection_']")
-            if review_section:
-                existing_msg = review_section.querySelector(".timer-restored-msg")
-                if existing_msg:
-                    existing_msg.remove()
-
-                msg = document.createElement("div")
-                msg.className = "timer-restored-msg"
-                msg.style.cssText = """
-                    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-                    border: 2px solid #3b82f6;
-                    border-radius: 12px;
-                    padding: 16px 20px;
-                    margin: 16px 0;
-                    animation: fadeIn 0.3s ease;
-                """
-
-                # Format initial time string
-                minutes = remaining_seconds // 60
-                seconds = remaining_seconds % 60
-                time_str = f"{minutes}:{seconds:02d}"
-
-                msg.innerHTML = f"""
-                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 8px;">
-                        ⏱️ Waiting Period Active (Restored from Previous Session)
-                    </div>
-                    <div style="font-size: 14px; color: #1e3a8a; margin-bottom: 6px;">
-                        <strong>{first_time_count}/2</strong> first-time edits made
-                        (Total: {total_edits} edits this session)
-                    </div>
-                    <div style="font-size: 14px; color: #1e3a8a; margin-bottom: 8px;">
-                        Score will update after <strong>{needed} more first-time edit(s)</strong> or when timer completes
-                    </div>
-                    <div style="font-size: 18px; color: #1e40af; font-weight: 700; text-align: center; padding: 12px; background: rgba(255,255,255,0.7); border-radius: 8px;">
-                        ⏳ Time remaining: <span class="countdown-timer" style="color: #2563eb;">{time_str}</span>
-                    </div>
-                """
-
-                review_section.insertBefore(msg, review_section.firstChild)
-
-                # Create countdown timer that updates every second
-                countdown_el = msg.querySelector(".countdown-timer")
-                remaining_time = [remaining_seconds]  # Use list to allow modification in closure
-
-                def update_countdown():
-                    if remaining_time[0] > 0:
-                        remaining_time[0] -= 1
-                        minutes = remaining_time[0] // 60
-                        seconds = remaining_time[0] % 60
-
-                        if countdown_el:
-                            countdown_el.textContent = f"{minutes}:{seconds:02d}"
-
-                        # Continue countdown
-                        window.setTimeout(create_proxy(update_countdown), 1000)
-                    else:
-                        # Timer completed - remove message
-                        window.console.log("⏰ Countdown timer completed")
-                        if msg and msg.parentNode:
-                            msg.style.opacity = "0"
-                            msg.style.transition = "opacity 0.5s"
-                            def final_remove():
-                                if msg and msg.parentNode:
-                                    msg.remove()
-                            window.setTimeout(create_proxy(final_remove), 500)
-
-                # Start the countdown
-                window.setTimeout(create_proxy(update_countdown), 1000)
-
-                window.console.log("✅ Timer restored message with countdown displayed")
-            else:
-                window.console.log("ℹ️ Review section not found - message not displayed")
-
-        except Exception as e:
-            window.console.error(f"⚠️ Error showing timer message: {e}")
-            import traceback
-            window.console.error(traceback.format_exc())
+        """Legacy wrapper - calls unified timer message function"""
+        remaining_seconds = int(remaining_minutes * 60)
+        self.show_unified_timer_message(remaining_seconds=remaining_seconds, context="restored from previous session")
 
     def show_score_updated_after_load_banner(self, percentage, elapsed_minutes):
         """Show banner message when score was updated after 5+ minutes on load"""
