@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 09: Language Modeling (Statistical NLP)</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .slide:first-child {
+            margin-top: 40px;
+        }
+
+        .slide:last-child {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #764ba2;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.4em;
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-weight: 500;
+        }
+
+        p, li {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .content-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .formula-box {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .important-box {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        ul, ol {
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1.1em;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .plot-container {
+            width: 100%;
+            height: 500px;
+            margin: 30px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 1em;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide">
+    <h1>Session 09</h1>
+    <h2>Language Modeling (Statistical NLP)</h2>
+    <p class="subtitle">N-gram Models, Perplexity, dan Likelihood</p>
+    <div style="margin-top: 40px;">
+        <span class="badge">Natural Language Processing</span>
+        <span class="badge">Semester 6</span>
+        <span class="badge">Week 9</span>
+    </div>
+    <div class="footer">
+        Universitas Mercu Buana<br>
+        Program Studi Teknik Informatika
+    </div>
+</div>
+
+<!-- Slide 2: Learning Objectives -->
+<div class="slide">
+    <h2>🎯 Capaian Pembelajaran</h2>
+    <div class="content-box">
+        <h3>Sub-CPMK Week 9:</h3>
+        <p>Mahasiswa mampu membangun model bahasa berbasis N-gram dan menghitung metrik evaluasi (perplexity, likelihood)</p>
+    </div>
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>✅ Kemampuan yang Dikuasai:</h4>
+            <ul>
+                <li>Membangun model N-gram dari teks sederhana</li>
+                <li>Menghitung perplexity dari model bahasa</li>
+                <li>Mengevaluasi kualitas language model</li>
+            </ul>
+        </div>
+        <div class="content-box">
+            <h4>📚 Topik Pembahasan:</h4>
+            <ul>
+                <li>N-gram Models (Unigram, Bigram, Trigram)</li>
+                <li>Probability Estimation</li>
+                <li>Perplexity</li>
+                <li>Likelihood</li>
+                <li>Smoothing Techniques</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Introduction to Language Modeling -->
+<div class="slide">
+    <h2>📖 Apa itu Language Modeling?</h2>
+    <div class="content-box">
+        <h3>Definisi</h3>
+        <p><strong>Language Model</strong> adalah model probabilistik yang memprediksi kata berikutnya dalam sebuah sequence berdasarkan kata-kata sebelumnya.</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh:</h4>
+        <p>Diberikan kalimat: <em>"Saya suka makan ___"</em></p>
+        <p>Language model akan menghitung probabilitas untuk kata berikutnya:</p>
+        <ul>
+            <li>P("nasi" | "Saya suka makan") = 0.4</li>
+            <li>P("mie" | "Saya suka makan") = 0.3</li>
+            <li>P("roti" | "Saya suka makan") = 0.2</li>
+            <li>P("mobil" | "Saya suka makan") = 0.001</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <h4>🎯 Aplikasi Language Model:</h4>
+        <ul>
+            <li><strong>Speech Recognition</strong>: Memilih kata yang paling mungkin dari suara yang didengar</li>
+            <li><strong>Machine Translation</strong>: Memilih terjemahan yang paling natural</li>
+            <li><strong>Text Generation</strong>: Menghasilkan teks yang koheren</li>
+            <li><strong>Spelling Correction</strong>: Memperbaiki typo berdasarkan konteks</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 4: N-gram Models Concept -->
+<div class="slide">
+    <h2>🔢 N-gram Models</h2>
+    <div class="content-box">
+        <h3>Konsep Dasar</h3>
+        <p>N-gram adalah sequence dari N kata yang berurutan. Model N-gram memprediksi kata berikutnya berdasarkan N-1 kata sebelumnya.</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Jenis N-gram</th>
+                <th>N</th>
+                <th>Konteks</th>
+                <th>Contoh</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Unigram</strong></td>
+                <td>1</td>
+                <td>Tidak ada konteks</td>
+                <td>P("makan")</td>
+            </tr>
+            <tr>
+                <td><strong>Bigram</strong></td>
+                <td>2</td>
+                <td>1 kata sebelumnya</td>
+                <td>P("makan" | "suka")</td>
+            </tr>
+            <tr>
+                <td><strong>Trigram</strong></td>
+                <td>3</td>
+                <td>2 kata sebelumnya</td>
+                <td>P("makan" | "saya", "suka")</td>
+            </tr>
+            <tr>
+                <td><strong>4-gram</strong></td>
+                <td>4</td>
+                <td>3 kata sebelumnya</td>
+                <td>P("makan" | "hari", "ini", "saya")</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="formula-box">
+        <h4>Formula Umum N-gram:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[P(w_n | w_1, w_2, ..., w_{n-1}) \approx P(w_n | w_{n-N+1}, ..., w_{n-1})\]
+        </p>
+        <p>Probabilitas kata ke-n hanya bergantung pada N-1 kata sebelumnya</p>
+    </div>
+</div>
+
+<!-- Slide 5: Unigram Model -->
+<div class="slide">
+    <h2>1️⃣ Unigram Model</h2>
+    <div class="content-box">
+        <h3>Model Paling Sederhana</h3>
+        <p>Unigram model mengasumsikan setiap kata <strong>independen</strong> dari kata lainnya.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Unigram:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[P(w_1, w_2, ..., w_n) = \prod_{i=1}^{n} P(w_i)\]
+        </p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[P(w_i) = \frac{\text{Count}(w_i)}{\text{Total kata dalam corpus}}\]
+        </p>
+    </div>
+
+    <div class="example-box">
+        <h4>📝 Contoh Perhitungan:</h4>
+        <p><strong>Corpus:</strong> "saya suka makan nasi. saya suka makan mie. saya suka tidur."</p>
+        <p><strong>Total kata:</strong> 12 kata</p>
+        <table>
+            <tr>
+                <th>Kata</th>
+                <th>Count</th>
+                <th>Probabilitas</th>
+            </tr>
+            <tr>
+                <td>saya</td>
+                <td>3</td>
+                <td>3/12 = 0.25</td>
+            </tr>
+            <tr>
+                <td>suka</td>
+                <td>3</td>
+                <td>3/12 = 0.25</td>
+            </tr>
+            <tr>
+                <td>makan</td>
+                <td>2</td>
+                <td>2/12 = 0.167</td>
+            </tr>
+            <tr>
+                <td>nasi</td>
+                <td>1</td>
+                <td>1/12 = 0.083</td>
+            </tr>
+        </table>
+        <p><strong>P("saya suka makan") = P("saya") × P("suka") × P("makan")</strong></p>
+        <p>= 0.25 × 0.25 × 0.167 = <span class="highlight">0.0104</span></p>
+    </div>
+</div>
+
+<!-- Slide 6: Bigram Model -->
+<div class="slide">
+    <h2>2️⃣ Bigram Model</h2>
+    <div class="content-box">
+        <h3>Markov Assumption</h3>
+        <p>Bigram model menggunakan <strong>Markov assumption</strong>: probabilitas kata saat ini hanya bergantung pada <span class="highlight">1 kata sebelumnya</span>.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Bigram:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[P(w_1, w_2, ..., w_n) = \prod_{i=1}^{n} P(w_i | w_{i-1})\]
+        </p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[P(w_i | w_{i-1}) = \frac{\text{Count}(w_{i-1}, w_i)}{\text{Count}(w_{i-1})}\]
+        </p>
+    </div>
+
+    <div class="example-box">
+        <h4>📝 Contoh Perhitungan Bigram:</h4>
+        <p><strong>Corpus:</strong> "saya suka makan. saya suka tidur. saya makan nasi."</p>
+        <table>
+            <tr>
+                <th>Bigram</th>
+                <th>Count</th>
+                <th>Conditional Probability</th>
+            </tr>
+            <tr>
+                <td>"saya suka"</td>
+                <td>2</td>
+                <td>P("suka"|"saya") = 2/3 = 0.667</td>
+            </tr>
+            <tr>
+                <td>"saya makan"</td>
+                <td>1</td>
+                <td>P("makan"|"saya") = 1/3 = 0.333</td>
+            </tr>
+            <tr>
+                <td>"suka makan"</td>
+                <td>1</td>
+                <td>P("makan"|"suka") = 1/2 = 0.5</td>
+            </tr>
+            <tr>
+                <td>"suka tidur"</td>
+                <td>1</td>
+                <td>P("tidur"|"suka") = 1/2 = 0.5</td>
+            </tr>
+        </table>
+        <p><strong>P("saya suka makan") = P("saya") × P("suka"|"saya") × P("makan"|"suka")</strong></p>
+        <p>= 0.3 × 0.667 × 0.5 = <span class="highlight">0.1</span></p>
+    </div>
+</div>
+
+<!-- Slide 7: Trigram Model -->
+<div class="slide">
+    <h2>3️⃣ Trigram Model</h2>
+    <div class="content-box">
+        <h3>Lebih Banyak Konteks</h3>
+        <p>Trigram model mempertimbangkan <span class="highlight">2 kata sebelumnya</span>, memberikan konteks yang lebih kaya.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Trigram:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[P(w_1, w_2, ..., w_n) = \prod_{i=1}^{n} P(w_i | w_{i-2}, w_{i-1})\]
+        </p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[P(w_i | w_{i-2}, w_{i-1}) = \frac{\text{Count}(w_{i-2}, w_{i-1}, w_i)}{\text{Count}(w_{i-2}, w_{i-1})}\]
+        </p>
+    </div>
+
+    <div class="important-box">
+        <h4>⚖️ Trade-off N-gram:</h4>
+        <table>
+            <tr>
+                <th>Aspek</th>
+                <th>N kecil (Unigram, Bigram)</th>
+                <th>N besar (Trigram, 4-gram)</th>
+            </tr>
+            <tr>
+                <td><strong>Konteks</strong></td>
+                <td>❌ Sedikit</td>
+                <td>✅ Banyak</td>
+            </tr>
+            <tr>
+                <td><strong>Data yang Dibutuhkan</strong></td>
+                <td>✅ Sedikit</td>
+                <td>❌ Banyak</td>
+            </tr>
+            <tr>
+                <td><strong>Sparsity Problem</strong></td>
+                <td>✅ Rendah</td>
+                <td>❌ Tinggi</td>
+            </tr>
+            <tr>
+                <td><strong>Akurasi</strong></td>
+                <td>❌ Lebih rendah</td>
+                <td>✅ Lebih tinggi (jika data cukup)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 8: Probability Calculation Example -->
+<div class="slide">
+    <h2>🧮 Contoh Lengkap: Membangun Bigram Model</h2>
+    <div class="example-box">
+        <h3>Step 1: Corpus</h3>
+        <div class="code-block">
+corpus = [
+    "I love NLP",
+    "I love machine learning",
+    "NLP is amazing"
+]
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h3>Step 2: Hitung Frequency Count</h3>
+        <table>
+            <tr>
+                <th>Bigram</th>
+                <th>Count</th>
+            </tr>
+            <tr><td>&lt;s&gt; I</td><td>2</td></tr>
+            <tr><td>I love</td><td>2</td></tr>
+            <tr><td>love NLP</td><td>1</td></tr>
+            <tr><td>love machine</td><td>1</td></tr>
+            <tr><td>machine learning</td><td>1</td></tr>
+            <tr><td>&lt;s&gt; NLP</td><td>1</td></tr>
+            <tr><td>NLP is</td><td>1</td></tr>
+            <tr><td>is amazing</td><td>1</td></tr>
+        </table>
+        <p><small>&lt;s&gt; = start of sentence, &lt;/s&gt; = end of sentence</small></p>
+    </div>
+
+    <div class="example-box">
+        <h3>Step 3: Hitung Probabilitas</h3>
+        <p>P("love" | "I") = Count("I love") / Count("I") = 2/2 = <strong>1.0</strong></p>
+        <p>P("NLP" | "love") = Count("love NLP") / Count("love") = 1/2 = <strong>0.5</strong></p>
+        <p>P("machine" | "love") = Count("love machine") / Count("love") = 1/2 = <strong>0.5</strong></p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Probabilitas Kalimat "I love NLP":</h4>
+        <p style="font-size: 1.3em;">
+            \[P(\text{"I love NLP"}) = P(\text{"I"}|\langle s\rangle) \times P(\text{"love"}|\text{"I"}) \times P(\text{"NLP"}|\text{"love"})\]
+        </p>
+        <p style="font-size: 1.5em; margin-top: 15px;">
+            = 1.0 × 1.0 × 0.5 = <span class="highlight">0.5</span>
+        </p>
+    </div>
+</div>
+
+<!-- Slide 9: Perplexity Concept -->
+<div class="slide">
+    <h2>📊 Perplexity</h2>
+    <div class="content-box">
+        <h3>Apa itu Perplexity?</h3>
+        <p><strong>Perplexity</strong> adalah metrik untuk mengukur <span class="highlight">seberapa baik</span> sebuah language model memprediksi test set.</p>
+        <p>Perplexity yang <strong>lebih rendah</strong> = model yang <strong>lebih baik</strong></p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Perplexity:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[PP(W) = P(w_1, w_2, ..., w_N)^{-\frac{1}{N}}\]
+        </p>
+        <p>Di mana W = sequence dari N kata</p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[PP(W) = \sqrt[N]{\frac{1}{P(w_1, w_2, ..., w_N)}}\]
+        </p>
+        <p>Untuk bigram model:</p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[PP(W) = \sqrt[N]{\prod_{i=1}^{N} \frac{1}{P(w_i | w_{i-1})}}\]
+        </p>
+    </div>
+
+    <div class="important-box">
+        <h4>💡 Interpretasi Perplexity:</h4>
+        <p>Perplexity dapat diinterpretasikan sebagai <strong>"berapa banyak pilihan kata yang setara"</strong> yang dimiliki model pada setiap posisi.</p>
+        <ul>
+            <li>Perplexity = 50 ➔ Model rata-rata memiliki 50 pilihan kata yang sama-sama mungkin</li>
+            <li>Perplexity = 10 ➔ Model lebih yakin, hanya ~10 pilihan setara</li>
+            <li>Perplexity = 1 ➔ Model sempurna, selalu tahu kata berikutnya</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 10: Perplexity Calculation Example -->
+<div class="slide">
+    <h2>🧮 Contoh Perhitungan Perplexity</h2>
+    <div class="example-box">
+        <h3>Scenario:</h3>
+        <p><strong>Test sentence:</strong> "I love NLP"</p>
+        <p><strong>N = 3 kata</strong></p>
+        <p>Dari bigram model sebelumnya:</p>
+        <ul>
+            <li>P("I" | &lt;s&gt;) = 1.0</li>
+            <li>P("love" | "I") = 1.0</li>
+            <li>P("NLP" | "love") = 0.5</li>
+        </ul>
+    </div>
+
+    <div class="formula-box">
+        <h4>Step 1: Hitung Probabilitas Total</h4>
+        <p style="font-size: 1.3em;">
+            \[P(\text{"I love NLP"}) = 1.0 \times 1.0 \times 0.5 = 0.5\]
+        </p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Step 2: Hitung Perplexity</h4>
+        <p style="font-size: 1.3em;">
+            \[PP = (0.5)^{-\frac{1}{3}} = \frac{1}{0.5^{1/3}} = \frac{1}{0.794} \approx 1.26\]
+        </p>
+    </div>
+
+    <div class="content-box">
+        <h4>✅ Interpretasi:</h4>
+        <p>Perplexity = <span class="highlight">1.26</span> menunjukkan bahwa model cukup yakin dalam prediksinya. Pada setiap posisi, model rata-rata memiliki sekitar 1.26 pilihan kata yang setara.</p>
+    </div>
+
+    <div class="important-box">
+        <h4>📈 Perplexity untuk Model yang Berbeda:</h4>
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>Typical Perplexity</th>
+            </tr>
+            <tr>
+                <td>Trigram model (corpus kecil)</td>
+                <td>50-200</td>
+            </tr>
+            <tr>
+                <td>Trigram model (corpus besar)</td>
+                <td>20-100</td>
+            </tr>
+            <tr>
+                <td>Neural language model</td>
+                <td>10-50</td>
+            </tr>
+            <tr>
+                <td>Transformer-based model</td>
+                <td>5-30</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 11: Likelihood -->
+<div class="slide">
+    <h2>📈 Likelihood</h2>
+    <div class="content-box">
+        <h3>Apa itu Likelihood?</h3>
+        <p><strong>Likelihood</strong> adalah probabilitas data (corpus) yang diamati, diberikan model tertentu.</p>
+        <p>Likelihood yang <strong>lebih tinggi</strong> = model yang <strong>lebih baik</strong> fit dengan data</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Likelihood:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[L(\theta) = P(D | \theta)\]
+        </p>
+        <p>Di mana:</p>
+        <ul style="text-align: left; margin-left: 40px;">
+            <li>θ = parameter model (probabilitas N-gram)</li>
+            <li>D = data (corpus)</li>
+        </ul>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            Untuk bigram: \[L = \prod_{i=1}^{N} P(w_i | w_{i-1})\]
+        </p>
+    </div>
+
+    <div class="content-box">
+        <h3>Log-Likelihood</h3>
+        <p>Dalam praktik, kita menggunakan <strong>log-likelihood</strong> karena:</p>
+        <ul>
+            <li>Menghindari <strong>numerical underflow</strong> (probabilitas sangat kecil)</li>
+            <li>Mengubah perkalian menjadi penjumlahan (lebih efisien)</li>
+        </ul>
+    </div>
+
+    <div class="formula-box">
+        <h4>Log-Likelihood:</h4>
+        <p style="font-size: 1.5em; margin: 20px 0;">
+            \[\log L = \sum_{i=1}^{N} \log P(w_i | w_{i-1})\]
+        </p>
+    </div>
+
+    <div class="example-box">
+        <h4>Hubungan Perplexity dan Log-Likelihood:</h4>
+        <p style="font-size: 1.2em;">
+            \[PP = 2^{-\frac{1}{N} \log_2 L}\]
+        </p>
+        <p>Perplexity adalah <strong>exponential</strong> dari <strong>negative average log-likelihood</strong></p>
+    </div>
+</div>
+
+<!-- Slide 12: Sparsity Problem -->
+<div class="slide">
+    <h2>⚠️ Sparsity Problem</h2>
+    <div class="content-box">
+        <h3>Masalah Utama N-gram:</h3>
+        <p>Banyak N-gram yang valid <strong>tidak pernah muncul</strong> di training corpus, sehingga memiliki probabilitas <strong>0</strong>.</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Masalah:</h4>
+        <p><strong>Training:</strong> "I love NLP. I love machine learning."</p>
+        <p><strong>Test:</strong> "I love statistics."</p>
+        <p>Bigram <strong>"love statistics"</strong> tidak pernah muncul di training ➔ P("statistics" | "love") = <strong>0</strong></p>
+        <p>Akibatnya: P("I love statistics") = P("I"|&lt;s&gt;) × P("love"|"I") × P("statistics"|"love") = 1 × 1 × <strong>0</strong> = <strong>0</strong></p>
+        <p style="color: red; font-weight: bold;">➔ Perplexity = ∞ (model gagal total!)</p>
+    </div>
+
+    <div class="important-box">
+        <h4>💡 Solusi: Smoothing</h4>
+        <p>Teknik untuk memberikan probabilitas non-zero pada N-gram yang tidak pernah terlihat:</p>
+        <ol>
+            <li><strong>Add-One (Laplace) Smoothing</strong></li>
+            <li><strong>Add-k Smoothing</strong></li>
+            <li><strong>Interpolation</strong></li>
+            <li><strong>Backoff</strong></li>
+            <li><strong>Kneser-Ney Smoothing</strong> (state-of-the-art)</li>
+        </ol>
+    </div>
+</div>
+
+<!-- Slide 13: Laplace Smoothing -->
+<div class="slide">
+    <h2>🔧 Laplace (Add-One) Smoothing</h2>
+    <div class="content-box">
+        <h3>Konsep</h3>
+        <p>Tambahkan <strong>1</strong> ke setiap count, seolah-olah setiap N-gram muncul setidaknya 1 kali.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Tanpa Smoothing:</h4>
+        <p style="font-size: 1.3em;">
+            \[P(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i)}{C(w_{i-1})}\]
+        </p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Dengan Laplace Smoothing:</h4>
+        <p style="font-size: 1.3em;">
+            \[P_{\text{Laplace}}(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i) + 1}{C(w_{i-1}) + V}\]
+        </p>
+        <p>Di mana V = ukuran vocabulary (jumlah kata unik)</p>
+    </div>
+
+    <div class="example-box">
+        <h4>📝 Contoh:</h4>
+        <p><strong>Corpus:</strong> "I love NLP. I love ML."</p>
+        <p>Vocabulary = {I, love, NLP, ML} ➔ V = 4</p>
+        <p>Count("I") = 2, Count("I love") = 2</p>
+
+        <p><strong>Tanpa smoothing:</strong></p>
+        <p>P("love" | "I") = 2/2 = 1.0</p>
+        <p>P("hate" | "I") = 0/2 = <strong>0</strong> ❌</p>
+
+        <p><strong>Dengan Laplace smoothing:</strong></p>
+        <p>P("love" | "I") = (2+1)/(2+4) = 3/6 = 0.5</p>
+        <p>P("hate" | "I") = (0+1)/(2+4) = 1/6 = <strong>0.167</strong> ✅</p>
+    </div>
+
+    <div class="important-box">
+        <h4>⚠️ Kekurangan Laplace Smoothing:</h4>
+        <p>Memberikan terlalu banyak probabilitas pada N-gram yang tidak pernah terlihat, terutama untuk vocabulary besar.</p>
+    </div>
+</div>
+
+<!-- Slide 14: Interpolation -->
+<div class="slide">
+    <h2>🔧 Interpolation Smoothing</h2>
+    <div class="content-box">
+        <h3>Ide Utama</h3>
+        <p>Kombinasikan probabilitas dari <strong>berbagai order N-gram</strong> (unigram, bigram, trigram) dengan bobot tertentu.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Formula Interpolation untuk Trigram:</h4>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[\hat{P}(w_i | w_{i-2}, w_{i-1}) = \lambda_3 P(w_i | w_{i-2}, w_{i-1})\]
+            \[+ \lambda_2 P(w_i | w_{i-1})\]
+            \[+ \lambda_1 P(w_i)\]
+        </p>
+        <p>dengan \(\lambda_1 + \lambda_2 + \lambda_3 = 1\)</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh dengan λ₁=0.1, λ₂=0.3, λ₃=0.6:</h4>
+        <p>Jika:</p>
+        <ul>
+            <li>P("nasi" | "suka", "makan") = 0.7 (trigram)</li>
+            <li>P("nasi" | "makan") = 0.5 (bigram)</li>
+            <li>P("nasi") = 0.02 (unigram)</li>
+        </ul>
+        <p>Maka:</p>
+        <p>\(\hat{P}(\text{"nasi"} | \text{"suka", "makan"}) = 0.6(0.7) + 0.3(0.5) + 0.1(0.02)\)</p>
+        <p>= 0.42 + 0.15 + 0.002 = <strong>0.572</strong></p>
+    </div>
+
+    <div class="content-box">
+        <h4>✅ Keuntungan:</h4>
+        <ul>
+            <li>Lebih robust terhadap data sparsity</li>
+            <li>Menggunakan informasi dari berbagai level N-gram</li>
+            <li>Tidak ada N-gram dengan probabilitas 0</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 15: Practical Implementation -->
+<div class="slide">
+    <h2>💻 Implementasi Praktis</h2>
+    <div class="code-block">
+import nltk
+from collections import defaultdict, Counter
+
+class BigramModel:
+    def __init__(self):
+        self.bigram_counts = defaultdict(Counter)
+        self.unigram_counts = Counter()
+        self.vocabulary = set()
+
+    def train(self, corpus):
+        """Train bigram model from corpus"""
+        for sentence in corpus:
+            words = ['&lt;s&gt;'] + sentence.split() + ['&lt;/s&gt;']
+
+            # Count unigrams
+            for word in words:
+                self.unigram_counts[word] += 1
+                self.vocabulary.add(word)
+
+            # Count bigrams
+            for w1, w2 in zip(words[:-1], words[1:]):
+                self.bigram_counts[w1][w2] += 1
+
+    def probability(self, w1, w2, smoothing='none', k=1):
+        """Calculate P(w2 | w1) with optional smoothing"""
+        bigram_count = self.bigram_counts[w1][w2]
+        unigram_count = self.unigram_counts[w1]
+        V = len(self.vocabulary)
+
+        if smoothing == 'laplace':
+            return (bigram_count + 1) / (unigram_count + V)
+        elif smoothing == 'add-k':
+            return (bigram_count + k) / (unigram_count + k * V)
+        else:
+            return bigram_count / unigram_count if unigram_count > 0 else 0
+
+    def sentence_probability(self, sentence, smoothing='none'):
+        """Calculate probability of entire sentence"""
+        words = ['&lt;s&gt;'] + sentence.split() + ['&lt;/s&gt;']
+        prob = 1.0
+
+        for w1, w2 in zip(words[:-1], words[1:]):
+            p = self.probability(w1, w2, smoothing)
+            prob *= p
+
+        return prob
+
+    def perplexity(self, test_sentences, smoothing='none'):
+        """Calculate perplexity on test set"""
+        total_log_prob = 0
+        total_words = 0
+
+        for sentence in test_sentences:
+            words = ['&lt;s&gt;'] + sentence.split() + ['&lt;/s&gt;']
+
+            for w1, w2 in zip(words[:-1], words[1:]):
+                p = self.probability(w1, w2, smoothing)
+                if p > 0:
+                    total_log_prob += -math.log2(p)
+                else:
+                    return float('inf')  # Infinite perplexity
+
+            total_words += len(words) - 1
+
+        return 2 ** (total_log_prob / total_words)
+
+# Example usage
+model = BigramModel()
+corpus = [
+    "I love NLP",
+    "I love machine learning",
+    "NLP is amazing"
+]
+model.train(corpus)
+
+# Calculate probability
+p = model.probability("I", "love", smoothing='laplace')
+print(f"P(love|I) = {p:.4f}")
+
+# Calculate perplexity
+test = ["I love NLP"]
+pp = model.perplexity(test, smoothing='laplace')
+print(f"Perplexity = {pp:.2f}")
+    </div>
+</div>
+
+<!-- Slide 16: Evaluation Metrics Visualization -->
+<div class="slide">
+    <h2>📊 Visualisasi: Perplexity vs N-gram Order</h2>
+    <div id="perplexityPlot" class="plot-container"></div>
+    <div class="content-box" style="margin-top: 20px;">
+        <h4>Interpretasi:</h4>
+        <ul>
+            <li><strong>Perplexity menurun</strong> dengan meningkatnya N (lebih banyak konteks)</li>
+            <li><strong>Diminishing returns</strong>: improvement berkurang untuk N yang sangat besar</li>
+            <li><strong>Data requirement</strong> meningkat eksponensial dengan N</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 17: Comparison Table -->
+<div class="slide">
+    <h2>📋 Ringkasan: Perbandingan Smoothing Methods</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Method</th>
+                <th>Kompleksitas</th>
+                <th>Performa</th>
+                <th>Kasus Penggunaan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>No Smoothing</strong></td>
+                <td>Sangat rendah</td>
+                <td>Buruk (zero probabilities)</td>
+                <td>Hanya untuk corpus sangat besar</td>
+            </tr>
+            <tr>
+                <td><strong>Add-One (Laplace)</strong></td>
+                <td>Rendah</td>
+                <td>Menengah</td>
+                <td>Baseline, corpus kecil</td>
+            </tr>
+            <tr>
+                <td><strong>Add-k</strong></td>
+                <td>Rendah</td>
+                <td>Menengah-Baik</td>
+                <td>Tuning k untuk dataset tertentu</td>
+            </tr>
+            <tr>
+                <td><strong>Interpolation</strong></td>
+                <td>Menengah</td>
+                <td>Baik</td>
+                <td>Kombinasi multiple N-grams</td>
+            </tr>
+            <tr>
+                <td><strong>Backoff</strong></td>
+                <td>Menengah</td>
+                <td>Baik</td>
+                <td>Fallback ke lower-order</td>
+            </tr>
+            <tr>
+                <td><strong>Kneser-Ney</strong></td>
+                <td>Tinggi</td>
+                <td>Sangat Baik</td>
+                <td>State-of-the-art untuk N-gram</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Slide 18: Real-World Applications -->
+<div class="slide">
+    <h2>🌍 Aplikasi Real-World</h2>
+    <div class="grid-2">
+        <div class="content-box">
+            <h3>🗣️ Speech Recognition</h3>
+            <p>Language model membantu memilih kata yang paling mungkin dari berbagai kandidat yang terdengar mirip.</p>
+            <p><strong>Contoh:</strong> "recognize speech" vs "wreck a nice beach"</p>
+        </div>
+        <div class="content-box">
+            <h3>🌐 Machine Translation</h3>
+            <p>Mengevaluasi fluency dari kandidat terjemahan.</p>
+            <p><strong>Contoh:</strong> "bank" ➔ "bank" (financial) vs "tepi" (river)</p>
+        </div>
+        <div class="content-box">
+            <h3>✍️ Text Generation</h3>
+            <p>Menghasilkan teks yang natural dan koheren.</p>
+            <p><strong>Aplikasi:</strong> Chatbots, autocomplete, creative writing</p>
+        </div>
+        <div class="content-box">
+            <h3>✅ Spelling Correction</h3>
+            <p>Memilih koreksi yang paling sesuai konteks.</p>
+            <p><strong>Contoh:</strong> "their" vs "there" vs "they're"</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 19: Limitations -->
+<div class="slide">
+    <h2>⚠️ Keterbatasan N-gram Models</h2>
+    <div class="important-box">
+        <h3>1. Context Window Terbatas</h3>
+        <p>Hanya melihat N-1 kata sebelumnya, tidak bisa menangkap dependensi jarak jauh.</p>
+        <p><em>Contoh:</em> "The cat that chased the mouse <strong>was</strong> tired" - trigram tidak bisa relate "cat" dengan "was"</p>
+    </div>
+
+    <div class="important-box">
+        <h3>2. Data Sparsity</h3>
+        <p>Membutuhkan corpus yang sangat besar untuk mengestimasi probabilitas yang akurat, terutama untuk trigram+</p>
+    </div>
+
+    <div class="important-box">
+        <h3>3. Tidak Ada Generalization</h3>
+        <p>Tidak bisa menggeneralisasi ke kata/pola yang tidak pernah terlihat.</p>
+        <p><em>Contoh:</em> Jika model tahu "red car" tapi tidak pernah melihat "blue car", tidak bisa menyimpulkan bahwa "blue car" juga valid</p>
+    </div>
+
+    <div class="important-box">
+        <h3>4. Ignore Word Similarity</h3>
+        <p>Memperlakukan semua kata sebagai simbol diskrit yang tidak berkaitan.</p>
+        <p>"cat" dan "kitten" diperlakukan sama berbedanya dengan "cat" dan "airplane"</p>
+    </div>
+
+    <div class="content-box">
+        <h4>💡 Solusi Modern:</h4>
+        <p><strong>Neural Language Models</strong> (RNN, LSTM, Transformer) dapat mengatasi banyak keterbatasan ini dengan:</p>
+        <ul>
+            <li>Word embeddings untuk similarity</li>
+            <li>Context window yang lebih besar/infinite</li>
+            <li>Better generalization</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 20: Assignment -->
+<div class="slide">
+    <h2>📝 Tugas Praktikum</h2>
+    <div class="content-box">
+        <h3>Tugas Terbimbing (2 jam)</h3>
+        <p><strong>Implementasikan model bigram atau trigram sederhana dan hitung perplexity pada dataset kecil.</strong></p>
+        <h4>Langkah-langkah:</h4>
+        <ol>
+            <li>Pilih atau buat corpus teks sederhana (minimal 50 kalimat)</li>
+            <li>Implementasikan bigram model dengan Python (bisa gunakan NLTK atau from scratch)</li>
+            <li>Hitung probabilitas untuk berbagai bigram</li>
+            <li>Split data menjadi train (80%) dan test (20%)</li>
+            <li>Hitung perplexity pada test set</li>
+            <li>Implementasikan minimal 1 smoothing technique (Laplace atau Add-k)</li>
+            <li>Bandingkan perplexity dengan dan tanpa smoothing</li>
+        </ol>
+    </div>
+
+    <div class="content-box">
+        <h3>Tugas Mandiri (4 jam)</h3>
+        <p><strong>Cari jurnal yang menggunakan model N-gram dalam penelitiannya, lalu buat ringkasan singkat tentang cara model tersebut diterapkan.</strong></p>
+        <h4>Yang harus dicantumkan:</h4>
+        <ul>
+            <li>Judul dan author paper</li>
+            <li>Masalah yang diselesaikan</li>
+            <li>Jenis N-gram yang digunakan (unigram/bigram/trigram)</li>
+            <li>Teknik smoothing yang dipakai</li>
+            <li>Hasil dan kesimpulan</li>
+            <li>Kelebihan dan kekurangan pendekatan yang digunakan</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>📊 Deliverables:</h4>
+        <ul>
+            <li>Source code (Python notebook atau .py file)</li>
+            <li>Report (PDF, 2-3 halaman) berisi:
+                <ul>
+                    <li>Deskripsi corpus yang digunakan</li>
+                    <li>Hasil perhitungan probabilitas</li>
+                    <li>Perbandingan perplexity</li>
+                    <li>Screenshot output program</li>
+                    <li>Analisis dan kesimpulan</li>
+                </ul>
+            </li>
+            <li>Ringkasan jurnal (PDF, 1-2 halaman)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 21: Resources -->
+<div class="slide">
+    <h2>📚 Referensi dan Sumber Belajar</h2>
+    <div class="content-box">
+        <h3>Textbooks:</h3>
+        <ul>
+            <li>Daniel Jurafsky & James H. Martin - <em>"Speech and Language Processing"</em> (Chapter 3)</li>
+            <li>Christopher Manning & Hinrich Schütze - <em>"Foundations of Statistical Natural Language Processing"</em></li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Online Resources:</h3>
+        <ul>
+            <li>Stanford CS224N: Natural Language Processing with Deep Learning</li>
+            <li>Coursera: Natural Language Processing Specialization</li>
+            <li><a href="https://web.stanford.edu/~jurafsky/slp3/" target="_blank">Speech and Language Processing (3rd ed. draft)</a></li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Tools & Libraries:</h3>
+        <ul>
+            <li><strong>NLTK</strong>: Natural Language Toolkit for Python</li>
+            <li><strong>spaCy</strong>: Industrial-strength NLP library</li>
+            <li><strong>KenLM</strong>: Fast language model toolkit</li>
+            <li><strong>SRILM</strong>: SRI Language Modeling Toolkit</li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Datasets:</h3>
+        <ul>
+            <li>Penn Treebank</li>
+            <li>Google N-gram Corpus</li>
+            <li>Wikipedia dumps</li>
+            <li>IndoNLU (untuk Bahasa Indonesia)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 22: Summary -->
+<div class="slide">
+    <h2>📌 Kesimpulan</h2>
+    <div class="content-box">
+        <h3>Key Takeaways:</h3>
+        <ol style="font-size: 1.3em; line-height: 2;">
+            <li><strong>Language modeling</strong> adalah tugas fundamental dalam NLP untuk memprediksi probabilitas sequences kata</li>
+            <li><strong>N-gram models</strong> menggunakan Markov assumption: probabilitas kata bergantung hanya pada N-1 kata sebelumnya</li>
+            <li><strong>Perplexity</strong> adalah metrik utama untuk evaluasi language model (lower is better)</li>
+            <li><strong>Smoothing</strong> diperlukan untuk mengatasi sparsity problem</li>
+            <li>N-gram models sederhana tapi efektif untuk banyak aplikasi NLP</li>
+        </ol>
+    </div>
+
+    <div class="formula-box">
+        <h3>Formula Penting:</h3>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            Bigram: \(P(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i)}{C(w_{i-1})}\)
+        </p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            Perplexity: \(PP(W) = P(w_1, ..., w_N)^{-\frac{1}{N}}\)
+        </p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            Laplace: \(P(w_i | w_{i-1}) = \frac{C(w_{i-1}, w_i) + 1}{C(w_{i-1}) + V}\)
+        </p>
+    </div>
+
+    <div class="important-box">
+        <h4>🔜 Next Week:</h4>
+        <p><strong>Machine Learning untuk NLP</strong></p>
+        <p>Text Classification, Naive Bayes, Logistic Regression, SVM, Sentiment Analysis</p>
+    </div>
+</div>
+
+<!-- Slide 23: Q&A -->
+<div class="slide">
+    <h2>❓ Pertanyaan?</h2>
+    <div style="text-align: center; margin: 60px 0;">
+        <h3 style="font-size: 2.5em; margin-bottom: 30px;">Terima Kasih! 🙏</h3>
+        <p style="font-size: 1.5em; color: #666;">
+            Session 09: Language Modeling (Statistical NLP)
+        </p>
+    </div>
+    <div class="footer">
+        <p>Natural Language Processing</p>
+        <p>Universitas Mercu Buana</p>
+        <p>Program Studi Teknik Informatika</p>
+    </div>
+</div>
+
+<script>
+// Plotly visualization for Perplexity vs N-gram order
+const ngramOrders = ['Unigram', 'Bigram', 'Trigram', '4-gram', '5-gram'];
+const perplexities = [450, 180, 85, 65, 58];
+const corpusSizes = ['1M words', '10M words', '100M words'];
+const perplexityData = [
+    {
+        x: ngramOrders,
+        y: [450, 180, 85, 65, 58],
+        name: '1M words',
+        type: 'bar',
+        marker: {color: '#667eea'}
+    },
+    {
+        x: ngramOrders,
+        y: [380, 120, 55, 38, 32],
+        name: '10M words',
+        type: 'bar',
+        marker: {color: '#764ba2'}
+    },
+    {
+        x: ngramOrders,
+        y: [320, 85, 35, 22, 18],
+        name: '100M words',
+        type: 'bar',
+        marker: {color: '#f093fb'}
+    }
+];
+
+const perplexityLayout = {
+    title: {
+        text: 'Perplexity vs N-gram Order untuk Berbagai Ukuran Corpus',
+        font: {size: 20, color: '#333'}
+    },
+    xaxis: {
+        title: 'N-gram Order',
+        titlefont: {size: 16},
+        tickfont: {size: 14}
+    },
+    yaxis: {
+        title: 'Perplexity (Lower is Better)',
+        titlefont: {size: 16},
+        tickfont: {size: 14}
+    },
+    barmode: 'group',
+    showlegend: true,
+    legend: {
+        x: 0.7,
+        y: 0.95,
+        font: {size: 14}
+    },
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(240,240,240,0.5)'
+};
+
+Plotly.newPlot('perplexityPlot', perplexityData, perplexityLayout, {responsive: true});
+
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Add scroll progress indicator
+window.addEventListener('scroll', () => {
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
+
+    // You can add a progress bar here if desired
+});
+</script>
+
+</body>
+</html>
