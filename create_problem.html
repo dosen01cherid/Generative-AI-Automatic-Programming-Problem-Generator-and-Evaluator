@@ -6944,8 +6944,19 @@ class DataManager:
     # -----------------------------------------------------
     def export_json(self):
         """Export all problems with validation and structure rebuilding"""
+        window.console.log("🚀 Export function called")
         math_parser = self.problem_creator.math_parser
         problems = self.problem_creator.problems
+        window.console.log(f"📊 Found {len(problems)} problem(s) to export")
+
+        # ✅ Handle empty problem set
+        if len(problems) == 0:
+            self._show_popup(
+                "⚠️ No problems to export",
+                "Please create at least one problem before exporting."
+            )
+            return
+
         invalid_entries = []
         structures_rebuilt = 0
 
@@ -7208,8 +7219,17 @@ class DataManager:
                     if len(correct_answers) == 0:
                         invalid_entries.append(f"Problem {p_index}, Step {s_index}: no correct answers defined")
                     else:
-                        # Check if answers have content
-                        empty_count = sum(1 for ans in correct_answers if not ans.get("value", "").strip())
+                        # Check if answers have content (handle both dict and string formats)
+                        empty_count = 0
+                        for ans in correct_answers:
+                            if isinstance(ans, dict):
+                                # New format: dict with 'value' key
+                                if not ans.get("value", "").strip():
+                                    empty_count += 1
+                            elif isinstance(ans, str):
+                                # Old format: string directly
+                                if not ans.strip():
+                                    empty_count += 1
                         if empty_count > 0:
                             invalid_entries.append(f"Problem {p_index}, Step {s_index}: {empty_count} empty answer(s)")
 
