@@ -239,7 +239,312 @@
     </div>
 </div>
 
-<!-- Slide 2: Learning Objectives -->
+<!-- Slide 2: Why Predict Next Word Probability? -->
+<div class="slide">
+    <h2>🎯 Mengapa Memprediksi Probabilitas Kata Berikutnya?</h2>
+    <div class="important-box">
+        <h3>Masalah Fundamental dalam NLP</h3>
+        <p>Bahasa manusia adalah <strong>sequential</strong> dan <strong>probabilistic</strong> - kata-kata tidak muncul secara acak, tetapi mengikuti pola tertentu berdasarkan konteks.</p>
+    </div>
+
+    <div class="content-box">
+        <h3>Tantangan Utama:</h3>
+        <ol>
+            <li><strong>Ambiguitas</strong>: Satu urutan kata bisa memiliki banyak kemungkinan kelanjutan</li>
+            <li><strong>Konteks</strong>: Kata berikutnya bergantung pada kata-kata sebelumnya</li>
+            <li><strong>Naturalness</strong>: Tidak semua urutan kata yang gramatikal terdengar natural</li>
+        </ol>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Ambiguitas:</h4>
+        <p><strong>"Saya pergi ke ___"</strong></p>
+        <ul>
+            <li>✅ "sekolah" (probability tinggi - natural)</li>
+            <li>✅ "pasar" (probability tinggi - natural)</li>
+            <li>⚠️ "meja" (probability rendah - kurang natural)</li>
+            <li>❌ "berlari" (probability sangat rendah - tidak gramatikal)</li>
+        </ul>
+        <p><strong>Language model memberikan skor probabilitas untuk membedakan pilihan-pilihan ini!</strong></p>
+    </div>
+
+    <div class="success-box" style="background: #e8f5e9; border-left: 5px solid #4caf50; padding: 25px; margin: 20px 0; border-radius: 10px;">
+        <h4>✅ Manfaat Utama:</h4>
+        <p>Dengan menghitung probabilitas kata berikutnya, kita dapat:</p>
+        <ul>
+            <li><strong>Ranking</strong>: Mengurutkan kandidat kata dari yang paling mungkin</li>
+            <li><strong>Filtering</strong>: Menyingkirkan kandidat yang tidak masuk akal</li>
+            <li><strong>Generation</strong>: Menghasilkan teks yang koheren dan natural</li>
+            <li><strong>Evaluation</strong>: Mengukur seberapa "baik" atau "natural" sebuah teks</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 3: Real-World Problems Solved -->
+<div class="slide">
+    <h2>🌍 Masalah NLP yang Diselesaikan</h2>
+    <div class="important-box">
+        <h3>1. Speech Recognition (Pengenalan Suara)</h3>
+        <p><strong>Masalah:</strong> Audio signal ambigu - banyak kata yang terdengar mirip</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Kasus:</h4>
+        <p>Audio terdengar seperti: <em>"wreck a nice beach"</em> atau <em>"recognize speech"</em>?</p>
+        <p><strong>Acoustic model</strong> memberikan kandidat:</p>
+        <table>
+            <tr>
+                <th>Kandidat</th>
+                <th>Acoustic Score</th>
+            </tr>
+            <tr>
+                <td>"wreck a nice beach"</td>
+                <td>0.6</td>
+            </tr>
+            <tr>
+                <td>"recognize speech"</td>
+                <td>0.55</td>
+            </tr>
+        </table>
+        <p><strong>Language model</strong> memberikan probability:</p>
+        <table>
+            <tr>
+                <th>Kandidat</th>
+                <th>Language Model P</th>
+                <th>Combined Score</th>
+            </tr>
+            <tr>
+                <td>"wreck a nice beach"</td>
+                <td>0.0001</td>
+                <td>0.6 × 0.0001 = <strong>0.00006</strong></td>
+            </tr>
+            <tr>
+                <td>"recognize speech"</td>
+                <td>0.01</td>
+                <td>0.55 × 0.01 = <strong>0.0055</strong> ✅</td>
+            </tr>
+        </table>
+        <p class="highlight">Language model membantu memilih interpretasi yang lebih masuk akal!</p>
+    </div>
+
+    <div class="content-box">
+        <h4>💡 Insight:</h4>
+        <p>Tanpa language model, sistem akan salah memilih "wreck a nice beach" karena acoustic score lebih tinggi. Dengan language model, kita tahu "recognize speech" jauh lebih probable dalam bahasa Inggris!</p>
+    </div>
+</div>
+
+<!-- Slide 4: More Real-World Examples -->
+<div class="slide">
+    <h2>🔧 Aplikasi Lainnya</h2>
+
+    <div class="important-box">
+        <h3>2. Machine Translation (Terjemahan Mesin)</h3>
+        <p><strong>Masalah:</strong> Satu kalimat bisa memiliki banyak terjemahan yang valid secara gramatikal</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh:</h4>
+        <p><strong>Bahasa Indonesia:</strong> "Saya makan nasi"</p>
+        <p><strong>Kandidat terjemahan Inggris:</strong></p>
+        <ul>
+            <li>"I eat rice" → P = 0.3 (present tense, masuk akal)</li>
+            <li>"I am eating rice" → P = 0.25 (present continuous, masuk akal)</li>
+            <li>"I ate rice" → P = 0.2 (past tense, context dependent)</li>
+            <li>"Rice eat I" → P = 0.0001 (gramatikal salah!)</li>
+        </ul>
+        <p><strong>Language model bahasa Inggris membantu memilih terjemahan yang paling natural!</strong></p>
+    </div>
+
+    <div class="important-box">
+        <h3>3. Spelling Correction (Koreksi Ejaan)</h3>
+        <p><strong>Masalah:</strong> Typo bisa dikoreksi ke banyak kata yang valid</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh:</h4>
+        <p>User menulis: <em>"I went to the <span style="color: red;">bnak</span>"</em></p>
+        <p><strong>Kandidat koreksi:</strong></p>
+        <ul>
+            <li>"bank" (edit distance = 1)</li>
+            <li>"blank" (edit distance = 1)</li>
+        </ul>
+        <p><strong>Dengan language model:</strong></p>
+        <ul>
+            <li>P("bank" | "I went to the") = <strong>0.05</strong> ✅ (makes sense!)</li>
+            <li>P("blank" | "I went to the") = <strong>0.0001</strong> (unlikely)</li>
+        </ul>
+        <p class="highlight">Language model memilih "bank" karena "went to the bank" adalah frasa yang umum!</p>
+    </div>
+</div>
+
+<!-- Slide 5: Text Generation -->
+<div class="slide">
+    <h2>✍️ Text Generation (Pembangkitan Teks)</h2>
+
+    <div class="important-box">
+        <h3>4. Auto-complete & Predictive Text</h3>
+        <p><strong>Masalah:</strong> Bagaimana memprediksi apa yang ingin diketik user selanjutnya?</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh: Email Auto-complete</h4>
+        <p>User menulis: <em>"Dear Professor, I am writing to ___"</em></p>
+
+        <p><strong>Language model memprediksi:</strong></p>
+        <table>
+            <tr>
+                <th>Kata Berikutnya</th>
+                <th>Probability</th>
+                <th>Ranking</th>
+            </tr>
+            <tr style="background: #e8f5e9;">
+                <td>"inform"</td>
+                <td>0.15</td>
+                <td>1 ✅</td>
+            </tr>
+            <tr style="background: #e8f5e9;">
+                <td>"request"</td>
+                <td>0.12</td>
+                <td>2 ✅</td>
+            </tr>
+            <tr style="background: #e8f5e9;">
+                <td>"inquire"</td>
+                <td>0.10</td>
+                <td>3 ✅</td>
+            </tr>
+            <tr>
+                <td>"eat"</td>
+                <td>0.0001</td>
+                <td>1247</td>
+            </tr>
+            <tr>
+                <td>"sleep"</td>
+                <td>0.00005</td>
+                <td>2891</td>
+            </tr>
+        </table>
+
+        <p><strong>Auto-complete menawarkan top-3 suggestions yang paling probable!</strong></p>
+    </div>
+
+    <div class="content-box">
+        <h4>Modern Applications:</h4>
+        <ul>
+            <li><strong>Gmail Smart Compose:</strong> Memprediksi kelanjutan email</li>
+            <li><strong>Google Search:</strong> Autocomplete query</li>
+            <li><strong>Smartphone Keyboards:</strong> Next word prediction</li>
+            <li><strong>ChatGPT/LLMs:</strong> Generate coherent responses</li>
+        </ul>
+        <p>Semua menggunakan konsep yang sama: <span class="highlight">menghitung probability kata berikutnya!</span></p>
+    </div>
+</div>
+
+<!-- Slide 6: Quality Measurement -->
+<div class="slide">
+    <h2>📊 Mengukur Kualitas Teks</h2>
+
+    <div class="important-box">
+        <h3>5. Evaluating Text Quality</h3>
+        <p><strong>Masalah:</strong> Bagaimana menilai apakah teks yang dihasilkan (machine translation, text generation) "baik" atau "buruk"?</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh: Membandingkan Kualitas Terjemahan</h4>
+        <p><strong>Teks Asli (Indonesia):</strong> "Cuaca hari ini sangat cerah"</p>
+
+        <p><strong>Terjemahan A:</strong> "The weather today is very bright"</p>
+        <p>P = 0.0012 (grammatical, tapi "bright" kurang natural untuk weather)</p>
+
+        <p><strong>Terjemahan B:</strong> "Today's weather is very sunny"</p>
+        <p>P = 0.0085 ✅ (more natural, higher probability)</p>
+
+        <p><strong>Terjemahan C:</strong> "Weather very today sunny is"</p>
+        <p>P = 0.0000001 ❌ (word order salah, very low probability)</p>
+    </div>
+
+    <div class="content-box">
+        <h3>Perplexity sebagai Metric:</h3>
+        <p>Language model mengukur "surprise" - seberapa surprised model melihat teks:</p>
+        <ul>
+            <li><strong>Low perplexity</strong> = text predictable, natural, fluent ✅</li>
+            <li><strong>High perplexity</strong> = text surprising, unnatural, disfluent ❌</li>
+        </ul>
+        <p>Ini memungkinkan <strong>automatic evaluation</strong> tanpa human judges!</p>
+    </div>
+
+    <div class="success-box" style="background: #e8f5e9; border-left: 5px solid #4caf50; padding: 25px; margin: 20px 0; border-radius: 10px;">
+        <h4>💡 Key Insight:</h4>
+        <p><strong>Language Model = Learned Statistical Model of Language</strong></p>
+        <p>Dengan training pada billions of words, model "belajar" pola bahasa yang natural. Model ini kemudian bisa digunakan untuk:</p>
+        <ul>
+            <li>✅ Distinguish good text from bad text</li>
+            <li>✅ Rank multiple candidate outputs</li>
+            <li>✅ Generate new text that follows learned patterns</li>
+            <li>✅ Detect anomalies (spam, generated text, etc.)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 7: Summary of Benefits -->
+<div class="slide">
+    <h2>📌 Ringkasan: Manfaat Probabilitas Kata Berikutnya</h2>
+
+    <div class="content-box">
+        <h3>Fundamental Capability yang Diperoleh:</h3>
+        <table>
+            <tr>
+                <th>Application</th>
+                <th>How Probability Helps</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td><strong>Speech Recognition</strong></td>
+                <td>Resolve acoustic ambiguity</td>
+                <td>"recognize speech" vs "wreck a nice beach"</td>
+            </tr>
+            <tr>
+                <td><strong>Machine Translation</strong></td>
+                <td>Choose natural translation</td>
+                <td>"I eat rice" vs "Rice eat I"</td>
+            </tr>
+            <tr>
+                <td><strong>Spelling Correction</strong></td>
+                <td>Context-aware correction</td>
+                <td>"bank" vs "blank" after "went to the"</td>
+            </tr>
+            <tr>
+                <td><strong>Auto-complete</strong></td>
+                <td>Predict likely continuation</td>
+                <td>Suggest "inform" after "I am writing to"</td>
+            </tr>
+            <tr>
+                <td><strong>Text Generation</strong></td>
+                <td>Generate coherent text</td>
+                <td>ChatGPT, story generation</td>
+            </tr>
+            <tr>
+                <td><strong>Quality Evaluation</strong></td>
+                <td>Measure text fluency</td>
+                <td>Compare translation quality via perplexity</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="important-box">
+        <h3>🎯 Core Principle:</h3>
+        <p style="font-size: 1.4em; text-align: center; margin: 20px 0;">
+            <strong>"Not all word sequences are equally likely"</strong>
+        </p>
+        <p>Language modeling captures this fundamental truth dengan menghitung probabilities, enabling countless NLP applications!</p>
+    </div>
+
+    <div class="success-box" style="background: #e8f5e9; border-left: 5px solid #4caf50; padding: 25px; margin: 20px 0; border-radius: 10px;">
+        <h4>🔜 Dalam Sesi Ini:</h4>
+        <p>Kita akan belajar bagaimana membangun language models menggunakan <strong>N-gram statistics</strong> untuk menghitung probabilitas-probabilitas ini!</p>
+    </div>
+</div>
+
+<!-- Slide 8: Learning Objectives -->
 <div class="slide">
     <h2>🎯 Capaian Pembelajaran</h2>
     <div class="content-box">
