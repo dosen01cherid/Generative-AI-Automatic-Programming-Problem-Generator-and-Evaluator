@@ -1,0 +1,626 @@
+###
+Problem Title: Four Types of Analytics Framework
+Problem Description: Memahami kerangka kerja empat tipe analytics dan karakteristik masing-masing
+
+#
+Step Description: Empat tipe analytics dalam urutan yang benar dari yang paling dasar hingga yang paling advanced adalah {blank}, {blank}, {blank}, dan {blank}.
+Step Type: fill-blank
+Correct Answer A: Descriptive Analytics
+Alternative Answer A: Descriptive
+Correct Answer B: Diagnostic Analytics
+Alternative Answer B: Diagnostic
+Correct Answer C: Predictive Analytics
+Alternative Answer C: Predictive
+Correct Answer D: Prescriptive Analytics
+Alternative Answer D: Prescriptive
+Must Be Correct: true
+
+#
+Step Description: Descriptive Analytics menjawab pertanyaan bisnis fundamental:
+Step Type: multiple-choice-single
+Option A: Apa yang terjadi?
+Option B: Mengapa hal itu terjadi?
+Option C: Apa yang akan terjadi?
+Option D: Apa yang harus dilakukan?
+Correct Answer: A
+Must Be Correct: true
+
+###
+Problem Title: Descriptive Analytics - Definisi dan Karakteristik
+Problem Description: Memahami tujuan, metode, dan output dari Descriptive Analytics
+
+#
+Step Description: Pilih SEMUA yang merupakan karakteristik dari Descriptive Analytics:
+Step Type: multiple-choice-multiple
+Option A: Fokus pada historical data analysis
+Option B: Menggunakan aggregation dan visualization
+Option C: Output berupa dashboards dan trends
+Option D: Memprediksi masa depan
+Option E: Menampilkan "what happened"
+Option F: Root cause investigation
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Metode utama dalam Descriptive Analytics meliputi {blank}, {blank}, dan {blank} untuk menghasilkan summary statistics.
+Step Type: fill-blank
+Correct Answer A: Aggregation
+Alternative Answer A: agregasi
+Correct Answer B: Visualization
+Alternative Answer B: visualisasi
+Correct Answer C: Reporting
+Alternative Answer C: pelaporan
+Must Be Correct: false
+
+###
+Problem Title: Descriptive Analytics - Case Study MercuShop
+Problem Description: Analisis data e-commerce MercuShop menggunakan Descriptive Analytics
+
+#
+Step Description: Dataset MercuShop memiliki karakteristik:
+Step Type: multiple-choice-multiple
+Option A: 54,935 transaksi
+Option B: 3,000 pelanggan unik
+Option C: Periode 1 tahun (2023)
+Option D: Periode 3 tahun (2021-2023)
+Option E: 5 kategori produk utama
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+#
+Step Description: Total revenue MercuShop adalah Rp {blank} miliar dengan average order value sebesar Rp {blank}.
+Step Type: fill-blank
+Correct Answer A: 16.74
+Alternative Answer A: 16,74
+Correct Answer B: 304,731
+Alternative Answer B: 304731
+Must Be Correct: false
+
+###
+Problem Title: Descriptive Analytics - Product Category Performance
+Problem Description: Analisis performa kategori produk
+
+#
+Step Description: Berdasarkan data MercuShop, kategori produk dengan kontribusi revenue tertinggi adalah:
+Step Type: multiple-choice-single
+Option A: Fashion (33.6%)
+Option B: Electronics (65.9%)
+Option C: Home & Living (14.3%)
+Option D: Sports (15.7%)
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Kategori Electronics mendominasi dengan {blank}% dari total penjualan, yang berarti lebih dari setengah revenue berasal dari satu kategori ini.
+Step Type: fill-blank
+Correct Answer: 65.9
+Alternative Answer: 65,9
+Alternative Answer: enam puluh lima koma sembilan
+Must Be Correct: false
+
+###
+Problem Title: Descriptive Analytics - Customer Segmentation
+Problem Description: Segmentasi pelanggan berdasarkan RFM analysis
+
+#
+Step Description: Empat customer segment di MercuShop adalah:
+Step Type: multiple-choice-multiple
+Option A: Regular customers
+Option B: Budget customers
+Option C: Premium customers
+Option D: VIP customers
+Option E: Enterprise customers
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Segmen Regular memiliki revenue per customer sebesar Rp {blank} juta dengan rata-rata {blank} orders per customer.
+Step Type: fill-blank
+Correct Answer A: 5.24
+Alternative Answer A: 5,24
+Correct Answer B: 17.5
+Alternative Answer B: 17,5
+Must Be Correct: false
+
+###
+Problem Title: Diagnostic Analytics - Purpose and Methods
+Problem Description: Memahami tujuan dan pendekatan Diagnostic Analytics
+
+#
+Step Description: Diagnostic Analytics berbeda dari Descriptive Analytics karena fokus pada:
+Step Type: multiple-choice-single
+Option A: Menampilkan apa yang terjadi di masa lalu
+Option B: Mengidentifikasi mengapa sesuatu terjadi
+Option C: Memprediksi apa yang akan terjadi
+Option D: Merekomendasikan tindakan yang harus dilakukan
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA metode yang digunakan dalam Diagnostic Analytics:
+Step Type: multiple-choice-multiple
+Option A: Correlation analysis
+Option B: Drill-down analysis
+Option C: Root cause investigation
+Option D: Machine learning forecasting
+Option E: Statistical comparison
+Option F: Time series prediction
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Diagnostic Analytics - Churn Analysis
+Problem Description: Analisis customer churn dan faktor penyebabnya
+
+#
+Step Description: Churn rate pelanggan MercuShop adalah hanya {blank}%, yang menunjukkan retention rate {blank}% - tergolong sangat baik.
+Step Type: fill-blank
+Correct Answer A: 2.3
+Alternative Answer A: 2,3
+Correct Answer B: 97.7
+Alternative Answer B: 97,7
+Must Be Correct: false
+
+#
+Step Description: Faktor utama yang membedakan churned customers dari active customers adalah:
+Step Type: multiple-choice-single
+Option A: Average Order Value yang lebih rendah 30.9%
+Option B: Purchase frequency yang lebih rendah 48.9%
+Option C: Total spent yang lebih rendah 64%
+Option D: Semua benar - ketiganya adalah faktor churn
+Correct Answer: D
+Must Be Correct: false
+
+###
+Problem Title: Diagnostic Analytics - Campaign ROI
+Problem Description: Analisis performa dan ROI kampanye marketing
+
+#
+Step Description: Berdasarkan analisis ROI di MercuShop, campaign type dengan ROI tertinggi adalah:
+Step Type: multiple-choice-single
+Option A: Online Ads dengan 1,079.3%
+Option B: Social Media dengan 1,567.7%
+Option C: Email dengan 2,681.1%
+Option D: Influencer dengan 1,124.7%
+Correct Answer: C
+Must Be Correct: false
+
+#
+Step Description: Email campaign memiliki ROI rata-rata {blank}% dan best performance mencapai {blank}%, yang berarti Email sekitar {blank} kali lebih efektif dibandingkan Online Ads.
+Step Type: fill-blank
+Correct Answer A: 2,681.1
+Alternative Answer A: 2681.1
+Correct Answer B: 3,834.8
+Alternative Answer B: 3834.8
+Correct Answer C: 2.5
+Alternative Answer C: 2,5
+Alternative Answer C: dua setengah
+Must Be Correct: false
+
+###
+Problem Title: Diagnostic Analytics - Price Elasticity
+Problem Description: Analisis price elasticity of demand per kategori produk
+
+#
+Step Description: Kategori dengan price elasticity paling tinggi (elastic demand) adalah:
+Step Type: multiple-choice-single
+Option A: Electronics dengan -0.43 (inelastic)
+Option B: Fashion dengan -1.13 (elastic)
+Option C: Books & Media dengan 1.29 (elastic)
+Option D: Sports dengan -0.43 (inelastic)
+Correct Answer: C
+Must Be Correct: false
+
+#
+Step Description: Price elasticity yang tinggi (elastic demand) berarti bahwa perubahan harga akan menyebabkan perubahan quantity demanded yang {blank}, sehingga strategi pricing harus lebih {blank}.
+Step Type: fill-blank
+Correct Answer A: besar
+Alternative Answer A: signifikan
+Alternative Answer A: substantial
+Correct Answer B: hati-hati
+Alternative Answer B: careful
+Alternative Answer B: konservatif
+Must Be Correct: false
+
+#
+Step Description: Jika suatu produk memiliki price elasticity -0.43 (inelastic), maka kenaikan harga 10% akan menyebabkan penurunan quantity sekitar:
+Step Type: multiple-choice-single
+Option A: 0.43%
+Option B: 4.3%
+Option C: 10%
+Option D: 43%
+Correct Answer: B
+Must Be Correct: false
+
+###
+Problem Title: Predictive Analytics - Fundamentals
+Problem Description: Memahami konsep dasar dan aplikasi Predictive Analytics
+
+#
+Step Description: Predictive Analytics menjawab pertanyaan bisnis:
+Step Type: multiple-choice-single
+Option A: What happened in the past?
+Option B: Why did it happen?
+Option C: What will happen in the future?
+Option D: What should we do about it?
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA yang merupakan metode dalam Predictive Analytics:
+Step Type: multiple-choice-multiple
+Option A: Machine learning models
+Option B: Statistical forecasting
+Option C: Regression analysis
+Option D: Historical reporting
+Option E: Trend analysis
+Option F: Aggregation queries
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Predictive Analytics - Sales Forecasting Models
+Problem Description: Perbandingan model untuk sales forecasting
+
+#
+Step Description: Model terbaik untuk sales forecasting di case study adalah {blank} dengan MAE (Mean Absolute Error) sebesar Rp {blank} juta.
+Step Type: fill-blank
+Correct Answer A: Gradient Boosting
+Alternative Answer A: gradient boosting
+Correct Answer B: 7.12
+Alternative Answer B: 7,12
+Alternative Answer B: 7.121827
+Must Be Correct: false
+
+#
+Step Description: Gradient Boosting dipilih sebagai model terbaik karena:
+Step Type: multiple-choice-multiple
+Option A: MAE 25% lebih rendah dari second-best model
+Option B: Standard deviation 58% lebih rendah dari Random Forest
+Option C: Paling mudah diinterpretasi oleh bisnis
+Option D: Forecast uncertainty hanya 4.7%
+Option E: Confidence interval paling sempit
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+###
+Problem Title: Predictive Analytics - Churn Prediction
+Problem Description: Model prediksi customer churn dan akurasinya
+
+#
+Step Description: Model untuk churn prediction yang mencapai akurasi 99.9% adalah:
+Step Type: multiple-choice-single
+Option A: Random Forest (99.6%)
+Option B: Logistic Regression (99.9%)
+Option C: Gradient Boosting (98.9%)
+Option D: Decision Tree (95.4%)
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Akurasi 99.9% pada churn prediction menimbulkan concern tentang potential {blank}, namun dalam case ini valid karena actual churn rate memang sangat rendah hanya {blank}%.
+Step Type: fill-blank
+Correct Answer A: overfitting
+Alternative Answer A: overfit
+Correct Answer B: 2.3
+Alternative Answer B: 2,3
+Must Be Correct: false
+
+#
+Step Description: Confusion matrix dari churn prediction menunjukkan:
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Model menghasilkan 68 True Positives, 1 False Positive, 831 True Negatives, dan 0 False Negatives, yang berarti hampir sempurna dalam memprediksi customer yang akan churn.
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: false
+
+###
+Problem Title: Predictive Analytics - Feature Importance
+Problem Description: Faktor-faktor penting dalam prediksi churn
+
+#
+Step Description: Dalam churn prediction model, urutan feature importance dari tertinggi adalah:
+Step Type: multiple-choice-single
+Option A: Frequency > Monetary > Recency
+Option B: Monetary > Days Since Purchase > Recency
+Option C: Recency > Monetary > Frequency
+Option D: Days Since Purchase > Frequency > Monetary
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Top 3 features untuk churn prediction adalah Monetary Score (importance {blank}), Days Since Purchase ({blank}), dan Recency Score ({blank}).
+Step Type: fill-blank
+Correct Answer A: 1.900
+Alternative Answer A: 1,900
+Correct Answer B: 1.859
+Alternative Answer B: 1,859
+Correct Answer C: 1.725
+Alternative Answer C: 1,725
+Must Be Correct: false
+
+###
+Problem Title: Predictive Analytics - CLV Prediction
+Problem Description: Prediksi Customer Lifetime Value per segment
+
+#
+Step Description: Average Customer Lifetime Value (CLV) untuk masing-masing segment adalah:
+Step Type: multiple-choice-multiple
+Option A: Regular: Rp 5.24M
+Option B: Budget: Rp 6.56M (tertinggi)
+Option C: Premium: Rp 22.2M (tertinggi)
+Option D: VIP: Rp 7.68M
+Correct Answer: A, C, D
+Must Be Correct: false
+
+#
+Step Description: Segment Premium memiliki CLV tertinggi sebesar Rp {blank} juta, yang menunjukkan bahwa customer premium memberikan value {blank} kali lebih besar dibandingkan Regular customer.
+Step Type: fill-blank
+Correct Answer A: 22.2
+Alternative Answer A: 22,2
+Correct Answer B: 4.2
+Alternative Answer B: 4,2
+Alternative Answer B: empat koma dua
+Must Be Correct: false
+
+###
+Problem Title: Prescriptive Analytics - Definition and Purpose
+Problem Description: Memahami tujuan dan output Prescriptive Analytics
+
+#
+Step Description: Prescriptive Analytics fokus pada:
+Step Type: multiple-choice-single
+Option A: Menjelaskan apa yang telah terjadi
+Option B: Menganalisis mengapa sesuatu terjadi
+Option C: Memprediksi apa yang akan terjadi
+Option D: Merekomendasikan apa yang harus dilakukan
+Correct Answer: D
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA yang merupakan output dari Prescriptive Analytics:
+Step Type: multiple-choice-multiple
+Option A: Action plans dan strategies
+Option B: Optimization recommendations
+Option C: Historical trends
+Option D: What-if scenarios
+Option E: Decision models
+Option F: Forecast probabilities
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+#
+Step Description: Prescriptive Analytics menggunakan metode seperti {blank}, {blank}, dan {blank} untuk menghasilkan rekomendasi optimal.
+Step Type: fill-blank
+Correct Answer A: Optimization
+Alternative Answer A: optimasi
+Correct Answer B: Simulation
+Alternative Answer B: simulasi
+Correct Answer C: Decision Models
+Alternative Answer C: decision modeling
+Must Be Correct: false
+
+###
+Problem Title: Prescriptive Analytics - Marketing Budget Optimization
+Problem Description: Optimasi alokasi budget marketing berdasarkan LTV/CAC
+
+#
+Step Description: Hasil optimasi marketing budget merekomendasikan alokasi terbesar untuk channel:
+Step Type: multiple-choice-single
+Option A: Paid Ads (36.5%)
+Option B: Organic (36.5%)
+Option C: Email (30.3%)
+Option D: Social Media (25%)
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA rekomendasi dalam optimasi marketing budget:
+Step Type: multiple-choice-multiple
+Option A: Organic mendapat 36.5% dengan LTV/CAC 222.7x
+Option B: Email mendapat 30.3% dengan LTV/CAC 185.1x
+Option C: Paid Ads dikurangi menjadi 4.6% karena LTV/CAC rendah (27.4x)
+Option D: Social Media ditingkatkan menjadi 40%
+Option E: Referral mendapat 20.6% karena high trust dan low cost
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Channel Organic memiliki LTV/CAC ratio {blank}x, yang berarti setiap Rp 1 yang diinvestasikan untuk acquire customer menghasilkan Rp {blank} dalam lifetime value.
+Step Type: fill-blank
+Correct Answer A: 222.7
+Alternative Answer A: 222,7
+Correct Answer B: 222.7
+Alternative Answer B: 222,7
+Must Be Correct: false
+
+###
+Problem Title: Prescriptive Analytics - Customer Retention Strategy
+Problem Description: Strategi retensi pelanggan berdasarkan risk-value matrix
+
+#
+Step Description: Strategi untuk segmen "Premium Critical Risk" (29 customers dengan CLV Rp 22.2M) adalah:
+Step Type: multiple-choice-multiple
+Option A: Investment Rp 14.5M (Rp 500K per customer)
+Option B: Expected retention rate 70%
+Option C: Expected value saved Rp 220.8M
+Option D: ROI 1,423%
+Option E: Gunakan generic mass email campaign
+Correct Answer: A, B, D
+Must Be Correct: false
+
+#
+Step Description: Overall ROI dari strategi customer retention yang komprehensif mencapai {blank}%, dengan total investment Rp {blank} juta dan expected return Rp {blank} juta.
+Step Type: fill-blank
+Correct Answer A: 2,335
+Alternative Answer A: 2335
+Correct Answer B: 34.3
+Alternative Answer B: 34,3
+Correct Answer C: 835.9
+Alternative Answer C: 835,9
+Must Be Correct: false
+
+###
+Problem Title: Prescriptive Analytics - Inventory Optimization
+Problem Description: Optimasi inventory management dan reorder strategy
+
+#
+Step Description: Hasil inventory optimization analysis menunjukkan:
+Step Type: multiple-choice-multiple
+Option A: 23 produk memerlukan urgent reorder
+Option B: 104 produk mengalami overstock
+Option C: Potential lost sales risk Rp 442M
+Option D: Semua produk dalam kondisi optimal
+Option E: Perlu implement automated reorder system
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Investment untuk automated inventory system sebesar Rp {blank} juta dapat mengurangi risk exposure Rp 442M, menghasilkan ROI {blank}% di tahun pertama.
+Step Type: fill-blank
+Correct Answer A: 50
+Alternative Answer A: lima puluh
+Correct Answer B: 884
+Alternative Answer B: delapan ratus delapan puluh empat
+Must Be Correct: false
+
+###
+Problem Title: Prescriptive Analytics - Dynamic Pricing
+Problem Description: Strategi dynamic pricing berdasarkan price elasticity
+
+#
+Step Description: Rekomendasi dynamic pricing untuk semua kategori adalah:
+Step Type: multiple-choice-single
+Option A: Turunkan harga 5% untuk semua produk
+Option B: Naikkan harga 3% untuk semua kategori
+Option C: Naikkan harga 10% hanya untuk Electronics
+Option D: Tidak ada perubahan harga
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Price increase +3% direkomendasikan karena:
+Step Type: multiple-choice-multiple
+Option A: Semua kategori menunjukkan inelastic demand (elasticity mendekati 0)
+Option B: Competitor pricing 5-8% lebih tinggi dari harga current
+Option C: Customer surveys menunjukkan price bukan top concern
+Option D: Inventory terlalu tinggi perlu discount
+Option E: Direct margin improvement tanpa significant volume impact
+Correct Answer: A, B, E
+Must Be Correct: false
+
+###
+Problem Title: Analytics Integration - Complete Framework
+Problem Description: Bagaimana 4 tipe analytics bekerja secara terintegrasi
+
+#
+Step Description: Urutan yang benar dalam menggunakan 4 tipe analytics untuk business decision adalah:
+Step Type: multiple-choice-single
+Option A: Predictive → Descriptive → Diagnostic → Prescriptive
+Option B: Descriptive → Diagnostic → Predictive → Prescriptive
+Option C: Prescriptive → Predictive → Diagnostic → Descriptive
+Option D: Diagnostic → Descriptive → Prescriptive → Predictive
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Setiap tipe analytics membangun di atas tipe sebelumnya, dimana {blank} memberikan foundation data, {blank} menjelaskan pola, {blank} memproyeksikan masa depan, dan {blank} memberikan action plan.
+Step Type: fill-blank
+Correct Answer A: Descriptive
+Alternative Answer A: descriptive analytics
+Correct Answer B: Diagnostic
+Alternative Answer B: diagnostic analytics
+Correct Answer C: Predictive
+Alternative Answer C: predictive analytics
+Correct Answer D: Prescriptive
+Alternative Answer D: prescriptive analytics
+Must Be Correct: true
+
+#
+Step Description: Analytics progression menunjukkan increasing complexity dan value:
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: true
+
+#
+Step Description: Setiap level analytics memerlukan data quality yang semakin tinggi, dengan Prescriptive Analytics membutuhkan data paling berkualitas dan comprehensive.
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: true
+
+###
+Problem Title: Business Impact and ROI Calculation
+Problem Description: Menghitung dampak bisnis dari implementasi analytics
+
+#
+Step Description: Total investment untuk implementasi semua rekomendasi prescriptive analytics adalah Rp {blank} juta dengan expected annual returns Rp {blank} miliar, menghasilkan overall ROI {blank}%.
+Step Type: fill-blank
+Correct Answer A: 114.3
+Alternative Answer A: 114,3
+Correct Answer B: 1.2
+Alternative Answer B: 1,2
+Correct Answer C: 1,050
+Alternative Answer C: 1050
+Must Be Correct: false
+
+#
+Step Description: Payback period untuk total investment analytics adalah:
+Step Type: multiple-choice-single
+Option A: 1.5 bulan
+Option B: 3.4 bulan
+Option C: 6 bulan
+Option D: 12 bulan
+Correct Answer: B
+Must Be Correct: false
+
+###
+Problem Title: Correlation vs Causation
+Problem Description: Memahami perbedaan antara korelasi dan kausalitas
+
+#
+Step Description: Pernyataan "Correlation does not imply causation" berarti:
+Step Type: multiple-choice-single
+Option A: Korelasi dan kausalitas adalah hal yang sama
+Option B: Hanya karena dua variabel berkorelasi tidak berarti satu menyebabkan yang lain
+Option C: Korelasi selalu menunjukkan hubungan sebab-akibat
+Option D: Kausalitas tidak penting dalam analisis data
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Contoh spurious correlation adalah ketika penjualan es krim berkorelasi dengan kasus tenggelam, padahal penyebab sebenarnya adalah {blank} yang mempengaruhi kedua variabel tersebut (confounding variable).
+Step Type: fill-blank
+Correct Answer: musim panas
+Alternative Answer: summer
+Alternative Answer: cuaca panas
+Alternative Answer: temperature
+Must Be Correct: false
+
+###
+Problem Title: Model Selection Criteria
+Problem Description: Kriteria pemilihan model machine learning yang tepat
+
+#
+Step Description: Pilih SEMUA kriteria yang digunakan untuk memilih best forecasting model:
+Step Type: multiple-choice-multiple
+Option A: MAE (Mean Absolute Error) yang rendah
+Option B: Standard deviation yang rendah (consistency)
+Option C: Forecast uncertainty percentage
+Option D: Model complexity (lebih complex selalu lebih baik)
+Option E: Confidence interval width
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Gradient Boosting memiliki MAE Rp 7.1M dengan standard deviation yang {blank}% lebih rendah dari Random Forest, menunjukkan tidak hanya akurat tapi juga {blank}.
+Step Type: fill-blank
+Correct Answer A: 58
+Alternative Answer A: lima puluh delapan
+Correct Answer B: consistent
+Alternative Answer B: konsisten
+Alternative Answer B: stable
+Must Be Correct: false

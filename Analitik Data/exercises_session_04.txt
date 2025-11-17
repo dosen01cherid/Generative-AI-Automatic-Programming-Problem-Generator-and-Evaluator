@@ -1,0 +1,687 @@
+###
+Problem Title: Data Exploration - Definisi dan Tujuan
+Problem Description: Memahami konsep dasar dan tujuan data exploration
+
+#
+Step Description: Data Exploration adalah proses {blank} data untuk memahami {blank}, {blank}, dan {blank} sebelum melakukan analisis mendalam.
+Step Type: fill-blank
+Correct Answer A: investigasi
+Alternative Answer A: eksplorasi
+Alternative Answer A: investigasi dan pemeriksaan
+Correct Answer B: struktur
+Alternative Answer B: karakteristik
+Alternative Answer B: pola
+Correct Answer C: pola
+Alternative Answer C: patterns
+Alternative Answer C: hubungan
+Correct Answer D: anomali
+Alternative Answer D: anomalies
+Alternative Answer D: outliers
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang merupakan tujuan utama dari Data Exploration:
+Step Type: multiple-choice-multiple
+Option A: Memahami distribusi data
+Option B: Identifikasi outliers dan missing values
+Option C: Menemukan patterns dan relationships
+Option D: Langsung membuat prediksi tanpa pemeriksaan
+Option E: Validasi asumsi statistik
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Measures of Central Tendency - Mean
+Problem Description: Memahami konsep dan perhitungan mean (rata-rata)
+
+#
+Step Description: Mean (rata-rata) adalah ukuran central tendency yang dihitung dengan {blank} semua nilai dan membaginya dengan {blank}.
+Step Type: fill-blank
+Correct Answer A: menjumlahkan
+Alternative Answer A: sum
+Alternative Answer A: total
+Correct Answer B: jumlah data
+Alternative Answer B: banyaknya data
+Alternative Answer B: n
+Must Be Correct: false
+
+#
+Step Description: Jika data adalah: 10, 15, 20, 25, 30, maka mean-nya adalah {blank}.
+Step Type: fill-blank
+Correct Answer: 20
+Alternative Answer: dua puluh
+Must Be Correct: false
+
+#
+Step Description: Kelemahan utama dari mean sebagai ukuran central tendency adalah:
+Step Type: multiple-choice-single
+Option A: Sulit dihitung
+Option B: Sangat sensitive terhadap outliers
+Option C: Tidak bisa digunakan untuk data numerik
+Option D: Selalu sama dengan median
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Measures of Central Tendency - Median
+Problem Description: Memahami konsep dan perhitungan median
+
+#
+Step Description: Median adalah nilai {blank} setelah data diurutkan, yang membagi data menjadi {blank} bagian yang sama.
+Step Type: fill-blank
+Correct Answer A: tengah
+Alternative Answer A: middle
+Alternative Answer A: median
+Correct Answer B: dua
+Alternative Answer B: 2
+Alternative Answer B: two
+Must Be Correct: false
+
+#
+Step Description: Untuk data: 5, 10, 15, 20, 25 (5 nilai, ganjil), median adalah:
+Step Type: multiple-choice-single
+Option A: 5
+Option B: 10
+Option C: 15
+Option D: 20
+Correct Answer: C
+Must Be Correct: false
+
+#
+Step Description: Untuk data: 10, 20, 30, 40 (4 nilai, genap), median adalah rata-rata dari nilai ke-2 dan ke-3, yaitu {blank}.
+Step Type: fill-blank
+Correct Answer: 25
+Alternative Answer: dua puluh lima
+Must Be Correct: false
+
+###
+Problem Title: Measures of Central Tendency - Mode
+Problem Description: Memahami konsep mode dan aplikasinya
+
+#
+Step Description: Mode adalah nilai yang paling {blank} muncul dalam dataset.
+Step Type: fill-blank
+Correct Answer: sering
+Alternative Answer: frequently
+Alternative Answer: banyak
+Must Be Correct: false
+
+#
+Step Description: Dalam dataset: 10, 20, 20, 30, 30, 30, 40, mode-nya adalah:
+Step Type: multiple-choice-single
+Option A: 10
+Option B: 20
+Option C: 30
+Option D: 40
+Correct Answer: C
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA pernyataan yang BENAR tentang mode:
+Step Type: multiple-choice-multiple
+Option A: Bisa digunakan untuk data categorical
+Option B: Bisa ada lebih dari satu mode (bimodal, multimodal)
+Option C: Tidak terpengaruh oleh outliers
+Option D: Selalu sama dengan mean
+Option E: Useful untuk data nominal
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Measures of Dispersion - Range
+Problem Description: Memahami konsep range sebagai ukuran dispersi
+
+#
+Step Description: Range adalah selisih antara nilai {blank} dan nilai {blank} dalam dataset.
+Step Type: fill-blank
+Correct Answer A: maksimum
+Alternative Answer A: tertinggi
+Alternative Answer A: terbesar
+Correct Answer B: minimum
+Alternative Answer B: terendah
+Alternative Answer B: terkecil
+Must Be Correct: false
+
+#
+Step Description: Jika data memiliki nilai minimum 15 dan maksimum 75, maka range-nya adalah {blank}.
+Step Type: fill-blank
+Correct Answer: 60
+Alternative Answer: enam puluh
+Must Be Correct: false
+
+#
+Step Description: Kelemahan utama range sebagai ukuran dispersi adalah:
+Step Type: multiple-choice-single
+Option A: Sulit dihitung
+Option B: Hanya menggunakan dua nilai (min dan max), mengabaikan nilai lainnya
+Option C: Tidak bisa digunakan untuk data numerik
+Option D: Selalu bernilai negatif
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Measures of Dispersion - Variance and Standard Deviation
+Problem Description: Memahami variance dan standard deviation
+
+#
+Step Description: Variance mengukur {blank} dari setiap data point terhadap {blank}.
+Step Type: fill-blank
+Correct Answer A: rata-rata kuadrat jarak
+Alternative Answer A: average squared deviation
+Alternative Answer A: dispersi kuadrat
+Correct Answer B: mean
+Alternative Answer B: rata-rata
+Alternative Answer B: average
+Must Be Correct: false
+
+#
+Step Description: Standard Deviation adalah {blank} dari variance, yang memiliki satuan yang sama dengan data asli.
+Step Type: fill-blank
+Correct Answer: akar kuadrat
+Alternative Answer: square root
+Alternative Answer: sqrt
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA pernyataan yang BENAR tentang Standard Deviation:
+Step Type: multiple-choice-multiple
+Option A: Semakin besar SD, semakin spread out datanya
+Option B: SD = 0 berarti semua nilai sama
+Option C: SD selalu non-negatif (>= 0)
+Option D: SD tidak terpengaruh oleh outliers
+Option E: SD memiliki satuan yang sama dengan data asli
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Percentiles and Quartiles
+Problem Description: Memahami konsep percentiles dan quartiles
+
+#
+Step Description: Quartiles membagi data terurut menjadi {blank} bagian yang sama, dengan Q1 pada percentile ke-{blank}, Q2 (median) pada percentile ke-{blank}, dan Q3 pada percentile ke-{blank}.
+Step Type: fill-blank
+Correct Answer A: 4
+Alternative Answer A: empat
+Alternative Answer A: four
+Correct Answer B: 25
+Alternative Answer B: dua puluh lima
+Correct Answer C: 50
+Alternative Answer C: lima puluh
+Correct Answer D: 75
+Alternative Answer D: tujuh puluh lima
+Must Be Correct: false
+
+#
+Step Description: Interquartile Range (IQR) dihitung dengan formula:
+Step Type: multiple-choice-single
+Option A: IQR = Q3 + Q1
+Option B: IQR = Q3 - Q1
+Option C: IQR = Q2 - Q1
+Option D: IQR = Max - Min
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: IQR mengukur spread dari {blank}% data di tengah, dan robust terhadap {blank}.
+Step Type: fill-blank
+Correct Answer A: 50
+Alternative Answer A: lima puluh
+Correct Answer B: outliers
+Alternative Answer B: outlier
+Alternative Answer B: nilai ekstrem
+Must Be Correct: false
+
+###
+Problem Title: Outlier Detection using IQR Method
+Problem Description: Mengidentifikasi outliers menggunakan metode IQR
+
+#
+Step Description: Dalam metode IQR, sebuah nilai dianggap outlier jika:
+Step Type: multiple-choice-multiple
+Option A: Nilai < Q1 - 1.5 × IQR (lower outlier)
+Option B: Nilai > Q3 + 1.5 × IQR (upper outlier)
+Option C: Nilai = Median
+Option D: Nilai berada di antara Q1 dan Q3
+Correct Answer: A, B
+Must Be Correct: true
+
+#
+Step Description: Jika Q1 = 20, Q3 = 40, maka IQR = {blank}. Lower fence = Q1 - 1.5×IQR = {blank}, dan Upper fence = Q3 + 1.5×IQR = {blank}.
+Step Type: fill-blank
+Correct Answer A: 20
+Alternative Answer A: dua puluh
+Correct Answer B: -10
+Alternative Answer B: minus sepuluh
+Correct Answer C: 70
+Alternative Answer C: tujuh puluh
+Must Be Correct: false
+
+#
+Step Description: Nilai 75 dengan Lower fence = 10 dan Upper fence = 70 adalah:
+Step Type: multiple-choice-single
+Option A: Normal value
+Option B: Outlier (upper)
+Option C: Outlier (lower)
+Option D: Q3
+Correct Answer: B
+Must Be Correct: false
+
+###
+Problem Title: Correlation Analysis - Fundamentals
+Problem Description: Memahami konsep correlation dan interpretasinya
+
+#
+Step Description: Correlation mengukur {blank} dan {blank} hubungan linear antara dua variabel.
+Step Type: fill-blank
+Correct Answer A: kekuatan
+Alternative Answer A: strength
+Correct Answer B: arah
+Alternative Answer B: direction
+Must Be Correct: false
+
+#
+Step Description: Koefisien korelasi Pearson (r) memiliki range:
+Step Type: multiple-choice-single
+Option A: 0 sampai 1
+Option B: -1 sampai 0
+Option C: -1 sampai +1
+Option D: 0 sampai infinity
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA interpretasi yang BENAR untuk correlation coefficient:
+Step Type: multiple-choice-multiple
+Option A: r = +1 berarti perfect positive correlation
+Option B: r = -1 berarti perfect negative correlation
+Option C: r = 0 berarti no linear relationship
+Option D: r > 0 berarti kedua variabel bergerak searah
+Option E: r < 0 berarti kedua variabel bergerak berlawanan arah
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Correlation Strength Interpretation
+Problem Description: Menginterpretasi kekuatan korelasi
+
+#
+Step Description: Interpretasi kekuatan korelasi berdasarkan |r| (nilai absolut):
+Step Type: multiple-choice-multiple
+Option A: |r| < 0.3 = Weak correlation
+Option B: 0.3 ≤ |r| < 0.7 = Moderate correlation
+Option C: |r| ≥ 0.7 = Strong correlation
+Option D: |r| = 1 = Perfect correlation
+Option E: |r| > 1 = Very strong correlation (impossible!)
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Jika korelasi antara variabel X dan Y adalah r = -0.85, maka hubungannya adalah:
+Step Type: multiple-choice-single
+Option A: Weak negative
+Option B: Moderate negative
+Option C: Strong negative
+Option D: Perfect negative
+Correct Answer: C
+Must Be Correct: false
+
+#
+Step Description: Correlation r = 0.15 menunjukkan hubungan yang {blank} dan praktis tidak ada hubungan linear yang signifikan.
+Step Type: fill-blank
+Correct Answer: weak
+Alternative Answer: lemah
+Alternative Answer: sangat lemah
+Must Be Correct: false
+
+###
+Problem Title: Correlation vs Causation - Critical Concept
+Problem Description: Memahami perbedaan krusial antara korelasi dan kausalitas
+
+#
+Step Description: "Correlation does not imply causation" berarti:
+Step Type: multiple-choice-single
+Option A: Korelasi dan kausalitas sama saja
+Option B: Hanya karena dua variabel berkorelasi tidak berarti satu menyebabkan yang lain
+Option C: Jika ada korelasi pasti ada kausalitas
+Option D: Kausalitas tidak penting dalam data analysis
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA alasan mengapa korelasi tidak sama dengan kausalitas:
+Step Type: multiple-choice-multiple
+Option A: Bisa ada confounding variables (variabel ketiga yang mempengaruhi kedua variabel)
+Option B: Bisa terjadi reverse causation (arah kausalitas terbalik)
+Option C: Bisa spurious correlation (kebetulan saja)
+Option D: Korelasi selalu menunjukkan hubungan sebab-akibat
+Correct Answer: A, B, C
+Must Be Correct: false
+
+#
+Step Description: Contoh classic spurious correlation: penjualan es krim berkorelasi dengan kasus tenggelam, padahal confounding variable-nya adalah {blank}.
+Step Type: fill-blank
+Correct Answer: musim panas
+Alternative Answer: summer
+Alternative Answer: temperature
+Alternative Answer: cuaca panas
+Must Be Correct: false
+
+###
+Problem Title: Data Transformation - Normalization
+Problem Description: Memahami teknik normalization untuk data transformation
+
+#
+Step Description: Min-Max Normalization mentransformasi data ke range {blank} sampai {blank} menggunakan formula tertentu.
+Step Type: fill-blank
+Correct Answer A: 0
+Alternative Answer A: nol
+Correct Answer B: 1
+Alternative Answer B: satu
+Must Be Correct: false
+
+#
+Step Description: Formula untuk Min-Max Normalization adalah:
+Step Type: multiple-choice-single
+Option A: (X - Min) / (Max - Min)
+Option B: (X - Mean) / SD
+Option C: X / Max
+Option D: X - Mean
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Jika nilai X = 50, Min = 20, Max = 80, maka normalized value = {blank}.
+Step Type: fill-blank
+Correct Answer: 0.5
+Alternative Answer: 0,5
+Alternative Answer: setengah
+Must Be Correct: false
+
+###
+Problem Title: Data Transformation - Standardization
+Problem Description: Memahami teknik standardization (Z-score)
+
+#
+Step Description: Standardization (Z-score) mentransformasi data sehingga memiliki mean = {blank} dan standard deviation = {blank}.
+Step Type: fill-blank
+Correct Answer A: 0
+Alternative Answer A: nol
+Correct Answer B: 1
+Alternative Answer B: satu
+Must Be Correct: false
+
+#
+Step Description: Formula untuk Z-score standardization adalah:
+Step Type: multiple-choice-single
+Option A: Z = (X - Min) / (Max - Min)
+Option B: Z = (X - Mean) / Standard Deviation
+Option C: Z = X / Mean
+Option D: Z = X - Median
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Z-score = -2 berarti nilai tersebut berada {blank} standard deviations di bawah mean.
+Step Type: fill-blank
+Correct Answer: 2
+Alternative Answer: dua
+Alternative Answer: two
+Must Be Correct: false
+
+###
+Problem Title: Normalization vs Standardization
+Problem Description: Memilih teknik transformation yang tepat
+
+#
+Step Description: Pilih SEMUA kapan sebaiknya menggunakan Normalization (Min-Max):
+Step Type: multiple-choice-multiple
+Option A: Ketika butuh bounded range (0-1)
+Option B: Untuk neural networks yang butuh input 0-1
+Option C: Ketika data tidak mengikuti normal distribution
+Option D: Ketika ada banyak outliers (NOT recommended)
+Option E: Untuk image processing (pixel values)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA kapan sebaiknya menggunakan Standardization (Z-score):
+Step Type: multiple-choice-multiple
+Option A: Ketika data approximately normal distribution
+Option B: Untuk algoritma yang assume zero mean (PCA, linear regression)
+Option C: Ketika ada outliers (lebih robust dari normalization)
+Option D: Ketika butuh interpretasi dalam terms of standard deviations
+Option E: Ketika tidak peduli dengan range tertentu
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+###
+Problem Title: Data Distribution - Skewness
+Problem Description: Memahami konsep skewness dalam distribusi data
+
+#
+Step Description: Skewness mengukur {blank} dari distribusi data.
+Step Type: fill-blank
+Correct Answer: ketidaksimetrisan
+Alternative Answer: asymmetry
+Alternative Answer: kemiringan
+Alternative Answer: skew
+Must Be Correct: false
+
+#
+Step Description: Karakteristik dari Positive Skew (Right Skew) adalah:
+Step Type: multiple-choice-multiple
+Option A: Tail lebih panjang di sisi kanan
+Option B: Mean > Median > Mode
+Option C: Banyak nilai kecil, sedikit nilai besar (outliers kanan)
+Option D: Tail lebih panjang di sisi kiri
+Correct Answer: A, B, C
+Must Be Correct: false
+
+#
+Step Description: Karakteristik dari Negative Skew (Left Skew) adalah:
+Step Type: multiple-choice-multiple
+Option A: Tail lebih panjang di sisi kiri
+Option B: Mean < Median < Mode
+Option C: Banyak nilai besar, sedikit nilai kecil (outliers kiri)
+Option D: Perfectly symmetric
+Correct Answer: A, B, C
+Must Be Correct: false
+
+#
+Step Description: Jika Mean = 50, Median = 55, Mode = 60, maka distribusi ini adalah:
+Step Type: multiple-choice-single
+Option A: Symmetric (Normal)
+Option B: Positive Skew (Right Skew)
+Option C: Negative Skew (Left Skew)
+Option D: Bimodal
+Correct Answer: C
+Must Be Correct: false
+
+###
+Problem Title: Handling Missing Values
+Problem Description: Strategi menangani missing data
+
+#
+Step Description: Pilih SEMUA strategi yang valid untuk handling missing values:
+Step Type: multiple-choice-multiple
+Option A: Deletion (hapus rows dengan missing values)
+Option B: Mean/Median imputation (isi dengan rata-rata)
+Option C: Forward fill / Backward fill (untuk time series)
+Option D: Ignore completely (selalu salah!)
+Option E: Predictive imputation (gunakan model untuk prediksi nilai)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Mean imputation sebaiknya digunakan ketika:
+Step Type: multiple-choice-multiple
+Option A: Data approximately normal distribution
+Option B: Missing values < 5-10% dari total data
+Option C: Missing values bersifat random (MCAR - Missing Completely At Random)
+Option D: Ada banyak outliers (NOT recommended)
+Option E: Variabel bersifat numerical
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Jika dataset memiliki 1000 rows dan kolom 'age' missing 30 values (3%), strategi yang paling sederhana dan reasonable adalah {blank} dengan mean atau median dari kolom tersebut.
+Step Type: fill-blank
+Correct Answer: imputation
+Alternative Answer: imputasi
+Alternative Answer: mengisi
+Alternative Answer: fill
+Must Be Correct: false
+
+###
+Problem Title: Exploratory Data Analysis - Histogram
+Problem Description: Menggunakan histogram untuk memahami distribusi
+
+#
+Step Description: Histogram digunakan untuk visualize {blank} dari variabel {blank}.
+Step Type: fill-blank
+Correct Answer A: distribusi
+Alternative Answer A: distribution
+Alternative Answer A: sebaran
+Correct Answer B: numerical
+Alternative Answer B: numerik
+Alternative Answer B: continuous
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA informasi yang bisa didapat dari histogram:
+Step Type: multiple-choice-multiple
+Option A: Shape of distribution (normal, skewed, bimodal)
+Option B: Central tendency (approximate)
+Option C: Spread/variability of data
+Option D: Presence of outliers
+Option E: Exact correlation dengan variabel lain
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Number of bins dalam histogram mempengaruhi:
+Step Type: multiple-choice-single
+Option A: Tidak ada pengaruh
+Option B: Level of detail - terlalu sedikit bins = over-smoothing, terlalu banyak = noisy
+Option C: Mean dari data
+Option D: Standard deviation dari data
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Exploratory Data Analysis - Box Plot
+Problem Description: Memahami dan menginterpretasi box plot
+
+#
+Step Description: Box plot menampilkan {blank}-number summary: Minimum, {blank}, {blank}, {blank}, dan Maximum.
+Step Type: fill-blank
+Correct Answer A: five
+Alternative Answer A: 5
+Alternative Answer A: lima
+Correct Answer B: Q1
+Alternative Answer B: quartile 1
+Alternative Answer B: kuartil pertama
+Correct Answer C: Median
+Alternative Answer C: Q2
+Alternative Answer C: quartile 2
+Correct Answer D: Q3
+Alternative Answer D: quartile 3
+Alternative Answer D: kuartil ketiga
+Must Be Correct: false
+
+#
+Step Description: Dalam box plot, "box" merepresentasikan:
+Step Type: multiple-choice-single
+Option A: Seluruh data
+Option B: Middle 50% of data (dari Q1 ke Q3)
+Option C: Mean ± 1 standard deviation
+Option D: Hanya outliers
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA yang bisa diidentifikasi dari box plot:
+Step Type: multiple-choice-multiple
+Option A: Median value
+Option B: Interquartile Range (IQR)
+Option C: Outliers (titik di luar whiskers)
+Option D: Skewness (jika median tidak di tengah box)
+Option E: Exact mean value (NOT directly visible)
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+###
+Problem Title: Exploratory Data Analysis - Scatter Plot
+Problem Description: Menggunakan scatter plot untuk analisis relasi
+
+#
+Step Description: Scatter plot digunakan untuk visualize hubungan antara {blank} variabel {blank}.
+Step Type: fill-blank
+Correct Answer A: dua
+Alternative Answer A: 2
+Alternative Answer A: two
+Correct Answer B: numerical
+Alternative Answer B: numerik
+Alternative Answer B: continuous
+Must Be Correct: false
+
+#
+Step Description: Dari scatter plot, kita bisa identify:
+Step Type: multiple-choice-multiple
+Option A: Direction of relationship (positive/negative)
+Option B: Strength of relationship (scatter vs linear)
+Option C: Linearity (linear vs non-linear pattern)
+Option D: Outliers (points jauh dari pattern)
+Option E: Clusters atau groupings
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+#
+Step Description: Scatter plot dengan points yang membentuk garis naik dari kiri bawah ke kanan atas menunjukkan:
+Step Type: multiple-choice-single
+Option A: Negative correlation
+Option B: Positive correlation
+Option C: No correlation
+Option D: Perfect zero correlation
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Comprehensive Data Exploration Workflow
+Problem Description: Urutan langkah dalam exploratory data analysis
+
+#
+Step Description: Urutan yang benar dalam melakukan EDA adalah:
+Step Type: multiple-choice-single
+Option A: Visualization → Summary Statistics → Data Cleaning
+Option B: Data Cleaning → Summary Statistics → Visualization
+Option C: Summary Statistics → Data Cleaning → Visualization
+Option D: Tidak ada urutan tertentu
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang termasuk dalam comprehensive EDA process:
+Step Type: multiple-choice-multiple
+Option A: Check data types dan structure
+Option B: Handle missing values
+Option C: Identify dan handle outliers
+Option D: Calculate summary statistics (mean, median, SD, etc)
+Option E: Visualize distributions dan relationships
+Option F: Langsung build model tanpa exploration
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+#
+Step Description: Dalam tahap summary statistics, kita hitung {blank} tendency (mean, median, mode), {blank} (range, SD, IQR), dan {blank} (skewness, kurtosis).
+Step Type: fill-blank
+Correct Answer A: central
+Alternative Answer A: pusat
+Alternative Answer A: pemusatan
+Correct Answer B: dispersion
+Alternative Answer B: dispersi
+Alternative Answer B: variability
+Correct Answer C: shape
+Alternative Answer C: bentuk
+Alternative Answer C: distribusi
+Must Be Correct: false

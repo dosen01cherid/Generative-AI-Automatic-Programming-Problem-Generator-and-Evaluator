@@ -1,0 +1,395 @@
+###
+Problem Title: Siklus Manajemen Data - 6 Tahap
+Problem Description: Memahami tahapan dalam siklus manajemen data
+
+#
+Step Description: Siklus Manajemen Data terdiri dari {blank} tahap utama yang dimulai dari perencanaan hingga pemanfaatan.
+Step Type: fill-blank
+Correct Answer: 6
+Alternative Answer: enam
+Alternative Answer: six
+Must Be Correct: false
+
+#
+Step Description: Tahap pertama dalam siklus manajemen data adalah {blank}, diikuti oleh tahap {blank}.
+Step Type: fill-blank
+Correct Answer A: Perencanaan
+Alternative Answer A: Planning
+Correct Answer B: Pengumpulan
+Alternative Answer B: Collection
+Must Be Correct: false
+
+###
+Problem Title: Dimensi Kualitas Data
+Problem Description: Mengidentifikasi dimensi-dimensi penting dalam kualitas data
+
+#
+Step Description: Pilih SEMUA dimensi yang merupakan bagian dari Data Quality:
+Step Type: multiple-choice-multiple
+Option A: Completeness (kelengkapan data)
+Option B: Accuracy (keakuratan data)
+Option C: Complexity (kompleksitas struktur)
+Option D: Consistency (konsistensi data)
+Option E: Timeliness (ketepatan waktu)
+Option F: Uniqueness (keunikan data)
+Correct Answer: A, B, D, E, F
+Must Be Correct: false
+
+#
+Step Description: Formula untuk menghitung Completeness adalah: Completeness = {blank} / Total values
+Step Type: fill-blank
+Correct Answer: Non-null values
+Alternative Answer: non-null
+Alternative Answer: jumlah nilai yang tidak null
+Must Be Correct: false
+
+###
+Problem Title: ETL Process
+Problem Description: Memahami tahapan Extract, Transform, Load
+
+#
+Step Description: Dalam ETL process, urutan yang benar adalah:
+Step Type: multiple-choice-single
+Option A: Transform → Extract → Load
+Option B: Extract → Transform → Load
+Option C: Load → Extract → Transform
+Option D: Extract → Load → Transform
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Extract adalah tahap {blank} data dari berbagai sumber, Transform adalah tahap {blank} dan standardisasi, sedangkan Load adalah tahap {blank} ke database tujuan.
+Step Type: fill-blank
+Correct Answer A: mengambil
+Alternative Answer A: retrieval
+Alternative Answer A: pengambilan
+Correct Answer B: pembersihan
+Alternative Answer B: cleaning
+Alternative Answer B: transformasi
+Correct Answer C: memuat
+Alternative Answer C: loading
+Alternative Answer C: pemuatan
+Must Be Correct: false
+
+###
+Problem Title: Data Quality Score Calculation
+Problem Description: Menghitung skor kualitas data
+
+#
+Step Description: Sebuah field memiliki Completeness 90%, Accuracy 85%, dan Uniqueness 95%. Hitung rata-rata overall quality score (dalam persen, berikan nilai bulat).
+Step Type: fill-blank
+Correct Answer: 90
+Alternative Answer: 90%
+Must Be Correct: false
+
+###
+Problem Title: Tahap Perencanaan Data
+Problem Description: Aktivitas dalam tahap perencanaan
+
+#
+Step Description: Manakah yang BUKAN termasuk aktivitas dalam tahap Perencanaan (Planning)?
+Step Type: multiple-choice-single
+Option A: Identifikasi kebutuhan data
+Option B: Definisi tujuan dan scope
+Option C: Penentuan sumber data
+Option D: Implementasi ETL pipeline
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: Data Storage Technologies
+Problem Description: Memahami teknologi penyimpanan data
+
+#
+Step Description: Pilih SEMUA yang merupakan opsi storage dalam tahap Penyimpanan:
+Step Type: multiple-choice-multiple
+Option A: Database relasional (MySQL, PostgreSQL)
+Option B: Data Warehouse
+Option C: Cloud Storage (AWS S3, Google Cloud)
+Option D: Excel spreadsheet untuk production
+Option E: NoSQL databases (MongoDB, Cassandra)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Data Processing Activities
+Problem Description: Aktivitas dalam tahap pengolahan data
+
+#
+Step Description: Dalam tahap Processing, tiga aktivitas utama adalah {blank}, {blank}, dan {blank}.
+Step Type: fill-blank
+Correct Answer A: Data Cleaning
+Alternative Answer A: Pembersihan
+Alternative Answer A: Cleaning
+Correct Answer B: Data Transformation
+Alternative Answer B: Transformasi
+Alternative Answer B: Transformation
+Correct Answer C: Data Integration
+Alternative Answer C: Integrasi
+Alternative Answer C: Integration
+Must Be Correct: false
+
+###
+Problem Title: Tools - Microsoft Excel
+Problem Description: Penggunaan Excel untuk data management
+
+#
+Step Description: Excel cocok digunakan untuk:
+Step Type: multiple-choice-single
+Option A: Big Data processing (>1 juta rows)
+Option B: Dataset kecil hingga menengah (<100,000 rows)
+Option C: Real-time streaming data
+Option D: Distributed computing
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Excel memiliki limit maksimal {blank} rows dan sangat baik untuk analisis {blank}.
+Step Type: fill-blank
+Correct Answer A: 1,048,576
+Alternative Answer A: 1048576
+Alternative Answer A: sekitar 1 juta
+Correct Answer B: eksploratori
+Alternative Answer B: exploratory
+Alternative Answer B: ad-hoc
+Must Be Correct: false
+
+###
+Problem Title: RapidMiner Capabilities
+Problem Description: Memahami kemampuan RapidMiner
+
+#
+Step Description: RapidMiner adalah tool yang menggunakan pendekatan:
+Step Type: multiple-choice-single
+Option A: Code-based programming
+Option B: Visual workflow / drag-and-drop
+Option C: Command-line interface
+Option D: Text-based scripting
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Google Colab vs Local Python
+Problem Description: Keunggulan Google Colab
+
+#
+Step Description: Pilih SEMUA keunggulan Google Colab:
+Step Type: multiple-choice-multiple
+Option A: Gratis dengan akses GPU/TPU
+Option B: Tidak perlu instalasi Python lokal
+Option C: Dapat share notebook dengan mudah
+Option D: Unlimited computing resources
+Option E: Terintegrasi dengan Google Drive
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Power BI Use Cases
+Problem Description: Aplikasi Power BI dalam business intelligence
+
+#
+Step Description: Power BI paling tepat digunakan untuk:
+Step Type: multiple-choice-single
+Option A: Data cleaning dan preprocessing
+Option B: Machine learning model training
+Option C: Interactive dashboards dan business reporting
+Option D: Database administration
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: RFM Analysis
+Problem Description: Memahami RFM untuk customer segmentation
+
+#
+Step Description: RFM Analysis terdiri dari tiga dimensi: Recency (seberapa baru customer bertransaksi), {blank} (seberapa sering), dan {blank} (berapa banyak uang dihabiskan).
+Step Type: fill-blank
+Correct Answer A: Frequency
+Alternative Answer A: frekuensi
+Correct Answer B: Monetary
+Alternative Answer B: monetary value
+Alternative Answer B: nilai moneter
+Must Be Correct: false
+
+###
+Problem Title: Data Quality - Completeness
+Problem Description: Mengukur kelengkapan data
+
+#
+Step Description: Jika sebuah dataset memiliki 10,000 records dan field 'email' memiliki 9,500 nilai yang terisi, maka Completeness score adalah {blank}%.
+Step Type: fill-blank
+Correct Answer: 95
+Alternative Answer: 95%
+Alternative Answer: 0.95
+Must Be Correct: false
+
+###
+Problem Title: Best Practice - Data Documentation
+Problem Description: Pentingnya dokumentasi data
+
+#
+Step Description: Data documentation harus mencakup:
+Step Type: multiple-choice-multiple
+Option A: Data lineage (asal-usul data)
+Option B: Data dictionary (definisi field)
+Option C: Update frequency
+Option D: Password database
+Option E: Quality metrics
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Data Analysis Techniques
+Problem Description: Teknik analisis dalam tahap Analysis
+
+#
+Step Description: Pilih SEMUA yang termasuk teknik dalam tahap Analysis:
+Step Type: multiple-choice-multiple
+Option A: Statistical analysis
+Option B: Machine learning
+Option C: Pattern discovery
+Option D: Data backup
+Option E: Trend analysis
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Data Utilization Goals
+Problem Description: Tujuan tahap pemanfaatan data
+
+#
+Step Description: Tujuan utama tahap Utilization adalah menggunakan hasil analisis untuk mendukung {blank}, membuat {blank}, dan menghasilkan {blank}.
+Step Type: fill-blank
+Correct Answer A: Decision Making
+Alternative Answer A: pengambilan keputusan
+Alternative Answer A: keputusan bisnis
+Correct Answer B: Reporting
+Alternative Answer B: laporan
+Alternative Answer B: pelaporan
+Correct Answer C: Business Value
+Alternative Answer C: nilai bisnis
+Alternative Answer C: value
+Must Be Correct: false
+
+###
+Problem Title: E-commerce Case Study - Data Sources
+Problem Description: Sumber data untuk analisis e-commerce
+
+#
+Step Description: Untuk project e-commerce analytics, pilih SEMUA sumber data yang relevan:
+Step Type: multiple-choice-multiple
+Option A: Website clickstream data
+Option B: Transaction database
+Option C: Customer demographics
+Option D: Weather data
+Option E: Customer service logs
+Option F: Product inventory
+Correct Answer: A, B, C, E, F
+Must Be Correct: false
+
+###
+Problem Title: Data Management Success Factors
+Problem Description: Faktor keberhasilan dalam data management
+
+#
+Step Description: Manakah yang PALING PENTING untuk kesuksesan data management?
+Step Type: multiple-choice-single
+Option A: Menggunakan tools yang paling mahal
+Option B: Data governance dan quality assurance yang kuat
+Option C: Menyimpan semua data tanpa filtering
+Option D: Menggunakan banyak tools sekaligus
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Data Quality Validation
+Problem Description: Validasi kualitas data
+
+#
+Step Description: Data validation rules harus mencakup:
+Step Type: multiple-choice-multiple
+Option A: Range checks (nilai dalam rentang valid)
+Option B: Format checks (email, phone number format)
+Option C: Cross-reference checks (konsistensi antar tabel)
+Option D: Ignoring all outliers
+Option E: Business logic validation
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Data Lifecycle Continuous Improvement
+Problem Description: Siklus iteratif dalam data management
+
+#
+Step Description: Data Management Lifecycle bersifat iteratif, yang berarti setelah tahap Utilization, kita dapat kembali ke tahap Planning untuk improvement berkelanjutan.
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: false
+
+###
+Problem Title: Tools Selection Decision
+Problem Description: Memilih tool yang tepat untuk kebutuhan
+
+#
+Step Description: Untuk visualisasi interaktif dan dashboard bisnis, tool yang PALING tepat adalah:
+Step Type: multiple-choice-single
+Option A: Microsoft Excel
+Option B: Google Colab (Python)
+Option C: Power BI
+Option D: Text editor
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Data Quality Trade-offs
+Problem Description: Memahami trade-off dalam data quality
+
+#
+Step Description: Manakah pernyataan yang BENAR tentang data quality?
+Step Type: multiple-choice-single
+Option A: 100% completeness selalu lebih baik, bahkan jika harus mengisi dengan data palsu
+Option B: Data quality harus di-balance dengan cost dan timeline
+Option C: Accuracy tidak penting selama data lengkap
+Option D: Consistency bisa diabaikan untuk mempercepat proses
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Comprehensive Data Management Scenario
+Problem Description: Studi kasus lengkap data management untuk retail
+
+#
+Step Description: Sebuah retail company ingin mengimplementasikan data management. Pada tahap Planning, mereka harus:
+Step Type: multiple-choice-multiple
+Option A: Identifikasi business objectives (meningkatkan penjualan 20%)
+Option B: Tentukan data sources (POS, CRM, inventory)
+Option C: Define success metrics (dashboard adoption rate)
+Option D: Langsung beli semua tools tanpa planning
+Option E: Stakeholder alignment
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Pada tahap Collection, sumber data utama retail meliputi {blank} untuk transaksi, {blank} untuk customer data, dan {blank} untuk inventory.
+Step Type: fill-blank
+Correct Answer A: POS
+Alternative Answer A: Point of Sale
+Alternative Answer A: sistem kasir
+Correct Answer B: CRM
+Alternative Answer B: Customer Relationship Management
+Alternative Answer B: sistem pelanggan
+Correct Answer C: WMS
+Alternative Answer C: Warehouse Management System
+Alternative Answer C: sistem gudang
+Must Be Correct: false
+
+#
+Step Description: Untuk data quality di retail, Completeness minimal yang acceptable untuk customer email adalah:
+Step Type: multiple-choice-single
+Option A: 50%
+Option B: 70%
+Option C: 90%
+Option D: 100%
+Correct Answer: C
+Must Be Correct: false
+

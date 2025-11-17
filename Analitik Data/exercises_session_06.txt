@@ -1,0 +1,557 @@
+###
+Problem Title: Data Visualization - Definition and Purpose
+Problem Description: Memahami konsep dasar dan tujuan data visualization
+
+#
+Step Description: Data Visualization adalah representasi {blank} dari informasi dan data menggunakan elemen {blank} seperti chart, grafik, dan peta.
+Step Type: fill-blank
+Correct Answer A: grafis
+Alternative Answer A: visual
+Alternative Answer A: graphical
+Correct Answer B: visual
+Alternative Answer B: grafik
+Alternative Answer B: graphic
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA tujuan utama dari data visualization:
+Step Type: multiple-choice-multiple
+Option A: Membuat data lebih mudah dipahami (accessible)
+Option B: Mengidentifikasi patterns dan trends
+Option C: Menyembunyikan informasi yang tidak menguntungkan
+Option D: Mengkomunikasikan insights dengan cepat
+Option E: Membuat keputusan data-driven
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+#
+Step Description: Otak manusia memproses informasi visual {blank} kali lebih cepat dibandingkan teks.
+Step Type: fill-blank
+Correct Answer: 60,000
+Alternative Answer: 60000
+Alternative Answer: enam puluh ribu
+Must Be Correct: false
+
+###
+Problem Title: CLEAR Principles for Effective Visualization
+Problem Description: Memahami prinsip-prinsip CLEAR dalam visualisasi data
+
+#
+Step Description: CLEAR adalah akronim dari {blank}, {blank}, {blank}, {blank}, dan {blank}.
+Step Type: fill-blank
+Correct Answer A: Clear
+Alternative Answer A: Jelas
+Alternative Answer A: Clarity
+Correct Answer B: Labeled
+Alternative Answer B: Berlabel
+Alternative Answer B: Labeling
+Correct Answer C: Easy
+Alternative Answer C: Mudah
+Alternative Answer C: Simple
+Correct Answer D: Accurate
+Alternative Answer D: Akurat
+Alternative Answer D: Accuracy
+Correct Answer E: Relevant
+Alternative Answer E: Relevan
+Alternative Answer E: Relevance
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang merupakan penerapan prinsip CLEAR yang benar:
+Step Type: multiple-choice-multiple
+Option A: Clear: Pesan immediately understandable tanpa penjelasan panjang
+Option B: Labeled: Semua axis, legend, dan data points diberi label
+Option C: Easy: Design sesimple mungkin, hindari clutter
+Option D: Accurate: Manipulasi skala axis untuk dramatisasi
+Option E: Relevant: Hanya tampilkan data yang mendukung pesan
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Chart Selection - Bar Chart vs Pie Chart
+Problem Description: Memilih jenis chart yang tepat untuk data
+
+#
+Step Description: Bar Chart paling tepat digunakan untuk:
+Step Type: multiple-choice-single
+Option A: Menampilkan parts of a whole dengan 3 kategori
+Option B: Perbandingan nilai antar banyak kategori (>6)
+Option C: Menunjukkan proporsi persentase yang total 100%
+Option D: Data time series dalam periode panjang
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Pie Chart sebaiknya TIDAK digunakan ketika:
+Step Type: multiple-choice-multiple
+Option A: Jumlah kategori lebih dari 6
+Option B: Perlu perbandingan presisi antar nilai
+Option C: Ada kategori dengan nilai yang sangat kecil (<2%)
+Option D: Ingin menampilkan parts of a whole
+Option E: Perlu membandingkan multiple datasets
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Manusia lebih baik dalam membandingkan {blank} (bar chart) daripada membandingkan {blank} atau sudut (pie chart).
+Step Type: fill-blank
+Correct Answer A: panjang
+Alternative Answer A: length
+Alternative Answer A: bar length
+Correct Answer B: area
+Alternative Answer B: luas
+Alternative Answer B: slice area
+Must Be Correct: false
+
+###
+Problem Title: Histogram - Distribution Visualization
+Problem Description: Memahami histogram untuk analisis distribusi
+
+#
+Step Description: Histogram digunakan untuk visualize {blank} dari data {blank}, dengan axis X menunjukkan {blank} dan axis Y menunjukkan {blank}.
+Step Type: fill-blank
+Correct Answer A: distribusi
+Alternative Answer A: distribution
+Alternative Answer A: sebaran
+Correct Answer B: continuous
+Alternative Answer B: kontinyu
+Alternative Answer B: numerical
+Correct Answer C: bins
+Alternative Answer C: range
+Alternative Answer C: intervals
+Correct Answer D: frequency
+Alternative Answer D: frekuensi
+Alternative Answer D: count
+Must Be Correct: false
+
+#
+Step Description: Formula Sturges' Rule untuk menentukan optimal number of bins adalah:
+Step Type: multiple-choice-single
+Option A: k = n / 10
+Option B: k = √n
+Option C: k = 1 + 3.322 × log₁₀(n)
+Option D: k = 2n
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA yang BENAR tentang bin selection dalam histogram:
+Step Type: multiple-choice-multiple
+Option A: Terlalu sedikit bins → oversmoothing, detail hilang
+Option B: Terlalu banyak bins → terlalu noisy, sulit lihat pola
+Option C: Jumlah bins tidak mempengaruhi interpretasi
+Option D: Alternative formula: k ≈ √n
+Option E: Sturges' Rule: k = 1 + 3.322 log₁₀(n)
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+###
+Problem Title: Line Chart - Time Series Visualization
+Problem Description: Menggunakan line chart untuk data time series
+
+#
+Step Description: Line Chart paling cocok untuk data {blank} yang menunjukkan {blank} over time.
+Step Type: fill-blank
+Correct Answer A: time series
+Alternative Answer A: temporal
+Alternative Answer A: waktu
+Correct Answer B: trends
+Alternative Answer B: pola
+Alternative Answer B: perubahan
+Must Be Correct: false
+
+#
+Step Description: Komponen time series terdiri dari:
+Step Type: multiple-choice-multiple
+Option A: Trend (T) - long-term pattern naik atau turun
+Option B: Seasonal (S) - pola berulang dalam periode tertentu
+Option C: Cyclical (C) - fluktuasi jangka panjang non-seasonal
+Option D: Irregular (I) - random variation atau noise
+Option E: Categorical (C) - data kategorikal
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Model decomposition untuk time series dapat berupa {blank} (Y = T + S + C + I) atau {blank} (Y = T × S × C × I).
+Step Type: fill-blank
+Correct Answer A: additive
+Alternative Answer A: penjumlahan
+Alternative Answer A: aditif
+Correct Answer B: multiplicative
+Alternative Answer B: perkalian
+Alternative Answer B: multiplikatif
+Must Be Correct: false
+
+###
+Problem Title: Scatter Plot - Bivariate Relationship
+Problem Description: Menggunakan scatter plot untuk analisis hubungan dua variabel
+
+#
+Step Description: Scatter Plot digunakan untuk visualize hubungan antara {blank} variabel {blank}.
+Step Type: fill-blank
+Correct Answer A: dua
+Alternative Answer A: 2
+Alternative Answer A: two
+Correct Answer B: numerical
+Alternative Answer B: numerik
+Alternative Answer B: continuous
+Must Be Correct: false
+
+#
+Step Description: Dari scatter plot, kita dapat identify:
+Step Type: multiple-choice-multiple
+Option A: Direction of relationship (positive/negative)
+Option B: Strength of correlation (tight vs scattered)
+Option C: Linearity (linear vs non-linear pattern)
+Option D: Outliers (points yang jauh dari pattern)
+Option E: Causation (sebab-akibat) secara langsung
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Jika scatter plot menunjukkan points yang tersebar random tanpa pola, maka korelasi antara kedua variabel adalah:
+Step Type: multiple-choice-single
+Option A: Strong positive
+Option B: Strong negative
+Option C: Weak atau no correlation
+Option D: Perfect correlation
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Box Plot - Five Number Summary
+Problem Description: Memahami dan menginterpretasi box plot
+
+#
+Step Description: Box plot menampilkan five-number summary yang terdiri dari {blank}, {blank}, {blank}, {blank}, dan {blank}.
+Step Type: fill-blank
+Correct Answer A: Minimum
+Alternative Answer A: Min
+Alternative Answer A: nilai minimum
+Correct Answer B: Q1
+Alternative Answer B: Quartile 1
+Alternative Answer B: kuartil pertama
+Correct Answer C: Median
+Alternative Answer C: Q2
+Alternative Answer C: Quartile 2
+Correct Answer D: Q3
+Alternative Answer D: Quartile 3
+Alternative Answer D: kuartil ketiga
+Correct Answer E: Maximum
+Alternative Answer E: Max
+Alternative Answer E: nilai maksimum
+Must Be Correct: false
+
+#
+Step Description: Dalam box plot, "box" merepresentasikan:
+Step Type: multiple-choice-single
+Option A: Seluruh data dari min ke max
+Option B: Middle 50% of data (IQR dari Q1 ke Q3)
+Option C: Data dalam 1 standard deviation dari mean
+Option D: Hanya outliers
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Pilih SEMUA informasi yang dapat dilihat dari box plot:
+Step Type: multiple-choice-multiple
+Option A: Median value (garis di tengah box)
+Option B: Spread of data (IQR)
+Option C: Skewness (jika median tidak di tengah box)
+Option D: Outliers (titik di luar whiskers)
+Option E: Exact mean value
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+###
+Problem Title: Heatmap - Correlation Matrix
+Problem Description: Menggunakan heatmap untuk visualisasi correlation
+
+#
+Step Description: Heatmap correlation matrix menggunakan {blank} untuk merepresentasikan kekuatan dan arah korelasi antar variabel.
+Step Type: fill-blank
+Correct Answer: warna
+Alternative Answer: color
+Alternative Answer: color intensity
+Must Be Correct: false
+
+#
+Step Description: Dalam heatmap correlation matrix:
+Step Type: multiple-choice-multiple
+Option A: Diagonal selalu bernilai 1 (korelasi variabel dengan dirinya sendiri)
+Option B: Matrix bersifat symmetrical
+Option C: Warna gelap/terang menunjukkan correlation strength
+Option D: Hanya menampilkan positive correlation
+Option E: Nilai berkisar dari -1 (negative) hingga +1 (positive)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Color Theory in Data Visualization
+Problem Description: Memahami penggunaan warna yang efektif
+
+#
+Step Description: Pilih SEMUA prinsip yang BENAR dalam penggunaan warna:
+Step Type: multiple-choice-multiple
+Option A: Sequential colors untuk data ordered (rendah ke tinggi)
+Option B: Diverging colors untuk data dengan midpoint penting (pos/neg)
+Option C: Categorical colors untuk data nominal (tidak ada urutan)
+Option D: Gunakan sebanyak mungkin warna untuk lebih menarik
+Option E: Pertimbangkan color blindness (8% populasi pria)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Untuk data sequential (0 ke 100), palet warna yang tepat adalah:
+Step Type: multiple-choice-single
+Option A: Red-Blue (diverging)
+Option B: Light Yellow to Dark Blue (sequential)
+Option C: Rainbow (categorical)
+Option D: Random colors
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Color-blind friendly palettes sebaiknya menghindari kombinasi warna {blank} dan {blank}.
+Step Type: fill-blank
+Correct Answer A: merah
+Alternative Answer A: red
+Correct Answer B: hijau
+Alternative Answer B: green
+Must Be Correct: false
+
+###
+Problem Title: Dashboard Design Principles
+Problem Description: Mendesain dashboard yang efektif
+
+#
+Step Description: Pilih SEMUA best practices dalam dashboard design:
+Step Type: multiple-choice-multiple
+Option A: Most important metric di top-left (natural eye flow)
+Option B: Consistent color scheme throughout
+Option C: Sebanyak mungkin charts dalam satu screen
+Option D: Clear hierarchy of information
+Option E: Interactive elements untuk drill-down
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+#
+Step Description: Rule "5 seconds test" untuk dashboard berarti:
+Step Type: multiple-choice-single
+Option A: Dashboard harus load dalam 5 detik
+Option B: User harus dapat memahami key insight dalam 5 detik
+Option C: Update data setiap 5 detik
+Option D: Maksimal 5 charts per dashboard
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Chart Junk and Minimalism
+Problem Description: Menghindari chart junk dan menerapkan minimalism
+
+#
+Step Description: Chart junk adalah elemen {blank} yang tidak menambah {blank} dan malah mengalihkan perhatian dari data.
+Step Type: fill-blank
+Correct Answer A: dekoratif
+Alternative Answer A: unnecessary
+Alternative Answer A: tidak perlu
+Correct Answer B: informasi
+Alternative Answer B: value
+Alternative Answer B: insight
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang termasuk chart junk yang harus dihindari:
+Step Type: multiple-choice-multiple
+Option A: 3D effects yang tidak perlu
+Option B: Grid lines yang terlalu banyak
+Option C: Dekorasi background yang rumit
+Option D: Axis labels yang jelas
+Option E: Excessive colors tanpa meaning
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Prinsip "Data-Ink Ratio" dari Edward Tufte menyatakan:
+Step Type: multiple-choice-single
+Option A: Semua ink harus untuk dekorasi
+Option B: Maksimalkan proporsi ink yang represent data, minimalkan non-data ink
+Option C: Semakin banyak ink semakin baik
+Option D: Tidak ada aturan tentang penggunaan ink
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Accessibility in Data Visualization
+Problem Description: Membuat visualisasi yang accessible untuk semua
+
+#
+Step Description: Pilih SEMUA pertimbangan accessibility dalam visualization:
+Step Type: multiple-choice-multiple
+Option A: Color-blind friendly palettes
+Option B: Sufficient contrast ratio (WCAG 4.5:1 minimum)
+Option C: Alternative text (alt text) untuk screen readers
+Option D: Hanya mengandalkan warna untuk membedakan data
+Option E: Font size yang readable (minimum 12pt)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: WCAG (Web Content Accessibility Guidelines) merekomendasikan contrast ratio minimum {blank}:1 untuk teks normal.
+Step Type: fill-blank
+Correct Answer: 4.5
+Alternative Answer: 4,5
+Alternative Answer: empat koma lima
+Must Be Correct: false
+
+###
+Problem Title: Misleading Visualizations - Common Pitfalls
+Problem Description: Menghindari visualisasi yang menyesatkan
+
+#
+Step Description: Pilih SEMUA yang merupakan praktik misleading yang harus dihindari:
+Step Type: multiple-choice-multiple
+Option A: Truncated Y-axis untuk exaggerate differences
+Option B: Inconsistent scales antar charts
+Option C: Cherry-picking data untuk support narrative
+Option D: Clearly labeled axes dengan full scale
+Option E: Using 3D untuk data 2D sehingga distort perception
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Truncated Y-axis (tidak dimulai dari 0) dapat:
+Step Type: multiple-choice-single
+Option A: Selalu merupakan best practice
+Option B: Acceptable jika clearly labeled dan data range sempit
+Option C: Selalu menyesatkan dan tidak boleh digunakan
+Option D: Tidak ada pengaruh pada interpretasi
+Correct Answer: B
+Must Be Correct: false
+
+#
+Step Description: Jika bar chart dengan Y-axis dari 95-100 (truncated) dibanding 0-100 (full), perbedaan visual akan terlihat {blank} lebih dramatis meskipun actual difference sama.
+Step Type: fill-blank
+Correct Answer: jauh
+Alternative Answer: much
+Alternative Answer: significantly
+Alternative Answer: sangat
+Must Be Correct: false
+
+###
+Problem Title: Interactive Visualizations
+Problem Description: Memahami benefits dan aplikasi interactive viz
+
+#
+Step Description: Pilih SEMUA benefits dari interactive visualization:
+Step Type: multiple-choice-multiple
+Option A: User dapat explore data sesuai interest mereka
+Option B: Drill-down untuk detail lebih lanjut
+Option C: Filter dan slice data secara dynamic
+Option D: Selalu lebih baik dari static visualization
+Option E: Enable self-service analytics
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Interactive visualization paling tepat untuk:
+Step Type: multiple-choice-single
+Option A: Printed reports
+Option B: Web dashboards dan applications
+Option C: Static presentations
+Option D: Academic papers
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Storytelling with Data
+Problem Description: Menggunakan visualisasi untuk storytelling yang efektif
+
+#
+Step Description: Data storytelling yang efektif memiliki {blank} bagian: Setup (context), {blank} (tension), dan {blank} (insight/action).
+Step Type: fill-blank
+Correct Answer A: tiga
+Alternative Answer A: 3
+Alternative Answer A: three
+Correct Answer B: Conflict
+Alternative Answer B: konflik
+Alternative Answer B: problem
+Correct Answer C: Resolution
+Alternative Answer C: resolusi
+Alternative Answer C: solution
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA elemen penting dalam data storytelling:
+Step Type: multiple-choice-multiple
+Option A: Clear narrative arc
+Option B: Context untuk memahami data
+Option C: Highlight key insights dengan annotations
+Option D: Sebanyak mungkin data points
+Option E: Call to action di akhir
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Tools for Data Visualization
+Problem Description: Memahami tools dan kapan menggunakannya
+
+#
+Step Description: Pilih tool yang paling tepat untuk setiap use case:
+Step Type: multiple-choice-multiple
+Option A: Excel - Quick ad-hoc charts dan exploratory analysis
+Option B: Tableau/Power BI - Interactive business dashboards
+Option C: Python (Matplotlib/Seaborn) - Programmatic viz dan custom analysis
+Option D: D3.js - Custom interactive web visualizations
+Option E: Notepad - Complex statistical visualizations
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Untuk membuat custom interactive web visualization dengan full control, library yang paling powerful adalah:
+Step Type: multiple-choice-single
+Option A: Microsoft Excel
+Option B: D3.js (JavaScript)
+Option C: Paint
+Option D: PowerPoint
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Visualization Ethics
+Problem Description: Ethical considerations dalam data visualization
+
+#
+Step Description: Prinsip ethical visualization meliputi:
+Step Type: multiple-choice-multiple
+Option A: Transparency tentang data sources dan methods
+Option B: Avoid manipulasi yang menyesatkan
+Option C: Representasi yang honest dan accurate
+Option D: Selalu manipulasi untuk support agenda
+Option E: Clear disclosure of limitations dan uncertainty
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Ketika ada uncertainty dalam data (error bars, confidence intervals), ethical practice adalah:
+Step Type: multiple-choice-single
+Option A: Sembunyikan untuk simplicity
+Option B: Clearly display dan explain uncertainty
+Option C: Manipulasi untuk reduce uncertainty
+Option D: Ignore uncertainty
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Ethical data visualization harus {blank}, {blank}, dan tidak {blank} audience.
+Step Type: fill-blank
+Correct Answer A: honest
+Alternative Answer A: jujur
+Alternative Answer A: truthful
+Correct Answer B: transparent
+Alternative Answer B: transparan
+Alternative Answer B: clear
+Correct Answer C: mislead
+Alternative Answer C: menyesatkan
+Alternative Answer C: deceive
+Must Be Correct: false

@@ -1,0 +1,461 @@
+###
+Problem Title: Data Analytics Lifecycle Phases
+Problem Description: Memahami struktur dan fase dalam Data Analytics Lifecycle
+
+#
+Step Description: Data Analytics Lifecycle terdiri dari berapa fase utama?
+Step Type: multiple-choice-single
+Option A: 4 fase
+Option B: 5 fase
+Option C: 6 fase
+Option D: 7 fase
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Fase Discovery - Business Understanding
+Problem Description: Memahami aktivitas dalam fase Discovery
+
+#
+Step Description: Dalam fase Discovery, apa yang BUKAN termasuk dalam aktivitas business understanding?
+Step Type: multiple-choice-single
+Option A: Identifikasi stakeholder
+Option B: Definisi business objectives
+Option C: Training model machine learning
+Option D: Formulate hypotheses
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Time Allocation in Analytics Projects
+Problem Description: Alokasi waktu dalam proyek analytics
+
+#
+Step Description: Berapa persentase waktu yang umumnya dihabiskan untuk fase Discovery dan Data Preparation dalam proyek analytics?
+Step Type: multiple-choice-single
+Option A: 50%
+Option B: 60%
+Option C: 70%
+Option D: 80%
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: Problem Definition Quality
+Problem Description: Membuat problem statement yang efektif
+
+#
+Step Description: Manakah contoh problem statement yang PALING spesifik dan baik?
+Step Type: multiple-choice-single
+Option A: "Kita ingin meningkatkan penjualan"
+Option B: "Improve customer satisfaction"
+Option C: "Reduce costs"
+Option D: "Reduce 30-day customer churn rate from 25% to 15% in 12 months"
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: Data Quality Dimensions
+Problem Description: Memahami dimensi-dimensi kualitas data
+
+#
+Step Description: Pilih SEMUA dimensi data quality yang benar:
+Step Type: multiple-choice-multiple
+Option A: Completeness - extent to which data is not missing
+Option B: Accuracy - data correctly represents reality
+Option C: Complexity - how complicated the data structure is
+Option D: Consistency - same data across sources matches
+Option E: Uniqueness - no unintended duplicates
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+###
+Problem Title: Missing Values Handling
+Problem Description: Strategi menangani missing values
+
+#
+Step Description: Untuk dataset dengan 100,000 records dan fitur 'income' yang memiliki 30% missing values, teknik mana yang PALING TIDAK disarankan?
+Step Type: multiple-choice-single
+Option A: Mean imputation
+Option B: Median imputation
+Option C: Listwise deletion (hapus semua baris dengan missing values)
+Option D: Predictive imputation using machine learning
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Feature Engineering - Temporal Features
+Problem Description: Membuat fitur temporal dari datetime
+
+#
+Step Description: Dari kolom datetime 'purchase_date', kita dapat membuat fitur baru seperti: day_of_week, is_weekend, month, dan {blank} yang mengukur recency.
+Step Type: fill-blank
+Correct Answer: days_since_last_purchase
+Alternative Answer: days_since_signup
+Alternative Answer: time_since_last_event
+Alternative Answer: recency
+Must Be Correct: false
+
+###
+Problem Title: Data Transformation - Normalization
+Problem Description: Menghitung Min-Max Normalization
+
+#
+Step Description: Diberikan nilai x = 75 pada fitur 'age' dengan x_min = 18 dan x_max = 90. Berapa hasil Min-Max Normalization? (Bulatkan ke 2 desimal)
+Step Type: fill-blank
+Correct Answer: 0.79
+Alternative Answer: 0.80
+Must Be Correct: false
+
+###
+Problem Title: IQR Outlier Detection
+Problem Description: Mendeteksi outlier menggunakan metode IQR
+
+#
+Step Description: Diberikan data dengan Q1 = 50, Q3 = 100. Tentukan upper bound untuk outlier detection menggunakan metode IQR.
+Step Type: fill-blank
+Correct Answer: 175
+Must Be Correct: false
+
+###
+Problem Title: Algorithm Selection - Classification
+Problem Description: Memilih algoritma yang tepat untuk klasifikasi
+
+#
+Step Description: Untuk problem klasifikasi dengan dataset kecil (1000 records) dan membutuhkan interpretability tinggi, algoritma mana yang PALING sesuai?
+Step Type: multiple-choice-single
+Option A: Deep Neural Network
+Option B: Decision Tree
+Option C: XGBoost
+Option D: K-Nearest Neighbors
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Regression vs Classification
+Problem Description: Membedakan problem regression dan classification
+
+#
+Step Description: Manakah yang merupakan problem REGRESSION?
+Step Type: multiple-choice-single
+Option A: Prediksi apakah customer akan churn (Yes/No)
+Option B: Klasifikasi email spam atau bukan spam
+Option C: Prediksi harga rumah dalam dollar
+Option D: Kategorisasi sentiment (Positive/Negative/Neutral)
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Cross-Validation Purpose
+Problem Description: Memahami tujuan cross-validation
+
+#
+Step Description: Apa tujuan utama dari K-Fold Cross-Validation?
+Step Type: multiple-choice-single
+Option A: Mempercepat training time
+Option B: Mengurangi overfitting
+Option C: Mendapatkan estimasi performa model yang lebih robust
+Option D: Menambah jumlah data training
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Confusion Matrix Understanding
+Problem Description: Memahami komponen confusion matrix
+
+#
+Step Description: Dalam confusion matrix untuk binary classification, pilih pernyataan yang BENAR:
+Step Type: multiple-choice-multiple
+Option A: True Positive (TP) = Model prediksi Positive, Actual Positive
+Option B: False Positive (FP) = Model prediksi Positive, Actual Negative (Type I Error)
+Option C: False Negative (FN) = Model prediksi Negative, Actual Positive (Type II Error)
+Option D: True Negative (TN) = Model prediksi Negative, Actual Negative
+Option E: Precision = TP / (TP + TN)
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+###
+Problem Title: Precision vs Recall Calculation
+Problem Description: Menghitung F1-Score dari confusion matrix
+
+#
+Step Description: Model klasifikasi menghasilkan: TP=80, FP=20, TN=150, FN=50. Hitung F1-Score (bulatkan ke 3 desimal).
+Step Type: fill-blank
+Correct Answer: 0.696
+Alternative Answer: 0.695
+Alternative Answer: 0.697
+Must Be Correct: false
+
+###
+Problem Title: Bias-Variance Tradeoff
+Problem Description: Memahami bias-variance tradeoff
+
+#
+Step Description: Model dengan HIGH BIAS dan LOW VARIANCE mengalami masalah apa?
+Step Type: multiple-choice-single
+Option A: Overfitting
+Option B: Underfitting
+Option C: Perfect fit
+Option D: Tidak ada masalah
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Overfitting Indicators
+Problem Description: Mengidentifikasi tanda-tanda overfitting
+
+#
+Step Description: Pilih SEMUA indikator overfitting:
+Step Type: multiple-choice-multiple
+Option A: Training accuracy 99%, Test accuracy 65%
+Option B: Training loss menurun, Validation loss meningkat
+Option C: Model performs sangat baik di training data tapi buruk di new data
+Option D: Training accuracy 75%, Test accuracy 73%
+Option E: Model terlalu simple dan tidak bisa capture patterns
+Correct Answer: A, B, C
+Must Be Correct: false
+
+###
+Problem Title: Data Splitting Strategy
+Problem Description: Strategi splitting untuk imbalanced dataset
+
+#
+Step Description: Untuk imbalanced dataset dengan class distribution 90% class A dan 10% class B, teknik splitting apa yang PALING tepat?
+Step Type: multiple-choice-single
+Option A: Random split
+Option B: Stratified split
+Option C: Time-based split
+Option D: Leave-one-out
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Feature Engineering - RFM
+Problem Description: Memahami RFM analysis
+
+#
+Step Description: RFM analysis dalam e-commerce customer segmentation terdiri dari tiga dimensi: Recency (seberapa baru), Frequency (seberapa sering), dan {blank} (berapa banyak uang dihabiskan).
+Step Type: fill-blank
+Correct Answer: Monetary
+Alternative Answer: Monetary Value
+Alternative Answer: monetary
+Must Be Correct: false
+
+###
+Problem Title: Data Quality Score Calculation
+Problem Description: Menghitung overall quality score
+
+#
+Step Description: Sebuah field memiliki Completeness 90%, Accuracy 85%, Uniqueness 95%. Hitung rata-rata overall quality score (dalam persen, bulatkan ke integer terdekat).
+Step Type: fill-blank
+Correct Answer: 90
+Alternative Answer: 90%
+Must Be Correct: false
+
+###
+Problem Title: ETL Process Understanding
+Problem Description: Memahami urutan tahapan ETL
+
+#
+Step Description: Urutan yang benar dalam ETL process adalah:
+Step Type: multiple-choice-single
+Option A: Transform → Extract → Load
+Option B: Extract → Transform → Load
+Option C: Load → Extract → Transform
+Option D: Extract → Load → Transform
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: ETL adalah singkatan dari {blank}, {blank}, dan {blank}.
+Step Type: fill-blank
+Correct Answer A: Extract
+Alternative Answer A: Extraction
+Alternative Answer A: ekstraksi
+Correct Answer B: Transform
+Alternative Answer B: Transformation
+Alternative Answer B: transformasi
+Correct Answer C: Load
+Alternative Answer C: Loading
+Alternative Answer C: pemuatan
+Must Be Correct: false
+
+###
+Problem Title: Hypothesis Formation
+Problem Description: Pentingnya hypothesis formation
+
+#
+Step Description: Benar atau Salah: Dalam fase Discovery, lebih baik langsung eksplorasi data tanpa membentuk hypotheses terlebih dahulu, agar bisa menemukan patterns yang unexpected.
+Step Type: true-false
+Correct Answer: False
+Must Be Correct: false
+
+###
+Problem Title: Model Deployment Options
+Problem Description: Berbagai opsi deployment model
+
+#
+Step Description: Pilih SEMUA deployment options yang valid:
+Step Type: multiple-choice-multiple
+Option A: Batch predictions - scheduled runs (daily, weekly)
+Option B: Real-time API - on-demand predictions
+Option C: Edge deployment - on-device models
+Option D: Manual predictions - analyst runs model setiap kali dibutuhkan
+Option E: Embedded - integrated dalam aplikasi
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Model Drift Detection
+Problem Description: Memahami penyebab model performance degradation
+
+#
+Step Description: Model accuracy turun dari 85% ke 70% setelah 6 bulan di production. Apa kemungkinan penyebabnya?
+Step Type: multiple-choice-single
+Option A: Code bug dalam production
+Option B: Data drift - input data distribution berubah
+Option C: Concept drift - relationship antara features dan target berubah
+Option D: Semua jawaban di atas mungkin
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: Visualization Best Practice
+Problem Description: Memilih jenis chart yang tepat
+
+#
+Step Description: Untuk menampilkan trend penjualan over time (monthly dari Jan - Dec), jenis chart apa yang PALING tepat?
+Step Type: multiple-choice-single
+Option A: Pie chart
+Option B: Line chart
+Option C: Scatter plot
+Option D: Box plot
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Stakeholder Communication
+Problem Description: Komunikasi hasil analytics ke stakeholder
+
+#
+Step Description: Saat mempresentasikan hasil analytics ke C-Level Executives, apa yang harus menjadi FOKUS UTAMA?
+Step Type: multiple-choice-single
+Option A: Technical details tentang algoritma yang digunakan
+Option B: Business impact, ROI, dan strategic implications
+Option C: Code implementation dan infrastructure
+Option D: Statistical significance tests dan p-values
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Regularization Techniques
+Problem Description: Memahami perbedaan Ridge dan Lasso
+
+#
+Step Description: Ridge dan Lasso regression keduanya adalah teknik regularization, tetapi apa perbedaan utamanya?
+Step Type: multiple-choice-single
+Option A: Ridge menggunakan L1 penalty, Lasso menggunakan L2 penalty
+Option B: Ridge menggunakan L2 penalty, Lasso menggunakan L1 penalty
+Option C: Ridge untuk classification, Lasso untuk regression
+Option D: Tidak ada perbedaan, keduanya sama
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Iterative Lifecycle Nature
+Problem Description: Memahami sifat iteratif dari lifecycle
+
+#
+Step Description: Benar atau Salah: Data Analytics Lifecycle adalah proses linear dimana setelah menyelesaikan satu fase, kita tidak boleh kembali ke fase sebelumnya.
+Step Type: true-false
+Correct Answer: False
+Must Be Correct: false
+
+###
+Problem Title: Success Criteria Definition
+Problem Description: Memahami kriteria SMART untuk success criteria
+
+#
+Step Description: Success criteria yang baik harus memenuhi kriteria SMART. Pilih yang termasuk SMART:
+Step Type: multiple-choice-multiple
+Option A: Specific - jelas dan spesifik
+Option B: Measurable - dapat diukur dengan metrics
+Option C: Achievable - realistic given constraints
+Option D: Relevant - aligned dengan business goals
+Option E: Time-bound - memiliki deadline jelas
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Encoding Categorical Variables
+Problem Description: Memilih encoding method yang tepat
+
+#
+Step Description: Untuk categorical feature 'Education' dengan nilai [High School, Bachelor, Master, PhD], encoding method apa yang PALING tepat?
+Step Type: multiple-choice-single
+Option A: One-Hot Encoding
+Option B: Label Encoding (0,1,2,3)
+Option C: Target Encoding
+Option D: Binary Encoding
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Comprehensive Case - Customer Churn
+Problem Description: Studi kasus lengkap: Customer Churn Prediction untuk perusahaan telekomunikasi
+
+#
+Step Description: Perusahaan telekomunikasi ingin memprediksi customer churn. Data menunjukkan 25% churn rate per tahun. Target: reduce ke 15% dalam 12 bulan. Dataset: 50,000 customers dengan features: tenure, monthly_charges, total_charges, contract_type, customer_service_calls, payment_method. Challenge: Dataset imbalanced (75% tidak churn, 25% churn). Dalam fase Discovery, aktivitas apa yang HARUS dilakukan?
+Step Type: multiple-choice-multiple
+Option A: Business understanding dan definisi success criteria
+Option B: Hypothesis formation tentang churn drivers
+Option C: Identifikasi stakeholder (marketing, customer service)
+Option D: Training model langsung
+Option E: Define metrics (precision, recall, F1-score)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Untuk handling imbalanced dataset (75% tidak churn, 25% churn), teknik apa yang bisa digunakan?
+Step Type: multiple-choice-multiple
+Option A: SMOTE oversampling
+Option B: Class weights adjustment
+Option C: Delete semua non-churned customers
+Option D: Stratified split untuk maintain proporsi
+Option E: Undersampling majority class
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+#
+Step Description: Feature engineering yang relevan untuk churn prediction termasuk membuat fitur {blank} dari tenure, {blank} dari customer service calls, dan {blank} dari contract type.
+Step Type: fill-blank
+Correct Answer A: tenure_months
+Alternative Answer A: tenure in months
+Alternative Answer A: durasi berlangganan
+Correct Answer B: call_frequency
+Alternative Answer B: frequency of calls
+Alternative Answer B: frekuensi panggilan
+Correct Answer C: contract_duration
+Alternative Answer C: is_monthly_contract
+Alternative Answer C: tipe kontrak
+Must Be Correct: false
+
+#
+Step Description: Untuk churn prediction, metric apa yang PALING penting?
+Step Type: multiple-choice-single
+Option A: Precision - karena false positive mahal
+Option B: Recall - karena ingin catch sebanyak mungkin churners
+Option C: F1-Score - balance antara precision dan recall
+Option D: Accuracy - overall correctness
+Correct Answer: C
+Must Be Correct: false
+
+#
+Step Description: Deployment strategy yang tepat untuk churn prediction adalah:
+Step Type: multiple-choice-single
+Option A: Real-time API untuk setiap customer login
+Option B: Weekly batch predictions untuk active customers
+Option C: One-time prediction tanpa update
+Option D: Manual prediction by analyst
+Correct Answer: B
+Must Be Correct: true
