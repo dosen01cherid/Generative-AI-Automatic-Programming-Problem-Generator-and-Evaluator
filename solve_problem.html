@@ -6255,6 +6255,9 @@ class ProblemSolverApp:
       desc_blocks = original_step_data.get("description", [])
       question = self.render_content_blocks(desc_blocks)
 
+      # ✅ Replace {blank} with ___ for visual display
+      question = question.replace("{blank}", "___")
+
       if not question.strip():
           question = f"Fill in the blanks: Step {step_idx + 1}"
 
@@ -9023,6 +9026,9 @@ This demonstrates the complete format for creating your own problem sets!
       import html as html_module
 
       window.console.log(f"🔧 Creating Multi-blank UI for step {step_idx}")
+
+      # ✅ Replace {blank} with ___ for visual display
+      desc_html = desc_html.replace("{blank}", "___")
 
       # Get correct answers structure (dict with A, B, C keys)
       correct_answers = step_data.get("correct_answers", {}")
