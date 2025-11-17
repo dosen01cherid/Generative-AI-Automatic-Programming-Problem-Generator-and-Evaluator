@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 7 Part 2: Probabilistic & Dependency Parsing</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin-bottom: 2px;
+            position: relative;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #667eea;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            color: #764ba2;
+            text-align: center;
+        }
+        
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #555;
+            margin-top: 20px;
+        }
+        
+        h4 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: #666;
+            margin-top: 15px;
+        }
+        
+        .content {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        ul {
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-left: 40px;
+            margin-top: 20px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .math-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 5px solid #667eea;
+            font-size: 1.2em;
+        }
+        
+        .plot-container {
+            width: 100%;
+            margin: 30px 0;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .prerequisite-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            overflow-x: auto;
+            margin: 20px 0;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #666;
+            text-align: center;
+            margin-top: -15px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .key-point {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .grammar-rule {
+            background: #e8f5e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #00bcd4;
+        }
+        
+        .indonesian-box {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 1</div>
+    <div class="content">
+        <h1>📊 Session 7: Parsing Algorithms & Language Structure</h1>
+        <div class="subtitle">Natural Language Processing - Part 2</div>
+        <div class="highlight">
+            <h3>Advanced Topics & Applications</h3>
+            <ul>
+                <li>Probabilistic Context-Free Grammars (PCFG)</li>
+                <li>Disambiguation with Probabilities</li>
+                <li>Dependency Parsing</li>
+                <li>Parsing Indonesian Sentences</li>
+                <li>Modern Neural Parsing</li>
+                <li>Practical Applications</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Recap from Part 1 -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 2</div>
+    <div class="content">
+        <h2>📚 Quick Recap: Part 1 Key Concepts</h2>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>Core Concepts</h3>
+                <ul>
+                    <li>Parsing = syntactic analysis</li>
+                    <li>CFG = formal grammar</li>
+                    <li>Parse trees show structure</li>
+                    <li>Constituency grouping</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>Algorithms</h3>
+                <ul>
+                    <li><strong>CYK:</strong> Bottom-up, needs CNF</li>
+                    <li><strong>Earley:</strong> Top-down, any CFG</li>
+                    <li>Both use dynamic programming</li>
+                    <li>O(n³) complexity</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="prerequisite-box" style="margin-top: 30px;">
+            <h3>🔴 Remaining Challenge: Ambiguity</h3>
+            <p style="font-size: 1.2em; margin-top: 10px;">
+                Many sentences have <strong>multiple valid parse trees</strong>. 
+                How do we choose the best one?
+            </p>
+            
+            <div class="example-box" style="margin-top: 15px;">
+                <strong>Example:</strong> "I saw the man with the telescope"
+                <ul style="margin-top: 10px;">
+                    <li>✅ Parse 1: I used the telescope (VP attachment)</li>
+                    <li>✅ Parse 2: The man has the telescope (NP attachment)</li>
+                </ul>
+                <p style="margin-top: 10px; font-weight: bold; color: red;">
+                    Both are grammatically valid! Which is correct?
+                </p>
+            </div>
+        </div>
+        
+        <div class="highlight">
+            <p style="font-size: 1.3em; text-align: center;">
+                🎯 Part 2 Solution: Use <strong>probabilities</strong> to choose the most likely parse!
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 3: Probabilistic CFG Introduction -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 3</div>
+    <div class="content">
+        <h2>🎲 Probabilistic Context-Free Grammar (PCFG)</h2>
+        
+        <div class="highlight">
+            <h3>Main Idea</h3>
+            <p style="font-size: 1.3em; line-height: 1.7;">
+                Add <strong>probabilities</strong> to CFG rules to represent how likely each rule is to be used.
+                This allows us to rank parse trees by probability and choose the most likely one!
+            </p>
+        </div>
+        
+        <div class="math-box">
+            <h3>Formal Definition</h3>
+            <p>A PCFG is a CFG where each production rule has a probability:</p>
+            \[
+            A \rightarrow \beta \quad [P(A \rightarrow \beta)]
+            \]
+            
+            <p style="margin-top: 20px;"><strong>Constraints:</strong></p>
+            \[
+            \sum_{\beta: A \rightarrow \beta \in R} P(A \rightarrow \beta) = 1 \quad \forall A \in N
+            \]
+            <p style="margin-top: 10px;">(For each non-terminal A, probabilities of all rules expanding A sum to 1)</p>
+        </div>
+        
+        <div class="key-point">
+            <h3>💡 Key Insight</h3>
+            <p style="font-size: 1.2em;">
+                The probability of a parse tree is the <strong>product</strong> of all rule probabilities used in the derivation.
+                We choose the tree with the highest probability!
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: PCFG Example -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 4</div>
+    <div class="content">
+        <h2>📝 PCFG Example: Grammar with Probabilities</h2>
+        
+        <div class="highlight">
+            <h3>A Simple Probabilistic Grammar</h3>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>S → NP VP</strong> &nbsp;&nbsp;&nbsp;[1.0]<br>
+            <span style="color: #666;">(Sentence structure is deterministic in this grammar)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>NP → DET N</strong> &nbsp;&nbsp;&nbsp;[0.6]<br>
+            <strong>NP → DET ADJ N</strong> &nbsp;&nbsp;&nbsp;[0.3]<br>
+            <strong>NP → N</strong> &nbsp;&nbsp;&nbsp;[0.1]<br>
+            <span style="color: #666;">(NP rules: probabilities sum to 1.0)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>VP → V</strong> &nbsp;&nbsp;&nbsp;[0.4]<br>
+            <strong>VP → V NP</strong> &nbsp;&nbsp;&nbsp;[0.5]<br>
+            <strong>VP → V PP</strong> &nbsp;&nbsp;&nbsp;[0.1]<br>
+            <span style="color: #666;">(VP rules: probabilities sum to 1.0)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>DET → "the"</strong> &nbsp;&nbsp;&nbsp;[0.7]<br>
+            <strong>DET → "a"</strong> &nbsp;&nbsp;&nbsp;[0.3]<br>
+            <strong>N → "cat"</strong> &nbsp;&nbsp;&nbsp;[0.3]<br>
+            <strong>N → "dog"</strong> &nbsp;&nbsp;&nbsp;[0.4]<br>
+            <strong>N → "telescope"</strong> &nbsp;&nbsp;&nbsp;[0.3]<br>
+            <strong>V → "saw"</strong> &nbsp;&nbsp;&nbsp;[0.6]<br>
+            <strong>V → "chased"</strong> &nbsp;&nbsp;&nbsp;[0.4]
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <strong>💡 Interpretation:</strong> These probabilities reflect how often each structure appears in real language data. 
+            Higher probability = more common usage!
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Computing Parse Tree Probability -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 5</div>
+    <div class="content">
+        <h2>🧮 Computing Parse Tree Probability</h2>
+        
+        <div class="math-box">
+            <h3>Probability Formula</h3>
+            <p style="font-size: 1.1em;">
+                The probability of a parse tree T is the product of all rule probabilities:
+            </p>
+            \[
+            P(T) = \prod_{\text{rule } r \in T} P(r)
+            \]
+        </div>
+        
+        <div class="example-box">
+            <h3>Example: "the cat sat"</h3>
+            
+            <div style="font-family: monospace; font-size: 1.1em; line-height: 2; margin-top: 20px;">
+                <strong>Parse Tree:</strong><br>
+                S → NP VP &nbsp;&nbsp;&nbsp;[1.0]<br>
+                NP → DET N &nbsp;&nbsp;&nbsp;[0.6]<br>
+                VP → V &nbsp;&nbsp;&nbsp;[0.4]<br>
+                DET → "the" &nbsp;&nbsp;&nbsp;[0.7]<br>
+                N → "cat" &nbsp;&nbsp;&nbsp;[0.3]<br>
+                V → "sat" &nbsp;&nbsp;&nbsp;[0.5]
+            </div>
+            
+            <div class="math-box" style="margin-top: 20px;">
+                <h4>Calculate Probability:</h4>
+                \[
+                P(T) = 1.0 \times 0.6 \times 0.4 \times 0.7 \times 0.3 \times 0.5
+                \]
+                \[
+                P(T) = 0.0252 = 2.52\%
+                \]
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <h3>🎯 Most Likely Parse</h3>
+            <p style="font-size: 1.2em;">
+                Given a sentence, we want to find:
+            </p>
+            \[
+            T^* = \arg\max_{T} P(T | \text{sentence})
+            \]
+            <p style="margin-top: 10px;">The parse tree with maximum probability given the words!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Learning PCFG Probabilities -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 6</div>
+    <div class="content">
+        <h2>📚 Learning PCFG Probabilities from Data</h2>
+        
+        <div class="highlight">
+            <h3>Where do probabilities come from?</h3>
+            <p style="font-size: 1.2em;">
+                Learn from <strong>treebanks</strong> - large corpora of manually parsed sentences!
+            </p>
+        </div>
+        
+        <div class="math-box">
+            <h3>Maximum Likelihood Estimation (MLE)</h3>
+            \[
+            P(A \rightarrow \beta) = \frac{\text{Count}(A \rightarrow \beta)}{\text{Count}(A)}
+            \]
+            
+            <p style="margin-top: 20px;"><strong>Where:</strong></p>
+            <ul>
+                <li>Count(A → β) = number of times rule A → β appears in treebank</li>
+                <li>Count(A) = total number of times non-terminal A is expanded</li>
+            </ul>
+        </div>
+        
+        <div class="example-box">
+            <h3>Example Calculation</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                In a treebank with 1000 sentences:
+            </p>
+            <ul style="font-size: 1.0em;">
+                <li>NP appears 3000 times total</li>
+                <li>NP → DET N appears 1800 times</li>
+                <li>NP → DET ADJ N appears 900 times</li>
+                <li>NP → N appears 300 times</li>
+            </ul>
+            
+            <div class="math-box" style="margin-top: 15px;">
+                <strong>Probabilities:</strong><br>
+                P(NP → DET N) = 1800/3000 = 0.6<br>
+                P(NP → DET ADJ N) = 900/3000 = 0.3<br>
+                P(NP → N) = 300/3000 = 0.1
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 Famous Treebanks:</strong> Penn Treebank (English), Indonesian Treebank, Universal Dependencies
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Disambiguation Example -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 7</div>
+    <div class="content">
+        <h2>🔍 PCFG Disambiguation: Resolving Ambiguity</h2>
+        
+        <div class="example-box">
+            <h3>Ambiguous Sentence: "I saw the man with the telescope"</h3>
+        </div>
+        
+        <div class="two-column">
+            <div class="box">
+                <h4>Parse 1: VP Attachment</h4>
+                <p style="font-family: monospace; font-size: 0.95em; line-height: 1.8;">
+                    S → NP VP [1.0]<br>
+                    NP → "I" [1.0]<br>
+                    VP → V NP PP [0.3]<br>
+                    V → "saw" [0.6]<br>
+                    NP → DET N [0.6]<br>
+                    DET → "the" [0.7]<br>
+                    N → "man" [0.4]<br>
+                    PP → PREP NP [1.0]<br>
+                    PREP → "with" [0.8]<br>
+                    NP → DET N [0.6]<br>
+                    N → "telescope" [0.2]
+                </p>
+                
+                <div class="math-box" style="margin-top: 15px; font-size: 0.9em;">
+                    P(T₁) = 1.0 × 1.0 × 0.3 × 0.6<br>
+                    × 0.6 × 0.7 × 0.4 × 1.0<br>
+                    × 0.8 × 0.6 × 0.2<br>
+                    = <strong>0.00483</strong>
+                </div>
+            </div>
+            
+            <div class="box">
+                <h4>Parse 2: NP Attachment</h4>
+                <p style="font-family: monospace; font-size: 0.95em; line-height: 1.8;">
+                    S → NP VP [1.0]<br>
+                    NP → "I" [1.0]<br>
+                    VP → V NP [0.5]<br>
+                    V → "saw" [0.6]<br>
+                    NP → NP PP [0.2]<br>
+                    NP → DET N [0.6]<br>
+                    DET → "the" [0.7]<br>
+                    N → "man" [0.4]<br>
+                    PP → PREP NP [1.0]<br>
+                    PREP → "with" [0.8]<br>
+                    NP → DET N [0.6]<br>
+                    N → "telescope" [0.2]
+                </p>
+                
+                <div class="math-box" style="margin-top: 15px; font-size: 0.9em;">
+                    P(T₂) = 1.0 × 1.0 × 0.5 × 0.6<br>
+                    × 0.2 × 0.6 × 0.7 × 0.4<br>
+                    × 1.0 × 0.8 × 0.6 × 0.2<br>
+                    = <strong>0.00580</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight" style="margin-top: 30px;">
+            <h3>✅ Winner: Parse 2 (NP Attachment)</h3>
+            <p style="font-size: 1.2em;">
+                P(T₂) = 0.00580 > P(T₁) = 0.00483<br>
+                PCFG chooses: "the man with the telescope" (man has telescope) ✓
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Probabilistic CYK -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 8</div>
+    <div class="content">
+        <h2>⚙️ Probabilistic CYK Algorithm</h2>
+        
+        <div class="highlight">
+            <h3>Extension of CYK for PCFG</h3>
+            <p style="font-size: 1.2em;">
+                Instead of just checking if a parse exists, find the <strong>most probable</strong> parse!
+            </p>
+        </div>
+        
+        <div class="math-box">
+            <h3>Modified Chart</h3>
+            <p style="font-size: 1.1em;">
+                Store not just constituents, but also their <strong>maximum probability</strong>:
+            </p>
+            \[
+            \pi[i][j][A] = \max_{T: A \Rightarrow^* w_i \ldots w_j} P(T)
+            \]
+            <p style="margin-top: 10px;">
+                (Maximum probability of any tree where A derives words from position i to j)
+            </p>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>Viterbi Algorithm</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                The probabilistic CYK uses the <strong>Viterbi algorithm</strong> to find maximum probability:
+            </p>
+            \[
+            \pi[i][j][A] = \max_{\substack{A \rightarrow BC, \\ i < k < j}} P(A \rightarrow BC) \times \pi[i][k][B] \times \pi[k][j][C]
+            \]
+        </div>
+        
+        <div class="key-point">
+            <h3>🎯 Result</h3>
+            <ul style="font-size: 1.1em;">
+                <li>\(\pi[0][n][S]\) = probability of most likely parse</li>
+                <li>Keep backpointers to reconstruct the best tree</li>
+                <li>Still O(n³|G|) complexity</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: Dependency Parsing Introduction -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 9</div>
+    <div class="content">
+        <h2>🔗 Dependency Parsing: A Different Approach</h2>
+        
+        <div class="highlight">
+            <h3>What is Dependency Parsing?</h3>
+            <p style="font-size: 1.3em; line-height: 1.7;">
+                Instead of grouping words into phrases (constituency), show direct <strong>grammatical relationships</strong> 
+                between words using directed edges (dependencies).
+            </p>
+        </div>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>🌳 Constituency Parsing</h3>
+                <ul>
+                    <li>Phrase structure</li>
+                    <li>Hierarchical grouping</li>
+                    <li>Parse trees with phrases</li>
+                    <li>Example: NP, VP, PP</li>
+                </ul>
+                <div style="margin-top: 15px; font-family: monospace; font-size: 0.9em;">
+                    S<br>
+                    ├── NP: "The cat"<br>
+                    └── VP: "sat"
+                </div>
+            </div>
+            
+            <div class="box">
+                <h3>🔗 Dependency Parsing</h3>
+                <ul>
+                    <li>Word-to-word relations</li>
+                    <li>Direct connections</li>
+                    <li>Labeled edges (relations)</li>
+                    <li>Example: nsubj, obj, det</li>
+                </ul>
+                <div style="margin-top: 15px; font-family: monospace; font-size: 0.9em;">
+                    sat (root)<br>
+                    ├── cat (nsubj)<br>
+                    │&nbsp;&nbsp;&nbsp;└── The (det)
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <h3>💡 Why Dependency Parsing?</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>Simpler:</strong> No intermediate phrase nodes</li>
+                <li><strong>More direct:</strong> Shows semantic relationships clearly</li>
+                <li><strong>Language-universal:</strong> Works well for free word order languages</li>
+                <li><strong>Practical:</strong> Easier for downstream NLP tasks</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Dependency Structure -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 10</div>
+    <div class="content">
+        <h2>🔗 Dependency Structure: Key Concepts</h2>
+        
+        <div class="math-box">
+            <h3>Formal Definition</h3>
+            <p style="font-size: 1.1em;">
+                A dependency tree for sentence \(w_1, \ldots, w_n\) consists of:
+            </p>
+            <ul>
+                <li><strong>Nodes:</strong> Words (including a special ROOT node)</li>
+                <li><strong>Edges:</strong> Directed arcs from head to dependent</li>
+                <li><strong>Labels:</strong> Grammatical relations (nsubj, obj, det, etc.)</li>
+            </ul>
+            
+            <h4 style="margin-top: 25px;">Constraints:</h4>
+            \[
+            \text{1. Single ROOT} \quad \text{2. Single head per word} \quad \text{3. Acyclic} \quad \text{4. Connected}
+            \]
+        </div>
+        
+        <div class="example-box">
+            <h3>Example: "The cat sat on the mat"</h3>
+            <div id="plot1" class="plot-container"></div>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>Common Dependency Relations</h3>
+            <table style="font-size: 0.95em;">
+                <tr>
+                    <th>Label</th>
+                    <th>Name</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>nsubj</strong></td>
+                    <td>Nominal subject</td>
+                    <td>"cat" in "cat sat"</td>
+                </tr>
+                <tr>
+                    <td><strong>obj</strong></td>
+                    <td>Direct object</td>
+                    <td>"ball" in "threw ball"</td>
+                </tr>
+                <tr>
+                    <td><strong>det</strong></td>
+                    <td>Determiner</td>
+                    <td>"the" in "the cat"</td>
+                </tr>
+                <tr>
+                    <td><strong>amod</strong></td>
+                    <td>Adjectival modifier</td>
+                    <td>"big" in "big cat"</td>
+                </tr>
+                <tr>
+                    <td><strong>case</strong></td>
+                    <td>Case marker (preposition)</td>
+                    <td>"on" in "on mat"</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: Dependency Parsing Algorithms -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 11</div>
+    <div class="content">
+        <h2>⚙️ Dependency Parsing Algorithms</h2>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>1️⃣ Transition-Based</h3>
+                <p style="font-size: 1.1em; margin: 15px 0;">
+                    Build tree incrementally using <strong>shift-reduce</strong> actions
+                </p>
+                
+                <h4>Actions:</h4>
+                <ul style="font-size: 0.95em;">
+                    <li><strong>SHIFT:</strong> Move word to stack</li>
+                    <li><strong>LEFT-ARC:</strong> Add dependency (stack top ← buffer)</li>
+                    <li><strong>RIGHT-ARC:</strong> Add dependency (stack top → buffer)</li>
+                </ul>
+                
+                <div style="background: #d4edda; padding: 15px; margin-top: 15px; border-radius: 5px;">
+                    <strong>✅ Pros:</strong>
+                    <ul style="font-size: 0.9em; margin-left: 20px; margin-top: 5px;">
+                        <li>Fast: O(n) linear time</li>
+                        <li>Simple to implement</li>
+                        <li>Works with neural networks</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="box">
+                <h3>2️⃣ Graph-Based</h3>
+                <p style="font-size: 1.1em; margin: 15px 0;">
+                    Score all possible edges, find <strong>maximum spanning tree</strong>
+                </p>
+                
+                <h4>Approach:</h4>
+                <ul style="font-size: 0.95em;">
+                    <li>Score every edge (word pair)</li>
+                    <li>Find highest-scoring tree</li>
+                    <li>Use MST algorithms (Chu-Liu-Edmonds)</li>
+                </ul>
+                
+                <div style="background: #d4edda; padding: 15px; margin-top: 15px; border-radius: 5px;">
+                    <strong>✅ Pros:</strong>
+                    <ul style="font-size: 0.9em; margin-left: 20px; margin-top: 5px;">
+                        <li>Globally optimal</li>
+                        <li>Better accuracy</li>
+                        <li>Considers all edges</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="highlight" style="margin-top: 30px;">
+            <h3>🎯 Modern Approach: Neural Parsers</h3>
+            <p style="font-size: 1.2em;">
+                Use deep learning (LSTM, Transformers) to learn edge scores or transition decisions.
+                State-of-the-art accuracy on many languages!
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 12: Constituency vs Dependency -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 12</div>
+    <div class="content">
+        <h2>⚖️ Constituency vs Dependency: Detailed Comparison</h2>
+        
+        <div id="plot2" class="plot-container"></div>
+        
+        <table style="font-size: 0.95em; margin-top: 30px;">
+            <tr>
+                <th>Aspect</th>
+                <th>Constituency Parsing</th>
+                <th>Dependency Parsing</th>
+            </tr>
+            <tr>
+                <td><strong>Structure</strong></td>
+                <td>Phrase-based, hierarchical</td>
+                <td>Word-to-word relations</td>
+            </tr>
+            <tr>
+                <td><strong>Output</strong></td>
+                <td>Parse tree with phrases (NP, VP)</td>
+                <td>Dependency tree with labeled edges</td>
+            </tr>
+            <tr>
+                <td><strong>Grammar</strong></td>
+                <td>CFG, PCFG</td>
+                <td>Dependency grammar</td>
+            </tr>
+            <tr>
+                <td><strong>Theory</strong></td>
+                <td>Chomskyan linguistics</td>
+                <td>Dependency grammar tradition</td>
+            </tr>
+            <tr>
+                <td><strong>Word Order</strong></td>
+                <td>Better for fixed word order (English)</td>
+                <td>Better for free word order (Indonesian, Russian)</td>
+            </tr>
+            <tr>
+                <td><strong>Semantic Relations</strong></td>
+                <td>Indirect (through phrases)</td>
+                <td>Direct (head-dependent)</td>
+            </tr>
+            <tr>
+                <td><strong>Complexity</strong></td>
+                <td>O(n³) for PCFG</td>
+                <td>O(n) transition, O(n³) graph-based</td>
+            </tr>
+            <tr>
+                <td><strong>Downstream Tasks</strong></td>
+                <td>Good for syntax research</td>
+                <td>Better for IE, QA, MT</td>
+            </tr>
+            <tr>
+                <td><strong>Annotation</strong></td>
+                <td>More complex to annotate</td>
+                <td>Easier and faster</td>
+            </tr>
+            <tr>
+                <td><strong>Modern Usage</strong></td>
+                <td>Less common now</td>
+                <td>More popular (Universal Dependencies)</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 13: Indonesian Language Parsing -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 13</div>
+    <div class="content">
+        <h2>🇮🇩 Parsing Indonesian Sentences</h2>
+        
+        <div class="indonesian-box">
+            <h3>Indonesian Language Characteristics</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>Word Order:</strong> Relatively flexible SVO (Subject-Verb-Object)</li>
+                <li><strong>No inflection:</strong> No verb conjugation, no noun declension</li>
+                <li><strong>Affixes:</strong> Rich prefix/suffix system (me-, ber-, -kan, -i)</li>
+                <li><strong>Classifiers:</strong> Numeral classifiers (satu buah apel)</li>
+                <li><strong>Reduplication:</strong> buku-buku, lari-lari</li>
+            </ul>
+        </div>
+        
+        <div class="example-box">
+            <h3>Example 1: Simple Sentence</h3>
+            <p style="font-size: 1.3em; font-weight: bold; margin: 15px 0;">
+                "Kucing itu duduk di atas meja"<br>
+                <span style="font-size: 0.8em; color: #666;">(The cat sat on top of the table)</span>
+            </p>
+            
+            <div class="two-column" style="margin-top: 20px;">
+                <div>
+                    <h4>Constituency Parse</h4>
+                    <div style="font-family: monospace; font-size: 1.0em; line-height: 1.8;">
+                        S<br>
+                        ├── NP<br>
+                        │&nbsp;&nbsp;&nbsp;├── N: "Kucing"<br>
+                        │&nbsp;&nbsp;&nbsp;└── DET: "itu"<br>
+                        └── VP<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;├── V: "duduk"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;└── PP<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── PREP: "di"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── NP<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── ADV: "atas"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── N: "meja"
+                    </div>
+                </div>
+                
+                <div>
+                    <h4>Dependency Parse</h4>
+                    <div style="font-family: monospace; font-size: 1.0em; line-height: 1.8;">
+                        duduk (ROOT)<br>
+                        ├── Kucing (nsubj)<br>
+                        │&nbsp;&nbsp;&nbsp;└── itu (det)<br>
+                        └── di (obl)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;└── meja (obj)<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── atas (case)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 14: Indonesian Parsing Example 2 -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 14</div>
+    <div class="content">
+        <h2>🇮🇩 Indonesian Parsing: Complex Example</h2>
+        
+        <div class="example-box">
+            <h3>Example 2: With Affixes and Object</h3>
+            <p style="font-size: 1.3em; font-weight: bold; margin: 15px 0;">
+                "Saya membaca buku cerita yang menarik"<br>
+                <span style="font-size: 0.8em; color: #666;">(I read an interesting story book)</span>
+            </p>
+        </div>
+        
+        <div class="indonesian-box">
+            <h3>Morphological Analysis</h3>
+            <table style="font-size: 1.0em;">
+                <tr>
+                    <th>Word</th>
+                    <th>Morphology</th>
+                    <th>POS</th>
+                    <th>English</th>
+                </tr>
+                <tr>
+                    <td>Saya</td>
+                    <td>saya</td>
+                    <td>PRON</td>
+                    <td>I</td>
+                </tr>
+                <tr>
+                    <td>membaca</td>
+                    <td>mem- + baca</td>
+                    <td>VERB</td>
+                    <td>read (active)</td>
+                </tr>
+                <tr>
+                    <td>buku</td>
+                    <td>buku</td>
+                    <td>NOUN</td>
+                    <td>book</td>
+                </tr>
+                <tr>
+                    <td>cerita</td>
+                    <td>cerita</td>
+                    <td>NOUN</td>
+                    <td>story</td>
+                </tr>
+                <tr>
+                    <td>yang</td>
+                    <td>yang</td>
+                    <td>SCONJ</td>
+                    <td>that/which</td>
+                </tr>
+                <tr>
+                    <td>menarik</td>
+                    <td>me- + tarik</td>
+                    <td>ADJ</td>
+                    <td>interesting</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="highlight" style="margin-top: 30px;">
+            <h3>Dependency Structure</h3>
+            <div style="font-family: monospace; font-size: 1.1em; line-height: 2; margin-top: 15px;">
+                membaca (ROOT)<br>
+                ├── Saya (nsubj)<br>
+                └── buku (obj)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── cerita (nmod) [compound noun]<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;└── menarik (acl:relcl) [relative clause]<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── yang (mark)
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 15: Indonesian Parsing Challenges -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 15</div>
+    <div class="content">
+        <h2>⚠️ Challenges in Indonesian Parsing</h2>
+        
+        <div class="prerequisite-box">
+            <h3>1️⃣ Word Segmentation & Morphology</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                Rich affixation can be ambiguous:
+            </p>
+            <ul style="font-size: 1.0em;">
+                <li><strong>"bermain"</strong> = ber- + main (to play) or be- + remain?</li>
+                <li><strong>"beranak"</strong> = ber- + anak (to give birth) or be- + ranak?</li>
+                <li>Need good morphological analyzer!</li>
+            </ul>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>2️⃣ Word Order Flexibility</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                Multiple valid orders possible:
+            </p>
+            <ul style="font-size: 1.0em;">
+                <li>"Buku itu saya baca" (That book I read) - OSV</li>
+                <li>"Saya baca buku itu" (I read that book) - SVO</li>
+                <li>Both grammatical! Dependency parsing handles this better.</li>
+            </ul>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>3️⃣ Limited Resources</h3>
+            <ul style="font-size: 1.1em;">
+                <li>Small treebanks compared to English</li>
+                <li>Less research on Indonesian syntax</li>
+                <li>Need more annotated data!</li>
+            </ul>
+        </div>
+        
+        <div class="key-point">
+            <h3>✅ Solutions</h3>
+            <ul style="font-size: 1.1em;">
+                <li>Use Universal Dependencies framework</li>
+                <li>Transfer learning from high-resource languages</li>
+                <li>Multilingual neural models (mBERT, XLM-R)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 16: Tools for Parsing -->
+< class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 16</div>
+    <div class="content">
+        <h2>🛠️ Practical Parsing Tools</h2>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>🌐 Universal Tools</h3>
+                <table style="font-size: 0.9em;">
+                    <tr>
+                        <th>Tool</th>
+                        <th>Type</th>
+                        <th>Features</th>
+                    </tr>
+                    <tr>
+                        <td><strong>spaCy</strong></td>
+                        <td>Both</td>
+                        <td>Fast, production-ready</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stanford Parser</strong></td>
+                        <td>Both</td>
+                        <td>Research-quality, slow</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UDPipe</strong></td>
+                        <td>Dependency</td>
+                        <td>90+ languages, UD</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stanza</strong></td>
+                        <td>Both</td>
+                        <td>Neural, 70+ languages</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="box">
+                <h3>🇮🇩 Indonesian-Specific</h3>
+                <ul style="font-size: 1.0em;">
+                    <li><strong>spaCy Indonesian model</strong></li>
+                    <li><strong>UDPipe Indonesian</strong></li>
+                    <li><strong>Stanza with Indonesian</strong></li>
+                    <li><strong>IndoNLP toolkit</strong></li>
+                </ul>
+            </div>
+        </div>
+        
+<!-- Slide 16: Tools for Parsing - MODIFIED CODE SECTION -->
+<div class="code-block" id="tools-code">
+    <button class="copy-btn" onclick="copyCode('tools-code')">📋 Copy Code</button>
+# Example: Parsing with Stanza (RECOMMENDED for Indonesian)
+import stanza
+
+# Initialize pipeline (only once per session)
+nlp = stanza.Pipeline('id', processors='tokenize,pos,lemma,depparse', 
+                      use_gpu=False, verbose=False)
+
+# Parse sentence
+sentence = "Kucing itu duduk di atas meja"
+doc = nlp(sentence)
+
+# Print dependency tree
+print("Word           POS        Dependency  Head")
+print("-" * 50)
+for sent in doc.sentences:
+    for word in sent.words:
+        head_text = sent.words[word.head-1].text if word.head > 0 else 'ROOT'
+        print(f"{word.text:15} {word.upos:10} {word.deprel:10} {head_text}")
+
+# Output:
+# Kucing         NOUN       nsubj      duduk
+# itu            DET        det        Kucing
+# duduk          VERB       ROOT       ROOT
+# di             ADP        case       meja
+# atas           ADP        case       meja
+# meja           NOUN       obl        duduk
+
+# Print detailed dependency information
+print("\n" + "="*50)
+print("Dependency Tree:")
+print("="*50)
+for sent in doc.sentences:
+    print(sent.dependencies_string())
+
+# Visualize (save to file)
+# Note: Stanza doesn't have built-in visualization
+# Use external tools or create custom visualization
+</div>
+    </div>
+
+<!-- Slide 17: Modern Neural Parsing -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 17</div>
+    <div class="content">
+        <h2>🧠 Modern Neural Parsing</h2>
+        
+        <div class="highlight">
+            <h3>Evolution of Parsing</h3>
+            <ul style="font-size: 1.2em;">
+                <li><strong>Traditional:</strong> Hand-crafted grammars, rule-based (1960s-1990s)</li>
+                <li><strong>Statistical:</strong> PCFG, learned from treebanks (1990s-2010s)</li>
+                <li><strong>Neural:</strong> Deep learning end-to-end (2014-present)</li>
+            </ul>
+        </div>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>Neural Constituency Parsing</h3>
+                <ul style="font-size: 1.0em;">
+                    <li><strong>Encoder:</strong> LSTM/Transformer processes sentence</li>
+                    <li><strong>Decoder:</strong> Predicts parse tree structure</li>
+                    <li><strong>Examples:</strong> 
+                        <ul style="font-size: 0.95em; margin-left: 20px;">
+                            <li>Recurrent Neural Network Grammars</li>
+                            <li>Chart-based neural parsers</li>
+                            <li>Self-attentive parsers</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>Neural Dependency Parsing</h3>
+                <ul style="font-size: 1.0em;">
+                    <li><strong>Encoder:</strong> BERT/RoBERTa contextual embeddings</li>
+                    <li><strong>Decoder:</strong> Edge scorer or transition classifier</li>
+                    <li><strong>Examples:</strong>
+                        <ul style="font-size: 0.95em; margin-left: 20px;">
+                            <li>Biaffine parser (state-of-the-art)</li>
+                            <li>Stack-LSTM parser</li>
+                            <li>Transformer-based parsers</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <h3>🎯 State-of-the-Art Performance</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>English:</strong> 95%+ accuracy on Penn Treebank</li>
+                <li><strong>Cross-lingual:</strong> Multilingual BERT enables zero-shot parsing</li>
+                <li><strong>End-to-end:</strong> No need for explicit features or grammars</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 18: Applications of Parsing -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 18</div>
+    <div class="content">
+        <h2>🚀 Applications of Parsing in NLP</h2>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>1️⃣ Machine Translation</h3>
+                <p style="font-size: 1.0em;">
+                    Parse source sentence, transfer structure, generate target
+                </p>
+                <ul style="font-size: 0.95em;">
+                    <li>Syntax-based MT</li>
+                    <li>Better handling of complex sentences</li>
+                    <li>Reordering based on structure</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>2️⃣ Information Extraction</h3>
+                <p style="font-size: 1.0em;">
+                    Extract entities and relations
+                </p>
+                <ul style="font-size: 0.95em;">
+                    <li>Subject-verb-object extraction</li>
+                    <li>Relation extraction (who did what to whom)</li>
+                    <li>Event extraction</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>3️⃣ Question Answering</h3>
+                <p style="font-size: 1.0em;">
+                    Understand question structure
+                </p>
+                <ul style="font-size: 0.95em;">
+                    <li>Parse question to find focus</li>
+                    <li>Match question structure with answers</li>
+                    <li>Generate structured queries</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>4️⃣ Sentiment Analysis</h3>
+                <p style="font-size: 1.0em;">
+                    Understand sentiment composition
+                </p>
+                <ul style="font-size: 0.95em;">
+                    <li>Negation scope ("not good")</li>
+                    <li>Aspect-based sentiment</li>
+                    <li>Compositional semantics</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="example-box" style="margin-top: 30px;">
+            <h3>Real Example: Information Extraction</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                <strong>Sentence:</strong> "Apple CEO Tim Cook announced the new iPhone in California"
+            </p>
+            
+            <div style="font-family: monospace; font-size: 1.0em; margin-top: 15px;">
+                announced (ROOT)<br>
+                ├── Tim Cook (nsubj) → <strong>Subject: Tim Cook</strong><br>
+                │&nbsp;&nbsp;&nbsp;└── CEO (appos)<br>
+                │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── Apple (nmod) → <strong>Organization: Apple</strong><br>
+                ├── iPhone (obj) → <strong>Object: iPhone</strong><br>
+                │&nbsp;&nbsp;&nbsp;└── new (amod)<br>
+                └── California (obl) → <strong>Location: California</strong>
+            </div>
+            
+            <p style="margin-top: 15px; font-weight: bold;">
+                ✅ Extracted: (Tim Cook, CEO of, Apple), (Tim Cook, announced, iPhone), (Event location: California)
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 19: Assignment Guidance -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 19</div>
+    <div class="content">
+        <h2>📝 Assignment Guidance</h2>
+        
+        <div class="highlight">
+            <h3>🎯 Guided Learning Task</h3>
+            <p style="font-size: 1.2em; margin-bottom: 15px;">
+                <strong>Task:</strong> Build simple parse trees for 2 Indonesian sentences and analyze their structure
+            </p>
+        </div>
+        
+        <div class="example-box">
+            <h3>Step-by-Step Guide</h3>
+            
+            <h4>1. Choose Your Sentences</h4>
+            <ul style="font-size: 1.0em;">
+                <li>Pick 2 Indonesian sentences (5-8 words each)</li>
+                <li>One simple (SVO), one complex (with PP or relative clause)</li>
+                <li>Examples: "Ayah membaca koran", "Ibu memasak nasi goreng yang enak"</li>
+            </ul>
+            
+            <h4>2. POS Tagging</h4>
+            <ul style="font-size: 1.0em;">
+                <li>Tag each word with its part of speech</li>
+                <li>Use: NOUN, VERB, DET, ADJ, PREP, etc.</li>
+            </ul>
+            
+            <h4>3. Draw Parse Trees</h4>
+            <ul style="font-size: 1.0em;">
+                <li><strong>Constituency tree:</strong> Show S, NP, VP, PP structure</li>
+                <li><strong>Dependency tree:</strong> Show head-dependent relations with labels</li>
+                <li>Can use tools or draw by hand</li>
+            </ul>
+            
+            <h4>4. Analysis (Write 1-2 paragraphs)</h4>
+            <ul style="font-size: 1.0em;">
+                <li>Explain the syntactic structure</li>
+                <li>Identify subject, verb, object, modifiers</li>
+                <li>Compare constituency vs dependency representation</li>
+                <li>Discuss any interesting features (word order, phrases, etc.)</li>
+            </ul>
+        </div>
+        
+<!-- Slide 19: Assignment Guidance - MODIFIED CODE SECTION -->
+<div class="code-block" id="assignment-code">
+    <button class="copy-btn" onclick="copyCode('assignment-code')">📋 Copy Code</button>
+# Assignment Code Template - Indonesian Parsing with Stanza
+import stanza
+
+# Load Indonesian pipeline (run once per session)
+print("Loading Stanza Indonesian model...")
+nlp = stanza.Pipeline('id', processors='tokenize,pos,lemma,depparse',
+                      use_gpu=False, verbose=False)
+print("✓ Model loaded!\n")
+
+# Your sentences for assignment
+sentence1 = "Ayah membaca koran di ruang tamu"
+sentence2 = "Ibu memasak nasi goreng yang enak"
+
+def analyze_sentence(text, sentence_num):
+    """Analyze Indonesian sentence and display results"""
+    
+    print("="*60)
+    print(f"SENTENCE {sentence_num}: {text}")
+    print("="*60)
+    
+    # Parse
+    doc = nlp(text)
+    
+    # 1. POS Tagging
+    print("\n1. POS TAGGING:")
+    print("-" * 50)
+    for sent in doc.sentences:
+        for word in sent.words:
+            print(f"{word.text:15} -> {word.upos}")
+    
+    # 2. Dependency Relations
+    print("\n2. DEPENDENCY RELATIONS:")
+    print("-" * 50)
+    print(f"{'Word':<15} {'POS':<10} {'Dependency':<12} {'Head':<15}")
+    print("-" * 50)
+    for sent in doc.sentences:
+        for word in sent.words:
+            head_text = sent.words[word.head-1].text if word.head > 0 else 'ROOT'
+            print(f"{word.text:<15} {word.upos:<10} {word.deprel:<12} {head_text:<15}")
+    
+    # 3. Dependency Tree (ASCII visualization)
+    print("\n3. DEPENDENCY TREE:")
+    print("-" * 50)
+    for sent in doc.sentences:
+        # Find root
+        root = None
+        for word in sent.words:
+            if word.head == 0:
+                root = word
+                break
+        
+        if root:
+            print(f"{root.text} (ROOT)")
+            # Print immediate children
+            for word in sent.words:
+                if word.head == root.id and word != root:
+                    print(f"├── {word.text} ({word.deprel})")
+                    # Print grandchildren
+                    for child in sent.words:
+                        if child.head == word.id:
+                            print(f"│   └── {child.text} ({child.deprel})")
+    
+    # 4. Extract Subject-Verb-Object
+    print("\n4. SYNTACTIC ANALYSIS:")
+    print("-" * 50)
+    for sent in doc.sentences:
+        subject = None
+        verb = None
+        obj = None
+        
+        for word in sent.words:
+            if word.deprel == 'nsubj':
+                subject = word.text
+            elif word.upos == 'VERB' and word.head == 0:
+                verb = word.text
+            elif word.deprel == 'obj':
+                obj = word.text
+        
+        print(f"Subject:   {subject if subject else 'N/A'}")
+        print(f"Verb:      {verb if verb else 'N/A'}")
+        print(f"Object:    {obj if obj else 'N/A'}")
+    
+    print("\n")
+
+# Analyze both sentences
+analyze_sentence(sentence1, 1)
+analyze_sentence(sentence2, 2)
+
+# Optional: Save results to file
+def save_analysis(text, filename="parsing_result.txt"):
+    """Save parsing analysis to file"""
+    doc = nlp(text)
+    
+    with open(filename, 'w', encoding='utf-8') as f:
+        f.write(f"Sentence: {text}\n")
+        f.write("="*60 + "\n\n")
+        
+        for sent in doc.sentences:
+            f.write("Dependencies:\n")
+            f.write(sent.dependencies_string())
+            f.write("\n")
+    
+    print(f"✓ Analysis saved to {filename}")
+
+# Uncomment to save:
+# save_analysis(sentence1, "sentence1_analysis.txt")
+</div></div>
+
+<!-- Slide 20: Independent Learning Task -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 20</div>
+    <div class="content">
+        <h2>📖 Independent Learning Task</h2>
+        
+        <div class="prerequisite-box">
+            <h3>📚 Task: Create a Mindmap of Parser Types</h3>
+            <p style="font-size: 1.2em;">
+                Study parsing theory from NLP books/resources, then create a comprehensive mindmap showing different types of parsers
+            </p>
+        </div>
+        
+        <div class="highlight">
+            <h3>What to Include in Your Mindmap</h3>
+            
+            <h4>Main Categories:</h4>
+            <ul style="font-size: 1.0em;">
+                <li><strong>By Parsing Direction:</strong> Top-down, Bottom-up, Chart</li>
+                <li><strong>By Grammar Type:</strong> CFG-based, Dependency-based</li>
+                <li><strong>By Probability:</strong> Deterministic, Probabilistic (PCFG)</li>
+                <li><strong>By Algorithm:</strong> CYK, Earley, Shift-Reduce, Transition-based, Graph-based</li>
+                <li><strong>By Learning:</strong> Rule-based, Statistical, Neural</li>
+            </ul>
+            
+            <h4>For Each Parser Type, Include:</h4>
+            <ul style="font-size: 1.0em;">
+                <li>Brief description (1-2 sentences)</li>
+                <li>Key algorithm or technique</li>
+                <li>Time complexity</li>
+                <li>Advantages and disadvantages</li>
+                <li>Examples or applications</li>
+            </ul>
+        </div>
+        
+        <div class="example-box" style="margin-top: 30px;">
+            <h3>📚 Recommended Resources</h3>
+            <ul style="font-size: 1.0em;">
+                <li>Speech and Language Processing (Jurafsky & Martin) - Chapter 12-13</li>
+                <li>Introduction to Natural Language Processing (Eisenstein) - Chapter 10</li>
+                <li>Natural Language Understanding (Allen) - Chapter 3</li>
+                <li>Universal Dependencies documentation: universaldependencies.org</li>
+                <li>Stanford NLP course materials (free online)</li>
+            </ul>
+        </div>
+        
+        <div class="key-point">
+            <h3>💡 Tips for Creating Mindmap</h3>
+            <ul style="font-size: 1.0em;">
+                <li>Use tools: XMind, MindMeister, draw.io, or paper</li>
+                <li>Use colors to distinguish categories</li>
+                <li>Include examples for clarity</li>
+                <li>Show relationships between parser types</li>
+                <li>Make it visual and easy to understand!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 21: Summary -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 21</div>
+    <div class="content">
+        <h2>📝 Part 2 Summary: Key Takeaways</h2>
+        
+        <div class="highlight">
+            <h3>✅ What We've Learned</h3>
+            <ul style="font-size: 1.2em; line-height: 1.8;">
+                <li><strong>PCFG:</strong> Add probabilities to resolve ambiguity</li>
+                <li><strong>Viterbi/Probabilistic CYK:</strong> Find most likely parse</li>
+                <li><strong>Dependency Parsing:</strong> Word-to-word relations</li>
+                <li><strong>Two paradigms:</strong> Constituency vs Dependency</li>
+                <li><strong>Indonesian:</strong> Flexible word order, rich morphology</li>
+                <li><strong>Modern:</strong> Neural networks achieve state-of-the-art</li>
+            </ul>
+        </div>
+        
+        <div class="two-column" style="margin-top: 30px;">
+            <div class="box">
+                <h3>🎯 Parsing Approaches</h3>
+                <table style="font-size: 0.9em;">
+                    <tr>
+                        <th>Type</th>
+                        <th>Best For</th>
+                    </tr>
+                    <tr>
+                        <td><strong>CFG/PCFG</strong></td>
+                        <td>Phrase structure, English</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dependency</strong></td>
+                        <td>Relations, free word order</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Neural</strong></td>
+                        <td>Accuracy, end-to-end</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="box">
+                <h3>🛠️ Practical Tools</h3>
+                <ul>
+                    <li>spaCy (production)</li>
+                    <li>Stanza (research)</li>
+                    <li>UDPipe (multilingual)</li>
+                    <li>Stanford Parser (comprehensive)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <h3>🔑 Key Insights</h3>
+            <ul style="font-size: 1.1em;">
+                <li>Parsing is fundamental for understanding sentence structure</li>
+                <li>Ambiguity is common; probabilities help choose best parse</li>
+                <li>Dependency parsing is more popular for modern NLP tasks</li>
+                <li>Indonesian has unique challenges requiring special handling</li>
+                <li>Neural methods dominate but traditional algorithms still important</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 22: Conclusion -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 2 | Slide 22</div>
+    <div class="content">
+        <h2>🎉 Session 7 Complete!</h2>
+        
+        <div class="highlight">
+            <h3>✅ Complete Understanding Achieved</h3>
+            <ul style="font-size: 1.3em; line-height: 1.8;">
+                <li>📚 Context-Free Grammars & PCFG</li>
+                <li>🌳 Parse trees and syntax structures</li>
+                <li>⚙️ Parsing algorithms (CYK, Earley)</li>
+                <li>🎲 Probabilistic disambiguation</li>
+                <li>🔗 Dependency parsing paradigm</li>
+                <li>🇮🇩 Indonesian language parsing</li>
+                <li>🧠 Modern neural approaches</li>
+            </ul>
+        </div>
+        
+        <div class="two-column" style="margin-top: 30px;">
+            <div class="box">
+                <h3>📚 Continue Learning</h3>
+                <ul>
+                    <li>Practice with real Indonesian sentences</li>
+                    <li>Explore Universal Dependencies</li>
+                    <li>Try different parsing tools</li>
+                    <li>Read research papers</li>
+                    <li>Build applications!</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>🔗 Resources</h3>
+                <ul>
+                    <li>universaldependencies.org</li>
+                    <li>spaCy documentation</li>
+                    <li>Stanford Parser guide</li>
+                    <li>Jurafsky & Martin textbook</li>
+                    <li>Indonesian Treebank</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 50px;">
+            <h1 style="color: #667eea; font-size: 4em;">Terima Kasih! 🙏</h1>
+            <p style="font-size: 1.5em; color: #764ba2; margin-top: 20px;">
+                Thank You! Questions? Let's discuss parsing together!
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Plot 1: Dependency Tree Visualization
+function createPlot1() {
+    const trace = {
+        type: 'sankey',
+        orientation: 'v',
+        node: {
+            pad: 20,
+            thickness: 20,
+            line: {
+                color: 'black',
+                width: 1
+            },
+            label: ['sat (ROOT)', 'cat', 'The', 'on', 'mat', 'the'],
+            color: ['#667eea', '#764ba2', '#f6d365', '#764ba2', '#fda085', '#f6d365'],
+            x: [0.5, 0.3, 0.15, 0.7, 0.85, 0.85],
+            y: [0.1, 0.4, 0.7, 0.4, 0.7, 0.85]
+        },
+        link: {
+            source: [0, 1, 0, 3, 3],
+            target: [1, 2, 3, 4, 5],
+            value: [1, 1, 1, 1, 1],
+            color: 'rgba(102, 126, 234, 0.3)',
+            label: ['nsubj', 'det', 'obl', 'obj', 'det']
+        }
+    };
+    
+    const layout = {
+        title: {
+            text: 'Dependency Tree: "The cat sat on the mat"',
+            font: { size: 24 }
+        },
+        font: { size: 14 },
+        height: 500,
+        annotations: [
+            { x: 0.3, y: 0.5, text: 'nsubj', showarrow: false, font: { color: 'blue', size: 12 } },
+            { x: 0.15, y: 0.75, text: 'det', showarrow: false, font: { color: 'blue', size: 12 } },
+            { x: 0.7, y: 0.5, text: 'obl', showarrow: false, font: { color: 'blue', size: 12 } },
+            { x: 0.85, y: 0.75, text: 'obj', showarrow: false, font: { color: 'blue', size: 12 } }
+        ]
+    };
+    
+    Plotly.newPlot('plot1', [trace], layout);
+}
+
+// Plot 2: Constituency vs Dependency Comparison
+function createPlot2() {
+    const categories = ['Expressiveness', 'Simplicity', 'Free Word Order', 'Speed', 'Semantic Relations', 'Modern Usage'];
+    
+    const trace1 = {
+        r: [85, 60, 55, 65, 70, 50],
+        theta: categories,
+        fill: 'toself',
+        name: 'Constituency Parsing',
+        type: 'scatterpolar',
+        marker: { color: '#667eea' }
+    };
+    
+    const trace2 = {
+        r: [75, 85, 90, 80, 95, 85],
+        theta: categories,
+        fill: 'toself',
+        name: 'Dependency Parsing',
+        type: 'scatterpolar',
+        marker: { color: '#764ba2' }
+    };
+    
+    const layout = {
+        title: {
+            text: 'Constituency vs Dependency Parsing: Feature Comparison',
+            font: { size: 24 }
+        },
+        polar: {
+            radialaxis: {
+                visible: true,
+                range: [0, 100]
+            }
+        },
+        height: 600
+    };
+    
+    Plotly.newPlot('plot2', [trace1, trace2], layout);
+}
+
+// Initialize all plots when page loads
+window.onload = function() {
+    createPlot1();
+    createPlot2();
+};
+</script>
+
+</body>
+</html>

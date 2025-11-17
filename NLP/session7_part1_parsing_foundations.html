@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 7 Part 1: Parsing Algorithms & Language Structure</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin-bottom: 2px;
+            position: relative;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        h1 {
+            font-size: 3em;
+            margin-bottom: 30px;
+            color: #667eea;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            font-size: 2.5em;
+            margin-bottom: 25px;
+            color: #764ba2;
+            text-align: center;
+        }
+        
+        h3 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: #555;
+            margin-top: 20px;
+        }
+        
+        h4 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            color: #666;
+            margin-top: 15px;
+        }
+        
+        .content {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        ul {
+            font-size: 1.3em;
+            line-height: 1.8;
+            margin-left: 40px;
+            margin-top: 20px;
+        }
+        
+        li {
+            margin-bottom: 15px;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .math-box {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 5px solid #667eea;
+            font-size: 1.2em;
+        }
+        
+        .plot-container {
+            width: 100%;
+            margin: 30px 0;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .prerequisite-box {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            overflow-x: auto;
+            margin: 20px 0;
+            line-height: 1.6;
+            white-space: pre;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            color: #666;
+            text-align: center;
+            margin-top: -15px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        
+        .key-point {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .tree-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #667eea;
+        }
+        
+        .tree-node {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            border: 2px solid #764ba2;
+            border-radius: 8px;
+            background: #f0f0f0;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        .grammar-rule {
+            background: #e8f5e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #4caf50;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+        
+        .example-box {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #00bcd4;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 1</div>
+    <div class="content">
+        <h1>🌳 Session 7: Parsing Algorithms & Language Structure</h1>
+        <div class="subtitle">Natural Language Processing</div>
+        <div class="highlight">
+            <h3>Part 1: Foundations & Grammar-Based Parsing</h3>
+            <ul>
+                <li>Prerequisites & Linguistic Foundations</li>
+                <li>Introduction to Parsing</li>
+                <li>Context-Free Grammars (CFG)</li>
+                <li>Constituency and Parse Trees</li>
+                <li>Chart Parsing Algorithms (CYK, Earley)</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 2: Learning Objectives -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 2</div>
+    <div class="content">
+        <h2>🎯 Learning Objectives (Sub-CPMK)</h2>
+        <div class="key-point">
+            <h3>By the end of this session, you will be able to:</h3>
+            <ul>
+                <li><strong>Describe and apply</strong> parsing algorithms to analyze language structure</li>
+                <li><strong>Draw</strong> parse trees for simple sentences</li>
+                <li><strong>Differentiate</strong> between deterministic and probabilistic parsing</li>
+            </ul>
+        </div>
+        <div class="highlight">
+            <h3>📝 Assignment Preview</h3>
+            <ul>
+                <li><strong>Guided Learning:</strong> Build simple parse trees for 2 Indonesian sentences and analyze their structure</li>
+                <li><strong>Independent:</strong> Study parsing theory and create a mindmap showing types of parsers</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- NEW SLIDE: Installation Instructions -->
+<div> class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 3 (NEW)</div>
+    <div class="content">
+        <h2>🔧 Installing Required Libraries</h2>
+        
+        <div class="highlight">
+            <h3>Prerequisites for Parsing Exercises</h3>
+            <p style="font-size: 1.2em;">Before we begin, let's set up the environment properly.</p>
+        </div>
+        
+        <div class="key-point">
+            <h3>⚠️ Common Installation Issues</h3>
+            <ul style="font-size: 1.1em;">
+                <li>NumPy version conflicts with PyTorch/Stanza</li>
+                <li>Incompatible library versions</li>
+                <li>Missing dependencies</li>
+            </ul>
+        </div>
+        
+        <div class="code-block" id="install-code">
+            <button class="copy-btn" onclick="copyCode('install-code')">📋 Copy Code</button>
+import subprocess
+import sys
+
+def install_parsing_libraries():
+    """
+    Install and configure libraries for parsing Indonesian text.
+    Handles version conflicts and dependencies properly.
+    """
+    
+    print("="*60)
+    print("Installing NLP Parsing Libraries")
+    print("="*60)
+    
+    # Step 1: Uninstall problematic versions
+    print("\n[1/4] Removing old versions...")
+    packages_to_remove = ['numpy', 'torch', 'stanza']
+    for package in packages_to_remove:
+        try:
+            subprocess.check_call([sys.executable, '-m', 'pip', 'uninstall', 
+                                 package, '-y'], 
+                                 stdout=subprocess.DEVNULL)
+            print(f"  ✓ Removed {package}")
+        except:
+            print(f"  - {package} not installed")
+    
+    # Step 2: Install compatible NumPy version
+    print("\n[2/4] Installing compatible NumPy...")
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+                          'numpy==1.23.5'])
+    print("  ✓ NumPy 1.23.5 installed")
+    
+    # Step 3: Install PyTorch (CPU version)
+    print("\n[3/4] Installing PyTorch...")
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+                          'torch', 'torchvision', 'torchaudio'])
+    print("  ✓ PyTorch installed")
+    
+    # Step 4: Install Stanza
+    print("\n[4/4] Installing Stanza...")
+    subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+                          'stanza'])
+    print("  ✓ Stanza installed")
+    
+    print("\n" + "="*60)
+    print("✅ Installation Complete!")
+    print("="*60)
+    print("\nNext step: Download Indonesian model")
+    print("Run: stanza.download('id')")
+    print("="*60)
+
+# Run installation
+if __name__ == "__main__":
+    install_parsing_libraries()
+        </div>
+        
+        <div class="example-box" style="margin-top: 30px;">
+            <h3>📥 Download Indonesian Model (Run Once)</h3>
+            <div class="code-block" id="download-code">
+                <button class="copy-btn" onclick="copyCode('download-code')">📋 Copy Code</button>
+import stanza
+
+# Download Indonesian language model (only needed once)
+print("Downloading Indonesian model...")
+stanza.download('id')
+print("✓ Download complete!")
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <h3>💡 Installation Notes</h3>
+            <ul style="font-size: 1.0em;">
+                <li><strong>Run installation script once:</strong> Before starting exercises</li>
+                <li><strong>Download model once:</strong> ~396 MB, takes 2-5 minutes</li>
+                <li><strong>Model location:</strong> Saved to <code>~/stanza_resources/id/</code></li>
+                <li><strong>Internet required:</strong> Only for initial download</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Slide 3: Prerequisites - Text Preprocessing -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 3</div>
+    <div class="content">
+        <h2>📋 Prerequisites: Text Preprocessing (Sessions 4-5)</h2>
+        
+        <div class="prerequisite-box">
+            <h3>Required Skills from Previous Sessions</h3>
+            <ul>
+                <li><strong>Tokenization:</strong> Breaking text into words/tokens</li>
+                <li><strong>Part-of-Speech (POS) Tagging:</strong> Identifying word categories (noun, verb, etc.)</li>
+                <li><strong>Text normalization:</strong> Handling case, punctuation</li>
+            </ul>
+        </div>
+        
+        <div class="example-box">
+            <h3>Example: Preprocessing Pipeline for Parsing</h3>
+            <p style="font-size: 1.2em; margin-top: 15px;">
+                <strong>Raw text:</strong> "The cat sat on the mat."<br><br>
+                <strong>Step 1 - Tokenization:</strong><br>
+                ["The", "cat", "sat", "on", "the", "mat", "."]<br><br>
+                <strong>Step 2 - POS Tagging:</strong><br>
+                [("The", "DET"), ("cat", "NOUN"), ("sat", "VERB"), ("on", "PREP"), ("the", "DET"), ("mat", "NOUN"), (".", "PUNCT")]<br><br>
+                <strong>Step 3 - Ready for Parsing!</strong>
+            </p>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 Why Important:</strong> Parsing builds on tokenization and POS tagging to understand sentence structure!
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Prerequisites - Linguistics Basics -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 4</div>
+    <div class="content">
+        <h2>📋 Prerequisites: Basic Linguistics Concepts</h2>
+        
+        <div class="prerequisite-box">
+            <h3>1. Parts of Speech (POS)</h3>
+            <table style="font-size: 1.0em; margin-top: 15px;">
+                <tr>
+                    <th>POS</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>NOUN (N)</strong></td>
+                    <td>Person, place, thing</td>
+                    <td>cat, house, John</td>
+                </tr>
+                <tr>
+                    <td><strong>VERB (V)</strong></td>
+                    <td>Action or state</td>
+                    <td>run, eat, is</td>
+                </tr>
+                <tr>
+                    <td><strong>DET</strong></td>
+                    <td>Determiner</td>
+                    <td>the, a, this</td>
+                </tr>
+                <tr>
+                    <td><strong>ADJ</strong></td>
+                    <td>Adjective (describes noun)</td>
+                    <td>big, red, happy</td>
+                </tr>
+                <tr>
+                    <td><strong>ADV</strong></td>
+                    <td>Adverb (describes verb)</td>
+                    <td>quickly, very, well</td>
+                </tr>
+                <tr>
+                    <td><strong>PREP</strong></td>
+                    <td>Preposition</td>
+                    <td>on, in, at, with</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>2. Phrases</h3>
+            <ul>
+                <li><strong>Noun Phrase (NP):</strong> "the big cat", "a red house"</li>
+                <li><strong>Verb Phrase (VP):</strong> "runs quickly", "ate the apple"</li>
+                <li><strong>Prepositional Phrase (PP):</strong> "on the table", "in the garden"</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Prerequisites - Formal Languages -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 5</div>
+    <div class="content">
+        <h2>📋 Prerequisites: Formal Language Theory Basics</h2>
+        
+        <div class="math-box">
+            <h3>Chomsky Hierarchy of Grammars</h3>
+            <table style="font-size: 0.95em; margin-top: 15px;">
+                <tr>
+                    <th>Type</th>
+                    <th>Grammar</th>
+                    <th>Language</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>Type 0</strong></td>
+                    <td>Unrestricted</td>
+                    <td>Recursively enumerable</td>
+                    <td>Natural languages</td>
+                </tr>
+                <tr>
+                    <td><strong>Type 1</strong></td>
+                    <td>Context-sensitive</td>
+                    <td>Context-sensitive</td>
+                    <td>Agreement rules</td>
+                </tr>
+                <tr style="background: #d4edda;">
+                    <td><strong>Type 2</strong></td>
+                    <td><strong>Context-free (CFG)</strong></td>
+                    <td>Context-free</td>
+                    <td><strong>Most parsing!</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>Type 3</strong></td>
+                    <td>Regular</td>
+                    <td>Regular</td>
+                    <td>Tokenization</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div class="key-point">
+            <h3>💡 Why Context-Free Grammars?</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>Powerful enough:</strong> Can describe most syntactic structures</li>
+                <li><strong>Efficient:</strong> Polynomial-time parsing algorithms exist</li>
+                <li><strong>Tractable:</strong> Not too complex to implement</li>
+                <li><strong>Well-studied:</strong> Lots of theory and tools available</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Introduction to Parsing -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 6</div>
+    <div class="content">
+        <h2>🔍 What is Parsing?</h2>
+        
+        <div class="highlight">
+            <h3>Definition</h3>
+            <p style="font-size: 1.3em; line-height: 1.7;">
+                <strong>Parsing</strong> (Syntactic Analysis) is the process of analyzing the grammatical structure of a sentence to determine how words relate to each other and form meaningful phrases and clauses.
+            </p>
+        </div>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>Input</h3>
+                <ul>
+                    <li>Sequence of words (tokens)</li>
+                    <li>Usually with POS tags</li>
+                    <li>Example: "The cat sat"</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>Output</h3>
+                <ul>
+                    <li>Parse tree (tree structure)</li>
+                    <li>Shows syntactic relationships</li>
+                    <li>Hierarchical organization</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="example-box" style="margin-top: 30px;">
+            <h3>Simple Example</h3>
+            <p style="font-size: 1.2em; text-align: center; margin: 20px 0; font-family: monospace;">
+                <strong>Sentence:</strong> "The cat sat"
+            </p>
+            <div style="text-align: center; font-family: monospace; font-size: 1.1em; line-height: 2;">
+                S (Sentence)<br>
+                ├── NP (Noun Phrase): "The cat"<br>
+                │&nbsp;&nbsp;&nbsp;├── DET: "The"<br>
+                │&nbsp;&nbsp;&nbsp;└── NOUN: "cat"<br>
+                └── VP (Verb Phrase): "sat"<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;└── VERB: "sat"
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 Key Insight:</strong> Parsing reveals the hierarchical structure hidden in linear text!
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: Why Parsing Matters -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 7</div>
+    <div class="content">
+        <h2>🎯 Why is Parsing Important?</h2>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>🔍 Understanding</h3>
+                <ul>
+                    <li><strong>Ambiguity resolution:</strong> "I saw the man with the telescope"</li>
+                    <li><strong>Semantic interpretation:</strong> Who did what to whom?</li>
+                    <li><strong>Relationship extraction:</strong> Subject-verb-object</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>🚀 Applications</h3>
+                <ul>
+                    <li><strong>Machine Translation:</strong> Translate structure, not just words</li>
+                    <li><strong>Question Answering:</strong> Understand question structure</li>
+                    <li><strong>Information Extraction:</strong> Extract relations from text</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="example-box" style="margin-top: 30px;">
+            <h3>📖 Real Example: Structural Ambiguity</h3>
+            <p style="font-size: 1.3em; margin: 20px 0;">
+                <strong>Sentence:</strong> "I saw the man with the telescope"
+            </p>
+            
+            <div class="two-column">
+                <div style="background: #fff; padding: 15px; border-radius: 5px;">
+                    <h4>Interpretation 1:</h4>
+                    <p style="font-family: monospace;">
+                        I used a telescope to see the man
+                    </p>
+                    <p style="margin-top: 10px;">
+                        <strong>Structure:</strong> VP = [saw [the man] [with telescope]]
+                    </p>
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 5px;">
+                    <h4>Interpretation 2:</h4>
+                    <p style="font-family: monospace;">
+                        I saw a man who has a telescope
+                    </p>
+                    <p style="margin-top: 10px;">
+                        <strong>Structure:</strong> VP = [saw [the man [with telescope]]]
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 Parsing helps disambiguate!</strong> Different parse trees = different meanings
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Context-Free Grammar (CFG) Introduction -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 8</div>
+    <div class="content">
+        <h2>📚 Context-Free Grammar (CFG)</h2>
+        
+        <div class="math-box">
+            <h3>Formal Definition</h3>
+            <p style="font-size: 1.2em;">A Context-Free Grammar is a 4-tuple:</p>
+            \[
+            G = (N, \Sigma, R, S)
+            \]
+            
+            <p style="margin-top: 20px;"><strong>Where:</strong></p>
+            <ul>
+                <li>\(N\) = Set of <strong>non-terminal</strong> symbols (S, NP, VP, etc.)</li>
+                <li>\(\Sigma\) = Set of <strong>terminal</strong> symbols (words: "cat", "sat", etc.)</li>
+                <li>\(R\) = Set of <strong>production rules</strong> \(A \rightarrow \beta\)</li>
+                <li>\(S\) = <strong>Start symbol</strong> (usually S for Sentence)</li>
+            </ul>
+        </div>
+        
+        <div class="highlight">
+            <h3>Production Rules Format</h3>
+            \[
+            A \rightarrow \beta
+            \]
+            <p style="font-size: 1.2em; margin-top: 15px;">
+                Where \(A \in N\) (non-terminal) and \(\beta \in (N \cup \Sigma)^*\) (sequence of terminals and non-terminals)
+            </p>
+        </div>
+        
+        <div class="key-point">
+            <h3>💡 "Context-Free" Means:</h3>
+            <p style="font-size: 1.2em;">
+                A rule like \(A \rightarrow \beta\) applies <strong>regardless of context</strong>. 
+                You can replace A with β anywhere A appears, no matter what's around it.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: CFG Example -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 9</div>
+    <div class="content">
+        <h2>📝 Simple CFG Example</h2>
+        
+        <div class="highlight">
+            <h3>A Tiny Grammar for English</h3>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>S → NP VP</strong><br>
+            <span style="color: #666;">(A sentence is a noun phrase followed by a verb phrase)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>NP → DET N</strong><br>
+            <span style="color: #666;">(A noun phrase is a determiner followed by a noun)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>NP → DET ADJ N</strong><br>
+            <span style="color: #666;">(A noun phrase can also have an adjective)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>VP → V</strong><br>
+            <span style="color: #666;">(A verb phrase can be just a verb)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>VP → V NP</strong><br>
+            <span style="color: #666;">(Or a verb with a noun phrase object)</span>
+        </div>
+        
+        <div class="grammar-rule">
+            <strong>DET → "the" | "a"</strong><br>
+            <strong>N → "cat" | "dog" | "mat"</strong><br>
+            <strong>ADJ → "big" | "small"</strong><br>
+            <strong>V → "sat" | "chased"</strong><br>
+            <span style="color: #666;">(Terminal rules: non-terminals produce actual words)</span>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <h3>✅ This Grammar Can Generate:</h3>
+            <ul style="font-size: 1.1em;">
+                <li>"the cat sat"</li>
+                <li>"a dog chased the cat"</li>
+                <li>"the big dog chased a small cat"</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Derivation -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 10</div>
+    <div class="content">
+        <h2>🔄 Derivation: Generating Sentences</h2>
+        
+        <div class="highlight">
+            <h3>What is Derivation?</h3>
+            <p style="font-size: 1.2em;">
+                <strong>Derivation</strong> is the process of generating a sentence by repeatedly applying grammar rules, 
+                starting from the start symbol S.
+            </p>
+        </div>
+        
+        <div class="example-box">
+            <h3>Example: Deriving "the cat sat"</h3>
+            
+            <div style="font-family: monospace; font-size: 1.2em; line-height: 2; margin-top: 20px;">
+                <strong>S</strong><br>
+                ⇒ <strong>NP VP</strong> &nbsp;&nbsp;&nbsp;<span style="color: #666;">(Apply: S → NP VP)</span><br>
+                ⇒ <strong>DET N VP</strong> &nbsp;&nbsp;&nbsp;<span style="color: #666;">(Apply: NP → DET N)</span><br>
+                ⇒ <strong>"the" N VP</strong> &nbsp;&nbsp;&nbsp;<span style="color: #666;">(Apply: DET → "the")</span><br>
+                ⇒ <strong>"the" "cat" VP</strong> &nbsp;&nbsp;&nbsp;<span style="color: #666;">(Apply: N → "cat")</span><br>
+                ⇒ <strong>"the" "cat" V</strong> &nbsp;&nbsp;&nbsp;<span style="color: #666;">(Apply: VP → V)</span><br>
+                ⇒ <strong>"the" "cat" "sat"</strong> &nbsp;&nbsp;&nbsp;<span style="color: #666;">(Apply: V → "sat")</span><br>
+            </div>
+        </div>
+        
+        <div class="math-box" style="margin-top: 30px;">
+            <h3>Notation</h3>
+            <ul>
+                <li>\(\Rightarrow\) : derives in one step</li>
+                <li>\(\Rightarrow^*\) : derives in zero or more steps</li>
+                <li>\(\Rightarrow^+\) : derives in one or more steps</li>
+            </ul>
+            
+            <p style="margin-top: 20px;">We write: \(S \Rightarrow^* \text{"the cat sat"}\)</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: Parse Trees -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 11</div>
+    <div class="content">
+        <h2>🌳 Parse Trees (Syntax Trees)</h2>
+        
+        <div class="highlight">
+            <h3>Definition</h3>
+            <p style="font-size: 1.2em; line-height: 1.7;">
+                A <strong>parse tree</strong> is a tree representation of the syntactic structure of a sentence according to a CFG. 
+                It shows how the sentence can be derived from the start symbol.
+            </p>
+        </div>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>Tree Properties</h3>
+                <ul>
+                    <li><strong>Root:</strong> Start symbol (S)</li>
+                    <li><strong>Internal nodes:</strong> Non-terminals</li>
+                    <li><strong>Leaves:</strong> Terminals (words)</li>
+                    <li><strong>Edges:</strong> Production rules</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>How to Read</h3>
+                <ul>
+                    <li>Top-down: From sentence to words</li>
+                    <li>Each node expands according to grammar rules</li>
+                    <li>Reading leaves left-to-right gives the sentence</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="plot1" class="plot-container"></div>
+    </div>
+</div>
+
+<!-- Slide 12: Constituency -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 12</div>
+    <div class="content">
+        <h2>📦 Constituency: Grouping Words into Phrases</h2>
+        
+        <div class="highlight">
+            <h3>What is a Constituent?</h3>
+            <p style="font-size: 1.2em; line-height: 1.7;">
+                A <strong>constituent</strong> is a word or group of words that function as a single unit within a hierarchical structure.
+                Constituents correspond to subtrees in the parse tree.
+            </p>
+        </div>
+        
+        <div class="example-box">
+            <h3>Example: "The big dog chased the cat"</h3>
+            
+            <div class="two-column" style="margin-top: 20px;">
+                <div style="background: #fff; padding: 15px; border-radius: 5px;">
+                    <h4>✅ Valid Constituents</h4>
+                    <ul style="font-size: 1.0em;">
+                        <li>"The big dog" (NP)</li>
+                        <li>"the cat" (NP)</li>
+                        <li>"chased the cat" (VP)</li>
+                        <li>"big dog" (smaller NP)</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #fff; padding: 15px; border-radius: 5px;">
+                    <h4>❌ Not Constituents</h4>
+                    <ul style="font-size: 1.0em;">
+                        <li>"dog chased" (crosses boundaries)</li>
+                        <li>"big dog chased" (incomplete)</li>
+                        <li>"the the" (no syntactic unit)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <h3>🧪 Tests for Constituency</h3>
+            <ul style="font-size: 1.1em;">
+                <li><strong>Substitution:</strong> Can replace with a single word (e.g., "The big dog" → "He")</li>
+                <li><strong>Movement:</strong> Can move as a unit ("The cat, the big dog chased")</li>
+                <li><strong>Coordination:</strong> Can coordinate with "and" ("the big dog and the small cat")</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 13: Types of Parsing -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 13</div>
+    <div class="content">
+        <h2>🔀 Types of Parsing Approaches</h2>
+        
+        <div class="two-column">
+            <div class="box">
+                <h3>1️⃣ Top-Down Parsing</h3>
+                <p style="font-size: 1.1em; margin: 15px 0;">
+                    Start with the start symbol (S) and try to derive the sentence
+                </p>
+                <ul>
+                    <li>Like generating a sentence</li>
+                    <li>Expand non-terminals until you match the input</li>
+                    <li><strong>Algorithm:</strong> Recursive Descent</li>
+                </ul>
+                
+                <div style="background: #d4edda; padding: 15px; margin-top: 15px; border-radius: 5px;">
+                    <strong>✅ Pros:</strong>
+                    <ul style="font-size: 0.95em; margin-left: 20px; margin-top: 5px;">
+                        <li>Intuitive (like how we think)</li>
+                        <li>Can guide search with semantics</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f8d7da; padding: 15px; margin-top: 10px; border-radius: 5px;">
+                    <strong>❌ Cons:</strong>
+                    <ul style="font-size: 0.95em; margin-left: 20px; margin-top: 5px;">
+                        <li>May need backtracking</li>
+                        <li>Left-recursion problems</li>
+                        <li>Can be inefficient</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="box">
+                <h3>2️⃣ Bottom-Up Parsing</h3>
+                <p style="font-size: 1.1em; margin: 15px 0;">
+                    Start with the words and build up to the start symbol (S)
+                </p>
+                <ul>
+                    <li>Like recognizing a sentence</li>
+                    <li>Combine terminals into non-terminals</li>
+                    <li><strong>Algorithm:</strong> Shift-Reduce</li>
+                </ul>
+                
+                <div style="background: #d4edda; padding: 15px; margin-top: 15px; border-radius: 5px;">
+                    <strong>✅ Pros:</strong>
+                    <ul style="font-size: 0.95em; margin-left: 20px; margin-top: 5px;">
+                        <li>More efficient (no backtracking)</li>
+                        <li>Handles left-recursion well</li>
+                    </ul>
+                </div>
+                
+                <div style="background: #f8d7da; padding: 15px; margin-top: 10px; border-radius: 5px;">
+                    <strong>❌ Cons:</strong>
+                    <ul style="font-size: 0.95em; margin-left: 20px; margin-top: 5px;">
+                        <li>Less intuitive</li>
+                        <li>Harder to incorporate semantics</li>
+                        <li>May build unnecessary structures</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px;">
+            <h3>🎯 Modern Approach: Chart Parsing</h3>
+            <p style="font-size: 1.2em;">
+                Combines best of both! Uses <strong>dynamic programming</strong> to avoid redundant work.
+                Examples: CYK, Earley algorithms
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 14: The Parsing Problem -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 14</div>
+    <div class="content">
+        <h2>🎯 The Parsing Problem: Ambiguity & Efficiency</h2>
+        
+        <div class="prerequisite-box">
+            <h3>Challenge 1: Ambiguity</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                Many sentences have <strong>multiple valid parse trees</strong>!
+            </p>
+            
+            <div class="example-box" style="margin-top: 15px;">
+                <strong>Example:</strong> "I shot an elephant in my pajamas"
+                <ul style="margin-top: 10px; font-size: 1.0em;">
+                    <li>Parse 1: I was wearing pajamas when I shot the elephant</li>
+                    <li>Parse 2: The elephant was wearing my pajamas</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>Challenge 2: Computational Complexity</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                Naive approaches can be exponential in sentence length!
+            </p>
+            
+            <div class="math-box" style="margin-top: 15px;">
+                <h4>Complexity Analysis</h4>
+                <ul>
+                    <li><strong>Naive top-down:</strong> \(O(2^n)\) - exponential!</li>
+                    <li><strong>With dynamic programming:</strong> \(O(n^3)\) - polynomial!</li>
+                    <li>For sentence of length \(n=20\): \(2^{20} = 1M\) vs \(20^3 = 8K\)</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="highlight" style="margin-top: 30px;">
+            <h3>💡 Solution: Chart Parsing</h3>
+            <p style="font-size: 1.2em;">
+                Use <strong>dynamic programming</strong> to store partial results and avoid recomputation.
+                Store partial parses in a chart (table) and reuse them!
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 15: Chart Parsing Introduction -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 15</div>
+    <div class="content">
+        <h2>📊 Chart Parsing: Dynamic Programming Approach</h2>
+        
+        <div class="highlight">
+            <h3>Main Idea</h3>
+            <p style="font-size: 1.2em; line-height: 1.7;">
+                Store all possible constituents (sub-parses) for all spans of the input in a table called a <strong>chart</strong>.
+                Reuse stored results to build larger constituents.
+            </p>
+        </div>
+        
+        <div class="math-box">
+            <h3>Chart Structure</h3>
+            <p style="font-size: 1.1em;">
+                For a sentence of length \(n\), we use a chart \(C[i][j]\) where:
+            </p>
+            \[
+            C[i][j] = \text{set of constituents spanning words } i \text{ to } j
+            \]
+            
+            <p style="margin-top: 20px;"><strong>Example:</strong></p>
+            <ul>
+                <li>\(C[0][1]\) = constituents for word 0 to word 1 ("the cat")</li>
+                <li>\(C[1][3]\) = constituents for word 1 to word 3 ("cat sat on")</li>
+                <li>\(C[0][n]\) = complete parse (entire sentence)</li>
+            </ul>
+        </div>
+        
+        <div class="key-point">
+            <h3>🎯 Key Principle: Optimal Substructure</h3>
+            <p style="font-size: 1.1em;">
+                If we know all parses for "the cat" and all parses for "sat", 
+                we can combine them to get parses for "the cat sat" without recomputing!
+            </p>
+        </div>
+        
+        <div id="plot2" class="plot-container"></div>
+    </div>
+</div>
+
+<!-- Slide 16: CYK Algorithm -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 16</div>
+    <div class="content">
+        <h2>⚙️ CYK Algorithm (Cocke-Younger-Kasami)</h2>
+        
+        <div class="highlight">
+            <h3>Overview</h3>
+            <ul style="font-size: 1.2em;">
+                <li><strong>Type:</strong> Bottom-up chart parsing</li>
+                <li><strong>Requirement:</strong> Grammar must be in <strong>Chomsky Normal Form (CNF)</strong></li>
+                <li><strong>Complexity:</strong> \(O(n^3 |G|)\) where \(n\) = sentence length, \(|G|\) = grammar size</li>
+            </ul>
+        </div>
+        
+        <div class="math-box">
+            <h3>Chomsky Normal Form (CNF)</h3>
+            <p style="font-size: 1.1em; margin-bottom: 15px;">
+                All production rules must be in one of these forms:
+            </p>
+            
+            <div class="grammar-rule">
+                <strong>A → B C</strong> &nbsp;&nbsp;&nbsp;(Binary rule: two non-terminals)
+            </div>
+            
+            <div class="grammar-rule">
+                <strong>A → a</strong> &nbsp;&nbsp;&nbsp;(Unary rule: one terminal)
+            </div>
+            
+            <div class="grammar-rule">
+                <strong>S → ε</strong> &nbsp;&nbsp;&nbsp;(Only if empty string in language)
+            </div>
+            
+            <p style="margin-top: 20px; font-size: 1.1em;">
+                <strong>Any CFG can be converted to CNF!</strong> (with some rule modifications)
+            </p>
+        </div>
+        
+        <div class="example-box">
+            <h3>Converting to CNF</h3>
+            <table style="font-size: 0.95em;">
+                <tr>
+                    <th>Original Rule</th>
+                    <th>CNF Equivalent</th>
+                </tr>
+                <tr>
+                    <td>VP → V NP PP</td>
+                    <td>VP → V X<br>X → NP PP</td>
+                </tr>
+                <tr>
+                    <td>NP → DET ADJ N</td>
+                    <td>NP → DET Y<br>Y → ADJ N</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 17: CYK Algorithm - How it Works -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 17</div>
+    <div class="content">
+        <h2>⚙️ CYK Algorithm: Step-by-Step</h2>
+        
+        <div class="math-box">
+            <h3>Algorithm Structure</h3>
+            <p style="font-size: 1.1em;">
+                Use a 3D table: \(\text{table}[i][j][A]\) = True if non-terminal A can derive words from position i to j
+            </p>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>Step 1: Initialize (Length 1 spans)</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                For each word \(w_i\), if there's a rule \(A \rightarrow w_i\), mark \(\text{table}[i][i+1][A] = \text{True}\)
+            </p>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>Step 2: Fill Table (Length 2 to n)</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                For each span length \(\ell\) from 2 to \(n\):<br>
+                For each starting position \(i\):<br>
+                &nbsp;&nbsp;For each split point \(k\):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;If rule \(A \rightarrow B C\) exists and:<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- \(B\) derives \([i, k)\) and<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;- \(C\) derives \([k, j)\)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;Then \(A\) can derive \([i, j)\)
+            </p>
+        </div>
+        
+        <div class="math-box" style="margin-top: 30px;">
+            <h3>Mathematical Formulation</h3>
+            \[
+            \text{table}[i][j][A] = \bigvee_{A \rightarrow BC \in R} \bigvee_{k=i+1}^{j-1} \left( \text{table}[i][k][B] \land \text{table}[k][j][C] \right)
+            \]
+            
+            <p style="margin-top: 15px; font-size: 1.0em;">
+                (Non-terminal A spans [i,j] if there exists a rule A→BC and split point k where B spans [i,k] and C spans [k,j])
+            </p>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 Result:</strong> If \(\text{table}[0][n][S] = \text{True}\), the sentence is grammatical!
+        </div>
+    </div>
+</div>
+
+<!-- Slide 18: CYK Example -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 18</div>
+    <div class="content">
+        <h2>📝 CYK Algorithm: Visual Example</h2>
+        
+        <div class="highlight">
+            <h3>Sentence: "the cat sat"</h3>
+            <h3>Grammar (in CNF):</h3>
+            <div class="grammar-rule">
+                S → NP VP<br>
+                NP → DET N<br>
+                VP → V<br>
+                DET → "the"<br>
+                N → "cat"<br>
+                V → "sat"
+            </div>
+        </div>
+        
+        <div id="plot3" class="plot-container"></div>
+        
+        <div class="example-box" style="margin-top: 30px;">
+            <h3>Reading the Chart</h3>
+            <table style="font-size: 1.0em;">
+                <tr>
+                    <th>Cell</th>
+                    <th>Span</th>
+                    <th>Contents</th>
+                    <th>Meaning</th>
+                </tr>
+                <tr>
+                    <td>[0,1]</td>
+                    <td>"the"</td>
+                    <td>{DET}</td>
+                    <td>"the" is a determiner</td>
+                </tr>
+                <tr>
+                    <td>[1,2]</td>
+                    <td>"cat"</td>
+                    <td>{N}</td>
+                    <td>"cat" is a noun</td>
+                </tr>
+                <tr>
+                    <td>[0,2]</td>
+                    <td>"the cat"</td>
+                    <td>{NP}</td>
+                    <td>"the cat" is a noun phrase</td>
+                </tr>
+                <tr>
+                    <td>[2,3]</td>
+                    <td>"sat"</td>
+                    <td>{V, VP}</td>
+                    <td>"sat" is a verb and verb phrase</td>
+                </tr>
+                <tr style="background: #d4edda;">
+                    <td>[0,3]</td>
+                    <td>"the cat sat"</td>
+                    <td>{S}</td>
+                    <td>Complete sentence! ✅</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 19: Earley Algorithm -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 19</div>
+    <div class="content">
+        <h2>⚙️ Earley Algorithm</h2>
+        
+        <div class="highlight">
+            <h3>Overview</h3>
+            <ul style="font-size: 1.2em;">
+                <li><strong>Type:</strong> Top-down chart parsing with dynamic programming</li>
+                <li><strong>Advantage:</strong> Works with <strong>any CFG</strong> (no CNF required!)</li>
+                <li><strong>Complexity:</strong> \(O(n^3)\) for arbitrary CFG, \(O(n^2)\) for unambiguous grammars</li>
+                <li><strong>More flexible</strong> than CYK</li>
+            </ul>
+        </div>
+        
+        <div class="math-box">
+            <h3>Key Concept: Dotted Rules</h3>
+            <p style="font-size: 1.1em; margin-bottom: 15px;">
+                Earley uses <strong>dotted rules</strong> to track partially completed parses:
+            </p>
+            
+            <div class="grammar-rule">
+                <strong>NP → DET • N</strong><br>
+                <span style="color: #666;">We've seen DET, expecting N next</span>
+            </div>
+            
+            <div class="grammar-rule">
+                <strong>VP → V • NP</strong><br>
+                <span style="color: #666;">We've seen V, expecting NP next</span>
+            </div>
+            
+            <div class="grammar-rule">
+                <strong>S → NP VP •</strong><br>
+                <span style="color: #666;">Complete! We've seen both NP and VP</span>
+            </div>
+        </div>
+        
+        <div class="two-column" style="margin-top: 30px;">
+            <div class="box">
+                <h3>✅ Advantages</h3>
+                <ul>
+                    <li>No grammar conversion needed</li>
+                    <li>Handles ε-productions</li>
+                    <li>Can handle left-recursion</li>
+                    <li>Natural for incremental parsing</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>📊 Use Cases</h3>
+                <ul>
+                    <li>Speech recognition (incremental)</li>
+                    <li>Real-time parsing</li>
+                    <li>Complex grammars</li>
+                    <li>More common in modern NLP</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 20: Earley Algorithm - Three Operations -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 20</div>
+    <div class="content">
+        <h2>⚙️ Earley Algorithm: Three Core Operations</h2>
+        
+        <div class="prerequisite-box">
+            <h3>1️⃣ Prediction</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                When we need a non-terminal, add all rules that could produce it
+            </p>
+            <div class="example-box" style="margin-top: 15px;">
+                <strong>If we have:</strong> S → • NP VP<br>
+                <strong>Predict:</strong> NP → • DET N (add all NP rules)
+            </div>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>2️⃣ Scanning</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                When we need a terminal, check if it matches the next input word
+            </p>
+            <div class="example-box" style="margin-top: 15px;">
+                <strong>If we have:</strong> DET → • "the"<br>
+                <strong>And next word is:</strong> "the"<br>
+                <strong>Scan:</strong> DET → "the" • (move dot past "the")
+            </div>
+        </div>
+        
+        <div class="prerequisite-box">
+            <h3>3️⃣ Completion</h3>
+            <p style="font-size: 1.1em; margin-top: 10px;">
+                When a rule is complete (dot at end), find all rules waiting for this non-terminal
+            </p>
+            <div class="example-box" style="margin-top: 15px;">
+                <strong>If we complete:</strong> DET → "the" •<br>
+                <strong>And we had:</strong> NP → • DET N<br>
+                <strong>Complete:</strong> NP → DET • N (move dot forward)
+            </div>
+        </div>
+        
+        <div class="key-point">
+            <strong>💡 The algorithm maintains a chart of states for each input position, repeatedly applying these three operations!</strong>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 21: Part 1 Summary -->
+<div class="slide">
+    <div class="slide-number">Session 7 - Part 1 | Slide 21</div>
+    <div class="content">
+        <h2>📝 Part 1 Summary: Key Takeaways</h2>
+        
+        <div class="highlight">
+            <h3>✅ What We've Learned</h3>
+            <ul style="font-size: 1.2em; line-height: 1.8;">
+                <li><strong>Parsing:</strong> Analyzing syntactic structure of sentences</li>
+                <li><strong>CFG:</strong> Formal grammars for describing language syntax</li>
+                <li><strong>Parse Trees:</strong> Hierarchical representation of sentence structure</li>
+                <li><strong>Constituency:</strong> How words group into phrases</li>
+                <li><strong>Chart Parsing:</strong> Efficient dynamic programming approach</li>
+                <li><strong>CYK & Earley:</strong> Two important parsing algorithms</li>
+            </ul>
+        </div>
+        
+        <div class="two-column" style="margin-top: 30px;">
+            <div class="box">
+                <h3>🎯 Core Concepts</h3>
+                <ul>
+                    <li>Context-Free Grammars (CFG)</li>
+                    <li>Terminal vs Non-terminal</li>
+                    <li>Production rules</li>
+                    <li>Derivation</li>
+                    <li>Parse trees</li>
+                    <li>Ambiguity</li>
+                </ul>
+            </div>
+            
+            <div class="box">
+                <h3>⚙️ Algorithms</h3>
+                <table style="font-size: 0.9em;">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Key Feature</th>
+                    </tr>
+                    <tr>
+                        <td><strong>CYK</strong></td>
+                        <td>Needs CNF, O(n³)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Earley</strong></td>
+                        <td>Any CFG, more flexible</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="key-point" style="margin-top: 30px; text-align: center;">
+            <h3 style="font-size: 2em; color: #667eea;">🔜 Coming in Part 2</h3>
+            <ul style="font-size: 1.2em; text-align: left; margin-top: 20px;">
+                <li>Probabilistic Context-Free Grammars (PCFG)</li>
+                <li>Dependency Parsing</li>
+                <li>Statistical parsing methods</li>
+                <li>Parsing Indonesian sentences</li>
+                <li>Modern neural parsing approaches</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+// Plot 1: Parse Tree Visualization using Plotly
+function createPlot1() {
+    // Create a simple parse tree for "the cat sat"
+    const trace = {
+        type: 'sankey',
+        orientation: 'v',
+        node: {
+            pad: 20,
+            thickness: 20,
+            line: {
+                color: 'black',
+                width: 1
+            },
+            label: ['S', 'NP', 'VP', 'DET', 'N', 'V', '"the"', '"cat"', '"sat"'],
+            color: ['#667eea', '#764ba2', '#764ba2', '#f6d365', '#f6d365', '#f6d365', 
+                    '#fda085', '#fda085', '#fda085'],
+            x: [0.5, 0.3, 0.7, 0.2, 0.4, 0.7, 0.2, 0.4, 0.7],
+            y: [0.1, 0.35, 0.35, 0.6, 0.6, 0.6, 0.9, 0.9, 0.9]
+        },
+        link: {
+            source: [0, 0, 1, 1, 2, 3, 4, 5],
+            target: [1, 2, 3, 4, 5, 6, 7, 8],
+            value: [1, 1, 1, 1, 1, 1, 1, 1],
+            color: 'rgba(102, 126, 234, 0.3)'
+        }
+    };
+    
+    const layout = {
+        title: {
+            text: 'Parse Tree for "the cat sat"',
+            font: { size: 24 }
+        },
+        font: { size: 14 },
+        height: 500
+    };
+    
+    Plotly.newPlot('plot1', [trace], layout);
+}
+
+// Plot 2: Chart Structure Visualization
+function createPlot2() {
+    // Create a heatmap showing chart structure
+    const z = [
+        [1, 1, 1],  // Length 1 spans (words)
+        [0, 1, 1],  // Length 2 spans (phrases)
+        [0, 0, 1]   // Length 3 span (sentence)
+    ];
+    
+    const annotations = [
+        { x: 0, y: 0, text: '"the"<br>DET', font: { size: 10 } },
+        { x: 1, y: 0, text: '"cat"<br>N', font: { size: 10 } },
+        { x: 2, y: 0, text: '"sat"<br>V, VP', font: { size: 10 } },
+        { x: 1, y: 1, text: '"the cat"<br>NP', font: { size: 10 } },
+        { x: 2, y: 1, text: '"cat sat"<br>...', font: { size: 10 } },
+        { x: 2, y: 2, text: '"the cat sat"<br>S ✓', font: { size: 10, color: 'green' } }
+    ];
+    
+    const trace = {
+        z: z,
+        x: ['Word 0', 'Word 1', 'Word 2'],
+        y: ['Len=1', 'Len=2', 'Len=3'],
+        type: 'heatmap',
+        colorscale: [
+            [0, 'white'],
+            [1, '#667eea']
+        ],
+        showscale: false
+    };
+    
+    const layout = {
+        title: {
+            text: 'Chart Parsing: Dynamic Programming Table',
+            font: { size: 24 }
+        },
+        annotations: annotations,
+        xaxis: {
+            side: 'top',
+            title: 'Ending Position'
+        },
+        yaxis: {
+            title: 'Span Length',
+            autorange: 'reversed'
+        },
+        height: 500
+    };
+    
+    Plotly.newPlot('plot2', [trace], layout);
+}
+
+// Plot 3: CYK Chart Example
+function createPlot3() {
+    // Create CYK parsing chart visualization
+    const data = [
+        {
+            x: [0.5, 1.5, 2.5],
+            y: [0.5, 0.5, 0.5],
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'Words',
+            text: ['"the"<br>DET', '"cat"<br>N', '"sat"<br>V,VP'],
+            textposition: 'middle center',
+            marker: {
+                size: 80,
+                color: '#fda085',
+                line: { width: 2, color: '#764ba2' }
+            },
+            showlegend: false
+        },
+        {
+            x: [1, 2],
+            y: [1.5, 1.5],
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'Length 2',
+            text: ['"the cat"<br>NP', '"cat sat"<br>--'],
+            textposition: 'middle center',
+            marker: {
+                size: 80,
+                color: '#f6d365',
+                line: { width: 2, color: '#764ba2' }
+            },
+            showlegend: false
+        },
+        {
+            x: [1.5],
+            y: [2.5],
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'Length 3',
+            text: ['"the cat sat"<br>S ✓'],
+            textposition: 'middle center',
+            marker: {
+                size: 100,
+                color: '#667eea',
+                line: { width: 3, color: '#764ba2' }
+            },
+            showlegend: false
+        }
+    ];
+    
+    const layout = {
+        title: {
+            text: 'CYK Chart: Bottom-Up Parsing',
+            font: { size: 24 }
+        },
+        xaxis: {
+            title: 'Word Position',
+            range: [0, 3],
+            showgrid: false,
+            zeroline: false
+        },
+        yaxis: {
+            title: 'Span Level',
+            range: [0, 3],
+            showgrid: false,
+            zeroline: false
+        },
+        height: 600,
+        hovermode: false
+    };
+    
+    Plotly.newPlot('plot3', data, layout);
+}
+
+// Initialize all plots when page loads
+window.onload = function() {
+    createPlot1();
+    createPlot2();
+    createPlot3();
+};
+</script>
+
+</body>
+</html>
