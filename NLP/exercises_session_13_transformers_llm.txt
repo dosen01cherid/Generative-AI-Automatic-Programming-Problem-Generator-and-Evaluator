@@ -1,0 +1,262 @@
+###
+Problem Title: Attention Mechanism
+Problem Description: Understanding attention
+
+#
+Step Description: Attention mechanism memungkinkan model untuk {blank} on different parts of input ketika processing each output element.
+Step Type: fill-blank
+Correct Answer: focus
+Alternative Answer: concentrate
+Alternative Answer: attend
+Alternative Answer: fokus
+Must Be Correct: false
+
+#
+Step Description: Attention computes weighted sum of values, dengan weights determined by:
+Step Type: multiple-choice-single
+Option A: Random selection
+Option B: Similarity between query and keys
+Option C: Position in sequence
+Option D: Word frequency
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Self-Attention
+Problem Description: Self-attention mechanism
+
+#
+Step Description: Self-attention menggunakan {blank} matrices: Query (Q), Key (K), dan Value (V).
+Step Type: fill-blank
+Correct Answer: 3
+Alternative Answer: tiga
+Alternative Answer: three
+Must Be Correct: false
+
+#
+Step Description: Attention formula: Attention(Q,K,V) = softmax((QK^T) / {blank}) × V
+Step Type: fill-blank
+Correct Answer: √d_k
+Alternative Answer: sqrt(d_k)
+Alternative Answer: square root of dimension
+Must Be Correct: false
+
+###
+Problem Title: Transformer Architecture
+Problem Description: Understanding Transformers
+
+#
+Step Description: Transformer architecture terdiri dari {blank} (processes input) dan {blank} (generates output).
+Step Type: fill-blank
+Correct Answer A: encoder
+Alternative Answer A: encoding stack
+Correct Answer B: decoder
+Alternative Answer B: decoding stack
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA komponen Transformer:
+Step Type: multiple-choice-multiple
+Option A: Multi-head attention
+Option B: Feed-forward networks
+Option C: Layer normalization
+Option D: Positional encoding
+Option E: Recurrent connections
+Option F: Residual connections
+Correct Answer: A, B, C, D, F
+Must Be Correct: false
+
+###
+Problem Title: Multi-Head Attention
+Problem Description: Multiple attention heads
+
+#
+Step Description: Multi-head attention menggunakan {blank} attention heads yang parallel untuk capture different aspects of relationships.
+Step Type: fill-blank
+Correct Answer: multiple
+Alternative Answer: several
+Alternative Answer: many
+Alternative Answer: h
+Must Be Correct: false
+
+#
+Step Description: Multi-head attention benefits:
+Step Type: multiple-choice-multiple
+Option A: Capture different types of relationships
+Option B: Attend to different positions simultaneously
+Option C: More expressive representation
+Option D: Slower inference
+Option E: Richer feature extraction
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Positional Encoding
+Problem Description: Encoding position information
+
+#
+Step Description: Transformers tidak memiliki {blank} connections seperti RNNs, sehingga butuh {blank} encoding untuk capture word order.
+Step Type: fill-blank
+Correct Answer A: recurrent
+Alternative Answer A: sequential
+Alternative Answer A: temporal
+Correct Answer B: positional
+Alternative Answer B: position
+Must Be Correct: false
+
+###
+Problem Title: Transformer Advantages
+Problem Description: Why Transformers won
+
+#
+Step Description: Pilih SEMUA keunggulan Transformers vs RNNs:
+Step Type: multiple-choice-multiple
+Option A: Fully parallelizable (faster training)
+Option B: Direct connections between any positions
+Option C: Better at capturing long-range dependencies
+Option D: Require less data
+Option E: More efficient on GPUs/TPUs
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: BERT Architecture
+Problem Description: Bidirectional Encoder Representations
+
+#
+Step Description: BERT adalah {blank}-only model yang di-train dengan {blank} Language Modeling objective.
+Step Type: fill-blank
+Correct Answer A: encoder
+Alternative Answer A: encoding
+Correct Answer B: Masked
+Alternative Answer B: MLM
+Must Be Correct: false
+
+#
+Step Description: BERT pre-training tasks:
+Step Type: multiple-choice-multiple
+Option A: Masked Language Modeling (MLM)
+Option B: Next Sentence Prediction (NSP)
+Option C: Autoregressive generation
+Option D: Machine Translation
+Correct Answer: A, B
+Must Be Correct: false
+
+###
+Problem Title: GPT Architecture
+Problem Description: Generative Pre-trained Transformer
+
+#
+Step Description: GPT adalah {blank}-only model yang di-train dengan {blank} language modeling (predict next word).
+Step Type: fill-blank
+Correct Answer A: decoder
+Alternative Answer A: decoding
+Correct Answer B: autoregressive
+Alternative Answer B: causal
+Alternative Answer B: left-to-right
+Must Be Correct: false
+
+#
+Step Description: GPT vs BERT:
+Step Type: multiple-choice-single
+Option A: GPT bidirectional, BERT unidirectional
+Option B: GPT unidirectional, BERT bidirectional
+Option C: Both bidirectional
+Option D: Both unidirectional
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Fine-tuning
+Problem Description: Transfer learning dengan pre-trained models
+
+#
+Step Description: Fine-tuning adalah proses {blank} pre-trained model pada {blank} downstream task.
+Step Type: fill-blank
+Correct Answer A: adapting
+Alternative Answer A: adjusting
+Alternative Answer A: training
+Correct Answer B: specific
+Alternative Answer B: target
+Alternative Answer B: particular
+Must Be Correct: false
+
+#
+Step Description: Benefits of fine-tuning pre-trained models:
+Step Type: multiple-choice-multiple
+Option A: Requires less task-specific data
+Option B: Faster convergence
+Option C: Better performance than training from scratch
+Option D: Pre-trained on billions of words
+Option E: Transfer learned knowledge
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Modern LLMs
+Problem Description: Large Language Models
+
+#
+Step Description: Pilih SEMUA yang termasuk modern LLMs:
+Step Type: multiple-choice-multiple
+Option A: GPT-3/GPT-4
+Option B: PaLM
+Option C: Claude
+Option D: Word2Vec
+Option E: LLaMA
+Option F: Gemini
+Correct Answer: A, B, C, E, F
+Must Be Correct: false
+
+###
+Problem Title: Transformer Scaling
+Problem Description: Scaling laws
+
+#
+Step Description: Modern LLMs di-scale dengan increase:
+Step Type: multiple-choice-multiple
+Option A: Model size (parameters)
+Option B: Training data size
+Option C: Compute budget
+Option D: Context length
+Option E: Number of layers
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Attention Complexity
+Problem Description: Computational complexity
+
+#
+Step Description: Self-attention complexity adalah O(n²) di mana n adalah {blank}, making it expensive untuk long sequences.
+Step Type: fill-blank
+Correct Answer: sequence length
+Alternative Answer: panjang sequence
+Alternative Answer: n
+Must Be Correct: false
+
+###
+Problem Title: Prompt Engineering
+Problem Description: Designing effective prompts
+
+#
+Step Description: Untuk modern LLMs, {blank} engineering adalah skill mendesign input prompts untuk get desired outputs.
+Step Type: fill-blank
+Correct Answer: prompt
+Alternative Answer: prompting
+Must Be Correct: false
+
+###
+Problem Title: Zero-shot vs Few-shot
+Problem Description: Learning paradigms
+
+#
+Step Description: Zero-shot learning berarti model performs task {blank} examples, few-shot dengan {blank} examples in prompt.
+Step Type: fill-blank
+Correct Answer A: without
+Alternative Answer A: tanpa
+Alternative Answer A: no
+Correct Answer B: few
+Alternative Answer B: beberapa
+Alternative Answer B: some
+Must Be Correct: false

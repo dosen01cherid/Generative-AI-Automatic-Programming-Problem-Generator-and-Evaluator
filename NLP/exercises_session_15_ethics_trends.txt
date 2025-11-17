@@ -1,0 +1,217 @@
+###
+Problem Title: Bias in NLP Models
+Problem Description: Understanding bias
+
+#
+Step Description: NLP models dapat inherit {blank} from training data, leading to unfair atau discriminatory outputs.
+Step Type: fill-blank
+Correct Answer: bias
+Alternative Answer: biases
+Alternative Answer: prejudice
+Must Be Correct: false
+
+#
+Step Description: Types of bias dalam NLP:
+Step Type: multiple-choice-multiple
+Option A: Gender bias
+Option B: Racial bias
+Option C: Cultural bias
+Option D: No bias exists in data
+Option E: Socioeconomic bias
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Fairness in NLP
+Problem Description: Ensuring fairness
+
+#
+Step Description: Fairness dalam NLP berarti model performs {blank} across different demographic groups.
+Step Type: fill-blank
+Correct Answer: equally
+Alternative Answer: sama
+Alternative Answer: fairly
+Alternative Answer: equally well
+Must Be Correct: false
+
+###
+Problem Title: Privacy Concerns
+Problem Description: Data privacy in NLP
+
+#
+Step Description: Pilih SEMUA privacy concerns dalam NLP:
+Step Type: multiple-choice-multiple
+Option A: Models memorizing training data
+Option B: Personal information in training corpora
+Option C: Re-identification dari generated text
+Option D: All data is always private
+Option E: Data breaches
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Misinformation and Deepfakes
+Problem Description: Combating fake content
+
+#
+Step Description: LLMs dapat digunakan untuk {blank} misinformation at scale, requiring techniques untuk {blank} generated text.
+Step Type: fill-blank
+Correct Answer A: generate
+Alternative Answer A: create
+Alternative Answer A: produce
+Correct Answer B: detect
+Alternative Answer B: identify
+Alternative Answer B: recognize
+Must Be Correct: false
+
+###
+Problem Title: Model Evaluation Beyond Accuracy
+Problem Description: Comprehensive evaluation
+
+#
+Step Description: Selain accuracy, kita harus evaluate:
+Step Type: multiple-choice-multiple
+Option A: Fairness across groups
+Option B: Robustness to adversarial inputs
+Option C: Interpretability
+Option D: Environmental impact
+Option E: Only accuracy matters
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+###
+Problem Title: Explainability and Interpretability
+Problem Description: Understanding model decisions
+
+#
+Step Description: {blank} explains why model made specific prediction, {blank} describes how model works internally.
+Step Type: fill-blank
+Correct Answer A: Explainability
+Alternative Answer A: Explanation
+Correct Answer B: Interpretability
+Alternative Answer B: Interpretation
+Must Be Correct: false
+
+###
+Problem Title: Environmental Impact
+Problem Description: Carbon footprint of NLP
+
+#
+Step Description: Training large language models requires massive {blank} resources, contributing to {blank} emissions.
+Step Type: fill-blank
+Correct Answer A: computational
+Alternative Answer A: compute
+Alternative Answer A: computing
+Correct Answer B: carbon
+Alternative Answer B: CO2
+Alternative Answer B: greenhouse gas
+Must Be Correct: false
+
+###
+Problem Title: Data Quality and Annotation
+Problem Description: Quality of training data
+
+#
+Step Description: High-quality NLP systems require:
+Step Type: multiple-choice-multiple
+Option A: Clean, well-annotated data
+Option B: Diverse training examples
+Option C: Quality control dalam annotation
+Option D: Any random internet text
+Option E: Representative datasets
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Multilingual and Low-Resource Languages
+Problem Description: Language diversity
+
+#
+Step Description: Low-resource languages memiliki {blank} training data available, requiring techniques seperti {blank} learning.
+Step Type: fill-blank
+Correct Answer A: limited
+Alternative Answer A: sedikit
+Alternative Answer A: little
+Correct Answer B: transfer
+Alternative Answer B: cross-lingual
+Alternative Answer B: multilingual
+Must Be Correct: false
+
+###
+Problem Title: Future Trends - Multimodal Models
+Problem Description: Beyond text
+
+#
+Step Description: Multimodal models process {blank} modalities seperti text, {blank}, dan {blank} together.
+Step Type: fill-blank
+Correct Answer A: multiple
+Alternative Answer A: many
+Alternative Answer A: several
+Correct Answer B: images
+Alternative Answer B: vision
+Alternative Answer B: visual
+Correct Answer C: audio
+Alternative Answer C: speech
+Alternative Answer C: sound
+Must Be Correct: false
+
+###
+Problem Title: Few-shot and Zero-shot Learning
+Problem Description: Learning with limited examples
+
+#
+Step Description: Few-shot learning berarti model learn dari {blank} examples, zero-shot berarti {blank} examples untuk new task.
+Step Type: fill-blank
+Correct Answer A: very few
+Alternative Answer A: minimal
+Alternative Answer A: beberapa
+Correct Answer B: no
+Alternative Answer B: zero
+Alternative Answer B: tanpa
+Must Be Correct: false
+
+###
+Problem Title: Continual Learning
+Problem Description: Learning over time
+
+#
+Step Description: Continual learning memungkinkan models untuk learn {blank} tasks tanpa {blank} previous knowledge.
+Step Type: fill-blank
+Correct Answer A: new
+Alternative Answer A: additional
+Alternative Answer A: baru
+Correct Answer B: forgetting
+Alternative Answer B: losing
+Alternative Answer B: melupakan
+Must Be Correct: false
+
+###
+Problem Title: Responsible AI Development
+Problem Description: Ethical AI practices
+
+#
+Step Description: Responsible AI development includes:
+Step Type: multiple-choice-multiple
+Option A: Transparency tentang model capabilities
+Option B: User privacy protection
+Option C: Bias mitigation
+Option D: Ignoring societal impact
+Option E: Accountability mechanisms
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Future of NLP
+Problem Description: Emerging directions
+
+#
+Step Description: Pilih SEMUA future directions dalam NLP research:
+Step Type: multiple-choice-multiple
+Option A: More efficient models (smaller, faster)
+Option B: Better multilingual support
+Option C: Improved reasoning capabilities
+Option D: End of NLP research
+Option E: Grounded language understanding
+Option F: Embodied AI
+Correct Answer: A, B, C, E, F
+Must Be Correct: false

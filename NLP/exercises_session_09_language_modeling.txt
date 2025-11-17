@@ -1,0 +1,448 @@
+###
+Problem Title: Language Model Basics
+Problem Description: Memahami dasar language modeling
+
+#
+Step Description: Language model adalah model probabilistik yang memprediksi {blank} dalam sebuah sequence berdasarkan kata-kata sebelumnya.
+Step Type: fill-blank
+Correct Answer: kata berikutnya
+Alternative Answer: next word
+Alternative Answer: kata selanjutnya
+Alternative Answer: word berikutnya
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA aplikasi yang menggunakan language models:
+Step Type: multiple-choice-multiple
+Option A: Speech Recognition
+Option B: Machine Translation
+Option C: Text Generation
+Option D: Image Classification
+Option E: Spelling Correction
+Option F: Auto-complete
+Correct Answer: A, B, C, E, F
+Must Be Correct: false
+
+###
+Problem Title: N-gram Models
+Problem Description: Memahami N-gram models
+
+#
+Step Description: Dalam N-gram model, N menunjukkan:
+Step Type: multiple-choice-single
+Option A: Jumlah total kata dalam corpus
+Option B: Jumlah kata consecutive yang dipertimbangkan
+Option C: Jumlah dokumen
+Option D: Jumlah unique words
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Unigram model mempertimbangkan {blank} kata sebelumnya, bigram mempertimbangkan {blank} kata, dan trigram mempertimbangkan {blank} kata sebelumnya.
+Step Type: fill-blank
+Correct Answer A: 0
+Alternative Answer A: nol
+Alternative Answer A: tidak ada
+Correct Answer B: 1
+Alternative Answer B: satu
+Alternative Answer B: one
+Correct Answer C: 2
+Alternative Answer C: dua
+Alternative Answer C: two
+Must Be Correct: false
+
+###
+Problem Title: Bigram Probability Calculation
+Problem Description: Menghitung probabilitas bigram
+
+#
+Step Description: Formula untuk menghitung probabilitas bigram P(w_i | w_{i-1}) adalah: Count(w_{i-1}, w_i) / {blank}
+Step Type: fill-blank
+Correct Answer: Count(w_{i-1})
+Alternative Answer: Count dari w_{i-1}
+Alternative Answer: jumlah kemunculan w_{i-1}
+Must Be Correct: false
+
+#
+Step Description: Jika "saya suka" muncul 10 kali dan "saya" muncul total 50 kali, maka P("suka"|"saya") = {blank} (tulis dalam desimal, contoh: 0.2)
+Step Type: fill-blank
+Correct Answer: 0.2
+Alternative Answer: 0.20
+Alternative Answer: 20%
+Alternative Answer: 10/50
+Must Be Correct: false
+
+###
+Problem Title: Markov Assumption
+Problem Description: Memahami Markov assumption
+
+#
+Step Description: Markov assumption dalam N-gram models menyatakan bahwa probabilitas kata saat ini hanya bergantung pada:
+Step Type: multiple-choice-single
+Option A: Semua kata sebelumnya dalam dokumen
+Option B: N-1 kata terakhir
+Option C: Kata pertama dalam kalimat
+Option D: Random words
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Markov assumption adalah {blank} - dalam kenyataan kata bisa depend on kata yang lebih jauh, tapi assumption ini membuat model lebih {blank}.
+Step Type: fill-blank
+Correct Answer A: simplification
+Alternative Answer A: penyederhanaan
+Alternative Answer A: simplifikasi
+Correct Answer B: tractable
+Alternative Answer B: manageable
+Alternative Answer B: mudah dihitung
+Must Be Correct: false
+
+###
+Problem Title: Perplexity Concept
+Problem Description: Memahami perplexity
+
+#
+Step Description: Perplexity mengukur seberapa {blank} language model terhadap test data. Perplexity yang {blank} menunjukkan model yang lebih baik.
+Step Type: fill-blank
+Correct Answer A: surprised
+Alternative Answer A: terkejut
+Alternative Answer A: uncertain
+Correct Answer B: rendah
+Alternative Answer B: lower
+Alternative Answer B: lebih kecil
+Must Be Correct: false
+
+#
+Step Description: Perplexity dapat diinterpretasikan sebagai:
+Step Type: multiple-choice-single
+Option A: Jumlah kata dalam vocabulary
+Option B: Average number of equally likely choices model has at each position
+Option C: Total probability dari corpus
+Option D: Accuracy percentage
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Perplexity Calculation
+Problem Description: Menghitung perplexity
+
+#
+Step Description: Formula perplexity untuk sequence W adalah: PP(W) = P(W)^{blank}, di mana N adalah panjang sequence.
+Step Type: fill-blank
+Correct Answer: -1/N
+Alternative Answer: -1/n
+Alternative Answer: to the power of -1/N
+Must Be Correct: false
+
+#
+Step Description: Jika P("I love NLP") = 0.5 dan kalimat memiliki 3 kata, maka perplexity = 0.5^{blank} = {blank} (berikan nilai dengan 2 desimal)
+Step Type: fill-blank
+Correct Answer A: -1/3
+Alternative Answer A: -0.333
+Alternative Answer A: -0.33
+Correct Answer B: 1.26
+Alternative Answer B: 1.25
+Alternative Answer B: 1.3
+Must Be Correct: false
+
+###
+Problem Title: Smoothing Necessity
+Problem Description: Mengapa perlu smoothing
+
+#
+Step Description: Sparsity problem terjadi ketika:
+Step Type: multiple-choice-single
+Option A: Corpus terlalu besar
+Option B: Banyak valid N-grams tidak pernah muncul di training data
+Option C: Model terlalu complex
+Option D: Vocabulary terlalu kecil
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Jika sebuah bigram tidak pernah muncul di training, tanpa smoothing probabilitasnya akan {blank}, yang menyebabkan probability dari entire sentence menjadi {blank}.
+Step Type: fill-blank
+Correct Answer A: 0
+Alternative Answer A: zero
+Alternative Answer A: nol
+Correct Answer B: 0
+Alternative Answer B: zero
+Alternative Answer B: nol
+Must Be Correct: false
+
+###
+Problem Title: Laplace Smoothing
+Problem Description: Memahami Laplace (Add-One) smoothing
+
+#
+Step Description: Laplace smoothing menambahkan {blank} ke setiap count, seolah-olah setiap N-gram muncul setidaknya {blank} kali.
+Step Type: fill-blank
+Correct Answer A: 1
+Alternative Answer A: satu
+Alternative Answer A: one
+Correct Answer B: 1
+Alternative Answer B: satu
+Alternative Answer B: once
+Must Be Correct: false
+
+#
+Step Description: Formula Laplace smoothing untuk bigram: P(w_i|w_{i-1}) = (Count(w_{i-1}, w_i) + 1) / (Count(w_{i-1}) + {blank}), di mana V adalah ukuran vocabulary.
+Step Type: fill-blank
+Correct Answer: V
+Alternative Answer: vocabulary size
+Alternative Answer: |V|
+Must Be Correct: false
+
+###
+Problem Title: Interpolation Smoothing
+Problem Description: Memahami interpolation
+
+#
+Step Description: Interpolation smoothing mengkombinasikan probabilitas dari:
+Step Type: multiple-choice-multiple
+Option A: Unigram model
+Option B: Bigram model
+Option C: Trigram model
+Option D: 10-gram model
+Option E: Different order N-grams
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+#
+Step Description: Dalam interpolation trigram, total dari semua lambda weights (λ₁ + λ₂ + λ₃) harus sama dengan {blank}.
+Step Type: fill-blank
+Correct Answer: 1
+Alternative Answer: satu
+Alternative Answer: 1.0
+Must Be Correct: false
+
+###
+Problem Title: Log Probability
+Problem Description: Menggunakan log probabilities
+
+#
+Step Description: Dalam praktik, kita menggunakan log probabilities karena:
+Step Type: multiple-choice-multiple
+Option A: Menghindari numerical underflow
+Option B: Mengubah perkalian menjadi penjumlahan
+Option C: Lebih mudah untuk optimisasi
+Option D: Menghasilkan nilai yang lebih besar
+Option E: Lebih efisien secara komputasi
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Likelihood vs Probability
+Problem Description: Membedakan likelihood dan probability
+
+#
+Step Description: Likelihood L(θ) mengukur seberapa baik model dengan parameter θ {blank} dengan observed data.
+Step Type: fill-blank
+Correct Answer: fit
+Alternative Answer: cocok
+Alternative Answer: sesuai
+Alternative Answer: match
+Must Be Correct: false
+
+#
+Step Description: Dalam language modeling, kita ingin {blank} likelihood dari training data.
+Step Type: multiple-choice-single
+Option A: Minimize
+Option B: Maximize
+Option C: Ignore
+Option D: Randomize
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: N-gram Trade-offs
+Problem Description: Trade-off dalam memilih N
+
+#
+Step Description: Pilih SEMUA pernyataan yang BENAR:
+Step Type: multiple-choice-multiple
+Option A: N besar = lebih banyak konteks = lebih akurat (jika data cukup)
+Option B: N besar = lebih banyak parameter = lebih sparse
+Option C: N kecil = lebih general tapi less precise
+Option D: Trigram selalu lebih baik dari bigram
+Option E: Unigram tidak mempertimbangkan word order
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Out-of-Vocabulary Words
+Problem Description: Handling OOV words
+
+#
+Step Description: Out-of-vocabulary (OOV) words adalah kata yang muncul di test data tapi tidak ada di:
+Step Type: multiple-choice-single
+Option A: Dictionary
+Option B: Training vocabulary
+Option C: Test set
+Option D: Grammar rules
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Untuk handle OOV words, kita bisa menggunakan {blank} token atau {blank} model untuk generate word representations.
+Step Type: fill-blank
+Correct Answer A: <UNK>
+Alternative Answer A: UNK
+Alternative Answer A: unknown
+Correct Answer B: character-level
+Alternative Answer B: subword
+Alternative Answer B: character
+Must Be Correct: false
+
+###
+Problem Title: Speech Recognition Application
+Problem Description: Language model dalam speech recognition
+
+#
+Step Description: Dalam speech recognition, acoustic model memberikan P(audio|word) sedangkan language model memberikan {blank}.
+Step Type: fill-blank
+Correct Answer: P(word)
+Alternative Answer: P(word sequence)
+Alternative Answer: prior probability
+Alternative Answer: probabilitas kata
+Must Be Correct: false
+
+#
+Step Description: Language model membantu speech recognition dengan:
+Step Type: multiple-choice-single
+Option A: Recording audio
+Option B: Resolving acoustic ambiguity - memilih word sequence yang lebih probable
+Option C: Amplifying sound
+Option D: Converting text to speech
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Backoff Smoothing
+Problem Description: Memahami backoff smoothing
+
+#
+Step Description: Backoff smoothing menggunakan lower-order N-gram ketika higher-order N-gram:
+Step Type: multiple-choice-single
+Option A: Memiliki probability tinggi
+Option B: Tidak tersedia atau memiliki count rendah
+Option C: Terlalu complex
+Option D: Sudah digunakan
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Kneser-Ney Smoothing
+Problem Description: Advanced smoothing technique
+
+#
+Step Description: Kneser-Ney smoothing dianggap {blank} untuk N-gram language models karena performance yang superior.
+Step Type: fill-blank
+Correct Answer: state-of-the-art
+Alternative Answer: best
+Alternative Answer: terbaik
+Alternative Answer: SOTA
+Must Be Correct: false
+
+###
+Problem Title: Language Model Evaluation
+Problem Description: Evaluasi language models
+
+#
+Step Description: Untuk membandingkan language models, kita bisa gunakan:
+Step Type: multiple-choice-multiple
+Option A: Perplexity pada held-out test set
+Option B: Extrinsic evaluation (performance pada downstream task)
+Option C: Training time
+Option D: Number of parameters
+Option E: Cross-entropy
+Correct Answer: A, B, E
+Must Be Correct: false
+
+###
+Problem Title: Text Generation with N-grams
+Problem Description: Generating text menggunakan N-grams
+
+#
+Step Description: Untuk generate text dengan bigram model, kita:
+Step Type: multiple-choice-single
+Option A: Pilih random words
+Option B: Sample kata berikutnya based on conditional probability P(w_i|w_{i-1})
+Option C: Hanya gunakan kata yang paling frequent
+Option D: Copy dari training data
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Sampling dengan temperature parameter: temperature {blank} membuat generation lebih deterministic, temperature {blank} membuat lebih random.
+Step Type: fill-blank
+Correct Answer A: rendah
+Alternative Answer A: low
+Alternative Answer A: kecil
+Correct Answer B: tinggi
+Alternative Answer B: high
+Alternative Answer B: besar
+Must Be Correct: false
+
+###
+Problem Title: Limitations of N-grams
+Problem Description: Keterbatasan N-gram models
+
+#
+Step Description: Pilih SEMUA keterbatasan N-gram language models:
+Step Type: multiple-choice-multiple
+Option A: Tidak dapat capture long-range dependencies
+Option B: Sparsity problem - butuh corpus sangat besar
+Option C: Treat words as discrete symbols (tidak ada notion of similarity)
+Option D: Terlalu lambat untuk inference
+Option E: Fixed context window (hanya N-1 kata)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Cross-Entropy
+Problem Description: Cross-entropy sebagai loss function
+
+#
+Step Description: Cross-entropy antara true distribution P dan model distribution Q mengukur {blank} antara kedua distributions.
+Step Type: fill-blank
+Correct Answer: difference
+Alternative Answer: perbedaan
+Alternative Answer: divergence
+Alternative Answer: distance
+Must Be Correct: false
+
+#
+Step Description: Lower cross-entropy berarti model distribution {blank} ke true distribution.
+Step Type: multiple-choice-single
+Option A: Lebih jauh
+Option B: Lebih dekat
+Option C: Tidak berhubungan
+Option D: Identik
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Practical N-gram Choices
+Problem Description: Memilih N dalam praktik
+
+#
+Step Description: Dalam praktik, model N-gram yang paling umum digunakan adalah:
+Step Type: multiple-choice-single
+Option A: Unigram saja
+Option B: Bigram dan Trigram
+Option C: 10-gram
+Option D: 100-gram
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: 5-gram atau higher jarang digunakan karena {blank} problem dan kebutuhan {blank} yang sangat besar.
+Step Type: fill-blank
+Correct Answer A: sparsity
+Alternative Answer A: sparse data
+Alternative Answer A: data sparsity
+Correct Answer B: data
+Alternative Answer B: corpus
+Alternative Answer B: training data
+Must Be Correct: false

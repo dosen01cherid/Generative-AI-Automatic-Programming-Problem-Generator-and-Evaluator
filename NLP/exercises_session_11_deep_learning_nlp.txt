@@ -1,0 +1,256 @@
+###
+Problem Title: Neural Network Basics
+Problem Description: Understanding artificial neural networks
+
+#
+Step Description: Artificial neuron computes weighted sum z = Σ(w_i × x_i) + b, then applies {blank} function untuk introduce non-linearity.
+Step Type: fill-blank
+Correct Answer: activation
+Alternative Answer: aktivasi
+Alternative Answer: nonlinearity
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA komponen dari neural network:
+Step Type: multiple-choice-multiple
+Option A: Input layer
+Option B: Hidden layer(s)
+Option C: Output layer
+Option D: Activation functions
+Option E: Weights and biases
+Option F: Parse trees
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Activation Functions
+Problem Description: Common activation functions
+
+#
+Step Description: ReLU activation function didefinisikan sebagai: ReLU(x) = {blank}
+Step Type: fill-blank
+Correct Answer: max(0, x)
+Alternative Answer: maximum dari 0 dan x
+Must Be Correct: false
+
+#
+Step Description: Sigmoid outputs range ({blank}, {blank}), Tanh outputs range (-1, 1), ReLU outputs range [{blank}, ∞).
+Step Type: fill-blank
+Correct Answer A: 0
+Alternative Answer A: zero
+Correct Answer B: 1
+Alternative Answer B: one
+Correct Answer C: 0
+Alternative Answer C: zero
+Must Be Correct: false
+
+###
+Problem Title: Word Embeddings
+Problem Description: Dense vector representations
+
+#
+Step Description: Word embeddings represent kata sebagai {blank} dimensional vectors yang capture {blank} meaning.
+Step Type: fill-blank
+Correct Answer A: low
+Alternative Answer A: rendah
+Alternative Answer A: dense
+Correct Answer B: semantic
+Alternative Answer B: semantik
+Alternative Answer B: meaning
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA advantages of word embeddings over one-hot encoding:
+Step Type: multiple-choice-multiple
+Option A: Lower dimensionality (300 vs 10,000+)
+Option B: Capture semantic similarity
+Option C: Dense representations
+Option D: Enable generalization
+Option E: Require less memory
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Word2Vec
+Problem Description: Word2Vec models
+
+#
+Step Description: Word2Vec memiliki dua architecture: {blank} (predict center word from context) dan {blank} (predict context from center word).
+Step Type: fill-blank
+Correct Answer A: CBOW
+Alternative Answer A: Continuous Bag of Words
+Correct Answer B: Skip-gram
+Alternative Answer B: Skipgram
+Must Be Correct: false
+
+#
+Step Description: Skip-gram umumnya lebih baik untuk:
+Step Type: multiple-choice-single
+Option A: Frequent words
+Option B: Rare words
+Option C: Very long documents
+Option D: Grammar checking
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Word Embedding Properties
+Problem Description: Amazing properties of embeddings
+
+#
+Step Description: Word embeddings menunjukkan property: King - Man + Woman ≈ {blank}
+Step Type: fill-blank
+Correct Answer: Queen
+Alternative Answer: queen
+Must Be Correct: false
+
+#
+Step Description: Cosine similarity mengukur {blank} between word vectors, dengan range dari {blank} (opposite) to {blank} (identical).
+Step Type: fill-blank
+Correct Answer A: similarity
+Alternative Answer A: kesamaan
+Alternative Answer A: angle
+Correct Answer B: -1
+Alternative Answer B: minus 1
+Correct Answer C: 1
+Alternative Answer C: one
+Must Be Correct: false
+
+###
+Problem Title: Feedforward Networks for NLP
+Problem Description: Feedforward neural networks
+
+#
+Step Description: Untuk sentiment classification, typical architecture: word embeddings → {blank} pooling → feedforward layers → {blank} output.
+Step Type: fill-blank
+Correct Answer A: average
+Alternative Answer A: mean
+Alternative Answer A: avg
+Correct Answer B: softmax
+Alternative Answer B: classification
+Must Be Correct: false
+
+#
+Step Description: Hidden layer dengan ReLU activation: h = ReLU(Wx + b). Dimensionality reduction terjadi jika:
+Step Type: multiple-choice-single
+Option A: Hidden size > Input size
+Option B: Hidden size < Input size
+Option C: Hidden size = Input size
+Option D: Never happens
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Backpropagation
+Problem Description: Training neural networks
+
+#
+Step Description: Backpropagation menggunakan {blank} rule untuk efficiently compute gradients dari loss w.r.t semua parameters.
+Step Type: fill-blank
+Correct Answer: chain
+Alternative Answer: rantai
+Must Be Correct: false
+
+#
+Step Description: Gradient descent update rule: w := w - η × {blank}, di mana η adalah {blank}.
+Step Type: fill-blank
+Correct Answer A: ∇L
+Alternative Answer A: gradient
+Alternative Answer A: ∇w L
+Correct Answer B: learning rate
+Alternative Answer B: LR
+Alternative Answer B: step size
+Must Be Correct: false
+
+###
+Problem Title: Optimization
+Problem Description: Optimization algorithms
+
+#
+Step Description: Pilih SEMUA optimizer yang umum digunakan:
+Step Type: multiple-choice-multiple
+Option A: SGD (Stochastic Gradient Descent)
+Option B: Adam
+Option C: RMSprop
+Option D: Momentum
+Option E: Perplexity
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+#
+Step Description: Mini-batch gradient descent menggunakan {blank} examples per update, balancing antara {blank} convergence dan {blank} efficiency.
+Step Type: fill-blank
+Correct Answer A: beberapa
+Alternative Answer A: small batch
+Alternative Answer A: batch
+Correct Answer B: stable
+Alternative Answer B: smooth
+Correct Answer C: computational
+Alternative Answer C: compute
+Must Be Correct: false
+
+###
+Problem Title: Overfitting Prevention
+Problem Description: Regularization techniques
+
+#
+Step Description: Dropout randomly sets {blank} of neurons to {blank} during training untuk prevent overfitting.
+Step Type: fill-blank
+Correct Answer A: fraction
+Alternative Answer A: percentage
+Alternative Answer A: some
+Correct Answer B: zero
+Alternative Answer B: 0
+Must Be Correct: false
+
+#
+Step Description: Teknik untuk prevent overfitting:
+Step Type: multiple-choice-multiple
+Option A: Dropout
+Option B: Early stopping
+Option C: L2 regularization
+Option D: Data augmentation
+Option E: Batch normalization
+Option F: Increase model size
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Pre-trained Embeddings
+Problem Description: Using pre-trained word embeddings
+
+#
+Step Description: Pre-trained embeddings seperti Word2Vec atau GloVe di-train pada {blank} of words dan dapat di-{blank} untuk specific tasks.
+Step Type: fill-blank
+Correct Answer A: billions
+Alternative Answer A: miliaran
+Alternative Answer A: large corpus
+Correct Answer B: fine-tuned
+Alternative Answer B: adapted
+Alternative Answer B: transfer
+Must Be Correct: false
+
+###
+Problem Title: Deep vs Traditional ML
+Problem Description: Comparison
+
+#
+Step Description: Deep learning {blank} learns features, traditional ML requires {blank} feature engineering.
+Step Type: fill-blank
+Correct Answer A: automatically
+Alternative Answer A: otomatis
+Alternative Answer A: auto
+Correct Answer B: manual
+Alternative Answer B: hand-crafted
+Must Be Correct: false
+
+#
+Step Description: Deep learning memerlukan:
+Step Type: multiple-choice-multiple
+Option A: Large datasets
+Option B: GPU/TPU untuk efficient training
+Option C: More computational resources
+Option D: Always performs better than traditional ML
+Option E: Careful hyperparameter tuning
+Correct Answer: A, B, C, E
+Must Be Correct: false

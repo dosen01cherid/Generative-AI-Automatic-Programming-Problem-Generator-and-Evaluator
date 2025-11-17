@@ -1,0 +1,371 @@
+###
+Problem Title: Context-Free Grammar Basics
+Problem Description: Memahami dasar-dasar Context-Free Grammar
+
+#
+Step Description: Context-Free Grammar (CFG) terdiri dari {blank} komponen utama: terminals, non-terminals, production rules, dan start symbol.
+Step Type: fill-blank
+Correct Answer: 4
+Alternative Answer: empat
+Alternative Answer: four
+Must Be Correct: false
+
+#
+Step Description: Dalam CFG, symbol yang muncul di hasil akhir parsing disebut {blank}, sedangkan symbol yang digunakan untuk derivasi disebut {blank}.
+Step Type: fill-blank
+Correct Answer A: terminals
+Alternative Answer A: terminal symbols
+Alternative Answer A: simbol terminal
+Correct Answer B: non-terminals
+Alternative Answer B: non-terminal symbols
+Alternative Answer B: simbol non-terminal
+Must Be Correct: false
+
+###
+Problem Title: Parse Tree vs Derivation
+Problem Description: Membedakan parse tree dan derivation
+
+#
+Step Description: Parse tree adalah representasi {blank} dari struktur kalimat, sedangkan derivation adalah urutan {blank} untuk menghasilkan kalimat.
+Step Type: fill-blank
+Correct Answer A: hierarkis
+Alternative Answer A: hierarchical
+Alternative Answer A: tree
+Correct Answer B: production rules
+Alternative Answer B: aturan produksi
+Alternative Answer B: rules
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang benar tentang parse tree:
+Step Type: multiple-choice-multiple
+Option A: Root node adalah start symbol
+Option B: Leaf nodes adalah terminal symbols
+Option C: Internal nodes adalah non-terminal symbols
+Option D: Parse tree harus selalu binary
+Option E: Satu kalimat bisa memiliki multiple parse trees (ambiguous)
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Ambiguity in Parsing
+Problem Description: Memahami ambiguitas dalam parsing
+
+#
+Step Description: Grammar yang menghasilkan lebih dari satu parse tree untuk kalimat yang sama disebut:
+Step Type: multiple-choice-single
+Option A: Unambiguous grammar
+Option B: Ambiguous grammar
+Option C: Regular grammar
+Option D: Invalid grammar
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Contoh klasik ambiguitas adalah kalimat "I saw the man with the telescope". Kalimat ini ambigu karena {blank} bisa attach ke {blank} atau ke {blank}.
+Step Type: fill-blank
+Correct Answer A: with the telescope
+Alternative Answer A: PP
+Alternative Answer A: prepositional phrase
+Correct Answer B: saw
+Alternative Answer B: verb
+Alternative Answer B: the man
+Correct Answer C: the man
+Alternative Answer C: man
+Alternative Answer C: saw
+Must Be Correct: false
+
+###
+Problem Title: CYK Algorithm
+Problem Description: Memahami CYK parsing algorithm
+
+#
+Step Description: CYK algorithm bekerja dengan grammar dalam bentuk:
+Step Type: multiple-choice-single
+Option A: Regular Grammar
+Option B: Context-Free Grammar dalam bentuk apapun
+Option C: Chomsky Normal Form (CNF)
+Option D: Regular Expression
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: CYK menggunakan pendekatan {blank} programming dan memiliki time complexity {blank}.
+Step Type: fill-blank
+Correct Answer A: dynamic
+Alternative Answer A: DP
+Alternative Answer A: dinamik
+Correct Answer B: O(n^3)
+Alternative Answer B: O(n³)
+Alternative Answer B: cubic
+Must Be Correct: false
+
+###
+Problem Title: Dependency Parsing
+Problem Description: Memahami dependency parsing
+
+#
+Step Description: Dalam dependency parsing, setiap kata memiliki satu {blank} (kecuali root), dan relasi antar kata disebut {blank}.
+Step Type: fill-blank
+Correct Answer A: head
+Alternative Answer A: parent
+Alternative Answer A: governor
+Correct Answer B: dependency relation
+Alternative Answer B: dependency
+Alternative Answer B: relasi dependensi
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang merupakan dependency relation umum:
+Step Type: multiple-choice-multiple
+Option A: nsubj (nominal subject)
+Option B: obj (object)
+Option C: det (determiner)
+Option D: root
+Option E: amod (adjectival modifier)
+Option F: terminal
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Transition-based vs Graph-based Parsing
+Problem Description: Membandingkan pendekatan parsing
+
+#
+Step Description: Transition-based parsing membangun dependency tree menggunakan:
+Step Type: multiple-choice-single
+Option A: Matrix calculations
+Option B: Sequence of shift-reduce actions
+Option C: Breadth-first search
+Option D: Regular expressions
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Graph-based parsing mencari {blank} tree dari semua possible trees dengan score tertinggi.
+Step Type: fill-blank
+Correct Answer: maximum spanning
+Alternative Answer: MST
+Alternative Answer: optimal
+Must Be Correct: false
+
+###
+Problem Title: Probabilistic CFG
+Problem Description: Memahami Probabilistic Context-Free Grammar
+
+#
+Step Description: Dalam PCFG, setiap production rule memiliki {blank} yang menunjukkan likelihood rule tersebut digunakan.
+Step Type: fill-blank
+Correct Answer: probability
+Alternative Answer: probabilitas
+Alternative Answer: weight
+Must Be Correct: false
+
+#
+Step Description: Probabilitas semua production rules dengan left-hand side yang sama harus:
+Step Type: multiple-choice-single
+Option A: Sama dengan 0
+Option B: Sama dengan 1
+Option C: Jumlahnya = 1
+Option D: Jumlahnya > 1
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Constituency vs Dependency
+Problem Description: Membedakan constituency dan dependency parsing
+
+#
+Step Description: Pilih SEMUA pernyataan yang benar:
+Step Type: multiple-choice-multiple
+Option A: Constituency parsing menghasilkan phrase structure tree
+Option B: Dependency parsing menghasilkan directed graph
+Option C: Constituency fokus pada hierarchical phrases
+Option D: Dependency fokus pada word-to-word relations
+Option E: Keduanya tidak bisa digunakan bersamaan
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+###
+Problem Title: Neural Parsing
+Problem Description: Neural network untuk parsing
+
+#
+Step Description: Neural dependency parsers modern menggunakan {blank} untuk represent kata dan {blank} network untuk predict dependencies.
+Step Type: fill-blank
+Correct Answer A: embeddings
+Alternative Answer A: word embeddings
+Alternative Answer A: vectors
+Correct Answer B: neural
+Alternative Answer B: deep
+Alternative Answer B: recurrent
+Must Be Correct: false
+
+###
+Problem Title: Parsing Evaluation
+Problem Description: Metrik evaluasi untuk parsing
+
+#
+Step Description: Untuk dependency parsing, metrik evaluasi utama adalah:
+Step Type: multiple-choice-multiple
+Option A: UAS (Unlabeled Attachment Score)
+Option B: LAS (Labeled Attachment Score)
+Option C: Perplexity
+Option D: BLEU score
+Option E: Accuracy
+Correct Answer: A, B
+Must Be Correct: false
+
+#
+Step Description: UAS mengukur persentase kata yang memiliki {blank} yang benar, sedangkan LAS juga mempertimbangkan {blank}.
+Step Type: fill-blank
+Correct Answer A: head
+Alternative Answer A: parent
+Alternative Answer A: governor yang benar
+Correct Answer B: label
+Alternative Answer B: dependency label
+Alternative Answer B: relasi yang benar
+Must Be Correct: false
+
+###
+Problem Title: Parsing Applications
+Problem Description: Aplikasi parsing dalam NLP
+
+#
+Step Description: Pilih SEMUA aplikasi yang membutuhkan parsing:
+Step Type: multiple-choice-multiple
+Option A: Information Extraction
+Option B: Machine Translation
+Option C: Question Answering
+Option D: Spell checking
+Option E: Semantic analysis
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Left-to-Right Parsing
+Problem Description: Memahami strategi left-to-right parsing
+
+#
+Step Description: Top-down parsing dimulai dari {blank} dan expand ke terminals, sedangkan bottom-up parsing dimulai dari {blank} dan reduce ke start symbol.
+Step Type: fill-blank
+Correct Answer A: start symbol
+Alternative Answer A: root
+Alternative Answer A: S
+Correct Answer B: terminals
+Alternative Answer B: input words
+Alternative Answer B: kata-kata
+Must Be Correct: false
+
+###
+Problem Title: Shift-Reduce Parsing
+Problem Description: Memahami shift-reduce parsing
+
+#
+Step Description: Dalam shift-reduce parsing, action SHIFT berarti:
+Step Type: multiple-choice-single
+Option A: Reduce dua elements menjadi satu
+Option B: Push kata berikutnya ke stack
+Option C: Pop dari stack
+Option D: Finish parsing
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Action REDUCE menggabungkan top elements dari stack menggunakan {blank} untuk membentuk {blank}.
+Step Type: fill-blank
+Correct Answer A: production rule
+Alternative Answer A: grammar rule
+Alternative Answer A: aturan produksi
+Correct Answer B: non-terminal
+Alternative Answer B: larger constituent
+Alternative Answer B: phrase
+Must Be Correct: false
+
+###
+Problem Title: Penn Treebank
+Problem Description: Penn Treebank annotation
+
+#
+Step Description: Penn Treebank menggunakan tag NP untuk {blank}, VP untuk {blank}, dan PP untuk {blank}.
+Step Type: fill-blank
+Correct Answer A: Noun Phrase
+Alternative Answer A: NP
+Alternative Answer A: frasa nomina
+Correct Answer B: Verb Phrase
+Alternative Answer B: VP
+Alternative Answer B: frasa verba
+Correct Answer C: Prepositional Phrase
+Alternative Answer C: PP
+Alternative Answer C: frasa preposisi
+Must Be Correct: false
+
+###
+Problem Title: Parsing Complexity
+Problem Description: Time complexity dari parsing algorithms
+
+#
+Step Description: Untuk kalimat dengan panjang n, time complexity dari CYK algorithm adalah {blank}, sedangkan simple recursive descent bisa exponential.
+Step Type: fill-blank
+Correct Answer: O(n^3)
+Alternative Answer: O(n³)
+Alternative Answer: cubic
+Alternative Answer: n cubed
+Must Be Correct: false
+
+###
+Problem Title: Universal Dependencies
+Problem Description: Universal Dependencies framework
+
+#
+Step Description: Universal Dependencies (UD) adalah framework untuk:
+Step Type: multiple-choice-single
+Option A: Hanya bahasa Inggris
+Option B: Cross-linguistically consistent dependency annotation
+Option C: Hanya constituency parsing
+Option D: Spell checking
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: UD menyediakan dependency annotation untuk lebih dari {blank} bahasa dengan consistent relations.
+Step Type: fill-blank
+Correct Answer: 100
+Alternative Answer: seratus
+Alternative Answer: 100+
+Alternative Answer: ratusan
+Must Be Correct: false
+
+###
+Problem Title: Parsing for Machine Translation
+Problem Description: Peran parsing dalam MT
+
+#
+Step Description: Parsing membantu machine translation dengan:
+Step Type: multiple-choice-multiple
+Option A: Mengidentifikasi phrase boundaries
+Option B: Menangkap word reordering patterns
+Option C: Memahami sentence structure
+Option D: Replacing spell checker
+Option E: Understanding syntactic relationships
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Greedy vs Beam Search Parsing
+Problem Description: Search strategies dalam parsing
+
+#
+Step Description: Greedy parsing memilih action terbaik di setiap step tanpa backtracking. Apakah ini selalu menghasilkan parse tree optimal?
+Step Type: true-false
+Correct Answer: False
+Must Be Correct: false
+
+#
+Step Description: Beam search parsing menyimpan top-{blank} kandidat di setiap step untuk avoid locally optimal decisions.
+Step Type: fill-blank
+Correct Answer: k
+Alternative Answer: K
+Alternative Answer: beberapa
+Alternative Answer: n
+Must Be Correct: false

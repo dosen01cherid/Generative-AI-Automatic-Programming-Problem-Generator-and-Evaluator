@@ -1,0 +1,432 @@
+###
+Problem Title: Supervised Learning for NLP
+Problem Description: Memahami supervised learning dalam NLP
+
+#
+Step Description: Supervised learning untuk text classification membutuhkan {blank} data - teks dengan {blank} yang sudah diketahui.
+Step Type: fill-blank
+Correct Answer A: labeled
+Alternative Answer A: labelled
+Alternative Answer A: annotated
+Correct Answer B: labels
+Alternative Answer B: class
+Alternative Answer B: kategori
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang termasuk supervised learning tasks dalam NLP:
+Step Type: multiple-choice-multiple
+Option A: Sentiment Analysis
+Option B: Named Entity Recognition
+Option C: Text Classification
+Option D: Clustering (unsupervised)
+Option E: Spam Detection
+Option F: POS Tagging
+Correct Answer: A, B, C, E, F
+Must Be Correct: false
+
+###
+Problem Title: Feature Representation - BoW
+Problem Description: Bag of Words representation
+
+#
+Step Description: Bag of Words (BoW) represents dokumen sebagai:
+Step Type: multiple-choice-single
+Option A: Sequence of words preserving order
+Option B: Multiset of words ignoring order
+Option C: Parse tree
+Option D: Dependency graph
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: BoW untuk "I love NLP and I love AI" dengan vocabulary {I, love, NLP, and, AI} adalah vector [{blank}, {blank}, 1, 1, 1].
+Step Type: fill-blank
+Correct Answer A: 2
+Alternative Answer A: dua
+Correct Answer B: 2
+Alternative Answer B: dua
+Must Be Correct: false
+
+###
+Problem Title: TF-IDF
+Problem Description: Understanding TF-IDF weighting
+
+#
+Step Description: TF-IDF singkatan dari {blank} - {blank}.
+Step Type: fill-blank
+Correct Answer A: Term Frequency
+Alternative Answer A: TF
+Correct Answer B: Inverse Document Frequency
+Alternative Answer B: IDF
+Must Be Correct: false
+
+#
+Step Description: IDF memberikan weight lebih tinggi untuk kata yang:
+Step Type: multiple-choice-single
+Option A: Muncul di semua dokumen
+Option B: Muncul di sedikit dokumen (rare)
+Option C: Paling panjang
+Option D: Paling pendek
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Naive Bayes Classifier
+Problem Description: Naive Bayes untuk text classification
+
+#
+Step Description: Naive Bayes menggunakan {blank} Theorem dan assumes bahwa features adalah conditionally {blank} given the class.
+Step Type: fill-blank
+Correct Answer A: Bayes
+Alternative Answer A: Bayes'
+Correct Answer B: independent
+Alternative Answer B: independen
+Must Be Correct: false
+
+#
+Step Description: Formula Naive Bayes: P(class|document) ∝ P(class) × {blank}
+Step Type: fill-blank
+Correct Answer: ∏P(word|class)
+Alternative Answer: product of P(word|class)
+Alternative Answer: perkalian P(word|class)
+Must Be Correct: false
+
+###
+Problem Title: Multinomial vs Bernoulli Naive Bayes
+Problem Description: Varian Naive Bayes
+
+#
+Step Description: Pilih pernyataan yang BENAR:
+Step Type: multiple-choice-multiple
+Option A: Multinomial NB uses word counts/frequencies
+Option B: Bernoulli NB uses binary presence/absence
+Option C: Multinomial NB cocok untuk text classification
+Option D: Bernoulli NB tidak bisa digunakan untuk text
+Option E: Keduanya memerlukan smoothing
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Logistic Regression
+Problem Description: Logistic regression untuk classification
+
+#
+Step Description: Logistic regression adalah {blank} model yang directly models P(y|x), berbeda dengan Naive Bayes yang adalah {blank} model.
+Step Type: fill-blank
+Correct Answer A: discriminative
+Alternative Answer A: diskriminatif
+Correct Answer B: generative
+Alternative Answer B: generatif
+Must Be Correct: false
+
+#
+Step Description: Sigmoid function σ(z) = 1 / (1 + e^-z) maps input ke range:
+Step Type: multiple-choice-single
+Option A: (-∞, +∞)
+Option B: (-1, 1)
+Option C: (0, 1)
+Option D: [0, ∞)
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Loss Functions
+Problem Description: Loss functions untuk classification
+
+#
+Step Description: Untuk binary classification, loss function yang digunakan logistic regression adalah:
+Step Type: multiple-choice-single
+Option A: Mean Squared Error
+Option B: Binary Cross-Entropy
+Option C: Hinge Loss
+Option D: Perplexity
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Cross-entropy loss untuk binary classification: L = -[y log(ŷ) + (1-y) log(1-ŷ)]. Loss ini {blank} confident wrong predictions.
+Step Type: fill-blank
+Correct Answer: penalizes
+Alternative Answer: menghukum
+Alternative Answer: heavily penalizes
+Must Be Correct: false
+
+###
+Problem Title: Regularization
+Problem Description: Regularization untuk prevent overfitting
+
+#
+Step Description: L1 regularization (Lasso) adds {blank} ke loss function dan dapat menghasilkan {blank} weights.
+Step Type: fill-blank
+Correct Answer A: |w|
+Alternative Answer A: absolute value of weights
+Alternative Answer A: sum of absolute weights
+Correct Answer B: sparse
+Alternative Answer B: zero
+Alternative Answer B: sparse/zero
+Must Be Correct: false
+
+#
+Step Description: L2 regularization (Ridge) adds w² ke loss dan:
+Step Type: multiple-choice-single
+Option A: Sets many weights to exactly zero
+Option B: Shrinks weights towards zero but keeps all features
+Option C: Increases weights
+Option D: Ignores weights
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Support Vector Machines
+Problem Description: SVM untuk text classification
+
+#
+Step Description: SVM mencari {blank} yang memisahkan classes dengan {blank} margin.
+Step Type: fill-blank
+Correct Answer A: hyperplane
+Alternative Answer A: decision boundary
+Alternative Answer A: separator
+Correct Answer B: maximum
+Alternative Answer B: maksimum
+Alternative Answer B: largest
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA yang benar tentang SVM:
+Step Type: multiple-choice-multiple
+Option A: Works well dengan high-dimensional data
+Option B: Effective dengan sparse data (seperti text)
+Option C: Memerlukan semua features di-normalize ke [-1,1]
+Option D: Margin maximization memberikan regularization effect
+Option E: Support vectors adalah data points terdekat ke decision boundary
+Correct Answer: A, B, D, E
+Must Be Correct: false
+
+###
+Problem Title: Kernel Trick
+Problem Description: Kernel untuk non-linear SVM
+
+#
+Step Description: Kernel trick memungkinkan SVM untuk learn {blank} decision boundaries tanpa explicitly map ke higher dimensions.
+Step Type: fill-blank
+Correct Answer: non-linear
+Alternative Answer: nonlinear
+Alternative Answer: complex
+Must Be Correct: false
+
+#
+Step Description: Popular kernels termasuk:
+Step Type: multiple-choice-multiple
+Option A: Linear kernel
+Option B: Polynomial kernel
+Option C: RBF (Gaussian) kernel
+Option D: Perplexity kernel
+Option E: Sigmoid kernel
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Evaluation Metrics
+Problem Description: Metrik evaluasi classification
+
+#
+Step Description: Confusion matrix untuk binary classification memiliki {blank} cells: TP, TN, FP, FN.
+Step Type: fill-blank
+Correct Answer: 4
+Alternative Answer: empat
+Alternative Answer: four
+Must Be Correct: false
+
+#
+Step Description: Precision = TP / (TP + {blank}), Recall = TP / (TP + {blank})
+Step Type: fill-blank
+Correct Answer A: FP
+Alternative Answer A: False Positives
+Correct Answer B: FN
+Alternative Answer B: False Negatives
+Must Be Correct: false
+
+###
+Problem Title: F1 Score
+Problem Description: F1 sebagai balanced metric
+
+#
+Step Description: F1 score adalah {blank} mean dari Precision dan Recall.
+Step Type: fill-blank
+Correct Answer: harmonic
+Alternative Answer: harmonik
+Must Be Correct: false
+
+#
+Step Description: F1 score berguna ketika:
+Step Type: multiple-choice-single
+Option A: Classes perfectly balanced
+Option B: Classes imbalanced dan kita peduli both precision & recall
+Option C: Hanya peduli accuracy
+Option D: Dataset sangat besar
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Cross-Validation
+Problem Description: K-fold cross-validation
+
+#
+Step Description: Dalam 5-fold cross-validation, data dibagi menjadi {blank} parts, dan model di-train {blank} kali.
+Step Type: fill-blank
+Correct Answer A: 5
+Alternative Answer A: lima
+Alternative Answer A: five
+Correct Answer B: 5
+Alternative Answer B: lima
+Alternative Answer B: five
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA manfaat cross-validation:
+Step Type: multiple-choice-multiple
+Option A: More reliable performance estimate
+Option B: Detects overfitting
+Option C: Uses all data for both training and testing
+Option D: Eliminates need for test set
+Option E: Reduces variance in performance estimate
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Overfitting vs Underfitting
+Problem Description: Recognizing fitting problems
+
+#
+Step Description: Overfitting terjadi ketika model:
+Step Type: multiple-choice-single
+Option A: Too simple, high training error, high test error
+Option B: Too complex, low training error, high test error
+Option C: Perfect, low training error, low test error
+Option D: Random performance
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Untuk mengatasi overfitting, kita bisa:
+Step Type: multiple-choice-multiple
+Option A: Use regularization (L1/L2)
+Option B: Reduce model complexity
+Option C: Get more training data
+Option D: Use more complex model
+Option E: Apply dropout
+Option F: Early stopping
+Correct Answer: A, B, C, E, F
+Must Be Correct: false
+
+###
+Problem Title: Hyperparameter Tuning
+Problem Description: Tuning hyperparameters
+
+#
+Step Description: Hyperparameters adalah parameters yang {blank} during training dan harus {blank} sebelum training.
+Step Type: fill-blank
+Correct Answer A: tidak di-learn
+Alternative Answer A: not learned
+Alternative Answer A: fixed
+Correct Answer B: di-set
+Alternative Answer B: chosen
+Alternative Answer B: determined
+Must Be Correct: false
+
+#
+Step Description: GridSearchCV mencoba {blank} combinations dari hyperparameters dan pilih yang terbaik based on {blank}.
+Step Type: fill-blank
+Correct Answer A: all
+Alternative Answer A: semua
+Alternative Answer A: every
+Correct Answer B: cross-validation score
+Alternative Answer B: CV score
+Alternative Answer B: validation performance
+Must Be Correct: false
+
+###
+Problem Title: Feature Engineering
+Problem Description: Creating effective features
+
+#
+Step Description: Pilih SEMUA teknik feature engineering untuk text:
+Step Type: multiple-choice-multiple
+Option A: N-grams (bigrams, trigrams)
+Option B: Lowercasing
+Option C: Stop word removal
+Option D: Stemming/Lemmatization
+Option E: Character n-grams
+Option F: Part-of-speech tags
+Correct Answer: A, B, C, D, E, F
+Must Be Correct: false
+
+###
+Problem Title: Imbalanced Classes
+Problem Description: Handling class imbalance
+
+#
+Step Description: Untuk imbalanced dataset (contoh: 95% negative, 5% positive), strategi yang bisa digunakan:
+Step Type: multiple-choice-multiple
+Option A: Class weighting (give more weight to minority class)
+Option B: Oversampling minority class
+Option C: Undersampling majority class
+Option D: Use accuracy sebagai metric
+Option E: SMOTE (Synthetic Minority Over-sampling)
+Option F: Use F1 atau balanced accuracy
+Correct Answer: A, B, C, E, F
+Must Be Correct: false
+
+###
+Problem Title: Comparison: NB vs LR vs SVM
+Problem Description: Memilih algorithm yang tepat
+
+#
+Step Description: Untuk dataset kecil (<1000 samples) dan butuh baseline cepat, pilih:
+Step Type: multiple-choice-single
+Option A: Deep Neural Network
+Option B: Naive Bayes
+Option C: Complex ensemble
+Option D: Transformer model
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Naive Bayes paling {blank} untuk training, SVM paling {blank} untuk high-dimensional sparse data, Logistic Regression memberikan {blank} trade-off.
+Step Type: fill-blank
+Correct Answer A: cepat
+Alternative Answer A: fast
+Alternative Answer A: fastest
+Correct Answer B: efektif
+Alternative Answer B: effective
+Alternative Answer B: powerful
+Correct Answer C: baik
+Alternative Answer C: good
+Alternative Answer C: balanced
+Must Be Correct: false
+
+###
+Problem Title: Pipeline in Practice
+Problem Description: ML pipeline untuk text classification
+
+#
+Step Description: Urutan yang benar dalam ML text classification pipeline:
+Step Type: multiple-choice-single
+Option A: Feature extraction → Train/test split → Model training → Evaluation
+Option B: Train/test split → Feature extraction → Model training → Evaluation
+Option C: Model training → Feature extraction → Train/test split → Evaluation
+Option D: Evaluation → Model training → Feature extraction → Train/test split
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: PENTING: Feature extraction (vectorizer) harus {blank} pada training data dan hanya {blank} pada test data untuk avoid data leakage.
+Step Type: fill-blank
+Correct Answer A: fit
+Alternative Answer A: fitted
+Alternative Answer A: di-fit
+Correct Answer B: transform
+Alternative Answer B: transformed
+Alternative Answer B: di-transform
+Must Be Correct: false

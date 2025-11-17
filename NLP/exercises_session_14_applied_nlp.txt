@@ -1,0 +1,217 @@
+###
+Problem Title: Named Entity Recognition
+Problem Description: Identifying entities in text
+
+#
+Step Description: NER task mengidentifikasi dan classify entities seperti {blank} (persons), {blank} (organizations), dan {blank} (locations).
+Step Type: fill-blank
+Correct Answer A: PER
+Alternative Answer A: PERSON
+Alternative Answer A: people
+Correct Answer B: ORG
+Alternative Answer B: ORGANIZATION
+Alternative Answer B: companies
+Correct Answer C: LOC
+Alternative Answer C: LOCATION
+Alternative Answer C: places
+Must Be Correct: false
+
+#
+Step Description: NER adalah {blank} task di mana setiap word mendapat entity tag.
+Step Type: fill-blank
+Correct Answer: sequence labeling
+Alternative Answer: tagging
+Alternative Answer: token classification
+Must Be Correct: false
+
+###
+Problem Title: Information Extraction
+Problem Description: Extracting structured information
+
+#
+Step Description: Pilih SEMUA komponen information extraction:
+Step Type: multiple-choice-multiple
+Option A: Named Entity Recognition
+Option B: Relation Extraction
+Option C: Event Extraction
+Option D: Spell checking
+Option E: Coreference Resolution
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Question Answering
+Problem Description: QA systems
+
+#
+Step Description: Extractive QA mengambil {blank} dari context sebagai answer, generative QA {blank} answer baru.
+Step Type: fill-blank
+Correct Answer A: span
+Alternative Answer A: substring
+Alternative Answer A: excerpt
+Correct Answer B: generates
+Alternative Answer B: creates
+Alternative Answer B: synthesizes
+Must Be Correct: false
+
+###
+Problem Title: Text Summarization
+Problem Description: Automatic summarization
+
+#
+Step Description: Extractive summarization {blank} important sentences dari dokumen, abstractive summarization {blank} summary dengan kata-kata baru.
+Step Type: fill-blank
+Correct Answer A: selects
+Alternative Answer A: extracts
+Alternative Answer A: picks
+Correct Answer B: generates
+Alternative Answer B: creates
+Alternative Answer B: writes
+Must Be Correct: false
+
+###
+Problem Title: Machine Translation
+Problem Description: Translating between languages
+
+#
+Step Description: Neural Machine Translation (NMT) menggunakan {blank} architecture: encoder untuk source language, decoder untuk {blank} language.
+Step Type: fill-blank
+Correct Answer A: encoder-decoder
+Alternative Answer A: seq2seq
+Alternative Answer A: sequence-to-sequence
+Correct Answer B: target
+Alternative Answer B: destination
+Must Be Correct: false
+
+###
+Problem Title: Sentiment Analysis Applications
+Problem Description: Real-world sentiment analysis
+
+#
+Step Description: Pilih SEMUA aplikasi sentiment analysis:
+Step Type: multiple-choice-multiple
+Option A: Product review analysis
+Option B: Social media monitoring
+Option C: Customer feedback classification
+Option D: Stock market prediction
+Option E: Brand reputation tracking
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Chatbots and Dialogue Systems
+Problem Description: Conversational AI
+
+#
+Step Description: Task-oriented chatbot fokus pada {blank} tasks (booking, customer service), open-domain chatbot untuk {blank} conversation.
+Step Type: fill-blank
+Correct Answer A: specific
+Alternative Answer A: particular
+Alternative Answer A: defined
+Correct Answer B: general
+Alternative Answer B: free-form
+Alternative Answer B: casual
+Must Be Correct: false
+
+###
+Problem Title: Text Classification Use Cases
+Problem Description: Real-world classification
+
+#
+Step Description: Pilih SEMUA text classification applications:
+Step Type: multiple-choice-multiple
+Option A: Spam detection
+Option B: Topic classification
+Option C: Language identification
+Option D: Intent classification
+Option E: Toxicity detection
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Document Clustering
+Problem Description: Unsupervised grouping
+
+#
+Step Description: Document clustering adalah {blank} task yang group similar documents tanpa {blank} labels.
+Step Type: fill-blank
+Correct Answer A: unsupervised
+Alternative Answer A: tanpa supervisi
+Correct Answer B: predefined
+Alternative Answer B: pre-defined
+Alternative Answer B: labeled
+Must Be Correct: false
+
+###
+Problem Title: Search and Retrieval
+Problem Description: Information retrieval
+
+#
+Step Description: Semantic search menggunakan {blank} representations untuk find documents based on {blank}, bukan just keyword matching.
+Step Type: fill-blank
+Correct Answer A: dense
+Alternative Answer A: vector
+Alternative Answer A: embedding
+Correct Answer B: meaning
+Alternative Answer B: semantics
+Alternative Answer B: semantic similarity
+Must Be Correct: false
+
+###
+Problem Title: Text Generation Applications
+Problem Description: Generating text
+
+#
+Step Description: Pilih SEMUA text generation applications:
+Step Type: multiple-choice-multiple
+Option A: Content creation
+Option B: Story generation
+Option C: Code generation
+Option D: Data-to-text (reports from data)
+Option E: Dialogue response generation
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Recommendation Systems
+Problem Description: NLP in recommendations
+
+#
+Step Description: NLP helps recommendation systems dengan analyze user {blank} (reviews, queries) dan item {blank} (descriptions, titles).
+Step Type: fill-blank
+Correct Answer A: feedback
+Alternative Answer A: reviews
+Alternative Answer A: text
+Correct Answer B: content
+Alternative Answer B: descriptions
+Alternative Answer B: text
+Must Be Correct: false
+
+###
+Problem Title: OCR and Document Processing
+Problem Description: Processing scanned documents
+
+#
+Step Description: OCR (Optical Character Recognition) converts {blank} to {blank}, often followed by NLP untuk extract information.
+Step Type: fill-blank
+Correct Answer A: images
+Alternative Answer A: scanned documents
+Alternative Answer A: pictures
+Correct Answer B: text
+Alternative Answer B: characters
+Must Be Correct: false
+
+###
+Problem Title: Multilingual NLP
+Problem Description: Cross-lingual applications
+
+#
+Step Description: Multilingual models seperti mBERT dan XLM-R di-train pada {blank} languages simultaneously untuk enable {blank} transfer.
+Step Type: fill-blank
+Correct Answer A: multiple
+Alternative Answer A: many
+Alternative Answer A: 100+
+Correct Answer B: cross-lingual
+Alternative Answer B: language
+Alternative Answer B: zero-shot
+Must Be Correct: false

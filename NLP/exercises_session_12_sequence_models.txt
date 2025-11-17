@@ -1,0 +1,277 @@
+###
+Problem Title: RNN Basics
+Problem Description: Understanding Recurrent Neural Networks
+
+#
+Step Description: RNN memiliki {blank} connections yang memungkinkan information persist dari one step to the next.
+Step Type: fill-blank
+Correct Answer: recurrent
+Alternative Answer: loop
+Alternative Answer: feedback
+Must Be Correct: false
+
+#
+Step Description: RNN computation at time t: h_t = tanh(W_{hh} × {blank} + W_{xh} × {blank} + b)
+Step Type: fill-blank
+Correct Answer A: h_{t-1}
+Alternative Answer A: previous hidden state
+Correct Answer B: x_t
+Alternative Answer B: current input
+Must Be Correct: false
+
+###
+Problem Title: RNN Architectures
+Problem Description: Different RNN configurations
+
+#
+Step Description: Pilih SEMUA RNN architecture types:
+Step Type: multiple-choice-multiple
+Option A: Many-to-one (sentiment classification)
+Option B: One-to-many (image captioning)
+Option C: Many-to-many synced (POS tagging)
+Option D: Many-to-many encoder-decoder (translation)
+Option E: One-to-one (standard feedforward)
+Correct Answer: A, B, C, D, E
+Must Be Correct: false
+
+###
+Problem Title: Vanishing Gradient Problem
+Problem Description: Problem dengan vanilla RNNs
+
+#
+Step Description: Vanishing gradient problem terjadi ketika gradients become exponentially {blank} saat backpropagating through many time steps.
+Step Type: fill-blank
+Correct Answer: small
+Alternative Answer: kecil
+Alternative Answer: tiny
+Alternative Answer: vanish
+Must Be Correct: false
+
+#
+Step Description: Vanishing gradients menyebabkan RNN:
+Step Type: multiple-choice-single
+Option A: Learn long-range dependencies dengan mudah
+Option B: Tidak bisa learn long-range dependencies
+Option C: Train lebih cepat
+Option D: Always overfit
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: LSTM Architecture
+Problem Description: Long Short-Term Memory
+
+#
+Step Description: LSTM memiliki {blank} gates: forget gate, input gate, dan output gate, plus {blank} state.
+Step Type: fill-blank
+Correct Answer A: 3
+Alternative Answer A: tiga
+Alternative Answer A: three
+Correct Answer B: cell
+Alternative Answer B: memory
+Must Be Correct: false
+
+#
+Step Description: Forget gate menentukan:
+Step Type: multiple-choice-single
+Option A: What new information to add
+Option B: What old information to discard
+Option C: What to output
+Option D: Learning rate
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: LSTM Gates
+Problem Description: Understanding LSTM gates
+
+#
+Step Description: Pilih SEMUA pernyataan yang benar tentang LSTM gates:
+Step Type: multiple-choice-multiple
+Option A: Gates use sigmoid activation (output 0-1)
+Option B: Forget gate: f_t = σ(W_f[h_{t-1}, x_t] + b_f)
+Option C: Cell state provides "memory highway"
+Option D: LSTM can learn long-term dependencies better than RNN
+Option E: LSTM tidak punya hidden state
+Correct Answer: A, B, C, D
+Must Be Correct: false
+
+###
+Problem Title: GRU vs LSTM
+Problem Description: Comparing GRU and LSTM
+
+#
+Step Description: GRU memiliki {blank} gates (update dan reset), sedangkan LSTM memiliki {blank} gates.
+Step Type: fill-blank
+Correct Answer A: 2
+Alternative Answer A: dua
+Alternative Answer A: two
+Correct Answer B: 3
+Alternative Answer B: tiga
+Alternative Answer B: three
+Must Be Correct: false
+
+#
+Step Description: Pilih SEMUA keunggulan GRU dibanding LSTM:
+Step Type: multiple-choice-multiple
+Option A: Fewer parameters (~25% less)
+Option B: Faster training
+Option C: Simpler architecture
+Option D: Always better performance
+Option E: Less memory usage
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: Bidirectional RNNs
+Problem Description: Processing in both directions
+
+#
+Step Description: Bidirectional RNN memproses sequence dalam {blank} directions: forward dan {blank}.
+Step Type: fill-blank
+Correct Answer A: dua
+Alternative Answer A: two
+Alternative Answer A: 2
+Alternative Answer A: both
+Correct Answer B: backward
+Alternative Answer B: reverse
+Must Be Correct: false
+
+#
+Step Description: Bidirectional RNN TIDAK cocok untuk:
+Step Type: multiple-choice-single
+Option A: Sentiment analysis
+Option B: Named Entity Recognition
+Option C: Real-time text generation (autoregressive)
+Option D: POS tagging
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Stacked RNNs
+Problem Description: Deep RNNs
+
+#
+Step Description: Stacked (multi-layer) RNN output dari layer l menjadi {blank} untuk layer l+1.
+Step Type: fill-blank
+Correct Answer: input
+Alternative Answer: masukan
+Must Be Correct: false
+
+#
+Step Description: Kedalaman typical untuk RNN dalam NLP:
+Step Type: multiple-choice-single
+Option A: 1 layer cukup
+Option B: 2-3 layers (sweet spot)
+Option C: 10+ layers selalu lebih baik
+Option D: 100 layers
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: BPTT
+Problem Description: Backpropagation Through Time
+
+#
+Step Description: BPTT adalah {blank} applied to RNNs dengan "unrolling" network across {blank}.
+Step Type: fill-blank
+Correct Answer A: backpropagation
+Alternative Answer A: backprop
+Alternative Answer A: BP
+Correct Answer B: time
+Alternative Answer B: time steps
+Alternative Answer B: timesteps
+Must Be Correct: false
+
+###
+Problem Title: Gradient Clipping
+Problem Description: Handling exploding gradients
+
+#
+Step Description: Gradient clipping mencegah {blank} gradients dengan membatasi gradient norm ke maximum threshold.
+Step Type: fill-blank
+Correct Answer: exploding
+Alternative Answer: explosive
+Alternative Answer: very large
+Must Be Correct: false
+
+#
+Step Description: Gradient clipping solution untuk:
+Step Type: multiple-choice-single
+Option A: Vanishing gradients
+Option B: Exploding gradients
+Option C: Overfitting
+Option D: Underfitting
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Sequence-to-Sequence
+Problem Description: Encoder-Decoder architecture
+
+#
+Step Description: Dalam seq2seq, {blank} processes input sequence menjadi fixed-size vector, {blank} generates output sequence dari vector tersebut.
+Step Type: fill-blank
+Correct Answer A: encoder
+Alternative Answer A: encoding network
+Correct Answer B: decoder
+Alternative Answer B: decoding network
+Must Be Correct: false
+
+###
+Problem Title: Training Best Practices
+Problem Description: Training RNNs effectively
+
+#
+Step Description: Pilih SEMUA best practices untuk training RNNs:
+Step Type: multiple-choice-multiple
+Option A: Gradient clipping
+Option B: Dropout between layers
+Option C: Lower learning rate than feedforward nets
+Option D: Never use batch normalization
+Option E: Truncated BPTT untuk long sequences
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: RNN Applications
+Problem Description: Real-world RNN usage
+
+#
+Step Description: RNNs cocok untuk tasks yang memerlukan:
+Step Type: multiple-choice-multiple
+Option A: Sequential data processing
+Option B: Variable-length inputs
+Option C: Temporal dependencies
+Option D: Fixed-size images only
+Option E: Text generation
+Correct Answer: A, B, C, E
+Must Be Correct: false
+
+###
+Problem Title: LSTM vs Transformers
+Problem Description: When to use what
+
+#
+Step Description: LSTM disadvantage dibanding Transformers:
+Step Type: multiple-choice-single
+Option A: Tidak bisa handle sequences
+Option B: Sequential processing (tidak parallelizable)
+Option C: Always worse performance
+Option D: Requires more data
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Practical Implementation
+Problem Description: Implementation considerations
+
+#
+Step Description: Untuk sequences dengan variable lengths, kita perlu {blank} shorter sequences dan {blank} longer sequences ke fixed length.
+Step Type: fill-blank
+Correct Answer A: pad
+Alternative Answer A: padding
+Correct Answer B: truncate
+Alternative Answer B: cut
+Alternative Answer B: trim
+Must Be Correct: false
