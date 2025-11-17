@@ -4663,9 +4663,44 @@ class ProblemSolverApp:
 
             elif step_type == "fill-blank":
                 window.console.log("📝 Capturing fill-blank answer")
-                input_field = container.querySelector(".fill-blank-input")
-                if input_field:
+
+                # ✅ Check if this is multi-blank mode
+                all_inputs = container.querySelectorAll(".fill-blank-input")
+                labeled_inputs = container.querySelectorAll("[data-blank-label]")
+
+                if labeled_inputs.length > 0:
+                    # Multi-blank mode: collect answers as dictionary with labels
+                    window.console.log(f"📝 Multi-blank mode detected: {labeled_inputs.length} blanks")
+                    multi_answers = {}
+                    all_filled = True
+
+                    for input_field in labeled_inputs:
+                        label = input_field.getAttribute("data-blank-label")
+                        value = input_field.value.strip()
+
+                        if value:
+                            multi_answers[label] = value
+                        else:
+                            all_filled = False
+                            window.console.warn(f"⚠️ Blank {label} is empty")
+
+                    if not all_filled:
+                        window.alert("⚠️ Please fill in all blanks before saving")
+                        return
+
+                    if len(multi_answers) == 0:
+                        window.alert("⚠️ Please enter answers for all blanks")
+                        return
+
+                    new_answer = multi_answers
+                    window.console.log(f"✅ Captured multi-blank answers: {new_answer}")
+
+                elif all_inputs.length > 0:
+                    # Single-blank mode: get single answer as array
+                    window.console.log("📝 Single-blank mode detected")
+                    input_field = all_inputs[0]
                     value = input_field.value.strip()
+
                     if value:
                         new_answer = [value]
                         window.console.log(f"✅ Captured answer: {new_answer}")
@@ -6130,7 +6165,18 @@ class ProblemSolverApp:
       """Recreate a fill-in-the-blank step for editing"""
       window.console.log(f"📝 Recreating Fill-blank step {step_idx}")
 
-      # ✅ Get question from original step data
+      # ✅ Check if this is multi-blank mode
+      blank_config = original_step_data.get("blank_config", {})
+      blank_mode = blank_config.get("mode", "single")
+
+      window.console.log(f"📝 Fill-blank mode: {blank_mode}")
+
+      # ✅ Handle multi-blank mode separately
+      if blank_mode == "multi":
+          self._recreate_multi_blank_step(container, step_idx, saved_step, original_step_data)
+          return
+
+      # ✅ Get question from original step data (single-blank mode)
       question = original_step_data.get("text", "")
 
       # If no text field, try description blocks
@@ -6200,6 +6246,71 @@ class ProblemSolverApp:
           return
 
       container.appendChild(q_div)
+
+    def _recreate_multi_blank_step(self, container, step_idx, saved_step, original_step_data):
+      """Recreate a multi-blank fill-in-the-blank step for editing"""
+      window.console.log(f"📝 Recreating Multi-blank fill-blank step {step_idx}")
+
+      # Get question from description blocks
+      desc_blocks = original_step_data.get("description", [])
+      question = self.render_content_blocks(desc_blocks)
+
+      if not question.strip():
+          question = f"Fill in the blanks: Step {step_idx + 1}"
+
+      # Get correct answers structure (dict with A, B, C keys)
+      correct_answers = original_step_data.get("correct_answers", {})
+
+      # Get user's previous answers from saved_step
+      user_answers = saved_step.get("user_answers", {})
+      window.console.log(f"User answers: {user_answers}")
+
+      # Display question
+      q_div = document.createElement("div")
+      q_div.style.cssText = "margin-bottom:16px;font-size:15px;color:#334155;line-height:1.6;"
+      q_div.innerHTML = question
+      container.appendChild(q_div)
+
+      # Create input fields for each blank (A, B, C, etc.)
+      if isinstance(correct_answers, dict):
+          # Sort labels alphabetically
+          labels = sorted(correct_answers.keys())
+
+          for label in labels:
+              # Create labeled input section
+              blank_section = document.createElement("div")
+              blank_section.style.cssText = "margin-bottom:12px;"
+
+              # Label
+              label_elem = document.createElement("div")
+              label_elem.style.cssText = "font-weight:600;color:#0b6efd;margin-bottom:4px;font-size:14px;"
+              label_elem.textContent = f"Blank {label}:"
+              blank_section.appendChild(label_elem)
+
+              # Input field
+              input_field = document.createElement("input")
+              input_field.type = "text"
+              input_field.className = f"fill-blank-input fill-blank-{label}"
+              input_field.setAttribute("data-blank-label", label)
+              input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;width:100%;font-size:15px;transition:all 0.2s;"
+              input_field.placeholder = f"Enter answer for blank {label}..."
+
+              # Populate with user's previous answer if exists
+              if isinstance(user_answers, dict) and label in user_answers:
+                  input_field.value = user_answers[label]
+
+              # Add focus styling
+              input_field.addEventListener("focus", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#3b82f6')))
+              input_field.addEventListener("blur", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#cbd5e1')))
+
+              blank_section.appendChild(input_field)
+              container.appendChild(blank_section)
+      else:
+          # Fallback for unexpected format
+          error_div = document.createElement("div")
+          error_div.style.cssText = "color:#ef4444;padding:12px;background:#fee2e2;border-radius:6px;"
+          error_div.textContent = "⚠️ Error: Invalid multi-blank configuration"
+          container.appendChild(error_div)
 
     def _recreate_multi_mc_step(self, container, step_idx, saved_step, original_step_data):
       """Recreate a multi-mc step for editing with dropdowns"""
@@ -8907,6 +9018,88 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
 
+    def create_multi_blank_ui(self, step_div, step_idx, step_data, desc_html, total_steps, must_correct_badge):
+      """Create UI for multi-blank fill-in-the-blank questions"""
+      import html as html_module
+
+      window.console.log(f"🔧 Creating Multi-blank UI for step {step_idx}")
+
+      # Get correct answers structure (dict with A, B, C keys)
+      correct_answers = step_data.get("correct_answers", {}")
+
+      html_content = f"""
+          <div class='step-header'>
+              <div style='font-weight:700;font-size:18px;margin-bottom:12px;'>
+                  Step <span class='step-number-display'>{step_idx + 1}</span> of {total_steps} {must_correct_badge}
+              </div>
+          </div>
+
+          <div class='step-description'>
+              {desc_html}
+          </div>
+
+          <div class='multi-blank-inputs-container' style='margin:20px 0;'>
+      """
+
+      # Create input fields for each blank (A, B, C, etc.)
+      if isinstance(correct_answers, dict):
+          labels = sorted(correct_answers.keys())
+
+          for label in labels:
+              html_content += f"""
+                  <div style='margin-bottom:16px;'>
+                      <label style='display:block;font-weight:600;color:#0b6efd;margin-bottom:4px;font-size:14px;'>
+                          Blank {label}:
+                      </label>
+                      <input
+                          type='text'
+                          class='fill-blank-input fill-blank-{label}'
+                          data-blank-label='{label}'
+                          style='width:100%;max-width:500px;padding:12px;
+                                 border:2px solid #cbd5e1;border-radius:8px;font-size:16px;'
+                          placeholder='Enter answer for blank {label}'
+                      />
+                  </div>
+              """
+
+      html_content += f"""
+          </div>
+
+          <div style='margin-top:20px;'>
+              <button id='submitBtn{step_idx}' class='btn-primary' style='padding:10px 24px;'>
+                  Submit Answers
+              </button>
+          </div>
+
+          <div id='stepFeedback{step_idx}'></div>
+      """
+
+      # Set innerHTML
+      step_div.innerHTML = html_content
+      window.console.log(f"📝 Multi-blank HTML set for step {step_idx}")
+
+      # Wire up submit button
+      submit_btn = step_div.querySelector(f"#submitBtn{step_idx}")
+
+      if submit_btn:
+          window.console.log(f"✅ Found submit button for multi-blank step {step_idx}")
+
+          def submit_handler(event):
+              window.console.log(f"🔘 Multi-blank submit button clicked for step {step_idx}")
+              try:
+                  self.submit_fill_blank(step_idx, step_data)
+              except Exception as e:
+                  window.console.error(f"Error in submit handler: {e}")
+                  import traceback
+                  window.console.error(traceback.format_exc())
+
+          submit_btn.addEventListener("click", create_proxy(submit_handler))
+          window.console.log(f"✅ Handler attached for multi-blank step {step_idx}")
+      else:
+          window.console.error(f"❌ Submit button NOT FOUND for multi-blank step {step_idx}")
+
+      window.console.log(f"✅ Multi-blank UI creation complete for step {step_idx}")
+
     def create_multi_mc_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
       """Create UI for multi-mc (fill-blank with inline dropdown selectors)"""
       import re
@@ -9056,6 +9249,15 @@ This demonstrates the complete format for creating your own problem sets!
           must_correct_badge = ""
           if must_correct:
               must_correct_badge = "<span style='background:#fef3c7;color:#b45309;padding:4px 8px;border-radius:4px;font-size:12px;margin-left:8px;'>⚠️ Must be correct</span>"
+
+          # ✅ Check if this is multi-blank mode
+          blank_config = step_data.get("blank_config", {})
+          blank_mode = blank_config.get("mode", "single")
+
+          if blank_mode == "multi":
+              window.console.log(f"📝 Multi-blank mode detected")
+              self.create_multi_blank_ui(step_div, step_idx, step_data, desc_html, total_steps, must_correct_badge)
+              return
 
           # ========================================
           # ROBUST BLANK DETECTION
