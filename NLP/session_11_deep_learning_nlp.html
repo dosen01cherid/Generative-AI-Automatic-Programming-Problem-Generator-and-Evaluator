@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 11: Deep Learning untuk NLP</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .slide:first-child {
+            margin-top: 40px;
+        }
+
+        .slide:last-child {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #764ba2;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.4em;
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-weight: 500;
+        }
+
+        p, li {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .content-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .formula-box {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .important-box {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        ul, ol {
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1.1em;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .plot-container {
+            width: 100%;
+            height: 500px;
+            margin: 30px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 1em;
+            margin-top: 40px;
+        }
+
+        .neuron-visual {
+            background: white;
+            border: 3px solid #667eea;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide">
+    <h1>Session 11</h1>
+    <h2>Deep Learning untuk NLP</h2>
+    <p class="subtitle">Neural Networks, Word Embeddings, Feedforward Networks</p>
+    <div style="margin-top: 40px;">
+        <span class="badge">Natural Language Processing</span>
+        <span class="badge">Semester 6</span>
+        <span class="badge">Week 11</span>
+    </div>
+    <div class="footer">
+        Universitas Mercu Buana<br>
+        Program Studi Teknik Informatika
+    </div>
+</div>
+
+<!-- Slide 2: Big Problems Deep Learning Solves -->
+<div class="slide">
+    <h2>🎯 Mengapa Deep Learning untuk NLP?</h2>
+    <div class="important-box">
+        <h3>Keterbatasan Traditional ML yang Diselesaikan:</h3>
+
+        <p><strong>1. Sparse, High-Dimensional Representations</strong></p>
+        <ul>
+            <li>TF-IDF, BoW menghasilkan vectors dengan 10,000s dimensi, mostly zeros</li>
+            <li>Tidak capture semantic similarity: "cat" & "kitten" sama berbedanya dengan "cat" & "table"</li>
+            <li><strong>DL Solution:</strong> <span class="highlight">Dense word embeddings</span> - low-dimensional vectors yang capture meaning</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <p><strong>2. Manual Feature Engineering</strong></p>
+        <ul>
+            <li>Traditional ML butuh domain experts untuk design features</li>
+            <li>Time-consuming, brittle, tidak generalize ke domain baru</li>
+            <li><strong>DL Solution:</strong> <span class="highlight">Automatic feature learning</span> - neural networks discover useful representations</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <p><strong>3. Inability to Model Sequences</strong></p>
+        <ul>
+            <li>BoW/TF-IDF ignore word order: "dog bites man" = "man bites dog"</li>
+            <li>N-grams limited to fixed small windows</li>
+            <li><strong>DL Solution:</strong> <span class="highlight">Recurrent & sequential models</span> - process variable-length sequences</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <p><strong>4. Complex Pattern Recognition</strong></p>
+        <ul>
+            <li>Linear models can't learn complex, non-linear patterns</li>
+            <li>Feature interactions harus explicitly engineered</li>
+            <li><strong>DL Solution:</strong> <span class="highlight">Deep architectures</span> - hierarchical feature composition</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 3: Learning Objectives -->
+<div class="slide">
+    <h2>📚 Capaian Pembelajaran</h2>
+    <div class="content-box">
+        <h3>Sub-CPMK Week 11:</h3>
+        <p>Mahasiswa mampu memahami dan mengimplementasikan neural networks dasar untuk NLP, termasuk word embeddings dan feedforward networks</p>
+    </div>
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>✅ Kemampuan yang Dikuasai:</h4>
+            <ul>
+                <li>Memahami artificial neural networks</li>
+                <li>Forward propagation computation</li>
+                <li>Backpropagation dan gradient descent</li>
+                <li>Word embeddings (Word2Vec concepts)</li>
+                <li>Feedforward networks untuk text classification</li>
+                <li>Activation functions dan optimization</li>
+            </ul>
+        </div>
+        <div class="content-box">
+            <h4>📋 Topik Pembahasan:</h4>
+            <ul>
+                <li>Neural Network Basics</li>
+                <li>Perceptron & Multi-layer Networks</li>
+                <li>Activation Functions</li>
+                <li>Backpropagation</li>
+                <li>Word Embeddings</li>
+                <li>Feedforward Networks untuk NLP</li>
+                <li>Training Tips & Tricks</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: Neural Network Basics -->
+<div class="slide">
+    <h2>🧠 Artificial Neural Network: Konsep Dasar</h2>
+    <div class="content-box">
+        <h3>Inspirasi dari Biological Neurons</h3>
+        <p>Neural networks terinspirasi dari cara otak manusia bekerja:</p>
+        <ul>
+            <li><strong>Neurons:</strong> Receive signals, process, fire output</li>
+            <li><strong>Synapses:</strong> Weighted connections between neurons</li>
+            <li><strong>Learning:</strong> Adjusting synapse strengths based on experience</li>
+        </ul>
+    </div>
+
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>Artificial Neuron (Perceptron)</h4>
+            <p><strong>Components:</strong></p>
+            <ul>
+                <li><strong>Inputs:</strong> x₁, x₂, ..., xₙ</li>
+                <li><strong>Weights:</strong> w₁, w₂, ..., wₙ</li>
+                <li><strong>Bias:</strong> b</li>
+                <li><strong>Activation function:</strong> f(·)</li>
+            </ul>
+        </div>
+
+        <div class="formula-box">
+            <h4>Computation:</h4>
+            <p style="font-size: 1.3em; margin: 15px 0;">
+                \[z = \sum_{i=1}^{n} w_i x_i + b\]
+            </p>
+            <p style="font-size: 1.3em; margin: 15px 0;">
+                \[y = f(z)\]
+            </p>
+            <p>z = weighted sum (pre-activation)</p>
+            <p>y = output (post-activation)</p>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>📝 Example: Simple Neuron</h4>
+        <p>Input: x = [2, 3], Weights: w = [0.5, -0.3], Bias: b = 1</p>
+        <p>Activation: ReLU(z) = max(0, z)</p>
+
+        <p><strong>Computation:</strong></p>
+        <p>z = (0.5 × 2) + (-0.3 × 3) + 1 = 1.0 - 0.9 + 1 = <strong>1.1</strong></p>
+        <p>y = ReLU(1.1) = max(0, 1.1) = <strong>1.1</strong></p>
+    </div>
+</div>
+
+<!-- Slide 5: Activation Functions -->
+<div class="slide">
+    <h2>⚡ Activation Functions</h2>
+    <div class="content-box">
+        <h3>Why Activation Functions?</h3>
+        <p>Without activation functions, neural networks = just linear transformations!</p>
+        <p>Activation functions introduce <strong>non-linearity</strong>, enabling networks to learn complex patterns.</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>1. Sigmoid</h4>
+            <div class="formula-box">
+                <p>\[\sigma(z) = \frac{1}{1 + e^{-z}}\]</p>
+                <p>Output: (0, 1)</p>
+            </div>
+            <p>✅ Probabilistic interpretation</p>
+            <p>❌ Vanishing gradients</p>
+            <p>❌ Not zero-centered</p>
+            <p><strong>Use:</strong> Output layer (binary classification)</p>
+        </div>
+
+        <div class="content-box">
+            <h4>2. Tanh</h4>
+            <div class="formula-box">
+                <p>\[\tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}\]</p>
+                <p>Output: (-1, 1)</p>
+            </div>
+            <p>✅ Zero-centered</p>
+            <p>✅ Stronger gradients than sigmoid</p>
+            <p>❌ Still vanishing gradients</p>
+            <p><strong>Use:</strong> Hidden layers (older networks)</p>
+        </div>
+
+        <div class="content-box">
+            <h4>3. ReLU (Rectified Linear Unit)</h4>
+            <div class="formula-box">
+                <p>\[\text{ReLU}(z) = \max(0, z)\]</p>
+                <p>Output: [0, ∞)</p>
+            </div>
+            <p>✅ No vanishing gradient (for z > 0)</p>
+            <p>✅ Computationally efficient</p>
+            <p>✅ Sparse activation</p>
+            <p>❌ "Dying ReLU" problem</p>
+            <p><strong>Use:</strong> Hidden layers (most common!)</p>
+        </div>
+
+        <div class="content-box">
+            <h4>4. Softmax</h4>
+            <div class="formula-box">
+                <p>\[\text{softmax}(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}}\]</p>
+                <p>Output: Probability distribution</p>
+            </div>
+            <p>✅ Outputs sum to 1</p>
+            <p>✅ Multi-class probabilities</p>
+            <p><strong>Use:</strong> Output layer (multi-class classification)</p>
+        </div>
+    </div>
+
+    <div id="activationPlot" class="plot-container"></div>
+</div>
+
+<!-- Slide 6: Multi-Layer Networks -->
+<div class="slide">
+    <h2>🏗️ Multi-Layer Perceptron (MLP)</h2>
+    <div class="content-box">
+        <h3>Architecture</h3>
+        <p><strong>Feedforward Neural Network</strong> dengan multiple layers:</p>
+        <ul>
+            <li><strong>Input Layer:</strong> Raw features</li>
+            <li><strong>Hidden Layer(s):</strong> Learned representations</li>
+            <li><strong>Output Layer:</strong> Predictions</li>
+        </ul>
+    </div>
+
+    <div class="formula-box">
+        <h4>Forward Propagation (2-layer network):</h4>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            <strong>Layer 1 (Hidden):</strong>
+        </p>
+        <p style="font-size: 1.2em;">
+            \[h = f_1(W_1 x + b_1)\]
+        </p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            <strong>Layer 2 (Output):</strong>
+        </p>
+        <p style="font-size: 1.2em;">
+            \[\hat{y} = f_2(W_2 h + b_2)\]
+        </p>
+        <p>Di mana:</p>
+        <ul style="text-align: left; margin-left: 40px;">
+            <li>x = input vector</li>
+            <li>W₁, W₂ = weight matrices</li>
+            <li>b₁, b₂ = bias vectors</li>
+            <li>f₁, f₂ = activation functions</li>
+            <li>h = hidden layer activations</li>
+            <li>ŷ = predicted output</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>Example Architecture untuk Sentiment Classification:</h4>
+        <table>
+            <tr>
+                <th>Layer</th>
+                <th>Dimension</th>
+                <th>Activation</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Input</td>
+                <td>5000</td>
+                <td>-</td>
+                <td>TF-IDF features</td>
+            </tr>
+            <tr>
+                <td>Hidden 1</td>
+                <td>256</td>
+                <td>ReLU</td>
+                <td>First representation</td>
+            </tr>
+            <tr>
+                <td>Hidden 2</td>
+                <td>128</td>
+                <td>ReLU</td>
+                <td>Second representation</td>
+            </tr>
+            <tr>
+                <td>Output</td>
+                <td>2</td>
+                <td>Softmax</td>
+                <td>Positive/Negative probabilities</td>
+            </tr>
+        </table>
+        <p><strong>Total parameters:</strong></p>
+        <p>W₁: 5000×256 = 1,280,000</p>
+        <p>W₂: 256×128 = 32,768</p>
+        <p>W₃: 128×2 = 256</p>
+        <p>Total: ~1.3 million parameters!</p>
+    </div>
+</div>
+
+<!-- Slide 7: Loss Functions -->
+<div class="slide">
+    <h2>📉 Loss Functions</h2>
+    <div class="content-box">
+        <h3>Training Goal</h3>
+        <p>Find weights W dan biases b yang <strong>minimize loss</strong> pada training data.</p>
+        <p>Loss function measures: <em>Seberapa jauh prediksi dari ground truth?</em></p>
+    </div>
+
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>Binary Cross-Entropy</h4>
+            <p><strong>For:</strong> Binary classification (2 classes)</p>
+            <div class="formula-box">
+                <p>\[L = -\frac{1}{N}\sum_{i=1}^{N} [y_i \log(\hat{y}_i) + (1-y_i)\log(1-\hat{y}_i)]\]</p>
+            </div>
+            <p>y ∈ {0, 1}, ŷ = predicted probability</p>
+        </div>
+
+        <div class="content-box">
+            <h4>Categorical Cross-Entropy</h4>
+            <p><strong>For:</strong> Multi-class classification (>2 classes)</p>
+            <div class="formula-box">
+                <p>\[L = -\frac{1}{N}\sum_{i=1}^{N} \sum_{c=1}^{C} y_{i,c} \log(\hat{y}_{i,c})\]</p>
+            </div>
+            <p>C = number of classes</p>
+            <p>y = one-hot encoded labels</p>
+        </div>
+
+        <div class="content-box">
+            <h4>Mean Squared Error (MSE)</h4>
+            <p><strong>For:</strong> Regression tasks</p>
+            <div class="formula-box">
+                <p>\[L = \frac{1}{N}\sum_{i=1}^{N} (y_i - \hat{y}_i)^2\]</p>
+            </div>
+            <p>Less common di NLP</p>
+        </div>
+    </div>
+
+    <div class="important-box">
+        <h4>💡 Intuition:</h4>
+        <p><strong>Cross-Entropy Loss</strong> penalizes confident wrong predictions heavily.</p>
+        <p>Example (binary):</p>
+        <ul>
+            <li>True label: 1, Predicted: 0.9 → Loss = -log(0.9) = <strong>0.105</strong> ✅ Low</li>
+            <li>True label: 1, Predicted: 0.1 → Loss = -log(0.1) = <strong>2.303</strong> ❌ High!</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 8: Backpropagation -->
+<div class="slide">
+    <h2>🔄 Backpropagation</h2>
+    <div class="content-box">
+        <h3>The Learning Algorithm</h3>
+        <p><strong>Backpropagation</strong> adalah algoritma untuk efficiently compute gradients dari loss w.r.t semua parameters.</p>
+        <p>Menggunakan <strong>chain rule</strong> dari calculus untuk propagate errors backwards through network.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Chain Rule:</h4>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[\frac{\partial L}{\partial w} = \frac{\partial L}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial z} \cdot \frac{\partial z}{\partial w}\]
+        </p>
+        <p>Gradient dari loss w.r.t. weight = product dari gradients sepanjang computational path</p>
+    </div>
+
+    <div class="content-box">
+        <h3>Backpropagation Steps:</h3>
+        <ol>
+            <li><strong>Forward Pass:</strong> Compute predictions ŷ dan loss L</li>
+            <li><strong>Backward Pass:</strong> Compute gradients starting from output:
+                <ul>
+                    <li>∂L/∂ŷ (gradient w.r.t. output)</li>
+                    <li>∂L/∂W₂, ∂L/∂b₂ (output layer gradients)</li>
+                    <li>∂L/∂h (hidden layer gradients)</li>
+                    <li>∂L/∂W₁, ∂L/∂b₁ (input layer gradients)</li>
+                </ul>
+            </li>
+            <li><strong>Update:</strong> W := W - η∇W, b := b - η∇b</li>
+        </ol>
+    </div>
+
+    <div class="example-box">
+        <h4>Simple Example: 1 neuron</h4>
+        <p>y = σ(wx + b), L = (y - ŷ)²</p>
+        <p><strong>Forward:</strong> x=2, w=0.5, b=1 → z=2, y=σ(2)=0.88</p>
+        <p>True label ŷ=1 → L = (0.88-1)² = 0.014</p>
+
+        <p><strong>Backward:</strong></p>
+        <p>∂L/∂y = 2(y - ŷ) = 2(0.88 - 1) = -0.24</p>
+        <p>∂y/∂z = σ(z)(1 - σ(z)) = 0.88×0.12 = 0.105</p>
+        <p>∂z/∂w = x = 2</p>
+        <p><strong>∂L/∂w = -0.24 × 0.105 × 2 = -0.050</strong></p>
+
+        <p><strong>Update:</strong> (η = 0.1)</p>
+        <p>w := 0.5 - 0.1×(-0.050) = <strong>0.505</strong></p>
+    </div>
+</div>
+
+<!-- Slide 9: Gradient Descent Variants -->
+<div class="slide">
+    <h2>⚙️ Optimization: Gradient Descent Variants</h2>
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>1. Batch Gradient Descent</h4>
+            <p>Compute gradient menggunakan <strong>entire training set</strong></p>
+            <div class="code-block">
+for epoch in range(num_epochs):
+    gradients = compute_gradients(X, y)
+    weights = weights - lr * gradients
+            </div>
+            <p>✅ Stable updates, smooth convergence</p>
+            <p>❌ Slow untuk large datasets</p>
+            <p>❌ Memory intensive</p>
+        </div>
+
+        <div class="content-box">
+            <h4>2. Stochastic Gradient Descent (SGD)</h4>
+            <p>Compute gradient menggunakan <strong>single example</strong></p>
+            <div class="code-block">
+for epoch in range(num_epochs):
+    for x, y in training_data:
+        gradients = compute_gradients(x, y)
+        weights = weights - lr * gradients
+            </div>
+            <p>✅ Fast updates</p>
+            <p>✅ Can escape local minima</p>
+            <p>❌ Noisy updates, erratic convergence</p>
+        </div>
+
+        <div class="content-box">
+            <h4>3. Mini-Batch Gradient Descent</h4>
+            <p>Compute gradient menggunakan <strong>small batch</strong> (e.g., 32, 64, 128)</p>
+            <div class="code-block">
+for epoch in range(num_epochs):
+    for batch in get_batches(X, y, batch_size):
+        gradients = compute_gradients(batch)
+        weights = weights - lr * gradients
+            </div>
+            <p>✅ Balance antara speed & stability</p>
+            <p>✅ Efficient GPU utilization</p>
+            <p>✅ <strong>MOST COMMON!</strong></p>
+        </div>
+    </div>
+
+    <div class="important-box">
+        <h4>Advanced Optimizers:</h4>
+        <div class="grid-2">
+            <div>
+                <p><strong>Momentum:</strong> Accumulate velocity untuk smooth out updates</p>
+                <p><strong>AdaGrad:</strong> Adaptive learning rates per parameter</p>
+            </div>
+            <div>
+                <p><strong>RMSProp:</strong> Adaptive learning rate dengan decay</p>
+                <p><strong>Adam:</strong> Combines momentum + RMSProp (very popular!)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Word Embeddings Introduction -->
+<div class="slide">
+    <h2>📊 Word Embeddings</h2>
+    <div class="content-box">
+        <h3>The Revolution in NLP</h3>
+        <p><strong>Word Embeddings</strong> adalah dense, low-dimensional vector representations dari words yang capture semantic meaning.</p>
+    </div>
+
+    <div class="important-box">
+        <h4>Problem dengan One-Hot Encoding:</h4>
+        <p>Vocabulary = {cat, dog, mouse, car, truck}</p>
+        <table>
+            <tr>
+                <th>Word</th>
+                <th>One-Hot Vector</th>
+                <th>Dimensionality</th>
+            </tr>
+            <tr>
+                <td>cat</td>
+                <td>[1, 0, 0, 0, 0]</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>dog</td>
+                <td>[0, 1, 0, 0, 0]</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>car</td>
+                <td>[0, 0, 0, 1, 0]</td>
+                <td>5</td>
+            </tr>
+        </table>
+        <p>❌ <strong>Problems:</strong></p>
+        <ul>
+            <li>Dimensionality = vocabulary size (10,000s - millions!)</li>
+            <li>Sparse (99.99% zeros)</li>
+            <li>No notion of similarity: "cat" sama berbedanya dengan "dog" & "car"</li>
+            <li>Can't generalize: each word is completely independent</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h4>✅ Word Embeddings Solution:</h4>
+        <p>Dense vectors (typically 50-300 dimensions) yang capture meaning:</p>
+        <table>
+            <tr>
+                <th>Word</th>
+                <th>Embedding (simplified 3D)</th>
+                <th>Interpretation</th>
+            </tr>
+            <tr>
+                <td>cat</td>
+                <td>[0.2, 0.8, -0.3]</td>
+                <td>Animal, Pet, Small</td>
+            </tr>
+            <tr>
+                <td>dog</td>
+                <td>[0.3, 0.7, -0.2]</td>
+                <td>Animal, Pet, Medium</td>
+            </tr>
+            <tr>
+                <td>car</td>
+                <td>[-0.5, -0.1, 0.6]</td>
+                <td>Vehicle, Non-living, Large</td>
+            </tr>
+        </table>
+        <p>✅ <strong>Advantages:</strong></p>
+        <ul>
+            <li>Low-dimensional (50-300 vs 10,000s)</li>
+            <li>Dense (all values non-zero)</li>
+            <li>Semantic similarity: similar words have similar vectors</li>
+            <li>Generalization: model can reason about unseen word combinations</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 11: Word2Vec -->
+<div class="slide">
+    <h2>🔤 Word2Vec</h2>
+    <div class="content-box">
+        <h3>Distributional Hypothesis</h3>
+        <p><em>"You shall know a word by the company it keeps"</em> - J.R. Firth (1957)</p>
+        <p>Words yang muncul di <strong>similar contexts</strong> tend to have <strong>similar meanings</strong>.</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Example:</h4>
+        <p>"I drink <span class="highlight">coffee</span> every morning"</p>
+        <p>"I drink <span class="highlight">tea</span> every morning"</p>
+        <p>"I drink <span class="highlight">water</span> every morning"</p>
+        <p>→ "coffee", "tea", "water" appear in similar contexts → should have similar embeddings (beverages)</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>CBOW (Continuous Bag of Words)</h4>
+            <p><strong>Task:</strong> Predict center word from context</p>
+            <p>Input: context words</p>
+            <p>Output: target word</p>
+            <div class="example-box">
+                <p>Sentence: "the cat sat on the mat"</p>
+                <p>Context: [the, cat, on, the] → Target: <strong>sat</strong></p>
+            </div>
+            <p>✅ Faster training</p>
+            <p>✅ Better for frequent words</p>
+        </div>
+
+        <div class="content-box">
+            <h4>Skip-gram</h4>
+            <p><strong>Task:</strong> Predict context words from center word</p>
+            <p>Input: target word</p>
+            <p>Output: context words</p>
+            <div class="example-box">
+                <p>Sentence: "the cat sat on the mat"</p>
+                <p>Target: <strong>sat</strong> → Context: [the, cat, on, the]</p>
+            </div>
+            <p>✅ Better for rare words</p>
+            <p>✅ Better word representations</p>
+        </div>
+    </div>
+
+    <div class="formula-box">
+        <h4>Skip-gram Objective:</h4>
+        <p>Maximize probability dari context words given target word:</p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            \[\max \sum_{t=1}^{T} \sum_{-c \leq j \leq c, j \neq 0} \log P(w_{t+j} | w_t)\]
+        </p>
+        <p>T = number of words in corpus</p>
+        <p>c = context window size</p>
+        <p>w_t = target word at position t</p>
+    </div>
+</div>
+
+<!-- Slide 12: Word Embedding Properties -->
+<div class="slide">
+    <h2>✨ Amazing Properties of Word Embeddings</h2>
+    <div class="success-box">
+        <h3>1. Semantic Similarity</h3>
+        <p>Similar words have high cosine similarity:</p>
+        <table>
+            <tr>
+                <th>Word Pair</th>
+                <th>Cosine Similarity</th>
+            </tr>
+            <tr>
+                <td>cat - dog</td>
+                <td>0.76</td>
+            </tr>
+            <tr>
+                <td>cat - kitten</td>
+                <td>0.82</td>
+            </tr>
+            <tr>
+                <td>cat - car</td>
+                <td>0.12</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="success-box">
+        <h3>2. Vector Arithmetic (Analogies)</h3>
+        <p>Word relationships dapat expressed as vector operations!</p>
+        <div class="formula-box">
+            <p style="font-size: 1.3em;">
+                \[\text{King} - \text{Man} + \text{Woman} \approx \text{Queen}\]
+            </p>
+            <p style="font-size: 1.3em;">
+                \[\text{Paris} - \text{France} + \text{Germany} \approx \text{Berlin}\]
+            </p>
+            <p style="font-size: 1.3em;">
+                \[\text{Walking} - \text{Walk} + \text{Swim} \approx \text{Swimming}\]
+            </p>
+        </div>
+        <p>Vectors capture relationships like gender, geography, verb tense!</p>
+    </div>
+
+    <div class="success-box">
+        <h3>3. Clustering in Semantic Space</h3>
+        <p>Words dari same category cluster together:</p>
+        <ul>
+            <li><strong>Animals:</strong> dog, cat, mouse, elephant clustering together</li>
+            <li><strong>Colors:</strong> red, blue, green, yellow clustering together</li>
+            <li><strong>Numbers:</strong> one, two, three, four clustering together</li>
+        </ul>
+    </div>
+
+    <div id="embeddingPlot" class="plot-container"></div>
+</div>
+
+<!-- Slide 13: Training Word Embeddings -->
+<div class="slide">
+    <h2>🎓 Training Word Embeddings</h2>
+    <div class="content-box">
+        <h3>Options:</h3>
+        <ol>
+            <li><strong>Train from scratch:</strong> Requires large corpus (billions of words)</li>
+            <li><strong>Use pre-trained embeddings:</strong> Word2Vec, GloVe, FastText (most common!)</li>
+        </ol>
+    </div>
+
+    <div class="example-box">
+        <h4>Using Pre-trained Embeddings (Gensim):</h4>
+        <div class="code-block">
+import gensim.downloader as api
+
+# Load pre-trained Word2Vec embeddings (trained on Google News)
+model = api.load("word2vec-google-news-300")
+
+# Get embedding for a word
+vector = model['computer']  # 300-dimensional vector
+print(f"Embedding dimension: {len(vector)}")
+
+# Find similar words
+similar = model.most_similar('computer', topn=5)
+print("Most similar to 'computer':")
+for word, similarity in similar:
+    print(f"  {word}: {similarity:.3f}")
+
+# Output:
+# computers: 0.776
+# laptop: 0.716
+# PC: 0.697
+# desktop: 0.674
+# software: 0.656
+
+# Analogy
+result = model.most_similar(
+    positive=['king', 'woman'],
+    negative=['man'],
+    topn=1
+)
+print(f"king - man + woman = {result[0][0]}")  # queen
+        </div>
+    </div>
+
+    <div class="important-box">
+        <h4>Popular Pre-trained Embeddings:</h4>
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>Dimensions</th>
+                <th>Vocabulary</th>
+                <th>Trained On</th>
+            </tr>
+            <tr>
+                <td>Word2Vec (Google)</td>
+                <td>300</td>
+                <td>3M words</td>
+                <td>Google News (100B words)</td>
+            </tr>
+            <tr>
+                <td>GloVe</td>
+                <td>50-300</td>
+                <td>400K-2M</td>
+                <td>Wikipedia + Gigaword</td>
+            </tr>
+            <tr>
+                <td>FastText</td>
+                <td>300</td>
+                <td>2M</td>
+                <td>Common Crawl</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 14: Feedforward Network for NLP -->
+<div class="slide">
+    <h2>📄 Feedforward Networks untuk Text Classification</h2>
+    <div class="content-box">
+        <h3>Architecture</h3>
+        <p>Menggunakan word embeddings sebagai input ke feedforward network:</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Example: Sentiment Classification</h4>
+        <ol>
+            <li><strong>Input:</strong> "This movie is amazing"</li>
+            <li><strong>Word Embeddings:</strong> Convert each word to 300-dim vector</li>
+            <li><strong>Aggregation:</strong> Average/sum embeddings → single 300-dim vector</li>
+            <li><strong>Feedforward Network:</strong>
+                <ul>
+                    <li>Hidden layer: 300 → 128 (ReLU)</li>
+                    <li>Output layer: 128 → 2 (Softmax)</li>
+                </ul>
+            </li>
+            <li><strong>Output:</strong> [P(negative), P(positive)]</li>
+        </ol>
+    </div>
+
+    <div class="code-block">
+import torch
+import torch.nn as nn
+
+class TextClassifier(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, num_classes):
+        super().__init__()
+        # Embedding layer
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+
+        # Feedforward layers
+        self.fc1 = nn.Linear(embedding_dim, hidden_dim)
+        self.relu = nn.ReLU()
+        self.fc2 = nn.Linear(hidden_dim, num_classes)
+
+    def forward(self, text):
+        # text shape: [batch_size, seq_len]
+
+        # Embed words: [batch_size, seq_len, embedding_dim]
+        embedded = self.embedding(text)
+
+        # Average pooling: [batch_size, embedding_dim]
+        pooled = embedded.mean(dim=1)
+
+        # Feedforward
+        hidden = self.relu(self.fc1(pooled))
+        output = self.fc2(hidden)
+
+        return output
+
+# Initialize model
+model = TextClassifier(
+    vocab_size=10000,
+    embedding_dim=300,
+    hidden_dim=128,
+    num_classes=2
+)
+
+# Example input (batch of 2 sentences, max length 10)
+text = torch.LongTensor([[1, 45, 234, 12, 0, 0, 0, 0, 0, 0],
+                         [67, 89, 23, 456, 78, 90, 0, 0, 0, 0]])
+
+# Forward pass
+logits = model(text)  # [2, 2]
+probabilities = torch.softmax(logits, dim=1)
+    </div>
+</div>
+
+<!-- Slide 15: Training Tips -->
+<div class="slide">
+    <h2>💡 Training Tips & Best Practices</h2>
+    <div class="grid-2">
+        <div class="important-box">
+            <h4>1. Initialization</h4>
+            <p><strong>Problem:</strong> Bad initialization → slow/no convergence</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Xavier/Glorot:</strong> For sigmoid/tanh</li>
+                <li><strong>He initialization:</strong> For ReLU</li>
+                <li>Don't use all zeros!</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>2. Learning Rate</h4>
+            <p><strong>Too high:</strong> Divergence, instability</p>
+            <p><strong>Too low:</strong> Slow convergence</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Start with 0.001 (Adam) or 0.01 (SGD)</li>
+                <li>Use learning rate scheduling</li>
+                <li>Try learning rate finder</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>3. Overfitting Prevention</h4>
+            <p><strong>Techniques:</strong></p>
+            <ul>
+                <li><strong>Dropout:</strong> Randomly drop neurons (p=0.5)</li>
+                <li><strong>L2 Regularization:</strong> Weight decay</li>
+                <li><strong>Early Stopping:</strong> Stop ketika validation loss increases</li>
+                <li><strong>Data Augmentation:</strong> Synonym replacement, back-translation</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>4. Batch Normalization</h4>
+            <p>Normalize activations di each layer</p>
+            <p><strong>Benefits:</strong></p>
+            <ul>
+                <li>Faster training</li>
+                <li>Higher learning rates possible</li>
+                <li>Regularization effect</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>5. Gradient Problems</h4>
+            <p><strong>Vanishing:</strong> Gradients → 0 (deep networks)</p>
+            <p><strong>Exploding:</strong> Gradients → ∞</p>
+            <p><strong>Solutions:</strong></p>
+            <ul>
+                <li>Use ReLU instead of sigmoid</li>
+                <li>Gradient clipping (for exploding)</li>
+                <li>Batch normalization</li>
+                <li>Residual connections (later)</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>6. Monitoring Training</h4>
+            <p><strong>Track:</strong></p>
+            <ul>
+                <li>Training & validation loss</li>
+                <li>Training & validation accuracy</li>
+                <li>Gradient norms</li>
+                <li>Learning rate</li>
+            </ul>
+            <p>Use TensorBoard atau Weights & Biases!</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 16: Complete Training Example -->
+<div class="slide">
+    <h2>💻 Complete Training Example</h2>
+    <div class="code-block">
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+from sklearn.model_selection import train_test_split
+
+# Assume we have data
+texts = [...]  # List of tokenized texts (lists of integers)
+labels = [...]  # List of labels (0 or 1)
+
+# Split data
+X_train, X_val, y_train, y_val = train_test_split(
+    texts, labels, test_size=0.2, random_state=42
+)
+
+# Create DataLoader
+train_dataset = TextDataset(X_train, y_train)
+val_dataset = TextDataset(X_val, y_val)
+
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32)
+
+# Initialize model
+model = TextClassifier(vocab_size=10000, embedding_dim=300,
+                       hidden_dim=128, num_classes=2)
+
+# Loss and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Training loop
+num_epochs = 10
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = model.to(device)
+
+for epoch in range(num_epochs):
+    # Training
+    model.train()
+    train_loss = 0
+    train_correct = 0
+
+    for texts, labels in train_loader:
+        texts, labels = texts.to(device), labels.to(device)
+
+        # Forward
+        outputs = model(texts)
+        loss = criterion(outputs, labels)
+
+        # Backward
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        train_loss += loss.item()
+        train_correct += (outputs.argmax(1) == labels).sum().item()
+
+    # Validation
+    model.eval()
+    val_loss = 0
+    val_correct = 0
+
+    with torch.no_grad():
+        for texts, labels in val_loader:
+            texts, labels = texts.to(device), labels.to(device)
+            outputs = model(texts)
+            loss = criterion(outputs, labels)
+
+            val_loss += loss.item()
+            val_correct += (outputs.argmax(1) == labels).sum().item()
+
+    # Print statistics
+    print(f"Epoch {epoch+1}/{num_epochs}")
+    print(f"  Train Loss: {train_loss/len(train_loader):.4f}, "
+          f"Acc: {100*train_correct/len(X_train):.2f}%")
+    print(f"  Val Loss: {val_loss/len(val_loader):.4f}, "
+          f"Acc: {100*val_correct/len(X_val):.2f}%")
+
+# Save model
+torch.save(model.state_dict(), 'text_classifier.pth')
+    </div>
+</div>
+
+<!-- Slide 17: Comparison Traditional ML vs Deep Learning -->
+<div class="slide">
+    <h2>⚖️ Traditional ML vs Deep Learning untuk NLP</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>Traditional ML</th>
+                <th>Deep Learning</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Feature Engineering</strong></td>
+                <td>❌ Manual, time-consuming</td>
+                <td>✅ Automatic, learned</td>
+            </tr>
+            <tr>
+                <td><strong>Representation</strong></td>
+                <td>Sparse, high-dim (BoW, TF-IDF)</td>
+                <td>Dense, low-dim (embeddings)</td>
+            </tr>
+            <tr>
+                <td><strong>Semantic Understanding</strong></td>
+                <td>❌ Limited</td>
+                <td>✅ Captures semantics</td>
+            </tr>
+            <tr>
+                <td><strong>Data Requirements</strong></td>
+                <td>✅ Works with small data</td>
+                <td>❌ Needs large data</td>
+            </tr>
+            <tr>
+                <td><strong>Training Time</strong></td>
+                <td>✅ Fast (minutes)</td>
+                <td>❌ Slow (hours/days)</td>
+            </tr>
+            <tr>
+                <td><strong>Computational Resources</strong></td>
+                <td>✅ CPU sufficient</td>
+                <td>❌ GPU/TPU recommended</td>
+            </tr>
+            <tr>
+                <td><strong>Interpretability</strong></td>
+                <td>✅ High</td>
+                <td>❌ Low (black box)</td>
+            </tr>
+            <tr>
+                <td><strong>Performance (large data)</strong></td>
+                <td>❌ Plateaus early</td>
+                <td>✅ Scales with data</td>
+            </tr>
+            <tr>
+                <td><strong>Sequence Modeling</strong></td>
+                <td>❌ Limited (fixed n-grams)</td>
+                <td>✅ Excellent (RNNs, Transformers)</td>
+            </tr>
+            <tr>
+                <td><strong>Transfer Learning</strong></td>
+                <td>❌ Difficult</td>
+                <td>✅ Easy (pre-trained models)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="important-box">
+        <h4>💡 When to Use What?</h4>
+        <ul>
+            <li><strong>Use Traditional ML when:</strong>
+                <ul>
+                    <li>Small dataset (<10K examples)</li>
+                    <li>Simple task, interpretability important</li>
+                    <li>Limited computational resources</li>
+                    <li>Need fast training/deployment</li>
+                </ul>
+            </li>
+            <li><strong>Use Deep Learning when:</strong>
+                <ul>
+                    <li>Large dataset (>100K examples)</li>
+                    <li>Complex patterns, semantic understanding needed</li>
+                    <li>GPUs available</li>
+                    <li>State-of-the-art performance required</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 18: Assignment -->
+<div class="slide">
+    <h2>📝 Tugas Praktikum</h2>
+    <div class="content-box">
+        <h3>Tugas Terbimbing (2 jam)</h3>
+        <p><strong>Implementasi Feedforward Neural Network untuk Text Classification</strong></p>
+        <h4>Langkah-langkah:</h4>
+        <ol>
+            <li>Load pre-trained Word2Vec embeddings (Gensim)</li>
+            <li>Prepare dataset (IMDB atau AG News)</li>
+            <li>Implement simple feedforward classifier:
+                <ul>
+                    <li>Embedding layer (use pre-trained)</li>
+                    <li>Average pooling</li>
+                    <li>2 hidden layers dengan ReLU</li>
+                    <li>Output layer dengan Softmax</li>
+                </ul>
+            </li>
+            <li>Train dengan different hyperparameters</li>
+            <li>Visualize training curves (loss, accuracy)</li>
+            <li>Compare dengan Logistic Regression baseline</li>
+        </ol>
+    </div>
+
+    <div class="content-box">
+        <h3>Tugas Mandiri (4 jam)</h3>
+        <p><strong>Exploration: Word Embeddings & Neural Networks</strong></p>
+        <h4>Part 1: Word Embeddings Analysis</h4>
+        <ol>
+            <li>Load Word2Vec/GloVe embeddings</li>
+            <li>Explore semantic similarities</li>
+            <li>Test analogy tasks (king-man+woman=?)</li>
+            <li>Visualize embeddings dengan t-SNE/PCA</li>
+            <li>Find interesting patterns/clusters</li>
+        </ol>
+        <h4>Part 2: Neural Network Experiments</h4>
+        <ol>
+            <li>Implement deeper network (3-4 layers)</li>
+            <li>Experiment dengan:
+                <ul>
+                    <li>Different activation functions</li>
+                    <li>Dropout rates (0.1, 0.3, 0.5)</li>
+                    <li>Learning rates</li>
+                    <li>Batch sizes</li>
+                </ul>
+            </li>
+            <li>Analyze overfitting vs underfitting</li>
+            <li>Compare frozen vs fine-tuned embeddings</li>
+        </ol>
+    </div>
+
+    <div class="example-box">
+        <h4>📊 Deliverables:</h4>
+        <ul>
+            <li>Jupyter notebook dengan code dan analysis</li>
+            <li>Report (PDF, 4-5 pages):
+                <ul>
+                    <li>Word embedding exploration dengan visualizations</li>
+                    <li>Network architecture diagram</li>
+                    <li>Hyperparameter tuning results</li>
+                    <li>Training curves plots</li>
+                    <li>Performance comparison table</li>
+                    <li>Error analysis</li>
+                    <li>Conclusions dan insights</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 19: Resources -->
+<div class="slide">
+    <h2>📚 Referensi dan Sumber Belajar</h2>
+    <div class="content-box">
+        <h3>Textbooks:</h3>
+        <ul>
+            <li>Ian Goodfellow et al. - <em>"Deep Learning"</em> (The Bible!)</li>
+            <li>Yoav Goldberg - <em>"Neural Network Methods for Natural Language Processing"</em></li>
+            <li>Michael Nielsen - <em>"Neural Networks and Deep Learning"</em> (free online)</li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Online Courses:</h3>
+        <ul>
+            <li>Stanford CS224N: NLP with Deep Learning</li>
+            <li>fast.ai: Practical Deep Learning for Coders</li>
+            <li>deeplearning.ai: Deep Learning Specialization (Coursera)</li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Frameworks & Libraries:</h3>
+        <ul>
+            <li><strong>PyTorch:</strong> Most popular DL framework untuk research</li>
+            <li><strong>TensorFlow/Keras:</strong> Production-ready framework</li>
+            <li><strong>Gensim:</strong> Word2Vec, Doc2Vec implementation</li>
+            <li><strong>Hugging Face:</strong> Pre-trained models dan embeddings</li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Tools:</h3>
+        <ul>
+            <li><strong>TensorBoard:</strong> Visualization untuk training</li>
+            <li><strong>Weights & Biases:</strong> Experiment tracking</li>
+            <li><strong>Google Colab:</strong> Free GPU access</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 20: Summary -->
+<div class="slide">
+    <h2>📌 Kesimpulan</h2>
+    <div class="content-box">
+        <h3>Key Takeaways:</h3>
+        <ol style="font-size: 1.3em; line-height: 2;">
+            <li><strong>Deep Learning</strong> revolutionized NLP dengan automatic feature learning</li>
+            <li><strong>Word Embeddings</strong> capture semantic meaning dalam dense, low-dimensional vectors</li>
+            <li><strong>Neural Networks</strong> learn hierarchical representations melalui multiple layers</li>
+            <li><strong>Backpropagation</strong> efficiently computes gradients untuk all parameters</li>
+            <li><strong>Activation functions</strong> (ReLU) introduce non-linearity</li>
+            <li><strong>Pre-trained embeddings</strong> (Word2Vec, GloVe) provide excellent starting point</li>
+            <li><strong>Proper training</strong> requires: good initialization, learning rate scheduling, regularization</li>
+            <li>Deep Learning <strong>excels with large data</strong>, traditional ML still good untuk small datasets</li>
+        </ol>
+    </div>
+
+    <div class="important-box">
+        <h4>🔜 Next Week:</h4>
+        <p><strong>Sequence Models (RNN, LSTM, GRU)</strong></p>
+        <p>Recurrent Neural Networks, Long Short-Term Memory, Gated Recurrent Units, Sequence-to-Sequence</p>
+    </div>
+</div>
+
+<!-- Slide 21: Q&A -->
+<div class="slide">
+    <h2>❓ Pertanyaan?</h2>
+    <div style="text-align: center; margin: 60px 0;">
+        <h3 style="font-size: 2.5em; margin-bottom: 30px;">Terima Kasih! 🙏</h3>
+        <p style="font-size: 1.5em; color: #666;">
+            Session 11: Deep Learning untuk NLP
+        </p>
+    </div>
+    <div class="footer">
+        <p>Natural Language Processing</p>
+        <p>Universitas Mercu Buana</p>
+        <p>Program Studi Teknik Informatika</p>
+    </div>
+</div>
+
+<script>
+// Plotly visualization for Activation functions
+const xValues = [];
+for (let x = -5; x <= 5; x += 0.1) {
+    xValues.push(x);
+}
+
+const sigmoidY = xValues.map(x => 1 / (1 + Math.exp(-x)));
+const tanhY = xValues.map(x => Math.tanh(x));
+const reluY = xValues.map(x => Math.max(0, x));
+
+const activationData = [
+    {
+        x: xValues,
+        y: sigmoidY,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Sigmoid',
+        line: {color: '#667eea', width: 3}
+    },
+    {
+        x: xValues,
+        y: tanhY,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Tanh',
+        line: {color: '#764ba2', width: 3}
+    },
+    {
+        x: xValues,
+        y: reluY,
+        type: 'scatter',
+        mode: 'lines',
+        name: 'ReLU',
+        line: {color: '#f093fb', width: 3}
+    }
+];
+
+const activationLayout = {
+    title: {
+        text: 'Common Activation Functions',
+        font: {size: 20, color: '#333'}
+    },
+    xaxis: {
+        title: 'Input (z)',
+        titlefont: {size: 16}
+    },
+    yaxis: {
+        title: 'Output f(z)',
+        titlefont: {size: 16}
+    },
+    showlegend: true,
+    legend: {x: 0.7, y: 0.2, font: {size: 14}},
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(240,240,240,0.5)'
+};
+
+Plotly.newPlot('activationPlot', activationData, activationLayout, {responsive: true});
+
+// Visualize word embeddings (2D projection simulation)
+const words = ['king', 'queen', 'man', 'woman', 'prince', 'princess',
+               'dog', 'cat', 'puppy', 'kitten',
+               'car', 'truck', 'vehicle', 'automobile'];
+
+const embeddingData = [
+    {
+        x: [2.5, 2.8, 1.5, 1.8, 2.2, 2.4,  -1.5, -1.2, -1.8, -1.4,  0.5, 0.8, 0.6, 0.7],
+        y: [3.0, 3.2, 1.0, 1.2, 2.5, 2.7,  -2.0, -1.8, -2.2, -2.0,  3.5, 3.7, 3.6, 3.4],
+        mode: 'markers+text',
+        type: 'scatter',
+        text: words,
+        textposition: 'top center',
+        marker: {
+            size: 12,
+            color: ['#667eea', '#667eea', '#667eea', '#667eea', '#667eea', '#667eea',
+                    '#764ba2', '#764ba2', '#764ba2', '#764ba2',
+                    '#f093fb', '#f093fb', '#f093fb', '#f093fb']
+        },
+        showlegend: false
+    }
+];
+
+const embeddingLayout = {
+    title: {
+        text: 'Word Embeddings Visualization (2D Projection)',
+        font: {size: 20, color: '#333'}
+    },
+    xaxis: {title: 'Dimension 1'},
+    yaxis: {title: 'Dimension 2'},
+    annotations: [
+        {x: 2.0, y: 2.0, text: 'Royalty', showarrow: false, font: {size: 14, color: '#667eea'}},
+        {x: -1.5, y: -2.0, text: 'Animals', showarrow: false, font: {size: 14, color: '#764ba2'}},
+        {x: 0.6, y: 3.6, text: 'Vehicles', showarrow: false, font: {size: 14, color: '#f093fb'}}
+    ],
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(240,240,240,0.5)'
+};
+
+Plotly.newPlot('embeddingPlot', embeddingData, embeddingLayout, {responsive: true});
+</script>
+
+</body>
+</html>
