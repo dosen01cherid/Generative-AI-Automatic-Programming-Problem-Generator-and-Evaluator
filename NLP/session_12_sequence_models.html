@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 12: Sequence Models (RNN, LSTM, GRU)</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin: 20px auto;
+            max-width: 1200px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .slide:first-child {
+            margin-top: 40px;
+        }
+
+        .slide:last-child {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            color: #764ba2;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        h3 {
+            font-size: 1.8em;
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.4em;
+            color: #764ba2;
+            margin: 20px 0 10px 0;
+            font-weight: 500;
+        }
+
+        p, li {
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .content-box {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .formula-box {
+            background: #e3f2fd;
+            border: 2px solid #2196F3;
+            padding: 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .important-box {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        ul, ol {
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 1.1em;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .plot-container {
+            width: 100%;
+            height: 500px;
+            margin: 30px 0;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.8em;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 1em;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide">
+    <h1>Session 12</h1>
+    <h2>Sequence Models</h2>
+    <p class="subtitle">RNN, LSTM, GRU untuk Sequential Data</p>
+    <div style="margin-top: 40px;">
+        <span class="badge">Natural Language Processing</span>
+        <span class="badge">Semester 6</span>
+        <span class="badge">Week 12</span>
+    </div>
+    <div class="footer">
+        Universitas Mercu Buana<br>
+        Program Studi Teknik Informatika
+    </div>
+</div>
+
+<!-- Slide 2: Big Problems Sequence Models Solve -->
+<div class="slide">
+    <h2>🎯 Mengapa Sequence Models untuk NLP?</h2>
+    <div class="important-box">
+        <h3>Masalah Fundamental: Language is Sequential!</h3>
+        <p>Bahasa natural memiliki struktur temporal dan dependencies jarak jauh yang tidak bisa ditangkap oleh feedforward networks.</p>
+    </div>
+
+    <div class="important-box">
+        <p><strong>1. Word Order Matters</strong></p>
+        <ul>
+            <li>"Dog bites man" ≠ "Man bites dog" (completely different meanings!)</li>
+            <li>Feedforward networks dengan averaged embeddings: both sentences sama</li>
+            <li><strong>RNN Solution:</strong> <span class="highlight">Process words sequentially</span>, maintain order information</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <p><strong>2. Variable-Length Inputs/Outputs</strong></p>
+        <ul>
+            <li>Sentences vary in length: 3 words to 100+ words</li>
+            <li>Feedforward networks require fixed-size inputs</li>
+            <li><strong>RNN Solution:</strong> <span class="highlight">Handle variable-length sequences</span> naturally</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <p><strong>3. Long-Range Dependencies</strong></p>
+        <ul>
+            <li>"The cat, which was very hungry and had been outside for hours, <strong>was</strong> tired"</li>
+            <li>"cat" dan "was" separated by 10+ words, tapi grammatically dependent</li>
+            <li>N-grams can't capture this (limited window)</li>
+            <li><strong>LSTM/GRU Solution:</strong> <span class="highlight">Memory mechanisms</span> untuk remember distant information</li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <p><strong>4. Contextual Understanding</strong></p>
+        <ul>
+            <li>"bank" dalam "river bank" vs "savings bank" - meaning depends on context</li>
+            <li>Static word embeddings can't disambiguate</li>
+            <li><strong>RNN Solution:</strong> <span class="highlight">Build context-dependent representations</span></li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 3: Learning Objectives -->
+<div class="slide">
+    <h2>📚 Capaian Pembelajaran</h2>
+    <div class="content-box">
+        <h3>Sub-CPMK Week 12:</h3>
+        <p>Mahasiswa mampu memahami dan mengimplementasikan recurrent neural networks (RNN, LSTM, GRU) untuk sequential NLP tasks</p>
+    </div>
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>✅ Kemampuan yang Dikuasai:</h4>
+            <ul>
+                <li>Memahami recurrent neural networks</li>
+                <li>Forward & backward propagation untuk RNN</li>
+                <li>Vanishing gradient problem</li>
+                <li>LSTM architecture dan gates</li>
+                <li>GRU sebagai simplified LSTM</li>
+                <li>Bidirectional dan stacked RNNs</li>
+                <li>Sequence-to-sequence tasks</li>
+            </ul>
+        </div>
+        <div class="content-box">
+            <h4>📋 Topik Pembahasan:</h4>
+            <ul>
+                <li>Recurrent Neural Networks (RNN)</li>
+                <li>Backpropagation Through Time</li>
+                <li>Vanishing/Exploding Gradients</li>
+                <li>Long Short-Term Memory (LSTM)</li>
+                <li>Gated Recurrent Unit (GRU)</li>
+                <li>Bidirectional RNNs</li>
+                <li>Applications dalam NLP</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 4: RNN Basics -->
+<div class="slide">
+    <h2>🔄 Recurrent Neural Network (RNN)</h2>
+    <div class="content-box">
+        <h3>Konsep Dasar</h3>
+        <p><strong>RNN</strong> adalah neural network dengan <strong>loops</strong>, allowing information to persist from one step to the next.</p>
+        <p>Key idea: <strong>Share parameters across time</strong> - same weights untuk process each element dalam sequence.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>RNN Computation:</h4>
+        <p>At each time step t:</p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[h_t = \tanh(W_{hh} h_{t-1} + W_{xh} x_t + b_h)\]
+        </p>
+        <p style="font-size: 1.3em; margin: 20px 0;">
+            \[y_t = W_{hy} h_t + b_y\]
+        </p>
+        <p>Di mana:</p>
+        <ul style="text-align: left; margin-left: 40px;">
+            <li><strong>x_t</strong> = input at time t (e.g., word embedding)</li>
+            <li><strong>h_t</strong> = hidden state at time t (memory/context)</li>
+            <li><strong>h_{t-1}</strong> = hidden state from previous time step</li>
+            <li><strong>y_t</strong> = output at time t</li>
+            <li><strong>W_{hh}, W_{xh}, W_{hy}</strong> = weight matrices (shared across time!)</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>📝 Example: Processing "I love NLP"</h4>
+        <p><strong>Step 1:</strong> Input "I" (embedding x₁) → h₁ = tanh(W_{xh} x₁ + b_h)</p>
+        <p><strong>Step 2:</strong> Input "love" (x₂), use h₁ → h₂ = tanh(W_{hh} h₁ + W_{xh} x₂ + b_h)</p>
+        <p><strong>Step 3:</strong> Input "NLP" (x₃), use h₂ → h₃ = tanh(W_{hh} h₂ + W_{xh} x₃ + b_h)</p>
+        <p><strong>Output:</strong> y₃ = W_{hy} h₃ + b_y (sentiment classification)</p>
+
+        <p><strong>Key:</strong> h₃ contains information dari "I", "love", DAN "NLP" - entire sequence context!</p>
+    </div>
+
+    <div class="content-box">
+        <h3>RNN Advantages:</h3>
+        <ul>
+            <li>✅ Handle variable-length sequences</li>
+            <li>✅ Model temporal dependencies</li>
+            <li>✅ Parameter sharing → efficient</li>
+            <li>✅ Can process sequences of any length</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 5: RNN Architectures -->
+<div class="slide">
+    <h2>🏗️ RNN Architectures untuk Different Tasks</h2>
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>1. One-to-One</h4>
+            <p>Standard feedforward network (not really RNN)</p>
+            <p><strong>Example:</strong> Image classification</p>
+            <p>Input: 1 item → Output: 1 item</p>
+        </div>
+
+        <div class="content-box">
+            <h4>2. One-to-Many</h4>
+            <p>Single input → sequence output</p>
+            <p><strong>Example:</strong> Image captioning</p>
+            <p>Input: Image → Output: "A dog playing in park"</p>
+        </div>
+
+        <div class="content-box">
+            <h4>3. Many-to-One</h4>
+            <p>Sequence input → single output</p>
+            <p><strong>Example:</strong> Sentiment classification</p>
+            <p>Input: "This movie is great" → Output: Positive</p>
+        </div>
+
+        <div class="content-box">
+            <h4>4. Many-to-Many (Synced)</h4>
+            <p>Sequence → sequence (same length)</p>
+            <p><strong>Example:</strong> POS tagging</p>
+            <p>Input: "I love NLP" → Output: [PRON, VERB, NOUN]</p>
+        </div>
+
+        <div class="content-box">
+            <h4>5. Many-to-Many (Encoder-Decoder)</h4>
+            <p>Sequence → sequence (different lengths)</p>
+            <p><strong>Example:</strong> Machine translation</p>
+            <p>Input: "Hello world" → Output: "Bonjour le monde"</p>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Most Common dalam NLP:</h4>
+        <table>
+            <tr>
+                <th>Task</th>
+                <th>Architecture</th>
+                <th>Example</th>
+            </tr>
+            <tr>
+                <td>Sentiment Analysis</td>
+                <td>Many-to-One</td>
+                <td>Text → Positive/Negative</td>
+            </tr>
+            <tr>
+                <td>Named Entity Recognition</td>
+                <td>Many-to-Many (synced)</td>
+                <td>Words → Entity labels</td>
+            </tr>
+            <tr>
+                <td>Machine Translation</td>
+                <td>Many-to-Many (encoder-decoder)</td>
+                <td>English → French</td>
+            </tr>
+            <tr>
+                <td>Text Generation</td>
+                <td>Many-to-Many</td>
+                <td>Prompt → Generated text</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Slide 6: Backpropagation Through Time -->
+<div class="slide">
+    <h2>⏱️ Backpropagation Through Time (BPTT)</h2>
+    <div class="content-box">
+        <h3>Training RNNs</h3>
+        <p><strong>BPTT</strong> adalah backpropagation applied to RNNs dengan "unrolling" network across time.</p>
+        <p>Gradients flow backwards through time dari output ke earlier time steps.</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Gradient Flow:</h4>
+        <p>Untuk compute ∂L/∂W_{hh}, gradients must flow through ALL time steps:</p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            \[\frac{\partial L}{\partial W_{hh}} = \sum_{t=1}^{T} \frac{\partial L_t}{\partial W_{hh}}\]
+        </p>
+        <p>At each time step, gradient depends on gradients dari future time steps:</p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            \[\frac{\partial h_t}{\partial h_{t-1}} = W_{hh}^T \cdot \text{diag}(1 - h_t^2)\]
+        </p>
+        <p>(for tanh activation)</p>
+    </div>
+
+    <div class="important-box">
+        <h4>Computational Challenge:</h4>
+        <p>Untuk sequence panjang (T=100), kita perlu:</p>
+        <ul>
+            <li>Store semua intermediate activations (memory intensive)</li>
+            <li>Compute gradients through all T time steps (slow)</li>
+        </ul>
+        <p><strong>Solution:</strong> Truncated BPTT - only backprop k steps (e.g., k=10)</p>
+    </div>
+</div>
+
+<!-- Slide 7: Vanishing Gradient Problem -->
+<div class="slide">
+    <h2>⚠️ Vanishing Gradient Problem</h2>
+    <div class="content-box">
+        <h3>The Problem</h3>
+        <p>Ketika backpropagating through many time steps, gradients dapat become <strong>exponentially small</strong> (vanish) atau <strong>exponentially large</strong> (explode).</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Matematika:</h4>
+        <p>Gradient dari h_t w.r.t. h_{t-k}:</p>
+        <p style="font-size: 1.2em; margin: 15px 0;">
+            \[\frac{\partial h_t}{\partial h_{t-k}} = \prod_{i=t-k+1}^{t} \frac{\partial h_i}{\partial h_{i-1}} = \prod_{i=t-k+1}^{t} W_{hh}^T \cdot \text{diag}(1-h_i^2)\]
+        </p>
+        <p><strong>Key insight:</strong> Product dari k matrices!</p>
+        <ul style="text-align: left; margin-left: 40px;">
+            <li>If largest eigenvalue of W_{hh} < 1 → gradients <strong>vanish</strong></li>
+            <li>If largest eigenvalue of W_{hh} > 1 → gradients <strong>explode</strong></li>
+        </ul>
+    </div>
+
+    <div class="important-box">
+        <h4>Consequences:</h4>
+        <div class="grid-2">
+            <div>
+                <p><strong>Vanishing Gradients:</strong></p>
+                <ul>
+                    <li>❌ Can't learn long-range dependencies</li>
+                    <li>❌ Early layers don't get trained</li>
+                    <li>❌ Model forgets distant past</li>
+                </ul>
+                <p><strong>Example:</strong> "The cat, which was very hungry..., <strong>was</strong> tired"</p>
+                <p>Can't learn dependency between "cat" (word 1) dan "was" (word 10)</p>
+            </div>
+            <div>
+                <p><strong>Exploding Gradients:</strong></p>
+                <ul>
+                    <li>❌ Numerical overflow (NaN)</li>
+                    <li>❌ Training instability</li>
+                    <li>❌ Huge parameter updates</li>
+                </ul>
+                <p><strong>Solution:</strong> Gradient clipping</p>
+                <div class="code-block" style="font-size: 0.9em;">
+if gradient_norm > threshold:
+    gradient = gradient * (threshold / gradient_norm)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="success-box">
+        <h4>✅ Solutions:</h4>
+        <ul>
+            <li><strong>For Exploding:</strong> Gradient clipping (easy fix)</li>
+            <li><strong>For Vanishing:</strong> LSTM & GRU (fundamental solution!)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 8: LSTM Introduction -->
+<div class="slide">
+    <h2>🧠 Long Short-Term Memory (LSTM)</h2>
+    <div class="content-box">
+        <h3>The Solution to Vanishing Gradients</h3>
+        <p><strong>LSTM</strong> (Hochreiter & Schmidhuber, 1997) designed specifically untuk learn long-term dependencies.</p>
+        <p>Key innovation: <strong>Cell state</strong> dengan <strong>gates</strong> yang control information flow.</p>
+    </div>
+
+    <div class="success-box">
+        <h4>LSTM vs RNN:</h4>
+        <table>
+            <tr>
+                <th>Aspect</th>
+                <th>RNN</th>
+                <th>LSTM</th>
+            </tr>
+            <tr>
+                <td><strong>Memory</strong></td>
+                <td>Single hidden state h_t</td>
+                <td>Hidden state h_t + Cell state C_t</td>
+            </tr>
+            <tr>
+                <td><strong>Information Flow</strong></td>
+                <td>Direct computation (tanh)</td>
+                <td>Controlled by gates</td>
+            </tr>
+            <tr>
+                <td><strong>Long-term Dependencies</strong></td>
+                <td>❌ Difficult (vanishing gradients)</td>
+                <td>✅ Excellent (constant error flow)</td>
+            </tr>
+            <tr>
+                <td><strong>Gradient Flow</strong></td>
+                <td>Multiplicative (exponential decay)</td>
+                <td>Additive (stable gradients)</td>
+            </tr>
+            <tr>
+                <td><strong>Parameters</strong></td>
+                <td>~N² (where N = hidden size)</td>
+                <td>~4N² (4× more parameters)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="content-box">
+        <h3>LSTM Components:</h3>
+        <ul>
+            <li><strong>Cell State (C_t):</strong> "Memory highway" - information flows with minimal interference</li>
+            <li><strong>Hidden State (h_t):</strong> Output untuk current time step</li>
+            <li><strong>Forget Gate:</strong> Decide apa yang di-discard dari cell state</li>
+            <li><strong>Input Gate:</strong> Decide apa yang di-store ke cell state</li>
+            <li><strong>Output Gate:</strong> Decide apa yang di-output berdasarkan cell state</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 9: LSTM Architecture -->
+<div class="slide">
+    <h2>🔧 LSTM Architecture: The Gates</h2>
+    <div class="formula-box">
+        <h4>LSTM Equations:</h4>
+        <p><strong>1. Forget Gate</strong> (decide apa yang di-forget):</p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)\]
+        </p>
+
+        <p><strong>2. Input Gate</strong> (decide apa yang di-store):</p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)\]
+        </p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[\tilde{C}_t = \tanh(W_C \cdot [h_{t-1}, x_t] + b_C)\]
+        </p>
+
+        <p><strong>3. Update Cell State:</strong></p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[C_t = f_t \odot C_{t-1} + i_t \odot \tilde{C}_t\]
+        </p>
+
+        <p><strong>4. Output Gate</strong> (decide apa yang di-output):</p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[o_t = \sigma(W_o \cdot [h_{t-1}, x_t] + b_o)\]
+        </p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[h_t = o_t \odot \tanh(C_t)\]
+        </p>
+
+        <p><small>σ = sigmoid, ⊙ = element-wise multiplication</small></p>
+    </div>
+
+    <div class="example-box">
+        <h4>Intuitive Explanation:</h4>
+        <ol>
+            <li><strong>Forget Gate (f_t):</strong>
+                <p>"Should I forget the previous context?"</p>
+                <p>Example: Ketika subject berganti dalam kalimat, forget previous subject info</p>
+            </li>
+            <li><strong>Input Gate (i_t) & Candidate (C̃_t):</strong>
+                <p>"What new information should I store?"</p>
+                <p>Example: Remember new subject "The cat"</p>
+            </li>
+            <li><strong>Cell State Update (C_t):</strong>
+                <p>C_t = (forget old info) + (add new info)</p>
+                <p>Selective memory update!</p>
+            </li>
+            <li><strong>Output Gate (o_t):</strong>
+                <p>"What should I output based on my memory?"</p>
+                <p>Filter cell state untuk relevant information</p>
+            </li>
+        </ol>
+    </div>
+</div>
+
+<!-- Slide 10: LSTM Example Walkthrough -->
+<div class="slide">
+    <h2>📝 LSTM Example: Processing "The cat was tired"</h2>
+    <div class="example-box">
+        <h4>Step 1: Process "The"</h4>
+        <p>Input: embedding untuk "The"</p>
+        <ul>
+            <li><strong>Forget gate:</strong> Nothing to forget (first word) → f₁ ≈ 1</li>
+            <li><strong>Input gate:</strong> Store article info → i₁ ≈ 0.3</li>
+            <li><strong>Cell state:</strong> C₁ contains "article" information</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>Step 2: Process "cat"</h4>
+        <p>Input: embedding untuk "cat"</p>
+        <ul>
+            <li><strong>Forget gate:</strong> Forget article (not important) → f₂ ≈ 0.2</li>
+            <li><strong>Input gate:</strong> Store "cat" (subject, important!) → i₂ ≈ 0.9</li>
+            <li><strong>Cell state:</strong> C₂ = 0.2 × C₁ + 0.9 × [cat info] ≈ mainly contains "cat"</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>Step 3: Process "was"</h4>
+        <p>Input: embedding untuk "was"</p>
+        <ul>
+            <li><strong>Forget gate:</strong> Keep subject info → f₃ ≈ 0.9</li>
+            <li><strong>Input gate:</strong> Add verb info → i₃ ≈ 0.5</li>
+            <li><strong>Cell state:</strong> C₃ contains both "cat" (subject) & "was" (verb)</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>Step 4: Process "tired"</h4>
+        <p>Input: embedding untuk "tired"</p>
+        <ul>
+            <li><strong>Forget gate:</strong> Keep context → f₄ ≈ 0.85</li>
+            <li><strong>Input gate:</strong> Add adjective → i₄ ≈ 0.7</li>
+            <li><strong>Output gate:</strong> Output full understanding → o₄ ≈ 0.9</li>
+            <li><strong>Final h₄:</strong> Contains semantic meaning dari entire sentence!</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h4>Key Takeaway:</h4>
+        <p>LSTM <strong>selectively</strong> remembers & forgets information sepanjang sequence, allowing it to maintain relevant context untuk long sequences!</p>
+    </div>
+</div>
+
+<!-- Slide 11: GRU -->
+<div class="slide">
+    <h2>⚡ Gated Recurrent Unit (GRU)</h2>
+    <div class="content-box">
+        <h3>Simplified LSTM</h3>
+        <p><strong>GRU</strong> (Cho et al., 2014) adalah simplified version dari LSTM dengan fewer parameters.</p>
+        <p>Combines forget & input gates menjadi single <strong>update gate</strong>.</p>
+    </div>
+
+    <div class="grid-2">
+        <div class="formula-box">
+            <h4>LSTM (3 gates):</h4>
+            <ul style="text-align: left;">
+                <li>Forget gate f_t</li>
+                <li>Input gate i_t</li>
+                <li>Output gate o_t</li>
+                <li>Cell state C_t</li>
+                <li>Hidden state h_t</li>
+            </ul>
+            <p><strong>Parameters:</strong> ~4N²</p>
+        </div>
+
+        <div class="formula-box">
+            <h4>GRU (2 gates):</h4>
+            <ul style="text-align: left;">
+                <li>Update gate z_t</li>
+                <li>Reset gate r_t</li>
+                <li>Hidden state h_t (no separate cell state!)</li>
+            </ul>
+            <p><strong>Parameters:</strong> ~3N²</p>
+            <p>✅ 25% fewer parameters!</p>
+        </div>
+    </div>
+
+    <div class="formula-box">
+        <h4>GRU Equations:</h4>
+        <p><strong>1. Reset Gate</strong> (how much past to forget):</p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[r_t = \sigma(W_r \cdot [h_{t-1}, x_t] + b_r)\]
+        </p>
+
+        <p><strong>2. Update Gate</strong> (balance old vs new):</p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[z_t = \sigma(W_z \cdot [h_{t-1}, x_t] + b_z)\]
+        </p>
+
+        <p><strong>3. Candidate Hidden State:</strong></p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[\tilde{h}_t = \tanh(W_h \cdot [r_t \odot h_{t-1}, x_t] + b_h)\]
+        </p>
+
+        <p><strong>4. Final Hidden State:</strong></p>
+        <p style="font-size: 1.2em; margin: 10px 0;">
+            \[h_t = (1 - z_t) \odot h_{t-1} + z_t \odot \tilde{h}_t\]
+        </p>
+    </div>
+
+    <div class="content-box">
+        <h4>Intuition:</h4>
+        <ul>
+            <li><strong>Reset gate r_t:</strong> "How much of past should I ignore when computing new candidate?"</li>
+            <li><strong>Update gate z_t:</strong> "How much should I update? (trade-off old vs new)"</li>
+            <li>If z_t ≈ 1: Keep new info, forget old (like high input gate)</li>
+            <li>If z_t ≈ 0: Keep old info, ignore new (like high forget gate)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 12: LSTM vs GRU Comparison -->
+<div class="slide">
+    <h2>⚖️ LSTM vs GRU: Which to Use?</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Aspect</th>
+                <th>LSTM</th>
+                <th>GRU</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Parameters</strong></td>
+                <td>More (~4N²)</td>
+                <td>✅ Fewer (~3N²)</td>
+            </tr>
+            <tr>
+                <td><strong>Training Speed</strong></td>
+                <td>Slower</td>
+                <td>✅ Faster (25% less computation)</td>
+            </tr>
+            <tr>
+                <td><strong>Memory</strong></td>
+                <td>More (separate C_t & h_t)</td>
+                <td>✅ Less (only h_t)</td>
+            </tr>
+            <tr>
+                <td><strong>Flexibility</strong></td>
+                <td>✅ More control (3 gates)</td>
+                <td>Simpler (2 gates)</td>
+            </tr>
+            <tr>
+                <td><strong>Performance</strong></td>
+                <td>✅ Slightly better on complex tasks</td>
+                <td>Comparable on most tasks</td>
+            </tr>
+            <tr>
+                <td><strong>Long Sequences</strong></td>
+                <td>✅ Slight edge</td>
+                <td>Very close</td>
+            </tr>
+            <tr>
+                <td><strong>Small Datasets</strong></td>
+                <td>May overfit</td>
+                <td>✅ Better (fewer params)</td>
+            </tr>
+            <tr>
+                <td><strong>Interpretability</strong></td>
+                <td>More complex</td>
+                <td>✅ Simpler to understand</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="important-box">
+        <h4>💡 Practical Recommendations:</h4>
+        <ul>
+            <li><strong>Start with GRU:</strong> Faster, simpler, usually performs similarly</li>
+            <li><strong>Try LSTM if:</strong>
+                <ul>
+                    <li>Very long sequences (>100 time steps)</li>
+                    <li>Complex temporal patterns</li>
+                    <li>Large dataset (can utilize extra parameters)</li>
+                </ul>
+            </li>
+            <li><strong>Reality:</strong> Performance difference usually small - speed advantage dari GRU often outweighs marginal LSTM gains</li>
+        </ul>
+    </div>
+
+    <div class="success-box">
+        <h4>Empirical Results dari Literature:</h4>
+        <p>Multiple studies show GRU & LSTM perform <strong>comparably</strong> pada many NLP tasks:</p>
+        <ul>
+            <li>Machine Translation: ~1% difference</li>
+            <li>Sentiment Analysis: negligible difference</li>
+            <li>Language Modeling: LSTM slightly better</li>
+            <li>Speech Recognition: GRU often preferred (faster)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 13: Bidirectional RNNs -->
+<div class="slide">
+    <h2>↔️ Bidirectional RNNs</h2>
+    <div class="content-box">
+        <h3>The Idea</h3>
+        <p>Standard RNNs process sequence <strong>left-to-right</strong> (past → future).</p>
+        <p>But in many tasks, <strong>future context</strong> juga informatif!</p>
+        <p><strong>Bidirectional RNNs:</strong> Process sequence dalam both directions!</p>
+    </div>
+
+    <div class="example-box">
+        <h4>Example: Why Bidirectional?</h4>
+        <p>Sentence: "The bank is on the river ___"</p>
+        <p>Question: Predict missing word</p>
+
+        <p><strong>Forward RNN only:</strong></p>
+        <ul>
+            <li>Sees: "The bank is on the river"</li>
+            <li>Might predict: "now", "today" (banking context)</li>
+        </ul>
+
+        <p><strong>Backward RNN:</strong></p>
+        <ul>
+            <li>If next word is "bank", sees "bank" first</li>
+            <li>Understands "river bank" context!</li>
+        </ul>
+
+        <p><strong>Bidirectional:</strong></p>
+        <ul>
+            <li>Combines both directions</li>
+            <li>Correctly understands geographical "bank", not financial!</li>
+        </ul>
+    </div>
+
+    <div class="formula-box">
+        <h4>Architecture:</h4>
+        <p><strong>Forward RNN:</strong> Process sequence left-to-right</p>
+        <p style="font-size: 1.2em;">
+            \[\vec{h}_t = \text{RNN}(\vec{h}_{t-1}, x_t)\]
+        </p>
+
+        <p><strong>Backward RNN:</strong> Process sequence right-to-left</p>
+        <p style="font-size: 1.2em;">
+            \[\overleftarrow{h}_t = \text{RNN}(\overleftarrow{h}_{t+1}, x_t)\]
+        </p>
+
+        <p><strong>Combine:</strong></p>
+        <p style="font-size: 1.2em;">
+            \[h_t = [\vec{h}_t; \overleftarrow{h}_t]\]
+        </p>
+        <p>(concatenation atau sum/average)</p>
+    </div>
+
+    <div class="success-box">
+        <h4>✅ When to Use Bidirectional RNNs?</h4>
+        <ul>
+            <li><strong>YES:</strong> Tasks dengan access to full sequence:
+                <ul>
+                    <li>Named Entity Recognition</li>
+                    <li>POS Tagging</li>
+                    <li>Sentiment Analysis</li>
+                    <li>Question Answering</li>
+                </ul>
+            </li>
+            <li><strong>NO:</strong> Sequential generation tasks:
+                <ul>
+                    <li>Language Modeling (can't see future!)</li>
+                    <li>Text Generation</li>
+                    <li>Real-time Speech Recognition</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 14: Stacked/Deep RNNs -->
+<div class="slide">
+    <h2>📚 Stacked (Deep) RNNs</h2>
+    <div class="content-box">
+        <h3>Multiple Layers</h3>
+        <p>Stack multiple RNN layers untuk learn <strong>hierarchical representations</strong>.</p>
+        <p>Lower layers: low-level features (syntax)</p>
+        <p>Higher layers: high-level features (semantics)</p>
+    </div>
+
+    <div class="formula-box">
+        <h4>Computation:</h4>
+        <p><strong>Layer 1:</strong></p>
+        <p style="font-size: 1.2em;">
+            \[h_t^{(1)} = \text{LSTM}(h_{t-1}^{(1)}, x_t)\]
+        </p>
+
+        <p><strong>Layer 2:</strong></p>
+        <p style="font-size: 1.2em;">
+            \[h_t^{(2)} = \text{LSTM}(h_{t-1}^{(2)}, h_t^{(1)})\]
+        </p>
+
+        <p><strong>Layer 3:</strong></p>
+        <p style="font-size: 1.2em;">
+            \[h_t^{(3)} = \text{LSTM}(h_{t-1}^{(3)}, h_t^{(2)})\]
+        </p>
+
+        <p>Output dari layer l menjadi input untuk layer l+1</p>
+    </div>
+
+    <div class="important-box">
+        <h4>Trade-offs:</h4>
+        <table>
+            <tr>
+                <th>Aspect</th>
+                <th>Shallow (1-2 layers)</th>
+                <th>Deep (3+ layers)</th>
+            </tr>
+            <tr>
+                <td><strong>Capacity</strong></td>
+                <td>Limited</td>
+                <td>✅ Higher (learn complex patterns)</td>
+            </tr>
+            <tr>
+                <td><strong>Parameters</strong></td>
+                <td>✅ Fewer</td>
+                <td>Many (N² per layer)</td>
+            </tr>
+            <tr>
+                <td><strong>Training Time</strong></td>
+                <td>✅ Fast</td>
+                <td>Slow</td>
+            </tr>
+            <tr>
+                <td><strong>Overfitting Risk</strong></td>
+                <td>✅ Lower</td>
+                <td>Higher (need dropout)</td>
+            </tr>
+            <tr>
+                <td><strong>Gradient Flow</strong></td>
+                <td>✅ Better</td>
+                <td>More difficult</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="content-box">
+        <h4>💡 Practical Guidelines:</h4>
+        <ul>
+            <li><strong>2 layers:</strong> Sweet spot untuk most tasks</li>
+            <li><strong>3-4 layers:</strong> Complex tasks dengan large data</li>
+            <li><strong>5+ layers:</strong> Rarely used (Transformers better alternative)</li>
+            <li><strong>Always use dropout</strong> between layers (0.2-0.5)</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 15: PyTorch Implementation -->
+<div class="slide">
+    <h2>💻 PyTorch Implementation</h2>
+    <div class="code-block">
+import torch
+import torch.nn as nn
+
+class SentimentClassifierLSTM(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim,
+                 num_layers=2, bidirectional=True, dropout=0.3):
+        super().__init__()
+
+        # Embedding layer
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+
+        # LSTM layer
+        self.lstm = nn.LSTM(
+            input_size=embedding_dim,
+            hidden_size=hidden_dim,
+            num_layers=num_layers,
+            bidirectional=bidirectional,
+            dropout=dropout if num_layers > 1 else 0,
+            batch_first=True
+        )
+
+        # Output layer
+        lstm_output_dim = hidden_dim * 2 if bidirectional else hidden_dim
+        self.fc = nn.Linear(lstm_output_dim, 2)  # 2 classes
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, text):
+        # text shape: [batch_size, seq_len]
+
+        # Embed: [batch_size, seq_len, embedding_dim]
+        embedded = self.dropout(self.embedding(text))
+
+        # LSTM: output shape [batch_size, seq_len, hidden_dim*2]
+        #       hidden/cell shape [num_layers*2, batch_size, hidden_dim]
+        output, (hidden, cell) = self.lstm(embedded)
+
+        # Concatenate final forward & backward hidden states
+        # hidden shape: [num_layers*2, batch_size, hidden_dim]
+        if self.lstm.bidirectional:
+            # Get last layer forward & backward hidden
+            hidden_fwd = hidden[-2, :, :]  # [batch_size, hidden_dim]
+            hidden_bwd = hidden[-1, :, :]  # [batch_size, hidden_dim]
+            hidden_cat = torch.cat((hidden_fwd, hidden_bwd), dim=1)
+        else:
+            hidden_cat = hidden[-1, :, :]  # [batch_size, hidden_dim]
+
+        # Apply dropout and output layer
+        output = self.dropout(hidden_cat)
+        logits = self.fc(output)  # [batch_size, 2]
+
+        return logits
+
+
+# GRU version (just change LSTM to GRU)
+class SentimentClassifierGRU(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim,
+                 num_layers=2, bidirectional=True, dropout=0.3):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+
+        self.gru = nn.GRU(
+            input_size=embedding_dim,
+            hidden_size=hidden_dim,
+            num_layers=num_layers,
+            bidirectional=bidirectional,
+            dropout=dropout if num_layers > 1 else 0,
+            batch_first=True
+        )
+
+        gru_output_dim = hidden_dim * 2 if bidirectional else hidden_dim
+        self.fc = nn.Linear(gru_output_dim, 2)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, text):
+        embedded = self.dropout(self.embedding(text))
+        output, hidden = self.gru(embedded)
+
+        if self.gru.bidirectional:
+            hidden_fwd = hidden[-2, :, :]
+            hidden_bwd = hidden[-1, :, :]
+            hidden_cat = torch.cat((hidden_fwd, hidden_bwd), dim=1)
+        else:
+            hidden_cat = hidden[-1, :, :]
+
+        output = self.dropout(hidden_cat)
+        logits = self.fc(output)
+        return logits
+
+
+# Initialize model
+model = SentimentClassifierLSTM(
+    vocab_size=10000,
+    embedding_dim=300,
+    hidden_dim=256,
+    num_layers=2,
+    bidirectional=True,
+    dropout=0.3
+)
+
+print(f"Model has {sum(p.numel() for p in model.parameters())} parameters")
+    </div>
+</div>
+
+<!-- Slide 16: Training Example -->
+<div class="slide">
+    <h2>🎓 Complete Training Example</h2>
+    <div class="code-block">
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader
+
+# Assume we have data
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=32)
+
+# Initialize model
+model = SentimentClassifierLSTM(vocab_size=10000, embedding_dim=300,
+                                hidden_dim=256, num_layers=2,
+                                bidirectional=True, dropout=0.3)
+
+# Move to GPU if available
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = model.to(device)
+
+# Loss and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Training loop
+num_epochs = 10
+best_val_loss = float('inf')
+
+for epoch in range(num_epochs):
+    # Training
+    model.train()
+    train_loss = 0
+    train_correct = 0
+    train_total = 0
+
+    for texts, labels in train_loader:
+        texts, labels = texts.to(device), labels.to(device)
+
+        # Forward pass
+        outputs = model(texts)
+        loss = criterion(outputs, labels)
+
+        # Backward pass
+        optimizer.zero_grad()
+        loss.backward()
+
+        # Gradient clipping (important for RNNs!)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
+
+        optimizer.step()
+
+        train_loss += loss.item()
+        train_correct += (outputs.argmax(1) == labels).sum().item()
+        train_total += labels.size(0)
+
+    # Validation
+    model.eval()
+    val_loss = 0
+    val_correct = 0
+    val_total = 0
+
+    with torch.no_grad():
+        for texts, labels in val_loader:
+            texts, labels = texts.to(device), labels.to(device)
+            outputs = model(texts)
+            loss = criterion(outputs, labels)
+
+            val_loss += loss.item()
+            val_correct += (outputs.argmax(1) == labels).sum().item()
+            val_total += labels.size(0)
+
+    # Calculate averages
+    avg_train_loss = train_loss / len(train_loader)
+    avg_val_loss = val_loss / len(val_loader)
+    train_acc = 100 * train_correct / train_total
+    val_acc = 100 * val_correct / val_total
+
+    print(f"Epoch {epoch+1}/{num_epochs}")
+    print(f"  Train Loss: {avg_train_loss:.4f}, Acc: {train_acc:.2f}%")
+    print(f"  Val Loss: {avg_val_loss:.4f}, Acc: {val_acc:.2f}%")
+
+    # Save best model
+    if avg_val_loss < best_val_loss:
+        best_val_loss = avg_val_loss
+        torch.save(model.state_dict(), 'best_lstm_model.pth')
+        print("  Saved best model!")
+
+print("Training complete!")
+    </div>
+</div>
+
+<!-- Slide 17: Applications in NLP -->
+<div class="slide">
+    <h2>🌍 Applications dalam NLP</h2>
+    <div class="grid-2">
+        <div class="content-box">
+            <h4>1. Sentiment Analysis</h4>
+            <p><strong>Architecture:</strong> Bidirectional LSTM/GRU</p>
+            <p>Input: Review text</p>
+            <p>Output: Positive/Negative/Neutral</p>
+            <p><strong>Why RNN:</strong> Context matters - "not bad" vs "not good"</p>
+        </div>
+
+        <div class="content-box">
+            <h4>2. Named Entity Recognition</h4>
+            <p><strong>Architecture:</strong> Bidirectional LSTM + CRF</p>
+            <p>Input: "Apple bought Beats for $3 billion"</p>
+            <p>Output: [ORG, O, ORG, O, MONEY, MONEY]</p>
+            <p><strong>Why RNN:</strong> Entity spans multiple words</p>
+        </div>
+
+        <div class="content-box">
+            <h4>3. Machine Translation</h4>
+            <p><strong>Architecture:</strong> Encoder-Decoder LSTM</p>
+            <p>Input: "I love NLP"</p>
+            <p>Output: "J'aime le NLP"</p>
+            <p><strong>Why RNN:</strong> Variable-length input/output</p>
+        </div>
+
+        <div class="content-box">
+            <h4>4. Text Generation</h4>
+            <p><strong>Architecture:</strong> Stacked LSTM</p>
+            <p>Input: Seed text "Once upon a"</p>
+            <p>Output: "time in a faraway land..."</p>
+            <p><strong>Why RNN:</strong> Generate one word at a time</p>
+        </div>
+
+        <div class="content-box">
+            <h4>5. Question Answering</h4>
+            <p><strong>Architecture:</strong> Bidirectional LSTM</p>
+            <p>Context + Question → Answer span</p>
+            <p><strong>Why RNN:</strong> Understand context & question</p>
+        </div>
+
+        <div class="content-box">
+            <h4>6. Speech Recognition</h4>
+            <p><strong>Architecture:</strong> Deep Bidirectional LSTM</p>
+            <p>Audio features → Text transcript</p>
+            <p><strong>Why RNN:</strong> Temporal audio signal</p>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 18: Best Practices -->
+<div class="slide">
+    <h2>💡 Best Practices untuk Training RNNs/LSTMs/GRUs</h2>
+    <div class="grid-2">
+        <div class="important-box">
+            <h4>1. Gradient Clipping</h4>
+            <p><strong>Always use!</strong> Prevents exploding gradients</p>
+            <div class="code-block" style="font-size: 0.9em;">
+torch.nn.utils.clip_grad_norm_(
+    model.parameters(),
+    max_norm=5.0
+)
+            </div>
+        </div>
+
+        <div class="important-box">
+            <h4>2. Dropout</h4>
+            <p>Apply between layers dan after embedding</p>
+            <ul>
+                <li>Typical: 0.2-0.5</li>
+                <li>Higher untuk larger models</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>3. Learning Rate</h4>
+            <p>Start smaller than feedforward:</p>
+            <ul>
+                <li>Adam: 0.0001-0.001</li>
+                <li>SGD: 0.01-0.1</li>
+                <li>Use LR scheduling!</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>4. Batch Size</h4>
+            <p>Smaller often better untuk RNNs:</p>
+            <ul>
+                <li>16-64 typical</li>
+                <li>Larger if memory allows</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>5. Sequence Length</h4>
+            <p>Truncate atau pad sequences:</p>
+            <ul>
+                <li>Find reasonable max (e.g., 95th percentile)</li>
+                <li>Truncate longer, pad shorter</li>
+                <li>Use packing untuk efficiency</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>6. Initialization</h4>
+            <p>Proper initialization crucial:</p>
+            <ul>
+                <li>Orthogonal untuk recurrent weights</li>
+                <li>Xavier/Glorot untuk feedforward</li>
+                <li>PyTorch defaults usually good!</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>7. Regularization</h4>
+            <ul>
+                <li>Dropout (most important)</li>
+                <li>Weight decay (L2)</li>
+                <li>Recurrent dropout (variational)</li>
+            </ul>
+        </div>
+
+        <div class="important-box">
+            <h4>8. Architecture Choices</h4>
+            <ul>
+                <li>Start with GRU (faster)</li>
+                <li>2 layers usually sufficient</li>
+                <li>Bidirectional if possible</li>
+                <li>Hidden dim: 128-512</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 19: Assignment -->
+<div class="slide">
+    <h2>📝 Tugas Praktikum</h2>
+    <div class="content-box">
+        <h3>Tugas Terbimbing (2 jam)</h3>
+        <p><strong>Implementasi LSTM untuk Sentiment Analysis</strong></p>
+        <h4>Langkah-langkah:</h4>
+        <ol>
+            <li>Load IMDB dataset (atau dataset sentiment lain)</li>
+            <li>Preprocessing: tokenization, padding</li>
+            <li>Implement LSTM classifier:
+                <ul>
+                    <li>Embedding layer (pre-trained atau learned)</li>
+                    <li>Bidirectional LSTM (2 layers)</li>
+                    <li>Output layer</li>
+                </ul>
+            </li>
+            <li>Train dengan gradient clipping</li>
+            <li>Compare dengan:
+                <ul>
+                    <li>GRU (instead of LSTM)</li>
+                    <li>Unidirectional vs Bidirectional</li>
+                    <li>1 layer vs 2 layers</li>
+                </ul>
+            </li>
+            <li>Visualize training curves</li>
+            <li>Analyze errors</li>
+        </ol>
+    </div>
+
+    <div class="content-box">
+        <h3>Tugas Mandiri (4 jam)</h3>
+        <p><strong>Comparison Study: RNN, LSTM, GRU</strong></p>
+        <h4>Tasks:</h4>
+        <ol>
+            <li>Implement vanilla RNN, LSTM, dan GRU untuk same task</li>
+            <li>Compare:
+                <ul>
+                    <li>Performance (accuracy, F1)</li>
+                    <li>Training time per epoch</li>
+                    <li>Number of parameters</li>
+                    <li>Convergence speed</li>
+                </ul>
+            </li>
+            <li>Experiment dengan hyperparameters:
+                <ul>
+                    <li>Hidden dimensions: 64, 128, 256, 512</li>
+                    <li>Layers: 1, 2, 3</li>
+                    <li>Dropout: 0.2, 0.3, 0.5</li>
+                </ul>
+            </li>
+            <li>Analyze gradient flow (optional advanced):
+                <ul>
+                    <li>Monitor gradient norms</li>
+                    <li>Visualize vanishing/exploding</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="example-box">
+        <h4>📊 Deliverables:</h4>
+        <ul>
+            <li>Jupyter notebook dengan implementations</li>
+            <li>Report (PDF, 4-5 pages):
+                <ul>
+                    <li>Architecture diagrams</li>
+                    <li>Comparison tables</li>
+                    <li>Training curves (loss, accuracy)</li>
+                    <li>Performance analysis</li>
+                    <li>Error analysis dengan examples</li>
+                    <li>Conclusions & recommendations</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 20: Resources -->
+<div class="slide">
+    <h2>📚 Referensi dan Sumber Belajar</h2>
+    <div class="content-box">
+        <h3>Papers (Must Read!):</h3>
+        <ul>
+            <li>Hochreiter & Schmidhuber (1997) - <em>"Long Short-Term Memory"</em> (LSTM original paper)</li>
+            <li>Cho et al. (2014) - <em>"Learning Phrase Representations using RNN Encoder-Decoder"</em> (GRU)</li>
+            <li>Chung et al. (2014) - <em>"Empirical Evaluation of Gated Recurrent Neural Networks"</em></li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Textbooks:</h3>
+        <ul>
+            <li>Goodfellow et al. - <em>"Deep Learning"</em> (Chapter 10: Sequence Modeling)</li>
+            <li>Goldberg - <em>"Neural Network Methods for NLP"</em></li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Online Resources:</h3>
+        <ul>
+            <li>Stanford CS224N Lecture 6-7: RNNs and LSTMs</li>
+            <li>Colah's Blog: "Understanding LSTM Networks" (excellent visualizations!)</li>
+            <li>The Unreasonable Effectiveness of RNNs (Andrej Karpathy)</li>
+        </ul>
+    </div>
+
+    <div class="content-box">
+        <h3>Tutorials:</h3>
+        <ul>
+            <li>PyTorch RNN Tutorial (official docs)</li>
+            <li>TensorFlow RNN Guide</li>
+            <li>fast.ai NLP course</li>
+        </ul>
+    </div>
+</div>
+
+<!-- Slide 21: Summary -->
+<div class="slide">
+    <h2>📌 Kesimpulan</h2>
+    <div class="content-box">
+        <h3>Key Takeaways:</h3>
+        <ol style="font-size: 1.3em; line-height: 2;">
+            <li><strong>RNNs</strong> process sequences dengan recurrent connections, maintaining temporal state</li>
+            <li><strong>Vanishing gradients</strong> adalah fundamental problem untuk vanilla RNNs</li>
+            <li><strong>LSTM</strong> solves vanishing gradients dengan gates & cell state</li>
+            <li><strong>GRU</strong> adalah simplified LSTM dengan comparable performance, faster training</li>
+            <li><strong>Bidirectional</strong> RNNs leverage both past & future context</li>
+            <li><strong>Stacking</strong> multiple layers learns hierarchical representations</li>
+            <li><strong>Gradient clipping</strong> essential untuk stable training</li>
+            <li>RNNs excellent untuk sequential tasks, tapi increasingly replaced by <strong>Transformers</strong></li>
+        </ol>
+    </div>
+
+    <div class="important-box">
+        <h4>🔜 Next Week:</h4>
+        <p><strong>Transformers and Large Language Models</strong></p>
+        <p>Attention Mechanism, Transformer Architecture, BERT, GPT, Modern LLMs</p>
+    </div>
+</div>
+
+<!-- Slide 22: Q&A -->
+<div class="slide">
+    <h2>❓ Pertanyaan?</h2>
+    <div style="text-align: center; margin: 60px 0;">
+        <h3 style="font-size: 2.5em; margin-bottom: 30px;">Terima Kasih! 🙏</h3>
+        <p style="font-size: 1.5em; color: #666;">
+            Session 12: Sequence Models (RNN, LSTM, GRU)
+        </p>
+    </div>
+    <div class="footer">
+        <p>Natural Language Processing</p>
+        <p>Universitas Mercu Buana</p>
+        <p>Program Studi Teknik Informatika</p>
+    </div>
+</div>
+
+<script>
+// Smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+</script>
+
+</body>
+</html>
