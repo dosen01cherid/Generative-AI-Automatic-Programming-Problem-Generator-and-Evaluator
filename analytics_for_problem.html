@@ -1961,7 +1961,43 @@ class ProgressAnalyzer:
                     return finalized
 
                 finalized_steps = sum(1 for s in step_states if is_step_finalized(s))
-                correct_steps = sum(1 for s in step_states if s.get("correct", False))
+
+                # ✅ DEBUG: Log each step's correct status and score
+                print("=" * 80)
+                print("🔍 DEBUG: Checking correct status and score for each step:")
+                print(f"🔍 Problem: {problem_title}")
+                total_score = 0.0
+                for idx, s in enumerate(step_states):
+                    is_correct = s.get("correct", False)
+                    step_type = s.get("step_type", "unknown")
+                    # ✅ Use score field if available, otherwise 100 if correct, 0 if incorrect
+                    has_score_field = "score" in s
+                    step_score = s.get("score", 100.0 if is_correct else 0.0)
+
+                    # ✅ FIX: Handle buggy old data where score=0.0 but correct=True
+                    # This happens when old exports had missing blanks data in multi-mc steps
+                    if has_score_field and step_score == 0.0 and is_correct:
+                        print(f"  ⚠️ WARNING: Step {idx + 1} has score=0.0 but correct=True (old buggy data)")
+                        print(f"  🔧 FIX: Changing score from 0.0% to 100.0%")
+                        step_score = 100.0
+
+                    total_score += step_score
+                    print(f"  Step {idx + 1}:")
+                    print(f"    - type: {step_type}")
+                    print(f"    - correct: {is_correct}")
+                    print(f"    - has 'score' field: {has_score_field}")
+                    print(f"    - score value: {step_score:.1f}%")
+                    print(f"    - user_answers: {s.get('user_answers', 'none')}")
+                    if not has_score_field:
+                        print(f"    ⚠️ WARNING: No score field! Using fallback (correct={is_correct})")
+
+                # ✅ Calculate correct_steps as percentage: total_score / (total_steps * 100) * total_steps
+                # This gives us the "equivalent number of fully correct steps"
+                correct_steps = (total_score / 100.0) if total_steps > 0 else 0
+                print(f"🔍 DEBUG: Total score = {total_score:.1f}%")
+                print(f"🔍 DEBUG: Equivalent correct_steps = {correct_steps:.2f} (out of {total_steps})")
+                print("=" * 80)
+
                 # ✅ Support both attempt_history (array) and attempts (count)
                 def get_attempt_count(s):
                     attempt_history = s.get("attempt_history", [])
@@ -2158,8 +2194,27 @@ class ProgressAnalyzer:
         Calculate student score based on CORRECT steps, not just finalized.
         Score = (correct steps / total steps) * 100
         """
+        # ✅ DEBUG: Log number of submissions
+        print("\n" + "=" * 80)
+        print(f"🔍 DEBUG: Calculating score for {len(student_subs)} submission(s)")
+        print("=" * 80)
+
         # ✅ Get CORRECT steps (not finalized - finalized means submitted, correct means actually right)
         correct_steps = sum(s.get("summary", {}).get("correct_steps", 0) for s in student_subs)
+
+        # ✅ DEBUG: Log each submission's correct_steps
+        print("🔍 DEBUG: Score Calculation Details:")
+        for idx, s in enumerate(student_subs):
+            sub_correct = s.get("summary", {}).get("correct_steps", 0)
+            sub_total = s.get("summary", {}).get("total_steps", 0)
+            sub_title = s.get("problem_title", "Unknown")
+            sub_export_meta = s.get("export_metadata", {})
+            print(f"  Submission {idx} ({sub_title}):")
+            print(f"    - correct_steps: {sub_correct}")
+            print(f"    - total_steps: {sub_total}")
+            print(f"    - export_metadata: {sub_export_meta}")
+
+        print(f"🔍 DEBUG: Sum of all correct_steps = {correct_steps}")
 
         # Try to get total steps from problem set metadata (if available)
         total_steps_in_set = None
@@ -2172,17 +2227,27 @@ class ProgressAnalyzer:
         # If problem set metadata is available, use it (NEW behavior)
         if total_steps_in_set is not None and total_steps_in_set > 0:
             try:
-                return round((correct_steps / total_steps_in_set) * 100, 2)
+                score = round((correct_steps / total_steps_in_set) * 100, 2)
+                print(f"🔍 DEBUG: Using total_steps_in_set={total_steps_in_set}")
+                print(f"🔍 DEBUG: Final score = ({correct_steps} / {total_steps_in_set}) * 100 = {score}%")
+                print("=" * 80 + "\n")
+                return score
             except:
                 return 0.0
 
         # Fallback: use only attempted steps (OLD behavior for backward compatibility)
         total_attempted_steps = sum(s.get("summary", {}).get("total_steps", 0) for s in student_subs)
         if total_attempted_steps == 0:
+            print("🔍 DEBUG: No attempted steps found, returning 0")
+            print("=" * 80 + "\n")
             return 0.0
 
         try:
-            return round((correct_steps / total_attempted_steps) * 100, 2)
+            score = round((correct_steps / total_attempted_steps) * 100, 2)
+            print(f"🔍 DEBUG: Using total_attempted_steps={total_attempted_steps}")
+            print(f"🔍 DEBUG: Final score = ({correct_steps} / {total_attempted_steps}) * 100 = {score}%")
+            print("=" * 80 + "\n")
+            return score
         except:
             return 0.0
 
@@ -4064,7 +4129,9 @@ class DisplayManager:
                 <tr style='background:#fafafa;'>
                     <th style='padding:6px;text-align:left;'>Step</th>
                     <th style='padding:6px;text-align:center;'>Status</th>
-                    <th style='padding:6px;text-align:left;'>Attempts</th>
+                    <th style='padding:6px;text-align:center;'>Score</th>
+                    <th style='padding:6px;text-align:center;'>Attempts</th>
+                    <th style='padding:6px;text-align:left;'>Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -4075,6 +4142,19 @@ class DisplayManager:
             finalized = step.get("finalized", False)
             correct = step.get("correct", False)
             structure_correct = step.get("structure_correct", False)
+
+            # ✅ Get score percentage (use score field if available, otherwise 100 if correct, 0 if not)
+            score_percentage = step.get("score", 100.0 if correct else 0.0)
+
+            # Score badge with color coding
+            if score_percentage >= 100:
+                score_color = "#059669"  # Green
+            elif score_percentage >= 50:
+                score_color = "#d97706"  # Orange
+            else:
+                score_color = "#dc2626"  # Red
+
+            score_badge = f"<span style='color:{score_color};font-weight:600;'>{score_percentage:.1f}%</span>"
 
             # Status badge
             if finalized and structure_correct:
@@ -4112,10 +4192,16 @@ class DisplayManager:
             if not step.get("attempts"):
                 attempts_html = "<em style='color:#9ca3af;'>No attempts</em>"
 
+            # Attempts count
+            attempts_count = len(step.get("attempts", []))
+            attempts_count_display = f"<span style='font-weight:600;'>{attempts_count}</span>"
+
             html_content += f"""
                 <tr>
                     <td style='padding:8px;vertical-align:top;font-weight:600;'>{step_no}</td>
                     <td style='padding:8px;vertical-align:top;text-align:center;'>{status}</td>
+                    <td style='padding:8px;vertical-align:top;text-align:center;'>{score_badge}</td>
+                    <td style='padding:8px;vertical-align:top;text-align:center;'>{attempts_count_display}</td>
                     <td style='padding:8px;vertical-align:top;'>{attempts_html}</td>
                 </tr>
             """

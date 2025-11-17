@@ -4364,9 +4364,15 @@ class ProblemSolverApp:
         is_readonly = is_math_expr or is_require_correct
         button_label = "👁️ Review" if is_readonly else "✏️ Edit"
 
+        # ✅ Get attempts count
+        attempts_count = step_data.get("attempts", 0)
+
         step_header.innerHTML = f"""
-            <div style="font-weight: 600; color: #475569;">
-                Step {step_idx + 1}
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-weight: 600; color: #475569;">Step {step_idx + 1}</span>
+                <span style="background: #f1f5f9; color: #64748b; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500;">
+                    Attempts: {attempts_count}
+                </span>
             </div>
             <button class="edit-step-btn" data-problem="{prob_idx}" data-step="{step_idx}"
                     style="padding: 6px 12px; background: #3b82f6; color: white; border: none;
@@ -4770,6 +4776,15 @@ class ProblemSolverApp:
 
             # Update with new answer
             self.problem_states[problem_idx][step_idx]["user_answers"] = new_answer
+
+            # ✅ Recalculate correct and score fields based on new answer
+            step_data_from_problem_set = self.problem_set[problem_idx]["steps"][step_idx]
+            recalculated_score = self.calculate_step_score(step_idx, step_data_from_problem_set, self.problem_states[problem_idx][step_idx])
+            recalculated_correct = (recalculated_score >= 100.0)
+
+            self.problem_states[problem_idx][step_idx]["score"] = recalculated_score
+            self.problem_states[problem_idx][step_idx]["correct"] = recalculated_correct
+            window.console.log(f"✅ Recalculated: score={recalculated_score:.1f}%, correct={recalculated_correct}")
 
             # ✅ Increment attempts counter if answer changed (edit session = new attempt)
             if answer_changed:
@@ -9758,24 +9773,51 @@ This demonstrates the complete format for creating your own problem sets!
         correct_answer = step_data.get("correct_answer", "")
         is_correct = (user_answer == correct_answer)
         must_correct = step_data.get("requireCorrect", False)
+        score_percentage = 100.0 if is_correct else 0.0
 
-        window.console.log(f"MC Single: user={user_answer}, correct={correct_answer}, is_correct={is_correct}, must_correct={must_correct}")
+        window.console.log(f"MC Single: user={user_answer}, correct={correct_answer}, is_correct={is_correct}, score={score_percentage:.1f}%, must_correct={must_correct}")
+
+        # ⏱️ Get elapsed time for this attempt
+        import js
+        current_time = js.Date.now()
+        time_taken = 0
+        if hasattr(self, 'step_timers') and current_prob_idx in self.step_timers:
+            step_time = self.step_timers[current_prob_idx].get(step_idx, {})
+            start_time = step_time.get("start", None)
+            if start_time:
+                time_taken = (current_time - start_time) / 1000.0  # Convert to seconds
 
         # ✅ CRITICAL: Update BOTH solve_state AND problem_states
         if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
             self.solve_states[current_prob_idx][step_idx]["finished"] = True
             self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.solve_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.solve_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
-            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True")
+            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True, score={score_percentage:.1f}%")
 
         # ✅ CRITICAL: Update problem_states (persisted state)
         if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
             self.problem_states[current_prob_idx][step_idx]["finished"] = True
             self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.problem_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.problem_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
             attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
             self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
-            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}")
+
+            # ✅ Add to attempt_history array
+            if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+            attempt_entry = {
+                "timestamp": current_time,
+                "time_taken": time_taken,
+                "correct": is_correct,
+                "score": score_percentage,
+                "user_answer": user_answer
+            }
+            self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}, score={score_percentage:.1f}%, time={time_taken:.1f}s")
 
         # Mark step as finished
         window.console.log("==================================================")
@@ -9878,23 +9920,69 @@ This demonstrates the complete format for creating your own problem sets!
         is_correct = (user_answers == correct_answers)
         must_correct = step_data.get("requireCorrect", False)
 
-        window.console.log(f"MC Multiple: user={user_answers}, correct={correct_answers}, is_correct={is_correct}")
+        # ✅ Calculate proportional score with partial credit
+        all_options = step_data.get("options", [])
+        all_labels = set([opt.get("label", "") for opt in all_options])
+        incorrect_labels = all_labels - correct_answers
+
+        num_correct = len(correct_answers)
+        num_incorrect = len(incorrect_labels)
+
+        points_per_correct = 100.0 / num_correct if num_correct > 0 else 0.0
+        penalty_per_incorrect = 100.0 / num_incorrect if num_incorrect > 0 else 0.0
+
+        score_percentage = 0.0
+        for label in user_answers:
+            if label in correct_answers:
+                score_percentage += points_per_correct
+            elif label in incorrect_labels:
+                score_percentage -= penalty_per_incorrect
+
+        score_percentage = max(0.0, min(100.0, score_percentage))
+
+        window.console.log(f"MC Multiple: user={user_answers}, correct={correct_answers}, score={score_percentage:.1f}%, is_correct={is_correct}")
+
+        # ⏱️ Get elapsed time for this attempt
+        import js
+        current_time = js.Date.now()
+        time_taken = 0
+        if hasattr(self, 'step_timers') and current_prob_idx in self.step_timers:
+            step_time = self.step_timers[current_prob_idx].get(step_idx, {})
+            start_time = step_time.get("start", None)
+            if start_time:
+                time_taken = (current_time - start_time) / 1000.0  # Convert to seconds
 
         # ✅ CRITICAL: Update BOTH solve_state AND problem_states
         if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
             self.solve_states[current_prob_idx][step_idx]["finished"] = True
             self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.solve_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.solve_states[current_prob_idx][step_idx]["user_answers"] = list(user_answers)
-            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True")
+            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True, score={score_percentage:.1f}%")
 
         # ✅ CRITICAL: Update problem_states (persisted state)
         if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
             self.problem_states[current_prob_idx][step_idx]["finished"] = True
             self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.problem_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.problem_states[current_prob_idx][step_idx]["user_answers"] = list(user_answers)
             attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
             self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
-            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}")
+
+            # ✅ Add to attempt_history array
+            if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+            attempt_entry = {
+                "timestamp": current_time,
+                "time_taken": time_taken,
+                "correct": is_correct,
+                "score": score_percentage,
+                "user_answer": list(user_answers)
+            }
+            self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}, score={score_percentage:.1f}%, time={time_taken:.1f}s")
 
         # Mark step as finished
         window.console.log("==================================================")
@@ -10015,34 +10103,67 @@ This demonstrates the complete format for creating your own problem sets!
         # Check correctness for each blank
         all_correct = True
         incorrect_blanks = []
+        correct_count = 0
         for label in blanks.keys():
             correct_answer = blanks[label].get("correct", "")
             user_answer = user_answers.get(label, "")
 
-            if user_answer != correct_answer:
+            if user_answer == correct_answer:
+                correct_count += 1
+            else:
                 all_correct = False
                 incorrect_blanks.append(label)
 
         is_correct = all_correct
         must_correct = step_data.get("requireCorrect", False)
 
-        window.console.log(f"Multi-MC: user_answers={user_answers}, is_correct={is_correct}, must_correct={must_correct}")
+        # ✅ Calculate proportional score percentage
+        total_blanks = len(blanks)
+        score_percentage = (correct_count / total_blanks * 100.0) if total_blanks > 0 else 0.0
+
+        window.console.log(f"Multi-MC: user_answers={user_answers}, correct={correct_count}/{total_blanks}, score={score_percentage:.1f}%, is_correct={is_correct}, must_correct={must_correct}")
+
+        # ⏱️ Get elapsed time for this attempt
+        import js
+        current_time = js.Date.now()
+        time_taken = 0
+        if hasattr(self, 'step_timers') and current_prob_idx in self.step_timers:
+            step_time = self.step_timers[current_prob_idx].get(step_idx, {})
+            start_time = step_time.get("start", None)
+            if start_time:
+                time_taken = (current_time - start_time) / 1000.0  # Convert to seconds
 
         # ✅ CRITICAL: Update BOTH solve_state AND problem_states
         if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
             self.solve_states[current_prob_idx][step_idx]["finished"] = True
             self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.solve_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.solve_states[current_prob_idx][step_idx]["user_answers"] = user_answers
-            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True")
+            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True, score={score_percentage:.1f}%")
 
         # ✅ CRITICAL: Update problem_states (persisted state)
         if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
             self.problem_states[current_prob_idx][step_idx]["finished"] = True
             self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.problem_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.problem_states[current_prob_idx][step_idx]["user_answers"] = user_answers
             attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
             self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
-            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}")
+
+            # ✅ Add to attempt_history array
+            if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+            attempt_entry = {
+                "timestamp": current_time,
+                "time_taken": time_taken,
+                "correct": is_correct,
+                "score": score_percentage,
+                "user_answer": user_answers
+            }
+            self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}, score={score_percentage:.1f}%, time={time_taken:.1f}s")
 
         # Mark step as finished
         window.console.log("==================================================")
@@ -10141,24 +10262,51 @@ This demonstrates the complete format for creating your own problem sets!
         correct_answer = str(step_data.get("correct_answer", "true")).lower()
         is_correct = (user_answer == correct_answer)
         must_correct = step_data.get("requireCorrect", False)
+        score_percentage = 100.0 if is_correct else 0.0
 
-        window.console.log(f"True/False: user={user_answer}, correct={correct_answer}, is_correct={is_correct}")
+        window.console.log(f"True/False: user={user_answer}, correct={correct_answer}, is_correct={is_correct}, score={score_percentage:.1f}%")
+
+        # ⏱️ Get elapsed time for this attempt
+        import js
+        current_time = js.Date.now()
+        time_taken = 0
+        if hasattr(self, 'step_timers') and current_prob_idx in self.step_timers:
+            step_time = self.step_timers[current_prob_idx].get(step_idx, {})
+            start_time = step_time.get("start", None)
+            if start_time:
+                time_taken = (current_time - start_time) / 1000.0  # Convert to seconds
 
         # ✅ CRITICAL: Update BOTH solve_state AND problem_states
         if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
             self.solve_states[current_prob_idx][step_idx]["finished"] = True
             self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.solve_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.solve_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
-            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True")
+            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True, score={score_percentage:.1f}%")
 
         # ✅ CRITICAL: Update problem_states (persisted state)
         if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
             self.problem_states[current_prob_idx][step_idx]["finished"] = True
             self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.problem_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.problem_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
             attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
             self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
-            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}")
+
+            # ✅ Add to attempt_history array
+            if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+            attempt_entry = {
+                "timestamp": current_time,
+                "time_taken": time_taken,
+                "correct": is_correct,
+                "score": score_percentage,
+                "user_answer": user_answer
+            }
+            self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}, score={score_percentage:.1f}%, time={time_taken:.1f}s")
 
         # Mark step as finished
         window.console.log("==================================================")
@@ -10287,24 +10435,51 @@ This demonstrates the complete format for creating your own problem sets!
                 break
 
         must_correct = step_data.get("requireCorrect", False)
+        score_percentage = 100.0 if is_correct else 0.0
 
-        window.console.log(f"Fill-blank check: '{user_answer}' against {correct_answers} = {is_correct}")
+        window.console.log(f"Fill-blank check: '{user_answer}' against {correct_answers} = {is_correct}, score={score_percentage:.1f}%")
+
+        # ⏱️ Get elapsed time for this attempt
+        import js
+        current_time = js.Date.now()
+        time_taken = 0
+        if hasattr(self, 'step_timers') and current_prob_idx in self.step_timers:
+            step_time = self.step_timers[current_prob_idx].get(step_idx, {})
+            start_time = step_time.get("start", None)
+            if start_time:
+                time_taken = (current_time - start_time) / 1000.0  # Convert to seconds
 
         # ✅ CRITICAL: Update BOTH solve_state AND problem_states
         if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
             self.solve_states[current_prob_idx][step_idx]["finished"] = True
             self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.solve_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.solve_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
-            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True")
+            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True, score={score_percentage:.1f}%")
 
         # ✅ CRITICAL: Update problem_states (persisted state)
         if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
             self.problem_states[current_prob_idx][step_idx]["finished"] = True
             self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
+            self.problem_states[current_prob_idx][step_idx]["score"] = score_percentage
             self.problem_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
             attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
             self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
-            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}")
+
+            # ✅ Add to attempt_history array
+            if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+            attempt_entry = {
+                "timestamp": current_time,
+                "time_taken": time_taken,
+                "correct": is_correct,
+                "score": score_percentage,
+                "user_answer": user_answer
+            }
+            self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}, score={score_percentage:.1f}%, time={time_taken:.1f}s")
 
         # Mark step as finished
         window.console.log("==================================================")
@@ -11016,8 +11191,21 @@ This demonstrates the complete format for creating your own problem sets!
       blanks = step_data.get("blanks", {})
       user_answers = step_state.get("user_answers", {})
 
+      print(f"🔍 DEBUG _calculate_multi_mc_score:")
+      print(f"  step_data keys: {list(step_data.keys())}")
+      print(f"  blanks: {blanks}")
+      print(f"  user_answers: {user_answers}")
+
       if not blanks:
-          return 0.0
+          print(f"  ⚠️ No blanks found!")
+          # Fallback: if step was marked correct, assume 100%
+          is_correct = step_state.get("correct", False)
+          if is_correct:
+              print(f"  ✅ Fallback: Using correct={is_correct} → returning 100.0%")
+              return 100.0
+          else:
+              print(f"  ❌ Fallback: Using correct={is_correct} → returning 0.0%")
+              return 0.0
 
       total_blanks = len(blanks)
       correct_count = 0
@@ -11025,12 +11213,14 @@ This demonstrates the complete format for creating your own problem sets!
       for label, blank_data in blanks.items():
           correct_answer = blank_data.get("correct", "")
           user_answer = user_answers.get(label, "")
+          is_match = (user_answer == correct_answer)
+          print(f"  Blank '{label}': user='{user_answer}' vs correct='{correct_answer}' → {is_match}")
 
-          if user_answer == correct_answer:
+          if is_match:
               correct_count += 1
 
       score = (correct_count / total_blanks) * 100.0 if total_blanks > 0 else 0.0
-      window.console.log(f"Multi-MC Score: {score:.1f}% ({correct_count}/{total_blanks} correct)")
+      print(f"  → Multi-MC Score: {score:.1f}% ({correct_count}/{total_blanks} correct)\n")
       return score
 
 
@@ -11212,10 +11402,28 @@ This demonstrates the complete format for creating your own problem sets!
           # ✅ CRITICAL: Update problem_states too
           if current_prob_idx is not None and current_prob_idx in self.problem_states:
               if step_idx < len(self.problem_states[current_prob_idx]):
+                  import js
+                  current_time = js.Date.now()
+
                   self.problem_states[current_prob_idx][step_idx]["correct"] = True
+                  self.problem_states[current_prob_idx][step_idx]["score"] = 100.0
                   self.problem_states[current_prob_idx][step_idx]["user_answers"] = [user_latex]
                   self.problem_states[current_prob_idx][step_idx]["attempts"] = step["attempts"]
-                  window.console.log(f"✅ Updated problem_states: correct=True")
+
+                  # ✅ Add to attempt_history array
+                  if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                      self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+                  attempt_entry = {
+                      "timestamp": current_time,
+                      "time_taken": time_taken,
+                      "correct": True,
+                      "score": 100.0,
+                      "user_answer": user_latex
+                  }
+                  self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+                  window.console.log(f"✅ Updated problem_states: correct=True, score=100.0%, time={time_taken:.1f}s")
 
           self.show_feedback(step_idx, "✅ Correct! Now click Finalize to verify your solution method.", "#059669")
 
@@ -11236,10 +11444,28 @@ This demonstrates the complete format for creating your own problem sets!
           # ✅ CRITICAL: Update problem_states too
           if current_prob_idx is not None and current_prob_idx in self.problem_states:
               if step_idx < len(self.problem_states[current_prob_idx]):
+                  import js
+                  current_time = js.Date.now()
+
                   self.problem_states[current_prob_idx][step_idx]["correct"] = False
+                  self.problem_states[current_prob_idx][step_idx]["score"] = 0.0
                   self.problem_states[current_prob_idx][step_idx]["user_answers"] = [user_latex]
                   self.problem_states[current_prob_idx][step_idx]["attempts"] = step["attempts"]
-                  window.console.log(f"✅ Updated problem_states: correct=False")
+
+                  # ✅ Add to attempt_history array
+                  if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
+                      self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
+
+                  attempt_entry = {
+                      "timestamp": current_time,
+                      "time_taken": time_taken,
+                      "correct": False,
+                      "score": 0.0,
+                      "user_answer": user_latex
+                  }
+                  self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
+
+                  window.console.log(f"✅ Updated problem_states: correct=False, score=0.0%, time={time_taken:.1f}s")
 
           # ✅ Show different message for requireCorrect steps
           if must_correct:
