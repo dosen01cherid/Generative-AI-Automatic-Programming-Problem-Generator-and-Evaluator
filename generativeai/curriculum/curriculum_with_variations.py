@@ -11,10 +11,8 @@ from typing import List, Dict
 from dataclasses import dataclass
 from enum import Enum
 
-# Fix encoding
-if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+# Note: Encoding wrapper is handled by the main application
+# to avoid double-wrapping issues
 
 
 class DifficultyLevel(Enum):

@@ -10,10 +10,8 @@ import io
 from typing import List, Dict
 from dataclasses import dataclass
 
-# Fix encoding for Windows console
-if sys.platform == "win32":
-    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+# Note: Encoding wrapper is handled by the main application
+# to avoid double-wrapping issues
 
 
 @dataclass
