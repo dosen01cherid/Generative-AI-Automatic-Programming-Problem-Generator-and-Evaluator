@@ -20,7 +20,10 @@ import io
 import argparse
 import os
 from typing import Dict, List, Optional, Tuple
-from curriculum_with_variations import EnhancedCurriculum, TopicWithVariations, SpecificationVariation, DifficultyLevel
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from curriculum.curriculum_with_variations import EnhancedCurriculum, TopicWithVariations, SpecificationVariation, DifficultyLevel
 
 # Fix encoding
 if sys.platform == "win32":
