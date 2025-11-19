@@ -1690,7 +1690,424 @@ Phase <span class="number">3</span>: Extract targets/distractors (deterministic 
         </div>
     </div>
 
-    <!-- Slide 32: Future Work -->
+    <!-- Slide 32: Midterm Exam Project -->
+    <div class="slide">
+        <h1>📝 Midterm Exam Project</h1>
+
+        <h2>English Grammar Learning System</h2>
+        <div class="info-box">
+            <p><strong>Group Project:</strong> 3 students per team</p>
+            <p><strong>Duration:</strong> 1 week</p>
+            <p><strong>Weight:</strong> 30% of final grade</p>
+        </div>
+
+        <h2>Project Objective:</h2>
+        <p style="font-size: 1.3em;">Build an English Grammar Learning System using small LLMs to generate varied fill-in-the-blank questions with progressive curriculum design.</p>
+
+        <h2>Core Requirements:</h2>
+        <div class="approach-card">
+            <h4>1. Curriculum Design (30 points)</h4>
+            <ul>
+                <li>Minimum 3 grammar topics (your choice)</li>
+                <li>At least 2 difficulty levels per topic</li>
+                <li>At least 3 specification variations per difficulty</li>
+                <li>Clear learning objectives</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>2. LLM Selection (15 points)</h4>
+            <ul>
+                <li>Choose small LLM (1.5b-7b recommended)</li>
+                <li>Document and justify choice</li>
+                <li>Compare at least 2 models</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 33: Project Requirements Details -->
+    <div class="slide">
+        <h1>📋 Project Requirements (Continued)</h1>
+
+        <div class="approach-card">
+            <h4>3. Question Generation System (40 points)</h4>
+            <ul>
+                <li><strong>Required:</strong> Single word fill-in-the-blank</li>
+                <li><strong>Required:</strong> Phrase/expression fill-in-the-blank</li>
+                <li><strong>Bonus (+5 each):</strong> Multi-blank, error correction, word order, transformation</li>
+                <li>At least 3 specification variations per difficulty</li>
+                <li>Choose one approach: Two-phase, Full LLM, Hybrid, or Template-based</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>4. Distractor Generation (10 points)</h4>
+            <ul>
+                <li>Create plausible wrong answers</li>
+                <li>3-4 options per blank</li>
+                <li>Rule-based or LLM-generated</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>5. Interactive Quiz Application (20 points)</h4>
+            <ul>
+                <li>Topic and difficulty selection menus</li>
+                <li>Question display with clear formatting</li>
+                <li>Immediate feedback</li>
+                <li>Progress tracking and score saving</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>6. Documentation (15 points)</h4>
+            <ul>
+                <li>README.md with installation and usage</li>
+                <li>CURRICULUM_DESIGN.md with topic justification</li>
+                <li>TECHNICAL_REPORT.md with LLM evaluation</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 34: Example Grammar Topics -->
+    <div class="slide">
+        <h1>📚 Example Grammar Topics</h1>
+
+        <h2>Your team chooses ONE approach:</h2>
+
+        <div class="approach-card">
+            <h4>Option A: Tense-Focused Progression</h4>
+            <ul>
+                <li><strong>Topic 1:</strong> Simple Present Tense
+                    <ul>
+                        <li>BEGINNER: Basic statements ("I ___ to school")</li>
+                        <li>INTERMEDIATE: Questions ("___ you like pizza?")</li>
+                        <li>ADVANCED: Mixed statements and questions</li>
+                    </ul>
+                </li>
+                <li><strong>Topic 2:</strong> Present Continuous Tense</li>
+                <li><strong>Topic 3:</strong> Simple Past Tense</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>Option B: Part-of-Speech Progression</h4>
+            <ul>
+                <li><strong>Topic 1:</strong> Nouns and Articles (a/an/the)</li>
+                <li><strong>Topic 2:</strong> Verbs and Auxiliaries</li>
+                <li><strong>Topic 3:</strong> Adjectives and Adverbs</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>Option C: Sentence Structure</h4>
+            <ul>
+                <li><strong>Topic 1:</strong> Basic Sentence Formation</li>
+                <li><strong>Topic 2:</strong> Question Formation</li>
+                <li><strong>Topic 3:</strong> Complex Sentences (conjunctions)</li>
+            </ul>
+        </div>
+
+        <p style="font-size: 1.2em; margin-top: 30px;"><strong>Your team decides:</strong> Topics, difficulty levels, and learning progression!</p>
+    </div>
+
+    <!-- Slide 35: LLM Options -->
+    <div class="slide">
+        <h1>🤖 Small LLM Options</h1>
+
+        <h2>Recommended Models:</h2>
+        <div class="comparison-table">
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>Size</th>
+                    <th>Speed</th>
+                    <th>Quality</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td>qwen2.5:1.5b</td>
+                    <td>1.5B</td>
+                    <td>⚡ Very Fast</td>
+                    <td>Good</td>
+                    <td>Practice, Homework</td>
+                </tr>
+                <tr>
+                    <td>qwen2.5:7b</td>
+                    <td>7B</td>
+                    <td>⚡ Fast</td>
+                    <td>Excellent</td>
+                    <td>Assessments</td>
+                </tr>
+                <tr>
+                    <td>llama3.2:3b</td>
+                    <td>3B</td>
+                    <td>⚡ Fast</td>
+                    <td>Very Good</td>
+                    <td>Balanced</td>
+                </tr>
+                <tr>
+                    <td>gemma2:2b</td>
+                    <td>2B</td>
+                    <td>⚡ Very Fast</td>
+                    <td>Good</td>
+                    <td>Quick generation</td>
+                </tr>
+                <tr>
+                    <td>phi-3:mini</td>
+                    <td>3.8B</td>
+                    <td>⚡ Fast</td>
+                    <td>Very Good</td>
+                    <td>Reasoning tasks</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>Your Task:</h2>
+        <ul style="font-size: 1.2em;">
+            <li>Test at least 2 models</li>
+            <li>Compare speed, quality, and resource usage</li>
+            <li>Document your choice with reasoning</li>
+            <li>Justify why small LLM is suitable</li>
+        </ul>
+    </div>
+
+    <!-- Slide 36: Team Structure & Timeline -->
+    <div class="slide">
+        <h1>👥 Team Structure</h1>
+
+        <h2>3 Students per Team:</h2>
+
+        <div class="approach-card">
+            <h4>Student 1: Curriculum Designer</h4>
+            <ul>
+                <li>Design grammar topics and progression</li>
+                <li>Create specification variations</li>
+                <li>Define difficulty levels</li>
+                <li>Write learning objectives</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>Student 2: LLM Engineer</h4>
+            <ul>
+                <li>Select and test LLM</li>
+                <li>Implement generation approach</li>
+                <li>Handle errors and validation</li>
+                <li>Optimize performance</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>Student 3: Application Developer</h4>
+            <ul>
+                <li>Build interactive quiz interface</li>
+                <li>Implement progress tracking</li>
+                <li>Create distractor generation</li>
+                <li>User experience design</li>
+            </ul>
+        </div>
+
+        <h2>1-Week Timeline:</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>Day 1-2: Planning & Design</h3>
+                <p>Choose topics, select LLM, design curriculum, create variations</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Day 3-4: Implementation</h3>
+                <p>Build question generator, implement LLM integration, test examples</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Day 5-6: Quiz Application</h3>
+                <p>Create interface, add progress tracking, polish UX</p>
+            </div>
+            <div class="timeline-item">
+                <h3>Day 7: Documentation & Testing</h3>
+                <p>Complete docs, test with users, fix bugs, prepare presentation</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 37: Evaluation Rubric -->
+    <div class="slide">
+        <h1>📊 Evaluation Rubric</h1>
+
+        <h2>Total: 130 points + 15 bonus</h2>
+
+        <div class="comparison-table">
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Points</th>
+                    <th>Key Criteria</th>
+                </tr>
+                <tr>
+                    <td>Curriculum Design</td>
+                    <td>30</td>
+                    <td>Topic selection, difficulty progression, variations</td>
+                </tr>
+                <tr>
+                    <td>LLM Selection</td>
+                    <td>15</td>
+                    <td>Model choice, comparison, efficiency</td>
+                </tr>
+                <tr>
+                    <td>Question Generation</td>
+                    <td>40</td>
+                    <td>Implementation, variation system, approach</td>
+                </tr>
+                <tr>
+                    <td>Distractor Generation</td>
+                    <td>10</td>
+                    <td>Quality of wrong answers, appropriateness</td>
+                </tr>
+                <tr>
+                    <td>Interactive Application</td>
+                    <td>20</td>
+                    <td>UI quality, progress tracking</td>
+                </tr>
+                <tr>
+                    <td>Documentation</td>
+                    <td>15</td>
+                    <td>README, curriculum design, technical report</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>Bonus Points (up to +15):</h2>
+        <ul style="font-size: 1.2em;">
+            <li>+5 points: Each additional question type beyond requirements</li>
+            <li>+5 points: Unlocking/gamification system</li>
+            <li>+5 points: Exceptional code quality and comments</li>
+            <li>+3 points: Example output screenshots/videos</li>
+        </ul>
+
+        <h2>Grading Scale:</h2>
+        <div class="info-box">
+            <p><strong>A:</strong> 117-130+ | <strong>B:</strong> 104-116 | <strong>C:</strong> 91-103 | <strong>D:</strong> 78-90 | <strong>F:</strong> &lt;78</p>
+        </div>
+    </div>
+
+    <!-- Slide 38: Example Question Flow -->
+    <div class="slide">
+        <h1>🎯 Example Question Flow</h1>
+
+        <h2>Verb Conjugation (Present Tense):</h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>1. Specification Selection</h3>
+                <div class="code-block">Topic: Present Tense Verb Conjugation
+Difficulty: BEGINNER
+Variation: <span class="string">"Generate present tense with third person singular"</span></div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>2. LLM Generates Sentence</h3>
+                <div class="code-block"><span class="string">"She goes to school every morning."</span></div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>3. Create Fill-in-the-Blank</h3>
+                <div class="code-block">Question: <span class="string">"She ___ to school every morning."</span>
+
+Options:
+  A) go
+  B) goes      <span class="comment">← Correct</span>
+  C) going
+  D) gone
+
+Explanation: Third person singular uses <span class="string">"goes"</span> in present tense</div>
+            </div>
+        </div>
+
+        <h2>Student Experience:</h2>
+        <ul style="font-size: 1.2em;">
+            <li>✅ Clear question format</li>
+            <li>✅ Plausible distractors test understanding</li>
+            <li>✅ Immediate feedback with explanation</li>
+            <li>✅ Score tracked for progress</li>
+        </ul>
+    </div>
+
+    <!-- Slide 39: Starter Code Provided -->
+    <div class="slide">
+        <h1>🚀 Starter Code Provided</h1>
+
+        <h2>We provide a complete template:</h2>
+
+        <div class="approach-card">
+            <h4>english_grammar_starter.py (480 lines)</h4>
+            <ul>
+                <li>Example curriculum structure (2 topics)</li>
+                <li>Question generator framework</li>
+                <li>Distractor generation system</li>
+                <li>Progress tracking implementation</li>
+                <li>TODO markers throughout</li>
+                <li>LLM connection testing</li>
+            </ul>
+        </div>
+
+        <h2>What you need to customize:</h2>
+        <div class="code-block"><span class="comment"># TODO: Choose your 3+ grammar topics</span>
+<span class="comment"># TODO: Add specification variations (min 3 per difficulty)</span>
+<span class="comment"># TODO: Implement your chosen LLM approach</span>
+<span class="comment"># TODO: Build distractor generation logic</span>
+<span class="comment"># TODO: Create interactive quiz interface</span>
+<span class="comment"># TODO: Complete documentation</span></div>
+
+        <h2>Quick Start:</h2>
+        <div class="code-block"><span class="comment"># Install Ollama</span>
+ollama pull qwen2.5:1.5b
+
+<span class="comment"># Test starter code</span>
+<span class="keyword">cd</span> midterm_projects
+python english_grammar_starter.py
+
+<span class="comment"># Start building your project!</span></div>
+    </div>
+
+    <!-- Slide 40: Resources for Project -->
+    <div class="slide">
+        <h1>📚 Project Resources</h1>
+
+        <h2>Documentation Provided:</h2>
+        <ul style="font-size: 1.2em;">
+            <li>📄 <strong>ENGLISH_GRAMMAR_MIDTERM_PROJECT.md</strong> (1,000+ lines)
+                <ul>
+                    <li>Complete specification with examples</li>
+                    <li>Timeline and deliverables</li>
+                    <li>Evaluation rubric</li>
+                    <li>FAQs and troubleshooting</li>
+                </ul>
+            </li>
+            <li>📄 <strong>english_grammar_starter.py</strong> (480 lines)
+                <ul>
+                    <li>Complete template structure</li>
+                    <li>Working examples</li>
+                    <li>TODO guidance</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2>Reference Materials:</h2>
+        <ul style="font-size: 1.2em;">
+            <li>🔗 C++ project as similar example</li>
+            <li>🔗 RAG infrastructure code</li>
+            <li>🔗 Deterministic processing examples</li>
+            <li>🔗 Progress tracking implementation</li>
+        </ul>
+
+        <h2>Grammar Resources:</h2>
+        <ul style="font-size: 1.2em;">
+            <li>📖 Cambridge Dictionary</li>
+            <li>📖 Grammarly</li>
+            <li>📖 COCA (Corpus of Contemporary American English)</li>
+        </ul>
+    </div>
+
+    <!-- Slide 41: Future Work -->
     <div class="slide">
         <h1>🚀 Future Enhancements</h1>
 
