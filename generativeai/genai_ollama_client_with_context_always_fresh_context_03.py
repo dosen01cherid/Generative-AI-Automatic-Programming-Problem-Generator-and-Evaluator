@@ -18,7 +18,7 @@ from typing import Optional
 # =======================================================
 # 🔧 CONFIGURATION
 # =======================================================
-OLLAMA_URL = "https://crops-logging-teaches-performing.trycloudflare.com/"
+OLLAMA_URL = "https://null-server-reliability-integration.trycloudflare.com"
 GEN_MODEL = "gpt-oss:20b"  # Generation model
 TIMEOUT = 600
 CONTEXT_FILE = "context.txt"

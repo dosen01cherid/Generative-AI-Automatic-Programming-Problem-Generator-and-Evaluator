@@ -21,7 +21,7 @@ from pathlib import Path
 # Replace this with your Cloudflare Tunnel URL
 # Example: https://bright-deer-123abc.trycloudflare.com
 # =======================================================
-OLLAMA_URL = "https://favors-mic-bedding-maps.trycloudflare.com/"
+OLLAMA_URL = "https://null-server-reliability-integration.trycloudflare.com"
 
 # Models
 EMBED_MODEL = "llama3.1:8b"  # or "nomic-embed-text" if available

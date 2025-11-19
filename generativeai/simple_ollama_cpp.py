@@ -2,7 +2,7 @@ import requests
 import json
 
 # Configuration
-CLOUDFLARE_URL = "https://your-tunnel.trycloudflare.com"  # Replace with your actual URL
+CLOUDFLARE_URL = "https://null-server-reliability-integration.trycloudflare.com"  # Replace with your actual URL
 MODEL = "codellama"  # Or "deepseek-coder", "qwen2.5-coder", etc.
 
 # Prompt for generating C++ code
