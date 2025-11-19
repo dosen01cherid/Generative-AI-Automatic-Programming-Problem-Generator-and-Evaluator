@@ -135,15 +135,7 @@ Options:
 Correct: B
 ```
 
-**Type 2: Multiple Blanks**
-```
-Sentence: "I ___(1)___ ___(2)___ a book right now."
-Blank 1: [am, is, are, was]
-Blank 2: [read, reads, reading, reader]
-Correct: am, reading
-```
-
-**Type 3: Phrase/Expression Blank**
+**Type 2: Phrase/Expression Blank**
 ```
 Sentence: "I have been living here ___ five years."
 Options:
@@ -155,14 +147,15 @@ Correct: B
 ```
 
 **Bonus Types (Optional, +5 points each):**
+- Multiple blanks in one sentence (advanced)
 - Error correction: "She don't like pizza" → "She doesn't like pizza"
 - Word order: "school / goes / She / to" → "She goes to school"
 - Transformation: Active → Passive, Direct → Indirect speech
 
-**Your team decides:**
-- Which question types to implement
-- How many types (minimum 1, more = bonus)
-- Complexity level
+**Your team must implement:**
+- At least Type 1 (Single Word Blank)
+- Either Type 2 (Phrase Blank) OR one bonus type
+- Additional types earn bonus points
 
 **B. Specification Variations (10 points)**
 
