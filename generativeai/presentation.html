@@ -1338,7 +1338,359 @@ prompts = [
         </ul>
     </div>
 
-    <!-- Slide 25: Future Work -->
+    <!-- Slide 25: Specification Variations -->
+    <div class="slide">
+        <h1>✨ The Specification Variations Approach</h1>
+
+        <h2>The Challenge:</h2>
+        <div class="warning-box">
+            <p><strong>Problem:</strong> Students need variety and progressive difficulty</p>
+            <ul>
+                <li>Single specifications become repetitive</li>
+                <li>No progression within same topic</li>
+                <li>Students can't practice at different difficulty levels</li>
+                <li>No challenge mode for mastery</li>
+            </ul>
+        </div>
+
+        <h2>The Solution:</h2>
+        <div class="success-box">
+            <p><strong>Multiple Explicit Specification Variations Per Topic</strong></p>
+            <ul>
+                <li>4 difficulty levels: BEGINNER → INTERMEDIATE → ADVANCED → EXPERT</li>
+                <li>Multiple ways to ask for the same concept</li>
+                <li>Progressive unlock system</li>
+                <li>Return to topics for challenges</li>
+            </ul>
+        </div>
+
+        <h2>Example: "For Loops" Topic</h2>
+        <div class="comparison-table">
+            <table>
+                <tr>
+                    <th>Level</th>
+                    <th>Specification Example</th>
+                    <th>Min Score</th>
+                </tr>
+                <tr>
+                    <td>BEGINNER</td>
+                    <td>"Create a for loop that counts from 0 to 5"</td>
+                    <td>2/3</td>
+                </tr>
+                <tr>
+                    <td>INTERMEDIATE</td>
+                    <td>"Write a loop that calculates sum of 1 to N"</td>
+                    <td>2/3</td>
+                </tr>
+                <tr>
+                    <td>ADVANCED</td>
+                    <td>"Create a loop for multiplication table"</td>
+                    <td>3/3</td>
+                </tr>
+                <tr>
+                    <td>EXPERT</td>
+                    <td>"Create nested loops for pyramid pattern"</td>
+                    <td>3/3</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 26: Two-Phase Generation -->
+    <div class="slide">
+        <h1>🔄 Two-Phase LLM Generation</h1>
+
+        <h2>How It Works:</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>Phase 1: Select Specification Variation</h3>
+                <p>Based on student's current difficulty level and topic progress</p>
+                <div class="code-block">topic = <span class="string">"For Loops"</span>
+difficulty = student.current_difficulty  <span class="comment"># BEGINNER, INTERMEDIATE, etc.</span>
+variations = topic.get_variations_by_difficulty(difficulty)
+selected = random.choice(variations)
+
+<span class="comment"># Example selected specification:</span>
+<span class="string">"Write a loop that calculates the sum of numbers 1 to N"</span></div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>Phase 2: Generate Code from Specification</h3>
+                <p>LLM generates C++ code based on the specific specification</p>
+                <div class="code-block">prompt = <span class="keyword">f"""</span>Write C++ code for: {selected.specification}
+
+Topic: {topic.name}
+Difficulty: {difficulty.name}<span class="keyword">"""</span>
+
+code = llm.generate(prompt)
+<span class="comment"># Result: Complete C++ code matching specification</span></div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>Phase 3: Process Question (Deterministic)</h3>
+                <p>Extract targets and distractors using rules (for 1.5b) or LLM (for 14b)</p>
+                <div class="code-block"><span class="comment"># For 1.5b: Deterministic</span>
+tokens = extract_all_tokens(code)
+targets = select_best_targets(tokens)
+distractors = get_distractors(targets)
+
+<span class="comment"># For 14b: LLM can do this too</span>
+question = create_fill_in_blank(code, targets, distractors)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 27: Progress Tracking System -->
+    <div class="slide">
+        <h1>📊 Progress Tracking & Unlocking</h1>
+
+        <h2>Student Progress Features:</h2>
+        <div class="approach-card">
+            <h4>1. Difficulty Unlocking</h4>
+            <ul>
+                <li>BEGINNER: Always unlocked</li>
+                <li>INTERMEDIATE: Unlocked after attempting BEGINNER</li>
+                <li>ADVANCED: Unlocked after attempting INTERMEDIATE</li>
+                <li>EXPERT: Unlocked after attempting ADVANCED</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>2. Topic Progression</h4>
+            <ul>
+                <li>Must complete BEGINNER level to unlock next topic</li>
+                <li>Can return to previous topics anytime</li>
+                <li>Practice harder difficulties for mastery</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>3. Score Tracking</h4>
+            <ul>
+                <li>Track best score per difficulty level</li>
+                <li>Record number of attempts</li>
+                <li>Saved to JSON file between sessions</li>
+            </ul>
+        </div>
+
+        <h2>Example Progress Display:</h2>
+        <div class="code-block"><span class="comment"># Student progress for "For Loops" topic</span>
+For Loops:
+  BEGINNER: <span class="string">3/3</span> (best of <span class="number">2</span> attempts) ✅
+  INTERMEDIATE: <span class="string">2/3</span> (best of <span class="number">1</span> attempt) 🔓
+  ADVANCED: 🔒 <span class="comment">Complete INTERMEDIATE first</span>
+  EXPERT: 🔒 <span class="comment">Complete ADVANCED first</span>
+
+Status: Can advance to next topic ✅</div>
+    </div>
+
+    <!-- Slide 28: Live Demo Comparison -->
+    <div class="slide">
+        <h1>🎮 Interactive Demo</h1>
+
+        <h2>Two New Quiz Applications:</h2>
+
+        <div class="approach-card">
+            <h4>quiz_app_14b_variations.py</h4>
+            <ul>
+                <li>High-quality two-phase generation</li>
+                <li>Specification variations + code generation</li>
+                <li>Progressive difficulty unlocking</li>
+                <li>~25-30s per question</li>
+                <li>Best for exams and assessments</li>
+            </ul>
+        </div>
+
+        <div class="approach-card">
+            <h4>quiz_app_1_5b_variations.py</h4>
+            <ul>
+                <li>Fast three-phase generation</li>
+                <li>Specification → 1.5b code → Deterministic processing</li>
+                <li>Same unlock system and progress tracking</li>
+                <li>~8s per question (3x faster!)</li>
+                <li>Best for practice and homework</li>
+            </ul>
+        </div>
+
+        <h2>Common Features:</h2>
+        <ul>
+            <li>🎯 Interactive topic selection menu</li>
+            <li>📈 Difficulty progression display</li>
+            <li>💾 Automatic progress saving</li>
+            <li>🏆 Challenge mode - return for harder difficulties</li>
+            <li>📊 Detailed progress reports</li>
+        </ul>
+
+        <div class="info-box">
+            <h3>Try it yourself!</h3>
+            <p style="font-size: 1.2em;">
+                <code>python quiz_app_1_5b_variations.py</code><br>
+                <code>python quiz_app_14b_variations.py</code>
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 29: RAG Document for Variations -->
+    <div class="slide">
+        <h1>📚 RAG Infrastructure Update</h1>
+
+        <h2>New Document: Specification Variations</h2>
+        <p>Complete catalog of explicit variations for the LLM to use</p>
+
+        <div class="approach-card">
+            <h4>rag_specification_variations.md</h4>
+            <p>Contains 50+ specification variations across all topics</p>
+            <ul>
+                <li>Organized by topic and difficulty</li>
+                <li>Clear, explicit task descriptions</li>
+                <li>Example targets for each variation</li>
+                <li>Min score requirements</li>
+                <li>Key concepts covered</li>
+            </ul>
+        </div>
+
+        <h2>Example Entry:</h2>
+        <div class="code-block"><span class="comment">### Topic 3.1: For Loops</span>
+
+<span class="comment">#### INTERMEDIATE Variations:</span>
+<span class="number">3</span>. <span class="string">"Write a loop that calculates the sum of numbers 1 to N"</span>
+   - Focus: Accumulator pattern
+   - Min score: <span class="number">2</span>/<span class="number">3</span>
+   - Example targets: <span class="keyword">for</span>, <span class="keyword">int</span>, sum
+   - Key concepts: accumulation, variable
+
+<span class="number">4</span>. <span class="string">"Create a loop that prints odd numbers in reverse"</span>
+   - Focus: Decrement loop
+   - Min score: <span class="number">2</span>/<span class="number">3</span>
+   - Example targets: <span class="keyword">for</span>, --, cout
+   - Key concepts: reverse iteration</div>
+
+        <h2>Benefits:</h2>
+        <ul>
+            <li>✅ Consistent difficulty progression</li>
+            <li>✅ Clear expectations for LLM</li>
+            <li>✅ Easy to add new variations</li>
+            <li>✅ Documented learning objectives</li>
+        </ul>
+    </div>
+
+    <!-- Slide 30: Complete System Architecture -->
+    <div class="slide">
+        <h1>🏗️ Complete System Architecture</h1>
+
+        <h2>The Full Stack:</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <h3>1. Curriculum Layer</h3>
+                <div class="code-block">curriculum_with_variations.py
+- <span class="number">6</span> topics with <span class="number">4-7</span> variations each
+- <span class="number">4</span> difficulty levels per topic
+- Prerequisites and unlock rules</div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>2. RAG Infrastructure</h3>
+                <div class="code-block">rag_specification_variations.md
+- <span class="number">50+</span> explicit specification variations
+- Organized by topic and difficulty
+- Example targets and key concepts</div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>3. Question Generation</h3>
+                <div class="code-block"><span class="comment"># Two-phase (14b) or Three-phase (1.5b)</span>
+Phase <span class="number">1</span>: Select specification variation
+Phase <span class="number">2</span>: Generate code from specification
+Phase <span class="number">3</span>: Extract targets/distractors (deterministic for <span class="number">1.5</span>b)</div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>4. Progress Tracking</h3>
+                <div class="code-block">student_progress.json
+- Track scores by topic + difficulty
+- Unlock next difficulties
+- Best scores and attempt counts</div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>5. Interactive Quiz</h3>
+                <div class="code-block">quiz_app_XXX_variations.py
+- Topic selection menu
+- Difficulty progression display
+- Question generation and scoring
+- Progress reports</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 31: Performance Comparison -->
+    <div class="slide">
+        <h1>⚡ Performance: Before vs After</h1>
+
+        <h2>Original System (Single Specification):</h2>
+        <div class="comparison-table">
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Specifications per topic</td>
+                    <td>3-5 examples</td>
+                </tr>
+                <tr>
+                    <td>Difficulty levels</td>
+                    <td>1 (topic difficulty only)</td>
+                </tr>
+                <tr>
+                    <td>Progression</td>
+                    <td>Linear (topic to topic)</td>
+                </tr>
+                <tr>
+                    <td>Student motivation</td>
+                    <td>Limited - can't practice mastery</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>New System (Specification Variations):</h2>
+        <div class="comparison-table">
+            <table>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Value</th>
+                    <th>Improvement</th>
+                </tr>
+                <tr>
+                    <td>Specifications per topic</td>
+                    <td>4-7 variations</td>
+                    <td>🟢 +40% variety</td>
+                </tr>
+                <tr>
+                    <td>Difficulty levels</td>
+                    <td>4 per topic</td>
+                    <td>🟢 4x progression</td>
+                </tr>
+                <tr>
+                    <td>Total questions</td>
+                    <td>50+ variations</td>
+                    <td>🟢 10x more</td>
+                </tr>
+                <tr>
+                    <td>Progression</td>
+                    <td>Within topics + between topics</td>
+                    <td>🟢 2D progression</td>
+                </tr>
+                <tr>
+                    <td>Student motivation</td>
+                    <td>High - unlock & challenge system</td>
+                    <td>🟢 Gamified</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 32: Future Work -->
     <div class="slide">
         <h1>🚀 Future Enhancements</h1>
 
@@ -1385,11 +1737,14 @@ context = analyze_usage(code)
 
         <h2>Files Created Today:</h2>
         <ul style="font-size: 1.1em;">
-            <li>📄 <code>cpp_curriculum_progression.py</code> - Curriculum structure</li>
+            <li>📄 <code>cpp_curriculum_progression.py</code> - Original curriculum structure</li>
+            <li>📄 <code>curriculum_with_variations.py</code> - ⭐ NEW: Enhanced curriculum with 4 difficulty levels</li>
             <li>📄 <code>quiz_app_templates.py</code> - Template-based (no LLM)</li>
-            <li>📄 <code>quiz_app_1_5b.py</code> - Deterministic 1.5b</li>
-            <li>📄 <code>quiz_app_14b.py</code> - Quality 14b</li>
-            <li>📄 <code>genai_ollama_rag_deterministic_1_5b.py</code> - RAG + Det</li>
+            <li>📄 <code>quiz_app_1_5b.py</code> - Deterministic 1.5b (original)</li>
+            <li>📄 <code>quiz_app_14b.py</code> - Quality 14b (original)</li>
+            <li>📄 <code>quiz_app_1_5b_variations.py</code> - ⭐ NEW: Fast with difficulty progression</li>
+            <li>📄 <code>quiz_app_14b_variations.py</code> - ⭐ NEW: Quality with difficulty progression</li>
+            <li>📄 <code>genai_ollama_rag_deterministic_1_5b.py</code> - RAG + Deterministic</li>
             <li>📄 <code>QUIZ_APPS_README.md</code> - User guide</li>
             <li>📄 <code>MIDTERM_PROJECT_SPECIFICATION.md</code> - Project guide</li>
         </ul>
@@ -1399,6 +1754,7 @@ context = analyze_usage(code)
             <li>📖 DETERMINISTIC_APPROACH.md</li>
             <li>📖 SMALL_MODEL_STRATEGY.md</li>
             <li>📖 RAG_SYSTEM_README.md</li>
+            <li>📖 rag_specification_variations.md - ⭐ NEW: 50+ specification variations</li>
         </ul>
     </div>
 
