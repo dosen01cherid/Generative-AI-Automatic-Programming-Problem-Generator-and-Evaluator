@@ -28,7 +28,7 @@ if sys.platform == "win32":
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Configuration
-OLLAMA_URL = "https://bye-suites-nsw-some.trycloudflare.com"
+OLLAMA_URL = "https://null-server-reliability-integration.trycloudflare.com"
 MODEL = "qwen2.5:1.5b"
 TIMEOUT = 300
 KEEP_ALIVE = "60m"
