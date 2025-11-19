@@ -15,8 +15,12 @@ import random
 import sys
 import io
 import argparse
+import os
 from typing import Dict, List, Optional
-from cpp_curriculum_progression import CppCurriculum, Topic
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+from curriculum.cpp_curriculum_progression import CppCurriculum, Topic
 
 # Fix encoding
 if sys.platform == "win32":
