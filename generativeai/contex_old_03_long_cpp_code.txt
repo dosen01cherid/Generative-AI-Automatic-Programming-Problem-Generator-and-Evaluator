@@ -1,0 +1,5359 @@
+You are a very clever assistant that can code in C++ by looking
+at the provided examples below. You are also know how to create
+fill-in-the-blank questions and ordering line of code questions
+perfectly.
+
+INSTRUCTIONS FOR FILL-IN-THE-BLANK QUESTIONS:
+- Each question should have ONLY ONE blank marked with _____
+- Provide 4 multiple choice options (numbered 1, 2, 3, 4)
+- Include distractors that are related C++ keywords or operators
+- Test understanding of keywords, operators, and single characters
+- Include questions for single characters: ; { } " ' >> << -> . * & : ++ -- :: [] ()
+- Always provide answer as a single number (1, 2, 3, or 4)
+- Format: Code, Question with _____, Options (1. option1  2. option2  3. option3  4. option4), Answer (number)
+
+INSTRUCTIONS FOR LINE ORDERING QUESTIONS:
+- Shuffle all lines of valid C++ code
+- Number each line starting from (1)
+- Provide the correct order as comma-separated numbers
+- Ensure the correct order creates syntactically valid code
+
+============================================================
+BASIC OUTPUT EXAMPLES
+============================================================
+
+------------
+Example 01
+------------
+Program to display one line of output to the screen
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello, World" << endl;
+   return 0;
+}
+
+------------
+Example 02
+------------
+Program to display two lines of output to the screen
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+
+------------
+Example 03
+------------
+Program to display multiple lines with different text
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Welcome to C++" << endl;
+   cout << "This is a programming language" << endl;
+   cout << "Let's learn together!" << endl;
+   return 0;
+}
+
+============================================================
+VARIABLE AND INPUT EXAMPLES
+============================================================
+
+------------
+Example 04
+------------
+Program to declare and display an integer variable
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 25;
+   cout << "Age is: " << age << endl;
+   return 0;
+}
+
+------------
+Example 05
+------------
+Program to get user input and display it
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int number;
+   cout << "Enter a number: ";
+   cin >> number;
+   cout << "You entered: " << number << endl;
+   return 0;
+}
+
+------------
+Example 06
+------------
+Program to add two numbers
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 10;
+   int b = 20;
+   int sum = a + b;
+   cout << "Sum is: " << sum << endl;
+   return 0;
+}
+
+============================================================
+CONDITIONAL EXAMPLES
+============================================================
+
+------------
+Example 07
+------------
+Program using if statement
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num > 5){
+      cout << "Number is greater than 5" << endl;
+   }
+   return 0;
+}
+
+------------
+Example 08
+------------
+Program using if-else statement
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int score = 75;
+   if(score >= 60){
+      cout << "Pass" << endl;
+   }
+   else{
+      cout << "Fail" << endl;
+   }
+   return 0;
+}
+
+============================================================
+LOOP EXAMPLES
+============================================================
+
+------------
+Example 09
+------------
+Program using for loop to display numbers 1 to 5
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 1; i <= 5; i++){
+      cout << i << endl;
+   }
+   return 0;
+}
+
+------------
+Example 10
+------------
+Program using while loop to count down
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int count = 5;
+   while(count > 0){
+      cout << count << endl;
+      count--;
+   }
+   return 0;
+}
+
+============================================================
+LINE ORDERING QUESTIONS
+============================================================
+
+------------------
+Line Ordering Question 01 (Basic Output)
+------------------
+Question
+------------------
+(1) using namespace std;
+(2) int main(){
+(3) #include <iostream>
+(4) return 0;
+(5) cout << "Hello, World" << endl;
+(6) }
+-----------------
+Answer
+-----------------
+3,1,2,5,4,6
+
+------------------
+Line Ordering Question 02 (Two Lines Output)
+------------------
+Question
+------------------
+(1) cout << "Line 2 of 2 lines" << endl;
+(2) #include <iostream>
+(3) return 0;
+(4) using namespace std;
+(5) int main(){
+(6) }
+(7) cout << "Line 1 of 2 lines" << endl;
+-----------------
+Answer
+-----------------
+2,4,5,7,1,3,6
+
+------------------
+Line Ordering Question 03 (Variable Declaration)
+------------------
+Question
+------------------
+(1) cout << "Age is: " << age << endl;
+(2) int age = 25;
+(3) using namespace std;
+(4) #include <iostream>
+(5) return 0;
+(6) int main(){
+(7) }
+-----------------
+Answer
+-----------------
+4,3,6,2,1,5,7
+
+------------------
+Line Ordering Question 04 (User Input)
+------------------
+Question
+------------------
+(1) cin >> number;
+(2) int main(){
+(3) cout << "You entered: " << number << endl;
+(4) #include <iostream>
+(5) int number;
+(6) using namespace std;
+(7) cout << "Enter a number: ";
+(8) return 0;
+(9) }
+-----------------
+Answer
+-----------------
+4,6,2,5,7,1,3,8,9
+
+------------------
+Line Ordering Question 05 (Addition)
+------------------
+Question
+------------------
+(1) int sum = a + b;
+(2) int a = 10;
+(3) using namespace std;
+(4) cout << "Sum is: " << sum << endl;
+(5) #include <iostream>
+(6) int b = 20;
+(7) int main(){
+(8) return 0;
+(9) }
+-----------------
+Answer
+-----------------
+5,3,7,2,6,1,4,8,9
+
+------------------
+Line Ordering Question 06 (If Statement)
+------------------
+Question
+------------------
+(1) if(num > 5){
+(2) #include <iostream>
+(3) cout << "Number is greater than 5" << endl;
+(4) int num = 10;
+(5) return 0;
+(6) }
+(7) int main(){
+(8) using namespace std;
+(9) }
+-----------------
+Answer
+-----------------
+2,8,7,4,1,3,6,5,9
+
+------------------
+Line Ordering Question 07 (If-Else)
+------------------
+Question
+------------------
+(1) int score = 75;
+(2) cout << "Fail" << endl;
+(3) #include <iostream>
+(4) if(score >= 60){
+(5) }
+(6) int main(){
+(7) cout << "Pass" << endl;
+(8) using namespace std;
+(9) else{
+(10) }
+(11) return 0;
+(12) }
+-----------------
+Answer
+-----------------
+3,8,6,1,4,7,5,9,2,10,11,12
+
+------------------
+Line Ordering Question 08 (For Loop)
+------------------
+Question
+------------------
+(1) return 0;
+(2) #include <iostream>
+(3) for(int i = 1; i <= 5; i++){
+(4) using namespace std;
+(5) }
+(6) int main(){
+(7) cout << i << endl;
+(8) }
+-----------------
+Answer
+-----------------
+2,4,6,3,7,5,1,8
+
+------------------
+Line Ordering Question 09 (While Loop)
+------------------
+Question
+------------------
+(1) }
+(2) cout << count << endl;
+(3) int count = 5;
+(4) using namespace std;
+(5) while(count > 0){
+(6) #include <iostream>
+(7) count--;
+(8) int main(){
+(9) return 0;
+(10) }
+-----------------
+Answer
+-----------------
+6,4,8,3,5,2,7,1,9,10
+
+------------------
+Line Ordering Question 10 (Multiple Variables)
+------------------
+Question
+------------------
+(1) cout << "Result: " << result << endl;
+(2) int result = x * y;
+(3) using namespace std;
+(4) int y = 7;
+(5) #include <iostream>
+(6) int x = 3;
+(7) return 0;
+(8) int main(){
+(9) }
+-----------------
+Answer
+-----------------
+5,3,8,6,4,2,1,7,9
+
+============================================================
+ARRAY EXAMPLES
+============================================================
+
+------------
+Example 11
+------------
+Program to declare and display array elements
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {10, 20, 30, 40, 50};
+   for(int i = 0; i < 5; i++){
+      cout << arr[i] << endl;
+   }
+   return 0;
+}
+
+------------
+Example 12
+------------
+Program to find sum of array elements
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   int sum = 0;
+   for(int i = 0; i < 5; i++){
+      sum += arr[i];
+   }
+   cout << "Sum: " << sum << endl;
+   return 0;
+}
+
+============================================================
+FUNCTION EXAMPLES
+============================================================
+
+------------
+Example 13
+------------
+Program with a simple function
+------------
+#include <iostream>
+using namespace std;
+void greet(){
+   cout << "Hello from function" << endl;
+}
+int main(){
+   greet();
+   return 0;
+}
+
+------------
+Example 14
+------------
+Program with function that returns a value
+------------
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add(5, 3);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+
+------------
+Example 15
+------------
+Program with function using pass by reference
+------------
+#include <iostream>
+using namespace std;
+void increment(int &x){
+   x++;
+}
+int main(){
+   int num = 5;
+   increment(num);
+   cout << "Number: " << num << endl;
+   return 0;
+}
+
+============================================================
+STRUCT EXAMPLES
+============================================================
+
+------------
+Example 16
+------------
+Program to declare and use a struct
+------------
+#include <iostream>
+using namespace std;
+struct Student{
+   string name;
+   int age;
+   float gpa;
+};
+int main(){
+   Student s1;
+   s1.name = "John";
+   s1.age = 20;
+   s1.gpa = 3.5;
+   cout << "Name: " << s1.name << endl;
+   cout << "Age: " << s1.age << endl;
+   return 0;
+}
+
+------------
+Example 17
+------------
+Program with struct initialization
+------------
+#include <iostream>
+using namespace std;
+struct Point{
+   int x;
+   int y;
+};
+int main(){
+   Point p1 = {10, 20};
+   cout << "X: " << p1.x << endl;
+   cout << "Y: " << p1.y << endl;
+   return 0;
+}
+
+------------
+Example 18
+------------
+Program with array of structs
+------------
+#include <iostream>
+using namespace std;
+struct Book{
+   string title;
+   int pages;
+};
+int main(){
+   Book books[2];
+   books[0].title = "C++ Programming";
+   books[0].pages = 500;
+   books[1].title = "Data Structures";
+   books[1].pages = 600;
+   for(int i = 0; i < 2; i++){
+      cout << books[i].title << endl;
+   }
+   return 0;
+}
+
+============================================================
+POINTER EXAMPLES
+============================================================
+
+------------
+Example 19
+------------
+Program to declare and use pointers
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   cout << "Address: " << ptr << endl;
+   return 0;
+}
+
+------------
+Example 20
+------------
+Program to modify value using pointer
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   int *p = &x;
+   *p = 10;
+   cout << "New value: " << x << endl;
+   return 0;
+}
+
+------------
+Example 21
+------------
+Program using dynamic memory allocation
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+
+------------
+Example 22
+------------
+Program with pointer to struct
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 100;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   delete head;
+   return 0;
+}
+
+============================================================
+LINKED LIST EXAMPLES
+============================================================
+
+------------
+Example 23
+------------
+Program to create a simple linked list with 2 nodes
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   Node *second = new Node;
+   head->data = 10;
+   head->next = second;
+   second->data = 20;
+   second->next = NULL;
+   cout << "First: " << head->data << endl;
+   cout << "Second: " << second->data << endl;
+   delete head;
+   delete second;
+   return 0;
+}
+
+------------
+Example 24
+------------
+Program to insert node at beginning of linked list
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+void insertAtBegin(Node **head, int value){
+   Node *newNode = new Node;
+   newNode->data = value;
+   newNode->next = *head;
+   *head = newNode;
+}
+int main(){
+   Node *head = NULL;
+   insertAtBegin(&head, 10);
+   insertAtBegin(&head, 20);
+   cout << "Head data: " << head->data << endl;
+   return 0;
+}
+
+------------
+Example 25
+------------
+Program to traverse and display linked list
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+void display(Node *head){
+   Node *temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+}
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   display(head);
+   return 0;
+}
+
+============================================================
+STACK EXAMPLES
+============================================================
+
+------------
+Example 26
+------------
+Program implementing stack using array
+------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top--];
+   }
+   bool isEmpty(){
+      return top == -1;
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   s.push(20);
+   cout << "Popped: " << s.pop() << endl;
+   return 0;
+}
+
+------------
+Example 27
+------------
+Program implementing stack using linked list
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+class Stack{
+   Node *top;
+public:
+   Stack(){
+      top = NULL;
+   }
+   void push(int value){
+      Node *newNode = new Node;
+      newNode->data = value;
+      newNode->next = top;
+      top = newNode;
+   }
+   int pop(){
+      if(top == NULL) return -1;
+      int value = top->data;
+      Node *temp = top;
+      top = top->next;
+      delete temp;
+      return value;
+   }
+};
+int main(){
+   Stack s;
+   s.push(5);
+   s.push(10);
+   cout << "Popped: " << s.pop() << endl;
+   return 0;
+}
+
+============================================================
+QUEUE EXAMPLES
+============================================================
+
+------------
+Example 28
+------------
+Program implementing queue using array
+------------
+#include <iostream>
+using namespace std;
+class Queue{
+   int arr[100];
+   int front, rear;
+public:
+   Queue(){
+      front = -1;
+      rear = -1;
+   }
+   void enqueue(int x){
+      if(front == -1) front = 0;
+      arr[++rear] = x;
+   }
+   int dequeue(){
+      int value = arr[front];
+      front++;
+      return value;
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(10);
+   q.enqueue(20);
+   cout << "Dequeued: " << q.dequeue() << endl;
+   return 0;
+}
+
+------------
+Example 29
+------------
+Program implementing queue using linked list
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+class Queue{
+   Node *front, *rear;
+public:
+   Queue(){
+      front = rear = NULL;
+   }
+   void enqueue(int value){
+      Node *newNode = new Node;
+      newNode->data = value;
+      newNode->next = NULL;
+      if(rear == NULL){
+         front = rear = newNode;
+         return;
+      }
+      rear->next = newNode;
+      rear = newNode;
+   }
+   int dequeue(){
+      if(front == NULL) return -1;
+      int value = front->data;
+      Node *temp = front;
+      front = front->next;
+      if(front == NULL) rear = NULL;
+      delete temp;
+      return value;
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(5);
+   q.enqueue(10);
+   cout << "Dequeued: " << q.dequeue() << endl;
+   return 0;
+}
+
+============================================================
+BINARY TREE EXAMPLES
+============================================================
+
+------------
+Example 30
+------------
+Program to create a binary tree node
+------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *left;
+   TreeNode *right;
+};
+TreeNode* createNode(int value){
+   TreeNode *newNode = new TreeNode;
+   newNode->data = value;
+   newNode->left = NULL;
+   newNode->right = NULL;
+   return newNode;
+}
+int main(){
+   TreeNode *root = createNode(10);
+   root->left = createNode(5);
+   root->right = createNode(15);
+   cout << "Root: " << root->data << endl;
+   return 0;
+}
+
+------------
+Example 31
+------------
+Program for tree inorder traversal
+------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *left;
+   TreeNode *right;
+};
+void inorder(TreeNode *root){
+   if(root == NULL) return;
+   inorder(root->left);
+   cout << root->data << " ";
+   inorder(root->right);
+}
+int main(){
+   TreeNode *root = new TreeNode;
+   root->data = 10;
+   root->left = NULL;
+   root->right = NULL;
+   inorder(root);
+   return 0;
+}
+
+------------
+Example 32
+------------
+Program for tree preorder traversal
+------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *left;
+   TreeNode *right;
+};
+void preorder(TreeNode *root){
+   if(root == NULL) return;
+   cout << root->data << " ";
+   preorder(root->left);
+   preorder(root->right);
+}
+int main(){
+   TreeNode *root = new TreeNode;
+   root->data = 10;
+   root->left = NULL;
+   root->right = NULL;
+   preorder(root);
+   return 0;
+}
+
+============================================================
+CLASS AND OBJECT EXAMPLES
+============================================================
+
+------------
+Example 33
+------------
+Program with simple class definition
+------------
+#include <iostream>
+using namespace std;
+class Rectangle{
+public:
+   int length;
+   int width;
+   int area(){
+      return length * width;
+   }
+};
+int main(){
+   Rectangle r;
+   r.length = 10;
+   r.width = 5;
+   cout << "Area: " << r.area() << endl;
+   return 0;
+}
+
+------------
+Example 34
+------------
+Program with class constructor
+------------
+#include <iostream>
+using namespace std;
+class Student{
+   string name;
+   int age;
+public:
+   Student(string n, int a){
+      name = n;
+      age = a;
+   }
+   void display(){
+      cout << "Name: " << name << endl;
+      cout << "Age: " << age << endl;
+   }
+};
+int main(){
+   Student s1("Alice", 20);
+   s1.display();
+   return 0;
+}
+
+------------
+Example 35
+------------
+Program with private and public members
+------------
+#include <iostream>
+using namespace std;
+class BankAccount{
+private:
+   double balance;
+public:
+   BankAccount(){
+      balance = 0;
+   }
+   void deposit(double amount){
+      balance += amount;
+   }
+   double getBalance(){
+      return balance;
+   }
+};
+int main(){
+   BankAccount acc;
+   acc.deposit(1000);
+   cout << "Balance: " << acc.getBalance() << endl;
+   return 0;
+}
+
+------------
+Example 36
+------------
+Program with class inheritance
+------------
+#include <iostream>
+using namespace std;
+class Animal{
+public:
+   void eat(){
+      cout << "Eating..." << endl;
+   }
+};
+class Dog : public Animal{
+public:
+   void bark(){
+      cout << "Barking..." << endl;
+   }
+};
+int main(){
+   Dog d;
+   d.eat();
+   d.bark();
+   return 0;
+}
+
+------------
+Example 37
+------------
+Program with getter and setter methods
+------------
+#include <iostream>
+using namespace std;
+class Person{
+private:
+   string name;
+   int age;
+public:
+   void setName(string n){
+      name = n;
+   }
+   string getName(){
+      return name;
+   }
+   void setAge(int a){
+      age = a;
+   }
+   int getAge(){
+      return age;
+   }
+};
+int main(){
+   Person p;
+   p.setName("Bob");
+   p.setAge(25);
+   cout << p.getName() << endl;
+   return 0;
+}
+
+============================================================
+DETAILED INSTRUCTION EXAMPLES - VARIABLES
+============================================================
+
+------------
+Example 38
+------------
+Program that displays a message with one variable
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int number = 42;
+   cout << "The number is: " << number << endl;
+   return 0;
+}
+
+------------
+Example 39
+------------
+Program that displays a message with two variables
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   int y = 20;
+   cout << "X is: " << x << endl;
+   cout << "Y is: " << y << endl;
+   return 0;
+}
+
+------------
+Example 40
+------------
+Program that displays a message with three variables
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 5;
+   int b = 10;
+   int c = 15;
+   cout << "A: " << a << ", B: " << b << ", C: " << c << endl;
+   return 0;
+}
+
+------------
+Example 41
+------------
+Program that adds two variables and then displays the output
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1 = 15;
+   int num2 = 25;
+   int sum = num1 + num2;
+   cout << "Sum: " << sum << endl;
+   return 0;
+}
+
+------------
+Example 42
+------------
+Program that subtracts two variables and then displays the output
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1 = 50;
+   int num2 = 30;
+   int difference = num1 - num2;
+   cout << "Difference: " << difference << endl;
+   return 0;
+}
+
+------------
+Example 43
+------------
+Program that multiplies two variables and then displays the output
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1 = 6;
+   int num2 = 7;
+   int product = num1 * num2;
+   cout << "Product: " << product << endl;
+   return 0;
+}
+
+------------
+Example 44
+------------
+Program that divides two variables and then displays the output
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1 = 20;
+   int num2 = 4;
+   int quotient = num1 / num2;
+   cout << "Quotient: " << quotient << endl;
+   return 0;
+}
+
+------------
+Example 45
+------------
+Program that adds three variables and then displays the output
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 10;
+   int b = 20;
+   int c = 30;
+   int total = a + b + c;
+   cout << "Total: " << total << endl;
+   return 0;
+}
+
+============================================================
+DETAILED INSTRUCTION EXAMPLES - WITH/WITHOUT FUNCTIONS
+============================================================
+
+------------
+Example 46
+------------
+Program that calculates area of rectangle without any function
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int length = 10;
+   int width = 5;
+   int area = length * width;
+   cout << "Area: " << area << endl;
+   return 0;
+}
+
+------------
+Example 47
+------------
+Program that calculates area of rectangle with function
+------------
+#include <iostream>
+using namespace std;
+int calculateArea(int l, int w){
+   return l * w;
+}
+int main(){
+   int length = 10;
+   int width = 5;
+   int area = calculateArea(length, width);
+   cout << "Area: " << area << endl;
+   return 0;
+}
+
+------------
+Example 48
+------------
+Program that finds maximum of two numbers without any function
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 15;
+   int b = 25;
+   int max;
+   if(a > b){
+      max = a;
+   }
+   else{
+      max = b;
+   }
+   cout << "Maximum: " << max << endl;
+   return 0;
+}
+
+------------
+Example 49
+------------
+Program that finds maximum of two numbers with function
+------------
+#include <iostream>
+using namespace std;
+int findMax(int x, int y){
+   if(x > y){
+      return x;
+   }
+   else{
+      return y;
+   }
+}
+int main(){
+   int a = 15;
+   int b = 25;
+   int max = findMax(a, b);
+   cout << "Maximum: " << max << endl;
+   return 0;
+}
+
+------------
+Example 50
+------------
+Program that checks if number is even without any function
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num % 2 == 0){
+      cout << "Even" << endl;
+   }
+   else{
+      cout << "Odd" << endl;
+   }
+   return 0;
+}
+
+------------
+Example 51
+------------
+Program that checks if number is even with function
+------------
+#include <iostream>
+using namespace std;
+bool isEven(int n){
+   return n % 2 == 0;
+}
+int main(){
+   int num = 10;
+   if(isEven(num)){
+      cout << "Even" << endl;
+   }
+   else{
+      cout << "Odd" << endl;
+   }
+   return 0;
+}
+
+============================================================
+RECURSION EXAMPLES
+============================================================
+
+------------
+Example 52
+------------
+Program that calculates factorial using recursion
+------------
+#include <iostream>
+using namespace std;
+int factorial(int n){
+   if(n <= 1){
+      return 1;
+   }
+   return n * factorial(n - 1);
+}
+int main(){
+   int num = 5;
+   int result = factorial(num);
+   cout << "Factorial: " << result << endl;
+   return 0;
+}
+
+------------
+Example 53
+------------
+Program that calculates fibonacci number using recursion
+------------
+#include <iostream>
+using namespace std;
+int fibonacci(int n){
+   if(n <= 1){
+      return n;
+   }
+   return fibonacci(n - 1) + fibonacci(n - 2);
+}
+int main(){
+   int num = 6;
+   int result = fibonacci(num);
+   cout << "Fibonacci: " << result << endl;
+   return 0;
+}
+
+------------
+Example 54
+------------
+Program that calculates sum of numbers from 1 to n using recursion
+------------
+#include <iostream>
+using namespace std;
+int sumNumbers(int n){
+   if(n == 0){
+      return 0;
+   }
+   return n + sumNumbers(n - 1);
+}
+int main(){
+   int num = 10;
+   int total = sumNumbers(num);
+   cout << "Sum: " << total << endl;
+   return 0;
+}
+
+------------
+Example 55
+------------
+Program that calculates power using recursion
+------------
+#include <iostream>
+using namespace std;
+int power(int base, int exp){
+   if(exp == 0){
+      return 1;
+   }
+   return base * power(base, exp - 1);
+}
+int main(){
+   int base = 2;
+   int exponent = 3;
+   int result = power(base, exponent);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+
+------------
+Example 56
+------------
+Program that prints numbers from n to 1 using recursion
+------------
+#include <iostream>
+using namespace std;
+void printNumbers(int n){
+   if(n == 0){
+      return;
+   }
+   cout << n << " ";
+   printNumbers(n - 1);
+}
+int main(){
+   int num = 5;
+   printNumbers(num);
+   cout << endl;
+   return 0;
+}
+
+------------
+Example 57
+------------
+Program that traverses binary tree using recursion (inorder)
+------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *left;
+   TreeNode *right;
+};
+void inorderTraversal(TreeNode *root){
+   if(root == NULL){
+      return;
+   }
+   inorderTraversal(root->left);
+   cout << root->data << " ";
+   inorderTraversal(root->right);
+}
+int main(){
+   TreeNode *root = new TreeNode;
+   root->data = 10;
+   root->left = NULL;
+   root->right = NULL;
+   inorderTraversal(root);
+   return 0;
+}
+
+============================================================
+EXCEPTION HANDLING EXAMPLES
+============================================================
+
+------------
+Example 58
+------------
+Program that handles division by zero using try-catch
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero error";
+      }
+      int result = a / b;
+      cout << "Result: " << result << endl;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+
+------------
+Example 59
+------------
+Program that handles invalid input using try-catch
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int age;
+      cout << "Enter age: ";
+      cin >> age;
+      if(age < 0){
+         throw age;
+      }
+      cout << "Age is: " << age << endl;
+   }
+   catch(int e){
+      cout << "Invalid age: " << e << endl;
+   }
+   return 0;
+}
+
+------------
+Example 60
+------------
+Program that handles array out of bounds using try-catch
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int arr[5] = {1, 2, 3, 4, 5};
+      int index = 10;
+      if(index >= 5){
+         throw "Index out of bounds";
+      }
+      cout << "Value: " << arr[index] << endl;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+
+------------
+Example 61
+------------
+Program with multiple catch blocks
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int choice = 1;
+      if(choice == 1){
+         throw 100;
+      }
+      else if(choice == 2){
+         throw "String error";
+      }
+   }
+   catch(int e){
+      cout << "Integer exception: " << e << endl;
+   }
+   catch(const char* msg){
+      cout << "String exception: " << msg << endl;
+   }
+   return 0;
+}
+
+------------
+Example 62
+------------
+Program that throws exception from function
+------------
+#include <iostream>
+using namespace std;
+int divide(int a, int b){
+   if(b == 0){
+      throw "Cannot divide by zero";
+   }
+   return a / b;
+}
+int main(){
+   try{
+      int result = divide(10, 0);
+      cout << "Result: " << result << endl;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+
+============================================================
+COMPLEX MULTI-STEP INSTRUCTION EXAMPLES
+============================================================
+
+------------
+Example 63
+------------
+Program that gets two numbers from user, adds them, and then displays the sum
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1, num2;
+   cout << "Enter first number: ";
+   cin >> num1;
+   cout << "Enter second number: ";
+   cin >> num2;
+   int sum = num1 + num2;
+   cout << "Sum is: " << sum << endl;
+   return 0;
+}
+
+------------
+Example 64
+------------
+Program that creates array of 5 numbers, calculates their sum, and then displays the average
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {10, 20, 30, 40, 50};
+   int sum = 0;
+   for(int i = 0; i < 5; i++){
+      sum += arr[i];
+   }
+   float average = sum / 5.0;
+   cout << "Average: " << average << endl;
+   return 0;
+}
+
+------------
+Example 65
+------------
+Program that gets a number from user, checks if it is positive or negative, and then displays appropriate message
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   cout << "Enter a number: ";
+   cin >> num;
+   if(num > 0){
+      cout << "Positive number" << endl;
+   }
+   else if(num < 0){
+      cout << "Negative number" << endl;
+   }
+   else{
+      cout << "Zero" << endl;
+   }
+   return 0;
+}
+
+------------
+Example 66
+------------
+Program that uses struct to store student data, initializes values, and then displays them
+------------
+#include <iostream>
+using namespace std;
+struct Student{
+   string name;
+   int age;
+   float gpa;
+};
+int main(){
+   Student s;
+   s.name = "Alice";
+   s.age = 20;
+   s.gpa = 3.8;
+   cout << "Name: " << s.name << endl;
+   cout << "Age: " << s.age << endl;
+   cout << "GPA: " << s.gpa << endl;
+   return 0;
+}
+
+------------
+Example 67
+------------
+Program that creates two variables, swaps their values using pointers, and then displays the result
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 10;
+   int b = 20;
+   int *p1 = &a;
+   int *p2 = &b;
+   int temp = *p1;
+   *p1 = *p2;
+   *p2 = temp;
+   cout << "A: " << a << endl;
+   cout << "B: " << b << endl;
+   return 0;
+}
+
+------------
+Example 68
+------------
+Program that uses linked list to insert two nodes and then displays their values
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   Node *second = new Node;
+   head->data = 10;
+   head->next = second;
+   second->data = 20;
+   second->next = NULL;
+   Node *temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+   cout << endl;
+   return 0;
+}
+
+------------
+Example 69
+------------
+Program that uses linked list to insert three nodes and then deletes the first node
+------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   Node *second = new Node;
+   Node *third = new Node;
+   head->data = 10;
+   head->next = second;
+   second->data = 20;
+   second->next = third;
+   third->data = 30;
+   third->next = NULL;
+   Node *temp = head;
+   head = head->next;
+   delete temp;
+   temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+   cout << endl;
+   return 0;
+}
+
+------------
+Example 70
+------------
+Program that uses stack to push three numbers and then pops two numbers
+------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top--];
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   s.push(20);
+   s.push(30);
+   cout << "Popped: " << s.pop() << endl;
+   cout << "Popped: " << s.pop() << endl;
+   return 0;
+}
+
+------------
+Example 71
+------------
+Program that uses queue to enqueue four numbers and then dequeues two numbers
+------------
+#include <iostream>
+using namespace std;
+class Queue{
+   int arr[100];
+   int front, rear;
+public:
+   Queue(){
+      front = 0;
+      rear = -1;
+   }
+   void enqueue(int x){
+      arr[++rear] = x;
+   }
+   int dequeue(){
+      return arr[front++];
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(5);
+   q.enqueue(10);
+   q.enqueue(15);
+   q.enqueue(20);
+   cout << "Dequeued: " << q.dequeue() << endl;
+   cout << "Dequeued: " << q.dequeue() << endl;
+   return 0;
+}
+
+------------
+Example 72
+------------
+Program that creates binary tree with three nodes and then performs inorder traversal
+------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *left;
+   TreeNode *right;
+};
+void inorder(TreeNode *root){
+   if(root == NULL) return;
+   inorder(root->left);
+   cout << root->data << " ";
+   inorder(root->right);
+}
+int main(){
+   TreeNode *root = new TreeNode;
+   root->data = 20;
+   root->left = new TreeNode;
+   root->left->data = 10;
+   root->left->left = NULL;
+   root->left->right = NULL;
+   root->right = new TreeNode;
+   root->right->data = 30;
+   root->right->left = NULL;
+   root->right->right = NULL;
+   inorder(root);
+   cout << endl;
+   return 0;
+}
+
+------------
+Example 73
+------------
+Program that creates class with constructor, sets values, and then displays them using getter method
+------------
+#include <iostream>
+using namespace std;
+class Person{
+   string name;
+   int age;
+public:
+   Person(string n, int a){
+      name = n;
+      age = a;
+   }
+   string getName(){
+      return name;
+   }
+   int getAge(){
+      return age;
+   }
+};
+int main(){
+   Person p("John", 25);
+   cout << "Name: " << p.getName() << endl;
+   cout << "Age: " << p.getAge() << endl;
+   return 0;
+}
+
+------------
+Example 74
+------------
+Program that uses array to store five numbers, finds the maximum value, and then displays it
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {12, 45, 23, 67, 34};
+   int max = arr[0];
+   for(int i = 1; i < 5; i++){
+      if(arr[i] > max){
+         max = arr[i];
+      }
+   }
+   cout << "Maximum: " << max << endl;
+   return 0;
+}
+
+------------
+Example 75
+------------
+Program that uses recursion to calculate factorial and then displays the result
+------------
+#include <iostream>
+using namespace std;
+int factorial(int n){
+   if(n <= 1){
+      return 1;
+   }
+   return n * factorial(n - 1);
+}
+int main(){
+   int num = 5;
+   int result = factorial(num);
+   cout << num << "! = " << result << endl;
+   return 0;
+}
+
+------------
+Example 76
+------------
+Program that tries to divide two numbers and catches division by zero exception
+------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+      cout << "Result: " << result << endl;
+   }
+   catch(const char* e){
+      cout << "Error: " << e << endl;
+   }
+   return 0;
+}
+
+------------
+Example 77
+------------
+Program that creates two objects of a class and then compares their values
+------------
+#include <iostream>
+using namespace std;
+class Number{
+   int value;
+public:
+   Number(int v){
+      value = v;
+   }
+   int getValue(){
+      return value;
+   }
+};
+int main(){
+   Number n1(10);
+   Number n2(20);
+   if(n1.getValue() > n2.getValue()){
+      cout << "n1 is greater" << endl;
+   }
+   else{
+      cout << "n2 is greater" << endl;
+   }
+   return 0;
+}
+
+============================================================
+FILL-IN-THE-BLANK QUESTIONS (MULTIPLE CHOICE FORMAT)
+============================================================
+
+------------------
+Fill-in-the-Blank Question 01 (Basic Output - Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#_____ <iostream>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. std  2. include  3. namespace  4. using
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 02 (Basic Output - Namespace)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using _____ std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. include  2. class  3. namespace  4. struct
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 03 (Basic Output - endl)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << _____;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. cout  2. endl  3. cin  4. std
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 04 (Basic Output - return)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello, World" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello, World" << endl;
+   _____ 0;
+}
+-------------------
+Options
+-------------------
+1. int  2. void  3. return  4. break
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 05 (Variable - int)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 25;
+   cout << "Age is: " << age << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ age = 25;
+   cout << "Age is: " << age << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. float  2. int  3. char  4. string
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 06 (Variable - cout)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 25;
+   cout << "Age is: " << age << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 25;
+   _____ << "Age is: " << age << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. cin  2. cout  3. scanf  4. printf
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 07 (Input - cin)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int number;
+   cout << "Enter a number: ";
+   cin >> number;
+   cout << "You entered: " << number << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int number;
+   cout << "Enter a number: ";
+   _____ >> number;
+   cout << "You entered: " << number << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. cout  2. scanf  3. cin  4. input
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 08 (If Statement - if)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num > 5){
+      cout << "Number is greater than 5" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   _____(num > 5){
+      cout << "Number is greater than 5" << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. while  2. for  3. if  4. switch
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 09 (If-Else - else)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int score = 75;
+   if(score >= 60){
+      cout << "Pass" << endl;
+   }
+   else{
+      cout << "Fail" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int score = 75;
+   if(score >= 60){
+      cout << "Pass" << endl;
+   }
+   ____{
+      cout << "Fail" << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. if  2. else  3. elif  4. then
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 10 (For Loop - for)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 1; i <= 5; i++){
+      cout << i << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____(int i = 1; i <= 5; i++){
+      cout << i << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. while  2. for  3. if  4. do
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 11 (While Loop - while)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int count = 5;
+   while(count > 0){
+      cout << count << endl;
+      count--;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int count = 5;
+   _____(count > 0){
+      cout << count << endl;
+      count--;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. for  2. if  3. while  4. do
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 12 (Struct - struct)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Student{
+   string name;
+   int age;
+};
+int main(){
+   Student s1;
+   s1.name = "John";
+   s1.age = 20;
+   cout << "Name: " << s1.name << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_____ Student{
+   string name;
+   int age;
+};
+int main(){
+   Student s1;
+   s1.name = "John";
+   s1.age = 20;
+   cout << "Name: " << s1.name << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. class  2. struct  3. typedef  4. enum
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 13 (Pointer - Asterisk)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int _____ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. &  2. *  3. #  4. @
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 14 (Pointer - Address)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = _____num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. *  2. &  3. %  4. $
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 15 (Dynamic Memory - new)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = _____ int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. malloc  2. new  3. alloc  4. create
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 16 (Dynamic Memory - delete)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   _____ ptr;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. free  2. delete  3. remove  4. destroy
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 17 (Linked List - NULL)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 100;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 100;
+   head->next = _____;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. 0  2. NULL  3. null  4. none
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 18 (Class - class)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_____ Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. struct  2. class  3. typedef  4. namespace
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 19 (Class - public)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+_____:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. private  2. protected  3. public  4. static
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 20 (Class - private)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class BankAccount{
+private:
+   double balance;
+public:
+   void deposit(double amount){
+      balance += amount;
+   }
+   double getBalance(){
+      return balance;
+   }
+};
+int main(){
+   BankAccount acc;
+   acc.deposit(1000);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class BankAccount{
+_____:
+   double balance;
+public:
+   void deposit(double amount){
+      balance += amount;
+   }
+   double getBalance(){
+      return balance;
+   }
+};
+int main(){
+   BankAccount acc;
+   acc.deposit(1000);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. public  2. protected  3. private  4. static
+-----------------
+Answer
+-----------------
+3
+
+------------------
+Fill-in-the-Blank Question 21 (Inheritance - Colon)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Animal{
+public:
+   void eat(){
+      cout << "Eating..." << endl;
+   }
+};
+class Dog : public Animal{
+public:
+   void bark(){
+      cout << "Barking..." << endl;
+   }
+};
+int main(){
+   Dog d;
+   d.eat();
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Animal{
+public:
+   void eat(){
+      cout << "Eating..." << endl;
+   }
+};
+class Dog _____ public Animal{
+public:
+   void bark(){
+      cout << "Barking..." << endl;
+   }
+};
+int main(){
+   Dog d;
+   d.eat();
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ;  2. :  3. ,  4. .
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 22 (Recursion - return)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int factorial(int n){
+   if(n <= 1){
+      return 1;
+   }
+   return n * factorial(n - 1);
+}
+int main(){
+   int result = factorial(5);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int factorial(int n){
+   if(n <= 1){
+      _____ 1;
+   }
+   return n * factorial(n - 1);
+}
+int main(){
+   int result = factorial(5);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. break  2. return  3. continue  4. exit
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 23 (Exception Handling - try)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   ____{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. try  2. check  3. test  4. attempt
+-----------------
+Answer
+-----------------
+1
+
+------------------
+Fill-in-the-Blank Question 24 (Exception Handling - throw)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         _____ "Division by zero";
+      }
+      int result = a / b;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. return  2. throw  3. raise  4. error
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 25 (Exception Handling - catch)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+   }
+   _____(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. catch  2. handle  3. except  4. error
+-----------------
+Answer
+-----------------
+1
+
+============================================================
+SINGLE CHARACTER FILL-IN-THE-BLANK QUESTIONS
+============================================================
+
+------------------
+Fill-in-the-Blank Question 26 (Semicolon - Statement End)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << "Value: " << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10_____
+   cout << "Value: " << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. :  2. ;  3. ,  4. .
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 27 (Opening Brace - Function)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main()_____
+   int x = 10;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ;  2. {  3. [  4. (
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 28 (Closing Brace - Function)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   return 0;
+_____
+-------------------
+Options
+-------------------
+1. }  2. ]  3. )  4. ;
+-----------------
+Answer
+-----------------
+1
+
+------------------
+Fill-in-the-Blank Question 29 (Opening Brace - If Statement)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num > 5){
+      cout << "Greater" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num > 5)_____
+      cout << "Greater" << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ;  2. {  3. :  4. [
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 30 (Closing Brace - If Statement)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num > 5){
+      cout << "Greater" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   if(num > 5){
+      cout << "Greater" << endl;
+   _____
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. }  2. ]  3. )  4. ;
+-----------------
+Answer
+-----------------
+1
+
+------------------
+Fill-in-the-Blank Question 31 (Double Quote - String Start)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello, World" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << _____Hello, World" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. '  2. "  3. `  4. <
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 32 (Double Quote - String End)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello, World" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello, World_____ << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. '  2. "  3. `  4. >
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 33 (Left Shift Operator - cout)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout _____ "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. >>  2. <<  3. <>  4. ><
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 34 (Right Shift Operator - cin)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   cin >> num;
+   cout << num << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   cin _____ num;
+   cout << num << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. <<  2. >>  3. <>  4. ><
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 35 (Parentheses - Function Call)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add(5, 3);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add_____5, 3);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. [  2. (  3. {  4. <
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 36 (Square Bracket - Array Declaration)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr_____5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. (  2. [  3. {  4. <
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 37 (Square Bracket - Array Access)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   cout << arr_____0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. (  2. [  3. {  4. <
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 38 (Arrow Operator - Pointer to Struct)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 100;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head_____data = 100;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. .  2. ->  3. ::  4. =>
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 39 (Dot Operator - Struct Member)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Point{
+   int x;
+   int y;
+};
+int main(){
+   Point p;
+   p.x = 10;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Point{
+   int x;
+   int y;
+};
+int main(){
+   Point p;
+   p_____x = 10;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ->  2. .  3. ::  4. :
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 40 (Asterisk - Dereference)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << *ptr << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << _____ptr << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. &  2. *  3. #  4. @
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 41 (Ampersand - Address Of)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = _____num;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. *  2. &  3. #  4. %
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 42 (Colon - Access Specifier)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class MyClass{
+private:
+   int x;
+public:
+   void setX(int val){
+      x = val;
+   }
+};
+int main(){
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class MyClass{
+private_____
+   int x;
+public:
+   void setX(int val){
+      x = val;
+   }
+};
+int main(){
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ;  2. :  3. .  4. ,
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 43 (Increment Operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   x++;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   x_____;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ++  2. --  3. +=  4. -=
+-----------------
+Answer
+-----------------
+1
+
+------------------
+Fill-in-the-Blank Question 44 (Decrement Operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int count = 5;
+   while(count > 0){
+      cout << count << endl;
+      count--;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int count = 5;
+   while(count > 0){
+      cout << count << endl;
+      count_____;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ++  2. --  3. +=  4. -=
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question 45 (Scope Resolution Operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   std_____cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. .  2. ::  3. ->  4. :
+-----------------
+Answer
+-----------------
+2
+
+============================================================
+
+------------------
+Fill-in-the-Blank Question 09 (Arrays)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {10, 20, 30, 40, 50};
+   for(int i = 0; i < 5; i++){
+      cout << arr[i] << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int _1_[5] = {10, 20, 30, 40, 50};
+   _2_(int i = 0; i < 5; i++){
+      cout << arr[_3_] << endl;
+   }
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: arr
+2: for
+3: i
+
+------------------
+Fill-in-the-Blank Question 10 (Functions)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add(5, 3);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_1_ add(int a, int b){
+   _2_ a + b;
+}
+int main(){
+   int result = _3_(5, 3);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: int
+2: return
+3: add
+
+------------------
+Fill-in-the-Blank Question 11 (Struct)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Student{
+   string name;
+   int age;
+};
+int main(){
+   Student s1;
+   s1.name = "John";
+   s1.age = 20;
+   cout << "Name: " << s1.name << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_1_ Student{
+   string name;
+   int _2_;
+};
+int main(){
+   Student s1;
+   s1._3_ = "John";
+   s1.age = 20;
+   cout << "Name: " << s1.name << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: struct
+2: age
+3: name
+
+------------------
+Fill-in-the-Blank Question 12 (Pointers)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int _1_ptr = _2_num;
+   cout << "Value: " << _3_ptr << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: *
+2: &
+3: *
+
+------------------
+Fill-in-the-Blank Question 13 (Dynamic Memory)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = _1_ int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   _2_ ptr;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: new
+2: delete
+
+------------------
+Fill-in-the-Blank Question 14 (Linked List Node)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 100;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct _1_{
+   int data;
+   Node *_2_;
+};
+int main(){
+   Node *head = new Node;
+   head->_3_ = 100;
+   head->next = _4_;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: Node
+2: next
+3: data
+4: NULL
+
+------------------
+Fill-in-the-Blank Question 15 (Stack Class)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top--];
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_1_ Stack{
+   int arr[100];
+   int top;
+_2_:
+   Stack(){
+      top = -1;
+   }
+   void _3_(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top--];
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: class
+2: public
+3: push
+
+------------------
+Fill-in-the-Blank Question 16 (Queue Operations)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Queue{
+   int arr[100];
+   int front, rear;
+public:
+   void enqueue(int x){
+      arr[++rear] = x;
+   }
+   int dequeue(){
+      return arr[front++];
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Queue{
+   int arr[100];
+   int _1_, rear;
+public:
+   void _2_(int x){
+      arr[++rear] = x;
+   }
+   int _3_(){
+      return arr[front++];
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(10);
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: front
+2: enqueue
+3: dequeue
+
+------------------
+Fill-in-the-Blank Question 17 (Binary Tree)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *left;
+   TreeNode *right;
+};
+TreeNode* createNode(int value){
+   TreeNode *newNode = new TreeNode;
+   newNode->data = value;
+   newNode->left = NULL;
+   newNode->right = NULL;
+   return newNode;
+}
+int main(){
+   TreeNode *root = createNode(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct TreeNode{
+   int data;
+   TreeNode *_1_;
+   TreeNode *_2_;
+};
+TreeNode* createNode(int value){
+   TreeNode *newNode = _3_ TreeNode;
+   newNode->data = value;
+   newNode->left = _4_;
+   newNode->right = NULL;
+   return newNode;
+}
+int main(){
+   TreeNode *root = createNode(10);
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: left
+2: right
+3: new
+4: NULL
+
+------------------
+Fill-in-the-Blank Question 18 (Class with Constructor)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Student{
+   string name;
+   int age;
+public:
+   Student(string n, int a){
+      name = n;
+      age = a;
+   }
+   void display(){
+      cout << "Name: " << name << endl;
+   }
+};
+int main(){
+   Student s1("Alice", 20);
+   s1.display();
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Student{
+   string name;
+   int age;
+_1_:
+   _2_(string n, int a){
+      name = n;
+      age = a;
+   }
+   void _3_(){
+      cout << "Name: " << name << endl;
+   }
+};
+int main(){
+   Student s1("Alice", 20);
+   s1.display();
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: public
+2: Student
+3: display
+
+------------------
+Fill-in-the-Blank Question 19 (Inheritance)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Animal{
+public:
+   void eat(){
+      cout << "Eating..." << endl;
+   }
+};
+class Dog : public Animal{
+public:
+   void bark(){
+      cout << "Barking..." << endl;
+   }
+};
+int main(){
+   Dog d;
+   d.eat();
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Animal{
+public:
+   void eat(){
+      cout << "Eating..." << endl;
+   }
+};
+class Dog : _1_ Animal{
+public:
+   void bark(){
+      cout << "Barking..." << endl;
+   }
+};
+int main(){
+   _2_ d;
+   d._3_();
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: public
+2: Dog
+3: eat
+
+------------------
+Fill-in-the-Blank Question 20 (Private Members)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class BankAccount{
+private:
+   double balance;
+public:
+   void deposit(double amount){
+      balance += amount;
+   }
+   double getBalance(){
+      return balance;
+   }
+};
+int main(){
+   BankAccount acc;
+   acc.deposit(1000);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class BankAccount{
+_1_:
+   double balance;
+_2_:
+   void deposit(double amount){
+      balance += amount;
+   }
+   double _3_(){
+      return balance;
+   }
+};
+int main(){
+   BankAccount acc;
+   acc._4_(1000);
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: private
+2: public
+3: getBalance
+4: deposit
+
+------------------
+Fill-in-the-Blank Question 21 (Recursion - Factorial)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int factorial(int n){
+   if(n <= 1){
+      return 1;
+   }
+   return n * factorial(n - 1);
+}
+int main(){
+   int result = factorial(5);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int _1_(int n){
+   if(n <= 1){
+      _2_ 1;
+   }
+   return n * _3_(n - 1);
+}
+int main(){
+   int result = factorial(5);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: factorial
+2: return
+3: factorial
+
+------------------
+Fill-in-the-Blank Question 22 (Recursion - Fibonacci)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int fibonacci(int n){
+   if(n <= 1){
+      return n;
+   }
+   return fibonacci(n - 1) + fibonacci(n - 2);
+}
+int main(){
+   int result = fibonacci(6);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int fibonacci(int n){
+   _1_(n <= 1){
+      return n;
+   }
+   return _2_(n - 1) + fibonacci(n - 2);
+}
+int main(){
+   int result = _3_(6);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: if
+2: fibonacci
+3: fibonacci
+
+------------------
+Fill-in-the-Blank Question 23 (Exception Handling - Basic)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         throw "Division by zero";
+      }
+      int result = a / b;
+   }
+   catch(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _1_{
+      int a = 10;
+      int b = 0;
+      if(b == 0){
+         _2_ "Division by zero";
+      }
+      int result = a / b;
+   }
+   _3_(const char* msg){
+      cout << "Error: " << msg << endl;
+   }
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: try
+2: throw
+3: catch
+
+------------------
+Fill-in-the-Blank Question 24 (Exception Handling - Integer)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int age = -5;
+      if(age < 0){
+         throw age;
+      }
+      cout << "Age: " << age << endl;
+   }
+   catch(int e){
+      cout << "Invalid: " << e << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int age = -5;
+      if(age < 0){
+         _1_ age;
+      }
+      cout << "Age: " << age << endl;
+   }
+   _2_(_3_ e){
+      cout << "Invalid: " << e << endl;
+   }
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: throw
+2: catch
+3: int
+
+------------------
+Fill-in-the-Blank Question 25 (Two Variables Addition)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1 = 15;
+   int num2 = 25;
+   int sum = num1 + num2;
+   cout << "Sum: " << sum << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int _1_ = 15;
+   int num2 = 25;
+   int _2_ = num1 + num2;
+   _3_ << "Sum: " << sum << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: num1
+2: sum
+3: cout
+
+------------------
+Fill-in-the-Blank Question 26 (With Function vs Without)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int calculateArea(int l, int w){
+   return l * w;
+}
+int main(){
+   int length = 10;
+   int width = 5;
+   int area = calculateArea(length, width);
+   cout << "Area: " << area << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int _1_(int l, int w){
+   _2_ l * w;
+}
+int main(){
+   int length = 10;
+   int width = 5;
+   int area = _3_(length, width);
+   cout << "Area: " << area << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: calculateArea
+2: return
+3: calculateArea
+
+------------------
+Fill-in-the-Blank Question 27 (Complex - User Input and Calculation)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1, num2;
+   cout << "Enter first number: ";
+   cin >> num1;
+   cout << "Enter second number: ";
+   cin >> num2;
+   int sum = num1 + num2;
+   cout << "Sum is: " << sum << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num1, num2;
+   cout << "Enter first number: ";
+   _1_ >> num1;
+   cout << "Enter second number: ";
+   cin >> _2_;
+   int _3_ = num1 + num2;
+   cout << "Sum is: " << sum << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: cin
+2: num2
+3: sum
+
+------------------
+Fill-in-the-Blank Question 28 (Complex - Linked List Operations)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   Node *second = new Node;
+   head->data = 10;
+   head->next = second;
+   second->data = 20;
+   second->next = NULL;
+   Node *temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *_1_;
+};
+int main(){
+   Node *head = _2_ Node;
+   Node *second = new Node;
+   head->data = 10;
+   head->_3_ = second;
+   second->data = 20;
+   second->next = _4_;
+   Node *temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: next
+2: new
+3: next
+4: NULL
+
+------------------
+Fill-in-the-Blank Question 29 (Complex - Stack Multiple Operations)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top--];
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   s.push(20);
+   cout << "Popped: " << s.pop() << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int _1_;
+public:
+   Stack(){
+      top = -1;
+   }
+   void _2_(int x){
+      arr[++top] = x;
+   }
+   int _3_(){
+      return arr[top--];
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   s.push(20);
+   cout << "Popped: " << s._4_() << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: top
+2: push
+3: pop
+4: pop
+
+------------------
+Fill-in-the-Blank Question 30 (Complex - Array Find Maximum)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {12, 45, 23, 67, 34};
+   int max = arr[0];
+   for(int i = 1; i < 5; i++){
+      if(arr[i] > max){
+         max = arr[i];
+      }
+   }
+   cout << "Maximum: " << max << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {12, 45, 23, 67, 34};
+   int _1_ = arr[0];
+   _2_(int i = 1; i < 5; i++){
+      if(arr[i] > max){
+         max = _3_[i];
+      }
+   }
+   cout << "Maximum: " << max << endl;
+   return 0;
+}
+-----------------
+Answer
+-----------------
+1: max
+2: for
+3: arr
+
+============================================================
+ADVANCED LINE ORDERING QUESTIONS
+============================================================
+
+------------------
+Line Ordering Question 11 (Array)
+------------------
+Question
+------------------
+(1) for(int i = 0; i < 5; i++){
+(2) int arr[5] = {10, 20, 30, 40, 50};
+(3) #include <iostream>
+(4) cout << arr[i] << endl;
+(5) using namespace std;
+(6) }
+(7) return 0;
+(8) int main(){
+(9) }
+-----------------
+Answer
+-----------------
+3,5,8,2,1,4,6,7,9
+
+------------------
+Line Ordering Question 12 (Function)
+------------------
+Question
+------------------
+(1) return a + b;
+(2) int add(int a, int b){
+(3) int main(){
+(4) #include <iostream>
+(5) }
+(6) cout << "Result: " << result << endl;
+(7) int result = add(5, 3);
+(8) using namespace std;
+(9) return 0;
+(10) }
+-----------------
+Answer
+-----------------
+4,8,2,1,5,3,7,6,9,10
+
+------------------
+Line Ordering Question 13 (Struct)
+------------------
+Question
+------------------
+(1) s1.name = "John";
+(2) int age;
+(3) Student s1;
+(4) using namespace std;
+(5) struct Student{
+(6) cout << "Name: " << s1.name << endl;
+(7) #include <iostream>
+(8) int main(){
+(9) return 0;
+(10) string name;
+(11) };
+(12) }
+-----------------
+Answer
+-----------------
+7,4,5,10,2,11,8,3,1,6,9,12
+
+------------------
+Line Ordering Question 14 (Pointers)
+------------------
+Question
+------------------
+(1) int *ptr = &num;
+(2) int num = 10;
+(3) return 0;
+(4) cout << "Value: " << *ptr << endl;
+(5) using namespace std;
+(6) int main(){
+(7) #include <iostream>
+(8) }
+-----------------
+Answer
+-----------------
+7,5,6,2,1,4,3,8
+
+------------------
+Line Ordering Question 15 (Dynamic Memory)
+------------------
+Question
+------------------
+(1) delete ptr;
+(2) int main(){
+(3) *ptr = 25;
+(4) cout << "Value: " << *ptr << endl;
+(5) using namespace std;
+(6) int *ptr = new int;
+(7) #include <iostream>
+(8) return 0;
+(9) }
+-----------------
+Answer
+-----------------
+7,5,2,6,3,4,1,8,9
+
+------------------
+Line Ordering Question 16 (Linked List Node)
+------------------
+Question
+------------------
+(1) head->data = 100;
+(2) struct Node{
+(3) return 0;
+(4) Node *next;
+(5) Node *head = new Node;
+(6) int main(){
+(7) using namespace std;
+(8) #include <iostream>
+(9) cout << "Data: " << head->data << endl;
+(10) head->next = NULL;
+(11) int data;
+(12) };
+(13) }
+-----------------
+Answer
+-----------------
+8,7,2,11,4,12,6,5,1,10,9,3,13
+
+------------------
+Line Ordering Question 17 (Stack Push)
+------------------
+Question
+------------------
+(1) arr[++top] = x;
+(2) int top;
+(3) Stack(){
+(4) void push(int x){
+(5) using namespace std;
+(6) int arr[100];
+(7) class Stack{
+(8) }
+(9) #include <iostream>
+(10) top = -1;
+(11) public:
+(12) }
+(13) };
+-----------------
+Answer
+-----------------
+9,5,7,6,2,11,3,10,8,4,1,8,13
+
+------------------
+Line Ordering Question 18 (Queue Enqueue)
+------------------
+Question
+------------------
+(1) int front, rear;
+(2) arr[++rear] = x;
+(3) public:
+(4) }
+(5) void enqueue(int x){
+(6) #include <iostream>
+(7) int arr[100];
+(8) using namespace std;
+(9) };
+(10) class Queue{
+-----------------
+Answer
+-----------------
+6,8,10,7,1,3,5,2,4,9
+
+------------------
+Line Ordering Question 19 (Binary Tree Node)
+------------------
+Question
+------------------
+(1) newNode->data = value;
+(2) newNode->left = NULL;
+(3) TreeNode *left;
+(4) using namespace std;
+(5) TreeNode* createNode(int value){
+(6) TreeNode *newNode = new TreeNode;
+(7) int data;
+(8) return newNode;
+(9) newNode->right = NULL;
+(10) struct TreeNode{
+(11) TreeNode *right;
+(12) #include <iostream>
+(13) }
+(14) };
+-----------------
+Answer
+-----------------
+12,4,10,7,3,11,14,5,6,1,2,9,8,13
+
+------------------
+Line Ordering Question 20 (Class with Constructor)
+------------------
+Question
+------------------
+(1) Student(string n, int a){
+(2) age = a;
+(3) void display(){
+(4) int age;
+(5) class Student{
+(6) using namespace std;
+(7) cout << "Name: " << name << endl;
+(8) public:
+(9) name = n;
+(10) #include <iostream>
+(11) string name;
+(12) }
+(13) }
+(14) };
+-----------------
+Answer
+-----------------
+10,6,5,11,4,8,1,9,2,12,3,7,13,14
+
+------------------
+Line Ordering Question 21 (Inheritance)
+------------------
+Question
+------------------
+(1) class Dog : public Animal{
+(2) void eat(){
+(3) cout << "Eating..." << endl;
+(4) }
+(5) using namespace std;
+(6) public:
+(7) void bark(){
+(8) #include <iostream>
+(9) class Animal{
+(10) cout << "Barking..." << endl;
+(11) };
+(12) public:
+(13) }
+(14) };
+-----------------
+Answer
+-----------------
+8,5,9,12,2,3,4,11,1,6,7,10,13,14
+
+------------------
+Line Ordering Question 22 (Getter and Setter)
+------------------
+Question
+------------------
+(1) void setName(string n){
+(2) private:
+(3) int age;
+(4) string name;
+(5) return name;
+(6) public:
+(7) name = n;
+(8) using namespace std;
+(9) #include <iostream>
+(10) }
+(11) class Person{
+(12) string getName(){
+(13) }
+(14) };
+-----------------
+Answer
+-----------------
+9,8,11,2,4,3,6,1,7,10,12,5,13,14
+
+------------------
+Line Ordering Question 23 (Tree Traversal)
+------------------
+Question
+------------------
+(1) TreeNode *right;
+(2) if(root == NULL) return;
+(3) void inorder(TreeNode *root){
+(4) cout << root->data << " ";
+(5) TreeNode *left;
+(6) #include <iostream>
+(7) inorder(root->right);
+(8) struct TreeNode{
+(9) inorder(root->left);
+(10) int data;
+(11) }
+(12) using namespace std;
+(13) };
+-----------------
+Answer
+-----------------
+6,12,8,10,5,1,13,3,2,9,4,7,11
+
+------------------
+Line Ordering Question 24 (Linked List Insert)
+------------------
+Question
+------------------
+(1) newNode->data = value;
+(2) *head = newNode;
+(3) Node *next;
+(4) Node *newNode = new Node;
+(5) using namespace std;
+(6) void insertAtBegin(Node **head, int value){
+(7) }
+(8) struct Node{
+(9) int data;
+(10) #include <iostream>
+(11) };
+(12) newNode->next = *head;
+-----------------
+Answer
+-----------------
+10,5,8,9,3,11,6,4,1,12,2,7
+
+------------------
+Line Ordering Question 25 (Complete Stack Implementation)
+------------------
+Question
+------------------
+(1) top = -1;
+(2) Stack s;
+(3) int top;
+(4) }
+(5) public:
+(6) return arr[top--];
+(7) int main(){
+(8) s.push(10);
+(9) arr[++top] = x;
+(10) using namespace std;
+(11) Stack(){
+(12) int pop(){
+(13) class Stack{
+(14) #include <iostream>
+(15) int arr[100];
+(16) }
+(17) void push(int x){
+(18) return 0;
+(19) }
+(20) };
+-----------------
+Answer
+-----------------
+14,10,13,15,3,5,11,1,4,17,9,16,12,6,16,20,7,2,8,18,19
+
+------------------
+Line Ordering Question 26 (Recursion - Factorial)
+------------------
+Question
+------------------
+(1) return n * factorial(n - 1);
+(2) int factorial(int n){
+(3) return 1;
+(4) #include <iostream>
+(5) }
+(6) if(n <= 1){
+(7) using namespace std;
+(8) int main(){
+(9) cout << "Result: " << result << endl;
+(10) return 0;
+(11) int result = factorial(5);
+(12) }
+-----------------
+Answer
+-----------------
+4,7,2,6,3,5,1,5,8,11,9,10,12
+
+------------------
+Line Ordering Question 27 (Recursion - Fibonacci)
+------------------
+Question
+------------------
+(1) return fibonacci(n - 1) + fibonacci(n - 2);
+(2) #include <iostream>
+(3) return n;
+(4) int result = fibonacci(6);
+(5) using namespace std;
+(6) if(n <= 1){
+(7) }
+(8) int fibonacci(int n){
+(9) int main(){
+(10) cout << "Result: " << result << endl;
+(11) return 0;
+(12) }
+-----------------
+Answer
+-----------------
+2,5,8,6,3,7,1,7,9,4,10,11,12
+
+------------------
+Line Ordering Question 28 (Exception Handling - Try Catch)
+------------------
+Question
+------------------
+(1) int b = 0;
+(2) throw "Division by zero";
+(3) using namespace std;
+(4) if(b == 0){
+(5) #include <iostream>
+(6) try{
+(7) catch(const char* msg){
+(8) }
+(9) int main(){
+(10) cout << "Error: " << msg << endl;
+(11) int a = 10;
+(12) return 0;
+(13) }
+(14) int result = a / b;
+-----------------
+Answer
+-----------------
+5,3,9,6,11,1,4,2,8,14,7,10,13,12,8
+
+------------------
+Line Ordering Question 29 (Exception Handling - Integer Throw)
+------------------
+Question
+------------------
+(1) cout << "Invalid: " << e << endl;
+(2) int age = -5;
+(3) using namespace std;
+(4) catch(int e){
+(5) if(age < 0){
+(6) #include <iostream>
+(7) int main(){
+(8) }
+(9) throw age;
+(10) cout << "Age: " << age << endl;
+(11) try{
+(12) return 0;
+(13) }
+-----------------
+Answer
+-----------------
+6,3,7,11,2,5,9,8,10,4,1,13,12,8
+
+------------------
+Line Ordering Question 30 (Two Variables with Addition)
+------------------
+Question
+------------------
+(1) int sum = num1 + num2;
+(2) #include <iostream>
+(3) int num1 = 15;
+(4) cout << "Sum: " << sum << endl;
+(5) int main(){
+(6) using namespace std;
+(7) return 0;
+(8) int num2 = 25;
+(9) }
+-----------------
+Answer
+-----------------
+2,6,5,3,8,1,4,7,9
+
+------------------
+Line Ordering Question 31 (With Function - Calculate Area)
+------------------
+Question
+------------------
+(1) int area = calculateArea(length, width);
+(2) return l * w;
+(3) cout << "Area: " << area << endl;
+(4) int width = 5;
+(5) #include <iostream>
+(6) int length = 10;
+(7) using namespace std;
+(8) int calculateArea(int l, int w){
+(9) }
+(10) int main(){
+(11) return 0;
+(12) }
+-----------------
+Answer
+-----------------
+5,7,8,2,9,10,6,4,1,3,11,12
+
+------------------
+Line Ordering Question 32 (User Input and Sum)
+------------------
+Question
+------------------
+(1) cin >> num2;
+(2) int sum = num1 + num2;
+(3) cout << "Enter first number: ";
+(4) #include <iostream>
+(5) cout << "Sum is: " << sum << endl;
+(6) cin >> num1;
+(7) int num1, num2;
+(8) using namespace std;
+(9) cout << "Enter second number: ";
+(10) return 0;
+(11) int main(){
+(12) }
+-----------------
+Answer
+-----------------
+4,8,11,7,3,6,9,1,2,5,10,12
+
+------------------
+Line Ordering Question 33 (Linked List Two Nodes with Display)
+------------------
+Question
+------------------
+(1) head->next = second;
+(2) Node *second = new Node;
+(3) while(temp != NULL){
+(4) struct Node{
+(5) int data;
+(6) second->data = 20;
+(7) using namespace std;
+(8) Node *temp = head;
+(9) #include <iostream>
+(10) Node *next;
+(11) temp = temp->next;
+(12) cout << temp->data << " ";
+(13) head->data = 10;
+(14) };
+(15) int main(){
+(16) Node *head = new Node;
+(17) }
+(18) second->next = NULL;
+(19) cout << endl;
+(20) return 0;
+-----------------
+Answer
+-----------------
+9,7,4,5,10,14,15,16,2,13,1,6,18,8,3,12,11,17,19,20,17
+
+------------------
+Line Ordering Question 34 (Linked List Delete First Node)
+------------------
+Question
+------------------
+(1) Node *third = new Node;
+(2) head->next = second;
+(3) #include <iostream>
+(4) Node *temp = head;
+(5) using namespace std;
+(6) second->data = 20;
+(7) Node *next;
+(8) delete temp;
+(9) head = head->next;
+(10) int data;
+(11) Node *second = new Node;
+(12) head->data = 10;
+(13) struct Node{
+(14) };
+(15) third->data = 30;
+(16) int main(){
+(17) cout << temp->data << " ";
+(18) Node *head = new Node;
+(19) while(temp != NULL){
+(20) temp = temp->next;
+(21) second->next = third;
+(22) temp = head;
+(23) third->next = NULL;
+(24) }
+(25) return 0;
+-----------------
+Answer
+-----------------
+3,5,13,10,7,14,16,18,11,1,12,2,6,21,15,23,4,9,8,22,19,17,20,24,25,24
+
+------------------
+Line Ordering Question 35 (Stack Push and Pop Operations)
+------------------
+Question
+------------------
+(1) s.push(20);
+(2) #include <iostream>
+(3) public:
+(4) }
+(5) s.push(30);
+(6) int top;
+(7) Stack(){
+(8) arr[++top] = x;
+(9) void push(int x){
+(10) cout << "Popped: " << s.pop() << endl;
+(11) using namespace std;
+(12) class Stack{
+(13) return 0;
+(14) top = -1;
+(15) int arr[100];
+(16) int pop(){
+(17) return arr[top--];
+(18) }
+(19) Stack s;
+(20) s.push(10);
+(21) int main(){
+-----------------
+Answer
+-----------------
+2,11,12,15,6,3,7,14,4,9,8,4,16,17,18,4,21,19,20,1,5,10,10,13,18
+
+------------------
+Line Ordering Question 36 (Queue Enqueue and Dequeue)
+------------------
+Question
+------------------
+(1) Queue q;
+(2) cout << "Dequeued: " << q.dequeue() << endl;
+(3) int dequeue(){
+(4) void enqueue(int x){
+(5) #include <iostream>
+(6) q.enqueue(10);
+(7) int front, rear;
+(8) using namespace std;
+(9) }
+(10) return arr[front++];
+(11) arr[++rear] = x;
+(12) q.enqueue(15);
+(13) public:
+(14) int arr[100];
+(15) return 0;
+(16) int main(){
+(17) class Queue{
+(18) q.enqueue(5);
+(19) q.enqueue(20);
+(20) }
+-----------------
+Answer
+-----------------
+5,8,17,14,7,13,4,11,9,3,10,9,9,16,1,18,6,12,19,2,2,15,20
+
+------------------
+Line Ordering Question 37 (Binary Tree with Traversal)
+------------------
+Question
+------------------
+(1) TreeNode *right;
+(2) inorder(root);
+(3) #include <iostream>
+(4) root->left->left = NULL;
+(5) root->data = 20;
+(6) root->right->data = 30;
+(7) TreeNode *left;
+(8) root->left = new TreeNode;
+(9) struct TreeNode{
+(10) return;
+(11) inorder(root->right);
+(12) }
+(13) cout << root->data << " ";
+(14) void inorder(TreeNode *root){
+(15) if(root == NULL)
+(16) int main(){
+(17) root->right->left = NULL;
+(18) using namespace std;
+(19) root->right = new TreeNode;
+(20) inorder(root->left);
+(21) int data;
+(22) TreeNode *root = new TreeNode;
+(23) root->left->data = 10;
+(24) root->left->right = NULL;
+(25) root->right->right = NULL;
+(26) cout << endl;
+(27) return 0;
+(28) };
+-----------------
+Answer
+-----------------
+3,18,9,21,7,1,28,14,15,10,20,13,11,12,16,22,5,8,23,4,24,19,6,17,25,2,26,27,12
+
+------------------
+Line Ordering Question 38 (Class Constructor and Getter)
+------------------
+Question
+------------------
+(1) age = a;
+(2) public:
+(3) name = n;
+(4) return age;
+(5) Person(string n, int a){
+(6) int age;
+(7) }
+(8) string name;
+(9) Person p("John", 25);
+(10) #include <iostream>
+(11) using namespace std;
+(12) return name;
+(13) int main(){
+(14) }
+(15) string getName(){
+(16) cout << "Name: " << p.getName() << endl;
+(17) class Person{
+(18) cout << "Age: " << p.getAge() << endl;
+(19) int getAge(){
+(20) return 0;
+-----------------
+Answer
+-----------------
+10,11,17,8,6,2,5,3,1,7,15,12,7,19,4,7,14,13,9,16,18,20,14
+
+------------------
+Line Ordering Question 39 (Array Find Maximum)
+------------------
+Question
+------------------
+(1) int arr[5] = {12, 45, 23, 67, 34};
+(2) return 0;
+(3) #include <iostream>
+(4) int max = arr[0];
+(5) if(arr[i] > max){
+(6) max = arr[i];
+(7) for(int i = 1; i < 5; i++){
+(8) int main(){
+(9) using namespace std;
+(10) }
+(11) cout << "Maximum: " << max << endl;
+(12) }
+-----------------
+Answer
+-----------------
+3,9,8,1,4,7,5,6,10,10,11,2,12
+
+------------------
+Line Ordering Question 40 (Recursion with Display)
+------------------
+Question
+------------------
+(1) int result = factorial(num);
+(2) #include <iostream>
+(3) if(n <= 1){
+(4) return n * factorial(n - 1);
+(5) int num = 5;
+(6) using namespace std;
+(7) }
+(8) int main(){
+(9) return 1;
+(10) int factorial(int n){
+(11) cout << num << "! = " << result << endl;
+(12) return 0;
+(13) }
+-----------------
+Answer
+-----------------
+2,6,10,3,9,7,4,7,8,5,1,11,12,13
+
+============================================================
+END OF EXAMPLES
+============================================================
+
+When creating new questions:
+
+FOR FILL-IN-THE-BLANK (MULTIPLE CHOICE FORMAT):
+1. Always start with valid C++ code
+2. Select ONLY ONE strategic word or character to blank out with _____
+3. Provide exactly 4 multiple choice options
+4. Focus on testing:
+   - Basic keywords: int, if, for, while, return, cout, cin, endl, namespace, include, else, try, catch, throw
+   - Type keywords: struct, class, void, float, char, string, bool
+   - Memory keywords: new, delete, NULL
+   - Access specifiers: public, private, protected
+   - Single characters: ; { } " ' >> << -> . * & : ++ -- :: [] ()
+5. Include good distractors (related keywords/operators that could confuse students)
+6. Format:
+   - Code section (complete working code)
+   - Question section (code with one _____ blank)
+   - Options section (1. option1  2. option2  3. option3  4. option4)
+   - Answer section (single number: 1, 2, 3, or 4)
+7. Create separate questions for both keyword blanks AND single character blanks
+
+FOR LINE ORDERING:
+1. Start with complete, valid C++ code
+2. Separate each line (including braces, struct/class definitions)
+3. Shuffle randomly but ensure every line is numbered sequentially
+4. The answer should recreate syntactically correct, compilable code
+5. Format answer as comma-separated numbers: 3,1,2,5,4,6
+6. For complex code (classes, structs, functions), ensure proper structure:
+   - Headers come first
+   - Declarations before definitions
+   - Class/struct definition before usage
+   - Function definition before main() or after with declaration
+7. Pay attention to scope and ordering dependencies
+
+IMPORTANT CONCEPTS TO TEST:
+- Memory management: new, delete, pointers
+- Data structures: arrays, structs, linked lists, stacks, queues, trees
+- OOP: classes, objects, constructors, inheritance, encapsulation
+- Access specifiers: public, private, protected
+- Pointer operations: *, &, ->, NULL
+- ADT operations: push, pop, enqueue, dequeue, insert, delete, traverse
+- Tree operations: inorder, preorder, postorder traversal
+
+Remember: Always ensure the original code compiles correctly before creating questions!

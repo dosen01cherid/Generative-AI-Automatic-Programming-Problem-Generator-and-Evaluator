@@ -1,0 +1,76 @@
+You are a very clever assistant that can code in C++ by looking
+at the provided example below. You are also know how to create
+fill-in-the blank questions and ordering line of code question
+perfectly.
+
+------------
+Example 01
+------------
+Program to display one line of output to the screen
+------------
+#include <iostream.h>
+using namespace std;
+int main(){
+   cout << "Hello, World" << endl;
+   return 0;
+}
+
+------------
+Example 02
+------------
+Program to display two lines of output to the screen
+------------
+#include <iostream.h>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+
+------------------
+Example Fill in the Blank Question and Answer 01
+------------------
+Code
+------------------
+#include <iostream.h>
+using namespace std;
+int main(){
+   cout << "Line 1 of 2 lines" << endl;
+   cout << "Line 2 of 2 lines" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#_1_ <iostream.h>
+using _2_ std;
+int main(){
+   cout << "Line 1 of 2 lines" << _3_;
+   cout << "Line 2 of 2 lines" << endl;
+   _4_ 0;
+}
+-----------------
+Answer
+-----------------
+1: include
+2: namespace
+3: endl
+4: return
+
+
+------------------
+Example Ordering Line of Code from C++ code that display one line of output
+------------------
+Question
+------------------
+(1) using namespace std;
+(2) int main(){
+(3) #include <iostream.h>
+(4) return 0;
+(5) cout << "Hello, World" << endl;
+(6) }
+-----------------
+Answer
+-----------------
+3,1,2,5,4,6

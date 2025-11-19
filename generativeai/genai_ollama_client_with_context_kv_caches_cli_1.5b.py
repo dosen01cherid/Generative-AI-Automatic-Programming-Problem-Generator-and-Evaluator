@@ -1,8 +1,9 @@
 """
-Ollama KV Cache Client (Auto-Context Preload with Progress)
+Ollama KV Cache Client (CLI Version - Non-Interactive) - qwen2.5:1.5b
 ---------------------------------------------------------
-Automatically preloads context.txt into KV cache at startup WITH PROGRESS.
-All questions (including first) are fast using cached context.
+Command-line version that accepts questions as arguments using qwen2.5:1.5b model.
+This is a smaller, faster model compared to the 14b version.
+Usage: python genai_ollama_client_with_context_kv_caches_cli_1.5b.py "Your question here"
 """
 
 import requests
@@ -13,6 +14,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 import sys
 import io
+import argparse
 
 # Fix encoding for Windows console to support emojis
 if sys.platform == "win32":
@@ -23,12 +25,12 @@ if sys.platform == "win32":
 # 🔧 CONFIGURATION
 # =======================================================
 OLLAMA_URL = "https://flows-billion-angels-soonest.trycloudflare.com"
-GEN_MODEL = "qwen2.5:14b"
+GEN_MODEL = "qwen2.5:1.5b"  # Smaller, faster model
 TIMEOUT = 600
 CONTEXT_FILE = "context.txt"
 MODEL_CONTEXT_SIZE = 128_000  # in tokens
 AVG_CHARS_PER_TOKEN = 4.0
-KEEP_ALIVE = "60m"  # Keep model loaded for 10 minutes
+KEEP_ALIVE = "60m"  # Keep model loaded for 60 minutes
 # =======================================================
 
 class OllamaKVCacheClient:
@@ -150,55 +152,16 @@ class OllamaKVCacheClient:
         """Rough estimate of token count."""
         return math.ceil(len(text) / AVG_CHARS_PER_TOKEN)
 
-    def is_model_loaded(self) -> bool:
-        """Check if model is currently loaded (KV cache exists)."""
-        try:
-            response = requests.get(f"{self.base_url}/api/ps", timeout=5)
-            models = response.json().get('models', [])
-            return any(m['name'].startswith(self.model) for m in models)
-        except:
-            return False
-
-    def get_cache_status(self) -> Dict[str, Any]:
-        """Get detailed cache status."""
-        status = {
-            'has_kv_cache': self.kv_cache_context is not None,
-            'model_loaded': self.is_model_loaded(),
-            'conversation_turns': len(self.conversation_history),
-        }
-
-        if self.kv_cache_context:
-            status['cache_tokens_estimate'] = len(self.kv_cache_context)
-
-        return status
-
-    def clear_kv_cache(self):
-        """Clear KV cache and unload model."""
-        print("\n🧹 Clearing KV cache and unloading model...")
-        try:
-            requests.post(
-                f"{self.base_url}/api/generate",
-                json={
-                    "model": self.model,
-                    "prompt": "",
-                    "keep_alive": 0  # Immediately unload
-                },
-                timeout=10
-            )
-            self.kv_cache_context = None
-            self.conversation_history = []
-            print("✅ KV cache cleared and model unloaded")
-        except Exception as e:
-            print(f"⚠️ Error clearing cache: {e}")
-
     def generate_with_cache(
         self,
         prompt: str,
-        use_kv_cache: bool = True
+        use_kv_cache: bool = True,
+        verbose: bool = True
     ) -> tuple[str, float]:
         """Generate response, optionally using KV cache."""
         cache_status = "🟢 WARM (using KV cache)" if (use_kv_cache and self.kv_cache_context) else "🔴 COLD (no cache)"
-        print(f"\n[{cache_status}]")
+        if verbose:
+            print(f"\n[{cache_status}]")
 
         # Prepare request payload
         payload = {
@@ -211,13 +174,14 @@ class OllamaKVCacheClient:
         # Include KV cache context if using cache
         if use_kv_cache and self.kv_cache_context is not None:
             payload["context"] = self.kv_cache_context
-            print(f"📦 Using cached context ({len(self.kv_cache_context):,} elements)")
+            if verbose:
+                print(f"📦 Using cached context ({len(self.kv_cache_context):,} elements)")
 
         # Estimate token usage
         new_tokens = self.estimate_tokens(prompt)
-        print(f"📊 New tokens to process: ~{new_tokens:,}")
-
-        print("🚀 Generating answer...\n")
+        if verbose:
+            print(f"📊 New tokens to process: ~{new_tokens:,}")
+            print("🚀 Generating answer...\n")
 
         # Stream response
         response_text = ""
@@ -243,7 +207,8 @@ class OllamaKVCacheClient:
                         # Collect response text
                         if "response" in data:
                             chunk = data["response"]
-                            print(chunk, end='', flush=True)
+                            if verbose:
+                                print(chunk, end='', flush=True)
                             response_text += chunk
 
                         # Capture the context field (KV cache)
@@ -258,30 +223,24 @@ class OllamaKVCacheClient:
             return "", 0
 
         elapsed_time = time.time() - start_time
-        print(f"\n\n⏱️  Response time: {elapsed_time:.2f}s")
+        if verbose:
+            print(f"\n\n⏱️  Response time: {elapsed_time:.2f}s")
 
         # Update KV cache context
         if new_context is not None:
             self.kv_cache_context = new_context
-            print(f"💾 KV cache updated ({len(new_context):,} elements)")
+            if verbose:
+                print(f"💾 KV cache updated ({len(new_context):,} elements)")
 
         return response_text.strip(), elapsed_time
 
     def ask_question(
         self,
         question: str,
-        keep_cache: bool = True
+        keep_cache: bool = True,
+        verbose: bool = True
     ) -> str:
         """Ask a question using the cached context."""
-
-        # If not keeping cache, clear and reload
-        if not keep_cache:
-            if self.kv_cache_context is not None:
-                self.clear_kv_cache()
-
-            # Pre-load context again
-            print("\n🔄 Reloading base context into fresh KV cache...")
-            self.preload_context_to_cache()
 
         # Build question prompt (context is already in cache)
         question_prompt = (
@@ -293,7 +252,8 @@ class OllamaKVCacheClient:
         # Generate response using cached context
         answer, response_time = self.generate_with_cache(
             question_prompt,
-            use_kv_cache=True
+            use_kv_cache=True,
+            verbose=verbose
         )
 
         # Track conversation history
@@ -306,37 +266,31 @@ class OllamaKVCacheClient:
 
         return answer
 
-    def show_statistics(self):
-        """Show conversation statistics."""
-        if not self.conversation_history:
-            print("\n📊 No questions asked yet.")
-            return
-
-        print("\n" + "="*60)
-        print("📊 SESSION STATISTICS")
-        print("="*60)
-
-        total_time = sum(turn['response_time'] for turn in self.conversation_history)
-
-        print(f"Total questions: {len(self.conversation_history)}")
-        print(f"Total response time: {total_time:.2f}s")
-        print(f"Average response time: {total_time / len(self.conversation_history):.2f}s")
-
-        # Show individual question times
-        print(f"\nQuestion breakdown:")
-        for i, turn in enumerate(self.conversation_history, 1):
-            cache_icon = "🟢" if turn['used_cache'] else "🔴"
-            print(f"  {cache_icon} Q{i}: {turn['response_time']:.2f}s - {turn['question'][:50]}...")
-
-        print("="*60)
-
 
 def main():
-    print("="*60)
-    print("🧠 Ollama KV Cache Client (Auto Pre-Load)")
-    print("="*60)
-    print("\nThis client pre-loads context.txt into KV cache at startup.")
-    print("ALL questions (including first) will be FAST!\n")
+    parser = argparse.ArgumentParser(
+        description='Ollama KV Cache Client - CLI Version',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python genai_ollama_client_with_context_kv_caches_cli.py "What is C++?"
+  python genai_ollama_client_with_context_kv_caches_cli.py "Explain pointers" --quiet
+        """
+    )
+    parser.add_argument('question', type=str, help='The question to ask')
+    parser.add_argument('--quiet', '-q', action='store_true', help='Quiet mode - only show the answer')
+    parser.add_argument('--context', '-c', type=str, default=CONTEXT_FILE, help='Path to context file')
+
+    args = parser.parse_args()
+
+    verbose = not args.quiet
+
+    if verbose:
+        print("="*60)
+        print("🧠 Ollama KV Cache Client (CLI Mode)")
+        print("="*60)
+        print("\nThis client pre-loads context.txt into KV cache at startup.")
+        print("ALL questions will be FAST!\n")
 
     # Initialize client
     client = OllamaKVCacheClient(
@@ -347,70 +301,37 @@ def main():
 
     # Load base context from file
     try:
-        client.load_base_context(CONTEXT_FILE)
+        client.load_base_context(args.context)
     except FileNotFoundError as e:
         print(f"\n❌ {e}")
-        print("❗ Please create a file named 'context.txt' in the same folder.")
-        return
+        print(f"❗ Please create a file named '{args.context}' in the same folder.")
+        sys.exit(1)
 
-    # PRE-LOAD context into KV cache BEFORE user asks anything
-    print("\n💡 Pre-loading context into KV cache before you ask questions...")
-    print("   This makes ALL questions fast, including the first one!\n")
+    # PRE-LOAD context into KV cache
+    if verbose:
+        print("\n💡 Pre-loading context into KV cache...")
 
     success = client.preload_context_to_cache()
 
     if not success:
-        print("\n⚠️ Failed to pre-load context. Continuing anyway...")
+        print("\n⚠️ Failed to pre-load context.")
+        sys.exit(1)
 
-    print("\n" + "-"*60)
-    print("💡 Context is now cached! All questions will be fast.")
-    print("💡 Choose 'y' to keep using cache or 'n' to reload fresh.")
-    print("-"*60)
+    if verbose:
+        print("\n" + "-"*60)
+        print("💡 Context is now cached! Answering your question...")
+        print("-"*60)
 
-    # Main interaction loop
-    while True:
-        print("\n" + "="*60)
-        question = input("❓ Enter your question (or 'exit'/'stats'):\n> ").strip()
+    # Ask the question
+    answer = client.ask_question(args.question, keep_cache=True, verbose=verbose)
 
-        if question.lower() in {"exit", "quit"}:
-            client.show_statistics()
-            client.clear_kv_cache()
-            print("\n👋 Goodbye!")
-            break
+    if args.quiet and answer:
+        print(answer)
 
-        if question.lower() == "stats":
-            client.show_statistics()
-            continue
-
-        if not question:
-            print("⚠️ Please enter a question.")
-            continue
-
-        # Ask user about cache preference
-        print("\n🧠 Cache Options:")
-        print("  [y] Keep KV cache (FAST - use existing cached context)")
-        print("  [n] Drop & reload KV cache (SLOW - fresh context reload)")
-
-        cache_choice = input("Your choice (y/n): ").strip().lower()
-        keep_cache = cache_choice.startswith('y')
-
-        # Show current cache status
-        cache_status = client.get_cache_status()
-        if cache_status['has_kv_cache']:
-            print(f"📦 Current cache: {cache_status['cache_tokens_estimate']:,} elements")
-        else:
-            print("📦 No cache (will reload)")
-
-        # Ask question
-        answer = client.ask_question(question, keep_cache=keep_cache)
-
-        if answer:
-            print(f"\n{'='*60}")
-            if keep_cache:
-                print("✅ Answer received using cached context")
-            else:
-                print("✅ Answer received with fresh context reload")
-            print(f"{'='*60}")
+    if verbose and answer:
+        print(f"\n{'='*60}")
+        print("✅ Answer received using cached context")
+        print(f"{'='*60}")
 
 
 if __name__ == "__main__":

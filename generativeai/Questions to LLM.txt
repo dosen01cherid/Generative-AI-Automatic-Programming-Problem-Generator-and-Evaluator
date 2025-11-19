@@ -1,0 +1,17 @@
+Create an example of fill-in-the-blank question from C++ code that displays 3 line of outputs with at least 2 blanks and include the correct answer by using chain-of-thought (COT) when giving answer.
+
+Create an example of ordering line of code from C++ code that display one line of output and include the correct answer. Use chain-of-thought (COT) when giving answer.
+
+Create an example of ordering line of code from C++ code that display one line of output and include the correct answer. Use chain-of-thought (COT) when giving answer. Don't forget to shuffle the line of code in the question.
+
+Create an example of fill-in-the-blank question from C++ code that displays 3 line of outputs.
+
+Create a question of fill-in-the-blank type that will display C++ code with some part of it replaced by a blank to be filled-in later. Make sure that the answer is part of the code and don't ask extraneous question. Just display the question and the answer with structured JSON {'question':'<question>', 'answer','<answer>'}
+
+Create a question of fill-in-the-blank type that will include C++ code with some part of it replaced by a blank to be filled-in later. Make sure that the answer is part of the code and don't ask extraneous question. Give response with the following JSON format {'question':'<question>', 'answer','<answer>'}. Create question related to for loop in C++.
+
+Create a code block in C++ to display number from 1 to 10 and then create a fill-in-the-blank question from the code. Use what is the context to give response.
+
+Create a code block in C++ to display output of multiple line by using for loop and then create several fill-in-the-blank question from the code. Use what is the context to give response.
+
+Generate lua code for love2d platform that depicts minimum simulation sytem of a falling ball by using love2d built-in game engine.
