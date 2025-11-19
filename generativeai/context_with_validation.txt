@@ -1,0 +1,5455 @@
+HOW TO CREATE ACCURATE FILL-IN-THE-BLANK QUESTIONS
+============================================================
+
+IMPORTANT: Use this EXACT format for all fill-in-the-blank questions:
+
+CODE:
+```cpp
+[Write complete, working C++ code here - no blanks, full working code]
+```
+
+TARGET:
+[Write the EXACT token/word/phrase from the code above that should be replaced with _____]
+
+DISTRACTORS:
+1. [Wrong option 1 - similar but incorrect]
+2. [Wrong option 2 - similar but incorrect]
+3. [Wrong option 3 - similar but incorrect]
+
+CRITICAL RULES:
+1. CODE must be complete and working C++ code
+2. TARGET must appear EXACTLY as written in CODE
+3. DISTRACTORS must be plausible but incorrect alternatives
+4. Use ONLY modern C++ syntax (C++11 and later)
+5. NEVER use old C-style code (malloc, printf, char*, NULL)
+
+============================================================
+FILL-IN-THE-BLANK EXAMPLES WITH VALIDATION FORMAT
+============================================================
+
+These examples demonstrate the correct format for creating
+fill-in-the-blank questions. Each example shows:
+- CODE: Complete working code
+- TARGET: Exact token to replace
+- DISTRACTORS: 3 wrong but plausible options
+
+------------------
+Fill-in-the-Blank Question Example S1 (Return Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+int
+
+DISTRACTORS:
+1. void
+2. char
+3. string
+
+------------------
+Fill-in-the-Blank Question Example S2 (cout Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+cout
+
+DISTRACTORS:
+1. print
+2. cin
+3. output
+
+------------------
+Fill-in-the-Blank Question Example S3 (endl Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+endl
+
+DISTRACTORS:
+1. end
+2. newline
+3. ln
+
+------------------
+Fill-in-the-Blank Question Example S4 (return Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+return
+
+DISTRACTORS:
+1. exit
+2. end
+3. finish
+
+------------------
+Fill-in-the-Blank Question Example S5 (include Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+include
+
+DISTRACTORS:
+1. import
+2. use
+3. require
+
+------------------
+Fill-in-the-Blank Question Example S6 (iostream Header)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+iostream
+
+DISTRACTORS:
+1. stdio
+2. io
+3. stream
+
+------------------
+Fill-in-the-Blank Question Example S7 (namespace Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+namespace
+
+DISTRACTORS:
+1. name
+2. space
+3. using
+
+------------------
+Fill-in-the-Blank Question Example S8 (std Namespace)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+std
+
+DISTRACTORS:
+1. standard
+2. system
+3. main
+
+------------------
+Fill-in-the-Blank Question Example S9 (Variable Type - int)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+int
+
+DISTRACTORS:
+1. float
+2. char
+3. double
+
+------------------
+Fill-in-the-Blank Question Example S10 (Variable Type - float)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   float pi = 3.14;
+   cout << pi << endl;
+   return 0;
+}
+```
+
+TARGET:
+float
+
+DISTRACTORS:
+1. int
+2. double
+3. decimal
+
+------------------
+Fill-in-the-Blank Question Example S11 (Variable Type - char)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   char grade = 'A';
+   cout << grade << endl;
+   return 0;
+}
+```
+
+TARGET:
+char
+
+DISTRACTORS:
+1. int
+2. string
+3. letter
+
+------------------
+Fill-in-the-Blank Question Example S12 (Variable Type - string)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string name = "John";
+   cout << name << endl;
+   return 0;
+}
+```
+
+TARGET:
+string
+
+DISTRACTORS:
+1. char
+2. text
+3. str
+
+------------------
+Fill-in-the-Blank Question Example S13 (if Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   if(x > 5){
+      cout << "Greater" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+if
+
+DISTRACTORS:
+1. when
+2. check
+3. while
+
+------------------
+Fill-in-the-Blank Question Example S14 (else Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 3;
+   if(x > 5){
+      cout << "Greater" << endl;
+   }else{
+      cout << "Smaller" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+else
+
+DISTRACTORS:
+1. otherwise
+2. except
+3. other
+
+------------------
+Fill-in-the-Blank Question Example S15 (for Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 0; i < 3; i++){
+      cout << i << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+for
+
+DISTRACTORS:
+1. loop
+2. repeat
+3. while
+
+------------------
+Fill-in-the-Blank Question Example S16 (while Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int i = 0;
+   while(i < 3){
+      cout << i << endl;
+      i++;
+   }
+   return 0;
+}
+```
+
+TARGET:
+while
+
+DISTRACTORS:
+1. for
+2. loop
+3. until
+
+------------------
+Fill-in-the-Blank Question Example S17 (cin Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   cin >> num;
+   cout << num << endl;
+   return 0;
+}
+```
+
+TARGET:
+cin
+
+DISTRACTORS:
+1. input
+2. cout
+3. read
+
+------------------
+Fill-in-the-Blank Question Example S18 (Function Return Type - void)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+void greet(){
+   cout << "Hello!" << endl;
+}
+int main(){
+   greet();
+   return 0;
+}
+```
+
+TARGET:
+void
+
+DISTRACTORS:
+1. int
+2. none
+3. empty
+
+------------------
+Fill-in-the-Blank Question Example S19 (struct Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Point{
+   int x;
+   int y;
+};
+int main(){
+   Point p;
+   p.x = 10;
+   return 0;
+}
+```
+
+TARGET:
+struct
+
+DISTRACTORS:
+1. class
+2. type
+3. object
+
+------------------
+Fill-in-the-Blank Question Example S20 (class Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Student{
+   public:
+      int age;
+};
+int main(){
+   Student s;
+   s.age = 20;
+   return 0;
+}
+```
+
+TARGET:
+class
+
+DISTRACTORS:
+1. struct
+2. object
+3. type
+
+------------------
+Fill-in-the-Blank Question Example S21 (public Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Student{
+   public:
+      int age;
+};
+int main(){
+   Student s;
+   s.age = 20;
+   return 0;
+}
+```
+
+TARGET:
+public
+
+DISTRACTORS:
+1. private
+2. protected
+3. open
+
+------------------
+Fill-in-the-Blank Question Example S22 (new Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+```
+
+TARGET:
+new
+
+DISTRACTORS:
+1. allocate
+2. create
+3. make
+
+------------------
+Fill-in-the-Blank Question Example S23 (delete Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+```
+
+TARGET:
+delete
+
+DISTRACTORS:
+1. release
+2. remove
+3. destroy
+
+------------------
+Fill-in-the-Blank Question Example S24 (Array Declaration)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+```
+
+TARGET:
+int
+
+DISTRACTORS:
+1. float
+2. array
+3. list
+
+------------------
+Fill-in-the-Blank Question Example S25 (Semicolon)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+;
+
+DISTRACTORS:
+1. ,
+2. :
+3. .
+
+------------------
+Fill-in-the-Blank Question Example S30 (Assignment Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+=
+
+DISTRACTORS:
+1. ==
+2. :
+3. !=
+
+------------------
+Fill-in-the-Blank Question Example A4 (While Loop - while keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int count = 0;
+   while(count < 3){
+      cout << "Count: " << count << endl;
+      count++;
+   }
+   return 0;
+}
+```
+
+TARGET:
+while
+
+DISTRACTORS:
+1. for
+2. if
+3. do
+
+------------------
+Fill-in-the-Blank Question Example A5 (If Statement - if keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 18;
+   if(age >= 18){
+      cout << "Adult" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+if
+
+DISTRACTORS:
+1. while
+2. for
+3. switch
+
+------------------
+Fill-in-the-Blank Question Example A9 (Function - void)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+void greet(){
+   cout << "Hello!" << endl;
+}
+int main(){
+   greet();
+   return 0;
+}
+```
+
+TARGET:
+void
+
+DISTRACTORS:
+1. int
+2. float
+3. char
+
+------------------
+Fill-in-the-Blank Question Example A10 (Function - Return Type int)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add(5, 3);
+   cout << "Sum: " << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+int
+
+DISTRACTORS:
+1. void
+2. float
+3. char
+
+------------------
+Fill-in-the-Blank Question Example A11 (Pointer - Asterisk)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 42;
+   int *ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+```
+
+TARGET:
+*
+
+DISTRACTORS:
+1. &
+2. ->
+3. ::
+
+------------------
+Fill-in-the-Blank Question Example A12 (Pointer - Address-of)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 42;
+   int *ptr = &num;
+   cout << "Address: " << ptr << endl;
+   return 0;
+}
+```
+
+TARGET:
+&
+
+DISTRACTORS:
+1. *
+2. ->
+3. .
+
+------------------
+Fill-in-the-Blank Question Example A13 (Class - class keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Car{
+   public:
+      string brand;
+};
+int main(){
+   Car myCar;
+   myCar.brand = "Toyota";
+   cout << myCar.brand << endl;
+   return 0;
+}
+```
+
+TARGET:
+class
+
+DISTRACTORS:
+1. struct
+2. void
+3. int
+
+------------------
+Fill-in-the-Blank Question Example A14 (Class - public keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Car{
+   public:
+      string brand;
+      void display(){
+         cout << brand << endl;
+      }
+};
+int main(){
+   Car myCar;
+   myCar.brand = "Honda";
+   myCar.display();
+   return 0;
+}
+```
+
+TARGET:
+public
+
+DISTRACTORS:
+1. private
+2. protected
+3. void
+
+------------------
+Fill-in-the-Blank Question Example A15 (Semicolon after statement)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << "Value: " << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+;
+
+DISTRACTORS:
+1. ,
+2. :
+3. .
+
+------------------
+Fill-in-the-Blank Question Example A20 (Double Quotes for String)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello World" << endl;
+   return 0;
+}
+```
+
+TARGET:
+"
+
+DISTRACTORS:
+1. '
+2. `
+3. <
+
+------------------
+Fill-in-the-Blank Question Example B2 (Array - Access Element)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {10, 20, 30, 40, 50};
+   for(int i = 0; i < 5; i++){
+      cout << arr[i] << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+[i]
+
+DISTRACTORS:
+1. (i)
+2. {i}
+3. <i>
+
+------------------
+Fill-in-the-Blank Question Example B3 (Array - Compound Assignment)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   int sum = 0;
+   for(int i = 0; i < 5; i++){
+      sum += arr[i];
+   }
+   cout << "Sum: " << sum << endl;
+   return 0;
+}
+```
+
+TARGET:
++=
+
+DISTRACTORS:
+1. =
+2. -=
+3. *=
+
+------------------
+Fill-in-the-Blank Question Example B4 (Function - Parameter Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add(5, 3);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+int
+
+DISTRACTORS:
+1. void
+2. float
+3. char
+
+------------------
+Fill-in-the-Blank Question Example B5 (Function - return keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int add(int a, int b){
+   return a + b;
+}
+int main(){
+   int result = add(5, 3);
+   cout << "Result: " << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+return
+
+DISTRACTORS:
+1. print
+2. cout
+3. output
+
+------------------
+Fill-in-the-Blank Question Example B6 (Pass by Reference - Ampersand)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+void increment(int &x){
+   x++;
+}
+int main(){
+   int num = 5;
+   increment(num);
+   cout << "Number: " << num << endl;
+   return 0;
+}
+```
+
+TARGET:
+&
+
+DISTRACTORS:
+1. *
+2. ->
+3. ::
+
+------------------
+Fill-in-the-Blank Question Example B7 (Struct - struct keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Student{
+   string name;
+   int age;
+   float gpa;
+};
+int main(){
+   Student s1;
+   s1.name = "John";
+   s1.age = 20;
+   cout << "Name: " << s1.name << endl;
+   return 0;
+}
+```
+
+TARGET:
+struct
+
+DISTRACTORS:
+1. class
+2. void
+3. int
+
+------------------
+Fill-in-the-Blank Question Example B8 (Struct - Dot Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Student{
+   string name;
+   int age;
+};
+int main(){
+   Student s1;
+   s1.name = "John";
+   s1.age = 20;
+   cout << "Name: " << s1.name << endl;
+   return 0;
+}
+```
+
+TARGET:
+.
+
+DISTRACTORS:
+1. ->
+2. ::
+3. :
+
+------------------
+Fill-in-the-Blank Question Example B9 (Pointer - new keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+```
+
+TARGET:
+new
+
+DISTRACTORS:
+1. allocate
+2. create
+3. make
+
+------------------
+Fill-in-the-Blank Question Example B10 (Pointer - delete keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 25;
+   cout << "Value: " << *ptr << endl;
+   delete ptr;
+   return 0;
+}
+```
+
+TARGET:
+delete
+
+DISTRACTORS:
+1. release
+2. remove
+3. destroy
+
+------------------
+Fill-in-the-Blank Question Example B11 (Pointer - Dereference)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 10;
+   int *ptr = &num;
+   cout << "Value: " << *ptr << endl;
+   return 0;
+}
+```
+
+TARGET:
+*
+
+DISTRACTORS:
+1. &
+2. ->
+3. .
+
+------------------
+Fill-in-the-Blank Question Example B13 (Pointer - Arrow Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 100;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+```
+
+TARGET:
+->
+
+DISTRACTORS:
+1. .
+2. ::
+3. :
+
+------------------
+Fill-in-the-Blank Question Example B14 (Linked List - Node Structure Member)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+```
+
+TARGET:
+*
+
+DISTRACTORS:
+1. &
+2. ->
+3. .
+
+------------------
+Fill-in-the-Blank Question Example B15 (Linked List - Traversal Condition)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+void display(Node *head){
+   Node *temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+}
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   display(head);
+   return 0;
+}
+```
+
+TARGET:
+!=
+
+DISTRACTORS:
+1. ==
+2. <
+3. >
+
+------------------
+Fill-in-the-Blank Question Example B16 (Stack - push method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){ top = -1; }
+   void push(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top
+```
+
+TARGET:
+push
+
+DISTRACTORS:
+1. pop
+2. enqueue
+3. insert
+
+------------------
+Fill-in-the-Blank Question Example B17 (Stack - pop method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){ top = -1; }
+   void push(int x){
+      arr[++top] = x;
+   }
+   int pop(){
+      return arr[top
+```
+
+TARGET:
+pop
+
+DISTRACTORS:
+1. push
+2. dequeue
+3. remove
+
+------------------
+Fill-in-the-Blank Question Example B18 (Queue - enqueue method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Queue{
+   int arr[100];
+   int front, rear;
+public:
+   Queue(){ front = -1; rear = -1; }
+   void enqueue(int x){
+      if(front == -1) front = 0;
+      arr[++rear] = x;
+   }
+   int dequeue(){
+      return arr[front++];
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(10);
+   cout << "Dequeued: " << q.dequeue() << endl;
+   return 0;
+}
+```
+
+TARGET:
+enqueue
+
+DISTRACTORS:
+1. push
+2. insert
+3. add
+
+------------------
+Fill-in-the-Blank Question Example B19 (Queue - dequeue method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Queue{
+   int arr[100];
+   int front, rear;
+public:
+   Queue(){ front = -1; rear = -1; }
+   void enqueue(int x){
+      if(front == -1) front = 0;
+      arr[++rear] = x;
+   }
+   int dequeue(){
+      return arr[front++];
+   }
+};
+int main(){
+   Queue q;
+   q.enqueue(10);
+   cout << "Dequeued: " << q.dequeue() << endl;
+   return 0;
+}
+```
+
+TARGET:
+dequeue
+
+DISTRACTORS:
+1. pop
+2. remove
+3. delete
+
+------------------
+Fill-in-the-Blank Question Example B20 (Class - Constructor)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Stack{
+   int arr[100];
+   int top;
+public:
+   Stack(){
+      top = -1;
+   }
+   void push(int x){
+      arr[++top] = x;
+   }
+};
+int main(){
+   Stack s;
+   s.push(10);
+   return 0;
+}
+```
+
+TARGET:
+Stack
+
+DISTRACTORS:
+1. init
+2. constructor
+3. create
+
+------------------
+Fill-in-the-Blank Question Example B24 (Parentheses - Function Call)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+void greet(){
+   cout << "Hello!" << endl;
+}
+int main(){
+   greet();
+   return 0;
+}
+```
+
+TARGET:
+()
+
+DISTRACTORS:
+1. []
+2. {}
+3. <>
+
+------------------
+Fill-in-the-Blank Question Example B25 (Colon - Access Specifier)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Stack{
+   int top;
+public:
+   Stack(){ top = -1; }
+};
+int main(){
+   Stack s;
+   return 0;
+}
+```
+
+TARGET:
+:
+
+DISTRACTORS:
+1. ;
+2. ::
+3. .
+
+------------------
+Fill-in-the-Blank Question Example B26 (Scope Resolution Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Calculator{
+public:
+   int add(int a, int b);
+};
+int Calculator::add(int a, int b){
+   return a + b;
+}
+int main(){
+   Calculator c;
+   cout << c.add(5, 3) << endl;
+   return 0;
+}
+```
+
+TARGET:
+::
+
+DISTRACTORS:
+1. .
+2. ->
+3. :
+
+------------------
+Fill-in-the-Blank Question Example B27 (cin keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   cout << "Enter number: ";
+   cin >> num;
+   cout << "You entered: " << num << endl;
+   return 0;
+}
+```
+
+TARGET:
+cin
+
+DISTRACTORS:
+1. cout
+2. input
+3. scanf
+
+------------------
+Fill-in-the-Blank Question Example B28 (cout keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 20;
+   cout << "Age: " << age << endl;
+   return 0;
+}
+```
+
+TARGET:
+cout
+
+DISTRACTORS:
+1. cin
+2. print
+3. output
+
+------------------
+Fill-in-the-Blank Question Example B29 (Assignment Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   int y;
+   y = x;
+   cout << "Y: " << y << endl;
+   return 0;
+}
+```
+
+TARGET:
+=
+
+DISTRACTORS:
+1. ==
+2. !=
+3. +=
+
+------------------
+Fill-in-the-Blank Question Example B30 (Main Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello World" << endl;
+   return 0;
+}
+```
+
+TARGET:
+main
+
+DISTRACTORS:
+1. start
+2. begin
+3. run
+
+------------------
+Fill-in-the-Blank Question Example C1 (include directive)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+#include
+
+DISTRACTORS:
+1. import
+2. using
+3. require
+
+------------------
+Fill-in-the-Blank Question Example C2 (using namespace)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+using
+
+DISTRACTORS:
+1. import
+2. include
+3. with
+
+------------------
+Fill-in-the-Blank Question Example C3 (std namespace)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+```
+
+TARGET:
+std
+
+DISTRACTORS:
+1. cout
+2. iostream
+3. main
+
+------------------
+Fill-in-the-Blank Question Example C6 (Equality Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 5;
+   int b = 5;
+   if(a == b){
+      cout << "Equal" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+==
+
+DISTRACTORS:
+1. =
+2. !=
+3. >=
+
+------------------
+Fill-in-the-Blank Question Example C7 (Not Equal Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   int y = 3;
+   if(x != y){
+      cout << "Not equal" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+!=
+
+DISTRACTORS:
+1. ==
+2. <>
+3. ><
+
+------------------
+Fill-in-the-Blank Question Example C10 (Addition Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int sum = 5 + 3;
+   cout << "Sum: " << sum << endl;
+   return 0;
+}
+```
+
+TARGET:
++
+
+DISTRACTORS:
+1. -
+2. *
+3. /
+
+------------------
+Fill-in-the-Blank Question Example C11 (Subtraction Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int diff = 10 - 3;
+   cout << "Difference: " << diff << endl;
+   return 0;
+}
+```
+
+TARGET:
+-
+
+DISTRACTORS:
+1. +
+2. *
+3. /
+
+------------------
+Fill-in-the-Blank Question Example C12 (Multiplication Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int product = 5 * 3;
+   cout << "Product: " << product << endl;
+   return 0;
+}
+```
+
+TARGET:
+*
+
+DISTRACTORS:
+1. +
+2. /
+3. %
+
+------------------
+Fill-in-the-Blank Question Example C13 (Division Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int quotient = 10 / 2;
+   cout << "Quotient: " << quotient << endl;
+   return 0;
+}
+```
+
+TARGET:
+/
+
+DISTRACTORS:
+1. *
+2. %
+3. -
+
+------------------
+Fill-in-the-Blank Question Example C14 (Modulus Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int remainder = 10 % 3;
+   cout << "Remainder: " << remainder << endl;
+   return 0;
+}
+```
+
+TARGET:
+%
+
+DISTRACTORS:
+1. /
+2. *
+3. //
+
+------------------
+Fill-in-the-Blank Question Example C15 (float data type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   float price = 19.99;
+   cout << "Price: " << price << endl;
+   return 0;
+}
+```
+
+TARGET:
+float
+
+DISTRACTORS:
+1. int
+2. double
+3. char
+
+------------------
+Fill-in-the-Blank Question Example C16 (double data type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   double pi = 3.14159;
+   cout << "Pi: " << pi << endl;
+   return 0;
+}
+```
+
+TARGET:
+double
+
+DISTRACTORS:
+1. float
+2. int
+3. long
+
+------------------
+Fill-in-the-Blank Question Example C17 (char data type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   char grade = 'A';
+   cout << "Grade: " << grade << endl;
+   return 0;
+}
+```
+
+TARGET:
+char
+
+DISTRACTORS:
+1. int
+2. string
+3. bool
+
+------------------
+Fill-in-the-Blank Question Example C18 (bool data type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   bool isValid = true;
+   if(isValid){
+      cout << "Valid" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+bool
+
+DISTRACTORS:
+1. int
+2. boolean
+3. flag
+
+------------------
+Fill-in-the-Blank Question Example C19 (string data type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string name = "John";
+   cout << "Name: " << name << endl;
+   return 0;
+}
+```
+
+TARGET:
+string
+
+DISTRACTORS:
+1. char
+2. text
+3. str
+
+------------------
+Fill-in-the-Blank Question Example C22 (do-while loop - do keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int i = 0;
+   do{
+      cout << i << endl;
+      i++;
+   }while(i < 3);
+   return 0;
+}
+```
+
+TARGET:
+do
+
+DISTRACTORS:
+1. for
+2. while
+3. repeat
+
+------------------
+Fill-in-the-Blank Question Example C23 (break keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 0; i < 10; i++){
+      if(i == 5){
+         break;
+      }
+      cout << i << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+break
+
+DISTRACTORS:
+1. continue
+2. stop
+3. exit
+
+------------------
+Fill-in-the-Blank Question Example C24 (continue keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 0; i < 5; i++){
+      if(i == 2){
+         continue;
+      }
+      cout << i << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+continue
+
+DISTRACTORS:
+1. break
+2. skip
+3. next
+
+------------------
+Fill-in-the-Blank Question Example C25 (switch keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int choice = 2;
+   switch(choice){
+      case 1: cout << "One" << endl; break;
+      case 2: cout << "Two" << endl; break;
+      default: cout << "Other" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+switch
+
+DISTRACTORS:
+1. if
+2. select
+3. case
+
+------------------
+Fill-in-the-Blank Question Example C26 (case keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 1;
+   switch(num){
+      case 1: cout << "One" << endl; break;
+      case 2: cout << "Two" << endl; break;
+   }
+   return 0;
+}
+```
+
+TARGET:
+case
+
+DISTRACTORS:
+1. if
+2. when
+3. option
+
+------------------
+Fill-in-the-Blank Question Example C27 (default keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   switch(x){
+      case 1: cout << "One" << endl; break;
+      default: cout << "Other" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+default
+
+DISTRACTORS:
+1. else
+2. otherwise
+3. other
+
+------------------
+Fill-in-the-Blank Question Example C28 (private keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Box{
+   private:
+      int width;
+   public:
+      void setWidth(int w){ width = w; }
+};
+int main(){
+   Box b;
+   b.setWidth(10);
+   return 0;
+}
+```
+
+TARGET:
+private
+
+DISTRACTORS:
+1. public
+2. protected
+3. internal
+
+------------------
+Fill-in-the-Blank Question Example C29 (protected keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   protected:
+      int value;
+};
+class Derived : public Base{
+   public:
+      void setValue(int v){ value = v; }
+};
+int main(){
+   Derived d;
+   d.setValue(100);
+   return 0;
+}
+```
+
+TARGET:
+protected
+
+DISTRACTORS:
+1. public
+2. private
+3. internal
+
+------------------
+Fill-in-the-Blank Question Example C30 (const keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   const int MAX = 100;
+   cout << "Max: " << MAX << endl;
+   return 0;
+}
+```
+
+TARGET:
+const
+
+DISTRACTORS:
+1. static
+2. final
+3. readonly
+
+------------------
+Fill-in-the-Blank Question Example C31 (Array Initialization - Curly Braces)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[3] = {1, 2, 3};
+   cout << arr[0] << endl;
+   return 0;
+}
+```
+
+TARGET:
+{}
+
+DISTRACTORS:
+1. ()
+2. []
+3. <>
+
+------------------
+Fill-in-the-Blank Question Example C32 (Logical AND)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   int y = 10;
+   if(x > 0 && y > 0){
+      cout << "Both positive" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+&&
+
+DISTRACTORS:
+1. ||
+2. &
+3. and
+
+------------------
+Fill-in-the-Blank Question Example C33 (Logical OR)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 5;
+   int b = 0;
+   if(a > 0 || b > 0){
+      cout << "At least one positive" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+||
+
+DISTRACTORS:
+1. &&
+2. |
+3. or
+
+------------------
+Fill-in-the-Blank Question Example C34 (Logical NOT)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   bool flag = false;
+   if(!flag){
+      cout << "Flag is false" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+!
+
+DISTRACTORS:
+1. ~
+2. not
+3. -
+
+------------------
+Fill-in-the-Blank Question Example C35 (Addition Assignment)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int total = 10;
+   total += 5;
+   cout << "Total: " << total << endl;
+   return 0;
+}
+```
+
+TARGET:
++=
+
+DISTRACTORS:
+1. =+
+2. +
+3. =
+
+------------------
+Fill-in-the-Blank Question Example C36 (Subtraction Assignment)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int balance = 100;
+   balance -= 20;
+   cout << "Balance: " << balance << endl;
+   return 0;
+}
+```
+
+TARGET:
+-=
+
+DISTRACTORS:
+1. =-
+2. -
+3. =
+
+------------------
+Fill-in-the-Blank Question Example C37 (Multiplication Assignment)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int value = 5;
+   value *= 3;
+   cout << "Value: " << value << endl;
+   return 0;
+}
+```
+
+TARGET:
+*=
+
+DISTRACTORS:
+1. =*
+2. *
+3. =
+
+------------------
+Fill-in-the-Blank Question Example C38 (Division Assignment)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int num = 20;
+   num /= 4;
+   cout << "Number: " << num << endl;
+   return 0;
+}
+```
+
+TARGET:
+/=
+
+DISTRACTORS:
+1. =/
+2. /
+3. =
+
+------------------
+Fill-in-the-Blank Question Example C39 (sizeof operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << "Size: " << sizeof(x) << endl;
+   return 0;
+}
+```
+
+TARGET:
+sizeof
+
+DISTRACTORS:
+1. length
+2. size
+3. count
+
+------------------
+Fill-in-the-Blank Question Example C40 (Ternary Operator - Question Mark)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int age = 20;
+   string status = (age >= 18) ? "Adult" : "Minor";
+   cout << status << endl;
+   return 0;
+}
+```
+
+TARGET:
+?
+
+DISTRACTORS:
+1. :
+2. !
+3. .
+
+------------------
+Fill-in-the-Blank Question Example C41 (Dynamic Array - Square Brackets)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int *arr = new int[5];
+   arr[0] = 10;
+   cout << arr[0] << endl;
+   delete[] arr;
+   return 0;
+}
+```
+
+TARGET:
+[]
+
+DISTRACTORS:
+1. ()
+2. {}
+3. <>
+
+------------------
+Fill-in-the-Blank Question Example C42 (Delete Array)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int *arr = new int[5];
+   arr[0] = 10;
+   delete[] arr;
+   return 0;
+}
+```
+
+TARGET:
+delete
+
+DISTRACTORS:
+1. release
+2. remove
+3. destroy
+
+------------------
+Fill-in-the-Blank Question Example C43 (Reference Variable)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   int &ref = x;
+   ref = 20;
+   cout << "X: " << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+&
+
+DISTRACTORS:
+1. *
+2. ->
+3. ::
+
+------------------
+Fill-in-the-Blank Question Example C44 (this pointer)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class MyClass{
+   int value;
+   public:
+      void setValue(int value){
+         this->value = value;
+      }
+};
+int main(){
+   MyClass obj;
+   obj.setValue(10);
+   return 0;
+}
+```
+
+TARGET:
+this
+
+DISTRACTORS:
+1. self
+2. me
+3. object
+
+------------------
+Fill-in-the-Blank Question Example C45 (static keyword for class member)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Counter{
+   public:
+      static int count;
+      Counter(){ count++; }
+};
+int Counter::count = 0;
+int main(){
+   Counter c1, c2;
+   cout << "Count: " << Counter::count << endl;
+   return 0;
+}
+```
+
+TARGET:
+static
+
+DISTRACTORS:
+1. const
+2. final
+3. shared
+
+------------------
+Fill-in-the-Blank Question Example C46 (virtual keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   public:
+      virtual void display(){
+         cout << "Base" << endl;
+      }
+};
+class Derived : public Base{
+   public:
+      void display(){
+         cout << "Derived" << endl;
+      }
+};
+int main(){
+   Base *b = new Derived();
+   b->display();
+   return 0;
+}
+```
+
+TARGET:
+virtual
+
+DISTRACTORS:
+1. override
+2. abstract
+3. dynamic
+
+------------------
+Fill-in-the-Blank Question Example C47 (typedef keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+typedef int Integer;
+int main(){
+   Integer num = 10;
+   cout << "Number: " << num << endl;
+   return 0;
+}
+```
+
+TARGET:
+typedef
+
+DISTRACTORS:
+1. define
+2. type
+3. alias
+
+------------------
+Fill-in-the-Blank Question Example C48 (Stack isEmpty check)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Stack{
+   int top;
+   public:
+      Stack(){ top = -1; }
+      bool isEmpty(){
+         return top == -1;
+      }
+};
+int main(){
+   Stack s;
+   if(s.isEmpty()){
+      cout << "Empty" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+==
+
+DISTRACTORS:
+1. !=
+2. <
+3. >
+
+------------------
+Fill-in-the-Blank Question Example C49 (Linked List - Create New Node)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *newNode = new Node;
+   newNode->data = 10;
+   newNode->next = NULL;
+   cout << newNode->data << endl;
+   delete newNode;
+   return 0;
+}
+```
+
+TARGET:
+new
+
+DISTRACTORS:
+1. allocate
+2. create
+3. make
+
+------------------
+Fill-in-the-Blank Question Example C50 (Queue - Check if Empty)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Queue{
+   int front, rear;
+   public:
+      Queue(){ front = -1; rear = -1; }
+      bool isEmpty(){
+         return front == -1;
+      }
+};
+int main(){
+   Queue q;
+   if(q.isEmpty()){
+      cout << "Queue is empty" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+==
+
+DISTRACTORS:
+1. !=
+2. <
+3. >
+
+------------------
+Fill-in-the-Blank Question Example D1 (Array Declaration - Square Bracket)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int numbers[10];
+   numbers[0] = 5;
+   cout << numbers[0] << endl;
+   return 0;
+}
+```
+
+TARGET:
+[]
+
+DISTRACTORS:
+1. ()
+2. {}
+3. <>
+
+------------------
+Fill-in-the-Blank Question Example D2 (String Length Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string text = "Hello";
+   cout << "Length: " << text.length() << endl;
+   return 0;
+}
+```
+
+TARGET:
+length
+
+DISTRACTORS:
+1. size
+2. count
+3. len
+
+------------------
+Fill-in-the-Blank Question Example D3 (Vector Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   return 0;
+}
+```
+
+TARGET:
+vector
+
+DISTRACTORS:
+1. array
+2. list
+3. container
+
+------------------
+Fill-in-the-Blank Question Example D4 (Vector Push Back)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   cout << v[0] << endl;
+   return 0;
+}
+```
+
+TARGET:
+push_back
+
+DISTRACTORS:
+1. add
+2. insert
+3. append
+
+------------------
+Fill-in-the-Blank Question Example D5 (Vector Size Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   cout << "Size: " << v.size() << endl;
+   return 0;
+}
+```
+
+TARGET:
+size
+
+DISTRACTORS:
+1. length
+2. count
+3. total
+
+------------------
+Fill-in-the-Blank Question Example D6 (Namespace Keyword in Declaration)
+------------------
+CODE:
+```cpp
+#include <iostream>
+namespace MyNamespace{
+   int value = 10;
+}
+int main(){
+   cout << MyNamespace::value << endl;
+   return 0;
+}
+```
+
+TARGET:
+namespace
+
+DISTRACTORS:
+1. using
+2. package
+3. module
+
+------------------
+Fill-in-the-Blank Question Example D7 (Inheritance - Colon)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   public:
+      int x;
+};
+class Derived : public Base{
+   public:
+      int y;
+};
+int main(){
+   Derived d;
+   d.x = 10;
+   return 0;
+}
+```
+
+TARGET:
+:
+
+DISTRACTORS:
+1. extends
+2. inherits
+3. ->
+
+------------------
+Fill-in-the-Blank Question Example D8 (Friend Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Box{
+   int width;
+   friend void showWidth(Box b);
+};
+void showWidth(Box b){
+   cout << b.width << endl;
+}
+int main(){
+   Box b;
+   return 0;
+}
+```
+
+TARGET:
+friend
+
+DISTRACTORS:
+1. public
+2. extern
+3. static
+
+------------------
+Fill-in-the-Blank Question Example D9 (Template Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+template <typename T>
+T maximum(T a, T b){
+   return (a > b) ? a : b;
+}
+int main(){
+   cout << maximum(5, 3) << endl;
+   return 0;
+}
+```
+
+TARGET:
+template
+
+DISTRACTORS:
+1. generic
+2. type
+3. class
+
+------------------
+Fill-in-the-Blank Question Example D10 (Typename Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+template <typename T>
+T add(T a, T b){
+   return a + b;
+}
+int main(){
+   cout << add(5, 3) << endl;
+   return 0;
+}
+```
+
+TARGET:
+typename
+
+DISTRACTORS:
+1. class
+2. type
+3. template
+
+------------------
+Fill-in-the-Blank Question Example D11 (Destructor Tilde)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class MyClass{
+   public:
+      MyClass(){ cout << "Constructor" << endl; }
+      ~MyClass(){ cout << "Destructor" << endl; }
+};
+int main(){
+   MyClass obj;
+   return 0;
+}
+```
+
+TARGET:
+~
+
+DISTRACTORS:
+1. -
+2. !
+3. delete
+
+------------------
+Fill-in-the-Blank Question Example D12 (Try Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      int x = 10;
+      if(x > 5) throw x;
+   }
+   catch(int e){
+      cout << "Exception: " << e << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+try
+
+DISTRACTORS:
+1. attempt
+2. check
+3. test
+
+------------------
+Fill-in-the-Blank Question Example D13 (Catch Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      throw 20;
+   }
+   catch(int e){
+      cout << "Error: " << e << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+catch
+
+DISTRACTORS:
+1. except
+2. handle
+3. trap
+
+------------------
+Fill-in-the-Blank Question Example D14 (Throw Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   try{
+      throw 404;
+   }
+   catch(int e){
+      cout << "Error code: " << e << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+throw
+
+DISTRACTORS:
+1. raise
+2. error
+3. except
+
+------------------
+Fill-in-the-Blank Question Example D15 (Inline Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+inline int square(int x){
+   return x * x;
+}
+int main(){
+   cout << square(5) << endl;
+   return 0;
+}
+```
+
+TARGET:
+inline
+
+DISTRACTORS:
+1. fast
+2. quick
+3. macro
+
+------------------
+Fill-in-the-Blank Question Example D16 (Extern Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+extern int globalVar;
+int globalVar = 100;
+int main(){
+   cout << globalVar << endl;
+   return 0;
+}
+```
+
+TARGET:
+extern
+
+DISTRACTORS:
+1. global
+2. external
+3. public
+
+------------------
+Fill-in-the-Blank Question Example D17 (Auto Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   auto x = 10;
+   auto y = 3.14;
+   cout << x << " " << y << endl;
+   return 0;
+}
+```
+
+TARGET:
+auto
+
+DISTRACTORS:
+1. var
+2. let
+3. type
+
+------------------
+Fill-in-the-Blank Question Example D18 (Register Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   register int counter = 0;
+   for(int i = 0; i < 10; i++){
+      counter++;
+   }
+   cout << counter << endl;
+   return 0;
+}
+```
+
+TARGET:
+register
+
+DISTRACTORS:
+1. fast
+2. cache
+3. static
+
+------------------
+Fill-in-the-Blank Question Example D19 (Volatile Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   volatile int flag = 1;
+   while(flag){
+      flag = 0;
+   }
+   return 0;
+}
+```
+
+TARGET:
+volatile
+
+DISTRACTORS:
+1. const
+2. mutable
+3. static
+
+------------------
+Fill-in-the-Blank Question Example D20 (Mutable Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class MyClass{
+   mutable int counter;
+   public:
+      MyClass() : counter(0) {}
+      void increment() const {
+         counter++;
+      }
+};
+int main(){
+   MyClass obj;
+   obj.increment();
+   return 0;
+}
+```
+
+TARGET:
+mutable
+
+DISTRACTORS:
+1. volatile
+2. changeable
+3. variable
+
+------------------
+Fill-in-the-Blank Question Example D21 (fstream Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main(){
+   ofstream file("data.txt");
+   file << "Hello World";
+   file.close();
+   return 0;
+}
+```
+
+TARGET:
+fstream
+
+DISTRACTORS:
+1. filestream
+2. file
+3. stream
+
+------------------
+Fill-in-the-Blank Question Example D22 (ofstream Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main(){
+   ofstream file("data.txt");
+   file << "Hello World";
+   file.close();
+   return 0;
+}
+```
+
+TARGET:
+ofstream
+
+DISTRACTORS:
+1. ifstream
+2. fstream
+3. fileout
+
+------------------
+Fill-in-the-Blank Question Example D23 (File Close Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main(){
+   ofstream file("data.txt");
+   file << "Hello World";
+   file.close();
+   return 0;
+}
+```
+
+TARGET:
+close
+
+DISTRACTORS:
+1. end
+2. stop
+3. finish
+
+------------------
+Fill-in-the-Blank Question Example D24 (ifstream Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main(){
+   ifstream file("data.txt");
+   string line;
+   getline(file, line);
+   file.close();
+   return 0;
+}
+```
+
+TARGET:
+ifstream
+
+DISTRACTORS:
+1. ofstream
+2. infile
+3. filein
+
+------------------
+Fill-in-the-Blank Question Example D25 (getline Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <fstream>
+using namespace std;
+int main(){
+   ifstream file("data.txt");
+   string line;
+   getline(file, line);
+   file.close();
+   return 0;
+}
+```
+
+TARGET:
+getline
+
+DISTRACTORS:
+1. readline
+2. readln
+3. getln
+
+------------------
+Fill-in-the-Blank Question Example D26 (Map Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <map>
+using namespace std;
+int main(){
+   map<string, int> ages;
+   ages["John"] = 25;
+   return 0;
+}
+```
+
+TARGET:
+map
+
+DISTRACTORS:
+1. dictionary
+2. hashmap
+3. hash
+
+------------------
+Fill-in-the-Blank Question Example D27 (Map Declaration)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <map>
+using namespace std;
+int main(){
+   map<string, int> ages;
+   ages["John"] = 25;
+   cout << ages["John"] << endl;
+   return 0;
+}
+```
+
+TARGET:
+map
+
+DISTRACTORS:
+1. dict
+2. hash
+3. table
+
+------------------
+Fill-in-the-Blank Question Example D28 (Set Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> numbers;
+   numbers.insert(10);
+   return 0;
+}
+```
+
+TARGET:
+set
+
+DISTRACTORS:
+1. collection
+2. hashset
+3. unordered
+
+------------------
+Fill-in-the-Blank Question Example D29 (Set Insert Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> numbers;
+   numbers.insert(10);
+   numbers.insert(20);
+   return 0;
+}
+```
+
+TARGET:
+insert
+
+DISTRACTORS:
+1. add
+2. push
+3. put
+
+------------------
+Fill-in-the-Blank Question Example D30 (List Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> myList;
+   myList.push_back(10);
+   return 0;
+}
+```
+
+TARGET:
+list
+
+DISTRACTORS:
+1. linkedlist
+2. array
+3. vector
+
+------------------
+Fill-in-the-Blank Question Example D31 (String substr Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string text = "Hello World";
+   string sub = text.substr(0, 5);
+   cout << sub << endl;
+   return 0;
+}
+```
+
+TARGET:
+substr
+
+DISTRACTORS:
+1. substring
+2. sub
+3. slice
+
+------------------
+Fill-in-the-Blank Question Example D32 (String find Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string text = "Hello World";
+   int pos = text.find("World");
+   cout << pos << endl;
+   return 0;
+}
+```
+
+TARGET:
+find
+
+DISTRACTORS:
+1. search
+2. locate
+3. indexOf
+
+------------------
+Fill-in-the-Blank Question Example D33 (String append Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string text = "Hello";
+   text.append(" World");
+   cout << text << endl;
+   return 0;
+}
+```
+
+TARGET:
+append
+
+DISTRACTORS:
+1. add
+2. concat
+3. join
+
+------------------
+Fill-in-the-Blank Question Example D34 (String empty Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string text = "";
+   if(text.empty()){
+      cout << "String is empty" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+empty
+
+DISTRACTORS:
+1. isEmpty
+2. isBlank
+3. null
+
+------------------
+Fill-in-the-Blank Question Example D35 (String clear Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string text = "Hello";
+   text.clear();
+   cout << "Cleared" << endl;
+   return 0;
+}
+```
+
+TARGET:
+clear
+
+DISTRACTORS:
+1. erase
+2. delete
+3. remove
+
+------------------
+Fill-in-the-Blank Question Example D36 (Vector clear Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v.clear();
+   cout << "Vector cleared" << endl;
+   return 0;
+}
+```
+
+TARGET:
+clear
+
+DISTRACTORS:
+1. erase
+2. delete
+3. removeAll
+
+------------------
+Fill-in-the-Blank Question Example D37 (Vector empty Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   if(v.empty()){
+      cout << "Vector is empty" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+empty
+
+DISTRACTORS:
+1. isEmpty
+2. null
+3. isNull
+
+------------------
+Fill-in-the-Blank Question Example D38 (Vector pop_back Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v.pop_back();
+   cout << v.size() << endl;
+   return 0;
+}
+```
+
+TARGET:
+pop_back
+
+DISTRACTORS:
+1. remove
+2. delete
+3. removeLast
+
+------------------
+Fill-in-the-Blank Question Example D39 (Vector at Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {10, 20, 30};
+   cout << v.at(1) << endl;
+   return 0;
+}
+```
+
+TARGET:
+at
+
+DISTRACTORS:
+1. get
+2. element
+3. index
+
+------------------
+Fill-in-the-Blank Question Example D40 (Vector front Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {10, 20, 30};
+   cout << v.front() << endl;
+   return 0;
+}
+```
+
+TARGET:
+front
+
+DISTRACTORS:
+1. first
+2. begin
+3. start
+
+------------------
+Fill-in-the-Blank Question Example D41 (Vector back Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {10, 20, 30};
+   cout << v.back() << endl;
+   return 0;
+}
+```
+
+TARGET:
+back
+
+DISTRACTORS:
+1. last
+2. end
+3. tail
+
+------------------
+Fill-in-the-Blank Question Example D42 (Algorithm Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {3, 1, 2};
+   sort(v.begin(), v.end());
+   return 0;
+}
+```
+
+TARGET:
+algorithm
+
+DISTRACTORS:
+1. sorting
+2. sort
+3. utility
+
+------------------
+Fill-in-the-Blank Question Example D43 (Sort Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {3, 1, 2};
+   sort(v.begin(), v.end());
+   return 0;
+}
+```
+
+TARGET:
+sort
+
+DISTRACTORS:
+1. arrange
+2. order
+3. sortArray
+
+------------------
+Fill-in-the-Blank Question Example D44 (Vector begin Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {3, 1, 2};
+   sort(v.begin(), v.end());
+   return 0;
+}
+```
+
+TARGET:
+begin
+
+DISTRACTORS:
+1. start
+2. first
+3. front
+
+------------------
+Fill-in-the-Blank Question Example D45 (Vector end Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {3, 1, 2};
+   sort(v.begin(), v.end());
+   return 0;
+}
+```
+
+TARGET:
+end
+
+DISTRACTORS:
+1. last
+2. finish
+3. back
+
+------------------
+Fill-in-the-Blank Question Example D46 (Find Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {10, 20, 30};
+   auto it = find(v.begin(), v.end(), 20);
+   return 0;
+}
+```
+
+TARGET:
+find
+
+DISTRACTORS:
+1. search
+2. locate
+3. seek
+
+------------------
+Fill-in-the-Blank Question Example D47 (reverse Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   reverse(v.begin(), v.end());
+   return 0;
+}
+```
+
+TARGET:
+reverse
+
+DISTRACTORS:
+1. flip
+2. invert
+3. backward
+
+------------------
+Fill-in-the-Blank Question Example D48 (max Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int main(){
+   int a = 10, b = 20;
+   int maximum = max(a, b);
+   cout << maximum << endl;
+   return 0;
+}
+```
+
+TARGET:
+max
+
+DISTRACTORS:
+1. maximum
+2. larger
+3. biggest
+
+------------------
+Fill-in-the-Blank Question Example D49 (min Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int main(){
+   int a = 10, b = 20;
+   int minimum = min(a, b);
+   cout << minimum << endl;
+   return 0;
+}
+```
+
+TARGET:
+min
+
+DISTRACTORS:
+1. minimum
+2. smaller
+3. smallest
+
+------------------
+Fill-in-the-Blank Question Example D50 (swap Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+using namespace std;
+int main(){
+   int a = 10, b = 20;
+   swap(a, b);
+   cout << a << " " << b << endl;
+   return 0;
+}
+```
+
+TARGET:
+swap
+
+DISTRACTORS:
+1. exchange
+2. switch
+3. trade
+
+------------------
+Fill-in-the-Blank Question Example D51 (Queue Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   return 0;
+}
+```
+
+TARGET:
+queue
+
+DISTRACTORS:
+1. deque
+2. stack
+3. list
+
+------------------
+Fill-in-the-Blank Question Example D52 (Queue Declaration)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   q.push(20);
+   return 0;
+}
+```
+
+TARGET:
+queue
+
+DISTRACTORS:
+1. deque
+2. stack
+3. list
+
+------------------
+Fill-in-the-Blank Question Example D53 (Queue push Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   q.push(20);
+   return 0;
+}
+```
+
+TARGET:
+push
+
+DISTRACTORS:
+1. enqueue
+2. add
+3. insert
+
+------------------
+Fill-in-the-Blank Question Example D54 (Queue pop Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   q.pop();
+   return 0;
+}
+```
+
+TARGET:
+pop
+
+DISTRACTORS:
+1. dequeue
+2. remove
+3. delete
+
+------------------
+Fill-in-the-Blank Question Example D55 (Queue front Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   cout << q.front() << endl;
+   return 0;
+}
+```
+
+TARGET:
+front
+
+DISTRACTORS:
+1. first
+2. peek
+3. head
+
+------------------
+Fill-in-the-Blank Question Example D56 (Stack Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <stack>
+using namespace std;
+int main(){
+   stack<int> s;
+   s.push(10);
+   return 0;
+}
+```
+
+TARGET:
+stack
+
+DISTRACTORS:
+1. queue
+2. deque
+3. list
+
+------------------
+Fill-in-the-Blank Question Example D57 (Stack Declaration)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <stack>
+using namespace std;
+int main(){
+   stack<int> s;
+   s.push(10);
+   s.push(20);
+   return 0;
+}
+```
+
+TARGET:
+stack
+
+DISTRACTORS:
+1. queue
+2. deque
+3. list
+
+------------------
+Fill-in-the-Blank Question Example D58 (Stack top Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <stack>
+using namespace std;
+int main(){
+   stack<int> s;
+   s.push(10);
+   cout << s.top() << endl;
+   return 0;
+}
+```
+
+TARGET:
+top
+
+DISTRACTORS:
+1. peek
+2. first
+3. front
+
+------------------
+Fill-in-the-Blank Question Example D59 (Deque Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <deque>
+using namespace std;
+int main(){
+   deque<int> dq;
+   dq.push_back(10);
+   return 0;
+}
+```
+
+TARGET:
+deque
+
+DISTRACTORS:
+1. queue
+2. stack
+3. list
+
+------------------
+Fill-in-the-Blank Question Example D60 (Deque push_front Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <deque>
+using namespace std;
+int main(){
+   deque<int> dq;
+   dq.push_front(10);
+   dq.push_back(20);
+   return 0;
+}
+```
+
+TARGET:
+push_front
+
+DISTRACTORS:
+1. addFront
+2. insertFront
+3. pushFirst
+
+------------------
+Fill-in-the-Blank Question Example D61 (Pair Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <utility>
+using namespace std;
+int main(){
+   pair<int, string> p;
+   p = make_pair(1, "one");
+   return 0;
+}
+```
+
+TARGET:
+utility
+
+DISTRACTORS:
+1. pair
+2. tuple
+3. container
+
+------------------
+Fill-in-the-Blank Question Example D62 (make_pair Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <utility>
+using namespace std;
+int main(){
+   pair<int, string> p;
+   p = make_pair(1, "one");
+   return 0;
+}
+```
+
+TARGET:
+make_pair
+
+DISTRACTORS:
+1. createPair
+2. pair
+3. newPair
+
+------------------
+Fill-in-the-Blank Question Example D63 (Pair first Member)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <utility>
+using namespace std;
+int main(){
+   pair<int, string> p = make_pair(1, "one");
+   cout << p.first << endl;
+   return 0;
+}
+```
+
+TARGET:
+first
+
+DISTRACTORS:
+1. one
+2. key
+3. left
+
+------------------
+Fill-in-the-Blank Question Example D64 (Pair second Member)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <utility>
+using namespace std;
+int main(){
+   pair<int, string> p = make_pair(1, "one");
+   cout << p.second << endl;
+   return 0;
+}
+```
+
+TARGET:
+second
+
+DISTRACTORS:
+1. two
+2. value
+3. right
+
+------------------
+Fill-in-the-Blank Question Example D65 (cmath Include)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main(){
+   double result = sqrt(16);
+   cout << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+cmath
+
+DISTRACTORS:
+1. math
+2. mathematics
+3. mathlib
+
+------------------
+Fill-in-the-Blank Question Example D66 (sqrt Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main(){
+   double result = sqrt(16);
+   cout << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+sqrt
+
+DISTRACTORS:
+1. squareroot
+2. root
+3. sqr
+
+------------------
+Fill-in-the-Blank Question Example D67 (pow Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main(){
+   double result = pow(2, 3);
+   cout << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+pow
+
+DISTRACTORS:
+1. power
+2. exp
+3. exponent
+
+------------------
+Fill-in-the-Blank Question Example D68 (abs Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main(){
+   int result = abs(-10);
+   cout << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+abs
+
+DISTRACTORS:
+1. absolute
+2. absval
+3. positive
+
+------------------
+Fill-in-the-Blank Question Example D69 (ceil Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main(){
+   double result = ceil(4.3);
+   cout << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+ceil
+
+DISTRACTORS:
+1. ceiling
+2. round
+3. roundup
+
+------------------
+Fill-in-the-Blank Question Example D70 (floor Function)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main(){
+   double result = floor(4.7);
+   cout << result << endl;
+   return 0;
+}
+```
+
+TARGET:
+floor
+
+DISTRACTORS:
+1. flr
+2. round
+3. rounddown
+
+------------------
+Fill-in-the-Blank Question Example D71 (Iterator Declaration)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   vector<int>::iterator it;
+   it = v.begin();
+   return 0;
+}
+```
+
+TARGET:
+iterator
+
+DISTRACTORS:
+1. iter
+2. pointer
+3. index
+
+------------------
+Fill-in-the-Blank Question Example D72 (this Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class MyClass{
+   int value;
+   public:
+      void setValue(int value){
+         this->value = value;
+      }
+};
+int main(){
+   MyClass obj;
+   obj.setValue(10);
+   return 0;
+}
+```
+
+TARGET:
+this
+
+DISTRACTORS:
+1. self
+2. me
+3. current
+
+------------------
+Fill-in-the-Blank Question Example D73 (virtual Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   public:
+      virtual void show(){
+         cout << "Base" << endl;
+      }
+};
+class Derived : public Base{
+   public:
+      void show(){
+         cout << "Derived" << endl;
+      }
+};
+int main(){
+   Base *ptr = new Derived();
+   ptr->show();
+   delete ptr;
+   return 0;
+}
+```
+
+TARGET:
+virtual
+
+DISTRACTORS:
+1. override
+2. abstract
+3. polymorphic
+
+------------------
+Fill-in-the-Blank Question Example D74 (override Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   public:
+      virtual void display(){}
+};
+class Derived : public Base{
+   public:
+      void display() override {
+         cout << "Derived" << endl;
+      }
+};
+int main(){
+   Derived d;
+   d.display();
+   return 0;
+}
+```
+
+TARGET:
+override
+
+DISTRACTORS:
+1. virtual
+2. final
+3. replace
+
+------------------
+Fill-in-the-Blank Question Example D75 (static_cast)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   double d = 3.14;
+   int i = static_cast<int>(d);
+   cout << i << endl;
+   return 0;
+}
+```
+
+TARGET:
+static_cast
+
+DISTRACTORS:
+1. cast
+2. convert
+3. dynamic_cast
+
+------------------
+Fill-in-the-Blank Question Example D76 (dynamic_cast)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   virtual void dummy(){}
+};
+class Derived : public Base{};
+int main(){
+   Base *b = new Derived();
+   Derived *d = dynamic_cast<Derived*>(b);
+   delete b;
+   return 0;
+}
+```
+
+TARGET:
+dynamic_cast
+
+DISTRACTORS:
+1. static_cast
+2. cast
+3. convert
+
+------------------
+Fill-in-the-Blank Question Example D77 (const_cast)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   const int x = 10;
+   int *y = const_cast<int*>(&x);
+   return 0;
+}
+```
+
+TARGET:
+const_cast
+
+DISTRACTORS:
+1. static_cast
+2. remove_const
+3. cast
+
+------------------
+Fill-in-the-Blank Question Example D78 (reinterpret_cast)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 42;
+   void *ptr = reinterpret_cast<void*>(&x);
+   return 0;
+}
+```
+
+TARGET:
+reinterpret_cast
+
+DISTRACTORS:
+1. static_cast
+2. void_cast
+3. convert
+
+------------------
+Fill-in-the-Blank Question Example D79 (sizeof Operator)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << sizeof(x) << endl;
+   return 0;
+}
+```
+
+TARGET:
+sizeof
+
+DISTRACTORS:
+1. size
+2. length
+3. bytes
+
+------------------
+Fill-in-the-Blank Question Example D80 (typedef Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+typedef int Integer;
+int main(){
+   Integer x = 10;
+   cout << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+typedef
+
+DISTRACTORS:
+1. define
+2. using
+3. alias
+
+------------------
+Fill-in-the-Blank Question Example D81 (enum Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+enum Color {RED, GREEN, BLUE};
+int main(){
+   Color c = RED;
+   cout << c << endl;
+   return 0;
+}
+```
+
+TARGET:
+enum
+
+DISTRACTORS:
+1. type
+2. enumeration
+3. define
+
+------------------
+Fill-in-the-Blank Question Example D82 (union Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+union Data{
+   int i;
+   float f;
+};
+int main(){
+   Data d;
+   d.i = 10;
+   return 0;
+}
+```
+
+TARGET:
+union
+
+DISTRACTORS:
+1. struct
+2. class
+3. type
+
+------------------
+Fill-in-the-Blank Question Example D83 (goto Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int i = 0;
+   start:
+   if(i < 3){
+      cout << i << endl;
+      i++;
+      goto start;
+   }
+   return 0;
+}
+```
+
+TARGET:
+goto
+
+DISTRACTORS:
+1. jump
+2. jump_to
+3. move
+
+------------------
+Fill-in-the-Blank Question Example D84 (default Keyword in Switch)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   switch(x){
+      case 1: cout << "One"; break;
+      default: cout << "Other"; break;
+   }
+   return 0;
+}
+```
+
+TARGET:
+default
+
+DISTRACTORS:
+1. else
+2. otherwise
+3. other
+
+------------------
+Fill-in-the-Blank Question Example D85 (case Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 1;
+   switch(x){
+      case 1: cout << "One"; break;
+      case 2: cout << "Two"; break;
+   }
+   return 0;
+}
+```
+
+TARGET:
+case
+
+DISTRACTORS:
+1. if
+2. when
+3. value
+
+------------------
+Fill-in-the-Blank Question Example D86 (break Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 0; i < 5; i++){
+      if(i == 3) break;
+      cout << i << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+break
+
+DISTRACTORS:
+1. stop
+2. exit
+3. end
+
+------------------
+Fill-in-the-Blank Question Example D87 (continue Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 0; i < 5; i++){
+      if(i == 2) continue;
+      cout << i << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+continue
+
+DISTRACTORS:
+1. skip
+2. next
+3. pass
+
+------------------
+Fill-in-the-Blank Question Example D88 (bool Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   bool flag = true;
+   if(flag){
+      cout << "True" << endl;
+   }
+   return 0;
+}
+```
+
+TARGET:
+bool
+
+DISTRACTORS:
+1. boolean
+2. int
+3. flag
+
+------------------
+Fill-in-the-Blank Question Example D91 (double Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   double pi = 3.14159;
+   cout << pi << endl;
+   return 0;
+}
+```
+
+TARGET:
+double
+
+DISTRACTORS:
+1. float
+2. decimal
+3. real
+
+------------------
+Fill-in-the-Blank Question Example D92 (long Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   long bigNumber = 1000000;
+   cout << bigNumber << endl;
+   return 0;
+}
+```
+
+TARGET:
+long
+
+DISTRACTORS:
+1. int
+2. bigint
+3. large
+
+------------------
+Fill-in-the-Blank Question Example D93 (short Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   short smallNum = 100;
+   cout << smallNum << endl;
+   return 0;
+}
+```
+
+TARGET:
+short
+
+DISTRACTORS:
+1. int
+2. small
+3. tiny
+
+------------------
+Fill-in-the-Blank Question Example D94 (unsigned Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   unsigned int x = 100;
+   cout << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+unsigned
+
+DISTRACTORS:
+1. positive
+2. nonnegative
+3. uint
+
+------------------
+Fill-in-the-Blank Question Example D95 (signed Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   signed int x = -50;
+   cout << x << endl;
+   return 0;
+}
+```
+
+TARGET:
+signed
+
+DISTRACTORS:
+1. negative
+2. integer
+3. sint
+
+------------------
+Fill-in-the-Blank Question Example D97 (explicit Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class MyClass{
+   public:
+      explicit MyClass(int x){}
+};
+int main(){
+   MyClass obj(10);
+   return 0;
+}
+```
+
+TARGET:
+explicit
+
+DISTRACTORS:
+1. implicit
+2. direct
+3. strict
+
+------------------
+Fill-in-the-Blank Question Example D98 (constexpr Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+constexpr int square(int x){
+   return x * x;
+}
+int main(){
+   cout << square(5) << endl;
+   return 0;
+}
+```
+
+TARGET:
+constexpr
+
+DISTRACTORS:
+1. const
+2. constant
+3. inline
+
+------------------
+Fill-in-the-Blank Question Example D99 (noexcept Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+void safe_function() noexcept {
+   cout << "Safe" << endl;
+}
+int main(){
+   safe_function();
+   return 0;
+}
+```
+
+TARGET:
+noexcept
+
+DISTRACTORS:
+1. nothrow
+2. safe
+3. nodanger
+
+------------------
+Fill-in-the-Blank Question Example D100 (decltype Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 5;
+   decltype(x) y = 10;
+   cout << y << endl;
+   return 0;
+}
+```
+
+TARGET:
+decltype
+
+DISTRACTORS:
+1. typeof
+2. typeid
+3. type
+
+------------------
+Fill-in-the-Blank Question Example D101 (final Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   public:
+      virtual void show() final {
+         cout << "Base" << endl;
+      }
+};
+int main(){
+   Base b;
+   b.show();
+   return 0;
+}
+```
+
+TARGET:
+final
+
+DISTRACTORS:
+1. sealed
+2. last
+3. end
+
+------------------
+Fill-in-the-Blank Question Example D102 (static Member)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Counter{
+   public:
+      static int count;
+      Counter(){ count++; }
+};
+int Counter::count = 0;
+int main(){
+   Counter c1, c2;
+   cout << Counter::count << endl;
+   return 0;
+}
+```
+
+TARGET:
+static
+
+DISTRACTORS:
+1. global
+2. shared
+3. common
+
+------------------
+Fill-in-the-Blank Question Example D103 (protected Keyword)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+class Base{
+   protected:
+      int value;
+};
+class Derived : public Base{
+   public:
+      void setValue(int v){ value = v; }
+};
+int main(){
+   Derived d;
+   d.setValue(10);
+   return 0;
+}
+```
+
+TARGET:
+protected
+
+DISTRACTORS:
+1. private
+2. public
+3. internal
+
+------------------
+Fill-in-the-Blank Question Example D104 (size_t Type)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   size_t len = v.size();
+   cout << len << endl;
+   return 0;
+}
+```
+
+TARGET:
+size_t
+
+DISTRACTORS:
+1. int
+2. unsigned
+3. long
+
+------------------
+Fill-in-the-Blank Question Example D105 (Vector resize Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v.resize(5);
+   cout << v.size() << endl;
+   return 0;
+}
+```
+
+TARGET:
+resize
+
+DISTRACTORS:
+1. setSize
+2. changeSize
+3. expand
+
+------------------
+Fill-in-the-Blank Question Example D106 (Map size Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <map>
+using namespace std;
+int main(){
+   map<int, string> m;
+   m[1] = "one";
+   cout << m.size() << endl;
+   return 0;
+}
+```
+
+TARGET:
+size
+
+DISTRACTORS:
+1. length
+2. count
+3. total
+
+------------------
+Fill-in-the-Blank Question Example D107 (Map find Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <map>
+using namespace std;
+int main(){
+   map<int, string> m;
+   m[1] = "one";
+   auto it = m.find(1);
+   return 0;
+}
+```
+
+TARGET:
+find
+
+DISTRACTORS:
+1. search
+2. locate
+3. get
+
+------------------
+Fill-in-the-Blank Question Example D108 (Map erase Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <map>
+using namespace std;
+int main(){
+   map<int, string> m;
+   m[1] = "one";
+   m.erase(1);
+   return 0;
+}
+```
+
+TARGET:
+erase
+
+DISTRACTORS:
+1. delete
+2. remove
+3. clear
+
+------------------
+Fill-in-the-Blank Question Example D109 (Set erase Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> s;
+   s.insert(10);
+   s.erase(10);
+   return 0;
+}
+```
+
+TARGET:
+erase
+
+DISTRACTORS:
+1. delete
+2. remove
+3. clear
+
+------------------
+Fill-in-the-Blank Question Example D110 (Set find Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> s = {10, 20, 30};
+   auto it = s.find(20);
+   return 0;
+}
+```
+
+TARGET:
+find
+
+DISTRACTORS:
+1. search
+2. locate
+3. contains
+
+------------------
+Fill-in-the-Blank Question Example D111 (List push_front Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> l;
+   l.push_front(10);
+   l.push_back(20);
+   return 0;
+}
+```
+
+TARGET:
+push_front
+
+DISTRACTORS:
+1. addFront
+2. insertFront
+3. prependinsert
+
+------------------
+Fill-in-the-Blank Question Example D112 (List pop_front Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> l = {10, 20, 30};
+   l.pop_front();
+   return 0;
+}
+```
+
+TARGET:
+pop_front
+
+DISTRACTORS:
+1. removeFront
+2. deleteFront
+3. removeFirst
+
+------------------
+Fill-in-the-Blank Question Example D113 (String compare Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string s1 = "hello";
+   string s2 = "world";
+   int result = s1.compare(s2);
+   return 0;
+}
+```
+
+TARGET:
+compare
+
+DISTRACTORS:
+1. equals
+2. compareTo
+3. match
+
+------------------
+Fill-in-the-Blank Question Example D114 (String c_str Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <cstring>
+using namespace std;
+int main(){
+   string s = "hello";
+   const char *cstr = s.c_str();
+   return 0;
+}
+```
+
+TARGET:
+c_str
+
+DISTRACTORS:
+1. toChar
+2. toCString
+3. charArray
+
+------------------
+Fill-in-the-Blank Question Example D115 (String insert Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string s = "hello";
+   s.insert(5, " world");
+   cout << s << endl;
+   return 0;
+}
+```
+
+TARGET:
+insert
+
+DISTRACTORS:
+1. add
+2. append
+3. put
+
+------------------
+Fill-in-the-Blank Question Example D116 (String erase Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string s = "hello world";
+   s.erase(5, 6);
+   cout << s << endl;
+   return 0;
+}
+```
+
+TARGET:
+erase
+
+DISTRACTORS:
+1. delete
+2. remove
+3. cut
+
+------------------
+Fill-in-the-Blank Question Example D117 (String replace Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+using namespace std;
+int main(){
+   string s = "hello world";
+   s.replace(6, 5, "C++");
+   cout << s << endl;
+   return 0;
+}
+```
+
+TARGET:
+replace
+
+DISTRACTORS:
+1. change
+2. substitute
+3. swap
+
+------------------
+Fill-in-the-Blank Question Example D118 (Vector insert Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 4};
+   v.insert(v.begin() + 2, 3);
+   return 0;
+}
+```
+
+TARGET:
+insert
+
+DISTRACTORS:
+1. add
+2. place
+3. put
+
+------------------
+Fill-in-the-Blank Question Example D119 (Vector erase Method)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3, 4};
+   v.erase(v.begin() + 2);
+   return 0;
+}
+```
+
+TARGET:
+erase
+
+DISTRACTORS:
+1. delete
+2. remove
+3. clear
+
+------------------
+Fill-in-the-Blank Question Example D120 (count Function from algorithm)
+------------------
+CODE:
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 2, 3, 2};
+   int n = count(v.begin(), v.end(), 2);
+   cout << n << endl;
+   return 0;
+}
+```
+
+TARGET:
+count
+
+DISTRACTORS:
+1. countOccurrences
+2. frequency
+3. occurrences
+
+------------------
+END OF EXAMPLES
+------------------

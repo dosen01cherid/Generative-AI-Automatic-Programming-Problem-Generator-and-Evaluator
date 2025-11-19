@@ -31,7 +31,7 @@ if sys.platform == "win32":
 OLLAMA_URL = "https://flows-billion-angels-soonest.trycloudflare.com"
 GEN_MODEL = "qwen2.5:14b"
 TIMEOUT = 600
-CONTEXT_FILE = "context.txt"
+CONTEXT_FILE = "context_with_validation.txt"  # New validation-formatted context
 MODEL_CONTEXT_SIZE = 128_000  # in tokens
 AVG_CHARS_PER_TOKEN = 4.0
 KEEP_ALIVE = "60m"
