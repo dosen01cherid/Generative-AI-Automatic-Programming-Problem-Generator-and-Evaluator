@@ -5311,6 +5311,1171 @@ Answer
 2,6,10,3,9,7,4,7,8,5,1,11,12,13
 
 ============================================================
+HOW TO CREATE ACCURATE FILL-IN-THE-BLANK QUESTIONS
+============================================================
+
+STEP-BY-STEP INSTRUCTIONS:
+
+1. START WITH VALID C++ CODE
+   - The code MUST compile and run correctly
+   - Keep the code simple and focused
+   - Ensure the code demonstrates a clear concept
+
+2. IDENTIFY WHAT TO REPLACE
+   - Choose EXACTLY ONE keyword, operator, or symbol to replace
+   - Common targets: keywords (int, for, if, class, return, etc.)
+   - Operators: =, ==, <<, >>, ++, --, etc.
+   - Symbols: ; { } ( ) [ ] < >
+   - Method names: push_back, size, length, etc.
+   - Header files: iostream, vector, string, etc.
+
+3. CREATE THE BLANK
+   - Replace the chosen word/symbol with EXACTLY: _____
+   - Use exactly 5 underscores
+   - Do NOT change anything else in the code
+   - Keep all spacing, indentation, and formatting identical
+
+4. CREATE 4 MULTIPLE CHOICE OPTIONS
+   - Option 1: A plausible wrong answer (related keyword/operator)
+   - Option 2: THE CORRECT ANSWER (always position 2)
+   - Option 3: Another plausible wrong answer
+   - Option 4: Another plausible wrong answer
+
+   Wrong answers should be:
+   - Related to the concept (similar keywords, common mistakes)
+   - Syntactically plausible (could look correct to a beginner)
+   - Not obviously wrong (avoid nonsense options)
+
+5. ANSWER FORMAT
+   - Always provide the answer as a single number: 2
+   - The correct answer is ALWAYS in position 2
+
+6. STRUCTURE FORMAT
+   Must include these sections in this exact order:
+   ------------------
+   Fill-in-the-Blank Question Example [ID] ([Description])
+   ------------------
+   Code
+   ------------------
+   [Complete valid C++ code]
+   -------------------
+   Question
+   -------------------
+   [Same code with ONE _____ replacement]
+   -------------------
+   Options
+   -------------------
+   1. [wrong]  2. [CORRECT]  3. [wrong]  4. [wrong]
+   -----------------
+   Answer
+   -----------------
+   2
+
+EXAMPLES OF GOOD REPLACEMENTS:
+✓ int x = 10;        →  _____ x = 10;           (replace "int")
+✓ cout << "Hello";   →  _____ << "Hello";        (replace "cout")
+✓ for(int i = 0...)  →  _____(int i = 0...)     (replace "for")
+✓ if(x > 5)          →  if(x _____ 5)           (replace ">")
+✓ return 0;          →  _____ 0;                (replace "return")
+✓ int x = 10;        →  int x _____ 10;         (replace "=")
+✓ cout << x;         →  cout _____ x;           (replace "<<")
+
+EXAMPLES OF BAD REPLACEMENTS (AVOID THESE):
+
+1. MISMATCH: Blank and Answer Don't Match
+   ✗ Code: cout << "Hello" << endl;
+   ✗ Replace: _____ << "Hello" << endl;
+   ✗ Wrong Answer: "cout <<"
+   ✗ Problem: You removed "cout" but answer includes "<<"
+   ✓ Correct Answer: "cout" (only what was replaced)
+
+   ✗ Code: int x = 10;
+   ✗ Replace: int _____ = 10;
+   ✗ Wrong Answer: "x ="
+   ✗ Problem: You removed "x" but answer includes "="
+   ✓ Correct Answer: "x" (only what was replaced)
+
+   ✗ Code: for(int i = 0; i < 5; i++)
+   ✗ Replace: for(_____ i = 0; i < 5; i++)
+   ✗ Wrong Answer: "int i"
+   ✗ Problem: You removed "int" but answer includes "i"
+   ✓ Correct Answer: "int" (only what was replaced)
+
+   ✗ Code: if(x > 5)
+   ✗ Replace: if(_____ > 5)
+   ✗ Wrong Answer: "x >"
+   ✗ Problem: You removed "x" but answer includes ">"
+   ✓ Correct Answer: "x" (only what was replaced)
+
+   ✗ Code: return 0;
+   ✗ Replace: _____ 0;
+   ✗ Wrong Answer: "return 0"
+   ✗ Problem: You removed "return" but answer includes "0"
+   ✓ Correct Answer: "return" (only what was replaced)
+
+2. REPLACING MULTIPLE WORDS/SYMBOLS AT ONCE
+   ✗ Code: int x = 10;
+   ✗ Replace: _____ = 10;
+   ✗ Problem: Removed both "int" and "x" (two words)
+   ✓ Correct: Choose only one - either "int" or "x"
+
+   ✗ Code: cout << x << endl;
+   ✗ Replace: cout _____ endl;
+   ✗ Problem: Removed "<< x <<" (multiple parts)
+   ✓ Correct: Replace only one operator at a time
+
+3. REPLACING PARTS OF WORDS
+   ✗ Code: return 0;
+   ✗ Replace: _____ turn 0;
+   ✗ Problem: Replacing "re" from "return" (incomplete word)
+   ✓ Correct: Replace the entire word "return"
+
+   ✗ Code: #include <iostream>
+   ✗ Replace: #_____ clude <iostream>
+   ✗ Problem: Replacing "in" from "include" (partial word)
+   ✓ Correct: Replace the entire word "include"
+
+4. REPLACING VARIABLE NAMES OR VALUES
+   ✗ Code: int sum = 10;
+   ✗ Replace: int _____ = 10;
+   ✗ Problem: Replacing variable name "sum" (not educational)
+   ✓ Correct: Replace keywords, operators, or data types
+
+   ✗ Code: int x = 10;
+   ✗ Replace: int x = _____;
+   ✗ Problem: Replacing the value "10" (not a concept)
+   ✓ Correct: Replace "int" or "=" instead
+
+5. MAKING THE BLANK AMBIGUOUS
+   ✗ Code: int x = 10;
+   ✗ Replace: _____ = 10;
+   ✗ Problem: Could be "int x" or just "x" (ambiguous)
+   ✓ Correct: Make it clear what's missing
+
+6. CREATING OBVIOUSLY WRONG OPTIONS
+   ✗ Options for cout:
+      1. banana  2. cout  3. elephant  4. xyz
+   ✗ Problem: Options are nonsense, not educational
+   ✓ Correct: Use related keywords: print, cin, cerr, output
+
+   ✗ Options for int:
+      1. hello  2. int  3. world  4. 123
+   ✗ Problem: Not related to data types
+   ✓ Correct: Use related types: float, char, double, bool
+
+REMEMBER: The correct answer must be EXACTLY what you removed, nothing more, nothing less!
+
+EXAMPLE WORKFLOW:
+
+Original Code:
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+
+Step 1: Choose what to replace → "cout"
+Step 2: Replace with _____ → _____ << "Hello" << endl;
+Step 3: Create options:
+   1. print  2. cout  3. cin  4. output
+Step 4: Answer is 2 (cout is in position 2)
+
+Another example with the same code:
+
+Step 1: Choose what to replace → "<<"
+Step 2: Replace with _____ → cout _____ "Hello" << endl;
+Step 3: Create options:
+   1. >>  2. <<  3. <  4. <=
+Step 4: Answer is 2 (<< is in position 2)
+
+IMPORTANT RULES:
+- ONE blank per question
+- Correct answer ALWAYS in position 2
+- Keep code formatting identical
+- Use _____ (5 underscores) for blanks
+- Provide related but wrong distractors
+- Test that code compiles before and after replacement
+
+============================================================
+SIMPLE FILL-IN-THE-BLANK EXAMPLES (DEMONSTRATING THE TECHNIQUE)
+============================================================
+
+These examples show how to correctly create fill-in-the-blank questions
+from simple C++ code. Each example demonstrates replacing ONE specific
+word or symbol with _____ and providing 4 multiple choice options.
+
+------------------
+Fill-in-the-Blank Question Example S1 (Return Type)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_____ main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. void  2. int  3. char  4. string
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S2 (cout Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. print  2. cout  3. cin  4. output
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S3 (endl Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << _____;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. end  2. endl  3. newline  4. ln
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S4 (return Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   _____ 0;
+}
+-------------------
+Options
+-------------------
+1. exit  2. return  3. end  4. finish
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S5 (include Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#_____ <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. import  2. include  3. use  4. require
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S6 (iostream Header)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <_____>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. stdio  2. iostream  3. io  4. stream
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S7 (namespace Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using _____ std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. name  2. namespace  3. space  4. using
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S8 (std Namespace)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace _____;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. standard  2. std  3. system  4. main
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S9 (Variable Type - int)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. float  2. int  3. char  4. double
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S10 (Variable Type - float)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   float pi = 3.14;
+   cout << pi << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ pi = 3.14;
+   cout << pi << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. int  2. float  3. double  4. decimal
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S11 (Variable Type - char)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   char grade = 'A';
+   cout << grade << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ grade = 'A';
+   cout << grade << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. int  2. char  3. string  4. letter
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S12 (Variable Type - string)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   string name = "John";
+   cout << name << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ name = "John";
+   cout << name << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. char  2. string  3. text  4. str
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S13 (if Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   if(x > 5){
+      cout << "Greater" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   _____(x > 5){
+      cout << "Greater" << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. when  2. if  3. check  4. while
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S14 (else Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 3;
+   if(x > 5){
+      cout << "Greater" << endl;
+   }else{
+      cout << "Smaller" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 3;
+   if(x > 5){
+      cout << "Greater" << endl;
+   }_____ {
+      cout << "Smaller" << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. otherwise  2. else  3. except  4. other
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S15 (for Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   for(int i = 0; i < 3; i++){
+      cout << i << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____(int i = 0; i < 3; i++){
+      cout << i << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. loop  2. for  3. repeat  4. while
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S16 (while Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int i = 0;
+   while(i < 3){
+      cout << i << endl;
+      i++;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int i = 0;
+   _____(i < 3){
+      cout << i << endl;
+      i++;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. for  2. while  3. loop  4. until
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S17 (cin Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   cin >> num;
+   cout << num << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int num;
+   _____ >> num;
+   cout << num << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. input  2. cin  3. cout  4. read
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S18 (Function Return Type - void)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+void greet(){
+   cout << "Hello!" << endl;
+}
+int main(){
+   greet();
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_____ greet(){
+   cout << "Hello!" << endl;
+}
+int main(){
+   greet();
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. int  2. void  3. none  4. empty
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S19 (struct Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Point{
+   int x;
+   int y;
+};
+int main(){
+   Point p;
+   p.x = 10;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_____ Point{
+   int x;
+   int y;
+};
+int main(){
+   Point p;
+   p.x = 10;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. class  2. struct  3. type  4. object
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S20 (class Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Student{
+   public:
+      int age;
+};
+int main(){
+   Student s;
+   s.age = 20;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+_____ Student{
+   public:
+      int age;
+};
+int main(){
+   Student s;
+   s.age = 20;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. struct  2. class  3. object  4. type
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S21 (public Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+class Student{
+   public:
+      int age;
+};
+int main(){
+   Student s;
+   s.age = 20;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+class Student{
+   _____:
+      int age;
+};
+int main(){
+   Student s;
+   s.age = 20;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. private  2. public  3. protected  4. open
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S22 (new Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = _____ int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. malloc  2. new  3. create  4. alloc
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S23 (delete Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   _____ ptr;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. free  2. delete  3. remove  4. destroy
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S24 (Array Declaration)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. float  2. int  3. array  4. list
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S25 (Semicolon)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10_____
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ,  2. ;  3. :  4. .
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S26 (Opening Brace)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main()_____
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. [  2. {  3. (  4. <
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S27 (Closing Brace)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+_____
+-------------------
+Options
+-------------------
+1. ]  2. }  3. )  4. >
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S28 (Left Shift Operator for cout)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout _____ x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. >>  2. <<  3. <  4. <=
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S29 (Right Shift Operator for cin)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x;
+   cin >> x;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x;
+   cin _____ x;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. <<  2. >>  3. >  4. >=
+-----------------
+Answer
+-----------------
+2
+
+------------------
+Fill-in-the-Blank Question Example S30 (Assignment Operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x _____ 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ==  2. =  3. :  4. !=
+-----------------
+Answer
+-----------------
+2
+
+============================================================
 ADDITIONAL FILL-IN-THE-BLANK EXAMPLES (FOR BETTER LEARNING)
 ============================================================
 
