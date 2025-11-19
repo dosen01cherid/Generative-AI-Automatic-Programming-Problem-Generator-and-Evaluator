@@ -72,9 +72,16 @@ def ask_with_context(context: str, question: str, model: Optional[str] = GEN_MOD
     # 2️⃣ Build augmented prompt
     augmented_prompt = (
         f"You are an AI assistant. Use ONLY the following context to answer.\n\n"
+        f"IMPORTANT: Use ONLY modern C++ syntax (C++11 and later). DO NOT use old C-style code:\n"
+        f"- Use new/delete or smart pointers (std::unique_ptr, std::shared_ptr) - NEVER malloc/free\n"
+        f"- Use std::string - NEVER char* or char arrays for strings\n"
+        f"- Use std::cout/std::cin - NEVER printf/scanf\n"
+        f"- Use std::vector, std::array - prefer over raw arrays\n"
+        f"- Use nullptr - NEVER NULL or 0 for pointers\n"
+        f"- Use modern C++ features: auto, range-based for loops, etc.\n\n"
         f"Context:\n{context}\n\n"
         f"Question: {question}\n\n"
-        f"Answer clearly and concisely."
+        f"Answer clearly and concisely. Generate ONLY modern C++ code, NO old C-style constructs."
     )
 
     # 3️⃣ Send prompt to Ollama (non-streaming)

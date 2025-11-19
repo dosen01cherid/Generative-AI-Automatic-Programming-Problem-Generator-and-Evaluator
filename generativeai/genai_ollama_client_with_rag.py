@@ -300,6 +300,14 @@ class OllamaRAGClient:
         # Create prompt with context
         prompt = f"""You are an AI assistant that creates C++ programming questions.
 
+IMPORTANT: Use ONLY modern C++ syntax (C++11 and later). DO NOT use old C-style code:
+- Use new/delete or smart pointers (std::unique_ptr, std::shared_ptr) - NEVER malloc/free
+- Use std::string - NEVER char* or char arrays for strings
+- Use std::cout/std::cin - NEVER printf/scanf
+- Use std::vector, std::array - prefer over raw arrays
+- Use nullptr - NEVER NULL or 0 for pointers
+- Use modern C++ features: auto, range-based for loops, etc.
+
 Based on the following context and examples, please answer the question.
 
 Context:
@@ -307,7 +315,8 @@ Context:
 
 Question: {question}
 
-Please provide a detailed and accurate response following the format shown in the examples."""
+Please provide a detailed and accurate response following the format shown in the examples.
+Remember: Generate ONLY modern C++ code, NO old C-style constructs."""
 
         # Generate response
         if verbose:
