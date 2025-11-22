@@ -1,19 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)",
-      "Bash(git pull:*)",
-      "Bash(git add:*)",
-      "Bash(git commit:*)",
-      "Bash(git push)",
-      "Bash(start solve_problem.html)",
-      "Bash(node -c:*)",
-      "Bash(python:*)",
-      "Bash(start create_problem.html)",
-      "Bash(cat:*)",
-      "Bash(curl:*)",
-      "Bash(git reset:*)",
-      "Bash(.gitignore)"
+      "Bash(git push)"
     ],
     "deny": [],
     "ask": []

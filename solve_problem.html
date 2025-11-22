@@ -918,6 +918,24 @@ print("✅ pyscript module created and registered")
       display: inline-block;
     }
 
+    /* Flashing error notification animation for incorrect answers requiring correction */
+    @keyframes flashError {
+      0%, 100% {
+        background: #fef2f2;
+        border-color: #fca5a5;
+      }
+      50% {
+        background: #fee2e2;
+        border-color: #ef4444;
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+      }
+    }
+
+    .error-flash {
+      animation: flashError 0.8s ease-in-out 3;
+      border: 2px solid #fca5a5;
+    }
+
     /* Hide problem area with fade out */
     @keyframes fadeOut {
       from {
@@ -10251,6 +10269,276 @@ This demonstrates the complete format for creating your own problem sets!
     # ============================================
     # ALL SUBMIT METHODS - UNIFIED STATE MANAGEMENT
     # ============================================
+
+    def _handle_incorrect_answer_with_blocking(self, step_idx, step_data, problem_type, correct_answers=None, results=None):
+        """
+        Unified method to handle incorrect answers when requireCorrect==True.
+
+        This method is called by all submit functions when:
+        - The answer is incorrect
+        - requireCorrect is True
+
+        It handles:
+        1. Resetting the 'finished' status
+        2. Optionally reshuffling/recreating UI (for MC types)
+        3. Displaying error messages with hints
+        4. Adding type-specific UI elements (hangman for fill-blank types)
+        5. Saving state
+        6. Early return to block progression
+
+        Parameters:
+        - step_idx: Index of the current step
+        - step_data: Data for the current step
+        - problem_type: Type of problem ('mc-single', 'mc-multiple', 'true-false', 'fill-blank', 'multi-blank')
+        - correct_answers: The correct answer(s) for display (optional, used for hangman)
+        - results: Dict of {label: is_correct} for multi-blank (optional)
+        """
+        current_prob_idx = self.current_problem_index
+
+        window.console.log(f"🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect (type: {problem_type})")
+
+        # ============================================
+        # 1. RESET FINISHED STATUS
+        # ============================================
+        if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+            self.solve_states[current_prob_idx][step_idx]["finished"] = False
+            window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+        if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+            self.problem_states[current_prob_idx][step_idx]["finished"] = False
+            window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
+
+        # ============================================
+        # 2. TYPE-SPECIFIC UI UPDATES (Reshuffle options for MC types)
+        # ============================================
+        if problem_type in ['mc-single', 'mc-multiple']:
+            if "options" in step_data and len(step_data["options"]) > 0:
+                window.console.log(f"🔄 Reshuffling {problem_type} options")
+                self.shuffle_array(step_data["options"])
+
+                # Recreate the UI with shuffled options
+                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                    container = self.solve_states[current_prob_idx][step_idx].get("container")
+                    if container:
+                        # Get problem data to get total steps
+                        problem = self.problem_set[current_prob_idx]
+                        total_steps = len(problem.get("steps", []))
+                        desc_html = self.render_content_blocks(step_data.get("description", []))
+
+                        # Recreate UI based on problem type
+                        if problem_type == 'mc-single':
+                            self.create_mc_single_ui(container, step_idx, step_data, desc_html, total_steps)
+                            window.console.log("✅ Recreated MC-Single UI with shuffled options")
+                        elif problem_type == 'mc-multiple':
+                            self.create_mc_multiple_ui(container, step_idx, step_data, desc_html, total_steps)
+                            window.console.log("✅ Recreated MC-Multiple UI with shuffled options")
+
+                        # Store step_data reference for future submits
+                        container.step_data = step_data
+
+        # ============================================
+        # 3. FIND OR CREATE FEEDBACK DIV
+        # ============================================
+        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+
+        if not feedback_div:
+            # Try to find step container
+            container = None
+            if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
+                container = self.solve_states[current_prob_idx][step_idx].get("container")
+
+            # Fallback: try querySelector
+            if not container:
+                container = document.querySelector(f"#step{step_idx}")
+
+            if container:
+                # Create feedback div
+                feedback_div = document.createElement("div")
+                feedback_div.id = f"stepFeedback{step_idx}"
+                feedback_div.className = "step-feedback"
+                container.appendChild(feedback_div)
+                window.console.log(f"✅ Created feedback div for step {step_idx}")
+            else:
+                window.console.warn(f"⚠️ Could not find container for step {step_idx}")
+
+        # ============================================
+        # 4. BUILD AND DISPLAY ERROR MESSAGE
+        # ============================================
+        if feedback_div:
+            # Base error message
+            if problem_type == 'multi-blank':
+                error_html = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                        ❌ Incorrect. This step requires all correct answers. Please try again.
+                    </div>
+                """
+            else:
+                error_html = """
+                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                        ❌ Incorrect. This step requires the correct answer. Please try again.
+                    </div>
+                """
+
+            # Add hint if available (except for true-false which doesn't show hints in original code)
+            hint = step_data.get("hint", "")
+            if hint and problem_type != 'true-false':
+                hint_blocks = hint if isinstance(hint, list) else [{"type": "text", "content": hint}]
+                hint_html = self.render_content_blocks(hint_blocks)
+
+                # Fill-blank types use parentheses for hints
+                if problem_type in ['fill-blank', 'multi-blank']:
+                    error_html += f"""
+                        <div style='background:#eff6ff;color:#1e40af;padding:12px;border-radius:8px;margin-top:8px;'>
+                            💡 <strong>Hint:</strong> ({hint_html})
+                        </div>
+                    """
+                else:
+                    error_html += f"""
+                        <div style='background:#eff6ff;color:#1e40af;padding:12px;border-radius:8px;margin-top:8px;'>
+                            💡 <strong>Hint:</strong> {hint_html}
+                        </div>
+                    """
+                window.console.log(f"✅ Displaying hint for {problem_type}")
+
+            # ============================================
+            # 5. ADD TYPE-SPECIFIC UI (Hangman for fill-blank types)
+            # ============================================
+            if problem_type == 'fill-blank' and correct_answers and len(correct_answers) > 0:
+                # Check if there are multiple possible answers
+                if len(correct_answers) > 1:
+                    error_html += f"""
+                        <div style='margin-top:12px;'>
+                            <div style='font-weight:600;color:#334155;margin-bottom:8px;'>Choose any one of these {len(correct_answers)} possible answers:</div>
+                            <div id='hangman_group_{step_idx}' class='hangman-option-group'>
+                    """
+
+                    for idx, answer in enumerate(correct_answers):
+                        if isinstance(answer, dict):
+                            correct_answer_text = answer.get("value", "")
+                        else:
+                            correct_answer_text = str(answer)
+
+                        if correct_answer_text:
+                            hangman_id = f"{step_idx}_{idx}"
+                            word_length = len([c for c in correct_answer_text if c.isalnum()])
+                            hangman_content = self.create_hangman_ui(correct_answer_text, hangman_id)
+
+                            error_html += f"""
+                                <div class='hangman-accordion-item' data-hangman-id='{hangman_id}' style='margin-bottom:8px;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:white;'>
+                                    <div class='hangman-accordion-header' onclick='window.problem_solver_app.toggle_hangman_accordion("{hangman_id}")' style='padding:12px;background:#f8fafc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;'>
+                                        <div style='font-weight:600;color:#475569;'>Option {idx + 1} ({word_length} letters)</div>
+                                        <div class='accordion-icon' style='color:#64748b;font-size:18px;'>▼</div>
+                                    </div>
+                                    <div class='hangman-accordion-content' id='accordion_content_{hangman_id}' style='display:none;padding:12px;'>
+                            """
+                            error_html += hangman_content
+                            error_html += """
+                                    </div>
+                                </div>
+                            """
+
+                    error_html += "</div></div>"
+                    window.console.log(f"✅ Displaying {len(correct_answers)} hangman UIs for Fill-Blank")
+                else:
+                    # Single answer
+                    first_answer = correct_answers[0]
+                    if isinstance(first_answer, dict):
+                        correct_answer_text = first_answer.get("value", "")
+                    else:
+                        correct_answer_text = str(first_answer)
+
+                    hangman_html = self.create_hangman_ui(correct_answer_text, step_idx)
+                    error_html += hangman_html
+                    window.console.log("✅ Displaying hangman UI for Fill-Blank")
+
+            elif problem_type == 'multi-blank' and correct_answers and results:
+                # Add hangman UI for each incorrect blank
+                for label, is_correct in results.items():
+                    if not is_correct and label in correct_answers:
+                        # Get the correct answer(s) for this blank
+                        expected = correct_answers[label]
+
+                        error_html += f"""
+                            <div style='margin-top:12px;border-top:1px solid #e2e8f0;padding-top:12px;'>
+                                <strong style='color:#334155;'>Blank {label}:</strong>
+                        """
+
+                        # Handle both list and single answer formats
+                        if isinstance(expected, list) and len(expected) > 0:
+                            # Multiple possible answers - create hangman for each
+                            if len(expected) > 1:
+                                error_html += f"""
+                                    <div style='font-size:14px;color:#64748b;margin-top:4px;margin-bottom:8px;'>Choose any one of these {len(expected)} possible answers:</div>
+                                    <div id='hangman_group_{step_idx}_{label}' class='hangman-option-group'>
+                                """
+
+                            for idx, answer in enumerate(expected):
+                                if isinstance(answer, dict):
+                                    correct_answer_text = answer.get("value", "")
+                                else:
+                                    correct_answer_text = str(answer)
+
+                                if correct_answer_text:
+                                    hangman_id = f"{step_idx}_{label}_{idx}"
+                                    word_length = len([c for c in correct_answer_text if c.isalnum()])
+                                    hangman_content = self.create_hangman_ui(correct_answer_text, hangman_id)
+
+                                    if len(expected) > 1:
+                                        error_html += f"""
+                                            <div class='hangman-accordion-item' data-hangman-id='{hangman_id}' style='margin-bottom:8px;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:white;'>
+                                                <div class='hangman-accordion-header' onclick='window.problem_solver_app.toggle_hangman_accordion("{hangman_id}")' style='padding:12px;background:#f8fafc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;'>
+                                                    <div style='font-weight:600;color:#475569;'>Option {idx + 1} ({word_length} letters)</div>
+                                                    <div class='accordion-icon' style='color:#64748b;font-size:18px;'>▼</div>
+                                                </div>
+                                                <div class='hangman-accordion-content' id='accordion_content_{hangman_id}' style='display:none;padding:12px;'>
+                                        """
+                                        error_html += hangman_content
+                                        error_html += """
+                                                </div>
+                                            </div>
+                                        """
+                                    else:
+                                        error_html += hangman_content
+
+                            if len(expected) > 1:
+                                error_html += "</div>"
+                        else:
+                            # Single answer
+                            if isinstance(expected, dict):
+                                correct_answer_text = expected.get("value", "")
+                            else:
+                                correct_answer_text = str(expected)
+
+                            if correct_answer_text:
+                                hangman_html = self.create_hangman_ui(correct_answer_text, f"{step_idx}_{label}")
+                                error_html += hangman_html
+
+                        error_html += "</div>"
+                        window.console.log(f"✅ Displaying hangman UI for Multi-Blank, blank {label}")
+
+            # Set the feedback HTML
+            feedback_div.innerHTML = error_html
+
+            # ============================================
+            # 7. ADD FLASHING ANIMATION
+            # ============================================
+            # Remove any existing animation classes first
+            feedback_div.classList.remove("error-flash")
+            # Force reflow to restart animation
+            void = feedback_div.offsetHeight
+            # Add flashing animation class
+            feedback_div.classList.add("error-flash")
+
+            window.console.log(f"✅ Displayed requireCorrect error message with flashing animation (type: {problem_type})")
+        else:
+            window.console.warn(f"⚠️ Could not display feedback - no container found for step {step_idx}")
+
+        # ============================================
+        # 6. SAVE STATE AND RETURN
+        # ============================================
+        self.save_to_storage()
+        window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
+        return True  # Return True to signal early return
 
     def submit_mc_single(self, step_idx, step_data):
         """Submit multiple choice single answer"""

@@ -28,7 +28,7 @@ if sys.platform == "win32":
 # =======================================================
 # 🔧 CONFIGURATION
 # =======================================================
-OLLAMA_URL = "https://flows-billion-angels-soonest.trycloudflare.com"
+OLLAMA_URL = "https://arrangements-avon-trained-recreation.trycloudflare.com/"
 GEN_MODEL = "qwen2.5:14b"
 TIMEOUT = 600
 CONTEXT_FILE = "context_with_validation.txt"  # New validation-formatted context
