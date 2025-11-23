@@ -28,10 +28,11 @@ Step Description: Dalam matriks augmented untuk sistem persamaan linear, setiap 
 Correct Answer: True
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Dalam matriks [[a,b,c],[d,e,f]], baris kedua adalah [{blank},{blank},{blank}]
-Correct Answer: d,e,f
+Step Description: Dalam matriks [[a,b,c],[d,e,f]], baris kedua adalah?
+Step Expression: `[[d,e,f]]`
+Step Expected: `[[d,e,f]]`
 
 
 ###Problem Title: Konsep Pivot - Definisi dan Peran Pivot
@@ -196,22 +197,25 @@ Correct Answer: True
 Problem Description: Pelajari notasi standar untuk operasi baris
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk mengalikan baris 2 dengan 3, kita tulis R_2 → {blank}R_2
-Correct Answer: 3
+Step Description: Untuk mengalikan baris 2 dengan 3, faktor perkalian adalah?
+Step Expression: `3*R_2`
+Step Expected: `3`
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk menukar baris 1 dan baris 3, kita tulis R_1 {blank} R_3
-Correct Answer: \leftrightarrow
+Step Description: Notasi untuk menukar baris 1 dan baris 3 adalah?
+Step Expression: `R_1 <-> R_3`
+Step Expected: `\leftrightarrow`
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk mengganti baris 2 dengan "baris 2 dikurangi 2 kali baris 1", kita tulis R_2 → R_2 {blank} 2R_1
-Correct Answer: -
+Step Description: Operator dalam R_2 → R_2 ___ 2R_1 untuk mengurangi adalah?
+Step Expression: `R_2 - 2*R_1`
+Step Expected: `-`
 
 #
 Step Type: true-false
@@ -244,10 +248,11 @@ Option D: Tidak ada operasi
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Baris 1 dikalikan dengan berapa? Jawab dalam bentuk pecahan jika perlu: {blank}
-Correct Answer: 1/2
+Step Description: Baris 1 dikalikan dengan berapa? (bentuk pecahan)
+Step Expression: `k`
+Step Expected: `1/2`
 
 #
 Step Type: math-expression
@@ -358,16 +363,18 @@ Step Expected: `[[1,2,3],[1,2,4]]`
 Problem Description: Lakukan operasi: ganti baris 2 dengan `R_2 - R_1` pada matriks `[[1,1,2],[3,4,8]]`
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Elemen pertama baris 2 baru = 3 - 1 = {blank}
-Correct Answer: 2
+Step Description: Elemen pertama baris 2 baru = ?
+Step Expression: `3 - 1`
+Step Expected: `2`
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Elemen kedua baris 2 baru = 4 - 1 = {blank}
-Correct Answer: 3
+Step Description: Elemen kedua baris 2 baru = ?
+Step Expression: `4 - 1`
+Step Expected: `3`
 
 #
 Step Type: math-expression
@@ -416,10 +423,11 @@ Option D: Langsung kurangkan
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: 3R_1 = 3[[1,2,3]] = [[3,{blank},9]]
-Correct Answer: 6
+Step Description: 3R_1 = 3[[1,2,3]], elemen kedua adalah?
+Step Expression: `3*2`
+Step Expected: `6`
 
 #
 Step Type: math-expression
@@ -600,16 +608,18 @@ Correct Answer: A
 Problem Description: Seseorang mengklaim melakukan R_2 → R_2 - 2R_1 pada `[[1,2,3],[4,5,6]]` dan mendapat `[[1,2,3],[2,1,0]]`. Apakah ini benar?
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: 2R_1 = 2[[1,2,3]] = [[2,4,{blank}]]
-Correct Answer: 6
+Step Description: 2R_1 = 2[[1,2,3]], elemen ketiga adalah?
+Step Expression: `2*3`
+Step Expected: `6`
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: R_2 - 2R_1 = [[4,5,6]] - [[2,4,6]] = [[2,1,{blank}]]
-Correct Answer: 0
+Step Description: R_2 - 2R_1 = [[4,5,6]] - [[2,4,6]], elemen ketiga adalah?
+Step Expression: `6 - 6`
+Step Expected: `0`
 
 #
 Step Type: true-false

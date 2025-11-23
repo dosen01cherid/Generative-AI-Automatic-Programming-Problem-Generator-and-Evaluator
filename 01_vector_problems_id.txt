@@ -58,10 +58,11 @@ Option D: Panjang vektor
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Dalam vektor [5,8,1], komponen kedua adalah {blank}
-Correct Answer: 8
+Step Description: Dalam vektor [5,8,1], komponen kedua adalah ___
+Step Expression: `x`
+Step Expected: `8`
 
 #
 Step Type: multiple-choice-single
@@ -196,9 +197,11 @@ Step Expected: `[[5,4]]`
 Problem Description: Diberikan vektor a = [[7,3]] dan b = [[4,8]], cari a - b dan eksplorasi sifat-sifatnya
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk vektor a = (a_1, a_2) dan b = (b_1, b_2), pengurangan a - b = (__, __)
+Step Description: Untuk vektor a = (a_1, a_2) dan b = (b_1, b_2), pengurangan a - b = ?
+Step Expression: `[[a_1 - b_1, a_2 - b_2]]`
+Step Expected: `[[a_1 - b_1, a_2 - b_2]]`
 
 #
 Step Type: math-expression
@@ -259,9 +262,11 @@ Step Expected: `[[6,-9,12]]`
 Problem Description: Diberikan vektor u = [[3,4]] dan v = [[2,5]], hitung dan pahami hasil kali titik
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk vektor u = (u_1, u_2) dan v = (v_1, v_2), hasil kali titik u cdot v = __ kali __ + __ kali __
+Step Description: Untuk vektor u = (u_1, u_2) dan v = (v_1, v_2), hasil kali titik u cdot v = ?
+Step Expression: `u_1*v_1 + u_2*v_2`
+Step Expected: `u_1*v_1 + u_2*v_2`
 
 #
 Step Type: math-expression
@@ -306,9 +311,11 @@ Option D: Keduanya memiliki arah yang sama
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Dua vektor u dan v ortogonal jika dan hanya jika hasil kali titik u cdot v = __
+Step Description: Dua vektor u dan v ortogonal jika dan hanya jika hasil kali titik u cdot v = ?
+Step Expression: `u*v`
+Step Expected: `0`
 
 #
 Step Type: math-expression
@@ -349,9 +356,11 @@ Option D: Jumlah komponen-komponennya
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk vektor v = (x, y), besar ||v|| = sqrt(__^2 + __^2)
+Step Description: Untuk vektor v = (x, y), besar ||v|| = ?
+Step Expression: `sqrt(x^2 + y^2)`
+Step Expected: `sqrt(x^2 + y^2)`
 
 #
 Step Type: math-expression
@@ -392,9 +401,11 @@ Option D: Vektor nol
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk mencari vektor satuan u-topi dalam arah v, kita hitung u-topi = v / __
+Step Description: Untuk mencari vektor satuan u-topi dalam arah v, kita hitung u-topi = v / ?
+Step Expression: `v/||v||`
+Step Expected: `||v||`
 
 #
 Step Type: math-expression
@@ -429,9 +440,11 @@ Option D: a xx b = b xx a
 Correct Answer: A, C
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk a = (a_1, a_2, a_3) dan b = (b_1, b_2, b_3), komponen i dari a xx b = __ kali __ - __ kali __
+Step Description: Untuk a = (a_1, a_2, a_3) dan b = (b_1, b_2, b_3), komponen i dari a xx b adalah:
+Step Expression: `a_2*b_3 - a_3*b_2`
+Step Expected: `a_2*b_3 - a_3*b_2`
 
 #
 Step Type: math-expression
@@ -478,9 +491,11 @@ Option D: Jarak dari u ke v
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Proyeksi skalar dari u pada v = (u cdot v) / __
+Step Description: Proyeksi skalar dari u pada v = (u cdot v) / ?
+Step Expression: `(u*v)/||v||`
+Step Expected: `||v||`
 
 #
 Step Type: math-expression

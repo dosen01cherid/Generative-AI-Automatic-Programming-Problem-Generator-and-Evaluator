@@ -582,10 +582,11 @@ Step Expected: `3`
 Problem Description: Ana membeli 3 buku dan 2 pensil seharga Rp 23000. Budi membeli 2 buku dan 1 pensil seharga Rp 15000. Tentukan harga satu buku
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Misalkan x = harga satu {blank} dan y = harga satu pensil
-Correct Answer: buku
+Step Description: Misalkan x = harga satu ___ dan y = harga satu pensil (isi nama barang)
+Step Expression: `x`
+Step Expected: `buku`
 
 #
 Step Type: math-expression
@@ -834,10 +835,11 @@ Correct Answer: True
 Problem Description: Perusahaan memproduksi produk A dan B. Produk A memerlukan 2 jam mesin dan 1 jam tenaga kerja. Produk B memerlukan 1 jam mesin dan 2 jam tenaga kerja. Tersedia 100 jam mesin dan 80 jam tenaga kerja. Berapa maksimal produk A jika semua waktu mesin digunakan dan produk B tidak diproduksi?
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Misalkan x = jumlah produk {blank}
-Correct Answer: A
+Step Description: Misalkan x = jumlah produk ___ (nama produk)
+Step Expression: `x`
+Step Expected: `A`
 
 #
 Step Type: math-expression

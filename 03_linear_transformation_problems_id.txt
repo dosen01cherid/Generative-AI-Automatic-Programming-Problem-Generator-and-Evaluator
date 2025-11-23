@@ -150,16 +150,18 @@ Option D: T(cv) = cT(v) dan T(u-v) = T(u) - T(v)
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Sifat T(u+v) = T(u) + T(v) disebut sifat {blank}
-Correct Answer: aditivitas
+Step Description: Sifat T(u+v) = T(u) + T(v) disebut sifat apa?
+Step Expression: `T(u+v) == T(u) + T(v)`
+Step Expected: `aditivitas`
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Sifat T(cv) = cT(v) disebut sifat {blank}
-Correct Answer: homogenitas
+Step Description: Sifat T(cv) = cT(v) disebut sifat apa?
+Step Expression: `T(c*v) == c*T(v)`
+Step Expected: `homogenitas`
 
 #
 Step Type: true-false
@@ -282,10 +284,11 @@ Option D: Cari invers dari T
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Vektor basis standar di RR^2 adalah e_1 = (1,{blank}) dan e_2 = ({blank},1)
-Correct Answer: 0, 0
+Step Description: Vektor basis standar di RR^2 adalah e_1 = (1,?) dan e_2 = (?,1)
+Step Expression: `[[1,0],[0,1]]`
+Step Expected: `0, 0`
 
 
 ###Problem Title: Mencari Matriks Transformasi Sederhana
