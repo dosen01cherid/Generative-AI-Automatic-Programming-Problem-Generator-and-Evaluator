@@ -1363,6 +1363,9 @@ print("✅ pyscript module created and registered")
 
                 <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px">
                   <button id="freestyleSubmit" class="btn">Submit Attempt</button>
+                  <button id="getStructureString" class="btn ghost" style="background: #3b82f6; color: #fff" title="Get structure string for Moodle submission">
+                    📋 Get Structure String
+                  </button>
                   <button id="freestyleGiveUp" class="btn ghost" style="background: #f59e0b; color: #fff">
                     Give Up (Show Solution)
                   </button>
@@ -14309,6 +14312,319 @@ This demonstrates the complete format for creating your own problem sets!
 
         window.alert("✅ Problem reset. Enter a new problem!")
 
+    # ============================================
+    # STRUCTURE CONVERTER FOR MOODLE
+    # ============================================
+
+    def _structure_to_string(self, structure):
+        """
+        Convert structure dict to a standardized string representation.
+        Format: ops:{Add:2,Mul:1}|operands:{x:1,2:1,3:1}|total_ops:3|total_operands:3
+        """
+        import json
+
+        # Sort dictionaries for consistent output
+        ops_str = json.dumps(structure.get("operators", {}), sort_keys=True, separators=(',', ':'))
+        operands_str = json.dumps(structure.get("operands", {}), sort_keys=True, separators=(',', ':'))
+        matrix_ops_str = json.dumps(structure.get("matrix_ops", []), sort_keys=True, separators=(',', ':'))
+
+        parts = [
+            f"ops:{ops_str}",
+            f"operands:{operands_str}",
+            f"total_ops:{structure.get('total_ops', 0)}",
+            f"total_operands:{structure.get('total_operands', 0)}"
+        ]
+
+        # Add matrix operations if present
+        if structure.get("matrix_ops"):
+            parts.append(f"matrix_ops:{matrix_ops_str}")
+
+        return "|".join(parts)
+
+    def get_structure_for_moodle(self, latex_expr):
+        """
+        Convert LaTeX expression to structure string for Moodle.
+        Returns dict with both simplified and expected structures.
+        """
+        if not latex_expr or not latex_expr.strip():
+            return {
+                "error": "Empty expression",
+                "success": False
+            }
+
+        try:
+            import sympy as sp
+
+            # Remove $$ markers if present
+            clean_expr = latex_expr
+            if clean_expr.startswith('$$') and clean_expr.endswith('$$'):
+                clean_expr = clean_expr[2:-2].strip()
+
+            # Check if this is a matrix expression
+            is_matrix = '[[' in clean_expr or '|R_' in clean_expr or '\\' in clean_expr
+
+            # Parse expression
+            if is_matrix:
+                window.console.log(f"Detected matrix expression: {clean_expr}")
+                parsed = self.math_parser.parse_latex(clean_expr)
+            else:
+                # Try simple parsing first
+                try:
+                    from sympy.parsing.sympy_parser import parse_expr
+                    sympy_text = clean_expr.replace('^', '**')
+                    parsed = parse_expr(sympy_text, local_dict={'sp': sp})
+                except:
+                    # Fallback to parse_latex
+                    parsed = self.math_parser.parse_latex(clean_expr)
+
+            if parsed is None:
+                return {
+                    "error": "Failed to parse expression",
+                    "success": False
+                }
+
+            # Get expected structure (as-is)
+            expected_structure = self.math_parser.extract_structure(parsed)
+            expected_str = self._structure_to_string(expected_structure)
+
+            # Get simplified structure
+            try:
+                simplified = sp.simplify(parsed)
+                simplified_structure = self.math_parser.extract_structure(simplified)
+                simplified_str = self._structure_to_string(simplified_structure)
+            except:
+                # If simplification fails, use expected
+                simplified_str = expected_str
+
+            # Check if structures are the same
+            same_structure = expected_str == simplified_str
+
+            return {
+                "success": True,
+                "expected": expected_str,          # 100% credit
+                "simplified": simplified_str,      # 50% credit
+                "same": same_structure,
+                "expected_structure": expected_structure,
+                "simplified_structure": simplified_structure if not same_structure else expected_structure
+            }
+
+        except Exception as e:
+            window.console.error(f"Error in get_structure_for_moodle: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+            return {
+                "error": str(e),
+                "success": False
+            }
+
+    def show_structure_modal(self, event):
+        """Show modal with structure strings for Moodle submission"""
+        window.console.log("=== show_structure_modal called ===")
+
+        # Get current answer from MathQuill field
+        if not self.freestyle_answer_mf:
+            window.alert("⚠️ Please enter an answer first")
+            return
+
+        latex_expr = self.freestyle_answer_mf.latex()
+        if not latex_expr or not latex_expr.strip():
+            window.alert("⚠️ Please enter an answer first")
+            return
+
+        # Generate structures
+        result = self.get_structure_for_moodle(latex_expr)
+
+        if not result.get("success"):
+            error_msg = result.get("error", "Unknown error")
+            window.alert(f"❌ Error: {error_msg}")
+            return
+
+        # Create modal using JavaScript DOM manipulation
+        # Properly serialize result to JSON for JavaScript
+        import json
+        js_code_replacement = json.dumps(result)
+
+        js_code = """
+        (function() {
+            // Get data from Python
+            const data = %s;
+
+            const expected_str = data.expected;
+            const simplified_str = data.simplified;
+            const same = data.same;
+            const expected_struct = data.expected_structure;
+
+            // Remove old modal if exists
+            const oldModal = document.querySelector('#structureModalContainer');
+            if (oldModal) oldModal.remove();
+
+            // Create modal container
+            const container = document.createElement('div');
+            container.id = 'structureModalContainer';
+
+            // Create backdrop
+            const backdrop = document.createElement('div');
+            backdrop.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 9999;
+            `;
+
+            // Create modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%%;
+                left: 50%%;
+                transform: translate(-50%%, -50%%);
+                background: white;
+                border: 2px solid #3b82f6;
+                border-radius: 12px;
+                padding: 24px;
+                max-width: 90%%;
+                max-height: 90vh;
+                overflow-y: auto;
+                z-index: 10000;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            `;
+
+            // Build modal HTML
+            let html = `
+                <button id="closeStructureModal" style="position:absolute;top:12px;right:12px;background:#ef4444;color:white;border:none;border-radius:6px;width:32px;height:32px;font-size:18px;cursor:pointer;font-weight:bold;">✖</button>
+
+                <h2 style="margin:0 0 16px 0;color:#1e40af;font-size:20px;">📋 Structure String for Moodle</h2>
+
+                <div style="background:#f0f9ff;padding:16px;border-radius:8px;margin-bottom:16px;border:2px solid #93c5fd;">
+                    <div style="font-weight:600;margin-bottom:8px;color:#1e40af;">💡 Instructions</div>
+                    <div style="font-size:14px;color:#1e3a8a;">Copy the structure string below and paste it into your Moodle fill-in-the-blank answer field.</div>
+                </div>
+            `;
+
+            if (!same) {
+                html += `
+                    <div style="background:#fef3c7;padding:12px;border-radius:8px;margin-bottom:16px;border:2px solid #fbbf24;">
+                        <div style="font-weight:600;margin-bottom:4px;color:#92400e;">⚠️ Note: Two Structure Formats Available</div>
+                        <div style="font-size:13px;color:#92400e;">Your expression has different simplified and expected structures. Use expected for 100%% credit.</div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-bottom:20px;">
+                    <div style="font-weight:600;margin-bottom:8px;color:#059669;display:flex;align-items:center;gap:8px;">
+                        <span>✓ Expected Structure (100%% Credit)</span>
+                    </div>
+                    <div style="background:#f9fafb;padding:12px;border-radius:6px;border:1px solid #d1d5db;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:8px;" id="expectedStructureText">${expected_str}</div>
+                    <button id="copyExpected" style="background:#10b981;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;">📋 Copy to Clipboard</button>
+                </div>
+            `;
+
+            if (!same) {
+                html += `
+                    <div style="margin-bottom:20px;">
+                        <div style="font-weight:600;margin-bottom:8px;color:#f59e0b;display:flex;align-items:center;gap:8px;">
+                            <span>⚡ Simplified Structure (50%% Credit)</span>
+                        </div>
+                        <div style="background:#f9fafb;padding:12px;border-radius:6px;border:1px solid #d1d5db;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:8px;" id="simplifiedStructureText">${simplified_str}</div>
+                        <button id="copySimplified" style="background:#f59e0b;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;">📋 Copy to Clipboard</button>
+                    </div>
+                `;
+            }
+
+            const ops = Object.entries(expected_struct.operators || {}).map(([k,v]) => `${k} (${v})`).join(', ') || 'None';
+            const operands = Object.entries(expected_struct.operands || {}).map(([k,v]) => `${k} (${v})`).join(', ') || 'None';
+            const has_matrix = expected_struct.matrix_ops && expected_struct.matrix_ops.length > 0;
+
+            html += `
+                <div style="background:#f3f4f6;padding:12px;border-radius:6px;">
+                    <div style="font-weight:600;margin-bottom:8px;color:#374151;font-size:14px;">📊 Structure Breakdown (Expected)</div>
+                    <div style="font-size:13px;color:#6b7280;font-family:monospace;">
+                        <div>• Operators: ${ops}</div>
+                        <div>• Operands: ${operands}</div>
+                        <div>• Total Operations: ${expected_struct.total_ops || 0}</div>
+                        <div>• Total Operands: ${expected_struct.total_operands || 0}</div>
+                        ${has_matrix ? `<div>• Matrix Operations: ${expected_struct.matrix_ops.length}</div>` : ''}
+                    </div>
+                </div>
+            `;
+
+            modal.innerHTML = html;
+
+            container.appendChild(backdrop);
+            container.appendChild(modal);
+            document.body.appendChild(container);
+
+            // Close handlers
+            function closeModal() {
+                container.remove();
+            }
+
+            document.getElementById('closeStructureModal').addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+
+            // Copy handlers
+            function copyToClipboard(text, buttonId) {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            showCopySuccess(buttonId);
+                        }).catch(() => {
+                            fallbackCopy(text, buttonId);
+                        });
+                    } else {
+                        fallbackCopy(text, buttonId);
+                    }
+                } catch(err) {
+                    alert('❌ Copy failed. Please select and copy manually.');
+                }
+            }
+
+            function fallbackCopy(text, buttonId) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showCopySuccess(buttonId);
+            }
+
+            function showCopySuccess(buttonId) {
+                const btn = document.getElementById(buttonId);
+                if (btn) {
+                    const originalText = btn.textContent;
+                    const originalBg = btn.style.background;
+                    btn.textContent = '✓ Copied!';
+                    btn.style.background = '#059669';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = originalBg;
+                    }, 2000);
+                }
+            }
+
+            document.getElementById('copyExpected').addEventListener('click', () => {
+                copyToClipboard(expected_str, 'copyExpected');
+            });
+
+            if (!same) {
+                document.getElementById('copySimplified').addEventListener('click', () => {
+                    copyToClipboard(simplified_str, 'copySimplified');
+                });
+            }
+        })();
+        """ % js_code_replacement
+
+        # Execute JavaScript
+        window.eval(js_code)
+
+
     def _update_freestyle_history(self):
       """Update the attempt history display"""
       history_el = document.querySelector("#freestyleHistory")
@@ -15315,7 +15631,7 @@ This demonstrates the complete format for creating your own problem sets!
                   self.disable_soft_keyboard(self.freestyle_problem_mf)
 
               # Add focus event listener to apply keyboard state when focused
-              def problem_focus_handler():
+              def problem_focus_handler(event):
                   if self.soft_keyboard_enabled:
                       self.enable_soft_keyboard(self.freestyle_problem_mf)
                   else:
@@ -15339,7 +15655,7 @@ This demonstrates the complete format for creating your own problem sets!
                   self.disable_soft_keyboard(self.freestyle_answer_mf)
 
               # Add focus event listener to apply keyboard state when focused
-              def answer_focus_handler():
+              def answer_focus_handler(event):
                   if self.soft_keyboard_enabled:
                       self.enable_soft_keyboard(self.freestyle_answer_mf)
                   else:
@@ -15395,6 +15711,13 @@ This demonstrates the complete format for creating your own problem sets!
                 submit_btn.addEventListener("click", create_proxy(lambda e: self.freestyle_submit(e)))
                 submit_btn._handler_attached = True
                 window.console.log("✅ Submit button handler attached")
+
+            # Get Structure String button
+            structure_btn = document.querySelector("#getStructureString")
+            if structure_btn and not hasattr(structure_btn, '_handler_attached'):
+                structure_btn.addEventListener("click", create_proxy(lambda e: self.show_structure_modal(e)))
+                structure_btn._handler_attached = True
+                window.console.log("✅ Structure button handler attached")
 
             # Give Up button
             giveup_btn = document.querySelector("#freestyleGiveUp")

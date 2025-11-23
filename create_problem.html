@@ -9760,7 +9760,15 @@ Step Expected: """
 
             if new_format == "gift":
                 try:
-                    gift_content = self._convert_to_gift_format(self.problem_creator.problems)
+                    # First, parse the current text content to get the latest problems
+                    current_text = editor_ref["editor"].getValue()
+
+                    # Parse text to problem data
+                    parsed_data = self._parse_text_format(current_text)
+
+                    # Convert parsed problems to GIFT format
+                    gift_content = self._convert_to_gift_format(parsed_data.get("problems", []))
+
                     editor_ref["editor"].setValue(gift_content, -1)
                     original_content["gift"] = gift_content
                     validation_status.style.display = "block"
@@ -9769,6 +9777,9 @@ Step Expected: """
                     validation_status.style.color = "#4c1d95"
                     validation_status.innerHTML = "🎓 <strong>Switched to GIFT Format</strong> - Ready for Moodle import"
                 except Exception as e:
+                    window.console.error(f"Error converting to GIFT: {e}")
+                    import traceback
+                    window.console.error(traceback.format_exc())
                     window.alert(f"Error converting to GIFT: {str(e)}")
                     format_selector.value = current_format["value"]
                     return
@@ -10033,7 +10044,7 @@ Step Expected: """
 
 
     def _convert_to_gift_format(self, problems):
-        """Convert problem objects to Moodle GIFT format
+        """Convert problem objects or dicts to Moodle GIFT format
 
         GIFT format specification:
         - Multiple choice: question {=correct ~wrong ~wrong}
@@ -10052,13 +10063,22 @@ Step Expected: """
         lines.append("")
 
         for prob_idx, problem in enumerate(problems, 1):
-            # Problem title as category
-            title = problem.title_el.value.strip() if hasattr(problem, 'title_el') and problem.title_el else f"Problem {prob_idx}"
+            # Handle both dict and object formats
+            if isinstance(problem, dict):
+                # Problem from parsed text (dict format)
+                title = problem.get("title", f"Problem {prob_idx}")
+                desc_blocks = problem.get("description", [])
+                steps = problem.get("steps", [])
+            else:
+                # Problem object
+                title = problem.title_el.value.strip() if hasattr(problem, 'title_el') and problem.title_el else f"Problem {prob_idx}"
+                desc_blocks = serialize_quill_content(problem.description_editor_id)
+                steps = problem.steps
+
             lines.append(f"$CATEGORY: {title}")
             lines.append("")
 
             # Problem description as a description item
-            desc_blocks = serialize_quill_content(problem.description_editor_id)
             desc_text = self._blocks_to_gift_text(desc_blocks)
             if desc_text:
                 lines.append(f"// Problem Description:")
@@ -10066,34 +10086,47 @@ Step Expected: """
                 lines.append("")
 
             # Convert each step to GIFT question
-            for step_idx, step in enumerate(problem.steps, 1):
-                # Step description as question text
-                step_desc_blocks = serialize_quill_content(step.description_editor_id)
+            for step_idx, step in enumerate(steps, 1):
+                # Handle both dict and object formats for steps
+                if isinstance(step, dict):
+                    step_desc_blocks = step.get("description", [])
+                    step_type = step.get("step_type", "math-expression")
+                else:
+                    step_desc_blocks = serialize_quill_content(step.description_editor_id)
+                    step_type = step.step_type if hasattr(step, 'step_type') else "math-expression"
+
                 question_text = self._blocks_to_gift_text(step_desc_blocks)
 
                 if not question_text:
                     question_text = f"Question {step_idx}"
 
-                # Get step type
-                step_type = step.step_type if hasattr(step, 'step_type') else "math-expression"
-
                 # Convert based on type
                 if step_type == "multiple-choice-single":
                     # Single answer multiple choice
-                    if hasattr(step, 'options') and step.options:
-                        choices = []
-
-                        # Get correct answer
+                    if isinstance(step, dict):
+                        # Dict format
+                        options = step.get("options", [])
+                        correct_answer = step.get("correct_answer", "")
+                    else:
+                        # Object format
+                        options = step.options if hasattr(step, 'options') else []
                         correct_answer = ""
                         if hasattr(step, 'type_content_el'):
                             select = step.type_content_el.querySelector(".correctAnswerSelect")
                             if select:
                                 correct_answer = select.value
 
-                        for i, option in enumerate(step.options):
+                    if options:
+                        choices = []
+                        for i, option in enumerate(options):
                             label = chr(65 + i)  # A, B, C, etc.
-                            opt_blocks = serialize_quill_content(option.get('editor_id', ''))
-                            opt_text = self._blocks_to_gift_text(opt_blocks)
+                            if isinstance(option, dict):
+                                # Dict format - content is already blocks
+                                opt_text = self._blocks_to_gift_text(option.get('content', []))
+                            else:
+                                # Object format
+                                opt_blocks = serialize_quill_content(option.get('editor_id', ''))
+                                opt_text = self._blocks_to_gift_text(opt_blocks)
 
                             if label == correct_answer:
                                 choices.append(f"=  {opt_text}")
@@ -10106,23 +10139,33 @@ Step Expected: """
 
                 elif step_type == "multiple-choice-multiple":
                     # Multiple answer multiple choice (with percentages)
-                    if hasattr(step, 'options') and step.options:
-                        choices = []
-
-                        # Get correct answers
+                    if isinstance(step, dict):
+                        # Dict format
+                        options = step.get("options", [])
+                        correct_answers = step.get("correct_answers", [])
+                    else:
+                        # Object format
+                        options = step.options if hasattr(step, 'options') else []
                         correct_answers = []
                         if hasattr(step, 'type_content_el'):
                             checkboxes = step.type_content_el.querySelectorAll(".correctAnswerCheckbox:checked")
                             for cb in checkboxes:
                                 correct_answers.append(cb.value)
 
+                    if options:
+                        choices = []
                         num_correct = len(correct_answers)
                         percentage = int(100 / num_correct) if num_correct > 0 else 0
 
-                        for i, option in enumerate(step.options):
+                        for i, option in enumerate(options):
                             label = chr(65 + i)
-                            opt_blocks = serialize_quill_content(option.get('editor_id', ''))
-                            opt_text = self._blocks_to_gift_text(opt_blocks)
+                            if isinstance(option, dict):
+                                # Dict format
+                                opt_text = self._blocks_to_gift_text(option.get('content', []))
+                            else:
+                                # Object format
+                                opt_blocks = serialize_quill_content(option.get('editor_id', ''))
+                                opt_text = self._blocks_to_gift_text(opt_blocks)
 
                             if label in correct_answers:
                                 choices.append(f"~%{percentage}%{opt_text}")
@@ -10135,13 +10178,19 @@ Step Expected: """
 
                 elif step_type == "true-false":
                     # True/False question
-                    answer = "T"
-                    if hasattr(step, 'type_content_el'):
-                        tf_true = step.type_content_el.querySelector(".tfTrue")
-                        tf_false = step.type_content_el.querySelector(".tfFalse")
+                    if isinstance(step, dict):
+                        # Dict format
+                        correct = step.get("correct_answer", "True")
+                        answer = "T" if correct.lower() == "true" else "F"
+                    else:
+                        # Object format
+                        answer = "T"
+                        if hasattr(step, 'type_content_el'):
+                            tf_true = step.type_content_el.querySelector(".tfTrue")
+                            tf_false = step.type_content_el.querySelector(".tfFalse")
 
-                        if tf_false and tf_false.checked:
-                            answer = "F"
+                            if tf_false and tf_false.checked:
+                                answer = "F"
 
                     lines.append(f"::{title} - Step {step_idx}::{question_text} {{{answer}}}")
 
@@ -10149,23 +10198,41 @@ Step Expected: """
                     # Fill in the blank (short answer)
                     answers = []
 
-                    blank_mode = getattr(step, 'blank_mode', 'single')
+                    if isinstance(step, dict):
+                        blank_mode = step.get("blank_config", {}).get("mode", "single")
+                    else:
+                        blank_mode = getattr(step, 'blank_mode', 'single')
 
-                    if blank_mode == "multi" and hasattr(step, 'type_content_el'):
-                        # Multi-blank - create separate question for each blank
-                        sections = step.type_content_el.querySelectorAll('[data-blank-label]')
+                    if blank_mode == "multi":
+                        if isinstance(step, dict):
+                            # Dict format - get from correct_answers dict
+                            correct_answers_dict = step.get("correct_answers", {})
+                            for label in sorted(correct_answers_dict.keys()):
+                                blank_data = correct_answers_dict[label]
+                                if isinstance(blank_data, list):
+                                    blank_answers = [f"={ans}" for ans in blank_data if ans]
+                                else:
+                                    blank_answers = [f"={blank_data}"] if blank_data else []
 
-                        for section in sections:
-                            label = section.getAttribute('data-blank-label')
-                            blank_answers = []
+                                if blank_answers:
+                                    lines.append(f"::{title} - Step {step_idx} - Blank {label}::{question_text} (Blank {label}) {{")
+                                    lines.extend(["  " + ans for ans in blank_answers])
+                                    lines.append("}")
+                        elif hasattr(step, 'type_content_el'):
+                            # Object format - Multi-blank - create separate question for each blank
+                            sections = step.type_content_el.querySelectorAll('[data-blank-label]')
 
-                            # Get correct answer
-                            correct_input = section.querySelector('.blankCorrectAnswer')
-                            if correct_input and correct_input.value.strip():
-                                blank_answers.append(f"={correct_input.value.strip()}")
+                            for section in sections:
+                                label = section.getAttribute('data-blank-label')
+                                blank_answers = []
 
-                            # Get alternatives
-                            alt_inputs = section.querySelectorAll('.altAnswer')
+                                # Get correct answer
+                                correct_input = section.querySelector('.blankCorrectAnswer')
+                                if correct_input and correct_input.value.strip():
+                                    blank_answers.append(f"={correct_input.value.strip()}")
+
+                                # Get alternatives
+                                alt_inputs = section.querySelectorAll('.altAnswer')
                             for alt_input in alt_inputs:
                                 if alt_input.value.strip():
                                     blank_answers.append(f"={alt_input.value.strip()}")
@@ -10200,17 +10267,28 @@ Step Expected: """
                     # Try to get original asciimath text, fallback to LaTeX if not available
                     expected = ""
 
-                    # Check if we have the original asciimath text
-                    if hasattr(step, 'original_expected_text') and step.original_expected_text:
-                        expected_raw = step.original_expected_text.strip()
+                    if isinstance(step, dict):
+                        # Dict format from parsed text
+                        expected = step.get("expected", "")
+                        # Remove $$ markers if present
+                        if expected.startswith('$$') and expected.endswith('$$'):
+                            expected = expected[2:-2].strip()
                         # Remove backticks if present
-                        if expected_raw.startswith('`') and expected_raw.endswith('`'):
-                            expected = expected_raw[1:-1].strip()
-                        else:
-                            expected = expected_raw
+                        elif expected.startswith('`') and expected.endswith('`'):
+                            expected = expected[1:-1].strip()
                     else:
-                        # Fallback to LaTeX
-                        expected = step.expected_mf.latex().strip() if hasattr(step, 'expected_mf') and step.expected_mf else ""
+                        # Object format
+                        # Check if we have the original asciimath text
+                        if hasattr(step, 'original_expected_text') and step.original_expected_text:
+                            expected_raw = step.original_expected_text.strip()
+                            # Remove backticks if present
+                            if expected_raw.startswith('`') and expected_raw.endswith('`'):
+                                expected = expected_raw[1:-1].strip()
+                            else:
+                                expected = expected_raw
+                        else:
+                            # Fallback to LaTeX
+                            expected = step.expected_mf.latex().strip() if hasattr(step, 'expected_mf') and step.expected_mf else ""
 
                     if expected:
                         # Generate simple and expected structures with credit percentages
@@ -10271,26 +10349,48 @@ Step Expected: """
             return []
 
         try:
-            # Parse the expression
-            parsed_expr = self.problem_creator.math_parser.parse_latex(expr_text) if expr_text.startswith('$$') else None
+            import sympy as sp
+            from sympy.parsing.sympy_parser import parse_expr
+            parsed_expr = None
 
-            if not parsed_expr:
-                # Try parsing as asciimath
-                import sympy as sp
-                from sympy.parsing.sympy_parser import parse_expr
+            # Remove $$ markers if present
+            clean_expr = expr_text
+            if clean_expr.startswith('$$') and clean_expr.endswith('$$'):
+                clean_expr = clean_expr[2:-2].strip()
 
-                # Convert asciimath to sympy
-                sympy_text = expr_text
+            # Check if this is a matrix expression (contains [[ or matrix operations)
+            is_matrix = '[[' in clean_expr or '|R_' in clean_expr or '\\' in clean_expr
+
+            if is_matrix:
+                # Use parse_latex for matrices (handles row operations)
+                window.console.log(f"Detected matrix expression, using parse_latex: {clean_expr}")
+                try:
+                    parsed_expr = self.problem_creator.math_parser.parse_latex(clean_expr)
+                except Exception as e:
+                    window.console.warn(f"Failed to parse matrix with parse_latex: {e}")
+                    return [(expr_text, 100)]  # Fallback to text
+            else:
+                # Try parsing as simple expression with sympy
+                sympy_text = clean_expr
                 import re
-                sympy_text = re.sub(r'\\(\w+)', r'\1', sympy_text)
-                sympy_text = sympy_text.replace('^', '**')
+                sympy_text = re.sub(r'\\(\w+)', r'\1', sympy_text)  # Remove backslashes
+                sympy_text = sympy_text.replace('^', '**')  # Power operator
 
                 try:
-                    parsed_expr = parse_expr(sympy_text)
-                except:
-                    window.console.warn(f"Failed to parse expression: {expr_text}")
-                    return [(expr_text, 100)]  # Fallback to text
+                    parsed_expr = parse_expr(sympy_text, local_dict={'sp': sp})
+                    window.console.log(f"Parsed as simple expression: {parsed_expr}")
+                except Exception as e:
+                    window.console.warn(f"Failed to parse expression with parse_expr: {e}")
+                    # Try parse_latex as fallback
+                    try:
+                        parsed_expr = self.problem_creator.math_parser.parse_latex(clean_expr)
+                        window.console.log(f"Parsed with parse_latex fallback: {parsed_expr}")
+                    except:
+                        window.console.warn(f"All parsing methods failed for: {expr_text}")
+                        return [(expr_text, 100)]  # Fallback to text
 
+            if parsed_expr is None:
+                return [(expr_text, 100)]
             if parsed_expr is None:
                 return [(expr_text, 100)]
 
