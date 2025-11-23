@@ -3927,30 +3927,102 @@ class DisplayManager:
 
         window.console.log(f"Original submissions: {len(submissions)}, After filtering problem-level duplicates: {len(filtered_submissions)}")
 
-        # Use filtered submissions for all processing
-        groups = self.group_by_student(filtered_submissions)
-        self.invalid_list = invalid or []
+        # ⭐ NEW: Group submissions by problem_set_id (UUID)
+        uuid_groups = {}
+        for sub in filtered_submissions:
+            uuid = sub.get("problem_set_id", "unknown")
+            if uuid not in uuid_groups:
+                uuid_groups[uuid] = []
+            uuid_groups[uuid].append(sub)
 
-        cheating_phones = set()
-        phone_to_cheat_group = {}
-        for group in self.cheating_groups:
-            for student in group["students"]:
-                cheating_phones.add(student["phone"])
-                phone_to_cheat_group[student["phone"]] = group["group_number"]
+        # Display report for each UUID
+        if len(uuid_groups) > 1:
+            # Multiple problem sets - show selector
+            window.console.log(f"📚 Found {len(uuid_groups)} different problem sets")
 
-        # Use filtered_submissions for summary and tables
-        summary_panel = self.create_summary_panel(groups, filtered_submissions)
-        results.appendChild(summary_panel)
+            # Create problem set selector panel
+            selector_panel = document.createElement("div")
+            selector_panel.className = "panel"
+            selector_panel.style.background = "#f0f9ff"
+            selector_panel.style.marginBottom = "16px"
+            selector_panel.innerHTML = f"""
+                <h3 style='margin-top:0;color:#0369a1;'>📚 Multiple Problem Sets Detected</h3>
+                <p style='margin-bottom:12px;'>Found <strong>{len(uuid_groups)}</strong> different problem sets in submissions. Click to expand/collapse each report:</p>
+            """
+            results.appendChild(selector_panel)
 
-        if self.cheating_groups:
-            self.display_cheating_panel(self.cheating_groups, results)
+        # Process each UUID group separately
+        for uuid_idx, (uuid, uuid_submissions) in enumerate(sorted(uuid_groups.items()), 1):
+            window.console.log(f"Processing UUID {uuid}: {len(uuid_submissions)} submissions")
 
-        table_panel = self.create_student_table(groups, filtered_submissions, cheating_phones)
-        results.appendChild(table_panel)
+            # Use filtered submissions for all processing
+            groups = self.group_by_student(uuid_submissions)
 
-        status_panel = self.create_status_table(groups, cheating_phones, phone_to_cheat_group)
-        results.appendChild(status_panel)
+            # Run cheating detection for this UUID group
+            uuid_cheating_groups = self.app.progress_analyzer.detect_cheating(uuid_submissions)
 
+            cheating_phones = set()
+            phone_to_cheat_group = {}
+            for group in uuid_cheating_groups:
+                for student in group["students"]:
+                    cheating_phones.add(student["phone"])
+                    phone_to_cheat_group[student["phone"]] = group["group_number"]
+
+            # Create container for this UUID's report
+            uuid_container = document.createElement("div")
+            uuid_container.className = "panel"
+            uuid_container.style.marginBottom = "24px"
+            uuid_container.style.border = "2px solid #0369a1"
+
+            # Get a friendly name for this problem set if available
+            problem_set_name = "Unknown Problem Set"
+            if uuid_submissions and len(uuid_submissions) > 0:
+                first_sub = uuid_submissions[0]
+                # Try to extract name from problem set
+                if first_sub.get("problem", {}).get("set_name"):
+                    problem_set_name = first_sub["problem"]["set_name"]
+
+            # Create header for this UUID's report
+            uuid_header = document.createElement("div")
+            uuid_header.style.cssText = "background:#0369a1;color:white;padding:16px;cursor:pointer;user-select:none;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center;"
+            uuid_header.innerHTML = f"""
+                <div>
+                    <h3 style='margin:0;'>📊 Problem Set #{uuid_idx}: {html.escape(problem_set_name)}</h3>
+                    <div style='font-size:13px;opacity:0.9;margin-top:4px;'>UUID: {html.escape(uuid[:16])}... | {len(uuid_submissions)} submissions | {len(groups)} students</div>
+                </div>
+                <span id='uuid-toggle-{uuid_idx}' style='font-size:20px;'>▼</span>
+            """
+
+            # Create content area (collapsible)
+            uuid_content = document.createElement("div")
+            uuid_content.id = f"uuid-content-{uuid_idx}"
+            uuid_content.style.padding = "16px"
+            uuid_content.style.display = "block" if len(uuid_groups) == 1 else "none"  # Show if only one set
+
+            # Use filtered_submissions for summary and tables
+            summary_panel = self.create_summary_panel(groups, uuid_submissions)
+            uuid_content.appendChild(summary_panel)
+
+            if uuid_cheating_groups:
+                cheating_div = document.createElement("div")
+                self.display_cheating_panel(uuid_cheating_groups, cheating_div)
+                uuid_content.appendChild(cheating_div.firstChild)
+
+            table_panel = self.create_student_table(groups, uuid_submissions, cheating_phones)
+            uuid_content.appendChild(table_panel)
+
+            status_panel = self.create_status_table(groups, cheating_phones, phone_to_cheat_group)
+            uuid_content.appendChild(status_panel)
+
+            # Assemble the UUID container
+            uuid_container.appendChild(uuid_header)
+            uuid_container.appendChild(uuid_content)
+            results.appendChild(uuid_container)
+
+            # Add toggle functionality
+            uuid_header.onclick = self.create_uuid_toggle_handler(uuid_idx)
+
+        # Display invalid submissions (shared across all UUIDs)
         if invalid:
             invalid_panel = self.create_invalid_panel(invalid)
             results.appendChild(invalid_panel)
@@ -3962,6 +4034,26 @@ class DisplayManager:
                 window.MathJax.typesetPromise()
         except:
             pass
+
+    # =====================================================
+    # UUID TOGGLE HANDLER
+    # =====================================================
+    def create_uuid_toggle_handler(self, uuid_idx):
+        """Create a handler function for toggling UUID report visibility"""
+        def toggle_handler(e=None):
+            from js import document
+            content = document.querySelector(f"#uuid-content-{uuid_idx}")
+            toggle_icon = document.querySelector(f"#uuid-toggle-{uuid_idx}")
+
+            if content and toggle_icon:
+                if content.style.display == "none":
+                    content.style.display = "block"
+                    toggle_icon.innerHTML = "▼"
+                else:
+                    content.style.display = "none"
+                    toggle_icon.innerHTML = "▶"
+
+        return toggle_handler
 
     # =====================================================
     # SUMMARY PANEL
