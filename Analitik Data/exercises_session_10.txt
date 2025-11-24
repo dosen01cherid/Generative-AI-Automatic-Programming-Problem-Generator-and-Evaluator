@@ -1,0 +1,587 @@
+###
+Problem Title: SMART Objectives Framework
+Problem Description: Memahami komponen SMART dalam mendefinisikan business objectives
+
+#
+Step Description: SMART adalah akronim yang terdiri dari 5 komponen. Berapa jumlah komponen dalam SMART objectives?
+Step Type: multiple-choice-single
+Option A: 3 komponen
+Option B: 4 komponen
+Option C: 5 komponen
+Option D: 6 komponen
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Dalam SMART objectives, huruf "M" berarti?
+Step Type: multiple-choice-single
+Option A: Meaningful
+Option B: Measurable
+Option C: Manageable
+Option D: Memorable
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Business Objective Quality
+Problem Description: Membedakan good dan bad business objectives
+
+#
+Step Description: Manakah contoh business objective yang PALING memenuhi kriteria SMART?
+Step Type: multiple-choice-single
+Option A: "Meningkatkan penjualan"
+Option B: "Membuat customer lebih puas"
+Option C: "Reduce customer churn rate from 25% to 15% within 12 months"
+Option D: "Improve business performance"
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Stakeholder Categories
+Problem Description: Mengidentifikasi tipe-tipe stakeholder dalam analytics project
+
+#
+Step Description: Stakeholder yang bertanggung jawab sebagai decision makers dan budget owners disebut?
+Step Type: multiple-choice-single
+Option A: Business Users
+Option B: Executive Sponsors
+Option C: Data Owners
+Option D: Analytics Team
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Stakeholder yang menyediakan domain knowledge dan technical accuracy adalah?
+Step Type: multiple-choice-single
+Option A: Subject Matter Experts
+Option B: Executive Sponsors
+Option C: Data Owners
+Option D: Business Users
+Correct Answer: A
+Must Be Correct: true
+
+###
+Problem Title: Problem Statement Components
+Problem Description: Memahami elemen-elemen dalam problem statement yang baik
+
+#
+Step Description: Problem statement yang baik harus mencakup berapa komponen utama?
+Step Type: multiple-choice-single
+Option A: 3 komponen
+Option B: 4 komponen
+Option C: 5 komponen
+Option D: 6 komponen
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: Analytics Translation
+Problem Description: Menerjemahkan business problem ke analytics problem
+
+#
+Step Description: Business problem "Predict which customers will leave next month" diterjemahkan ke analytics type apa?
+Step Type: multiple-choice-single
+Option A: Descriptive Analytics
+Option B: Diagnostic Analytics
+Option C: Predictive Analytics - Classification
+Option D: Prescriptive Analytics
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Business question "What happened last quarter?" termasuk tipe analytics apa?
+Step Type: multiple-choice-single
+Option A: Descriptive Analytics
+Option B: Diagnostic Analytics
+Option C: Predictive Analytics
+Option D: Prescriptive Analytics
+Correct Answer: A
+Must Be Correct: true
+
+###
+Problem Title: Success Metrics Types
+Problem Description: Membedakan business metrics dan model performance metrics
+
+#
+Step Description: Manakah yang termasuk Business Metrics (bukan model metrics)?
+Step Type: multiple-choice-single
+Option A: F1-Score
+Option B: Revenue increase
+Option C: Accuracy
+Option D: RMSE
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Manakah yang termasuk Model Performance Metrics?
+Step Type: multiple-choice-single
+Option A: Market share
+Option B: Cost reduction
+Option C: Customer satisfaction
+Option D: Precision and Recall
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: ROI Calculation
+Problem Description: Menghitung Return on Investment untuk analytics project
+
+#
+Step Description: Project cost = $500,000. Annual revenue saved = $2,000,000. Berapa ROI-nya? (dalam persen, tanpa simbol %)
+Step Type: fill-blank
+Correct Answer: 300
+Must Be Correct: true
+
+###
+Problem Title: Data Quality Dimensions
+Problem Description: Memahami 6 dimensi data quality
+
+#
+Step Description: Berapa jumlah dimensi utama dalam Data Quality Assessment?
+Step Type: multiple-choice-single
+Option A: 4 dimensi
+Option B: 5 dimensi
+Option C: 6 dimensi
+Option D: 7 dimensi
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Completeness Calculation
+Problem Description: Menghitung completeness score
+
+#
+Step Description: Dataset memiliki 1000 rows. Kolom "email" memiliki 850 non-null values. Berapa completeness score? (dalam persen, bulatkan ke integer)
+Step Type: fill-blank
+Correct Answer: 85
+Must Be Correct: true
+
+###
+Problem Title: Accuracy Definition
+Problem Description: Memahami dimensi accuracy dalam data quality
+
+#
+Step Description: Dimensi data quality yang mengukur "data correctly represents real-world values" disebut?
+Step Type: multiple-choice-single
+Option A: Completeness
+Option B: Accuracy
+Option C: Consistency
+Option D: Validity
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Overall Quality Score Calculation
+Problem Description: Menghitung weighted quality score
+
+#
+Step Description: Sebuah dataset memiliki Completeness=80% (weight 30%), Accuracy=90% (weight 40%), Validity=85% (weight 30%). Berapa overall quality score? (bulatkan ke 1 desimal)
+Step Type: fill-blank
+Correct Answer: 85.5
+Must Be Correct: true
+
+###
+Problem Title: Quality Score Interpretation
+Problem Description: Menginterpretasikan quality score
+
+#
+Step Description: Data quality score 92% termasuk kategori apa?
+Step Type: multiple-choice-single
+Option A: Low Quality (< 70%)
+Option B: Medium Quality (70-84%)
+Option C: High Quality (≥ 85%)
+Option D: Perfect Quality (100%)
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Data dengan quality score 65% sebaiknya?
+Step Type: multiple-choice-single
+Option A: Langsung digunakan untuk modeling
+Option B: Requires major data preparation atau cari alternative data sources
+Option C: Hanya perlu minor cleaning
+Option D: Tidak perlu treatment apapun
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Descriptive Statistics - Mean
+Problem Description: Menghitung mean (average)
+
+#
+Step Description: Data: [10, 20, 30, 40, 50]. Berapa mean-nya?
+Step Type: fill-blank
+Correct Answer: 30
+Must Be Correct: true
+
+###
+Problem Title: Descriptive Statistics - Median
+Problem Description: Memahami konsep median
+
+#
+Step Description: Data (sorted): [10, 20, 30, 40, 50]. Berapa median-nya?
+Step Type: fill-blank
+Correct Answer: 30
+Must Be Correct: true
+
+###
+Problem Title: IQR Outlier Detection
+Problem Description: Menggunakan IQR method untuk mendeteksi outliers
+
+#
+Step Description: Diberikan Q1 = 50, Q3 = 100. Berapa nilai IQR?
+Step Type: fill-blank
+Correct Answer: 50
+Must Be Correct: true
+
+#
+Step Description: Dengan Q1 = 50, Q3 = 100, IQR = 50. Berapa Upper Bound untuk outlier detection?
+Step Type: fill-blank
+Correct Answer: 175
+Must Be Correct: true
+
+#
+Step Description: Dengan Q1 = 50, Q3 = 100, IQR = 50. Berapa Lower Bound untuk outlier detection?
+Step Type: fill-blank
+Correct Answer: -25
+Must Be Correct: true
+
+###
+Problem Title: Z-Score Calculation
+Problem Description: Menghitung z-score untuk outlier detection
+
+#
+Step Description: Data point x = 100, mean = 70, standard deviation = 10. Berapa z-score? (bulatkan ke 1 desimal)
+Step Type: fill-blank
+Correct Answer: 3.0
+Must Be Correct: true
+
+#
+Step Description: Nilai |z-score| berapa yang umumnya dianggap sebagai outlier?
+Step Type: multiple-choice-single
+Option A: |z| > 1
+Option B: |z| > 2
+Option C: |z| > 3
+Option D: |z| > 4
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Correlation Interpretation
+Problem Description: Menginterpretasikan correlation coefficient
+
+#
+Step Description: Pearson correlation coefficient (r) memiliki range nilai dari berapa sampai berapa?
+Step Type: multiple-choice-single
+Option A: 0 to 1
+Option B: -1 to 0
+Option C: -1 to 1
+Option D: 0 to 100
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Correlation r = 0.85 menunjukkan relationship apa?
+Step Type: multiple-choice-single
+Option A: Very weak positive
+Option B: Moderate positive
+Option C: Strong positive
+Option D: Very strong positive
+Correct Answer: D
+Must Be Correct: true
+
+#
+Step Description: Correlation r = -0.75 menunjukkan relationship apa?
+Step Type: multiple-choice-single
+Option A: No relationship
+Option B: Weak negative
+Option C: Strong negative
+Option D: Perfect negative
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Missing Data Types
+Problem Description: Memahami tipe-tipe missing data
+
+#
+Step Description: Missing data yang tidak memiliki relationship dengan data apapun (observed atau unobserved) disebut?
+Step Type: multiple-choice-single
+Option A: MCAR - Missing Completely At Random
+Option B: MAR - Missing At Random
+Option C: MNAR - Missing Not At Random
+Option D: RANDOM - Random Missing
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Tipe missing data yang PALING problematic dan dapat menimbulkan bias adalah?
+Step Type: multiple-choice-single
+Option A: MCAR
+Option B: MAR
+Option C: MNAR
+Option D: Semua sama saja
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Missing Data Handling
+Problem Description: Memilih metode yang tepat untuk handling missing data
+
+#
+Step Description: Untuk missing data < 5% dan MCAR, metode apa yang paling simple dan acceptable?
+Step Type: multiple-choice-single
+Option A: Predictive imputation
+Option B: Deletion (hapus rows dengan missing)
+Option C: Create "missing" category
+Option D: Forward fill
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Jika missing data > 40% pada suatu kolom, apa yang sebaiknya dilakukan?
+Step Type: multiple-choice-single
+Option A: Mean imputation
+Option B: Mode imputation
+Option C: Consider dropping the variable atau collect more data
+Option D: Listwise deletion
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Data Understanding Activities
+Problem Description: Memahami 5 aktivitas dalam data understanding
+
+#
+Step Description: Berapa jumlah key activities dalam Data Understanding Framework?
+Step Type: multiple-choice-single
+Option A: 3 activities
+Option B: 4 activities
+Option C: 5 activities
+Option D: 6 activities
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: EDA Purpose
+Problem Description: Memahami tujuan Exploratory Data Analysis
+
+#
+Step Description: Apa tujuan utama dari EDA (Exploratory Data Analysis)?
+Step Type: multiple-choice-single
+Option A: Build machine learning models
+Option B: Understand data structure, detect outliers, discover patterns
+Option C: Clean the data
+Option D: Deploy the model
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Data Sources Types
+Problem Description: Mengidentifikasi berbagai tipe data sources
+
+#
+Step Description: Data source yang merupakan centralized analytical repositories seperti Snowflake, BigQuery disebut?
+Step Type: multiple-choice-single
+Option A: Internal Databases
+Option B: Data Warehouses
+Option C: APIs
+Option D: Streaming Data
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Business Understanding Time Investment
+Problem Description: Memahami time allocation dalam analytics project
+
+#
+Step Description: Berapa persentase waktu yang umumnya dihabiskan untuk Discovery Phase (Business + Data Understanding) dalam analytics project?
+Step Type: multiple-choice-single
+Option A: 10-20%
+Option B: 20-30%
+Option C: 30-40%
+Option D: 50-60%
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Data Profiling Report Components
+Problem Description: Memahami struktur data profiling report
+
+#
+Step Description: Data Profiling Report harus mencakup berapa section utama?
+Step Type: multiple-choice-single
+Option A: 3 sections
+Option B: 4 sections
+Option C: 5 sections
+Option D: 6 sections
+Correct Answer: D
+Must Be Correct: true
+
+###
+Problem Title: Validity Dimension
+Problem Description: Memahami validity dalam data quality
+
+#
+Step Description: Dimensi data quality yang mengukur "data conforms to defined business rules and constraints" disebut?
+Step Type: multiple-choice-single
+Option A: Completeness
+Option B: Accuracy
+Option C: Validity
+Option D: Consistency
+Correct Answer: C
+Must Be Correct: true
+
+###
+Problem Title: Uniqueness Calculation
+Problem Description: Menghitung uniqueness score
+
+#
+Step Description: Dataset memiliki 5000 records, terdapat 100 duplicate records. Berapa uniqueness score? (dalam persen, bulatkan ke integer)
+Step Type: fill-blank
+Correct Answer: 98
+Must Be Correct: true
+
+###
+Problem Title: Correlation vs Causation
+Problem Description: Memahami perbedaan correlation dan causation
+
+#
+Step Description: Pernyataan "Correlation does NOT imply causation" adalah?
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: true
+
+###
+Problem Title: Analytics Lifecycle Position
+Problem Description: Memahami posisi Data Understanding dalam lifecycle
+
+#
+Step Description: Dalam Data Analytics Lifecycle, Data Understanding berada di fase apa?
+Step Type: multiple-choice-single
+Option A: Data Preparation
+Option B: Discovery Phase
+Option C: Model Building
+Option D: Deployment
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Success Criteria Requirements
+Problem Description: Memahami karakteristik good success criteria
+
+#
+Step Description: Success criteria yang baik harus memiliki karakteristik apa?
+Step Type: multiple-choice-single
+Option A: Vague dan general
+Option B: Quantifiable, has baseline, target value, and timeline
+Option C: Hanya fokus pada technical metrics
+Option D: Tidak perlu timeline
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: 5 Whys Technique
+Problem Description: Memahami teknik 5 Whys untuk root cause analysis
+
+#
+Step Description: Teknik "5 Whys" digunakan untuk?
+Step Type: multiple-choice-single
+Option A: Menghitung statistical metrics
+Option B: Menemukan root cause dari business problem
+Option C: Build machine learning models
+Option D: Visualize data
+Correct Answer: B
+Must Be Correct: true
+
+###
+Problem Title: Comprehensive Case - E-Commerce Analytics
+Problem Description: Studi kasus lengkap: E-Commerce Customer Analytics Project
+
+#
+Step Description: E-commerce company ingin meningkatkan conversion rate. Current conversion rate = 2%, Target = 4%. Ini termasuk tipe business objective apa?
+Step Type: multiple-choice-single
+Option A: Descriptive objective
+Option B: SMART objective (specific, measurable, achievable, relevant, time-bound)
+Option C: Vague objective
+Option D: Technical objective
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Untuk project di atas, stakeholder yang PALING berkepentingan dengan ROI dan strategic alignment adalah?
+Step Type: multiple-choice-single
+Option A: Data Analyst
+Option B: IT Manager
+Option C: Executive Sponsors (CEO, CFO)
+Option D: Store Manager
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Data quality assessment menunjukkan: Completeness 88%, Accuracy 92%, Consistency 75%, Validity 90%, Uniqueness 95%. Dengan equal weights, berapa overall quality score? (bulatkan ke integer)
+Step Type: fill-blank
+Correct Answer: 88
+Must Be Correct: true
+
+#
+Step Description: Dataset memiliki 100,000 customer records. Kolom "purchase_amount" memiliki mean=$150, std=$40. Customer dengan purchase=$270 memiliki z-score berapa?
+Step Type: fill-blank
+Correct Answer: 3.0
+Must Be Correct: true
+
+#
+Step Description: Dengan z-score = 3.0, apakah customer ini dianggap outlier?
+Step Type: true-false
+Correct Answer: True
+Must Be Correct: true
+
+#
+Step Description: Correlation analysis menunjukkan: time_on_site vs purchase (r=0.65), email_opens vs purchase (r=0.45). Feature mana yang memiliki stronger relationship dengan purchase?
+Step Type: multiple-choice-single
+Option A: time_on_site
+Option B: email_opens
+Option C: Sama kuat
+Option D: Tidak ada yang strong
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Missing data pada kolom "customer_review" sebesar 35%. Ini termasuk kategori missing % apa?
+Step Type: multiple-choice-single
+Option A: Very low (< 5%)
+Option B: Low (5-15%)
+Option C: Medium (15-40%)
+Option D: High (> 40%)
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Untuk 35% missing pada "customer_review", strategi apa yang PALING tepat?
+Step Type: multiple-choice-single
+Option A: Deletion (hapus semua rows)
+Option B: Mean imputation
+Option C: Investigate pattern, consider creating "missing" indicator or predictive imputation
+Option D: Ignore dan langsung modeling
+Correct Answer: C
+Must Be Correct: true
+
+#
+Step Description: Setelah data understanding, quality score = 87%. Decision apa yang tepat?
+Step Type: multiple-choice-single
+Option A: Stop project - data quality terlalu rendah
+Option B: GO - proceed to Data Preparation phase
+Option C: Collect all data from scratch
+Option D: Skip data preparation dan langsung modeling
+Correct Answer: B
+Must Be Correct: true
+
+#
+Step Description: Data profiling report harus include berapa section minimal?
+Step Type: multiple-choice-single
+Option A: 3 sections
+Option B: 4 sections
+Option C: 5 sections
+Option D: 6 sections
+Correct Answer: D
+Must Be Correct: true
