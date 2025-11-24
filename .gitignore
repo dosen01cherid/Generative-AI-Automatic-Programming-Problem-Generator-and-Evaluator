@@ -1,1 +1,4 @@
 generativeai/retrieved_context_*.txt
+
+# Backup files from problem text conversions
+*.backup
