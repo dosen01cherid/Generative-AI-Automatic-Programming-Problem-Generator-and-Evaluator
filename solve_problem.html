@@ -9200,7 +9200,7 @@ This demonstrates the complete format for creating your own problem sets!
 
       return "".join(html_parts)
     
-    def create_math_expression_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_math_expression_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for math expression problems with submit and finalize buttons"""
       must_correct = step_data.get("requireCorrect", False)
 
@@ -9295,7 +9295,7 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
     
-    def create_mc_single_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_mc_single_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for multiple choice single answer"""
       options = step_data.get("options", [])
       must_correct = step_data.get("requireCorrect", False)  # ✅ NEW
@@ -9362,7 +9362,7 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
     
-    def create_mc_multiple_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_mc_multiple_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for multiple choice multiple answers"""
       options = step_data.get("options", [])
       must_correct = step_data.get("requireCorrect", False)  # ✅ NEW
@@ -9444,7 +9444,7 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
 
-    def create_fill_blank_ui(self, step_div, step_idx, step_data, desc_html, total_steps, must_correct_badge):
+    def create_fill_blank_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps, must_correct_badge):
       """Create UI for fill-in-the-blank questions (both single and multi-blank)"""
       import html as html_module
 
@@ -9550,7 +9550,7 @@ This demonstrates the complete format for creating your own problem sets!
 
       window.console.log(f"✅ Fill-blank UI creation complete for step {step_idx}")
 
-    def create_multi_mc_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_multi_mc_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for multi-mc (fill-blank with inline dropdown selectors)"""
       import re
 
@@ -9620,7 +9620,7 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
 
-    def create_truefalse_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_truefalse_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create true/false UI"""
 
       window.console.log(f"🔧 Creating True/False UI for step {step_idx}")
@@ -10579,7 +10579,7 @@ This demonstrates the complete format for creating your own problem sets!
                         desc_html = self.render_content_blocks(step_data.get("description", []))
 
                         # Recreate mc-multiple UI with shuffled options
-                        self.create_mc_multiple_ui(container, step_idx, step_data, desc_html, total_steps)
+                        self.create_mc_multiple_ui(container, index, step_idx, step_data, desc_html, total_steps)
                         window.console.log("✅ Recreated MC-Multiple UI with shuffled options")
 
             # ✅ ALWAYS show feedback - find or create feedback div
@@ -10812,7 +10812,7 @@ This demonstrates the complete format for creating your own problem sets!
                         desc_html = self.render_content_blocks(step_data.get("description", []))
 
                         # Recreate multi-mc UI with shuffled options
-                        self.create_multi_mc_ui(container, step_idx, step_data, desc_html, total_steps)
+                        self.create_multi_mc_ui(container, index, step_idx, step_data, desc_html, total_steps)
                         window.console.log("✅ Recreated Multi-MC UI with shuffled options")
 
             # ✅ ALWAYS show feedback - find or create feedback div
