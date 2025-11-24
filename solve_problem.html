@@ -9035,7 +9035,7 @@ This demonstrates the complete format for creating your own problem sets!
       for step_idx, step_data in enumerate(steps):
           step_div = document.createElement("div")
           step_div.className = "panel step"
-          step_div.id = f"step{step_idx}"
+          step_div.id = f"step{index}_{step_idx}"
 
           step_type = step_data.get("step_type", "math-expression")
           if step_type == "step-by-step":
@@ -9049,21 +9049,21 @@ This demonstrates the complete format for creating your own problem sets!
 
           # Create UI based on type
           if step_type == "math-expression":
-              self.create_math_expression_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_math_expression_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multiple-choice-single":
-              self.create_mc_single_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_mc_single_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multiple-choice-multiple":
-              self.create_mc_multiple_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_mc_multiple_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multi-mc":
-              self.create_multi_mc_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_multi_mc_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "true-false":
-              self.create_truefalse_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_truefalse_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "fill-blank":
               # Unified handling for both single-blank and multi-blank
               window.console.log(f"📝 Creating fill-blank UI for step {step_idx}")
               must_correct = step_data.get("requireCorrect", False)
               must_correct_badge = "🔒 Must be correct" if must_correct else ""
-              self.create_fill_blank_ui(step_div, step_idx, step_data, desc_html, len(steps), must_correct_badge)
+              self.create_fill_blank_ui(step_div, index, step_idx, step_data, desc_html, len(steps), must_correct_badge)
           else:
               window.console.error(f"Unknown step type: {step_type}")
               continue
