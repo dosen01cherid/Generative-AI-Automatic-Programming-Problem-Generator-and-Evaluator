@@ -8405,15 +8405,14 @@ This demonstrates the complete format for creating your own problem sets!
         try:
             window.console.log("🔄 Resetting all answers...")
 
-            # Clear specific localStorage keys (matching actual keys used in save_to_storage)
-            window.localStorage.removeItem('problem_solver_problem_set')
-            window.localStorage.removeItem('problem_solver_states')
-            window.localStorage.removeItem('problem_solver_current_index')
-            window.localStorage.removeItem('score_display_manager')
-            window.localStorage.removeItem('score_edits')
-            window.localStorage.removeItem('score_tracker_state')
-            window.localStorage.removeItem('credit_data')
-            window.localStorage.removeItem('problem_solver_data')  # Old format
+            # Clear only answer/progress keys - PRESERVE the problem set!
+            # DO NOT remove 'problem_solver_problem_set' - that's the problem set itself
+            window.localStorage.removeItem('problem_solver_states')  # User answers
+            window.localStorage.removeItem('problem_solver_current_index')  # Current position
+            window.localStorage.removeItem('score_display_manager')  # Score display
+            window.localStorage.removeItem('score_edits')  # Score edits
+            window.localStorage.removeItem('score_tracker_state')  # Score tracker
+            window.localStorage.removeItem('credit_data')  # Credit data
 
             window.console.log("✅ All localStorage data cleared")
 
