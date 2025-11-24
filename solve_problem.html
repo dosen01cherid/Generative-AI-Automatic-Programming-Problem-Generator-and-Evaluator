@@ -10589,7 +10589,7 @@ This demonstrates the complete format for creating your own problem sets!
                         desc_html = self.render_content_blocks(step_data.get("description", []))
 
                         # Recreate mc-multiple UI with shuffled options
-                        self.create_mc_multiple_ui(container, index, step_idx, step_data, desc_html, total_steps)
+                        self.create_mc_multiple_ui(container, current_prob_idx, step_idx, step_data, desc_html, total_steps)
                         window.console.log("✅ Recreated MC-Multiple UI with shuffled options")
 
             # ✅ ALWAYS show feedback - find or create feedback div
@@ -10832,7 +10832,7 @@ This demonstrates the complete format for creating your own problem sets!
                         desc_html = self.render_content_blocks(step_data.get("description", []))
 
                         # Recreate multi-mc UI with shuffled options
-                        self.create_multi_mc_ui(container, index, step_idx, step_data, desc_html, total_steps)
+                        self.create_multi_mc_ui(container, current_prob_idx, step_idx, step_data, desc_html, total_steps)
                         window.console.log("✅ Recreated Multi-MC UI with shuffled options")
 
             # ✅ ALWAYS show feedback - find or create feedback div
