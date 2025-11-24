@@ -10364,8 +10364,18 @@ This demonstrates the complete format for creating your own problem sets!
                     window.console.log("✅ Displaying hint for MC-Single")
 
                 window.console.log(f"📝 MC-Single: Setting feedback innerHTML (length: {len(error_html)})")
-                feedback_div.innerHTML = error_html
-                
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
                 # Remove flashing class after animation completes
                 def remove_flash_mc_single():
                     flash_div = feedback_div.querySelector(".flash-incorrect")
@@ -10618,8 +10628,18 @@ This demonstrates the complete format for creating your own problem sets!
                     """
                     window.console.log("✅ Displaying hint for MC-Multiple")
 
-                feedback_div.innerHTML = error_html
-                
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
                 # Remove flashing class after animation completes
                 def remove_flash_mc_req():
                     flash_div = feedback_div.querySelector(".flash-incorrect")
@@ -10851,8 +10871,18 @@ This demonstrates the complete format for creating your own problem sets!
                     """
                     window.console.log("✅ Displaying hint for Multi-MC")
 
-                feedback_div.innerHTML = error_html
-                
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
                 # Remove flashing class after animation completes
                 def remove_flash_multi_mc():
                     flash_div = feedback_div.querySelector(".flash-incorrect")
@@ -11649,8 +11679,18 @@ This demonstrates the complete format for creating your own problem sets!
                         """
                         window.console.log(f"✅ Created accordion for Blank {label} with {num_options} option(s)")
 
-                feedback_div.innerHTML = error_html
-                
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
                 # Remove flashing class after animation completes
                 def remove_flash_multi():
                     flash_div = feedback_div.querySelector(".flash-incorrect")
