@@ -10421,15 +10421,37 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.error("❌ No current problem index")
             return
 
+        window.console.log(f"🔍 submit_mc_multiple called with step_idx={step_idx}")
+
         # Get the step container to scope the checkbox query
-        step_div = document.querySelector(f"#step{step_idx}")
+        selector = f"#step{step_idx}"
+        window.console.log(f"🔍 Looking for container with selector: {selector}")
+        step_div = document.querySelector(selector)
+
         if not step_div:
             window.console.error(f"❌ Step container not found for step {step_idx}")
+            # Debug: show all step divs
+            all_steps = document.querySelectorAll("[id^='step']")
+            window.console.log(f"🔍 Found {all_steps.length} elements with id starting with 'step'")
+            for i in range(all_steps.length):
+                window.console.log(f"  - {all_steps[i].id}")
             return
 
+        window.console.log(f"✅ Found step_div: id={step_div.id}, tagName={step_div.tagName}")
+        window.console.log(f"🔍 step_div innerHTML length: {len(step_div.innerHTML)}")
+
+        # Debug: show all inputs in the step_div
+        all_inputs = step_div.querySelectorAll("input")
+        window.console.log(f"🔍 Total inputs in step_div: {all_inputs.length}")
+        for i in range(all_inputs.length):
+            inp = all_inputs[i]
+            window.console.log(f"  - type={inp.type}, name={inp.name}, value={inp.value}, checked={inp.checked}")
+
         # Get all selected answers (scoped to this step)
-        all_checkboxes = step_div.querySelectorAll(f"input[name='mc_multiple_{step_idx}']")
-        checkboxes = step_div.querySelectorAll(f"input[name='mc_multiple_{step_idx}']:checked")
+        checkbox_selector = f"input[name='mc_multiple_{step_idx}']"
+        window.console.log(f"🔍 Looking for checkboxes with selector: {checkbox_selector}")
+        all_checkboxes = step_div.querySelectorAll(checkbox_selector)
+        checkboxes = step_div.querySelectorAll(f"{checkbox_selector}:checked")
 
         window.console.log(f"🔍 MC-Multiple Debug:")
         window.console.log(f"  Total checkboxes found: {all_checkboxes.length}")
