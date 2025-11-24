@@ -5694,7 +5694,7 @@ class ProblemSolverApp:
         # ✅ Hide original Submit/Finalize buttons and feedback
         submit_btn = container.querySelector(f"#submitBtn{step_idx}")
         finalize_btn = container.querySelector(f"#finalizeBtn{step_idx}")
-        feedback_div = container.querySelector(f"#stepFeedback{step_idx}")
+        feedback_div = container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
 
         if submit_btn:
             submit_btn.style.display = "none"
@@ -9329,7 +9329,7 @@ This demonstrates the complete format for creating your own problem sets!
         <button class='btn submit-step' style='margin-top:12px;'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
-      <div id='stepFeedback{step_idx}' class='step-feedback'></div>
+      <div id='stepFeedback{index}_{step_idx}' class='step-feedback'></div>
       """
 
       # Add click handlers to options
@@ -9401,7 +9401,7 @@ This demonstrates the complete format for creating your own problem sets!
         <button class='btn submit-step' style='margin-top:12px;'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
-      <div id='stepFeedback{step_idx}' class='step-feedback'></div>
+      <div id='stepFeedback{index}_{step_idx}' class='step-feedback'></div>
       """
 
       # 🔍 DEBUG: Log container state AFTER recreation
@@ -9521,7 +9521,7 @@ This demonstrates the complete format for creating your own problem sets!
               </button>
           </div>
 
-          <div id='stepFeedback{step_idx}'></div>
+          <div id='stepFeedback{index}_{step_idx}'></div>
       """
 
       # Set innerHTML
@@ -9600,7 +9600,7 @@ This demonstrates the complete format for creating your own problem sets!
         <button class='btn submit-step'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
-      <div id='stepFeedback{step_idx}' class='step-feedback'></div>
+      <div id='stepFeedback{index}_{step_idx}' class='step-feedback'></div>
       """
 
       # Submit button
@@ -9651,7 +9651,7 @@ This demonstrates the complete format for creating your own problem sets!
               </button>
           </div>
 
-          <div id='stepFeedback{step_idx}'></div>
+          <div id='stepFeedback{index}_{step_idx}'></div>
       """
 
       step_div.innerHTML = html
@@ -10056,7 +10056,7 @@ This demonstrates the complete format for creating your own problem sets!
             finalize_btn.style.display = "none"
 
         # Show finalized message
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
         if feedback_div:
             feedback_div.innerHTML = """
                 <div style='background:#dbeafe;color:#1e40af;padding:16px;border-radius:8px;text-align:center;margin-top:12px;'>
@@ -10215,7 +10215,7 @@ This demonstrates the complete format for creating your own problem sets!
 
             # Show warning - query within current problem container
             problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10325,7 +10325,7 @@ This demonstrates the complete format for creating your own problem sets!
                 self.save_to_storage()
                 return
 
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             window.console.log(f"🔍 MC-Single: Looking for #stepFeedback{step_idx}, found: {feedback_div is not None}")
 
             if not feedback_div:
@@ -10336,7 +10336,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -10392,7 +10392,7 @@ This demonstrates the complete format for creating your own problem sets!
             return
 
         # Show feedback for non-requireCorrect questions
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
         window.console.log(f"🔍 MC-Single: Post-blocking feedback lookup, found: {feedback_div is not None}")
 
         if feedback_div:
@@ -10476,7 +10476,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.warn("No answers selected")
 
             # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10595,7 +10595,7 @@ This demonstrates the complete format for creating your own problem sets!
             # ✅ ALWAYS show feedback - find or create feedback div
             # Scope to current problem container
             problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if not feedback_div:
                 # Try to find step container
                 if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -10603,7 +10603,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -10656,7 +10656,7 @@ This demonstrates the complete format for creating your own problem sets!
 
         # Show feedback - query within current problem container
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-        feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+        feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
@@ -10720,7 +10720,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.warn("Not all blanks answered")
 
             # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10838,7 +10838,7 @@ This demonstrates the complete format for creating your own problem sets!
             # ✅ ALWAYS show feedback - find or create feedback div
             # Scope to current problem container
             problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if not feedback_div:
                 # Try to find step container
                 if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -10846,7 +10846,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -10900,7 +10900,7 @@ This demonstrates the complete format for creating your own problem sets!
         # Show feedback
         # Query within current problem container
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-        feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+        feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
@@ -10942,7 +10942,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.warn("No answer selected")
 
             # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -11025,7 +11025,7 @@ This demonstrates the complete format for creating your own problem sets!
             # ✅ ALWAYS show feedback - find or create feedback div
             # Scope to current problem container
             problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if not feedback_div:
                 # Try to find step container
                 if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -11033,7 +11033,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -11062,7 +11062,7 @@ This demonstrates the complete format for creating your own problem sets!
         # Show feedback
         # Query within current problem container
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
-        feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}") if problem_container else None
+        feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
@@ -11129,7 +11129,7 @@ This demonstrates the complete format for creating your own problem sets!
             # Check if any answers are empty
             if not all(user_answers.values()):
                 window.console.warn("⚠️ Some answers are empty")
-                feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+                feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
                 if feedback_div:
                     feedback_div.innerHTML = """
                         <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -11176,7 +11176,7 @@ This demonstrates the complete format for creating your own problem sets!
             # Check if answer is empty
             if not user_answer:
                 window.console.warn("⚠️ Answer is empty")
-                feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+                feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
                 if feedback_div:
                     feedback_div.innerHTML = """
                         <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -11303,7 +11303,7 @@ This demonstrates the complete format for creating your own problem sets!
                 window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
                 return
 
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
 
             # Create feedback div if it doesn't exist
             if not feedback_div:
@@ -11311,7 +11311,7 @@ This demonstrates the complete format for creating your own problem sets!
                 container = problem_container.querySelector(f"#step{current_prob_idx}_{step_idx}")
                 if container:
                     feedback_div = document.createElement("div")
-                    feedback_div.id = f"stepFeedback{step_idx}"
+                    feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                     feedback_div.className = "step-feedback"
                     container.appendChild(feedback_div)
                     window.console.log(f"✅ Fill-Blank: Created feedback_div for step {step_idx}")
@@ -11427,7 +11427,7 @@ This demonstrates the complete format for creating your own problem sets!
         # Query within the current problem container to avoid picking feedback from other problems
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
         if problem_container:
-            feedback_div = problem_container.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
         else:
             feedback_div = None
         if feedback_div:
@@ -11485,7 +11485,7 @@ This demonstrates the complete format for creating your own problem sets!
         # Check if any answers are empty
         if not all(user_answers.values()):
             window.console.warn("⚠️ Some answers are empty")
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -11589,7 +11589,7 @@ This demonstrates the complete format for creating your own problem sets!
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
 
             # Show feedback
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
 
             # Create feedback div if it doesn't exist (defensive)
             if not feedback_div:
@@ -11597,7 +11597,7 @@ This demonstrates the complete format for creating your own problem sets!
                 container = document.querySelector(f"#step{current_prob_idx}_{step_idx}")
                 if container:
                     feedback_div = document.createElement("div")
-                    feedback_div.id = f"stepFeedback{step_idx}"
+                    feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                     feedback_div.className = "step-feedback"
                     container.appendChild(feedback_div)
                     window.console.log(f"✅ Multi-Blank: Created feedback_div for step {step_idx}")
