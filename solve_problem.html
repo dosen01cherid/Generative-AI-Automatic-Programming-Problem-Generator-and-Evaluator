@@ -10424,7 +10424,7 @@ This demonstrates the complete format for creating your own problem sets!
         window.console.log(f"🔍 submit_mc_multiple called with step_idx={step_idx}")
 
         # Get the step container to scope the checkbox query
-        selector = f"#step{step_idx}"
+        selector = f"#step{current_prob_idx}_{step_idx}"
         window.console.log(f"🔍 Looking for container with selector: {selector}")
         step_div = document.querySelector(selector)
 
@@ -11085,7 +11085,7 @@ This demonstrates the complete format for creating your own problem sets!
                 window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
                 return
 
-            labeled_inputs = problem_container.querySelectorAll(f"#step{step_idx} [data-blank-label]")
+            labeled_inputs = problem_container.querySelectorAll(f"#step{current_prob_idx}_{step_idx} [data-blank-label]")
             window.console.log(f"📝 Multi-blank mode: Found {labeled_inputs.length} labeled inputs")
             user_answers = {}
             for i in range(labeled_inputs.length):
@@ -11118,9 +11118,9 @@ This demonstrates the complete format for creating your own problem sets!
                 window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
                 return
 
-            window.console.log(f"🐛 DEBUG: selector = .accordion-problem[data-index='{current_prob_idx}'] #step{step_idx} .fill-blank-input")
+            window.console.log(f"🐛 DEBUG: selector = .accordion-problem[data-index=\'{current_prob_idx}\'] #step{current_prob_idx}_{step_idx} .fill-blank-input")
             try:
-                all_inputs = problem_container.querySelectorAll(f"#step{step_idx} .fill-blank-input")
+                all_inputs = problem_container.querySelectorAll(f"#step{current_prob_idx}_{step_idx} .fill-blank-input")
                 window.console.log(f"🐛 DEBUG: querySelectorAll succeeded, found {all_inputs.length} inputs")
                 for idx in range(all_inputs.length):
                     inp = all_inputs[idx]
@@ -11278,7 +11278,7 @@ This demonstrates the complete format for creating your own problem sets!
             # Create feedback div if it doesn't exist
             if not feedback_div:
                 window.console.warn(f"⚠️ Fill-Blank: feedback_div not found for step {step_idx}, attempting to create it")
-                container = problem_container.querySelector(f"#step{step_idx}")
+                container = problem_container.querySelector(f"#step{current_prob_idx}_{step_idx}")
                 if container:
                     feedback_div = document.createElement("div")
                     feedback_div.id = f"stepFeedback{step_idx}"
@@ -11286,7 +11286,7 @@ This demonstrates the complete format for creating your own problem sets!
                     container.appendChild(feedback_div)
                     window.console.log(f"✅ Fill-Blank: Created feedback_div for step {step_idx}")
                 else:
-                    window.console.error(f"❌ Fill-Blank: Container #step{step_idx} not found!")
+                    window.console.error(f"❌ Fill-Blank: Container #step{current_prob_idx}_{step_idx} not found!")
 
             if feedback_div:
                 # Build error message
@@ -11564,7 +11564,7 @@ This demonstrates the complete format for creating your own problem sets!
             # Create feedback div if it doesn't exist (defensive)
             if not feedback_div:
                 window.console.warn(f"⚠️ Multi-Blank: feedback_div not found for step {step_idx}, attempting to create it")
-                container = document.querySelector(f"#step{step_idx}")
+                container = document.querySelector(f"#step{current_prob_idx}_{step_idx}")
                 if container:
                     feedback_div = document.createElement("div")
                     feedback_div.id = f"stepFeedback{step_idx}"
@@ -11572,7 +11572,7 @@ This demonstrates the complete format for creating your own problem sets!
                     container.appendChild(feedback_div)
                     window.console.log(f"✅ Multi-Blank: Created feedback_div for step {step_idx}")
                 else:
-                    window.console.error(f"❌ Multi-Blank: Container #step{step_idx} not found!")
+                    window.console.error(f"❌ Multi-Blank: Container #step{current_prob_idx}_{step_idx} not found!")
 
             if feedback_div:
                 # Build error message
