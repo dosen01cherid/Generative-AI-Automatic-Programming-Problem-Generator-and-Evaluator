@@ -10413,10 +10413,17 @@ This demonstrates the complete format for creating your own problem sets!
             return
 
         # Get all selected answers
+        all_checkboxes = document.querySelectorAll(f"input[name='mc_multiple_{step_idx}']")
         checkboxes = document.querySelectorAll(f"input[name='mc_multiple_{step_idx}']:checked")
+
+        window.console.log(f"🔍 MC-Multiple Debug:")
+        window.console.log(f"  Total checkboxes found: {all_checkboxes.length}")
+        window.console.log(f"  Checked checkboxes found: {checkboxes.length}")
+
         user_answers = set()
         for i in range(checkboxes.length):
             user_answers.add(checkboxes[i].value)
+            window.console.log(f"  ✓ Checked: {checkboxes[i].value}")
 
         if len(user_answers) == 0:
             window.console.warn("No answers selected")
