@@ -14,7 +14,10 @@
       "Bash(done)",
       "Bash(git fetch:*)",
       "Bash(python update_ui_functions.py:*)",
-      "Bash(python fix_step_selectors.py:*)"
+      "Bash(python fix_step_selectors.py:*)",
+      "Bash(python fix_flash_animation.py:*)",
+      "Bash(python add_storage_info_updater.py:*)",
+      "Bash(python add_reset_page_handler.py:*)"
     ],
     "deny": [],
     "ask": []

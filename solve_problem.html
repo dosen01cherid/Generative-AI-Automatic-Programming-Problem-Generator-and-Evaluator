@@ -1253,6 +1253,10 @@ print("✅ pyscript module created and registered")
             <span class="nav-icon">📤</span>
             <span>Submit Progress</span>
           </div>
+          <div class="nav-item" data-page="reset" style="border-top: 1px solid #e5e7eb; margin-top: 8px; padding-top: 8px;">
+            <span class="nav-icon">🔄</span>
+            <span>Reset Answers</span>
+          </div>
         </nav>
       </aside>
 
@@ -1675,6 +1679,47 @@ print("✅ pyscript module created and registered")
             </div>
           </div>
         </div>
+        <!-- Reset Page -->
+        <div id="resetPage" class="page">
+          <div class="panel">
+            <h3>🔄 Reset Answers</h3>
+            <p style="margin-bottom: 16px; color: #6b7280;">
+              This will clear all your saved answers and progress from the browser's local storage.
+              <strong>This action cannot be undone.</strong>
+            </p>
+
+            <div style="background: #fef2f2; border: 2px solid #fca5a5; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+              <h4 style="color: #dc2626; margin: 0 0 8px 0;">⚠️ Warning</h4>
+              <p style="margin: 0; color: #991b1b; font-size: 14px;">
+                Resetting will delete:
+              </p>
+              <ul style="margin: 8px 0 0 0; color: #991b1b; font-size: 14px;">
+                <li>All problem answers</li>
+                <li>All step completion status</li>
+                <li>All attempt history and scores</li>
+                <li>Timer data</li>
+              </ul>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-direction: column;">
+              <button id="resetAllBtn" class="btn" style="background: #dc2626; color: white; padding: 16px; font-size: 16px; font-weight: 600;">
+                🗑️ Reset All Answers
+              </button>
+
+              <button id="resetCurrentProblemBtn" class="btn" style="background: #f59e0b; color: white; padding: 14px;">
+                🔄 Reset Current Problem Only
+              </button>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+              <h4 style="margin-bottom: 12px; color: #374151;">📊 Current Storage Info</h4>
+              <div id="storageInfo" style="background: #f9fafb; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 13px; color: #374151;">
+                Loading storage information...
+              </div>
+            </div>
+          </div>
+        </div>
+
       </main>
     </div>
 
@@ -6973,6 +7018,38 @@ class ProblemSolverApp:
         if telegram_btn:
             telegram_btn.addEventListener("click", create_proxy(lambda e: self.share_via_telegram(e)))
 
+        # Reset buttons
+        reset_all_btn = document.querySelector("#resetAllBtn")
+        if reset_all_btn:
+            def handle_reset_all(e):
+                confirmed = window.confirm(
+                    "⚠️ WARNING: This will delete ALL your saved answers and progress!\\n\\n"
+                    "This action cannot be undone.\\n\\n"
+                    "Are you sure you want to continue?"
+                )
+                if confirmed:
+                    self.reset_all_answers()
+            reset_all_btn.addEventListener("click", create_proxy(handle_reset_all))
+            window.console.log("✅ Reset All button handler attached")
+
+        reset_current_btn = document.querySelector("#resetCurrentProblemBtn")
+        if reset_current_btn:
+            def handle_reset_current(e):
+                current_prob_idx = self.current_problem_index
+                if current_prob_idx is None:
+                    window.alert("⚠️ Please open a problem first")
+                    return
+
+                confirmed = window.confirm(
+                    f"⚠️ This will reset Problem {current_prob_idx + 1}\\n\\n"
+                    "All answers and progress for this problem will be deleted.\\n\\n"
+                    "Continue?"
+                )
+                if confirmed:
+                    self.reset_current_problem()
+            reset_current_btn.addEventListener("click", create_proxy(handle_reset_current))
+            window.console.log("✅ Reset Current Problem button handler attached")
+
         # Tab switching for load page
         tab_buttons = document.querySelectorAll(".load-tab")
         for i in range(tab_buttons.length):
@@ -7170,7 +7247,12 @@ class ProblemSolverApp:
           def delayed_init():
               self.ensure_freestyle_initialized()
           window.setTimeout(create_proxy(delayed_init), 100)
-        
+
+        if page_name == "reset":
+          def delayed_update():
+              self.update_storage_info()
+          window.setTimeout(create_proxy(delayed_update), 100)
+
         self.close_sidebar(None)
     
     def toggle_sidebar(self, event):
@@ -8315,6 +8397,114 @@ This demonstrates the complete format for creating your own problem sets!
             import traceback
             window.console.error(traceback.format_exc())
 
+
+    
+    def reset_all_answers(self):
+        """Reset all answers and progress"""
+        import js
+        try:
+            window.console.log("🔄 Resetting all answers...")
+
+            # Clear specific localStorage keys
+            js.localStorage.removeItem('problem_states')
+            js.localStorage.removeItem('compressed_problem_set')
+            js.localStorage.removeItem('edited_problems')
+            js.localStorage.removeItem('score_display_states')
+            js.localStorage.removeItem('historical_edits')
+            js.localStorage.removeItem('score_tracker_session')
+            js.localStorage.removeItem('credit_count')
+            js.localStorage.removeItem('pending_timer')
+
+            window.console.log("✅ All localStorage data cleared")
+
+            # Reset internal state
+            self.problem_states = {}
+            self.solve_states = {}
+            if hasattr(self, 'step_timers'):
+                self.step_timers = {}
+
+            window.alert("✅ All answers and progress have been reset!\n\nPlease reload the page to start fresh.")
+
+        except Exception as e:
+            window.console.error(f"❌ Reset failed: {e}")
+            window.alert(f"❌ Reset failed: {e}")
+
+    def reset_current_problem(self):
+        """Reset only the current problem's answers"""
+        import js
+        try:
+            current_prob_idx = self.current_problem_index
+            if current_prob_idx is None:
+                window.alert("⚠️ No problem is currently open")
+                return
+
+            window.console.log(f"🔄 Resetting problem {current_prob_idx}...")
+
+            # Remove from problem_states
+            if current_prob_idx in self.problem_states:
+                del self.problem_states[current_prob_idx]
+
+            # Remove from solve_states
+            if current_prob_idx in self.solve_states:
+                del self.solve_states[current_prob_idx]
+
+            # Save updated state
+            self.save_to_storage()
+
+            window.console.log(f"✅ Problem {current_prob_idx} reset")
+            window.alert(f"✅ Problem {current_prob_idx + 1} has been reset!\n\nPlease reload the problem to start fresh.")
+
+        except Exception as e:
+            window.console.error(f"❌ Reset failed: {e}")
+            window.alert(f"❌ Reset failed: {e}")
+
+    def get_storage_info(self):
+        """Get information about current localStorage usage"""
+        import js
+        try:
+            info = {
+                "problems_count": len(self.problem_states),
+                "total_steps": sum(len(steps) for steps in self.problem_states.values()),
+                "completed_problems": sum(1 for prob_idx in self.problem_states if self.is_problem_complete(prob_idx))
+            }
+
+            # Get localStorage sizes
+            try:
+                problem_states_str = js.localStorage.getItem('problem_states')
+                if problem_states_str:
+                    info["problem_states_size"] = len(problem_states_str)
+            except:
+                info["problem_states_size"] = 0
+
+            return info
+        except Exception as e:
+            window.console.error(f"Error getting storage info: {e}")
+            return {}
+
+
+    def update_storage_info(self):
+        """Update the storage info display on reset page"""
+        info_div = document.querySelector("#storageInfo")
+        if not info_div:
+            return
+
+        try:
+            info = self.get_storage_info()
+
+            size_kb = info.get("problem_states_size", 0) / 1024
+
+            html = f"""
+                <div style='margin-bottom: 8px;'><strong>Problems with saved data:</strong> {info.get('problems_count', 0)}</div>
+                <div style='margin-bottom: 8px;'><strong>Total steps saved:</strong> {info.get('total_steps', 0)}</div>
+                <div style='margin-bottom: 8px;'><strong>Completed problems:</strong> {info.get('completed_problems', 0)}</div>
+                <div><strong>Storage size:</strong> {size_kb:.2f} KB</div>
+            """
+
+            info_div.innerHTML = html
+            window.console.log("✅ Storage info updated")
+        except Exception as e:
+            info_div.innerHTML = f"<div style='color: #dc2626;'>Error loading storage info: {e}</div>"
+            window.console.error(f"Error updating storage info: {e}")
 
     def load_from_storage(self):
         """Load from localStorage - problem_set compressed, problem_states uncompressed"""
