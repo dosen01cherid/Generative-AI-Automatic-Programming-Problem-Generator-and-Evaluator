@@ -19,7 +19,8 @@
       "Bash(python add_storage_info_updater.py:*)",
       "Bash(python add_reset_page_handler.py:*)",
       "Bash(python fix_reset_localstorage_keys.py:*)",
-      "Bash(python fix_reset_preserve_problem_set.py:*)"
+      "Bash(python fix_reset_preserve_problem_set.py:*)",
+      "Bash(python:*)"
     ],
     "deny": [],
     "ask": []
