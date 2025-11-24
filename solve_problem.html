@@ -8405,15 +8405,15 @@ This demonstrates the complete format for creating your own problem sets!
         try:
             window.console.log("🔄 Resetting all answers...")
 
-            # Clear specific localStorage keys
-            js.localStorage.removeItem('problem_states')
-            js.localStorage.removeItem('compressed_problem_set')
-            js.localStorage.removeItem('edited_problems')
-            js.localStorage.removeItem('score_display_states')
-            js.localStorage.removeItem('historical_edits')
-            js.localStorage.removeItem('score_tracker_session')
-            js.localStorage.removeItem('credit_count')
-            js.localStorage.removeItem('pending_timer')
+            # Clear specific localStorage keys (matching actual keys used in save_to_storage)
+            window.localStorage.removeItem('problem_solver_problem_set')
+            window.localStorage.removeItem('problem_solver_states')
+            window.localStorage.removeItem('problem_solver_current_index')
+            window.localStorage.removeItem('score_display_manager')
+            window.localStorage.removeItem('score_edits')
+            window.localStorage.removeItem('score_tracker_state')
+            window.localStorage.removeItem('credit_data')
+            window.localStorage.removeItem('problem_solver_data')  # Old format
 
             window.console.log("✅ All localStorage data cleared")
 
@@ -8470,7 +8470,7 @@ This demonstrates the complete format for creating your own problem sets!
 
             # Get localStorage sizes
             try:
-                problem_states_str = js.localStorage.getItem('problem_states')
+                problem_states_str = window.localStorage.getItem('problem_solver_states')
                 if problem_states_str:
                     info["problem_states_size"] = len(problem_states_str)
             except:
