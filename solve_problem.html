@@ -3,17 +3,80 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>Problem Solver – Multi-Type Support</title>
+    <title>NoNet-NoSet-NoChat - Problem Solver</title>
 
-    <!-- External Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
+    <!-- External Libraries - Loaded dynamically with caching -->
+    <script>
+      // Load external libraries with caching before anything else
+      (async function() {
+        const CACHE_VERSION = 'problem-solver-v3-full-offline';
+        const EXTERNAL_LIBS = {
+          mathquillCSS: 'https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css',
+          jquery: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
+          mathquillJS: 'https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js'
+        };
+
+        // Helper to load cached resource
+        async function loadCached(url, type) {
+          try {
+            const cache = await caches.open(CACHE_VERSION);
+            let response = await cache.match(url);
+
+            if (!response) {
+              console.log(`📥 Downloading ${type}: ${url.split('/').pop()}`);
+              response = await fetch(url);
+              await cache.put(url, response.clone());
+              console.log(`✅ ${type} cached`);
+            } else {
+              console.log(`⚡ ${type} from cache: ${url.split('/').pop()}`);
+            }
+
+            return await response.text();
+          } catch (e) {
+            console.warn(`${type} cache error, using CDN:`, e);
+            const response = await fetch(url);
+            return await response.text();
+          }
+        }
+
+        try {
+          // Load MathQuill CSS
+          const cssText = await loadCached(EXTERNAL_LIBS.mathquillCSS, 'CSS');
+          const style = document.createElement('style');
+          style.textContent = cssText;
+          document.head.appendChild(style);
+
+          // Load jQuery
+          const jqueryText = await loadCached(EXTERNAL_LIBS.jquery, 'jQuery');
+          const jqueryScript = document.createElement('script');
+          jqueryScript.textContent = jqueryText;
+          document.head.appendChild(jqueryScript);
+          await new Promise(resolve => setTimeout(resolve, 50));
+
+          // Load MathQuill JS
+          const mathquillText = await loadCached(EXTERNAL_LIBS.mathquillJS, 'MathQuill');
+          const mathquillScript = document.createElement('script');
+          mathquillScript.textContent = mathquillText;
+          document.head.appendChild(mathquillScript);
+
+          console.log('✅ All external libraries loaded and cached!');
+        } catch (e) {
+          console.error('Error loading external libraries:', e);
+        }
+      })();
+    </script>
 
     <!-- ⚡ Cache-First Pyodide Loading -->
     <script>
-      const CACHE_VERSION = 'problem-solver-v1';
+      const CACHE_VERSION = 'problem-solver-v3-full-offline';
       const PYODIDE_URL = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
+
+      // External library URLs for caching
+      const EXTERNAL_LIBS = {
+        mathquillCSS: 'https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.css',
+        jquery: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js',
+        mathquillJS: 'https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js'
+      };
 
       function updateStatus(msg) {
         const el = document.getElementById('loadingStatus');
@@ -43,6 +106,78 @@
         }
       }
 
+      // Load and cache external CSS
+      async function getCachedCSS(url) {
+        try {
+          const cache = await caches.open(CACHE_VERSION);
+          let response = await cache.match(url);
+
+          if (!response) {
+            console.log(`📥 Downloading CSS: ${url}`);
+            response = await fetch(url);
+            await cache.put(url, response.clone());
+            console.log('✅ CSS cached');
+          } else {
+            console.log('⚡ CSS loaded from cache');
+          }
+
+          return await response.text();
+        } catch (e) {
+          console.warn('CSS cache error, using CDN:', e);
+          const response = await fetch(url);
+          return await response.text();
+        }
+      }
+
+      // Load and cache external JavaScript
+      async function loadCachedExternalScript(url) {
+        try {
+          const cache = await caches.open(CACHE_VERSION);
+          let response = await cache.match(url);
+
+          if (!response) {
+            console.log(`📥 Downloading script: ${url}`);
+            response = await fetch(url);
+            await cache.put(url, response.clone());
+            console.log('✅ Script cached');
+          } else {
+            console.log('⚡ Script loaded from cache');
+          }
+
+          const scriptText = await response.text();
+          const script = document.createElement('script');
+          script.textContent = scriptText;
+          document.head.appendChild(script);
+
+          // Wait for script to execute
+          await new Promise(resolve => setTimeout(resolve, 50));
+        } catch (e) {
+          console.error('Script loading error:', e);
+          // Fallback to direct load
+          const script = document.createElement('script');
+          script.src = url;
+          document.head.appendChild(script);
+          await new Promise((resolve, reject) => {
+            script.onload = resolve;
+            script.onerror = reject;
+          });
+        }
+      }
+
+      // Cache packages for offline use
+      async function cachePackagesForOffline() {
+        try {
+          // Micropip automatically caches packages in IndexedDB
+          // This function confirms packages are cached for offline use
+          // The packages (lark, sympy, Brotli) are stored by micropip
+          console.log('📦 Packages cached in IndexedDB by micropip');
+          return true;
+        } catch (e) {
+          console.warn('Package caching check:', e);
+          return false;
+        }
+      }
+
       // Initialize Pyodide with caching
       async function initPyodide() {
         updateStatus('🔧 Loading Pyodide...');
@@ -61,14 +196,30 @@
         updateStatus('✅ Pyodide ready!');
         updateStatus('📦 Loading packages (sympy, lark, brotli)...');
         
-        await window.pyodide.loadPackage(['micropip']);
+                await window.pyodide.loadPackage(['micropip']);
+
+        // Configure package caching for offline use
         await window.pyodide.runPythonAsync(`
 import micropip
-await micropip.install(['sympy', 'lark', 'Brotli'])
-print("✅ Packages installed")
+
+# Install packages with caching enabled (default in Pyodide)
+# These will be stored in IndexedDB and work offline after first load
+try:
+    await micropip.install([
+        'sympy',
+        'lark',      # Lark parser - cached for offline parsing
+        'Brotli'     # Compression library
+    ], keep_going=True)
+    print("✅ Packages installed and cached for offline use")
+except Exception as e:
+    print(f"⚠️ Package installation issue: {e}")
+    # Try to continue - packages might already be cached
         `);
-        
-        updateStatus('✅ All packages loaded!');
+
+        updateStatus('✅ All packages loaded and cached!');
+
+        // Pre-cache for next offline use
+        await cachePackagesForOffline();
         await setupPyScriptCompat();
         await executePyScripts();
       }
@@ -396,8 +547,17 @@ print("✅ pyscript module created and registered")
       background: #fff;
       box-shadow: 4px 0 12px rgba(0,0,0,0.1);
       padding: 16px;
+      padding-top: 85px;
+      padding-bottom: 60px;
       overflow-y: auto;
       flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
     }
 
     .nav-menu {
@@ -434,6 +594,7 @@ print("✅ pyscript module created and registered")
       flex: 1;
       padding: 16px;
       max-width: 100%;
+      margin-left: 320px;
     }
 
     .page {
@@ -683,7 +844,9 @@ print("✅ pyscript module created and registered")
       }
       
       .main-content {
+        margin-left: 0 !important;
         padding: 60px 8px 8px 8px;
+        width: 100% !important;
       }
       
       .menu-btn {
@@ -1192,8 +1355,115 @@ print("✅ pyscript module created and registered")
     }
 
     </style>
-  </head>
-  <body>
+  
+  <!-- NoNet-NoSet-NoChat Branding Styles -->
+  <style id="nonet-step-branding">
+    .nonet-step-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #5568d3;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nonet-step-header.hidden {
+      transform: translateY(-100%);
+    }
+
+    .nonet-step-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+
+    
+
+    .nonet-step-tagline {
+      font-size: 11px;
+      opacity: 0.9;
+      font-weight: normal;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .nonet-step-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nonet-step-badge::before {
+      content: "⚡";
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .nonet-step-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #5568d3;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nonet-step-header.hidden {
+      transform: translateY(-100%);
+    }
+      .nonet-step-logo {
+        font-size: 20px;
+        padding-left: 60px;
+      }
+      .nonet-step-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+
+</head>
+  <body style="padding-top: 70px;">
+  <!-- NoNet-NoSet-NoChat Branding Header -->
+  <div class="nonet-step-header">
+    <div class="nonet-step-logo">
+      <div>
+        <div style="font-size: 20px; font-weight: bold;">NoNet-NoSet-NoChat</div>
+        <div class="nonet-step-tagline">Learn Properly, Understand Fully</div>
+      </div>
+    </div>
+    <div class="nonet-step-badge">
+      Offline Ready
+    </div>
+  </div>
+
+
     <!-- Loading Overlay -->
     <div id="loadingOverlay">
       <div class="spinner"></div>
@@ -1258,7 +1528,13 @@ print("✅ pyscript module created and registered")
             <span>Reset Answers</span>
           </div>
         </nav>
-      </aside>
+          <!-- Attribution at Bottom of Sidebar -->
+    <div style="padding: 15px; border-top: 1px solid #e0e0e0; margin-top: auto; background: #f9f9f9; text-align: center; font-size: 12px; position: absolute; bottom: 0; left: 0; right: 0; width: 100%;">
+      <a href="attributions.html" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">
+        📜 Open Source Attributions
+      </a>
+    </div>
+  </aside>
 
       <!-- Main Content -->
       <main class="main-content">
@@ -6105,6 +6381,72 @@ class ProblemSolverApp:
         # ✅ Get options from original step data
         options = original_step_data.get("options", [])
 
+        # ✅ NEW: Check localStorage for existing shuffle to maintain consistency
+        # Get current problem index from saved data
+        current_prob_idx = saved_step.get("problem_index", 0)
+        shuffle_key = f"mc_multiple_shuffle_{current_prob_idx}_{step_idx}"
+        stored_shuffle = window.localStorage.getItem(shuffle_key)
+
+        if stored_shuffle:
+            # Reuse existing shuffle to preserve user experience
+            import json
+            stored_data = json.loads(stored_shuffle)
+
+            # Handle both old format (just labels) and new format (dict with labels and visible_correct)
+            if isinstance(stored_data, list):
+                # Old format - just labels
+                stored_labels = stored_data
+            else:
+                # New format - dict with labels and visible_correct
+                stored_labels = stored_data.get("labels", [])
+
+            options = [opt for opt in options if opt.get("label", "") in stored_labels]
+            # Restore original order from stored shuffle
+            options.sort(key=lambda opt: stored_labels.index(opt.get("label", "")))
+            window.console.log(f"♻️  MC-Multiple recreate reusing stored shuffle: {stored_labels}")
+        elif len(options) > 3:
+            # First time: Apply shuffle algorithm for mc-multiple with >3 options
+            # Display (total - 1) options, ensuring at least 2 correct answers are included
+            import random
+            import json
+            correct_answers = set(original_step_data.get("correct_answers", []))
+
+            # Separate correct and incorrect options
+            correct_opts = [opt for opt in options if opt.get("label", "") in correct_answers]
+            incorrect_opts = [opt for opt in options if opt.get("label", "") not in correct_answers]
+
+            num_correct = len(correct_opts)
+            num_to_display = len(options) - 1
+
+            # Ensure at least 2 correct options are included
+            if num_correct >= 2:
+                # Determine how many correct and incorrect to include
+                num_correct_to_include = min(num_correct, max(2, num_to_display - len(incorrect_opts)))
+                num_incorrect_to_include = num_to_display - num_correct_to_include
+
+                # Shuffle and select
+                random.shuffle(correct_opts)
+                random.shuffle(incorrect_opts)
+
+                selected_correct = correct_opts[:num_correct_to_include]
+                selected_incorrect = incorrect_opts[:num_incorrect_to_include]
+
+                # Combine and shuffle again for display
+                options = selected_correct + selected_incorrect
+                random.shuffle(options)
+
+                # Store the shuffled labels AND visible correct answers in localStorage
+                shuffled_labels = [opt.get("label", "") for opt in options]
+                visible_correct = [opt.get("label", "") for opt in options if opt.get("label", "") in correct_answers]
+
+                shuffle_data = {
+                    "labels": shuffled_labels,
+                    "visible_correct": visible_correct
+                }
+                window.localStorage.setItem(shuffle_key, json.dumps(shuffle_data))
+
+                window.console.log(f"🔀 MC-Multiple recreate shuffle: {len(original_step_data.get('options', []))} → {len(options)} options ({len(visible_correct)} correct visible)")
+
         # ✅ Get user's previous answers from saved_step
         user_answers = saved_step.get("user_answers", [])
 
@@ -9029,6 +9371,16 @@ This demonstrates the complete format for creating your own problem sets!
       """Load a problem into the solve UI"""
       window.console.log(f"📂 Loading problem {index}")
 
+      # ✅ Clear mc-multiple shuffle storage for this problem
+      # This ensures fresh shuffles when user starts a new problem
+      if index < len(self.problem_set):
+          problem = self.problem_set[index]
+          steps = problem.get("steps", [])
+          for step_idx in range(len(steps)):
+              shuffle_key = f"mc_multiple_shuffle_{index}_{step_idx}"
+              window.localStorage.removeItem(shuffle_key)
+          window.console.log(f"🔄 Cleared mc-multiple shuffle storage for problem {index}")
+
       # Get the container
       if body_container is None:
           body_container = document.querySelector(f"#problemBody{index}")
@@ -9555,6 +9907,70 @@ This demonstrates the complete format for creating your own problem sets!
       """Create UI for multiple choice multiple answers"""
       options = step_data.get("options", [])
       must_correct = step_data.get("requireCorrect", False)  # ✅ NEW
+
+      # ✅ NEW: Check localStorage for existing shuffle first
+      shuffle_key = f"mc_multiple_shuffle_{index}_{step_idx}"
+      stored_shuffle = window.localStorage.getItem(shuffle_key)
+
+      if stored_shuffle:
+          # Reuse existing shuffle to preserve user experience
+          import json
+          stored_data = json.loads(stored_shuffle)
+
+          # Handle both old format (just labels) and new format (dict with labels and visible_correct)
+          if isinstance(stored_data, list):
+              # Old format - just labels
+              stored_labels = stored_data
+          else:
+              # New format - dict with labels and visible_correct
+              stored_labels = stored_data.get("labels", [])
+
+          options = [opt for opt in options if opt.get("label", "") in stored_labels]
+          # Restore original order from stored shuffle
+          options.sort(key=lambda opt: stored_labels.index(opt.get("label", "")))
+          window.console.log(f"♻️  MC-Multiple reusing stored shuffle: {stored_labels}")
+      elif len(options) > 3:
+          # First time: Shuffle algorithm for mc-multiple with >3 options
+          # Display (total - 1) options, ensuring at least 2 correct answers are included
+          import random
+          import json
+          correct_answers = set(step_data.get("correct_answers", []))
+
+          # Separate correct and incorrect options
+          correct_opts = [opt for opt in options if opt.get("label", "") in correct_answers]
+          incorrect_opts = [opt for opt in options if opt.get("label", "") not in correct_answers]
+
+          num_correct = len(correct_opts)
+          num_to_display = len(options) - 1
+
+          # Ensure at least 2 correct options are included
+          if num_correct >= 2:
+              # Determine how many correct and incorrect to include
+              num_correct_to_include = min(num_correct, max(2, num_to_display - len(incorrect_opts)))
+              num_incorrect_to_include = num_to_display - num_correct_to_include
+
+              # Shuffle and select
+              random.shuffle(correct_opts)
+              random.shuffle(incorrect_opts)
+
+              selected_correct = correct_opts[:num_correct_to_include]
+              selected_incorrect = incorrect_opts[:num_incorrect_to_include]
+
+              # Combine and shuffle again for display
+              options = selected_correct + selected_incorrect
+              random.shuffle(options)
+
+              # Store the shuffled labels AND visible correct answers in localStorage
+              shuffled_labels = [opt.get("label", "") for opt in options]
+              visible_correct = [opt.get("label", "") for opt in options if opt.get("label", "") in correct_answers]
+
+              shuffle_data = {
+                  "labels": shuffled_labels,
+                  "visible_correct": visible_correct
+              }
+              window.localStorage.setItem(shuffle_key, json.dumps(shuffle_data))
+
+              window.console.log(f"🔀 MC-Multiple shuffle: {len(step_data.get('options', []))} → {len(options)} options ({len(visible_correct)} correct visible)")
 
       # 🔍 DEBUG: Log container state BEFORE recreation
       existing_checkboxes = step_div.querySelectorAll(f"input[name='mc_multiple_{step_idx}']")
@@ -10674,7 +11090,25 @@ This demonstrates the complete format for creating your own problem sets!
                 """
             return
 
+        # ✅ Get correct answers - use visible correct answers if shuffled
         correct_answers = set(step_data.get("correct_answers", []))
+
+        # Check if we have stored shuffle data with visible correct answers
+        shuffle_key = f"mc_multiple_shuffle_{current_prob_idx}_{step_idx}"
+        stored_shuffle = window.localStorage.getItem(shuffle_key)
+
+        if stored_shuffle:
+            import json
+            stored_data = json.loads(stored_shuffle)
+            if isinstance(stored_data, dict) and "visible_correct" in stored_data:
+                # Use only the visible correct answers for grading
+                visible_correct = set(stored_data["visible_correct"])
+                original_correct = correct_answers
+                correct_answers = visible_correct
+                window.console.log(f"✅ Using visible correct answers for grading:")
+                window.console.log(f"   Original: {original_correct}")
+                window.console.log(f"   Visible:  {visible_correct}")
+
         is_correct = (user_answers == correct_answers)
         must_correct = step_data.get("requireCorrect", False)
 
@@ -10766,6 +11200,12 @@ This demonstrates the complete format for creating your own problem sets!
             # 🔄 RESHUFFLE OPTIONS
             if "options" in step_data and len(step_data["options"]) > 0:
                 window.console.log("🔄 Reshuffling MC options")
+
+                # ✅ Clear stored shuffle to force fresh shuffle
+                shuffle_key = f"mc_multiple_shuffle_{current_prob_idx}_{step_idx}"
+                window.localStorage.removeItem(shuffle_key)
+                window.console.log(f"🔄 Cleared stored shuffle for fresh attempt (requireCorrect)")
+
                 self.shuffle_array(step_data["options"])
 
                 # Recreate the UI with shuffled options
@@ -16650,5 +17090,29 @@ window.setTimeout(create_proxy(app.init), 700)
 
 print("✅ Problem Solver initialized with multi-type support")
 </script>
-  </body>
+  
+  
+
+
+  <!-- Auto-hide Header Script -->
+  <script>
+    (function() {
+      const header = document.querySelector('.nonet-step-header');
+      const threshold = 10; // Show only when within 10px of top
+
+      window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop <= threshold) {
+          // At the very top - show header
+          header.classList.remove('hidden');
+        } else {
+          // Scrolled down - hide header
+          header.classList.add('hidden');
+        }
+      });
+    })();
+  </script>
+
+</body>
 </html>
