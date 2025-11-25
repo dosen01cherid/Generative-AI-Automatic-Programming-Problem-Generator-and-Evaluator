@@ -192,15 +192,23 @@
       transform: scale(0.95);
     }
 
-    /* Main content wrapper adjustment */
+    /* Main content wrapper adjustment - starts collapsed */
     .main-wrapper {
-      margin-left: 320px;
-      transition: margin-left 0.3s ease;
+      margin-left: 72px;
+      width: calc(100% - 72px);
+      transition: all 0.3s ease;
       min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .main-wrapper.sidebar-expanded {
+      margin-left: 280px;
+      width: calc(100% - 280px);
     }
 
     .main-wrapper.sidebar-hidden {
       margin-left: 0;
+      width: 100%;
     }
 
     body {
@@ -1519,7 +1527,7 @@
     </div>
   </div>
   <!-- Left Sidebar -->
-  <div class="sidebar" id="sidebar">
+  <div class="sidebar collapsed" id="sidebar">
     <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
     <div class="sidebar-header">
       <div class="sidebar-header-content">
@@ -1527,7 +1535,7 @@
         <p class="sidebar-subtitle">Search, manage, and control</p>
       </div>
       <button class="sidebar-toggle-inner" onclick="toggleSidebarExpand()" title="Expand/Collapse">
-        <span id="sidebarExpandIcon">◀</span>
+        <span id="sidebarExpandIcon">▶</span>
       </button>
     </div>
     <div class="sidebar-content">
