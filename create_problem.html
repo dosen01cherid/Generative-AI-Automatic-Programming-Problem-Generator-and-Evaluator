@@ -53,90 +53,84 @@
       position: fixed;
       left: 0;
       top: 0;
-      width: 280px;
+      width: 70px;
       height: 100vh;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
       color: white;
       overflow-y: auto;
       overflow-x: hidden;
       z-index: 1000;
-      transition: width 0.3s ease;
       box-shadow: 4px 0 12px rgba(0,0,0,0.15);
-    }
-
-    /* Collapsed state - slim with icons only */
-    .sidebar.collapsed {
-      width: 72px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      gap: 0;
     }
 
     .sidebar.hidden {
       transform: translateX(-100%);
+      transition: transform 0.3s ease;
     }
-
-    .sidebar-header {
-      padding: 16px;
-      background: rgba(0,0,0,0.2);
-      border-bottom: 2px solid rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      position: relative;
-    }
-
-    .sidebar-header-content {
-      flex: 1;
-      min-width: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .sidebar.collapsed .sidebar-header-content {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .sidebar-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0 0 4px 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .sidebar-subtitle {
-      font-size: 12px;
-      opacity: 0.9;
-      margin: 0;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .sidebar-toggle-inner {
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.2);
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 6px;
+    /* Vertical icon menu items */
+    .sidebar .menu-item {
+      width: 50px;
+      height: 50px;
+      margin: 8px 0;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       transition: all 0.2s;
-      flex-shrink: 0;
       color: white;
-      font-size: 18px;
+      position: relative;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 0;
+      flex-shrink: 0;
     }
 
-    .sidebar-toggle-inner:hover {
-      background: rgba(255,255,255,0.3);
+    .sidebar .menu-item:hover {
+      background: rgba(255,255,255,0.25);
       transform: scale(1.1);
     }
 
-    .sidebar.collapsed .sidebar-toggle-inner {
-      margin: 0 auto;
+    .sidebar .menu-item.active {
+      background: rgba(255,255,255,0.3);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
+
+    .sidebar .menu-icon {
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Tooltip on hover */
+    .sidebar .menu-item::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 70px;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 10000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .sidebar .menu-item:hover::after {
+      opacity: 1;
+    }
+
+
 
     .sidebar-content {
       padding: 16px 0;
@@ -192,18 +186,13 @@
       transform: scale(0.95);
     }
 
-    /* Main content wrapper adjustment - starts collapsed */
+    /* Main content wrapper adjustment */
     .main-wrapper {
-      margin-left: 72px;
-      width: calc(100% - 72px);
+      margin-left: 70px;
+      width: calc(100% - 70px);
       transition: all 0.3s ease;
       min-height: 100vh;
       box-sizing: border-box;
-    }
-
-    .main-wrapper.sidebar-expanded {
-      margin-left: 280px;
-      width: calc(100% - 280px);
     }
 
     .main-wrapper.sidebar-hidden {
@@ -1307,7 +1296,7 @@
        ===================================================== */
     .floating-panel {
       position: fixed;
-      left: 296px; /* 280px sidebar + 16px gap */
+      left: 86px; /* 280px sidebar + 16px gap */
       top: 100px;
       min-width: 380px;
       max-width: 450px;
@@ -1327,7 +1316,7 @@
 
     /* When sidebar is collapsed */
     .sidebar.collapsed ~ .main-wrapper ~ .floating-panel {
-      left: 88px; /* 72px sidebar + 16px gap */
+      left: 86px; /* 72px sidebar + 16px gap */
     }
 
     @keyframes slideInPanel {
@@ -1440,7 +1429,7 @@
     /* Mobile adjustments */
     @media (max-width: 768px) {
       .floating-panel {
-        left: 16px;
+        left: 86px;
         right: 16px;
         top: 80px;
         max-width: none;
@@ -1529,49 +1518,22 @@
   <!-- Left Sidebar -->
   <div class="sidebar collapsed" id="sidebar">
     <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
-    <div class="sidebar-header">
-      <div class="sidebar-header-content">
-        <h2 class="sidebar-title">⚡ Quick Actions</h2>
-        <p class="sidebar-subtitle">Search, manage, and control</p>
-      </div>
-      <button class="sidebar-toggle-inner" onclick="toggleSidebarExpand()" title="Expand/Collapse">
-        <span id="sidebarExpandIcon">▶</span>
-      </button>
-    </div>
-    <div class="sidebar-content">
-      <!-- Menu Items -->
-      <button class="menu-item" onclick="toggleFloatingPanel('search', this)">
-        <div class="menu-icon">🔍</div>
-        <div class="menu-text">
-          <div class="menu-label">Search</div>
-          <div class="menu-desc">Find problems</div>
-        </div>
-      </button>
+    <!-- Vertical Icon Menu -->
+    <button class="menu-item" onclick="toggleFloatingPanel('search', this)" data-tooltip="Search Problems">
+      <div class="menu-icon">🔍</div>
+    </button>
 
-      <button class="menu-item" onclick="toggleFloatingPanel('filter', this)">
-        <div class="menu-icon">🎯</div>
-        <div class="menu-text">
-          <div class="menu-label">Filter</div>
-          <div class="menu-desc">By topic/type</div>
-        </div>
-      </button>
+    <button class="menu-item" onclick="toggleFloatingPanel('filter', this)" data-tooltip="Filter">
+      <div class="menu-icon">🎯</div>
+    </button>
 
-      <button class="menu-item" onclick="toggleFloatingPanel('data', this)">
-        <div class="menu-icon">💾</div>
-        <div class="menu-text">
-          <div class="menu-label">Data</div>
-          <div class="menu-desc">Import/Export</div>
-        </div>
-      </button>
+    <button class="menu-item" onclick="toggleFloatingPanel('data', this)" data-tooltip="Data Management">
+      <div class="menu-icon">💾</div>
+    </button>
 
-      <button class="menu-item" onclick="toggleFloatingPanel('actions', this)">
-        <div class="menu-icon">⚡</div>
-        <div class="menu-text">
-          <div class="menu-label">Actions</div>
-          <div class="menu-desc">Quick controls</div>
-        </div>
-      </button>
-    </div>
+    <button class="menu-item" onclick="toggleFloatingPanel('actions', this)" data-tooltip="Quick Actions">
+      <div class="menu-icon">⚡</div>
+    </button>
   </div>
 
   <!-- Backdrop for mobile -->
