@@ -42,7 +42,10 @@
 
 ### Tampilan Utama:
 
-**Sidebar Kiri**:
+![Figure 1: Tampilan awal Problem Solver](images/solve_problem/figure_01_initial_view.png)
+**Gambar 1.** Tampilan awal aplikasi Problem Solver tanpa problem set yang dimuat
+
+**Sidebar Kiri** (Gambar 2):
 - **Menu Button** (☰): Buka/tutup sidebar
 - **Problem Set Info**: Informasi problem set yang dimuat
 - **Navigation**:
@@ -51,6 +54,9 @@
   - Load Problem Set
   - Submit Progress
   - Reset Answers
+
+![Figure 2: Sidebar navigation menu](images/solve_problem/figure_02_sidebar_menu.png)
+**Gambar 2.** Sidebar dengan menu navigasi lengkap
 
 **Area Konten**:
 - Menampilkan soal yang sedang dikerjakan
@@ -66,6 +72,9 @@
 
 1. **Klik menu "Load Problem Set"** di sidebar
 2. **Ada 2 cara untuk memuat soal**:
+
+![Figure 3: Load Problem Set page](images/solve_problem/figure_03_load_problem_set.png)
+**Gambar 3.** Halaman Load Problem Set dengan opsi Upload dan Paste JSON
 
 #### A. Upload File JSON:
 1. Klik tab **"Upload JSON"**
@@ -105,7 +114,7 @@
 
 3. **Masukkan Jawaban**
    - Gunakan input field yang tersedia
-   - Untuk soal matematika, gunakan MathQuill keyboard
+   - Untuk soal matematika, gunakan MathQuill keyboard (Gambar 5)
 
 4. **Submit Jawaban**
    - Klik tombol **"Check Answer"** atau **"Submit"**
@@ -335,11 +344,17 @@ Pilih: Python dan interpreted
 - MathQuill input field (dengan toolbar keyboard)
 - Keyboard virtual untuk input matematika
 
+![Figure 5: MathQuill keyboard untuk input matematika](images/solve_problem/figure_05_mathquill_keyboard.png)
+**Gambar 5.** Keyboard virtual MathQuill untuk input ekspresi matematika
+
 **Cara Menjawab**:
 
-1. **Menggunakan Keyboard Virtual**:
+1. **Menggunakan Keyboard Virtual** (Gambar 6):
    - Klik tombol pada keyboard virtual untuk input simbol matematika
    - Tersedia: angka, operator (+, -, ×, ÷), power (^), subscript (_), dll.
+
+![Figure 6: Keyboard numbers section](images/solve_problem/figure_06_keyboard_numbers.png)
+**Gambar 6.** Section Numbers & Basic pada keyboard virtual
 
 2. **Menggunakan Keyboard Fisik**:
    - Ketik langsung (untuk angka dan operator dasar)
@@ -380,11 +395,14 @@ Navigation: [←] [→] [Backspace]
 
 Freestyle mode adalah mode latihan bebas di mana Anda bisa membuat soal matematika sendiri dan berlatih menyelesaikannya dengan sistem kredit.
 
+![Figure 4: Freestyle Practice mode](images/solve_problem/figure_04_freestyle_practice.png)
+**Gambar 4.** Halaman Freestyle Practice dengan sistem kredit
+
 ### Cara Menggunakan Freestyle:
 
 1. **Masuk ke Freestyle Mode**:
    - Klik **"Freestyle Practice"** di sidebar
-   - Halaman freestyle akan terbuka
+   - Halaman freestyle akan terbuka (Gambar 4)
 
 2. **Set Problem (Buat Soal)**:
    - Di field **"Problem"**, ketik soal matematika
@@ -410,7 +428,10 @@ Freestyle mode adalah mode latihan bebas di mana Anda bisa membuat soal matemati
 
 ### Sistem Kredit:
 
-**Credit Display** di bagian atas menampilkan:
+![Figure 8: Credit system display](images/solve_problem/figure_08_credit_system.png)
+**Gambar 8.** Tampilan sistem kredit di Freestyle Practice
+
+**Credit Display** (Gambar 8) di bagian atas menampilkan:
 - **Credit Balance**: Total kredit Anda saat ini
 - **Earned**: Kredit yang diperoleh (dari jawaban benar)
 - **Spent**: Kredit yang dipakai (dari give up atau hint)
@@ -429,7 +450,7 @@ Freestyle mode adalah mode latihan bebas di mana Anda bisa membuat soal matemati
 
 ### Keyboard Matematika di Freestyle:
 
-**Accordion Sections**:
+**Accordion Sections** (Gambar 5 & 6):
 1. **Numbers & Basic**: Angka, operator dasar
 2. **Functions**: sqrt, sin, cos, tan, log, ln
 3. **Greek Letters**: α, β, γ, θ, π, dll.
@@ -446,15 +467,15 @@ Freestyle mode adalah mode latihan bebas di mana Anda bisa membuat soal matemati
 
 ### Sidebar Navigation:
 
-**Menu Button (☰)**:
+**Menu Button (☰)** (Gambar 2):
 - Buka/tutup sidebar
 - Otomatis tertutup di mobile
 
 **Pages**:
 1. **Problems**: Halaman utama dengan daftar soal
-2. **Freestyle Practice**: Mode latihan bebas
-3. **Load Problem Set**: Muat soal baru
-4. **Submit Progress**: Export jawaban untuk submit
+2. **Freestyle Practice**: Mode latihan bebas (Gambar 4)
+3. **Load Problem Set**: Muat soal baru (Gambar 3)
+4. **Submit Progress**: Export jawaban untuk submit (Gambar 7)
 5. **Reset Answers**: Reset semua jawaban
 
 ### Problem Navigation:
@@ -480,10 +501,13 @@ Freestyle mode adalah mode latihan bebas di mana Anda bisa membuat soal matemati
 
 Export progress digunakan untuk mengirim jawaban Anda ke pengajar.
 
+![Figure 7: Export/Submit Progress page](images/solve_problem/figure_07_export_progress.png)
+**Gambar 7.** Halaman Export/Submit Progress
+
 ### Cara Export Progress:
 
 1. **Klik "Submit Progress"** di sidebar
-2. Halaman export akan terbuka
+2. Halaman export akan terbuka (Gambar 7)
 3. Ada 2 tab:
 
 #### Tab 1: Progress Summary
@@ -645,7 +669,10 @@ Reset digunakan untuk menghapus semua jawaban dan mulai dari awal.
 
 ### 5. Mobile Usage
 
-**Menggunakan di Mobile**:
+![Figure 10: Mobile view](images/solve_problem/figure_10_mobile_view.png)
+**Gambar 10.** Tampilan aplikasi di perangkat mobile
+
+**Menggunakan di Mobile** (Gambar 10):
 - Sidebar otomatis tertutup untuk menghemat ruang
 - Buka sidebar dengan tombol ☰ di kiri atas
 - Keyboard virtual otomatis muncul
@@ -807,6 +834,21 @@ A: Tidak. Essay disimpan untuk di-review manual oleh pengajar.
 
 **Q: Credit di freestyle untuk apa?**
 A: Gamification untuk motivasi latihan. Tidak mempengaruhi grade sebenarnya.
+
+---
+
+## Daftar Gambar
+
+1. **Gambar 1** - Tampilan awal aplikasi Problem Solver tanpa problem set yang dimuat
+2. **Gambar 2** - Sidebar dengan menu navigasi lengkap
+3. **Gambar 3** - Halaman Load Problem Set dengan opsi Upload dan Paste JSON
+4. **Gambar 4** - Halaman Freestyle Practice dengan sistem kredit
+5. **Gambar 5** - Keyboard virtual MathQuill untuk input ekspresi matematika
+6. **Gambar 6** - Section Numbers & Basic pada keyboard virtual
+7. **Gambar 7** - Halaman Export/Submit Progress
+8. **Gambar 8** - Tampilan sistem kredit di Freestyle Practice
+9. **Gambar 9** - Area konten utama aplikasi
+10. **Gambar 10** - Tampilan aplikasi di perangkat mobile
 
 ---
 
