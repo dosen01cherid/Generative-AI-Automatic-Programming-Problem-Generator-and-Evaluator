@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 10: Business & Data Understanding - Part 1</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        .slide-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        h4 {
+            color: #764ba2;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        p, li {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .formula-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .key-point {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .column-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .process-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #667eea;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title Slide -->
+    <div class="slide">
+        <div class="slide-number">Slide 1</div>
+        <div class="slide-content">
+            <h1 style="text-align: center; font-size: 3em;">Session 10</h1>
+            <h2 style="text-align: center; color: #667eea; margin-top: 20px;">Business & Data Understanding</h2>
+            <p class="subtitle" style="text-align: center; margin-top: 30px;">Part 1: Business Understanding Framework</p>
+
+            <div class="highlight" style="margin-top: 50px;">
+                <h3 style="color: #333;">Learning Objectives:</h3>
+                <ul>
+                    <li>Memahami pentingnya business understanding dalam data analytics</li>
+                    <li>Menerapkan framework SMART untuk mendefinisikan business objectives</li>
+                    <li>Mengidentifikasi stakeholders dan kebutuhan mereka</li>
+                    <li>Menerjemahkan business problems menjadi analytics problems</li>
+                    <li>Memahami success criteria dan metrics</li>
+                </ul>
+            </div>
+
+            <div class="footer-note">
+                <p><strong>Mata Kuliah:</strong> Data Analitik | <strong>Program Studi:</strong> Sistem Informasi</p>
+                <p><strong>Universitas Mercu Buana</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Why Business Understanding? -->
+    <div class="slide">
+        <div class="slide-number">Slide 2</div>
+        <div class="slide-content">
+            <h1>Why Business Understanding Matters?</h1>
+
+            <div class="key-point">
+                <h3>Key Insight:</h3>
+                <p><strong>"You can't solve a problem you don't understand"</strong></p>
+                <p>Business understanding adalah fondasi dari setiap successful analytics project.</p>
+            </div>
+
+            <h2>The Business Understanding Challenge</h2>
+
+            <div class="two-column">
+                <div class="column-box">
+                    <h3 style="color: #dc3545;">❌ Without Business Understanding</h3>
+                    <ul>
+                        <li>Building wrong models</li>
+                        <li>Solving wrong problems</li>
+                        <li>Wasting time & resources</li>
+                        <li>No stakeholder buy-in</li>
+                        <li>Insights tidak actionable</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h3 style="color: #28a745;">✓ With Business Understanding</h3>
+                    <ul>
+                        <li>Clear problem definition</li>
+                        <li>Aligned dengan business goals</li>
+                        <li>Measurable success criteria</li>
+                        <li>Stakeholder engagement</li>
+                        <li>Actionable insights</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Statistics: The Cost of Poor Understanding</h2>
+            <div class="example-box">
+                <p><strong>Research findings:</strong></p>
+                <ul>
+                    <li><strong>80%</strong> of analytics projects fail due to poor business understanding</li>
+                    <li><strong>60%</strong> of data scientists' time is wasted on misaligned projects</li>
+                    <li>Average cost of failed analytics project: <strong>$500K - $2M</strong></li>
+                </ul>
+            </div>
+
+            <div class="metric-card">
+                <p>ROI of good business understanding</p>
+                <div class="metric-value">3-5x</div>
+                <p>Higher project success rate</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Business Understanding Framework -->
+    <div class="slide">
+        <div class="slide-number">Slide 3</div>
+        <div class="slide-content">
+            <h1>Business Understanding Framework</h1>
+
+            <h2>6 Key Components</h2>
+
+            <div class="process-step">
+                <h3>1. Business Objectives</h3>
+                <p>What does the organization want to achieve?</p>
+                <ul>
+                    <li>Strategic goals</li>
+                    <li>Business metrics to improve</li>
+                    <li>Timeline and constraints</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>2. Stakeholder Identification</h3>
+                <p>Who are the key players?</p>
+                <ul>
+                    <li>Decision makers</li>
+                    <li>Data owners</li>
+                    <li>End users of analytics</li>
+                    <li>Subject matter experts</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>3. Problem Definition</h3>
+                <p>What is the specific problem to solve?</p>
+                <ul>
+                    <li>Current state vs. desired state</li>
+                    <li>Root cause analysis</li>
+                    <li>Problem scope and boundaries</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>4. Success Criteria</h3>
+                <p>How will we measure success?</p>
+                <ul>
+                    <li>Quantifiable metrics</li>
+                    <li>Target values</li>
+                    <li>Baseline measurements</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>5. Constraints & Resources</h3>
+                <p>What limitations do we have?</p>
+                <ul>
+                    <li>Budget constraints</li>
+                    <li>Time constraints</li>
+                    <li>Data availability</li>
+                    <li>Technical infrastructure</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>6. Analytics Translation</h3>
+                <p>Convert business problem → analytics problem</p>
+                <ul>
+                    <li>Identify analytics approach (descriptive, predictive, prescriptive)</li>
+                    <li>Define target variable</li>
+                    <li>Determine required data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: SMART Objectives Framework -->
+    <div class="slide">
+        <div class="slide-number">Slide 4</div>
+        <div class="slide-content">
+            <h1>SMART Objectives Framework</h1>
+
+            <div class="key-point">
+                <p>Every business objective should be <strong>SMART</strong></p>
+            </div>
+
+            <h2>SMART Criteria</h2>
+
+            <table>
+                <tr>
+                    <th>Letter</th>
+                    <th>Meaning</th>
+                    <th>Description</th>
+                    <th>Example Question</th>
+                </tr>
+                <tr>
+                    <td><strong>S</strong></td>
+                    <td>Specific</td>
+                    <td>Clearly defined, not vague</td>
+                    <td>What exactly do we want to achieve?</td>
+                </tr>
+                <tr>
+                    <td><strong>M</strong></td>
+                    <td>Measurable</td>
+                    <td>Can be quantified</td>
+                    <td>How will we measure progress?</td>
+                </tr>
+                <tr>
+                    <td><strong>A</strong></td>
+                    <td>Achievable</td>
+                    <td>Realistic given constraints</td>
+                    <td>Can we realistically achieve this?</td>
+                </tr>
+                <tr>
+                    <td><strong>R</strong></td>
+                    <td>Relevant</td>
+                    <td>Aligned with business strategy</td>
+                    <td>Does this support our business goals?</td>
+                </tr>
+                <tr>
+                    <td><strong>T</strong></td>
+                    <td>Time-bound</td>
+                    <td>Has a clear deadline</td>
+                    <td>When should this be accomplished?</td>
+                </tr>
+            </table>
+
+            <h2>Examples: Bad vs Good Objectives</h2>
+
+            <div class="two-column">
+                <div class="warning-box">
+                    <h4>❌ Bad (Not SMART)</h4>
+                    <ul>
+                        <li>"Increase sales"</li>
+                        <li>"Improve customer satisfaction"</li>
+                        <li>"Reduce costs"</li>
+                        <li>"Be more profitable"</li>
+                    </ul>
+                    <p><strong>Problem:</strong> Vague, not measurable, no timeline</p>
+                </div>
+                <div class="key-point">
+                    <h4>✓ Good (SMART)</h4>
+                    <ul>
+                        <li>"Increase monthly sales revenue by 15% within 6 months"</li>
+                        <li>"Improve NPS score from 45 to 60 in Q2 2025"</li>
+                        <li>"Reduce customer acquisition cost by 20% by end of year"</li>
+                        <li>"Increase profit margin from 12% to 18% in 12 months"</li>
+                    </ul>
+                    <p><strong>Why:</strong> Specific, measurable, time-bound</p>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Case Study: E-Commerce Customer Churn</h3>
+                <p><strong>Bad objective:</strong> "We want to reduce customer churn"</p>
+                <p><strong>SMART objective:</strong> "Reduce monthly customer churn rate from 8% to 5% within 9 months by implementing targeted retention campaigns based on predictive churn model"</p>
+                <ul>
+                    <li><strong>S:</strong> Reduce customer churn through retention campaigns</li>
+                    <li><strong>M:</strong> From 8% to 5% (measurable reduction)</li>
+                    <li><strong>A:</strong> 3% reduction is achievable with targeted campaigns</li>
+                    <li><strong>R:</strong> Aligned with business goal of customer retention</li>
+                    <li><strong>T:</strong> Within 9 months</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Stakeholder Identification -->
+    <div class="slide">
+        <div class="slide-number">Slide 5</div>
+        <div class="slide-content">
+            <h1>Stakeholder Identification & Analysis</h1>
+
+            <h2>Who Are Stakeholders?</h2>
+            <p>Stakeholders are individuals or groups who have an interest in or are affected by the analytics project.</p>
+
+            <h2>Stakeholder Categories</h2>
+
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Role</th>
+                    <th>Key Interest</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>Executive Sponsors</strong></td>
+                    <td>Decision makers, budget owners</td>
+                    <td>ROI, strategic alignment</td>
+                    <td>CEO, CFO, VP</td>
+                </tr>
+                <tr>
+                    <td><strong>Business Users</strong></td>
+                    <td>End users of insights</td>
+                    <td>Actionable insights, usability</td>
+                    <td>Marketing Manager, Sales Director</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Owners</strong></td>
+                    <td>Provide data access</td>
+                    <td>Data governance, privacy</td>
+                    <td>IT Manager, DBA</td>
+                </tr>
+                <tr>
+                    <td><strong>Subject Matter Experts</strong></td>
+                    <td>Domain knowledge</td>
+                    <td>Technical accuracy</td>
+                    <td>Product Manager, Operations Lead</td>
+                </tr>
+                <tr>
+                    <td><strong>Analytics Team</strong></td>
+                    <td>Execute the project</td>
+                    <td>Clear requirements, data access</td>
+                    <td>Data Scientists, Analysts</td>
+                </tr>
+            </table>
+
+            <h2>Stakeholder Analysis Matrix</h2>
+
+            <div class="chart-container">
+                <div id="stakeholderMatrix"></div>
+            </div>
+
+            <div class="highlight">
+                <h3>Best Practices for Stakeholder Management:</h3>
+                <ul>
+                    <li><strong>Identify early:</strong> Map stakeholders at project start</li>
+                    <li><strong>Understand needs:</strong> Interview each stakeholder group</li>
+                    <li><strong>Manage expectations:</strong> Set realistic timelines and deliverables</li>
+                    <li><strong>Communication plan:</strong> Regular updates tailored to each group</li>
+                    <li><strong>Conflict resolution:</strong> Address competing priorities early</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Example: Retail Sales Forecasting Project</h3>
+                <table>
+                    <tr>
+                        <th>Stakeholder</th>
+                        <th>Power</th>
+                        <th>Interest</th>
+                        <th>Strategy</th>
+                    </tr>
+                    <tr>
+                        <td>CEO</td>
+                        <td>High</td>
+                        <td>High</td>
+                        <td>Manage closely - monthly executive briefings</td>
+                    </tr>
+                    <tr>
+                        <td>Sales Director</td>
+                        <td>Medium</td>
+                        <td>High</td>
+                        <td>Keep satisfied - weekly updates</td>
+                    </tr>
+                    <tr>
+                        <td>IT Team</td>
+                        <td>High</td>
+                        <td>Low</td>
+                        <td>Keep informed - technical documentation</td>
+                    </tr>
+                    <tr>
+                        <td>Store Managers</td>
+                        <td>Low</td>
+                        <td>High</td>
+                        <td>Keep informed - quarterly summaries</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Problem Definition -->
+    <div class="slide">
+        <div class="slide-number">Slide 6</div>
+        <div class="slide-content">
+            <h1>Problem Definition</h1>
+
+            <div class="key-point">
+                <p><strong>"A problem well-stated is half-solved"</strong> - Charles Kettering</p>
+            </div>
+
+            <h2>The 5 Whys Technique</h2>
+            <p>Teknik untuk menemukan root cause dari business problem</p>
+
+            <div class="example-box">
+                <h3>Example: Customer Churn</h3>
+                <ol>
+                    <li><strong>Why</strong> are customers leaving? → They're not satisfied</li>
+                    <li><strong>Why</strong> are they not satisfied? → Poor customer service</li>
+                    <li><strong>Why</strong> is customer service poor? → Long wait times</li>
+                    <li><strong>Why</strong> are wait times long? → Insufficient support staff</li>
+                    <li><strong>Why</strong> is staff insufficient? → Budget constraints + high turnover</li>
+                </ol>
+                <p><strong>Root cause:</strong> Need to optimize staffing allocation and improve retention</p>
+            </div>
+
+            <h2>Problem Statement Framework</h2>
+
+            <div class="formula-box">
+                <h3>Problem Statement Template:</h3>
+                <p style="background: white; padding: 15px; border-radius: 5px; font-family: monospace;">
+                    "[Current State] is causing [Business Impact]. We need to [Desired State] by [Method/Approach] to achieve [Business Outcome] within [Timeframe]."
+                </p>
+            </div>
+
+            <h3>Problem Statement Components:</h3>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td>Current State</td>
+                    <td>What's happening now</td>
+                    <td>"25% monthly churn rate"</td>
+                </tr>
+                <tr>
+                    <td>Business Impact</td>
+                    <td>Why it matters</td>
+                    <td>"$2M annual revenue loss"</td>
+                </tr>
+                <tr>
+                    <td>Desired State</td>
+                    <td>Target outcome</td>
+                    <td>"Reduce to 15% churn"</td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>Analytics approach</td>
+                    <td>"Predictive churn model + retention campaigns"</td>
+                </tr>
+                <tr>
+                    <td>Business Outcome</td>
+                    <td>Expected benefit</td>
+                    <td>"Save $800K annually"</td>
+                </tr>
+                <tr>
+                    <td>Timeframe</td>
+                    <td>When</td>
+                    <td>"Within 12 months"</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <h3>Complete Problem Statement Example:</h3>
+                <p><strong>Scenario:</strong> Online Retail Company</p>
+                <p><strong>Problem Statement:</strong></p>
+                <p>"Our current monthly customer churn rate of 25% is causing an estimated $2M in lost annual revenue and hindering our growth targets. We need to reduce the churn rate to 15% by implementing a predictive analytics model to identify at-risk customers and deploy targeted retention campaigns, which will save approximately $800K in annual revenue within 12 months."</p>
+            </div>
+
+            <h2>Common Pitfalls in Problem Definition</h2>
+
+            <div class="warning-box">
+                <h4>❌ Avoid These Mistakes:</h4>
+                <ul>
+                    <li><strong>Too vague:</strong> "Improve customer experience"</li>
+                    <li><strong>Solution-focused:</strong> "Build a machine learning model" (this is HOW, not WHAT)</li>
+                    <li><strong>Not measurable:</strong> "Make customers happier"</li>
+                    <li><strong>No business context:</strong> "Predict customer behavior" (Why? What impact?)</li>
+                    <li><strong>Scope creep:</strong> "Solve all customer issues" (too broad)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Analytics Translation -->
+    <div class="slide">
+        <div class="slide-number">Slide 7</div>
+        <div class="slide-content">
+            <h1>Translating Business to Analytics Problems</h1>
+
+            <h2>The Translation Challenge</h2>
+            <p>Business problems are expressed in business language. We need to translate them into analytics problems.</p>
+
+            <div class="two-column">
+                <div class="column-box">
+                    <h3>Business Language</h3>
+                    <ul>
+                        <li>Increase revenue</li>
+                        <li>Reduce churn</li>
+                        <li>Improve efficiency</li>
+                        <li>Better targeting</li>
+                        <li>Optimize inventory</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h3>Analytics Language</h3>
+                    <ul>
+                        <li>Regression (predict sales)</li>
+                        <li>Classification (churn yes/no)</li>
+                        <li>Optimization</li>
+                        <li>Clustering (customer segments)</li>
+                        <li>Time series forecasting</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Analytics Problem Types</h2>
+
+            <table>
+                <tr>
+                    <th>Analytics Type</th>
+                    <th>Question Answered</th>
+                    <th>Business Use Case</th>
+                    <th>Techniques</th>
+                </tr>
+                <tr>
+                    <td><strong>Descriptive</strong></td>
+                    <td>What happened?</td>
+                    <td>Sales dashboard, KPI reporting</td>
+                    <td>Aggregation, Visualization</td>
+                </tr>
+                <tr>
+                    <td><strong>Diagnostic</strong></td>
+                    <td>Why did it happen?</td>
+                    <td>Why did sales drop last quarter?</td>
+                    <td>Drill-down, Correlation analysis</td>
+                </tr>
+                <tr>
+                    <td><strong>Predictive</strong></td>
+                    <td>What will happen?</td>
+                    <td>Churn prediction, demand forecasting</td>
+                    <td>Regression, Classification, Time series</td>
+                </tr>
+                <tr>
+                    <td><strong>Prescriptive</strong></td>
+                    <td>What should we do?</td>
+                    <td>Price optimization, resource allocation</td>
+                    <td>Optimization, Simulation</td>
+                </tr>
+            </table>
+
+            <h2>Translation Framework</h2>
+
+            <div class="process-step">
+                <h3>Step 1: Identify Business Goal</h3>
+                <p>Example: "Reduce customer churn"</p>
+            </div>
+
+            <div class="process-step">
+                <h3>Step 2: Define Analytics Objective</h3>
+                <p>Example: "Predict which customers will churn in next 30 days"</p>
+            </div>
+
+            <div class="process-step">
+                <h3>Step 3: Specify Analytics Type</h3>
+                <p>Example: "Binary classification problem (Churn: Yes/No)"</p>
+            </div>
+
+            <div class="process-step">
+                <h3>Step 4: Define Target Variable</h3>
+                <p>Example: "Target = 1 if customer churns within 30 days, 0 otherwise"</p>
+            </div>
+
+            <div class="process-step">
+                <h3>Step 5: Identify Required Features</h3>
+                <p>Example: "Customer demographics, usage patterns, payment history, support tickets, etc."</p>
+            </div>
+
+            <div class="process-step">
+                <h3>Step 6: Define Success Metric</h3>
+                <p>Example: "F1-Score > 0.75, Recall > 0.80 (capture 80% of churners)"</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Complete Translation Example</h3>
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Business View</th>
+                        <th>Analytics View</th>
+                    </tr>
+                    <tr>
+                        <td>Goal</td>
+                        <td>Reduce customer churn from 25% to 15%</td>
+                        <td>Build predictive model with 80% recall</td>
+                    </tr>
+                    <tr>
+                        <td>Question</td>
+                        <td>Which customers are likely to leave?</td>
+                        <td>P(Churn = 1 | Customer Features) > threshold</td>
+                    </tr>
+                    <tr>
+                        <td>Action</td>
+                        <td>Target retention campaigns</td>
+                        <td>Score customers, rank by churn probability</td>
+                    </tr>
+                    <tr>
+                        <td>Success</td>
+                        <td>Churn rate reduced by 10 percentage points</td>
+                        <td>Model recall ≥ 80%, precision ≥ 65%</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Success Criteria & Metrics -->
+    <div class="slide">
+        <div class="slide-number">Slide 8</div>
+        <div class="slide-content">
+            <h1>Success Criteria & Metrics</h1>
+
+            <h2>Two Types of Success Metrics</h2>
+
+            <div class="two-column">
+                <div class="column-box" style="border-color: #28a745;">
+                    <h3>1. Business Metrics</h3>
+                    <p><strong>Measure business impact</strong></p>
+                    <ul>
+                        <li>Revenue increase</li>
+                        <li>Cost reduction</li>
+                        <li>Customer satisfaction (NPS, CSAT)</li>
+                        <li>Market share</li>
+                        <li>Operational efficiency</li>
+                    </ul>
+                    <p><strong>Example:</strong> "Reduce churn from 25% to 15%"</p>
+                </div>
+                <div class="column-box" style="border-color: #667eea;">
+                    <h3>2. Model Performance Metrics</h3>
+                    <p><strong>Measure analytics quality</strong></p>
+                    <ul>
+                        <li>Accuracy, Precision, Recall</li>
+                        <li>F1-Score, AUC-ROC</li>
+                        <li>MAE, RMSE, R²</li>
+                        <li>Model interpretability</li>
+                        <li>Inference time</li>
+                    </ul>
+                    <p><strong>Example:</strong> "F1-Score ≥ 0.75"</p>
+                </div>
+            </div>
+
+            <div class="key-point">
+                <p><strong>Important:</strong> Business metrics are ultimately more important than model metrics!</p>
+                <p>A model with 95% accuracy is useless if it doesn't improve business outcomes.</p>
+            </div>
+
+            <h2>Baseline Measurement</h2>
+            <p>Always establish a baseline before starting analytics project:</p>
+
+            <div class="formula-box">
+                <h3>Improvement Calculation:</h3>
+                <p>$$\text{Improvement} = \frac{\text{New Value} - \text{Baseline}}{\text{Baseline}} \times 100\%$$</p>
+                <p><strong>Example:</strong></p>
+                <p>Baseline churn rate: 25%</p>
+                <p>New churn rate: 15%</p>
+                <p>$$\text{Improvement} = \frac{15 - 25}{25} \times 100\% = -40\%$$</p>
+                <p>(40% reduction in churn rate)</p>
+            </div>
+
+            <h2>Defining Good Success Criteria</h2>
+
+            <table>
+                <tr>
+                    <th>Criteria</th>
+                    <th>Description</th>
+                    <th>Example</th>
+                </tr>
+                <tr>
+                    <td><strong>Quantifiable</strong></td>
+                    <td>Can be measured with numbers</td>
+                    <td>"Increase sales by 15%" not "Increase sales"</td>
+                </tr>
+                <tr>
+                    <td><strong>Baseline</strong></td>
+                    <td>Know starting point</td>
+                    <td>"From 25% to 15%" not just "15%"</td>
+                </tr>
+                <tr>
+                    <td><strong>Target</strong></td>
+                    <td>Clear goal value</td>
+                    <td>"Achieve 15% churn" not "Reduce churn"</td>
+                </tr>
+                <tr>
+                    <td><strong>Timeline</strong></td>
+                    <td>When to achieve</td>
+                    <td>"Within 12 months"</td>
+                </tr>
+                <tr>
+                    <td><strong>Verifiable</strong></td>
+                    <td>Can be independently verified</td>
+                    <td>Use existing BI system to track churn</td>
+                </tr>
+            </table>
+
+            <h2>Business Impact Estimation</h2>
+
+            <div class="example-box">
+                <h3>Churn Reduction ROI Calculation:</h3>
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>Current monthly churn: 25% of 10,000 customers = 2,500 customers</li>
+                    <li>Average customer lifetime value (LTV): $800</li>
+                    <li>Target churn: 15% = 1,500 customers</li>
+                </ul>
+                <p><strong>Calculation:</strong></p>
+                <p>$$\text{Customers Saved} = 2,500 - 1,500 = 1,000 \text{ customers/month}$$</p>
+                <p>$$\text{Annual Revenue Saved} = 1,000 \times 12 \times 800 = \$9,600,000$$</p>
+                <p>$$\text{Project Cost} = \$500,000$$</p>
+                <p>$$\text{ROI} = \frac{9,600,000 - 500,000}{500,000} \times 100\% = 1,820\%$$</p>
+            </div>
+
+            <div class="metric-card">
+                <p>Expected ROI</p>
+                <div class="metric-value">1,820%</div>
+                <p>Strong business case for analytics project</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stakeholder Power-Interest Matrix
+        const stakeholderData = [{
+            x: [2, 8, 8, 5, 9],
+            y: [8, 9, 3, 7, 2],
+            mode: 'markers+text',
+            type: 'scatter',
+            name: 'Stakeholders',
+            text: ['Store Managers', 'CEO', 'IT Team', 'Sales Director', 'Finance'],
+            textposition: 'top center',
+            marker: {
+                size: 20,
+                color: ['#FFC107', '#dc3545', '#667eea', '#28a745', '#667eea']
+            }
+        }];
+
+        const stakeholderLayout = {
+            title: 'Power-Interest Matrix',
+            xaxis: {
+                title: 'Power/Influence →',
+                range: [0, 10],
+                showgrid: true
+            },
+            yaxis: {
+                title: 'Interest/Engagement →',
+                range: [0, 10],
+                showgrid: true
+            },
+            shapes: [
+                // Quadrant lines
+                {
+                    type: 'line',
+                    x0: 5, y0: 0,
+                    x1: 5, y1: 10,
+                    line: { color: '#999', width: 2, dash: 'dash' }
+                },
+                {
+                    type: 'line',
+                    x0: 0, y0: 5,
+                    x1: 10, y1: 5,
+                    line: { color: '#999', width: 2, dash: 'dash' }
+                }
+            ],
+            annotations: [
+                {
+                    x: 2.5, y: 2.5,
+                    text: 'Monitor',
+                    showarrow: false,
+                    font: { size: 14, color: '#999' }
+                },
+                {
+                    x: 7.5, y: 2.5,
+                    text: 'Keep Informed',
+                    showarrow: false,
+                    font: { size: 14, color: '#999' }
+                },
+                {
+                    x: 2.5, y: 7.5,
+                    text: 'Keep Satisfied',
+                    showarrow: false,
+                    font: { size: 14, color: '#999' }
+                },
+                {
+                    x: 7.5, y: 7.5,
+                    text: 'Manage Closely',
+                    showarrow: false,
+                    font: { size: 14, color: '#999' }
+                }
+            ],
+            height: 500
+        };
+
+        Plotly.newPlot('stakeholderMatrix', stakeholderData, stakeholderLayout);
+    </script>
+
+</body>
+</html>

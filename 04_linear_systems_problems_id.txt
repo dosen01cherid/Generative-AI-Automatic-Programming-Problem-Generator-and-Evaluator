@@ -172,40 +172,40 @@ Option D: Kalikan kedua persamaan
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 5 - y
+Step Expression: `x`
+Step Expected: `5 - y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: (5 - y) - y
-Step Expected: 1
+Step Expression: `(5 - y) - y`
+Step Expected: `1`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 5 - 2*y
-Step Expected: 1
+Step Expression: `5 - 2*y`
+Step Expected: `1`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 2
+Step Expression: `y`
+Step Expected: `2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 5 - 2
-Step Expected: 3
+Step Expression: `5 - 2`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[3,2]]
-Step Expected: [[3,2]]
+Step Expression: `[[3,2]]`
+Step Expected: `[[3,2]]`
 
 
 ###Problem Title: Sistem Linear 2x2 - Metode Eliminasi
@@ -222,40 +222,40 @@ Option D: Membagi kedua ruas dengan variabel
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*(x + y)
-Step Expected: 2*x + 2*y
+Step Expression: `2*(x + y)`
+Step Expected: `2*x + 2*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*x + 2*y
-Step Expected: 10
+Step Expression: `2*x + 2*y`
+Step Expected: `10`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: (2*x + 3*y) - (2*x + 2*y)
-Step Expected: 13 - 10
+Step Expression: `(2*x + 3*y) - (2*x + 2*y)`
+Step Expected: `13 - 10`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 3
+Step Expression: `y`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x + 3
-Step Expected: 5
+Step Expression: `x + 3`
+Step Expected: `5`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 2
+Step Expression: `x`
+Step Expected: `2`
 
 
 ###Problem Title: Sistem Linear 2x2 - Bentuk Matriks
@@ -268,74 +268,74 @@ Step Description: Matriks augmented menggabungkan matriks koefisien dengan vekto
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[3,2,7]]
-Step Expected: [[3,2,7]]
+Step Expression: `[[3,2,7]]`
+Step Expected: `[[3,2,7]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,-1,1]]
-Step Expected: [[1,-1,1]]
+Step Expression: `[[1,-1,1]]`
+Step Expected: `[[1,-1,1]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[3,2,7],[1,-1,1]]
-Step Expected: [[3,2,7],[1,-1,1]]
+Step Expression: `[[3,2,7],[1,-1,1]]`
+Step Expected: `[[3,2,7],[1,-1,1]]`
 
 
 ###Problem Title: Sistem Linear 3x3 - Metode Eliminasi Gauss
 Problem Description: Selesaikan sistem x + y + z = 6, 2x - y + z = 3, dan x + 2y - z = 2 menggunakan eliminasi
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
-Step Expected: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]
+Step Expression: `[[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]`
+Step Expected: `[[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]|R_2\to R_2-2R_1
-Step Expected: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]
+Step Expression: `[[1,1,1,6],[2,-1,1,3],[1,2,-1,2]]|R_2\to R_2-2R_1`
+Step Expected: `[[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]|R_3\to R_3-R_1
-Step Expected: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]
+Step Expression: `[[1,1,1,6],[0,-3,-1,-9],[1,2,-1,2]]|R_3\to R_3-R_1`
+Step Expected: `[[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]|R_2\to (-1/3)R_2
-Step Expected: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]
+Step Expression: `[[1,1,1,6],[0,-3,-1,-9],[0,1,-2,-4]]|R_2\to (-1/3)R_2`
+Step Expected: `[[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]|R_3\to R_3-R_2
-Step Expected: [[1,1,1,6],[0,1,1/3,3],[0,0,-7/3,-7]]
+Step Expression: `[[1,1,1,6],[0,1,1/3,3],[0,1,-2,-4]]|R_3\to R_3-R_2`
+Step Expected: `[[1,1,1,6],[0,1,1/3,3],[0,0,-7/3,-7]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: z
-Step Expected: 3
+Step Expression: `z`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 2
+Step Expression: `y`
+Step Expected: `2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 1
+Step Expression: `x`
+Step Expected: `1`
 
 
 ###Problem Title: Sistem Tidak Konsisten - Tidak Ada Solusi
@@ -352,16 +352,16 @@ Option D: Terdapat baris dengan semua elemen nol
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*(x + y)
-Step Expected: 2*x + 2*y
+Step Expression: `2*(x + y)`
+Step Expected: `2*x + 2*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*3
-Step Expected: 6
+Step Expression: `2*3`
+Step Expected: `6`
 
 #
 Step Type: true-false
@@ -374,16 +374,16 @@ Correct Answer: True
 Problem Description: Tunjukkan bahwa sistem x + 2y = 4 dan 2x + 4y = 8 memiliki infinit banyak solusi
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,2,4],[2,4,8]]
-Step Expected: [[1,2,4],[2,4,8]]
+Step Expression: `[[1,2,4],[2,4,8]]`
+Step Expected: `[[1,2,4],[2,4,8]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,2,4],[2,4,8]]|R_2\to R_2-2R_1
-Step Expected: [[1,2,4],[0,0,0]]
+Step Expression: `[[1,2,4],[2,4,8]]|R_2\to R_2-2R_1`
+Step Expected: `[[1,2,4],[0,0,0]]`
 
 #
 Step Type: multiple-choice-single
@@ -396,10 +396,10 @@ Option D: Semua variabel bernilai nol
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 4 - 2*t
+Step Expression: `x`
+Step Expected: `4 - 2*t`
 
 
 ###Problem Title: Sistem Linear dengan Parameter
@@ -416,16 +416,16 @@ Option D: Konstanta ruas kanan nol
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,2],[2,k]]
-Step Expected: [[1,2],[2,k]]
+Step Expression: `[[1,2],[2,k]]`
+Step Expected: `[[1,2],[2,k]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 1*k - 2*2
-Step Expected: k - 4
+Step Expression: `1*k - 2*2`
+Step Expected: `k - 4`
 
 #
 Step Type: true-false
@@ -454,16 +454,16 @@ Step Description: Solusi sistem adalah titik potong kedua garis
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 3 + 2
-Step Expected: 5
+Step Expression: `3 + 2`
+Step Expected: `5`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*3 - 2
-Step Expected: 4
+Step Expression: `2*3 - 2`
+Step Expected: `4`
 
 
 ###Problem Title: Sistem Linear Homogen
@@ -486,34 +486,34 @@ Option D: Tidak ada solusi
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 3*y
+Step Expression: `x`
+Step Expected: `3*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*(3*y) + y
-Step Expected: 0
+Step Expression: `2*(3*y) + y`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 7*y
-Step Expected: 0
+Step Expression: `7*y`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 0
+Step Expression: `y`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 0
+Step Expression: `x`
+Step Expected: `0`
 
 
 ###Problem Title: Sistem 2x2 dengan Pecahan
@@ -530,148 +530,149 @@ Option D: Abaikan penyebut
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 6*((1/2)*x + (1/3)*y)
-Step Expected: 3*x + 2*y
+Step Expression: `6*((1/2)*x + (1/3)*y)`
+Step Expected: `3*x + 2*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 6*2
-Step Expected: 12
+Step Expression: `6*2`
+Step Expected: `12`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 4*((1/4)*x - (1/2)*y)
-Step Expected: x - 2*y
+Step Expression: `4*((1/4)*x - (1/2)*y)`
+Step Expected: `x - 2*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 4*(-1)
-Step Expected: -4
+Step Expression: `4*(-1)`
+Step Expected: `-4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: (3*x + 2*y) + (x - 2*y)
-Step Expected: 12 + (-4)
+Step Expression: `(3*x + 2*y) + (x - 2*y)`
+Step Expected: `12 + (-4)`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 2
+Step Expression: `x`
+Step Expected: `2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2 - 2*y
-Step Expected: -4
+Step Expression: `2 - 2*y`
+Step Expected: `-4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 3
+Step Expression: `y`
+Step Expected: `3`
 
 
 ###Problem Title: Aplikasi - Soal Cerita Uang
 Problem Description: Ana membeli 3 buku dan 2 pensil seharga Rp 23000. Budi membeli 2 buku dan 1 pensil seharga Rp 15000. Tentukan harga satu buku
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Misalkan x = harga satu {blank} dan y = harga satu pensil
-Correct Answer: buku
+Step Description: Misalkan x = harga satu ___ dan y = harga satu pensil (isi nama barang)
+Step Expression: `x`
+Step Expected: `buku`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 3*x + 2*y
-Step Expected: 23000
+Step Expression: `3*x + 2*y`
+Step Expected: `23000`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*x + y
-Step Expected: 15000
+Step Expression: `2*x + y`
+Step Expected: `15000`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 15000 - 2*x
+Step Expression: `y`
+Step Expected: `15000 - 2*x`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 3*x + 2*(15000 - 2*x)
-Step Expected: 23000
+Step Expression: `3*x + 2*(15000 - 2*x)`
+Step Expected: `23000`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 3*x + 30000 - 4*x
-Step Expected: 23000
+Step Expression: `3*x + 30000 - 4*x`
+Step Expected: `23000`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 7000
+Step Expression: `x`
+Step Expected: `7000`
 
 
 ###Problem Title: Aplikasi - Soal Cerita Campuran
 Problem Description: Campuran berisi 40% alkohol dicampur dengan campuran 70% alkohol. Jika 6 liter campuran pertama dicampur dengan 4 liter campuran kedua, berapa persen alkohol dalam campuran akhir?
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 0.4*6
-Step Expected: 2.4
+Step Expression: `0.4*6`
+Step Expected: `2.4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 0.7*4
-Step Expected: 2.8
+Step Expression: `0.7*4`
+Step Expected: `2.8`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2.4 + 2.8
-Step Expected: 5.2
+Step Expression: `2.4 + 2.8`
+Step Expected: `5.2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 6 + 4
-Step Expected: 10
+Step Expression: `6 + 4`
+Step Expected: `10`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: (5.2/10)*100
-Step Expected: 52
+Step Expression: `(5.2/10)*100`
+Step Expected: `52`
 
 
 ###Problem Title: Sistem 3x3 dengan Variabel Bebas
 Problem Description: Selesaikan sistem x + 2y + z = 4 dan 2x + 4y + 2z = 8
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,2,1,4],[2,4,2,8]]
-Step Expected: [[1,2,1,4],[2,4,2,8]]
+Step Expression: `[[1,2,1,4],[2,4,2,8]]`
+Step Expected: `[[1,2,1,4],[2,4,2,8]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: [[1,2,1,4],[2,4,2,8]]|R_2\to R_2-2R_1
-Step Expected: [[1,2,1,4],[0,0,0,0]]
+Step Expression: `[[1,2,1,4],[2,4,2,8]]|R_2\to R_2-2R_1`
+Step Expected: `[[1,2,1,4],[0,0,0,0]]`
 
 #
 Step Type: multiple-choice-single
@@ -684,10 +685,10 @@ Option D: 3
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 4 - 2*s - t
+Step Expression: `x`
+Step Expected: `4 - 2*s - t`
 
 
 ###Problem Title: Identifikasi Jenis Sistem
@@ -724,80 +725,80 @@ Option D: Kalikan kedua persamaan dengan 10
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*(5*x + 3*y)
-Step Expected: 10*x + 6*y
+Step Expression: `2*(5*x + 3*y)`
+Step Expected: `10*x + 6*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*31
-Step Expected: 62
+Step Expression: `2*31`
+Step Expected: `62`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 3*(7*x - 2*y)
-Step Expected: 21*x - 6*y
+Step Expression: `3*(7*x - 2*y)`
+Step Expected: `21*x - 6*y`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 3*20
-Step Expected: 60
+Step Expression: `3*20`
+Step Expected: `60`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: (10*x + 6*y) + (21*x - 6*y)
-Step Expected: 62 + 60
+Step Expression: `(10*x + 6*y) + (21*x - 6*y)`
+Step Expected: `62 + 60`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 31*x
-Step Expected: 122
+Step Expression: `31*x`
+Step Expected: `122`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 122/31
+Step Expression: `x`
+Step Expected: `122/31`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 4
+Step Expression: `x`
+Step Expected: `4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 5*4 + 3*y
-Step Expected: 31
+Step Expression: `5*4 + 3*y`
+Step Expected: `31`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: (31-20)/3
+Step Expression: `y`
+Step Expected: `(31-20)/3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: y
-Step Expected: 11/3
+Step Expression: `y`
+Step Expected: `11/3`
 
 
 ###Problem Title: Verifikasi Solusi Sistem
 Problem Description: Periksa apakah (2,1,3) adalah solusi dari sistem x + y + z = 6, 2x - y = 3, dan x + 2z = 8
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2 + 1 + 3
-Step Expected: 6
+Step Expression: `2 + 1 + 3`
+Step Expected: `6`
 
 #
 Step Type: true-false
@@ -806,10 +807,10 @@ Step Description: Karena 2 + 1 + 3 = 6, persamaan pertama terpenuhi
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*2 - 1
-Step Expected: 3
+Step Expression: `2*2 - 1`
+Step Expected: `3`
 
 #
 Step Type: true-false
@@ -818,10 +819,10 @@ Step Description: Karena 2(2) - 1 = 3, persamaan kedua terpenuhi
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2 + 2*3
-Step Expected: 8
+Step Expression: `2 + 2*3`
+Step Expected: `8`
 
 #
 Step Type: true-false
@@ -834,28 +835,29 @@ Correct Answer: True
 Problem Description: Perusahaan memproduksi produk A dan B. Produk A memerlukan 2 jam mesin dan 1 jam tenaga kerja. Produk B memerlukan 1 jam mesin dan 2 jam tenaga kerja. Tersedia 100 jam mesin dan 80 jam tenaga kerja. Berapa maksimal produk A jika semua waktu mesin digunakan dan produk B tidak diproduksi?
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Misalkan x = jumlah produk {blank}
-Correct Answer: A
+Step Description: Misalkan x = jumlah produk ___ (nama produk)
+Step Expression: `x`
+Step Expected: `A`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 2*x
-Step Expected: 100
+Step Expression: `2*x`
+Step Expected: `100`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: x
-Step Expected: 50
+Step Expression: `x`
+Step Expected: `50`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Expression: 1*50
-Step Expected: 50
+Step Expression: `1*50`
+Step Expected: `50`
 
 #
 Step Type: true-false

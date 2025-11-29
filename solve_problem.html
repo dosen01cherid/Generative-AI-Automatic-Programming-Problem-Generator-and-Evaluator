@@ -528,6 +528,23 @@ print("✅ pyscript module created and registered")
       overflow-x: auto;
     }
 
+    /* Flashing animation for incorrect answers */
+    @keyframes flashIncorrect {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.02);
+      }
+    }
+
+    .flash-incorrect {
+      animation: flashIncorrect 0.5s ease-in-out 6;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.6) !important;
+    }
+
     /* Multiple Choice Styles */
     .mc-option {
       display: block;
@@ -1236,6 +1253,10 @@ print("✅ pyscript module created and registered")
             <span class="nav-icon">📤</span>
             <span>Submit Progress</span>
           </div>
+          <div class="nav-item" data-page="reset" style="border-top: 1px solid #e5e7eb; margin-top: 8px; padding-top: 8px;">
+            <span class="nav-icon">🔄</span>
+            <span>Reset Answers</span>
+          </div>
         </nav>
       </aside>
 
@@ -1346,6 +1367,9 @@ print("✅ pyscript module created and registered")
 
                 <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px">
                   <button id="freestyleSubmit" class="btn">Submit Attempt</button>
+                  <button id="getStructureString" class="btn ghost" style="background: #3b82f6; color: #fff" title="Get structure string for Moodle submission">
+                    📋 Get Structure String
+                  </button>
                   <button id="freestyleGiveUp" class="btn ghost" style="background: #f59e0b; color: #fff">
                     Give Up (Show Solution)
                   </button>
@@ -1655,6 +1679,47 @@ print("✅ pyscript module created and registered")
             </div>
           </div>
         </div>
+        <!-- Reset Page -->
+        <div id="resetPage" class="page">
+          <div class="panel">
+            <h3>🔄 Reset Answers</h3>
+            <p style="margin-bottom: 16px; color: #6b7280;">
+              This will clear all your saved answers and progress from the browser's local storage.
+              <strong>This action cannot be undone.</strong>
+            </p>
+
+            <div style="background: #fef2f2; border: 2px solid #fca5a5; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+              <h4 style="color: #dc2626; margin: 0 0 8px 0;">⚠️ Warning</h4>
+              <p style="margin: 0; color: #991b1b; font-size: 14px;">
+                Resetting will delete:
+              </p>
+              <ul style="margin: 8px 0 0 0; color: #991b1b; font-size: 14px;">
+                <li>All problem answers</li>
+                <li>All step completion status</li>
+                <li>All attempt history and scores</li>
+                <li>Timer data</li>
+              </ul>
+            </div>
+
+            <div style="display: flex; gap: 12px; flex-direction: column;">
+              <button id="resetAllBtn" class="btn" style="background: #dc2626; color: white; padding: 16px; font-size: 16px; font-weight: 600;">
+                🗑️ Reset All Answers
+              </button>
+
+              <button id="resetCurrentProblemBtn" class="btn" style="background: #f59e0b; color: white; padding: 14px;">
+                🔄 Reset Current Problem Only
+              </button>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
+              <h4 style="margin-bottom: 12px; color: #374151;">📊 Current Storage Info</h4>
+              <div id="storageInfo" style="background: #f9fafb; border-radius: 8px; padding: 16px; font-family: monospace; font-size: 13px; color: #374151;">
+                Loading storage information...
+              </div>
+            </div>
+          </div>
+        </div>
+
       </main>
     </div>
 
@@ -4696,18 +4761,17 @@ class ProblemSolverApp:
                     window.console.log(f"✅ Captured multi-blank answers: {new_answer}")
 
                 elif all_inputs.length > 0:
-                    # Single-blank mode: get single answer as array
-                    window.console.log("📝 Single-blank mode detected")
+                    # Single-blank mode: collect answer as list
+                    window.console.log(f"📝 Single-blank mode detected")
                     input_field = all_inputs[0]
                     value = input_field.value.strip()
 
-                    if value:
-                        new_answer = [value]
-                        window.console.log(f"✅ Captured answer: {new_answer}")
-                    else:
-                        window.console.warn("⚠️ Empty fill-blank input")
-                        window.alert("⚠️ Please enter an answer before saving")
+                    if not value:
+                        window.alert("⚠️ Please fill in the blank before saving")
                         return
+
+                    new_answer = [value]
+                    window.console.log(f"✅ Captured single-blank answer: {new_answer}")
                 else:
                     window.console.error("❌ Fill-blank input not found")
                     window.alert("❌ Error: Input field not found")
@@ -4990,7 +5054,7 @@ class ProblemSolverApp:
 
     def show_notification(self, message, notification_type="success"):
         """
-        Show a notification message to the user
+        Show a notification message to the user with flashing effect for errors
 
         Args:
             message: The message to display
@@ -5017,8 +5081,12 @@ class ProblemSolverApp:
         }
 
         color_scheme = colors.get(notification_type, colors["success"])
+        
+        # Add flashing class for error notifications
+        flash_class = " flash-incorrect" if notification_type == "error" else ""
 
         notification = document.createElement("div")
+        notification.className = flash_class.strip()
         notification.style.cssText = f"""
             position: fixed;
             top: 20px;
@@ -5671,7 +5739,7 @@ class ProblemSolverApp:
         # ✅ Hide original Submit/Finalize buttons and feedback
         submit_btn = container.querySelector(f"#submitBtn{step_idx}")
         finalize_btn = container.querySelector(f"#finalizeBtn{step_idx}")
-        feedback_div = container.querySelector(f"#stepFeedback{step_idx}")
+        feedback_div = container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
 
         if submit_btn:
             submit_btn.style.display = "none"
@@ -5791,18 +5859,34 @@ class ProblemSolverApp:
                     window.console.log(f"✅ Enabled TF button {i}")
         
         elif step_type == "fill-blank":
-            if is_require_correct:
-                window.console.log("👁️ Showing fill-blank in read-only mode (requireCorrect)")
+            # Only disable if requireCorrect AND the step has been finished
+            step_finished = step.get("finished", False)
+            if is_require_correct and step_finished:
+                window.console.log("👁️ Showing fill-blank in read-only mode (requireCorrect + finished)")
 
-                # Keep text input disabled
-                input_field = container.querySelector(".fill-blank-input")
-                if input_field:
-                    input_field.disabled = True
-                    input_field.readOnly = True
-                    input_field.style.pointerEvents = "none"
-                    input_field.style.opacity = "0.7"
-                    input_field.style.backgroundColor = "#f8fafc"
-                    window.console.log("✅ Kept fill-blank input disabled")
+                # Check if multi-blank or single-blank
+                labeled_inputs = container.querySelectorAll("[data-blank-label]")
+                
+                if labeled_inputs.length > 0:
+                    # Multi-blank mode: disable all labeled inputs
+                    window.console.log(f"👁️ Disabling {labeled_inputs.length} multi-blank inputs")
+                    for input_field in labeled_inputs:
+                        input_field.disabled = True
+                        input_field.readOnly = True
+                        input_field.style.pointerEvents = "none"
+                        input_field.style.opacity = "0.7"
+                        input_field.style.backgroundColor = "#f8fafc"
+                else:
+                    # Single-blank mode: disable the single input
+                    window.console.log("👁️ Disabling single-blank input")
+                    input_field = container.querySelector(".fill-blank-input")
+                    if input_field:
+                        input_field.disabled = True
+                        input_field.readOnly = True
+                        input_field.style.pointerEvents = "none"
+                        input_field.style.opacity = "0.7"
+                        input_field.style.backgroundColor = "#f8fafc"
+                        window.console.log("✅ Kept fill-blank input disabled")
 
                 # Show read-only notice
                 readonly_notice = document.createElement("div")
@@ -5812,16 +5896,33 @@ class ProblemSolverApp:
             else:
                 window.console.log("📝 Enabling fill-blank editing")
 
-                # Re-enable text input
-                input_field = container.querySelector(".fill-blank-input")
-                if input_field:
-                    input_field.disabled = False
-                    input_field.readOnly = False
-                    input_field.style.pointerEvents = "auto"
-                    input_field.style.opacity = "1"
-                    input_field.style.backgroundColor = "#ffffff"
-                    input_field.focus()
-                    window.console.log("✅ Enabled fill-blank input")
+                # Check if multi-blank or single-blank
+                labeled_inputs = container.querySelectorAll("[data-blank-label]")
+                
+                if labeled_inputs.length > 0:
+                    # Multi-blank mode: enable all labeled inputs
+                    window.console.log(f"📝 Enabling {labeled_inputs.length} multi-blank inputs")
+                    for i, input_field in enumerate(labeled_inputs):
+                        input_field.disabled = False
+                        input_field.readOnly = False
+                        input_field.style.pointerEvents = "auto"
+                        input_field.style.opacity = "1"
+                        input_field.style.backgroundColor = "#ffffff"
+                        if i == 0:  # Focus on first input
+                            input_field.focus()
+                    window.console.log("✅ Enabled all multi-blank inputs")
+                else:
+                    # Single-blank mode: enable the single input
+                    window.console.log("📝 Enabling single-blank input")
+                    input_field = container.querySelector(".fill-blank-input")
+                    if input_field:
+                        input_field.disabled = False
+                        input_field.readOnly = False
+                        input_field.style.pointerEvents = "auto"
+                        input_field.style.opacity = "1"
+                        input_field.style.backgroundColor = "#ffffff"
+                        input_field.focus()
+                        window.console.log("✅ Enabled fill-blank input")
         
         elif step_type in ["freestyle", "math-expression"]:
             window.console.log("👁️ Showing math expression in read-only mode")
@@ -6162,158 +6263,144 @@ class ProblemSolverApp:
         container.appendChild(btn_container)
 
     def _recreate_fill_blank_step(self, container, step_idx, saved_step, original_step_data):
-      """Recreate a fill-in-the-blank step for editing"""
+      """Recreate a fill-in-the-blank step for editing (handles both single and multi-blank)"""
       window.console.log(f"📝 Recreating Fill-blank step {step_idx}")
 
-      # ✅ Check if this is multi-blank mode
-      blank_config = original_step_data.get("blank_config", {})
-      blank_mode = blank_config.get("mode", "single")
+      # Use unified method to detect blank mode
+      is_multi_blank = self._detect_blank_mode(original_step_data)
+      
+      correct_answers = original_step_data.get("correct_answers", {})
+      user_answers = saved_step.get("user_answers", [])
 
-      window.console.log(f"📝 Fill-blank mode: {blank_mode}")
+      window.console.log(f"📝 Fill-blank mode: {'multi' if is_multi_blank else 'single'}")
+      window.console.log(f"User answers: {user_answers}")
 
-      # ✅ Handle multi-blank mode separately
-      if blank_mode == "multi":
-          self._recreate_multi_blank_step(container, step_idx, saved_step, original_step_data)
-          return
-
-      # ✅ Get question from original step data (single-blank mode)
-      question = original_step_data.get("text", "")
-
-      # If no text field, try description blocks
-      if not question:
+      if is_multi_blank:
+          # Multi-blank mode
+          # Get question from description blocks
           desc_blocks = original_step_data.get("description", [])
           question = self.render_content_blocks(desc_blocks)
 
-      if not question.strip():
-          question = f"Fill in the blank: Step {step_idx + 1}"
+          # Replace {blank} with ___ for visual display
+          question = question.replace("{blank}", "___")
 
-      # Get user's previous answer from saved_step
-      user_answer = saved_step.get("user_answers", [])
+          if not question.strip():
+              question = f"Fill in the blanks: Step {step_idx + 1}"
 
-      window.console.log(f"Question: {question[:100]}...")
-      window.console.log(f"User answer: {user_answer}")
-
-      # Create question with blank
-      q_div = document.createElement("div")
-      q_div.style.cssText = "margin-bottom:16px;font-size:15px;color:#334155;line-height:1.6;"
-
-      # Replace ___ with input field
-      if "___" in question:
-          parts = question.split("___")
-
-          span1 = document.createElement("span")
-          span1.textContent = parts[0]
-          q_div.appendChild(span1)
-
-          input_field = document.createElement("input")
-          input_field.type = "text"
-          input_field.className = "fill-blank-input"
-          input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;min-width:150px;font-size:15px;margin:0 4px;transition:all 0.2s;"
-          input_field.placeholder = "Your answer..."
-
-          if user_answer and len(user_answer) > 0:
-              input_field.value = user_answer[0]
-
-          # Add focus styling
-          input_field.addEventListener("focus", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#3b82f6')))
-          input_field.addEventListener("blur", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#cbd5e1')))
-
-          q_div.appendChild(input_field)
-
-          if len(parts) > 1:
-              span2 = document.createElement("span")
-              span2.textContent = parts[1]
-              q_div.appendChild(span2)
-      else:
+          # Display question
+          q_div = document.createElement("div")
+          q_div.style.cssText = "margin-bottom:16px;font-size:15px;color:#334155;line-height:1.6;"
           q_div.innerHTML = question
-
-          # Add input below
-          input_field = document.createElement("input")
-          input_field.type = "text"
-          input_field.className = "fill-blank-input"
-          input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;width:100%;font-size:15px;margin-top:12px;transition:all 0.2s;"
-          input_field.placeholder = "Your answer..."
-
-          if user_answer and len(user_answer) > 0:
-              input_field.value = user_answer[0]
-
-          # Add focus styling
-          input_field.addEventListener("focus", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#3b82f6')))
-          input_field.addEventListener("blur", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#cbd5e1')))
-
           container.appendChild(q_div)
-          container.appendChild(input_field)
-          return
 
-      container.appendChild(q_div)
+          # Create input fields for each blank (A, B, C, etc.)
+          if isinstance(correct_answers, dict):
+              # Sort labels alphabetically
+              labels = sorted(correct_answers.keys())
 
-    def _recreate_multi_blank_step(self, container, step_idx, saved_step, original_step_data):
-      """Recreate a multi-blank fill-in-the-blank step for editing"""
-      window.console.log(f"📝 Recreating Multi-blank fill-blank step {step_idx}")
+              for label in labels:
+                  # Create labeled input section
+                  blank_section = document.createElement("div")
+                  blank_section.style.cssText = "margin-bottom:12px;"
 
-      # Get question from description blocks
-      desc_blocks = original_step_data.get("description", [])
-      question = self.render_content_blocks(desc_blocks)
+                  # Label
+                  label_elem = document.createElement("div")
+                  label_elem.style.cssText = "font-weight:600;color:#0b6efd;margin-bottom:4px;font-size:14px;"
+                  label_elem.textContent = f"Blank {label}:"
+                  blank_section.appendChild(label_elem)
 
-      # ✅ Replace {blank} with ___ for visual display
-      question = question.replace("{blank}", "___")
+                  # Input field
+                  input_field = document.createElement("input")
+                  input_field.type = "text"
+                  input_field.className = f"fill-blank-input fill-blank-{label}"
+                  input_field.setAttribute("data-blank-label", label)
+                  input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;width:100%;font-size:15px;transition:all 0.2s;"
+                  input_field.placeholder = f"Enter answer for blank {label}..."
 
-      if not question.strip():
-          question = f"Fill in the blanks: Step {step_idx + 1}"
+                  # Populate with user's previous answer if exists
+                  if isinstance(user_answers, dict) and label in user_answers:
+                      input_field.value = user_answers[label]
 
-      # Get correct answers structure (dict with A, B, C keys)
-      correct_answers = original_step_data.get("correct_answers", {})
+                  # Add focus styling
+                  input_field.addEventListener("focus", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#3b82f6')))
+                  input_field.addEventListener("blur", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#cbd5e1')))
 
-      # Get user's previous answers from saved_step
-      user_answers = saved_step.get("user_answers", {})
-      window.console.log(f"User answers: {user_answers}")
+                  blank_section.appendChild(input_field)
+                  container.appendChild(blank_section)
+          else:
+              # Fallback for unexpected format
+              error_div = document.createElement("div")
+              error_div.style.cssText = "color:#ef4444;padding:12px;background:#fee2e2;border-radius:6px;"
+              error_div.textContent = "⚠️ Error: Invalid multi-blank configuration"
+              container.appendChild(error_div)
+      else:
+          # Single-blank mode
+          # Get question from original step data
+          question = original_step_data.get("text", "")
 
-      # Display question
-      q_div = document.createElement("div")
-      q_div.style.cssText = "margin-bottom:16px;font-size:15px;color:#334155;line-height:1.6;"
-      q_div.innerHTML = question
-      container.appendChild(q_div)
+          # If no text field, try description blocks
+          if not question:
+              desc_blocks = original_step_data.get("description", [])
+              question = self.render_content_blocks(desc_blocks)
 
-      # Create input fields for each blank (A, B, C, etc.)
-      if isinstance(correct_answers, dict):
-          # Sort labels alphabetically
-          labels = sorted(correct_answers.keys())
+          if not question.strip():
+              question = f"Fill in the blank: Step {step_idx + 1}"
 
-          for label in labels:
-              # Create labeled input section
-              blank_section = document.createElement("div")
-              blank_section.style.cssText = "margin-bottom:12px;"
+          window.console.log(f"Question: {question[:100]}...")
 
-              # Label
-              label_elem = document.createElement("div")
-              label_elem.style.cssText = "font-weight:600;color:#0b6efd;margin-bottom:4px;font-size:14px;"
-              label_elem.textContent = f"Blank {label}:"
-              blank_section.appendChild(label_elem)
+          # Create question with blank
+          q_div = document.createElement("div")
+          q_div.style.cssText = "margin-bottom:16px;font-size:15px;color:#334155;line-height:1.6;"
 
-              # Input field
+          # Replace ___ with input field
+          if "___" in question:
+              parts = question.split("___")
+
+              span1 = document.createElement("span")
+              span1.textContent = parts[0]
+              q_div.appendChild(span1)
+
               input_field = document.createElement("input")
               input_field.type = "text"
-              input_field.className = f"fill-blank-input fill-blank-{label}"
-              input_field.setAttribute("data-blank-label", label)
-              input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;width:100%;font-size:15px;transition:all 0.2s;"
-              input_field.placeholder = f"Enter answer for blank {label}..."
+              input_field.className = "fill-blank-input"
+              input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;min-width:150px;font-size:15px;margin:0 4px;transition:all 0.2s;"
+              input_field.placeholder = "Your answer..."
 
-              # Populate with user's previous answer if exists
-              if isinstance(user_answers, dict) and label in user_answers:
-                  input_field.value = user_answers[label]
+              if user_answers and len(user_answers) > 0:
+                  input_field.value = user_answers[0]
 
               # Add focus styling
               input_field.addEventListener("focus", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#3b82f6')))
               input_field.addEventListener("blur", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#cbd5e1')))
 
-              blank_section.appendChild(input_field)
-              container.appendChild(blank_section)
-      else:
-          # Fallback for unexpected format
-          error_div = document.createElement("div")
-          error_div.style.cssText = "color:#ef4444;padding:12px;background:#fee2e2;border-radius:6px;"
-          error_div.textContent = "⚠️ Error: Invalid multi-blank configuration"
-          container.appendChild(error_div)
+              q_div.appendChild(input_field)
+
+              if len(parts) > 1:
+                  span2 = document.createElement("span")
+                  span2.textContent = parts[1]
+                  q_div.appendChild(span2)
+          else:
+              q_div.innerHTML = question
+
+              # Add input below
+              input_field = document.createElement("input")
+              input_field.type = "text"
+              input_field.className = "fill-blank-input"
+              input_field.style.cssText = "border:2px solid #cbd5e1;border-radius:6px;padding:8px 12px;width:100%;font-size:15px;margin-top:12px;transition:all 0.2s;"
+              input_field.placeholder = "Your answer..."
+
+              if user_answers and len(user_answers) > 0:
+                  input_field.value = user_answers[0]
+
+              # Add focus styling
+              input_field.addEventListener("focus", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#3b82f6')))
+              input_field.addEventListener("blur", create_proxy(lambda e: setattr(e.target.style, 'borderColor', '#cbd5e1')))
+
+              container.appendChild(q_div)
+              container.appendChild(input_field)
+              return
+
+          container.appendChild(q_div)
 
     def _recreate_multi_mc_step(self, container, step_idx, saved_step, original_step_data):
       """Recreate a multi-mc step for editing with dropdowns"""
@@ -6531,6 +6618,36 @@ class ProblemSolverApp:
             array[i], array[j] = array[j], array[i]
         return array
 
+    def _detect_blank_mode(self, step_data):
+        """
+        Unified method to detect if fill-blank is single or multi-blank mode.
+        
+        This method conforms to the export format from create_problem.html:
+        - Single blank: blank_config.mode = "single", correct_answers is a list
+        - Multi blank: blank_config.mode = "multi", correct_answers is a dict
+        
+        Returns:
+            bool: True if multi-blank, False if single-blank
+        """
+        # Priority 1: Check blank_config.mode (most reliable)
+        blank_config = step_data.get("blank_config", {})
+        blank_mode = blank_config.get("mode", None)
+        
+        if blank_mode == "multi":
+            return True
+        elif blank_mode == "single":
+            return False
+        
+        # Priority 2: Fallback to checking correct_answers structure
+        # Multi-blank uses dict, single-blank uses list
+        correct_answers = step_data.get("correct_answers", {})
+        is_multi = isinstance(correct_answers, dict)
+        
+        # Log the detection for debugging
+        window.console.log(f"🔍 _detect_blank_mode: mode={blank_mode}, correct_answers type={type(correct_answers).__name__}, is_multi={is_multi}")
+        
+        return is_multi
+
     def create_hangman_ui(self, correct_answer, step_idx):
         """Create an interactive hangman UI with a start button"""
         # Convert answer to string and get length
@@ -6541,6 +6658,8 @@ class ProblemSolverApp:
 
         # Generate unique ID for this hangman instance
         hangman_id = f"hangman_{step_idx}"
+        window.console.log(f"🔍 create_hangman_ui called: answer={answer_str}, step_idx={step_idx}")
+        window.console.log(f"🔍 create_hangman_ui: hangman_id = {hangman_id}")
 
         # Create container with button to start hangman
         hangman_html = f"""
@@ -6554,6 +6673,7 @@ class ProblemSolverApp:
             <div id='{hangman_id}_game' style='display:none;margin-top:12px;'></div>
         </div>
         """
+        window.console.log(f"🔍 create_hangman_ui: returning HTML, length = {len(hangman_html)}")
         return hangman_html
 
     def toggle_hangman_accordion(self, hangman_id):
@@ -6579,6 +6699,33 @@ class ProblemSolverApp:
                 icon = accordion_item.querySelector(".accordion-icon")
                 if icon:
                     icon.innerHTML = "▼"
+
+    def toggle_blank_accordion(self, accordion_id):
+        """Toggle accordion visibility for multi-blank"""
+        content = document.querySelector(f"#accordion_content_{accordion_id}")
+        if not content:
+            window.console.log(f"⚠️ Could not find accordion content: {accordion_id}")
+            return
+
+        # Toggle display
+        if content.style.display == "none":
+            content.style.display = "block"
+            # Update icon
+            accordion_item = document.querySelector(f".blank-accordion-item[data-blank-id='{accordion_id}']")
+            if accordion_item:
+                icon = accordion_item.querySelector(".accordion-icon")
+                if icon:
+                    icon.innerHTML = "▲"
+            window.console.log(f"✅ Opened blank accordion: {accordion_id}")
+        else:
+            content.style.display = "none"
+            # Update icon
+            accordion_item = document.querySelector(f".blank-accordion-item[data-blank-id='{accordion_id}']")
+            if accordion_item:
+                icon = accordion_item.querySelector(".accordion-icon")
+                if icon:
+                    icon.innerHTML = "▼"
+            window.console.log(f"✅ Closed blank accordion: {accordion_id}")
 
     def start_hangman(self, hangman_id, answer_str):
         """Initialize and start the hangman game"""
@@ -6871,6 +7018,38 @@ class ProblemSolverApp:
         if telegram_btn:
             telegram_btn.addEventListener("click", create_proxy(lambda e: self.share_via_telegram(e)))
 
+        # Reset buttons
+        reset_all_btn = document.querySelector("#resetAllBtn")
+        if reset_all_btn:
+            def handle_reset_all(e):
+                confirmed = window.confirm(
+                    "⚠️ WARNING: This will delete ALL your saved answers and progress!\\n\\n"
+                    "This action cannot be undone.\\n\\n"
+                    "Are you sure you want to continue?"
+                )
+                if confirmed:
+                    self.reset_all_answers()
+            reset_all_btn.addEventListener("click", create_proxy(handle_reset_all))
+            window.console.log("✅ Reset All button handler attached")
+
+        reset_current_btn = document.querySelector("#resetCurrentProblemBtn")
+        if reset_current_btn:
+            def handle_reset_current(e):
+                current_prob_idx = self.current_problem_index
+                if current_prob_idx is None:
+                    window.alert("⚠️ Please open a problem first")
+                    return
+
+                confirmed = window.confirm(
+                    f"⚠️ This will reset Problem {current_prob_idx + 1}\\n\\n"
+                    "All answers and progress for this problem will be deleted.\\n\\n"
+                    "Continue?"
+                )
+                if confirmed:
+                    self.reset_current_problem()
+            reset_current_btn.addEventListener("click", create_proxy(handle_reset_current))
+            window.console.log("✅ Reset Current Problem button handler attached")
+
         # Tab switching for load page
         tab_buttons = document.querySelectorAll(".load-tab")
         for i in range(tab_buttons.length):
@@ -7068,7 +7247,12 @@ class ProblemSolverApp:
           def delayed_init():
               self.ensure_freestyle_initialized()
           window.setTimeout(create_proxy(delayed_init), 100)
-        
+
+        if page_name == "reset":
+          def delayed_update():
+              self.update_storage_info()
+          window.setTimeout(create_proxy(delayed_update), 100)
+
         self.close_sidebar(None)
     
     def toggle_sidebar(self, event):
@@ -8214,6 +8398,113 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.error(traceback.format_exc())
 
 
+    
+    def reset_all_answers(self):
+        """Reset all answers and progress"""
+        import js
+        try:
+            window.console.log("🔄 Resetting all answers...")
+
+            # Clear only answer/progress keys - PRESERVE the problem set!
+            # DO NOT remove 'problem_solver_problem_set' - that's the problem set itself
+            window.localStorage.removeItem('problem_solver_states')  # User answers
+            window.localStorage.removeItem('problem_solver_current_index')  # Current position
+            window.localStorage.removeItem('score_display_manager')  # Score display
+            window.localStorage.removeItem('score_edits')  # Score edits
+            window.localStorage.removeItem('score_tracker_state')  # Score tracker
+            window.localStorage.removeItem('credit_data')  # Credit data
+
+            window.console.log("✅ All localStorage data cleared")
+
+            # Reset internal state
+            self.problem_states = {}
+            self.solve_states = {}
+            if hasattr(self, 'step_timers'):
+                self.step_timers = {}
+
+            window.alert("✅ All answers and progress have been reset!\n\nPlease reload the page to start fresh.")
+
+        except Exception as e:
+            window.console.error(f"❌ Reset failed: {e}")
+            window.alert(f"❌ Reset failed: {e}")
+
+    def reset_current_problem(self):
+        """Reset only the current problem's answers"""
+        import js
+        try:
+            current_prob_idx = self.current_problem_index
+            if current_prob_idx is None:
+                window.alert("⚠️ No problem is currently open")
+                return
+
+            window.console.log(f"🔄 Resetting problem {current_prob_idx}...")
+
+            # Remove from problem_states
+            if current_prob_idx in self.problem_states:
+                del self.problem_states[current_prob_idx]
+
+            # Remove from solve_states
+            if current_prob_idx in self.solve_states:
+                del self.solve_states[current_prob_idx]
+
+            # Save updated state
+            self.save_to_storage()
+
+            window.console.log(f"✅ Problem {current_prob_idx} reset")
+            window.alert(f"✅ Problem {current_prob_idx + 1} has been reset!\n\nPlease reload the problem to start fresh.")
+
+        except Exception as e:
+            window.console.error(f"❌ Reset failed: {e}")
+            window.alert(f"❌ Reset failed: {e}")
+
+    def get_storage_info(self):
+        """Get information about current localStorage usage"""
+        import js
+        try:
+            info = {
+                "problems_count": len(self.problem_states),
+                "total_steps": sum(len(steps) for steps in self.problem_states.values()),
+                "completed_problems": sum(1 for prob_idx in self.problem_states if self.is_problem_complete(prob_idx))
+            }
+
+            # Get localStorage sizes
+            try:
+                problem_states_str = window.localStorage.getItem('problem_solver_states')
+                if problem_states_str:
+                    info["problem_states_size"] = len(problem_states_str)
+            except:
+                info["problem_states_size"] = 0
+
+            return info
+        except Exception as e:
+            window.console.error(f"Error getting storage info: {e}")
+            return {}
+
+
+    def update_storage_info(self):
+        """Update the storage info display on reset page"""
+        info_div = document.querySelector("#storageInfo")
+        if not info_div:
+            return
+
+        try:
+            info = self.get_storage_info()
+
+            size_kb = info.get("problem_states_size", 0) / 1024
+
+            html = f"""
+                <div style='margin-bottom: 8px;'><strong>Problems with saved data:</strong> {info.get('problems_count', 0)}</div>
+                <div style='margin-bottom: 8px;'><strong>Total steps saved:</strong> {info.get('total_steps', 0)}</div>
+                <div style='margin-bottom: 8px;'><strong>Completed problems:</strong> {info.get('completed_problems', 0)}</div>
+                <div><strong>Storage size:</strong> {size_kb:.2f} KB</div>
+            """
+
+            info_div.innerHTML = html
+            window.console.log("✅ Storage info updated")
+        except Exception as e:
+            info_div.innerHTML = f"<div style='color: #dc2626;'>Error loading storage info: {e}</div>"
+            window.console.error(f"Error updating storage info: {e}")
+
     def load_from_storage(self):
         """Load from localStorage - problem_set compressed, problem_states uncompressed"""
         try:
@@ -8933,6 +9224,7 @@ This demonstrates the complete format for creating your own problem sets!
       for step_idx, step_data in enumerate(steps):
           step_div = document.createElement("div")
           step_div.className = "panel step"
+          step_div.id = f"step{index}_{step_idx}"
 
           step_type = step_data.get("step_type", "math-expression")
           if step_type == "step-by-step":
@@ -8946,17 +9238,21 @@ This demonstrates the complete format for creating your own problem sets!
 
           # Create UI based on type
           if step_type == "math-expression":
-              self.create_math_expression_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_math_expression_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multiple-choice-single":
-              self.create_mc_single_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_mc_single_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multiple-choice-multiple":
-              self.create_mc_multiple_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_mc_multiple_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "multi-mc":
-              self.create_multi_mc_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_multi_mc_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "true-false":
-              self.create_truefalse_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              self.create_truefalse_ui(step_div, index, step_idx, step_data, desc_html, len(steps))
           elif step_type == "fill-blank":
-              self.create_fillblank_ui(step_div, step_idx, step_data, desc_html, len(steps))
+              # Unified handling for both single-blank and multi-blank
+              window.console.log(f"📝 Creating fill-blank UI for step {step_idx}")
+              must_correct = step_data.get("requireCorrect", False)
+              must_correct_badge = "🔒 Must be correct" if must_correct else ""
+              self.create_fill_blank_ui(step_div, index, step_idx, step_data, desc_html, len(steps), must_correct_badge)
           else:
               window.console.error(f"Unknown step type: {step_type}")
               continue
@@ -9093,7 +9389,7 @@ This demonstrates the complete format for creating your own problem sets!
 
       return "".join(html_parts)
     
-    def create_math_expression_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_math_expression_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for math expression problems with submit and finalize buttons"""
       must_correct = step_data.get("requireCorrect", False)
 
@@ -9188,7 +9484,7 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
     
-    def create_mc_single_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_mc_single_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for multiple choice single answer"""
       options = step_data.get("options", [])
       must_correct = step_data.get("requireCorrect", False)  # ✅ NEW
@@ -9222,7 +9518,7 @@ This demonstrates the complete format for creating your own problem sets!
         <button class='btn submit-step' style='margin-top:12px;'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
-      <div id='stepFeedback{step_idx}' class='step-feedback'></div>
+      <div id='stepFeedback{index}_{step_idx}' class='step-feedback'></div>
       """
 
       # Add click handlers to options
@@ -9255,10 +9551,15 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
     
-    def create_mc_multiple_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_mc_multiple_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for multiple choice multiple answers"""
       options = step_data.get("options", [])
       must_correct = step_data.get("requireCorrect", False)  # ✅ NEW
+
+      # 🔍 DEBUG: Log container state BEFORE recreation
+      existing_checkboxes = step_div.querySelectorAll(f"input[name='mc_multiple_{step_idx}']")
+      window.console.log(f"🔍 BEFORE innerHTML: {existing_checkboxes.length} checkboxes in container")
+      window.console.log(f"🔍 Container element: {step_div.tagName}, id={step_div.id if step_div.id else 'no-id'}, class={step_div.className}")
 
       # ✅ NEW: Badge for must_correct
       must_correct_badge = ""
@@ -9289,8 +9590,12 @@ This demonstrates the complete format for creating your own problem sets!
         <button class='btn submit-step' style='margin-top:12px;'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
-      <div id='stepFeedback{step_idx}' class='step-feedback'></div>
+      <div id='stepFeedback{index}_{step_idx}' class='step-feedback'></div>
       """
+
+      # 🔍 DEBUG: Log container state AFTER recreation
+      new_checkboxes = step_div.querySelectorAll(f"input[name='mc_multiple_{step_idx}']")
+      window.console.log(f"🔍 AFTER innerHTML: {new_checkboxes.length} checkboxes in container")
 
       # Add click handlers
       option_labels = step_div.querySelectorAll(".mc-option")
@@ -9328,33 +9633,48 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
 
-    def create_multi_blank_ui(self, step_div, step_idx, step_data, desc_html, total_steps, must_correct_badge):
-      """Create UI for multi-blank fill-in-the-blank questions"""
+    def create_fill_blank_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps, must_correct_badge):
+      """Create UI for fill-in-the-blank questions (both single and multi-blank)"""
       import html as html_module
 
-      window.console.log(f"🔧 Creating Multi-blank UI for step {step_idx}")
-
-      # Get correct answers structure (dict with A, B, C keys)
+      # Use unified method to detect blank mode
+      is_multi_blank = self._detect_blank_mode(step_data)
       correct_answers = step_data.get("correct_answers", {})
 
-      # ✅ Replace {blank} with inline text inputs
-      if isinstance(correct_answers, dict):
-          labels = sorted(correct_answers.keys())
-          for label in labels:
-              # Create inline input for each blank
+      if is_multi_blank:
+          window.console.log(f"🔧 Creating Multi-blank UI for step {step_idx}")
+          
+          # Replace {blank} with inline text inputs
+          if isinstance(correct_answers, dict):
+              labels = sorted(correct_answers.keys())
+              for label in labels:
+                  # Create inline input for each blank
+                  input_html = f"""<input
+                      type='text'
+                      class='fill-blank-input fill-blank-{label}'
+                      data-blank-label='{label}'
+                      style='display:inline-block;min-width:150px;max-width:250px;padding:8px 12px;
+                             border:2px solid #0b6efd;border-radius:6px;font-size:16px;
+                             margin:0 4px;vertical-align:middle;'
+                      placeholder='({label})'
+                  />"""
+                  # Replace first occurrence of {blank} with the input field
+                  desc_html = desc_html.replace("{blank}", input_html, 1)
+          else:
+              # Fallback: just replace with single input
               input_html = f"""<input
                   type='text'
-                  class='fill-blank-input fill-blank-{label}'
-                  data-blank-label='{label}'
+                  class='fill-blank-input'
                   style='display:inline-block;min-width:150px;max-width:250px;padding:8px 12px;
                          border:2px solid #0b6efd;border-radius:6px;font-size:16px;
                          margin:0 4px;vertical-align:middle;'
-                  placeholder='({label})'
+                  placeholder='answer'
               />"""
-              # Replace first occurrence of {{blank}} with the input field
-              desc_html = desc_html.replace("{blank}", input_html, 1)
+              desc_html = desc_html.replace("{blank}", input_html)
       else:
-          # Fallback: just replace with single input
+          window.console.log(f"🔧 Creating Single-blank UI for step {step_idx}")
+          
+          # Replace ___ or {blank} with inline text input
           input_html = f"""<input
               type='text'
               class='fill-blank-input'
@@ -9363,7 +9683,15 @@ This demonstrates the complete format for creating your own problem sets!
                      margin:0 4px;vertical-align:middle;'
               placeholder='answer'
           />"""
-          desc_html = desc_html.replace("{blank}", input_html)
+          
+          # Replace both ___ and {blank} with input field
+          if "___" in desc_html:
+              desc_html = desc_html.replace("___", input_html, 1)
+          elif "{blank}" in desc_html:
+              desc_html = desc_html.replace("{blank}", input_html, 1)
+          else:
+              # No placeholder found, add input at the end
+              desc_html += f"<br><br>{input_html}"
 
       html_content = f"""
           <div class='step-header'>
@@ -9378,40 +9706,40 @@ This demonstrates the complete format for creating your own problem sets!
 
           <div style='margin-top:20px;'>
               <button id='submitBtn{step_idx}' class='btn-primary' style='padding:10px 24px;'>
-                  Submit Answers
+                  {'Submit Answers' if is_multi_blank else 'Submit Answer'}
               </button>
           </div>
 
-          <div id='stepFeedback{step_idx}'></div>
+          <div id='stepFeedback{index}_{step_idx}'></div>
       """
 
       # Set innerHTML
       step_div.innerHTML = html_content
-      window.console.log(f"📝 Multi-blank HTML set for step {step_idx}")
+      window.console.log(f"📝 Fill-blank HTML set for step {step_idx} ({'multi' if is_multi_blank else 'single'}-blank mode)")
 
       # Wire up submit button
       submit_btn = step_div.querySelector(f"#submitBtn{step_idx}")
 
       if submit_btn:
-          window.console.log(f"✅ Found submit button for multi-blank step {step_idx}")
+          window.console.log(f"✅ Found submit button for fill-blank step {step_idx}")
 
           def submit_handler(event):
-              window.console.log(f"🔘 Multi-blank submit button clicked for step {step_idx}")
+              window.console.log(f"🔘 Fill-blank submit button clicked for step {step_idx}")
               try:
-                  self.submit_multi_blank(step_idx, step_data)
+                  self.submit_fill_blank(step_idx, step_data)
               except Exception as e:
                   window.console.error(f"Error in submit handler: {e}")
                   import traceback
                   window.console.error(traceback.format_exc())
 
           submit_btn.addEventListener("click", create_proxy(submit_handler))
-          window.console.log(f"✅ Handler attached for multi-blank step {step_idx}")
+          window.console.log(f"✅ Handler attached for fill-blank step {step_idx}")
       else:
-          window.console.error(f"❌ Submit button NOT FOUND for multi-blank step {step_idx}")
+          window.console.error(f"❌ Submit button NOT FOUND for fill-blank step {step_idx}")
 
-      window.console.log(f"✅ Multi-blank UI creation complete for step {step_idx}")
+      window.console.log(f"✅ Fill-blank UI creation complete for step {step_idx}")
 
-    def create_multi_mc_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_multi_mc_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create UI for multi-mc (fill-blank with inline dropdown selectors)"""
       import re
 
@@ -9461,7 +9789,7 @@ This demonstrates the complete format for creating your own problem sets!
         <button class='btn submit-step'>Submit Answer</button>
         <button class='btn next-step' style='display:none;background:#10b981;'>Next Step →</button>
       </div>
-      <div id='stepFeedback{step_idx}' class='step-feedback'></div>
+      <div id='stepFeedback{index}_{step_idx}' class='step-feedback'></div>
       """
 
       # Submit button
@@ -9481,7 +9809,7 @@ This demonstrates the complete format for creating your own problem sets!
               self.next_step(step_idx)
           next_btn.addEventListener("click", create_proxy(next_handler))
 
-    def create_truefalse_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
+    def create_truefalse_ui(self, step_div, index, step_idx, step_data, desc_html, total_steps):
       """Create true/false UI"""
 
       window.console.log(f"🔧 Creating True/False UI for step {step_idx}")
@@ -9512,7 +9840,7 @@ This demonstrates the complete format for creating your own problem sets!
               </button>
           </div>
 
-          <div id='stepFeedback{step_idx}'></div>
+          <div id='stepFeedback{index}_{step_idx}'></div>
       """
 
       step_div.innerHTML = html
@@ -9547,196 +9875,6 @@ This demonstrates the complete format for creating your own problem sets!
 
       window.console.log(f"✅ True/False UI complete for step {step_idx}")
     
-    def create_fillblank_ui(self, step_div, step_idx, step_data, desc_html, total_steps):
-      """Create fill-in-the-blank UI with robust blank detection"""
-
-      window.console.log(f"🔧 Creating Fill-blank UI for step {step_idx}")
-
-      try:
-          # ✅ Import html module at the top
-          import html as html_module
-
-          must_correct = step_data.get("requireCorrect", False)
-          must_correct_badge = ""
-          if must_correct:
-              must_correct_badge = "<span style='background:#fef3c7;color:#b45309;padding:4px 8px;border-radius:4px;font-size:12px;margin-left:8px;'>⚠️ Must be correct</span>"
-
-          # ✅ Check if this is multi-blank mode
-          blank_config = step_data.get("blank_config", {})
-          blank_mode = blank_config.get("mode", "single")
-
-          if blank_mode == "multi":
-              window.console.log(f"📝 Multi-blank mode detected")
-              self.create_multi_blank_ui(step_div, step_idx, step_data, desc_html, total_steps, must_correct_badge)
-              return
-
-          # ========================================
-          # ROBUST BLANK DETECTION
-          # ========================================
-
-          # Try multiple blank representations
-          blank_patterns = [
-              "{blank}",       # Primary pattern
-              "_____",         # Five underscores (from {blank} replacement)
-              "___",           # Triple underscore
-              "__",            # Double underscore
-              "_",             # Single underscore
-              "{{blank}}",     # Template-style
-              "[blank]",       # Bracket-style
-              "______",        # Many underscores
-          ]
-
-          # Get question text from multiple possible sources
-          text_with_blanks = (
-              step_data.get("text", "") or 
-              step_data.get("question", "") or
-              desc_html
-          )
-
-          window.console.log(f"Fill-blank text: {text_with_blanks}")
-
-          # Detect which blank pattern is used (if any)
-          detected_pattern = None
-          blank_count = 0
-
-          for pattern in blank_patterns:
-              count = text_with_blanks.count(pattern)
-              if count > 0:
-                  detected_pattern = pattern
-                  blank_count = count
-                  window.console.log(f"✅ Detected blank pattern: '{pattern}' ({count} instance(s))")
-                  break
-
-          # ========================================
-          # BUILD HTML CONTENT
-          # ========================================
-
-          if detected_pattern and blank_count > 0:
-              window.console.log(f"📝 Using inline blank mode with pattern: {detected_pattern}")
-
-              html_content = f"""
-                  <div class='step-header'>
-                      <div style='font-weight:700;font-size:18px;margin-bottom:12px;'>
-                          Step <span class='step-number-display'>{step_idx + 1}</span> of {total_steps} {must_correct_badge}
-                      </div>
-                  </div>
-
-                  <div class='fill-blank-container' style='margin:20px 0;'>
-                      <div style='font-size:16px;line-height:2;'>
-              """
-
-              # Split by detected pattern and create inline inputs
-              parts = text_with_blanks.split(detected_pattern)
-
-              for i, part in enumerate(parts):
-                  if part:
-                      html_content += f"<span>{part}</span>"
-
-                  if i < len(parts) - 1:
-                      input_id = f"fillBlankInput{step_idx}_{i}" if blank_count > 1 else f"fillBlankInput{step_idx}"
-                      html_content += f"""
-                          <input 
-                              type='text' 
-                              id='{input_id}'
-                              class='fill-blank-input'
-                              data-blank-index='{i}'
-                              style='display:inline-block;min-width:120px;max-width:200px;padding:6px 12px;
-                                     border:2px solid #cbd5e1;border-radius:6px;font-size:16px;
-                                     margin:0 4px;vertical-align:middle;'
-                              placeholder='Your answer'
-                          />
-                      """
-
-              html_content += """
-                      </div>
-                  </div>
-              """
-
-          else:
-              window.console.log(f"📝 Using separate input mode (no blank pattern detected)")
-
-              html_content = f"""
-                  <div class='step-header'>
-                      <div style='font-weight:700;font-size:18px;margin-bottom:12px;'>
-                          Step <span class='step-number-display'>{step_idx + 1}</span> of {total_steps} {must_correct_badge}
-                      </div>
-                  </div>
-
-                  <div class='step-description'>
-                      {desc_html}
-                  </div>
-
-                  <div class='fill-blank-separate-container' style='margin:20px 0;'>
-                      <div style='margin-top:12px;'>
-                          <label style='display:block;font-weight:600;margin-bottom:8px;color:#334155;'>
-                              Your Answer:
-                          </label>
-                          <input
-                              type='text'
-                              id='fillBlankInput{step_idx}'
-                              class='fill-blank-input'
-                              data-blank-index='0'
-                              style='width:100%;max-width:500px;padding:12px;
-                                     border:2px solid #cbd5e1;border-radius:8px;font-size:16px;'
-                              placeholder='Type your answer here'
-                          />
-                      </div>
-                  </div>
-              """
-
-          # Add common elements
-          html_content += f"""
-              <div style='margin-top:20px;'>
-                  <button id='submitBtn{step_idx}' class='btn-primary' style='padding:10px 24px;'>
-                      Submit Answer
-                  </button>
-              </div>
-
-              <div id='stepFeedback{step_idx}'></div>
-          """
-
-          # ✅ Set innerHTML
-          step_div.innerHTML = html_content
-          window.console.log(f"📝 HTML set for step {step_idx}")
-
-          # ✅ CRITICAL: Add explicit check to see if we reach this point
-          window.console.log(f"🔍 About to search for submit button for step {step_idx}")
-
-          # ✅ Query for submit button
-          submit_btn = step_div.querySelector(f"#submitBtn{step_idx}")
-
-          if submit_btn:
-              window.console.log(f"✅ Found submit button for step {step_idx}")
-
-              def submit_handler(event):
-                  window.console.log(f"🔘 Fill-blank submit button clicked for step {step_idx}")
-                  try:
-                      self.submit_fill_blank(step_idx, step_data)
-                      window.console.log("✅ submit_fill_blank completed")
-                  except Exception as e:
-                      window.console.error(f"❌ Error in submit_fill_blank: {e}")
-                      import traceback
-                      window.console.error(traceback.format_exc())
-
-              submit_btn.addEventListener("click", create_proxy(submit_handler))
-              window.console.log(f"✅ Handler attached for step {step_idx}")
-              window.console.log(f"✅✅ VERIFIED: Handler is attached for step {step_idx}!")
-          else:
-              window.console.error(f"❌ Submit button NOT FOUND for step {step_idx}")
-              # Try alternative query
-              all_buttons = step_div.querySelectorAll("button")
-              window.console.log(f"   Found {all_buttons.length} button(s) in step_div")
-              for i in range(all_buttons.length):
-                  btn = all_buttons[i]
-                  window.console.log(f"   Button {i}: id='{btn.id}', text='{btn.textContent}'")
-
-          window.console.log(f"✅ Fill-blank UI creation complete for step {step_idx}")
-
-      except Exception as e:
-          window.console.error(f"❌ CRITICAL ERROR in create_fillblank_ui for step {step_idx}: {e}")
-          import traceback
-          window.console.error(traceback.format_exc()) 
-          
     def finalize_math_expression(self, step_idx):
       """Handle finalization for math expression problems - checks structure"""
       window.console.log(f"🔍 Finalize step: problem {self.current_problem_index}, step {step_idx}")
@@ -10107,7 +10245,7 @@ This demonstrates the complete format for creating your own problem sets!
             finalize_btn.style.display = "none"
 
         # Show finalized message
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
         if feedback_div:
             feedback_div.innerHTML = """
                 <div style='background:#dbeafe;color:#1e40af;padding:16px;border-radius:8px;text-align:center;margin-top:12px;'>
@@ -10264,8 +10402,9 @@ This demonstrates the complete format for creating your own problem sets!
         if not selected:
             window.console.warn("No answer selected")
 
-            # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            # Show warning - query within current problem container
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10337,6 +10476,8 @@ This demonstrates the complete format for creating your own problem sets!
         # This ensures blocking happens even if feedback_div is not found
         if not is_correct and must_correct:
             window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
+            # Show flashing notification
+            self.show_notification("❌ Incorrect! This step requires the correct answer.", "error")
             # Reset finished status if must be correct
             if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
                 self.solve_states[current_prob_idx][step_idx]["finished"] = False
@@ -10366,8 +10507,14 @@ This demonstrates the complete format for creating your own problem sets!
                         # Store step_data reference for future submits
                         container.step_data = step_data
 
-            # ✅ ALWAYS show feedback - find or create feedback div
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            # ✅ ALWAYS show feedback - find or create feedback div within current problem
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            if not problem_container:
+                window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
+                self.save_to_storage()
+                return
+
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             window.console.log(f"🔍 MC-Single: Looking for #stepFeedback{step_idx}, found: {feedback_div is not None}")
 
             if not feedback_div:
@@ -10378,7 +10525,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -10387,7 +10534,7 @@ This demonstrates the complete format for creating your own problem sets!
                 window.console.log("📝 MC-Single: Building error message...")
                 # Build error message with optional hint
                 error_html = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
@@ -10406,7 +10553,24 @@ This demonstrates the complete format for creating your own problem sets!
                     window.console.log("✅ Displaying hint for MC-Single")
 
                 window.console.log(f"📝 MC-Single: Setting feedback innerHTML (length: {len(error_html)})")
-                feedback_div.innerHTML = error_html
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
+                # Remove flashing class after animation completes
+                def remove_flash_mc_single():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_mc_single), 3000)
                 window.console.log("✅ MC-Single: Displayed requireCorrect error message to user")
                 window.console.log(f"📝 MC-Single: feedback_div.innerHTML now has {len(feedback_div.innerHTML)} characters")
             else:
@@ -10417,7 +10581,7 @@ This demonstrates the complete format for creating your own problem sets!
             return
 
         # Show feedback for non-requireCorrect questions
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
         window.console.log(f"🔍 MC-Single: Post-blocking feedback lookup, found: {feedback_div is not None}")
 
         if feedback_div:
@@ -10429,10 +10593,17 @@ This demonstrates the complete format for creating your own problem sets!
                 """
             else:
                 feedback_div.innerHTML = f"""
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                         ❌ Incorrect. The correct answer was: {correct_answer}
                     </div>
                 """
+                
+                # Remove flashing class after animation completes
+                def remove_flash_mc_single_normal():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_mc_single_normal), 3000)
         else:
             window.console.warn(f"⚠️ MC-Single: Feedback div not found for non-blocking case")
 
@@ -10449,17 +10620,52 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.error("❌ No current problem index")
             return
 
-        # Get all selected answers
-        checkboxes = document.querySelectorAll(f"input[name='mc_multiple_{step_idx}']:checked")
+        window.console.log(f"🔍 submit_mc_multiple called with step_idx={step_idx}")
+
+        # Get the step container to scope the checkbox query
+        selector = f"#step{current_prob_idx}_{step_idx}"
+        window.console.log(f"🔍 Looking for container with selector: {selector}")
+        step_div = document.querySelector(selector)
+
+        if not step_div:
+            window.console.error(f"❌ Step container not found for step {step_idx}")
+            # Debug: show all step divs
+            all_steps = document.querySelectorAll("[id^='step']")
+            window.console.log(f"🔍 Found {all_steps.length} elements with id starting with 'step'")
+            for i in range(all_steps.length):
+                window.console.log(f"  - {all_steps[i].id}")
+            return
+
+        window.console.log(f"✅ Found step_div: id={step_div.id}, tagName={step_div.tagName}")
+        window.console.log(f"🔍 step_div innerHTML length: {len(step_div.innerHTML)}")
+
+        # Debug: show all inputs in the step_div
+        all_inputs = step_div.querySelectorAll("input")
+        window.console.log(f"🔍 Total inputs in step_div: {all_inputs.length}")
+        for i in range(all_inputs.length):
+            inp = all_inputs[i]
+            window.console.log(f"  - type={inp.type}, name={inp.name}, value={inp.value}, checked={inp.checked}")
+
+        # Get all selected answers (scoped to this step)
+        checkbox_selector = f"input[name='mc_multiple_{step_idx}']"
+        window.console.log(f"🔍 Looking for checkboxes with selector: {checkbox_selector}")
+        all_checkboxes = step_div.querySelectorAll(checkbox_selector)
+        checkboxes = step_div.querySelectorAll(f"{checkbox_selector}:checked")
+
+        window.console.log(f"🔍 MC-Multiple Debug:")
+        window.console.log(f"  Total checkboxes found: {all_checkboxes.length}")
+        window.console.log(f"  Checked checkboxes found: {checkboxes.length}")
+
         user_answers = set()
         for i in range(checkboxes.length):
             user_answers.add(checkboxes[i].value)
+            window.console.log(f"  ✓ Checked: {checkboxes[i].value}")
 
         if len(user_answers) == 0:
             window.console.warn("No answers selected")
 
             # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10572,11 +10778,13 @@ This demonstrates the complete format for creating your own problem sets!
                         desc_html = self.render_content_blocks(step_data.get("description", []))
 
                         # Recreate mc-multiple UI with shuffled options
-                        self.create_mc_multiple_ui(container, step_idx, step_data, desc_html, total_steps)
+                        self.create_mc_multiple_ui(container, current_prob_idx, step_idx, step_data, desc_html, total_steps)
                         window.console.log("✅ Recreated MC-Multiple UI with shuffled options")
 
             # ✅ ALWAYS show feedback - find or create feedback div
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            # Scope to current problem container
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if not feedback_div:
                 # Try to find step container
                 if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -10584,7 +10792,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -10592,7 +10800,7 @@ This demonstrates the complete format for creating your own problem sets!
             if feedback_div:
                 # Build error message with optional hint
                 error_html = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
@@ -10609,7 +10817,24 @@ This demonstrates the complete format for creating your own problem sets!
                     """
                     window.console.log("✅ Displaying hint for MC-Multiple")
 
-                feedback_div.innerHTML = error_html
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
+                # Remove flashing class after animation completes
+                def remove_flash_mc_req():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_mc_req), 3000)
                 window.console.log("✅ Displayed requireCorrect error message to user")
             else:
                 window.console.warn("⚠️ Could not display feedback - no container found")
@@ -10618,8 +10843,9 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
             return
 
-        # Show feedback
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        # Show feedback - query within current problem container
+        problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+        feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
@@ -10630,10 +10856,17 @@ This demonstrates the complete format for creating your own problem sets!
             else:
                 correct_list = ", ".join(sorted(correct_answers))
                 feedback_div.innerHTML = f"""
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                         ❌ Incorrect. The correct answers were: {correct_list}
                     </div>
                 """
+                
+                # Remove flashing class after animation completes
+                def remove_flash_mc_normal():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_mc_normal), 3000)
 
         # Save and check completion
         self.save_to_storage()
@@ -10676,7 +10909,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.warn("Not all blanks answered")
 
             # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10788,11 +11021,13 @@ This demonstrates the complete format for creating your own problem sets!
                         desc_html = self.render_content_blocks(step_data.get("description", []))
 
                         # Recreate multi-mc UI with shuffled options
-                        self.create_multi_mc_ui(container, step_idx, step_data, desc_html, total_steps)
+                        self.create_multi_mc_ui(container, current_prob_idx, step_idx, step_data, desc_html, total_steps)
                         window.console.log("✅ Recreated Multi-MC UI with shuffled options")
 
             # ✅ ALWAYS show feedback - find or create feedback div
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            # Scope to current problem container
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if not feedback_div:
                 # Try to find step container
                 if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -10800,7 +11035,7 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
@@ -10808,7 +11043,7 @@ This demonstrates the complete format for creating your own problem sets!
             if feedback_div:
                 # Build error message with optional hint
                 error_html = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires all correct answers. Please try again.
                     </div>
                 """
@@ -10825,7 +11060,24 @@ This demonstrates the complete format for creating your own problem sets!
                     """
                     window.console.log("✅ Displaying hint for Multi-MC")
 
-                feedback_div.innerHTML = error_html
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
+
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
+                # Remove flashing class after animation completes
+                def remove_flash_multi_mc():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_multi_mc), 3000)
                 window.console.log("✅ Displayed requireCorrect error message to user")
             else:
                 window.console.warn("⚠️ Could not display feedback - no container found")
@@ -10835,7 +11087,9 @@ This demonstrates the complete format for creating your own problem sets!
             return
 
         # Show feedback
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        # Query within current problem container
+        problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+        feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
@@ -10847,10 +11101,17 @@ This demonstrates the complete format for creating your own problem sets!
                 # Show which blanks were incorrect
                 incorrect_msg = f"Blank(s) {', '.join(incorrect_blanks)} incorrect"
                 feedback_div.innerHTML = f"""
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                         ❌ {incorrect_msg}
                     </div>
                 """
+                
+                # Remove flashing class after animation completes
+                def remove_flash_multi_mc_normal():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_multi_mc_normal), 3000)
 
         # Save and check completion
         self.save_to_storage()
@@ -10870,7 +11131,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.warn("No answer selected")
 
             # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -10951,7 +11212,9 @@ This demonstrates the complete format for creating your own problem sets!
                 window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
 
             # ✅ ALWAYS show feedback - find or create feedback div
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            # Scope to current problem container
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
             if not feedback_div:
                 # Try to find step container
                 if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
@@ -10959,17 +11222,24 @@ This demonstrates the complete format for creating your own problem sets!
                     if container:
                         # Create feedback div
                         feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
+                        feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                         feedback_div.className = "step-feedback"
                         container.appendChild(feedback_div)
                         window.console.log(f"✅ Created feedback div for step {step_idx}")
 
             if feedback_div:
                 feedback_div.innerHTML = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires the correct answer. Please try again.
                     </div>
                 """
+                
+                # Remove flashing class after animation completes
+                def remove_flash_tf():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_tf), 3000)
                 window.console.log("✅ Displayed requireCorrect error message to user")
             else:
                 window.console.warn("⚠️ Could not display feedback - no container found")
@@ -10979,7 +11249,9 @@ This demonstrates the complete format for creating your own problem sets!
             return
 
         # Show feedback
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        # Query within current problem container
+        problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+        feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
@@ -10990,10 +11262,17 @@ This demonstrates the complete format for creating your own problem sets!
             else:
                 correct_display = "True" if correct_answer == "true" else "False"
                 feedback_div.innerHTML = f"""
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
                         ❌ Incorrect. The correct answer was: {correct_display}
                     </div>
                 """
+                
+                # Remove flashing class after animation completes
+                def remove_flash_tf_normal():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_tf_normal), 3000)
 
         # Save and check completion
         self.save_to_storage()
@@ -11002,63 +11281,160 @@ This demonstrates the complete format for creating your own problem sets!
 
 
     def submit_fill_blank(self, step_idx, step_data):
-        """Submit fill in the blank answer"""
+        """Submit fill-in-the-blank answers (both single and multi-blank)"""
         current_prob_idx = self.current_problem_index
         if current_prob_idx is None:
             window.console.error("❌ No current problem index")
             return
 
-        # Get user input
-        input_elem = document.querySelector(f"#fillBlankInput{step_idx}")
-        if not input_elem:
-            window.console.error(f"❌ Input element not found for step {step_idx}")
-            return
+        window.console.log(f"🔘 submit_fill_blank called for step {step_idx}")
 
-        user_answer = input_elem.value.strip()
-        if not user_answer:
-            window.console.warn("No answer provided")
+        # Use unified method to detect blank mode (data-based, not DOM-based)
+        is_multi_blank = self._detect_blank_mode(step_data)
+        window.console.log(f"🐛 DEBUG: is_multi_blank = {is_multi_blank}")
+        window.console.log(f"🐛 DEBUG: step_data.blank_config = {step_data.get('blank_config', 'Not found')}")
+        window.console.log(f"🐛 DEBUG: step_data.correct_answers type = {type(step_data.get('correct_answers', [])).__name__}")
+        
+        # Collect user answers based on mode
+        if is_multi_blank:
+            # Multi-blank mode: collect as dictionary
+            # Query within the current problem container to avoid picking up inputs from other problems
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            if not problem_container:
+                window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
+                return
 
-            # Show warning
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
-            if feedback_div:
-                feedback_div.innerHTML = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ⚠️ Please enter an answer
-                    </div>
-                """
-            return
+            labeled_inputs = problem_container.querySelectorAll(f"#step{current_prob_idx}_{step_idx} [data-blank-label]")
+            window.console.log(f"📝 Multi-blank mode: Found {labeled_inputs.length} labeled inputs")
+            user_answers = {}
+            for i in range(labeled_inputs.length):
+                elem = labeled_inputs[i]
+                label = elem.getAttribute("data-blank-label")
+                value = elem.value.strip()
+                if label:
+                    user_answers[label] = value
+                    window.console.log(f"  Blank {label}: '{value}'")
 
-        # ✅ DEBUGGING: Log step_data structure
-        window.console.log(f"🔍 Fill-blank step_data keys: {list(step_data.keys())}")
-        window.console.log(f"🔍 step_data has blank_config: {'blank_config' in step_data}")
-        window.console.log(f"🔍 step_data has correct_answers: {'correct_answers' in step_data}")
-        window.console.log(f"🔍 step_data has accepted_answers: {'accepted_answers' in step_data}")
+            # Check if any answers are empty
+            if not all(user_answers.values()):
+                window.console.warn("⚠️ Some answers are empty")
+                feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
+                if feedback_div:
+                    feedback_div.innerHTML = """
+                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                            ⚠️ Please fill in all blanks
+                        </div>
+                    """
+                return
+        else:
+            # Single-blank mode: collect as list
+            window.console.log(f"📝 Single-blank mode detected")
+            window.console.log(f"🐛 DEBUG: step_idx = {step_idx}")
 
-        # ✅ FIX: Check for both correct_answers (new format) and accepted_answers (old format)
-        correct_answers = step_data.get("correct_answers", step_data.get("accepted_answers", []))
+            # Query within the current problem container to avoid picking up inputs from other problems
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            if not problem_container:
+                window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
+                return
 
-        if 'correct_answers' in step_data:
-            window.console.log(f"🔍 correct_answers value: {step_data['correct_answers']}")
-            window.console.log(f"🔍 correct_answers length: {len(step_data['correct_answers'])}")
-        if 'accepted_answers' in step_data:
-            window.console.log(f"🔍 accepted_answers value: {step_data['accepted_answers']}")
+            window.console.log(f"🐛 DEBUG: selector = .accordion-problem[data-index=\'{current_prob_idx}\'] #step{current_prob_idx}_{step_idx} .fill-blank-input")
+            try:
+                all_inputs = problem_container.querySelectorAll(f"#step{current_prob_idx}_{step_idx} .fill-blank-input")
+                window.console.log(f"🐛 DEBUG: querySelectorAll succeeded, found {all_inputs.length} inputs")
+                for idx in range(all_inputs.length):
+                    inp = all_inputs[idx]
+                    window.console.log(f"  Input {idx}: value='{inp.value}', data-blank-label={inp.getAttribute('data-blank-label')}")
+            except Exception as e:
+                window.console.error(f"❌ ERROR in querySelectorAll: {e}")
+                import traceback
+                window.console.error(traceback.format_exc())
+                return
+            if all_inputs.length == 0:
+                window.console.error(f"❌ No input element found for step {step_idx}")
+                return
+            
+            input_element = all_inputs[0]
+            window.console.log(f"🐛 DEBUG: all_inputs.length = {all_inputs.length}")
+            window.console.log(f"🐛 DEBUG: input_element = {input_element}")
+            window.console.log(f"🐛 DEBUG: input_element.value = '{input_element.value}'")
+            window.console.log(f"🐛 DEBUG: input_element.id = {input_element.id}")
+            window.console.log(f"🐛 DEBUG: input_element.className = {input_element.className}")
+            user_answer = input_element.value.strip()
+            window.console.log(f"📝 User answer: '{user_answer}'")
 
-        is_correct = False
+            # Check if answer is empty
+            if not user_answer:
+                window.console.warn("⚠️ Answer is empty")
+                feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
+                if feedback_div:
+                    feedback_div.innerHTML = """
+                        <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
+                            ⚠️ Please enter an answer
+                        </div>
+                    """
+                return
+            
+            user_answers = [user_answer]
 
-        for answer in correct_answers:
-            if isinstance(answer, dict):
-                answer_value = answer.get("value", "").strip().lower()
-            else:
-                answer_value = str(answer).strip().lower()
+        # Get correct answers
+        correct_answers = step_data.get("correct_answers", step_data.get("accepted_answers", {}))
+        window.console.log(f"📋 Correct answers (before normalization): {correct_answers}")
 
-            if user_answer.lower() == answer_value:
-                is_correct = True
-                break
+        # ✅ NORMALIZE: Convert single-blank to multi-blank format (with 1 blank)
+        # This allows us to use the same code path for both cases
+        if not is_multi_blank:
+            window.console.log("🔄 Normalizing single-blank to multi-blank format")
+            # Convert user_answers from list to dict with label "1"
+            user_answers = {"1": user_answers[0]}
+            # Convert correct_answers from list to dict with label "1"
+            correct_answers = {"1": correct_answers}
+            window.console.log(f"📋 Normalized user_answers: {user_answers}")
+            window.console.log(f"📋 Normalized correct_answers: {correct_answers}")
 
+        # Check answers (unified logic now handles both single and multi-blank)
+        if True:
+            # Multi-blank: check each answer
+            results = {}
+            all_correct = True
+            for label, user_answer in user_answers.items():
+                if label in correct_answers:
+                    expected = correct_answers[label]
+                    is_correct = False
+
+                    # Handle both list and string formats
+                    if isinstance(expected, list):
+                        # Check against each accepted answer
+                        for answer in expected:
+                            if isinstance(answer, dict):
+                                answer_value = answer.get("value", "").strip().lower()
+                            else:
+                                answer_value = str(answer).strip().lower()
+
+                            if user_answer.lower() == answer_value:
+                                is_correct = True
+                                break
+                    else:
+                        # Single answer comparison
+                        if isinstance(expected, dict):
+                            answer_value = expected.get("value", "").strip().lower()
+                        else:
+                            answer_value = str(expected).strip().lower()
+
+                        is_correct = user_answer.lower() == answer_value
+
+                    results[label] = is_correct
+                    if not is_correct:
+                        all_correct = False
+                    window.console.log(f"  Blank {label}: {'✅' if is_correct else '❌'}")
+
+            # Calculate score
+            score_percentage = (sum(results.values()) / len(results) * 100) if results else 0
+            is_correct = all_correct
+
+        window.console.log(f"📊 Score: {score_percentage:.1f}%")
+
+        # Check if this step requires correct answer
         must_correct = step_data.get("requireCorrect", False)
-        score_percentage = 100.0 if is_correct else 0.0
-
-        window.console.log(f"Fill-blank check: '{user_answer}' against {correct_answers} = {is_correct}, score={score_percentage:.1f}%")
 
         # ⏱️ Get elapsed time for this attempt
         import js
@@ -11070,24 +11446,21 @@ This demonstrates the complete format for creating your own problem sets!
             if start_time:
                 time_taken = (current_time - start_time) / 1000.0  # Convert to seconds
 
-        # ✅ CRITICAL: Update BOTH solve_state AND problem_states
-        if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
-            self.solve_states[current_prob_idx][step_idx]["finished"] = True
-            self.solve_states[current_prob_idx][step_idx]["correct"] = is_correct
-            self.solve_states[current_prob_idx][step_idx]["score"] = score_percentage
-            self.solve_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
-            window.console.log(f"✅ Updated solve_state: Step {step_idx}, finished=True, score={score_percentage:.1f}%")
-
-        # ✅ CRITICAL: Update problem_states (persisted state)
+        # Record first attempt time
         if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
+            if "first_attempt_time" not in self.problem_states[current_prob_idx][step_idx]:
+                self.problem_states[current_prob_idx][step_idx]["first_attempt_time"] = time_taken
+                window.console.log(f"⏱️ First attempt completed in {time_taken:.1f}s for problem {current_prob_idx}, step {step_idx}")
+
+            # Update state
             self.problem_states[current_prob_idx][step_idx]["finished"] = True
             self.problem_states[current_prob_idx][step_idx]["correct"] = is_correct
             self.problem_states[current_prob_idx][step_idx]["score"] = score_percentage
-            self.problem_states[current_prob_idx][step_idx]["user_answers"] = [user_answer]
+            self.problem_states[current_prob_idx][step_idx]["user_answers"] = user_answers
             attempts = self.problem_states[current_prob_idx][step_idx].get("attempts", 0)
             self.problem_states[current_prob_idx][step_idx]["attempts"] = attempts + 1
 
-            # ✅ Add to attempt_history array
+            # Add to attempt history
             if "attempt_history" not in self.problem_states[current_prob_idx][step_idx]:
                 self.problem_states[current_prob_idx][step_idx]["attempt_history"] = []
 
@@ -11096,156 +11469,182 @@ This demonstrates the complete format for creating your own problem sets!
                 "time_taken": time_taken,
                 "correct": is_correct,
                 "score": score_percentage,
-                "user_answer": user_answer
+                "user_answers": user_answers
             }
             self.problem_states[current_prob_idx][step_idx]["attempt_history"].append(attempt_entry)
 
-            window.console.log(f"✅ Updated problem_states: Problem {current_prob_idx}, Step {step_idx}, finished=True, correct={is_correct}, score={score_percentage:.1f}%, time={time_taken:.1f}s")
-
         # Mark step as finished
-        window.console.log("==================================================")
         window.console.log(f"✅ Step {step_idx} marked as finished")
-        window.console.log("Current solve_state status:")
-        for i, step in enumerate(self.solve_states[current_prob_idx]):
-            status = "✅ DONE" if step.get("finished") else "⏳ TODO"
-            window.console.log(f"  Step {i}: {status}")
-        window.console.log("==================================================")
 
-        # ✅ CRITICAL: Check requireCorrect BEFORE showing feedback
-        # This ensures blocking happens even if feedback_div is not found
+        # Check requireCorrect BEFORE showing feedback
         if not is_correct and must_correct:
-            window.console.log("🚫 BLOCKING PROGRESSION: requireCorrect=True and answer is incorrect")
-            # Reset finished status if must be correct
+            window.console.log("🚫 BLOCKING: requireCorrect=True and answer is incorrect")
+            # Reset finished status
             if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
                 self.solve_states[current_prob_idx][step_idx]["finished"] = False
-                window.console.log(f"✅ Reset solve_states[{current_prob_idx}][{step_idx}]['finished'] = False")
             if current_prob_idx in self.problem_states and step_idx < len(self.problem_states[current_prob_idx]):
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
-                window.console.log(f"✅ Reset problem_states[{current_prob_idx}][{step_idx}]['finished'] = False")
 
-            # ✅ ALWAYS show feedback - find or create feedback div
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            # Show feedback
+            # Query within the current problem container to avoid picking feedback from other problems
+            problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+            if not problem_container:
+                window.console.error(f"❌ Problem container not found for problem {current_prob_idx}")
+                return
+
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
+
+            # Create feedback div if it doesn't exist
             if not feedback_div:
-                # Try to find step container
-                if current_prob_idx in self.solve_states and step_idx < len(self.solve_states[current_prob_idx]):
-                    container = self.solve_states[current_prob_idx][step_idx].get("container")
-                    if container:
-                        # Create feedback div
-                        feedback_div = document.createElement("div")
-                        feedback_div.id = f"stepFeedback{step_idx}"
-                        feedback_div.className = "step-feedback"
-                        container.appendChild(feedback_div)
-                        window.console.log(f"✅ Created feedback div for step {step_idx}")
+                window.console.warn(f"⚠️ Fill-Blank: feedback_div not found for step {step_idx}, attempting to create it")
+                container = problem_container.querySelector(f"#step{current_prob_idx}_{step_idx}")
+                if container:
+                    feedback_div = document.createElement("div")
+                    feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
+                    feedback_div.className = "step-feedback"
+                    container.appendChild(feedback_div)
+                    window.console.log(f"✅ Fill-Blank: Created feedback_div for step {step_idx}")
+                else:
+                    window.console.error(f"❌ Fill-Blank: Container #step{current_prob_idx}_{step_idx} not found!")
 
             if feedback_div:
                 # Build error message
-                error_html = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
-                        ❌ Incorrect. This step requires the correct answer. Please try again.
+                error_html = f"""
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                        ❌ Incorrect. This step requires {"all correct answers" if is_multi_blank else "a correct answer"}. Please try again.
                     </div>
                 """
-
-                # Add hint if available (in parentheses)
+    
+                # Add hint if available
                 hint = step_data.get("hint", "")
                 if hint:
                     hint_blocks = hint if isinstance(hint, list) else [{"type": "text", "content": hint}]
                     hint_html = self.render_content_blocks(hint_blocks)
                     error_html += f"""
                         <div style='background:#eff6ff;color:#1e40af;padding:12px;border-radius:8px;margin-top:8px;'>
-                            💡 <strong>Hint:</strong> ({hint_html})
+                            💡 Hint: {hint_html}
                         </div>
                     """
-                    window.console.log("✅ Displaying hint for Fill-Blank")
-
-                # Add hangman UI for the correct answer(s)
-                if len(correct_answers) > 0:
-                    # Check if there are multiple possible answers
-                    if len(correct_answers) > 1:
-                        error_html += f"""
-                            <div style='margin-top:12px;'>
-                                <div style='font-weight:600;color:#334155;margin-bottom:8px;'>Choose any one of these {len(correct_answers)} possible answers:</div>
-                                <div id='hangman_group_{step_idx}' class='hangman-option-group'>
-                        """
-
-                        for idx, answer in enumerate(correct_answers):
-                            if isinstance(answer, dict):
-                                correct_answer_text = answer.get("value", "")
+    
+                # Add hangman UI when requireCorrect=True (works for both single and multi-blank)
+                # Add hangman UI for each incorrect blank
+                if True:
+                    for label, user_answer in user_answers.items():
+                        if label in correct_answers:
+                            expected = correct_answers[label]
+                            
+                            # Check if this blank is incorrect
+                            is_blank_correct = False
+                            if isinstance(expected, list):
+                                for answer in expected:
+                                    if isinstance(answer, dict):
+                                        answer_value = answer.get("value", "").strip().lower()
+                                    else:
+                                        answer_value = str(answer).strip().lower()
+                                    if user_answer.lower() == answer_value:
+                                        is_blank_correct = True
+                                        break
                             else:
-                                correct_answer_text = str(answer)
-
-                            if correct_answer_text:
-                                hangman_id = f"{step_idx}_{idx}"
-                                # Calculate word length hint
-                                word_length = len([c for c in correct_answer_text if c.isalnum()])
-
-                                # Generate hangman HTML first (outside f-string to avoid escaping issues)
-                                hangman_content = self.create_hangman_ui(correct_answer_text, hangman_id)
-
+                                if isinstance(expected, dict):
+                                    answer_value = expected.get("value", "").strip().lower()
+                                else:
+                                    answer_value = str(expected).strip().lower()
+                                is_blank_correct = user_answer.lower() == answer_value
+    
+                            # If incorrect, add hangman UI
+                            if not is_blank_correct:
+                                # Count total options
+                                num_options = len(expected) if isinstance(expected, list) else 1
+                                
+                                # Create accordion for this blank
+                                accordion_id = f"blank_accordion_{current_prob_idx}_{step_idx}_{label}"
+                                
                                 error_html += f"""
-                                    <div class='hangman-accordion-item' data-hangman-id='{hangman_id}' style='margin-bottom:8px;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:white;'>
-                                        <div class='hangman-accordion-header' onclick='window.problem_solver_app.toggle_hangman_accordion("{hangman_id}")' style='padding:12px;background:#f8fafc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;'>
-                                            <div style='font-weight:600;color:#475569;'>Option {idx + 1} ({word_length} letters)</div>
+                                    <div class='blank-accordion-item' data-blank-id='{accordion_id}' style='margin-top:12px;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:white;'>
+                                        <div class='blank-accordion-header' onclick='window.problem_solver_app.toggle_blank_accordion("{accordion_id}")' style='padding:12px;background:#f8fafc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;'>
+                                            <div>
+                                                <div style='font-weight:600;color:#334155;'>Blank {label}</div>
+                                                <div style='font-size:14px;color:#64748b;margin-top:2px;'>{num_options} possible answer{"s" if num_options > 1 else ""}</div>
+                                            </div>
                                             <div class='accordion-icon' style='color:#64748b;font-size:18px;'>▼</div>
                                         </div>
-                                        <div class='hangman-accordion-content' id='accordion_content_{hangman_id}' style='display:none;padding:12px;'>
+                                        <div class='blank-accordion-content' id='accordion_content_{accordion_id}' style='display:none;padding:12px;background:#ffffff;'>
                                 """
-                                # Concatenate hangman HTML instead of interpolating
-                                error_html += hangman_content
+                                
+                                # Handle both list and single answer formats
+                                if isinstance(expected, list) and len(expected) > 0:
+                                    # Add all hangman buttons
+                                    for idx, answer in enumerate(expected):
+                                        if isinstance(answer, dict):
+                                            correct_answer_text = answer.get("value", "")
+                                        else:
+                                            correct_answer_text = str(answer)
+    
+                                        if correct_answer_text:
+                                            hangman_id = f"{current_prob_idx}_{step_idx}_{label}_{idx}"
+                                            hangman_content = self.create_hangman_ui(correct_answer_text, hangman_id)
+                                            error_html += hangman_content
+                                else:
+                                    # Single answer
+                                    if isinstance(expected, dict):
+                                        correct_answer_text = expected.get("value", "")
+                                    else:
+                                        correct_answer_text = str(expected)
+    
+                                    if correct_answer_text:
+                                        hangman_id = f"{current_prob_idx}_{step_idx}_{label}"
+                                        hangman_html = self.create_hangman_ui(correct_answer_text, hangman_id)
+                                        error_html += hangman_html
+                                
                                 error_html += """
                                         </div>
                                     </div>
                                 """
-
-                        error_html += "</div></div>"
-                        window.console.log(f"✅ Displaying {len(correct_answers)} hangman UIs for Fill-Blank")
-                    else:
-                        # Single answer
-                        first_answer = correct_answers[0]
-                        if isinstance(first_answer, dict):
-                            correct_answer_text = first_answer.get("value", "")
-                        else:
-                            correct_answer_text = str(first_answer)
-
-                        hangman_html = self.create_hangman_ui(correct_answer_text, step_idx)
-                        error_html += hangman_html
-                        window.console.log("✅ Displaying hangman UI for Fill-Blank")
-
+    
+                window.console.log(f"🐛 DEBUG: About to set feedback_div.innerHTML")
+                window.console.log(f"🐛 DEBUG: feedback_div = {feedback_div}")
+                window.console.log(f"🐛 DEBUG: feedback_div.id = {feedback_div.id if feedback_div else 'None'}")
+                window.console.log(f"🐛 DEBUG: error_html length = {len(error_html)}")
                 feedback_div.innerHTML = error_html
-                window.console.log("✅ Displayed requireCorrect error message to user")
-            else:
-                window.console.warn("⚠️ Could not display feedback - no container found")
+                window.console.log("❌ Fill-Blank: Shown requireCorrect error message with hint")
 
-            self.save_to_storage()
-            window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
+
+            # Don't proceed to next step
             return
 
-        # Show feedback
-        feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+        # Show success/failure feedback
+        # Query within the current problem container to avoid picking feedback from other problems
+        problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
+        if problem_container:
+            feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
+        else:
+            feedback_div = None
         if feedback_div:
             if is_correct:
                 feedback_div.innerHTML = """
-                    <div style='background:#dcfce7;color:#16a34a;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                    <div class='flash-correct' style='background:#d1fae5;color:#065f46;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ✅ Correct!
                     </div>
                 """
             else:
-                # ✅ FIX: Use correct_answers instead of accepted_answers
-                correct_displays = ", ".join([a.get("display", a.get("value", "")) if isinstance(a, dict) else str(a) for a in correct_answers])
-                feedback_div.innerHTML = f"""
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ❌ Incorrect. Accepted answers: {correct_displays}
+                # Show simple incorrect message (no hangman for requireCorrect=False)
+                feedback_div.innerHTML = """
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                        ❌ Incorrect
                     </div>
                 """
 
-        # Disable input
-        input_elem.disabled = True
-
-        # Save and check completion
+        # Save progress
         self.save_to_storage()
-        window.console.log("✅ Proceeding to check completion and show next step")
-        self._check_problem_completion_and_show_next_step(step_idx)
 
-    def submit_multi_blank(self, step_idx, step_data):
+        # Update progress
+        self.update_problem_progress(current_prob_idx)
+
+        # Proceed to next step
+        def delayed_next():
+            self.next_step(step_idx)
+        window.setTimeout(create_proxy(delayed_next), 800)
+
         """Submit multi-blank fill-in-the-blank answers"""
         current_prob_idx = self.current_problem_index
         if current_prob_idx is None:
@@ -11275,7 +11674,7 @@ This demonstrates the complete format for creating your own problem sets!
         # Check if any answers are empty
         if not all(user_answers.values()):
             window.console.warn("⚠️ Some answers are empty")
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
             if feedback_div:
                 feedback_div.innerHTML = """
                     <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
@@ -11379,25 +11778,25 @@ This demonstrates the complete format for creating your own problem sets!
                 self.problem_states[current_prob_idx][step_idx]["finished"] = False
 
             # Show feedback
-            feedback_div = document.querySelector(f"#stepFeedback{step_idx}")
+            feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
 
             # Create feedback div if it doesn't exist (defensive)
             if not feedback_div:
                 window.console.warn(f"⚠️ Multi-Blank: feedback_div not found for step {step_idx}, attempting to create it")
-                container = document.querySelector(f"#step{step_idx}")
+                container = document.querySelector(f"#step{current_prob_idx}_{step_idx}")
                 if container:
                     feedback_div = document.createElement("div")
-                    feedback_div.id = f"stepFeedback{step_idx}"
+                    feedback_div.id = f"stepFeedback{current_prob_idx}_{step_idx}"
                     feedback_div.className = "step-feedback"
                     container.appendChild(feedback_div)
                     window.console.log(f"✅ Multi-Blank: Created feedback_div for step {step_idx}")
                 else:
-                    window.console.error(f"❌ Multi-Blank: Container #step{step_idx} not found!")
+                    window.console.error(f"❌ Multi-Blank: Container #step{current_prob_idx}_{step_idx} not found!")
 
             if feedback_div:
                 # Build error message
                 error_html = """
-                    <div style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
+                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
                         ❌ Incorrect. This step requires all correct answers. Please try again.
                     </div>
                 """
@@ -11419,56 +11818,38 @@ This demonstrates the complete format for creating your own problem sets!
                     if not is_correct and label in correct_answers:
                         # Get the correct answer(s) for this blank
                         expected = correct_answers[label]
-
+                        
+                        # Count total options
+                        num_options = len(expected) if isinstance(expected, list) else 1
+                        
+                        # Create accordion for this blank
+                        accordion_id = f"blank_accordion_{current_prob_idx}_{step_idx}_{label}"
+                        
                         error_html += f"""
-                            <div style='margin-top:12px;border-top:1px solid #e2e8f0;padding-top:12px;'>
-                                <strong style='color:#334155;'>Blank {label}:</strong>
+                            <div class='blank-accordion-item' data-blank-id='{accordion_id}' style='margin-top:12px;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:white;'>
+                                <div class='blank-accordion-header' onclick='window.problem_solver_app.toggle_blank_accordion("{accordion_id}")' style='padding:12px;background:#f8fafc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;'>
+                                    <div>
+                                        <div style='font-weight:600;color:#334155;'>Blank {label}</div>
+                                        <div style='font-size:14px;color:#64748b;margin-top:2px;'>{num_options} possible answer{"s" if num_options > 1 else ""}</div>
+                                    </div>
+                                    <div class='accordion-icon' style='color:#64748b;font-size:18px;'>▼</div>
+                                </div>
+                                <div class='blank-accordion-content' id='accordion_content_{accordion_id}' style='display:none;padding:12px;background:#ffffff;'>
                         """
-
+                        
                         # Handle both list and single answer formats
                         if isinstance(expected, list) and len(expected) > 0:
-                            # Multiple possible answers - create hangman for each
-                            if len(expected) > 1:
-                                error_html += f"""
-                                    <div style='font-size:14px;color:#64748b;margin-top:4px;margin-bottom:8px;'>Choose any one of these {len(expected)} possible answers:</div>
-                                    <div id='hangman_group_{step_idx}_{label}' class='hangman-option-group'>
-                                """
-
+                            # Add all hangman buttons directly (no nested accordions)
                             for idx, answer in enumerate(expected):
                                 if isinstance(answer, dict):
                                     correct_answer_text = answer.get("value", "")
-                                    display_text = answer.get("display", correct_answer_text)
                                 else:
                                     correct_answer_text = str(answer)
-                                    display_text = correct_answer_text
 
                                 if correct_answer_text:
-                                    hangman_id = f"{step_idx}_{label}_{idx}"
-                                    word_length = len([c for c in correct_answer_text if c.isalnum()])
-
-                                    # Generate hangman HTML first (outside f-string to avoid escaping issues)
+                                    hangman_id = f"{current_prob_idx}_{step_idx}_{label}_{idx}"
                                     hangman_content = self.create_hangman_ui(correct_answer_text, hangman_id)
-
-                                    if len(expected) > 1:
-                                        error_html += f"""
-                                            <div class='hangman-accordion-item' data-hangman-id='{hangman_id}' style='margin-bottom:8px;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:white;'>
-                                                <div class='hangman-accordion-header' onclick='window.problem_solver_app.toggle_hangman_accordion("{hangman_id}")' style='padding:12px;background:#f8fafc;cursor:pointer;display:flex;justify-content:space-between;align-items:center;'>
-                                                    <div style='font-weight:600;color:#475569;'>Option {idx + 1} ({word_length} letters)</div>
-                                                    <div class='accordion-icon' style='color:#64748b;font-size:18px;'>▼</div>
-                                                </div>
-                                                <div class='hangman-accordion-content' id='accordion_content_{hangman_id}' style='display:none;padding:12px;'>
-                                        """
-                                        # Concatenate hangman HTML instead of interpolating
-                                        error_html += hangman_content
-                                        error_html += """
-                                                </div>
-                                            </div>
-                                        """
-                                    else:
-                                        error_html += hangman_content
-
-                            if len(expected) > 1:
-                                error_html += "</div>"
+                                    error_html += hangman_content
                         else:
                             # Single answer
                             if isinstance(expected, dict):
@@ -11477,13 +11858,34 @@ This demonstrates the complete format for creating your own problem sets!
                                 correct_answer_text = str(expected)
 
                             if correct_answer_text:
-                                hangman_html = self.create_hangman_ui(correct_answer_text, f"{step_idx}_{label}")
+                                hangman_id = f"{current_prob_idx}_{step_idx}_{label}"
+                                hangman_html = self.create_hangman_ui(correct_answer_text, hangman_id)
                                 error_html += hangman_html
+                        
+                        error_html += """
+                                </div>
+                            </div>
+                        """
+                        window.console.log(f"✅ Created accordion for Blank {label} with {num_options} option(s)")
 
-                        error_html += "</div>"
-                        window.console.log(f"✅ Displaying hangman UI for Multi-Blank, blank {label}")
+                # Set innerHTML without flash class initially
+                temp_html = error_html.replace("flash-incorrect", "temp-no-flash")
+                feedback_div.innerHTML = temp_html
 
-                feedback_div.innerHTML = error_html
+                # Trigger animation by adding flash class after element is rendered
+                def trigger_flash():
+                    elem = feedback_div.querySelector(".temp-no-flash")
+                    if elem:
+                        elem.classList.remove("temp-no-flash")
+                        elem.classList.add("flash-incorrect")
+                window.setTimeout(create_proxy(trigger_flash), 50)
+
+                # Remove flashing class after animation completes
+                def remove_flash_multi():
+                    flash_div = feedback_div.querySelector(".flash-incorrect")
+                    if flash_div:
+                        flash_div.classList.remove("flash-incorrect")
+                window.setTimeout(create_proxy(remove_flash_multi), 3000)
 
             self.save_to_storage()
             return
@@ -12107,33 +12509,81 @@ This demonstrates the complete format for creating your own problem sets!
     def _calculate_fill_blank_score(self, step_data, step_state):
       """
       Calculate score for fill-in-the-blank questions.
-      Since there's only one blank with multiple possible correct answers,
-      score is either 100 (correct) or 0 (incorrect).
+      Supports both single-blank and multi-blank modes.
+      
+      Single-blank: user_answers is a list, correct_answers is a list
+      Multi-blank: user_answers is a dict, correct_answers is a dict
       """
-      # ✅ FIX: Check for both correct_answers (new format) and accepted_answers (old format)
       correct_answers = step_data.get("correct_answers", step_data.get("accepted_answers", []))
       user_answers = step_state.get("user_answers", [])
 
       if not correct_answers or not user_answers:
           return 0.0
 
-      user_answer = user_answers[0].strip().lower() if len(user_answers) > 0 else ""
+      # Check if multi-blank mode (user_answers is dict)
+      if isinstance(user_answers, dict):
+          # Multi-blank mode: proportional scoring
+          if not isinstance(correct_answers, dict):
+              window.console.error("Multi-blank mode detected but correct_answers is not a dict")
+              return 0.0
+          
+          total_blanks = len(correct_answers)
+          correct_count = 0
+          
+          for label, correct_value in correct_answers.items():
+              user_value = user_answers.get(label, "")
+              
+              # Handle both string and list of acceptable answers
+              if isinstance(correct_value, list):
+                  # Multiple acceptable answers for this blank (list of dicts or strings)
+                  user_normalized = str(user_value).strip().lower()
+                  matches = False
+                  for cv in correct_value:
+                      if isinstance(cv, dict):
+                          # Extract "value" field from dict
+                          cv_value = cv.get("value", "").strip().lower()
+                      else:
+                          # Plain string
+                          cv_value = str(cv).strip().lower()
 
-      # Check if user answer matches any correct answer
-      for correct_ans in correct_answers:
-          if isinstance(correct_ans, dict):
-              # Old format support: {"value": "answer"}
-              correct_value = correct_ans.get("value", "").strip().lower()
-          else:
-              # New format: just string
-              correct_value = str(correct_ans).strip().lower()
+                      if user_normalized == cv_value:
+                          matches = True
+                          break
+              else:
+                  # Single correct answer for this blank (dict or string)
+                  if isinstance(correct_value, dict):
+                      correct_str = correct_value.get("value", "").strip().lower()
+                  else:
+                      correct_str = str(correct_value).strip().lower()
+                  matches = str(user_value).strip().lower() == correct_str
+              
+              if matches:
+                  correct_count += 1
+                  correct_count += 1
+          
+          score = (correct_count / total_blanks) * 100.0 if total_blanks > 0 else 0.0
+          window.console.log(f"Fill-Blank (Multi) Score: {score:.1f}% ({correct_count}/{total_blanks} correct)")
+          return score
+      
+      else:
+          # Single-blank mode: all-or-nothing scoring
+          user_answer = user_answers[0].strip().lower() if len(user_answers) > 0 else ""
 
-          if user_answer == correct_value:
-              window.console.log(f"Fill-Blank Score: 100% (matched '{correct_value}')")
-              return 100.0
+          # Check if user answer matches any correct answer
+          for correct_ans in correct_answers:
+              if isinstance(correct_ans, dict):
+                  # Old format support: {"value": "answer"}
+                  correct_value = correct_ans.get("value", "").strip().lower()
+              else:
+                  # New format: just string
+                  correct_value = str(correct_ans).strip().lower()
 
-      window.console.log(f"Fill-Blank Score: 0% (no match found)")
-      return 0.0
+              if user_answer == correct_value:
+                  window.console.log(f"Fill-Blank (Single) Score: 100% (matched '{correct_value}')")
+                  return 100.0
+
+          window.console.log(f"Fill-Blank (Single) Score: 0% (no match found)")
+          return 0.0
 
 
     def _calculate_multi_mc_score(self, step_data, step_state):
@@ -12882,14 +13332,36 @@ This demonstrates the complete format for creating your own problem sets!
       return (False, None, None)
     
     def show_feedback(self, step_idx, message, color):
-        """Show feedback message"""
+        """Show feedback message with flashing effect for incorrect answers"""
         if step_idx >= len(self.solve_state):
             return
         
         step = self.solve_state[step_idx]
         feedback = step["container"].querySelector(".step-feedback")
         if feedback:
+            # Check if this is an incorrect answer (red color or contains error indicators)
+            is_incorrect = (
+                "❌" in message or 
+                "Incorrect" in message or 
+                "Wrong" in message or
+                "wrong" in message or
+                color.lower() in ["#b91c1c", "#ef4444", "#dc2626", "#f87171"]
+            )
+            
             feedback.innerHTML = f"<div style='color:{color};background:{color}20;padding:12px;border-radius:6px;'>{message}</div>"
+            
+            # Add flashing animation for incorrect answers
+            if is_incorrect:
+                # Get the inner div that was just created
+                inner_div = feedback.querySelector("div")
+                if inner_div:
+                    inner_div.classList.add("flash-incorrect")
+                    
+                    # Remove the flashing class after animation completes (3 seconds)
+                    def remove_flash():
+                        if inner_div:
+                            inner_div.classList.remove("flash-incorrect")
+                    window.setTimeout(create_proxy(remove_flash), 3000)
     
     def next_step(self, step_idx):
       """Move to next step with prominent transition animations"""
@@ -13627,7 +14099,14 @@ This demonstrates the complete format for creating your own problem sets!
                     giveup_btn.style.opacity = "0.5"
             else:
                 if feedback_el:
-                    feedback_el.innerHTML = f"<div style='color:#b91c1c;background:#fee2e2;padding:12px;border-radius:6px;'>❌ Incorrect (Attempt {len(self.freestyle_attempts)}). Try again!</div>"
+                    feedback_el.innerHTML = f"<div style='color:#b91c1c;background:#fee2e2;padding:12px;border-radius:6px;' class='flash-incorrect'>❌ Incorrect (Attempt {len(self.freestyle_attempts)}). Try again!</div>"
+                    
+                    # Remove flashing class after animation completes
+                    def remove_flash():
+                        inner_div = feedback_el.querySelector("div")
+                        if inner_div:
+                            inner_div.classList.remove("flash-incorrect")
+                    window.setTimeout(create_proxy(remove_flash), 3000)
 
             # Update history
             self._update_freestyle_history()
@@ -14105,6 +14584,319 @@ This demonstrates the complete format for creating your own problem sets!
             giveup_btn.title = ""
 
         window.alert("✅ Problem reset. Enter a new problem!")
+
+    # ============================================
+    # STRUCTURE CONVERTER FOR MOODLE
+    # ============================================
+
+    def _structure_to_string(self, structure):
+        """
+        Convert structure dict to a standardized string representation.
+        Format: ops:{Add:2,Mul:1}|operands:{x:1,2:1,3:1}|total_ops:3|total_operands:3
+        """
+        import json
+
+        # Sort dictionaries for consistent output
+        ops_str = json.dumps(structure.get("operators", {}), sort_keys=True, separators=(',', ':'))
+        operands_str = json.dumps(structure.get("operands", {}), sort_keys=True, separators=(',', ':'))
+        matrix_ops_str = json.dumps(structure.get("matrix_ops", []), sort_keys=True, separators=(',', ':'))
+
+        parts = [
+            f"ops:{ops_str}",
+            f"operands:{operands_str}",
+            f"total_ops:{structure.get('total_ops', 0)}",
+            f"total_operands:{structure.get('total_operands', 0)}"
+        ]
+
+        # Add matrix operations if present
+        if structure.get("matrix_ops"):
+            parts.append(f"matrix_ops:{matrix_ops_str}")
+
+        return "|".join(parts)
+
+    def get_structure_for_moodle(self, latex_expr):
+        """
+        Convert LaTeX expression to structure string for Moodle.
+        Returns dict with both simplified and expected structures.
+        """
+        if not latex_expr or not latex_expr.strip():
+            return {
+                "error": "Empty expression",
+                "success": False
+            }
+
+        try:
+            import sympy as sp
+
+            # Remove $$ markers if present
+            clean_expr = latex_expr
+            if clean_expr.startswith('$$') and clean_expr.endswith('$$'):
+                clean_expr = clean_expr[2:-2].strip()
+
+            # Check if this is a matrix expression
+            is_matrix = '[[' in clean_expr or '|R_' in clean_expr or '\\' in clean_expr
+
+            # Parse expression
+            if is_matrix:
+                window.console.log(f"Detected matrix expression: {clean_expr}")
+                parsed = self.math_parser.parse_latex(clean_expr)
+            else:
+                # Try simple parsing first
+                try:
+                    from sympy.parsing.sympy_parser import parse_expr
+                    sympy_text = clean_expr.replace('^', '**')
+                    parsed = parse_expr(sympy_text, local_dict={'sp': sp})
+                except:
+                    # Fallback to parse_latex
+                    parsed = self.math_parser.parse_latex(clean_expr)
+
+            if parsed is None:
+                return {
+                    "error": "Failed to parse expression",
+                    "success": False
+                }
+
+            # Get expected structure (as-is)
+            expected_structure = self.math_parser.extract_structure(parsed)
+            expected_str = self._structure_to_string(expected_structure)
+
+            # Get simplified structure
+            try:
+                simplified = sp.simplify(parsed)
+                simplified_structure = self.math_parser.extract_structure(simplified)
+                simplified_str = self._structure_to_string(simplified_structure)
+            except:
+                # If simplification fails, use expected
+                simplified_str = expected_str
+
+            # Check if structures are the same
+            same_structure = expected_str == simplified_str
+
+            return {
+                "success": True,
+                "expected": expected_str,          # 100% credit
+                "simplified": simplified_str,      # 50% credit
+                "same": same_structure,
+                "expected_structure": expected_structure,
+                "simplified_structure": simplified_structure if not same_structure else expected_structure
+            }
+
+        except Exception as e:
+            window.console.error(f"Error in get_structure_for_moodle: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+            return {
+                "error": str(e),
+                "success": False
+            }
+
+    def show_structure_modal(self, event):
+        """Show modal with structure strings for Moodle submission"""
+        window.console.log("=== show_structure_modal called ===")
+
+        # Get current answer from MathQuill field
+        if not self.freestyle_answer_mf:
+            window.alert("⚠️ Please enter an answer first")
+            return
+
+        latex_expr = self.freestyle_answer_mf.latex()
+        if not latex_expr or not latex_expr.strip():
+            window.alert("⚠️ Please enter an answer first")
+            return
+
+        # Generate structures
+        result = self.get_structure_for_moodle(latex_expr)
+
+        if not result.get("success"):
+            error_msg = result.get("error", "Unknown error")
+            window.alert(f"❌ Error: {error_msg}")
+            return
+
+        # Create modal using JavaScript DOM manipulation
+        # Properly serialize result to JSON for JavaScript
+        import json
+        js_code_replacement = json.dumps(result)
+
+        js_code = """
+        (function() {
+            // Get data from Python
+            const data = %s;
+
+            const expected_str = data.expected;
+            const simplified_str = data.simplified;
+            const same = data.same;
+            const expected_struct = data.expected_structure;
+
+            // Remove old modal if exists
+            const oldModal = document.querySelector('#structureModalContainer');
+            if (oldModal) oldModal.remove();
+
+            // Create modal container
+            const container = document.createElement('div');
+            container.id = 'structureModalContainer';
+
+            // Create backdrop
+            const backdrop = document.createElement('div');
+            backdrop.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 9999;
+            `;
+
+            // Create modal
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%%;
+                left: 50%%;
+                transform: translate(-50%%, -50%%);
+                background: white;
+                border: 2px solid #3b82f6;
+                border-radius: 12px;
+                padding: 24px;
+                max-width: 90%%;
+                max-height: 90vh;
+                overflow-y: auto;
+                z-index: 10000;
+                box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+            `;
+
+            // Build modal HTML
+            let html = `
+                <button id="closeStructureModal" style="position:absolute;top:12px;right:12px;background:#ef4444;color:white;border:none;border-radius:6px;width:32px;height:32px;font-size:18px;cursor:pointer;font-weight:bold;">✖</button>
+
+                <h2 style="margin:0 0 16px 0;color:#1e40af;font-size:20px;">📋 Structure String for Moodle</h2>
+
+                <div style="background:#f0f9ff;padding:16px;border-radius:8px;margin-bottom:16px;border:2px solid #93c5fd;">
+                    <div style="font-weight:600;margin-bottom:8px;color:#1e40af;">💡 Instructions</div>
+                    <div style="font-size:14px;color:#1e3a8a;">Copy the structure string below and paste it into your Moodle fill-in-the-blank answer field.</div>
+                </div>
+            `;
+
+            if (!same) {
+                html += `
+                    <div style="background:#fef3c7;padding:12px;border-radius:8px;margin-bottom:16px;border:2px solid #fbbf24;">
+                        <div style="font-weight:600;margin-bottom:4px;color:#92400e;">⚠️ Note: Two Structure Formats Available</div>
+                        <div style="font-size:13px;color:#92400e;">Your expression has different simplified and expected structures. Use expected for 100%% credit.</div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div style="margin-bottom:20px;">
+                    <div style="font-weight:600;margin-bottom:8px;color:#059669;display:flex;align-items:center;gap:8px;">
+                        <span>✓ Expected Structure (100%% Credit)</span>
+                    </div>
+                    <div style="background:#f9fafb;padding:12px;border-radius:6px;border:1px solid #d1d5db;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:8px;" id="expectedStructureText">${expected_str}</div>
+                    <button id="copyExpected" style="background:#10b981;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;">📋 Copy to Clipboard</button>
+                </div>
+            `;
+
+            if (!same) {
+                html += `
+                    <div style="margin-bottom:20px;">
+                        <div style="font-weight:600;margin-bottom:8px;color:#f59e0b;display:flex;align-items:center;gap:8px;">
+                            <span>⚡ Simplified Structure (50%% Credit)</span>
+                        </div>
+                        <div style="background:#f9fafb;padding:12px;border-radius:6px;border:1px solid #d1d5db;font-family:monospace;font-size:12px;word-break:break-all;margin-bottom:8px;" id="simplifiedStructureText">${simplified_str}</div>
+                        <button id="copySimplified" style="background:#f59e0b;color:white;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600;font-size:14px;">📋 Copy to Clipboard</button>
+                    </div>
+                `;
+            }
+
+            const ops = Object.entries(expected_struct.operators || {}).map(([k,v]) => `${k} (${v})`).join(', ') || 'None';
+            const operands = Object.entries(expected_struct.operands || {}).map(([k,v]) => `${k} (${v})`).join(', ') || 'None';
+            const has_matrix = expected_struct.matrix_ops && expected_struct.matrix_ops.length > 0;
+
+            html += `
+                <div style="background:#f3f4f6;padding:12px;border-radius:6px;">
+                    <div style="font-weight:600;margin-bottom:8px;color:#374151;font-size:14px;">📊 Structure Breakdown (Expected)</div>
+                    <div style="font-size:13px;color:#6b7280;font-family:monospace;">
+                        <div>• Operators: ${ops}</div>
+                        <div>• Operands: ${operands}</div>
+                        <div>• Total Operations: ${expected_struct.total_ops || 0}</div>
+                        <div>• Total Operands: ${expected_struct.total_operands || 0}</div>
+                        ${has_matrix ? `<div>• Matrix Operations: ${expected_struct.matrix_ops.length}</div>` : ''}
+                    </div>
+                </div>
+            `;
+
+            modal.innerHTML = html;
+
+            container.appendChild(backdrop);
+            container.appendChild(modal);
+            document.body.appendChild(container);
+
+            // Close handlers
+            function closeModal() {
+                container.remove();
+            }
+
+            document.getElementById('closeStructureModal').addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+
+            // Copy handlers
+            function copyToClipboard(text, buttonId) {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            showCopySuccess(buttonId);
+                        }).catch(() => {
+                            fallbackCopy(text, buttonId);
+                        });
+                    } else {
+                        fallbackCopy(text, buttonId);
+                    }
+                } catch(err) {
+                    alert('❌ Copy failed. Please select and copy manually.');
+                }
+            }
+
+            function fallbackCopy(text, buttonId) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showCopySuccess(buttonId);
+            }
+
+            function showCopySuccess(buttonId) {
+                const btn = document.getElementById(buttonId);
+                if (btn) {
+                    const originalText = btn.textContent;
+                    const originalBg = btn.style.background;
+                    btn.textContent = '✓ Copied!';
+                    btn.style.background = '#059669';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.style.background = originalBg;
+                    }, 2000);
+                }
+            }
+
+            document.getElementById('copyExpected').addEventListener('click', () => {
+                copyToClipboard(expected_str, 'copyExpected');
+            });
+
+            if (!same) {
+                document.getElementById('copySimplified').addEventListener('click', () => {
+                    copyToClipboard(simplified_str, 'copySimplified');
+                });
+            }
+        })();
+        """ % js_code_replacement
+
+        # Execute JavaScript
+        window.eval(js_code)
+
 
     def _update_freestyle_history(self):
       """Update the attempt history display"""
@@ -15112,7 +15904,7 @@ This demonstrates the complete format for creating your own problem sets!
                   self.disable_soft_keyboard(self.freestyle_problem_mf)
 
               # Add focus event listener to apply keyboard state when focused
-              def problem_focus_handler():
+              def problem_focus_handler(event):
                   if self.soft_keyboard_enabled:
                       self.enable_soft_keyboard(self.freestyle_problem_mf)
                   else:
@@ -15136,7 +15928,7 @@ This demonstrates the complete format for creating your own problem sets!
                   self.disable_soft_keyboard(self.freestyle_answer_mf)
 
               # Add focus event listener to apply keyboard state when focused
-              def answer_focus_handler():
+              def answer_focus_handler(event):
                   if self.soft_keyboard_enabled:
                       self.enable_soft_keyboard(self.freestyle_answer_mf)
                   else:
@@ -15192,6 +15984,13 @@ This demonstrates the complete format for creating your own problem sets!
                 submit_btn.addEventListener("click", create_proxy(lambda e: self.freestyle_submit(e)))
                 submit_btn._handler_attached = True
                 window.console.log("✅ Submit button handler attached")
+
+            # Get Structure String button
+            structure_btn = document.querySelector("#getStructureString")
+            if structure_btn and not hasattr(structure_btn, '_handler_attached'):
+                structure_btn.addEventListener("click", create_proxy(lambda e: self.show_structure_modal(e)))
+                structure_btn._handler_attached = True
+                window.console.log("✅ Structure button handler attached")
 
             # Give Up button
             giveup_btn = document.querySelector("#freestyleGiveUp")

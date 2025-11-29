@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Editor with Live Preview</title>
+
+  <!-- Marked.js for Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- GitHub Markdown CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.5.0/github-markdown.min.css">
+
+  <!-- Ace Editor -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/mode-markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.2/theme-github.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #f6f8fa;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Toolbar */
+    .toolbar {
+      background: #24292e;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .toolbar h1 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-right: auto;
+    }
+
+    .toolbar button,
+    .toolbar label {
+      background: #0366d6;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .toolbar button:hover,
+    .toolbar label:hover {
+      background: #0256c7;
+    }
+
+    .toolbar input[type="file"] {
+      display: none;
+    }
+
+    .toolbar .mode-toggle {
+      background: #28a745;
+    }
+
+    .toolbar .mode-toggle:hover {
+      background: #239738;
+    }
+
+    .toolbar .mode-toggle.edit-mode {
+      background: #ffa500;
+    }
+
+    .toolbar .mode-toggle.edit-mode:hover {
+      background: #ff8c00;
+    }
+
+    .toolbar .file-name {
+      color: #fafbfc;
+      font-size: 14px;
+      opacity: 0.8;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* Main Container */
+    .container {
+      display: flex;
+      height: calc(100vh - 60px);
+      background: white;
+    }
+
+    /* Left Panel - Rendered Markdown */
+    .preview-panel {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      border-right: 1px solid #e1e4e8;
+    }
+
+    .markdown-body {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Edit mode hover effect */
+    .edit-mode .markdown-body > * {
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      padding-left: 12px;
+      margin-left: -15px;
+      border-radius: 4px;
+    }
+
+    .edit-mode .markdown-body > *:hover {
+      background: #f6f8fa;
+      border-left-color: #0366d6;
+    }
+
+    .edit-mode .markdown-body > *.editing {
+      background: #fff3cd;
+      border-left-color: #ffa500;
+    }
+
+    /* Right Panel - Ace Editor */
+    .editor-panel {
+      width: 0;
+      overflow: hidden;
+      transition: width 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-panel.active {
+      width: 50%;
+    }
+
+    .editor-header {
+      background: #fafbfc;
+      padding: 10px 15px;
+      border-bottom: 1px solid #e1e4e8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .editor-header h3 {
+      font-size: 14px;
+      color: #586069;
+      font-weight: 600;
+    }
+
+    .editor-header button {
+      background: #0366d6;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .editor-header button:hover {
+      background: #0256c7;
+    }
+
+    #aceEditor {
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Scrollbar styling */
+    .preview-panel::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .preview-panel::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    .preview-panel::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+    }
+
+    .preview-panel::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    /* Info message */
+    .info-message {
+      background: #d1ecf1;
+      border: 1px solid #bee5eb;
+      color: #0c5460;
+      padding: 12px 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .edit-mode-info {
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <h1>📝 Markdown Editor</h1>
+    <span class="file-name" id="fileName">No file loaded</span>
+
+    <label for="fileInput">
+      📁 Open MD File
+    </label>
+    <input type="file" id="fileInput" accept=".md,.markdown">
+
+    <button id="saveBtn">💾 Save</button>
+    <button id="downloadBtn">📥 Download</button>
+    <button id="modeToggle" class="mode-toggle">✏️ Edit Mode</button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <div class="markdown-body" id="preview">
+        <div class="info-message">
+          <strong>👋 Welcome to Markdown Editor!</strong><br>
+          Click "Open MD File" to load a markdown file, or start editing.<br><br>
+          <strong>How to use:</strong><br>
+          • <strong>View Mode</strong>: Read the rendered markdown<br>
+          • <strong>Edit Mode</strong>: Click on any element to edit it in the Ace editor →
+        </div>
+        <h1>Sample Markdown</h1>
+        <p>Click the "Edit Mode" button to start editing.</p>
+        <h2>Features</h2>
+        <ul>
+          <li>GitHub-style markdown rendering</li>
+          <li>Live preview</li>
+          <li>Edit individual sections</li>
+          <li>Save and download files</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Editor Panel -->
+    <div class="editor-panel" id="editorPanel">
+      <div class="editor-header">
+        <h3>✏️ Edit Markdown</h3>
+        <button id="applyBtn">Apply Changes</button>
+      </div>
+      <div id="aceEditor"></div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let currentFile = null;
+    let currentFileName = '';
+    let isEditMode = false;
+    let fullMarkdownContent = '# Sample Markdown\n\nClick the "Edit Mode" button to start editing.\n\n## Features\n\n- GitHub-style markdown rendering\n- Live preview\n- Edit individual sections\n- Save and download files';
+    let currentEditingElement = null;
+    let markdownElements = [];
+
+    // Initialize Ace Editor
+    const aceEditor = ace.edit("aceEditor");
+    aceEditor.setTheme("ace/theme/github");
+    aceEditor.session.setMode("ace/mode/markdown");
+    aceEditor.setOptions({
+      fontSize: "14px",
+      showPrintMargin: false,
+      wrap: true
+    });
+
+    // Elements
+    const preview = document.getElementById('preview');
+    const editorPanel = document.getElementById('editorPanel');
+    const modeToggle = document.getElementById('modeToggle');
+    const fileInput = document.getElementById('fileInput');
+    const saveBtn = document.getElementById('saveBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const applyBtn = document.getElementById('applyBtn');
+    const fileNameDisplay = document.getElementById('fileName');
+
+    // Configure marked for GitHub-flavored markdown
+    marked.setOptions({
+      gfm: true,
+      breaks: true,
+      headerIds: true
+    });
+
+    // Parse markdown and track element positions
+    function parseMarkdownToElements(markdown) {
+      const lines = markdown.split('\n');
+      const elements = [];
+      let currentBlock = '';
+      let startLine = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const isBlockStart = /^#{1,6}\s|^```|^-\s|^\d+\.\s|^>\s|^\|/.test(line);
+        const isEmptyLine = line.trim() === '';
+
+        if (isBlockStart && currentBlock) {
+          elements.push({
+            content: currentBlock.trim(),
+            startLine,
+            endLine: i - 1
+          });
+          currentBlock = line + '\n';
+          startLine = i;
+        } else if (isEmptyLine && currentBlock) {
+          currentBlock += line + '\n';
+          elements.push({
+            content: currentBlock.trim(),
+            startLine,
+            endLine: i
+          });
+          currentBlock = '';
+          startLine = i + 1;
+        } else {
+          currentBlock += line + '\n';
+        }
+      }
+
+      if (currentBlock.trim()) {
+        elements.push({
+          content: currentBlock.trim(),
+          startLine,
+          endLine: lines.length - 1
+        });
+      }
+
+      return elements;
+    }
+
+    // Render markdown
+    function renderMarkdown(markdown) {
+      fullMarkdownContent = markdown;
+      markdownElements = parseMarkdownToElements(markdown);
+
+      const html = marked.parse(markdown);
+      preview.innerHTML = html;
+
+      if (isEditMode) {
+        attachEditListeners();
+      }
+    }
+
+    // Attach click listeners for edit mode
+    function attachEditListeners() {
+      const children = Array.from(preview.children);
+      children.forEach((child, index) => {
+        if (markdownElements[index]) {
+          child.setAttribute('data-index', index);
+          child.addEventListener('click', () => editElement(child, index));
+        }
+      });
+    }
+
+    // Edit element
+    function editElement(element, index) {
+      if (!isEditMode) return;
+
+      // Remove previous editing class
+      if (currentEditingElement) {
+        currentEditingElement.classList.remove('editing');
+      }
+
+      currentEditingElement = element;
+      element.classList.add('editing');
+
+      // Show editor panel
+      editorPanel.classList.add('active');
+
+      // Set content in Ace editor
+      const elementData = markdownElements[index];
+      aceEditor.setValue(elementData.content, -1);
+      aceEditor.focus();
+
+      // Store current index for applying changes
+      aceEditor.currentIndex = index;
+    }
+
+    // Apply changes from Ace editor
+    applyBtn.addEventListener('click', () => {
+      const newContent = aceEditor.getValue();
+      const index = aceEditor.currentIndex;
+
+      if (index !== undefined && markdownElements[index]) {
+        // Update the element
+        markdownElements[index].content = newContent;
+
+        // Reconstruct full markdown
+        fullMarkdownContent = markdownElements.map(el => el.content).join('\n\n');
+
+        // Re-render
+        renderMarkdown(fullMarkdownContent);
+
+        // Clear editing state
+        editorPanel.classList.remove('active');
+        if (currentEditingElement) {
+          currentEditingElement.classList.remove('editing');
+          currentEditingElement = null;
+        }
+      }
+    });
+
+    // Toggle edit mode
+    modeToggle.addEventListener('click', () => {
+      isEditMode = !isEditMode;
+      document.body.classList.toggle('edit-mode', isEditMode);
+
+      if (isEditMode) {
+        modeToggle.textContent = '👁️ View Mode';
+        modeToggle.classList.add('edit-mode');
+        attachEditListeners();
+      } else {
+        modeToggle.textContent = '✏️ Edit Mode';
+        modeToggle.classList.remove('edit-mode');
+        editorPanel.classList.remove('active');
+        if (currentEditingElement) {
+          currentEditingElement.classList.remove('editing');
+          currentEditingElement = null;
+        }
+      }
+    });
+
+    // File input handler
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        currentFile = file;
+        currentFileName = file.name;
+        fileNameDisplay.textContent = currentFileName;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const content = event.target.result;
+          renderMarkdown(content);
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // Save file (overwrite)
+    saveBtn.addEventListener('click', () => {
+      if (!currentFileName) {
+        alert('No file loaded. Use "Download" to save as new file.');
+        return;
+      }
+
+      const blob = new Blob([fullMarkdownContent], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = currentFileName;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      alert(`File saved as: ${currentFileName}`);
+    });
+
+    // Download as new file
+    downloadBtn.addEventListener('click', () => {
+      const fileName = prompt('Enter file name:', currentFileName || 'document.md');
+      if (!fileName) return;
+
+      const blob = new Blob([fullMarkdownContent], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName.endsWith('.md') ? fileName : fileName + '.md';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Initial render
+    renderMarkdown(fullMarkdownContent);
+  </script>
+</body>
+</html>

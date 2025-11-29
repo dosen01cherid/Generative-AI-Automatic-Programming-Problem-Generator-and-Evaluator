@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 10: Business & Data Understanding - Part 2</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        .slide-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        h4 {
+            color: #764ba2;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+
+        p, li {
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .formula-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .example-box {
+            background: #fff3cd;
+            padding: 20px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .key-point {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .warning-box {
+            background: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .column-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .process-step {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .quality-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            margin: 5px;
+        }
+
+        .quality-high {
+            background: #28a745;
+            color: white;
+        }
+
+        .quality-medium {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .quality-low {
+            background: #dc3545;
+            color: white;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #667eea;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Title Slide -->
+    <div class="slide">
+        <div class="slide-number">Slide 1</div>
+        <div class="slide-content">
+            <h1 style="text-align: center; font-size: 3em;">Session 10</h1>
+            <h2 style="text-align: center; color: #667eea; margin-top: 20px;">Business & Data Understanding</h2>
+            <p class="subtitle" style="text-align: center; margin-top: 30px;">Part 2: Data Understanding Framework</p>
+
+            <div class="highlight" style="margin-top: 50px;">
+                <h3 style="color: #333;">Learning Objectives:</h3>
+                <ul>
+                    <li>Memahami pentingnya data understanding dalam analytics</li>
+                    <li>Melakukan data profiling dan assessment</li>
+                    <li>Mengevaluasi data quality dimensions</li>
+                    <li>Melakukan exploratory data analysis (EDA)</li>
+                    <li>Mengidentifikasi data issues dan mitigation strategies</li>
+                </ul>
+            </div>
+
+            <div class="footer-note">
+                <p><strong>Mata Kuliah:</strong> Data Analitik | <strong>Program Studi:</strong> Sistem Informasi</p>
+                <p><strong>Universitas Mercu Buana</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: What is Data Understanding? -->
+    <div class="slide">
+        <div class="slide-number">Slide 2</div>
+        <div class="slide-content">
+            <h1>What is Data Understanding?</h1>
+
+            <div class="key-point">
+                <p><strong>Data Understanding:</strong> The process of exploring, profiling, and assessing data to determine its suitability for analytics objectives.</p>
+            </div>
+
+            <h2>Why Data Understanding Matters</h2>
+
+            <div class="two-column">
+                <div class="warning-box">
+                    <h3>❌ Without Data Understanding</h3>
+                    <ul>
+                        <li>Garbage In, Garbage Out (GIGO)</li>
+                        <li>Wrong insights from bad data</li>
+                        <li>Wasted modeling effort</li>
+                        <li>Missed data quality issues</li>
+                        <li>Unrealistic expectations</li>
+                    </ul>
+                </div>
+                <div class="key-point">
+                    <h3>✓ With Data Understanding</h3>
+                    <ul>
+                        <li>Know data limitations</li>
+                        <li>Identify data issues early</li>
+                        <li>Plan data preparation steps</li>
+                        <li>Discover unexpected patterns</li>
+                        <li>Set realistic expectations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Data Understanding in Analytics Lifecycle</h2>
+
+            <div class="highlight">
+                <p>Data Understanding is part of the <strong>Discovery Phase</strong> in the Data Analytics Lifecycle</p>
+                <ol>
+                    <li>Business Understanding (What problem?)</li>
+                    <li><strong>Data Understanding (What data?)</strong> ← We are here</li>
+                    <li>Data Preparation (Clean & transform)</li>
+                    <li>Model Planning (Select algorithms)</li>
+                    <li>Model Building (Train models)</li>
+                    <li>Model Evaluation & Deployment</li>
+                </ol>
+            </div>
+
+            <div class="example-box">
+                <h3>Real-World Example:</h3>
+                <p><strong>Scenario:</strong> A company wants to predict customer churn</p>
+                <p><strong>Business Understanding:</strong> Reduce churn from 25% to 15%</p>
+                <p><strong>Data Understanding Questions:</strong></p>
+                <ul>
+                    <li>Do we have historical churn data?</li>
+                    <li>How far back does the data go?</li>
+                    <li>What customer features are available?</li>
+                    <li>Is the data complete and accurate?</li>
+                    <li>Are there enough churned customers for training?</li>
+                    <li>What's the data refresh frequency?</li>
+                </ul>
+            </div>
+
+            <div class="metric-card">
+                <p>Time spent on Data Understanding</p>
+                <div class="metric-value">20-30%</div>
+                <p>of total analytics project time</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Data Understanding Framework -->
+    <div class="slide">
+        <div class="slide-number">Slide 3</div>
+        <div class="slide-content">
+            <h1>Data Understanding Framework</h1>
+
+            <h2>5 Key Activities</h2>
+
+            <div class="process-step">
+                <h3>1. Initial Data Collection</h3>
+                <p><strong>Goal:</strong> Gather all potentially relevant data sources</p>
+                <ul>
+                    <li>Identify data sources (databases, files, APIs, external data)</li>
+                    <li>Assess data availability and access permissions</li>
+                    <li>Document data lineage and ownership</li>
+                    <li>Understand data generation process</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>2. Data Description</h3>
+                <p><strong>Goal:</strong> Understand the structure and format of data</p>
+                <ul>
+                    <li>Number of records (rows)</li>
+                    <li>Number of attributes (columns)</li>
+                    <li>Data types (numeric, categorical, datetime, text)</li>
+                    <li>File formats and sizes</li>
+                    <li>Relationships between tables</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>3. Data Exploration (EDA)</h3>
+                <p><strong>Goal:</strong> Discover patterns, distributions, and relationships</p>
+                <ul>
+                    <li>Descriptive statistics (mean, median, std, min, max)</li>
+                    <li>Distribution analysis (histograms, box plots)</li>
+                    <li>Correlation analysis</li>
+                    <li>Outlier detection</li>
+                    <li>Visual exploration</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>4. Data Quality Assessment</h3>
+                <p><strong>Goal:</strong> Evaluate data fitness for purpose</p>
+                <ul>
+                    <li>Completeness (missing values)</li>
+                    <li>Accuracy (correctness)</li>
+                    <li>Consistency (no contradictions)</li>
+                    <li>Timeliness (up-to-date)</li>
+                    <li>Validity (follows business rules)</li>
+                    <li>Uniqueness (no duplicates)</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>5. Data Profiling Report</h3>
+                <p><strong>Goal:</strong> Document findings and recommendations</p>
+                <ul>
+                    <li>Summary of data sources</li>
+                    <li>Data quality scores</li>
+                    <li>Key findings and insights</li>
+                    <li>Identified issues and risks</li>
+                    <li>Recommendations for data preparation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Data Sources & Collection -->
+    <div class="slide">
+        <div class="slide-number">Slide 4</div>
+        <div class="slide-content">
+            <h1>Data Sources & Collection</h1>
+
+            <h2>Types of Data Sources</h2>
+
+            <table>
+                <tr>
+                    <th>Source Type</th>
+                    <th>Description</th>
+                    <th>Examples</th>
+                    <th>Access Method</th>
+                </tr>
+                <tr>
+                    <td><strong>Internal Databases</strong></td>
+                    <td>Operational systems within organization</td>
+                    <td>CRM, ERP, Transaction DB</td>
+                    <td>SQL queries, DB connectors</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Warehouses</strong></td>
+                    <td>Centralized analytical repositories</td>
+                    <td>Snowflake, Redshift, BigQuery</td>
+                    <td>SQL, BI tools</td>
+                </tr>
+                <tr>
+                    <td><strong>Files</strong></td>
+                    <td>Structured/semi-structured files</td>
+                    <td>CSV, Excel, JSON, XML</td>
+                    <td>File readers, parsers</td>
+                </tr>
+                <tr>
+                    <td><strong>APIs</strong></td>
+                    <td>External services and platforms</td>
+                    <td>REST APIs, GraphQL</td>
+                    <td>HTTP requests, SDKs</td>
+                </tr>
+                <tr>
+                    <td><strong>Web Scraping</strong></td>
+                    <td>Data extracted from websites</td>
+                    <td>Product prices, reviews</td>
+                    <td>BeautifulSoup, Scrapy</td>
+                </tr>
+                <tr>
+                    <td><strong>Streaming Data</strong></td>
+                    <td>Real-time data feeds</td>
+                    <td>IoT sensors, clickstreams</td>
+                    <td>Kafka, Kinesis</td>
+                </tr>
+                <tr>
+                    <td><strong>External Data</strong></td>
+                    <td>Third-party data providers</td>
+                    <td>Weather data, demographics</td>
+                    <td>Data marketplaces, APIs</td>
+                </tr>
+            </table>
+
+            <h2>Data Collection Checklist</h2>
+
+            <div class="two-column">
+                <div class="column-box">
+                    <h3>Technical Questions</h3>
+                    <ul>
+                        <li>✓ What format is the data in?</li>
+                        <li>✓ How large is the dataset?</li>
+                        <li>✓ Where is the data stored?</li>
+                        <li>✓ How to access the data?</li>
+                        <li>✓ What are access credentials?</li>
+                        <li>✓ Is data encrypted?</li>
+                    </ul>
+                </div>
+                <div class="column-box">
+                    <h3>Business Questions</h3>
+                    <ul>
+                        <li>✓ Who owns the data?</li>
+                        <li>✓ What permissions are needed?</li>
+                        <li>✓ Are there privacy concerns?</li>
+                        <li>✓ What's the update frequency?</li>
+                        <li>✓ Historical data availability?</li>
+                        <li>✓ Data retention policies?</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h3>Example: Customer Churn Data Collection</h3>
+                <table>
+                    <tr>
+                        <th>Data Source</th>
+                        <th>Information</th>
+                        <th>Size</th>
+                        <th>Update Frequency</th>
+                    </tr>
+                    <tr>
+                        <td>CRM Database</td>
+                        <td>Customer demographics, account info</td>
+                        <td>50K records</td>
+                        <td>Daily</td>
+                    </tr>
+                    <tr>
+                        <td>Usage Logs</td>
+                        <td>Product usage patterns</td>
+                        <td>2M records</td>
+                        <td>Real-time</td>
+                    </tr>
+                    <tr>
+                        <td>Support Tickets</td>
+                        <td>Customer service interactions</td>
+                        <td>100K tickets</td>
+                        <td>Real-time</td>
+                    </tr>
+                    <tr>
+                        <td>Billing System</td>
+                        <td>Payment history, invoices</td>
+                        <td>150K transactions</td>
+                        <td>Daily</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Data Quality Dimensions -->
+    <div class="slide">
+        <div class="slide-number">Slide 5</div>
+        <div class="slide-content">
+            <h1>Data Quality Dimensions</h1>
+
+            <div class="key-point">
+                <p><strong>Data Quality:</strong> The degree to which data meets requirements for its intended use.</p>
+            </div>
+
+            <h2>6 Critical Dimensions of Data Quality</h2>
+
+            <div class="process-step">
+                <h3>1. Completeness</h3>
+                <p>Extent to which data is not missing</p>
+                <div class="formula-box">
+                    <p>$$\text{Completeness} = \frac{\text{Non-null values}}{\text{Total values}} \times 100\%$$</p>
+                </div>
+                <p><strong>Example:</strong> Dataset has 1000 rows, "email" column has 850 non-null values</p>
+                <p>$$\text{Completeness} = \frac{850}{1000} \times 100\% = 85\%$$</p>
+                <div class="quality-indicator quality-medium">Medium Quality</div>
+            </div>
+
+            <div class="process-step">
+                <h3>2. Accuracy</h3>
+                <p>Data correctly represents real-world values</p>
+                <div class="formula-box">
+                    <p>$$\text{Accuracy} = \frac{\text{Correct values}}{\text{Total values}} \times 100\%$$</p>
+                </div>
+                <p><strong>Example:</strong> Verify 100 phone numbers, 92 are valid</p>
+                <p>$$\text{Accuracy} = \frac{92}{100} \times 100\% = 92\%$$</p>
+                <div class="quality-indicator quality-high">High Quality</div>
+            </div>
+
+            <div class="process-step">
+                <h3>3. Consistency</h3>
+                <p>Same data across different sources matches</p>
+                <p><strong>Example Issues:</strong></p>
+                <ul>
+                    <li>Customer name in CRM: "John Smith" vs Billing: "J. Smith"</li>
+                    <li>Date format: "2025-01-15" vs "15/01/2025"</li>
+                    <li>Units: "100 kg" vs "220 lbs" (same weight, different units)</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>4. Timeliness</h3>
+                <p>Data is up-to-date and available when needed</p>
+                <p><strong>Questions:</strong></p>
+                <ul>
+                    <li>When was data last updated?</li>
+                    <li>Is the data fresh enough for decision-making?</li>
+                    <li>What's the acceptable data age?</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>5. Validity</h3>
+                <p>Data conforms to defined business rules and constraints</p>
+                <p><strong>Example Rules:</strong></p>
+                <ul>
+                    <li>Age must be between 0-150</li>
+                    <li>Email must contain "@"</li>
+                    <li>Phone number has 10-15 digits</li>
+                    <li>Date of birth < Today</li>
+                </ul>
+                <div class="formula-box">
+                    <p>$$\text{Validity} = \frac{\text{Valid values}}{\text{Total values}} \times 100\%$$</p>
+                </div>
+            </div>
+
+            <div class="process-step">
+                <h3>6. Uniqueness</h3>
+                <p>No unintended duplicate records</p>
+                <div class="formula-box">
+                    <p>$$\text{Uniqueness} = \frac{\text{Unique records}}{\text{Total records}} \times 100\%$$</p>
+                </div>
+                <p><strong>Example:</strong> 10,000 customer records, 9,800 unique customers (200 duplicates)</p>
+                <p>$$\text{Uniqueness} = \frac{9800}{10000} \times 100\% = 98\%$$</p>
+                <div class="quality-indicator quality-high">High Quality</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Data Quality Assessment -->
+    <div class="slide">
+        <div class="slide-number">Slide 6</div>
+        <div class="slide-content">
+            <h1>Data Quality Assessment</h1>
+
+            <h2>Quality Score Calculation</h2>
+
+            <div class="formula-box">
+                <h3>Overall Data Quality Score:</h3>
+                <p>$$\text{Quality Score} = \frac{\sum_{i=1}^{n} w_i \times Q_i}{\sum_{i=1}^{n} w_i}$$</p>
+                <p>Where:</p>
+                <ul>
+                    <li>\(Q_i\) = Quality score for dimension \(i\)</li>
+                    <li>\(w_i\) = Weight/importance of dimension \(i\)</li>
+                    <li>\(n\) = Number of quality dimensions</li>
+                </ul>
+            </div>
+
+            <h2>Example: Customer Dataset Quality Assessment</h2>
+
+            <table>
+                <tr>
+                    <th>Dimension</th>
+                    <th>Weight</th>
+                    <th>Score (%)</th>
+                    <th>Weighted Score</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Completeness</td>
+                    <td>25%</td>
+                    <td>85%</td>
+                    <td>21.25</td>
+                    <td><span class="quality-indicator quality-medium">Medium</span></td>
+                </tr>
+                <tr>
+                    <td>Accuracy</td>
+                    <td>30%</td>
+                    <td>92%</td>
+                    <td>27.60</td>
+                    <td><span class="quality-indicator quality-high">High</span></td>
+                </tr>
+                <tr>
+                    <td>Consistency</td>
+                    <td>15%</td>
+                    <td>78%</td>
+                    <td>11.70</td>
+                    <td><span class="quality-indicator quality-medium">Medium</span></td>
+                </tr>
+                <tr>
+                    <td>Validity</td>
+                    <td>20%</td>
+                    <td>95%</td>
+                    <td>19.00</td>
+                    <td><span class="quality-indicator quality-high">High</span></td>
+                </tr>
+                <tr>
+                    <td>Uniqueness</td>
+                    <td>10%</td>
+                    <td>98%</td>
+                    <td>9.80</td>
+                    <td><span class="quality-indicator quality-high">High</span></td>
+                </tr>
+                <tr>
+                    <th colspan="3">Overall Quality Score</th>
+                    <th>89.35%</th>
+                    <th><span class="quality-indicator quality-high">High</span></th>
+                </tr>
+            </table>
+
+            <div class="formula-box">
+                <h3>Calculation:</h3>
+                <p>$$\text{Quality Score} = \frac{(0.25 \times 85) + (0.30 \times 92) + (0.15 \times 78) + (0.20 \times 95) + (0.10 \times 98)}{1.0}$$</p>
+                <p>$$= \frac{21.25 + 27.60 + 11.70 + 19.00 + 9.80}{1.0} = 89.35\%$$</p>
+            </div>
+
+            <h2>Quality Score Interpretation</h2>
+
+            <div class="three-column">
+                <div class="column-box" style="border-color: #28a745;">
+                    <h3 style="color: #28a745;">High Quality</h3>
+                    <p style="font-size: 2em; text-align: center;">≥ 85%</p>
+                    <p>Data is fit for purpose. Minor issues can be addressed in data preparation.</p>
+                </div>
+                <div class="column-box" style="border-color: #ffc107;">
+                    <h3 style="color: #ffc107;">Medium Quality</h3>
+                    <p style="font-size: 2em; text-align: center;">70-84%</p>
+                    <p>Significant data preparation required. May limit analytics scope.</p>
+                </div>
+                <div class="column-box" style="border-color: #dc3545;">
+                    <h3 style="color: #dc3545;">Low Quality</h3>
+                    <p style="font-size: 2em; text-align: center;">< 70%</p>
+                    <p>Major issues. Consider finding alternative data sources or improving data collection.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Exploratory Data Analysis (EDA) -->
+    <div class="slide">
+        <div class="slide-number">Slide 7</div>
+        <div class="slide-content">
+            <h1>Exploratory Data Analysis (EDA)</h1>
+
+            <div class="key-point">
+                <p><strong>EDA:</strong> The process of analyzing datasets to summarize their main characteristics, often using statistical graphics and other visualization methods.</p>
+            </div>
+
+            <h2>EDA Objectives</h2>
+            <ul>
+                <li>Understand data structure and distributions</li>
+                <li>Detect outliers and anomalies</li>
+                <li>Discover patterns and relationships</li>
+                <li>Test underlying assumptions</li>
+                <li>Generate hypotheses for analytics</li>
+            </ul>
+
+            <h2>Descriptive Statistics</h2>
+
+            <div class="two-column">
+                <div class="column-box">
+                    <h3>Central Tendency</h3>
+                    <div class="formula-box">
+                        <p><strong>Mean (Average):</strong></p>
+                        <p>$$\bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i$$</p>
+                        <p><strong>Median:</strong></p>
+                        <p>Middle value when sorted</p>
+                        <p><strong>Mode:</strong></p>
+                        <p>Most frequent value</p>
+                    </div>
+                </div>
+                <div class="column-box">
+                    <h3>Dispersion (Spread)</h3>
+                    <div class="formula-box">
+                        <p><strong>Variance:</strong></p>
+                        <p>$$\sigma^2 = \frac{1}{n} \sum_{i=1}^{n} (x_i - \bar{x})^2$$</p>
+                        <p><strong>Standard Deviation:</strong></p>
+                        <p>$$\sigma = \sqrt{\sigma^2}$$</p>
+                        <p><strong>Range:</strong></p>
+                        <p>$$\text{Range} = x_{max} - x_{min}$$</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Example: Customer Age Distribution</h2>
+
+            <div class="chart-container">
+                <div id="ageDistribution"></div>
+            </div>
+
+            <div class="example-box">
+                <h3>Statistical Summary:</h3>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Interpretation</th>
+                    </tr>
+                    <tr>
+                        <td>Count</td>
+                        <td>10,000</td>
+                        <td>Total customers</td>
+                    </tr>
+                    <tr>
+                        <td>Mean</td>
+                        <td>42.5 years</td>
+                        <td>Average customer age</td>
+                    </tr>
+                    <tr>
+                        <td>Median</td>
+                        <td>40 years</td>
+                        <td>Middle value (50th percentile)</td>
+                    </tr>
+                    <tr>
+                        <td>Std Dev</td>
+                        <td>12.8 years</td>
+                        <td>Typical deviation from mean</td>
+                    </tr>
+                    <tr>
+                        <td>Min</td>
+                        <td>18 years</td>
+                        <td>Youngest customer</td>
+                    </tr>
+                    <tr>
+                        <td>Max</td>
+                        <td>85 years</td>
+                        <td>Oldest customer</td>
+                    </tr>
+                    <tr>
+                        <td>Q1 (25%)</td>
+                        <td>32 years</td>
+                        <td>25% of customers are younger</td>
+                    </tr>
+                    <tr>
+                        <td>Q3 (75%)</td>
+                        <td>53 years</td>
+                        <td>75% of customers are younger</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Correlation Analysis -->
+    <div class="slide">
+        <div class="slide-number">Slide 8</div>
+        <div class="slide-content">
+            <h1>Correlation Analysis</h1>
+
+            <h2>Pearson Correlation Coefficient</h2>
+
+            <div class="formula-box">
+                <p>$$r = \frac{\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_i - \bar{x})^2} \sqrt{\sum_{i=1}^{n} (y_i - \bar{y})^2}}$$</p>
+                <p>Range: \(-1 \leq r \leq 1\)</p>
+                <ul>
+                    <li>\(r = 1\): Perfect positive correlation</li>
+                    <li>\(r = 0\): No correlation</li>
+                    <li>\(r = -1\): Perfect negative correlation</li>
+                </ul>
+            </div>
+
+            <h2>Correlation Strength Interpretation</h2>
+
+            <table>
+                <tr>
+                    <th>|r| Value</th>
+                    <th>Strength</th>
+                    <th>Interpretation</th>
+                </tr>
+                <tr>
+                    <td>0.00 - 0.19</td>
+                    <td>Very Weak</td>
+                    <td>Almost no relationship</td>
+                </tr>
+                <tr>
+                    <td>0.20 - 0.39</td>
+                    <td>Weak</td>
+                    <td>Slight relationship</td>
+                </tr>
+                <tr>
+                    <td>0.40 - 0.59</td>
+                    <td>Moderate</td>
+                    <td>Moderate relationship</td>
+                </tr>
+                <tr>
+                    <td>0.60 - 0.79</td>
+                    <td>Strong</td>
+                    <td>Strong relationship</td>
+                </tr>
+                <tr>
+                    <td>0.80 - 1.00</td>
+                    <td>Very Strong</td>
+                    <td>Very strong relationship</td>
+                </tr>
+            </table>
+
+            <h2>Example: Customer Churn Correlations</h2>
+
+            <div class="chart-container">
+                <div id="correlationHeatmap"></div>
+            </div>
+
+            <div class="example-box">
+                <h3>Key Findings:</h3>
+                <ul>
+                    <li><strong>Strong positive:</strong> Support_Tickets ↔ Churn (r = 0.72) - More support issues → Higher churn</li>
+                    <li><strong>Strong negative:</strong> Tenure ↔ Churn (r = -0.68) - Longer tenure → Lower churn</li>
+                    <li><strong>Moderate positive:</strong> Monthly_Charges ↔ Churn (r = 0.45) - Higher charges → Higher churn</li>
+                    <li><strong>Weak:</strong> Age ↔ Churn (r = 0.12) - Age has minimal impact on churn</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ Important: Correlation ≠ Causation</h3>
+                <p>Just because two variables are correlated doesn't mean one causes the other!</p>
+                <p><strong>Example:</strong> Ice cream sales and drowning deaths are correlated (both higher in summer), but ice cream doesn't cause drowning!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Outlier Detection -->
+    <div class="slide">
+        <div class="slide-number">Slide 9</div>
+        <div class="slide-content">
+            <h1>Outlier Detection</h1>
+
+            <div class="key-point">
+                <p><strong>Outlier:</strong> A data point that differs significantly from other observations. May indicate data error or genuine extreme value.</p>
+            </div>
+
+            <h2>Method 1: IQR (Interquartile Range) Method</h2>
+
+            <div class="formula-box">
+                <h3>Formulas:</h3>
+                <p>$$\text{IQR} = Q_3 - Q_1$$</p>
+                <p>$$\text{Lower Bound} = Q_1 - 1.5 \times \text{IQR}$$</p>
+                <p>$$\text{Upper Bound} = Q_3 + 1.5 \times \text{IQR}$$</p>
+                <p><strong>Outliers:</strong> Values below Lower Bound or above Upper Bound</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Example: Monthly Purchase Amount</h3>
+                <p><strong>Given:</strong></p>
+                <ul>
+                    <li>Q1 = $50</li>
+                    <li>Q3 = $200</li>
+                </ul>
+                <p><strong>Calculate:</strong></p>
+                <p>$$\text{IQR} = 200 - 50 = 150$$</p>
+                <p>$$\text{Lower Bound} = 50 - 1.5 \times 150 = 50 - 225 = -175$$</p>
+                <p>$$\text{Upper Bound} = 200 + 1.5 \times 150 = 200 + 225 = 425$$</p>
+                <p><strong>Interpretation:</strong> Purchases above $425 are outliers (unusually high)</p>
+            </div>
+
+            <h2>Method 2: Z-Score Method</h2>
+
+            <div class="formula-box">
+                <h3>Formula:</h3>
+                <p>$$z = \frac{x - \mu}{\sigma}$$</p>
+                <p>Where:</p>
+                <ul>
+                    <li>\(x\) = data point</li>
+                    <li>\(\mu\) = mean</li>
+                    <li>\(\sigma\) = standard deviation</li>
+                </ul>
+                <p><strong>Rule of thumb:</strong> |z| > 3 indicates an outlier</p>
+            </div>
+
+            <div class="example-box">
+                <h3>Example: Customer Age</h3>
+                <p><strong>Given:</strong> Mean age = 42 years, Std Dev = 12 years, Customer age = 85 years</p>
+                <p><strong>Calculate:</strong></p>
+                <p>$$z = \frac{85 - 42}{12} = \frac{43}{12} = 3.58$$</p>
+                <p><strong>Interpretation:</strong> |z| = 3.58 > 3, this is an outlier (unusually old customer)</p>
+            </div>
+
+            <h2>Box Plot Visualization</h2>
+
+            <div class="chart-container">
+                <div id="boxPlot"></div>
+            </div>
+
+            <div class="two-column">
+                <div class="key-point">
+                    <h3>✓ When to Keep Outliers</h3>
+                    <ul>
+                        <li>Legitimate extreme values</li>
+                        <li>VIP customers with high spending</li>
+                        <li>Rare but valid events</li>
+                        <li>Business wants to understand extremes</li>
+                    </ul>
+                </div>
+                <div class="warning-box">
+                    <h3>✗ When to Remove Outliers</h3>
+                    <ul>
+                        <li>Data entry errors</li>
+                        <li>Measurement errors</li>
+                        <li>System glitches</li>
+                        <li>Will skew model training</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Missing Data Analysis -->
+    <div class="slide">
+        <div class="slide-number">Slide 10</div>
+        <div class="slide-content">
+            <h1>Missing Data Analysis</h1>
+
+            <h2>Types of Missing Data</h2>
+
+            <div class="process-step">
+                <h3>1. MCAR - Missing Completely At Random</h3>
+                <p>Missingness has no relationship with any data (observed or unobserved)</p>
+                <p><strong>Example:</strong> Survey responses lost due to server crash</p>
+                <p><strong>Impact:</strong> Least problematic, can usually be ignored or imputed</p>
+            </div>
+
+            <div class="process-step">
+                <h3>2. MAR - Missing At Random</h3>
+                <p>Missingness depends on observed data, not on the missing value itself</p>
+                <p><strong>Example:</strong> Younger customers less likely to report income (age is observed, income is missing)</p>
+                <p><strong>Impact:</strong> Can be handled with appropriate imputation methods</p>
+            </div>
+
+            <div class="process-step">
+                <h3>3. MNAR - Missing Not At Random</h3>
+                <p>Missingness depends on the unobserved value itself</p>
+                <p><strong>Example:</strong> High-income people refuse to report income (missing because value is high)</p>
+                <p><strong>Impact:</strong> Most problematic, may introduce bias</p>
+            </div>
+
+            <h2>Missing Data Patterns</h2>
+
+            <div class="chart-container">
+                <div id="missingDataChart"></div>
+            </div>
+
+            <h2>Handling Missing Data</h2>
+
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>When to Use</th>
+                    <th>Pros</th>
+                    <th>Cons</th>
+                </tr>
+                <tr>
+                    <td><strong>Deletion</strong></td>
+                    <td>< 5% missing, MCAR</td>
+                    <td>Simple, no bias if MCAR</td>
+                    <td>Loses data, reduces sample size</td>
+                </tr>
+                <tr>
+                    <td><strong>Mean/Median Imputation</strong></td>
+                    <td>Numerical data, < 15% missing</td>
+                    <td>Simple, fast</td>
+                    <td>Reduces variance, doesn't account for relationships</td>
+                </tr>
+                <tr>
+                    <td><strong>Mode Imputation</strong></td>
+                    <td>Categorical data</td>
+                    <td>Simple, preserves categories</td>
+                    <td>May bias toward majority class</td>
+                </tr>
+                <tr>
+                    <td><strong>Forward/Backward Fill</strong></td>
+                    <td>Time series data</td>
+                    <td>Maintains temporal continuity</td>
+                    <td>Only for time-ordered data</td>
+                </tr>
+                <tr>
+                    <td><strong>Predictive Imputation</strong></td>
+                    <td>MAR, complex patterns</td>
+                    <td>Accounts for relationships, more accurate</td>
+                    <td>Computationally expensive, complex</td>
+                </tr>
+                <tr>
+                    <td><strong>Create "Missing" Category</strong></td>
+                    <td>MNAR, informative missingness</td>
+                    <td>Preserves information about missingness</td>
+                    <td>Increases dimensionality</td>
+                </tr>
+            </table>
+
+            <div class="example-box">
+                <h3>Decision Framework: What % Missing is Too Much?</h3>
+                <ul>
+                    <li><strong>0-5%:</strong> Usually safe to delete or impute</li>
+                    <li><strong>5-15%:</strong> Use careful imputation methods</li>
+                    <li><strong>15-40%:</strong> Investigate pattern, consider creating "missing" indicator</li>
+                    <li><strong>> 40%:</strong> Consider dropping the variable entirely or collecting more data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Data Profiling Report -->
+    <div class="slide">
+        <div class="slide-number">Slide 11</div>
+        <div class="slide-content">
+            <h1>Data Profiling Report</h1>
+
+            <h2>Report Structure</h2>
+
+            <div class="process-step">
+                <h3>1. Executive Summary</h3>
+                <ul>
+                    <li>Data sources overview</li>
+                    <li>Overall data quality score</li>
+                    <li>Key findings (3-5 bullet points)</li>
+                    <li>Recommendations</li>
+                    <li>Go/No-go decision</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>2. Data Source Details</h3>
+                <ul>
+                    <li>Source name and location</li>
+                    <li>Number of records and attributes</li>
+                    <li>Data types and formats</li>
+                    <li>Update frequency</li>
+                    <li>Data lineage</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>3. Quality Assessment</h3>
+                <ul>
+                    <li>Quality scores by dimension</li>
+                    <li>Overall quality score</li>
+                    <li>Comparison to requirements</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>4. Statistical Summary</h3>
+                <ul>
+                    <li>Descriptive statistics per variable</li>
+                    <li>Distribution analysis</li>
+                    <li>Correlation analysis</li>
+                    <li>Outlier detection results</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>5. Data Issues & Risks</h3>
+                <ul>
+                    <li>Missing data patterns</li>
+                    <li>Data quality problems</li>
+                    <li>Outliers and anomalies</li>
+                    <li>Consistency issues</li>
+                    <li>Potential impact on analytics</li>
+                </ul>
+            </div>
+
+            <div class="process-step">
+                <h3>6. Recommendations</h3>
+                <ul>
+                    <li>Data preparation steps needed</li>
+                    <li>Feature engineering opportunities</li>
+                    <li>Additional data needed</li>
+                    <li>Data collection improvements</li>
+                </ul>
+            </div>
+
+            <h2>Example Summary Report</h2>
+
+            <div class="example-box">
+                <h3>Customer Churn Prediction - Data Profiling Summary</h3>
+
+                <h4>Data Sources:</h4>
+                <ul>
+                    <li>CRM Database: 50,000 customers, 25 attributes</li>
+                    <li>Usage Logs: 2M records, 15 attributes</li>
+                    <li>Support Tickets: 100K tickets, 10 attributes</li>
+                </ul>
+
+                <h4>Overall Quality Score: 87% (High)</h4>
+
+                <h4>Key Findings:</h4>
+                <ul>
+                    <li>✓ Sufficient historical data (2 years)</li>
+                    <li>✓ High accuracy (92%) and uniqueness (98%)</li>
+                    <li>⚠ Email field 15% missing - needs imputation</li>
+                    <li>⚠ Income field 30% missing - consider dropping or creating indicator</li>
+                    <li>✓ Strong correlations found: Support_Tickets (r=0.72), Tenure (r=-0.68)</li>
+                </ul>
+
+                <h4>Recommendations:</h4>
+                <ol>
+                    <li><strong>Proceed with project</strong> - data quality is sufficient</li>
+                    <li><strong>Data Preparation:</strong>
+                        <ul>
+                            <li>Handle missing income: Create "income_missing" indicator</li>
+                            <li>Impute missing emails using domain from company name</li>
+                            <li>Remove 47 duplicate customer records</li>
+                            <li>Cap outliers in monthly_charges at 99th percentile</li>
+                        </ul>
+                    </li>
+                    <li><strong>Feature Engineering:</strong>
+                        <ul>
+                            <li>Create "support_ticket_rate" = tickets per month of tenure</li>
+                            <li>Create RFM features (Recency, Frequency, Monetary)</li>
+                            <li>Encode contract_type (month-to-month, 1-year, 2-year)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Additional Data Needed:</strong>
+                        <ul>
+                            <li>Competitor pricing data (optional, nice-to-have)</li>
+                            <li>Customer satisfaction scores (if available)</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <h4>Decision: ✓ GO</h4>
+                <p>Data quality meets requirements. Proceed to Data Preparation phase.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Summary & Best Practices -->
+    <div class="slide">
+        <div class="slide-number">Slide 12</div>
+        <div class="slide-content">
+            <h1>Summary & Best Practices</h1>
+
+            <h2>Business & Data Understanding: The Foundation</h2>
+
+            <div class="highlight">
+                <h3>Remember:</h3>
+                <ul>
+                    <li><strong>Business Understanding</strong> defines WHAT problem to solve</li>
+                    <li><strong>Data Understanding</strong> determines IF we CAN solve it</li>
+                    <li>Together, they form the <strong>Discovery Phase</strong></li>
+                </ul>
+            </div>
+
+            <h2>Key Takeaways</h2>
+
+            <div class="two-column">
+                <div class="column-box" style="border-color: #28a745;">
+                    <h3>Business Understanding</h3>
+                    <ul>
+                        <li>✓ Use SMART objectives</li>
+                        <li>✓ Identify all stakeholders</li>
+                        <li>✓ Define clear problem statement</li>
+                        <li>✓ Translate to analytics problem</li>
+                        <li>✓ Set measurable success criteria</li>
+                        <li>✓ Estimate business impact</li>
+                    </ul>
+                </div>
+                <div class="column-box" style="border-color: #667eea;">
+                    <h3>Data Understanding</h3>
+                    <ul>
+                        <li>✓ Assess all data sources</li>
+                        <li>✓ Evaluate data quality (6 dimensions)</li>
+                        <li>✓ Perform thorough EDA</li>
+                        <li>✓ Detect outliers and missing data</li>
+                        <li>✓ Analyze correlations</li>
+                        <li>✓ Document findings in report</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2>Common Pitfalls to Avoid</h2>
+
+            <div class="warning-box">
+                <h3>❌ Don't do this:</h3>
+                <ul>
+                    <li>Skip business understanding and jump to modeling</li>
+                    <li>Assume data quality is good without checking</li>
+                    <li>Ignore stakeholder input</li>
+                    <li>Define vague, unmeasurable objectives</li>
+                    <li>Proceed with low-quality data (< 70%)</li>
+                    <li>Forget to document assumptions and findings</li>
+                    <li>Overlook missing data patterns</li>
+                </ul>
+            </div>
+
+            <h2>Best Practices Checklist</h2>
+
+            <div class="key-point">
+                <h3>✓ Before Moving to Data Preparation:</h3>
+                <ul>
+                    <li>☐ Business objective is SMART</li>
+                    <li>☐ All stakeholders identified and consulted</li>
+                    <li>☐ Problem statement is clear and specific</li>
+                    <li>☐ Success metrics defined and agreed upon</li>
+                    <li>☐ Analytics approach selected (descriptive/predictive/prescriptive)</li>
+                    <li>☐ Data sources identified and accessible</li>
+                    <li>☐ Data quality score ≥ 70% (preferably ≥ 85%)</li>
+                    <li>☐ EDA completed and documented</li>
+                    <li>☐ Missing data strategy defined</li>
+                    <li>☐ Outlier handling approach determined</li>
+                    <li>☐ Data profiling report created and approved</li>
+                    <li>☐ Go/No-go decision made</li>
+                </ul>
+            </div>
+
+            <h2>The Data Analytics Lifecycle</h2>
+
+            <div class="chart-container">
+                <div id="lifecycleFlow"></div>
+            </div>
+
+            <div class="metric-card">
+                <p>Time Investment in Discovery Phase</p>
+                <div class="metric-value">30-40%</div>
+                <p>But saves 2-3x time in later phases!</p>
+            </div>
+
+            <div class="footer-note">
+                <p><strong>Next Session:</strong> Data Preparation - Cleaning, Transformation, and Feature Engineering</p>
+                <p><strong>Remember:</strong> "Garbage In, Garbage Out" - Quality discovery ensures quality outcomes!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Age Distribution Histogram
+        const ageData = [];
+        for (let i = 0; i < 1000; i++) {
+            const age = Math.round(Math.random() * (85 - 18) + 18 + (Math.random() - 0.5) * 20);
+            if (age >= 18 && age <= 85) ageData.push(age);
+        }
+
+        const ageTrace = {
+            x: ageData,
+            type: 'histogram',
+            name: 'Age Distribution',
+            marker: {
+                color: '#667eea'
+            },
+            nbinsx: 30
+        };
+
+        const ageLayout = {
+            title: 'Customer Age Distribution',
+            xaxis: { title: 'Age (years)' },
+            yaxis: { title: 'Frequency' },
+            bargap: 0.05
+        };
+
+        Plotly.newPlot('ageDistribution', [ageTrace], ageLayout);
+
+        // Correlation Heatmap
+        const correlationData = [{
+            z: [
+                [1.00, -0.68, 0.45, 0.72, 0.12],
+                [-0.68, 1.00, -0.35, -0.52, -0.08],
+                [0.45, -0.35, 1.00, 0.38, 0.15],
+                [0.72, -0.52, 0.38, 1.00, 0.05],
+                [0.12, -0.08, 0.15, 0.05, 1.00]
+            ],
+            x: ['Churn', 'Tenure', 'Monthly_Charges', 'Support_Tickets', 'Age'],
+            y: ['Churn', 'Tenure', 'Monthly_Charges', 'Support_Tickets', 'Age'],
+            type: 'heatmap',
+            colorscale: [
+                [0, '#dc3545'],
+                [0.5, '#ffffff'],
+                [1, '#28a745']
+            ],
+            zmid: 0,
+            colorbar: {
+                title: 'Correlation'
+            }
+        }];
+
+        const correlationLayout = {
+            title: 'Feature Correlation Matrix',
+            annotations: []
+        };
+
+        // Add correlation values as annotations
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < 5; j++) {
+                const value = correlationData[0].z[i][j];
+                correlationLayout.annotations.push({
+                    x: correlationData[0].x[j],
+                    y: correlationData[0].y[i],
+                    text: value.toFixed(2),
+                    showarrow: false,
+                    font: { color: Math.abs(value) > 0.5 ? 'white' : 'black' }
+                });
+            }
+        }
+
+        Plotly.newPlot('correlationHeatmap', correlationData, correlationLayout);
+
+        // Box Plot for Outlier Detection
+        const boxData = [
+            {
+                y: [45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 450, 480, 520],
+                type: 'box',
+                name: 'Monthly Purchase',
+                marker: { color: '#667eea' },
+                boxmean: 'sd'
+            }
+        ];
+
+        const boxLayout = {
+            title: 'Monthly Purchase Amount - Outlier Detection',
+            yaxis: { title: 'Amount ($)' }
+        };
+
+        Plotly.newPlot('boxPlot', boxData, boxLayout);
+
+        // Missing Data Chart
+        const missingData = [{
+            x: ['Email', 'Phone', 'Income', 'Address', 'Age'],
+            y: [15, 8, 30, 5, 2],
+            type: 'bar',
+            marker: {
+                color: ['#ffc107', '#28a745', '#dc3545', '#28a745', '#28a745']
+            }
+        }];
+
+        const missingLayout = {
+            title: 'Missing Data by Feature (%)',
+            xaxis: { title: 'Feature' },
+            yaxis: { title: 'Missing %' },
+            shapes: [
+                {
+                    type: 'line',
+                    x0: -0.5,
+                    x1: 4.5,
+                    y0: 15,
+                    y1: 15,
+                    line: {
+                        color: '#ffc107',
+                        width: 2,
+                        dash: 'dash'
+                    }
+                }
+            ],
+            annotations: [
+                {
+                    x: 2,
+                    y: 16,
+                    text: '15% threshold',
+                    showarrow: false,
+                    font: { color: '#ffc107' }
+                }
+            ]
+        };
+
+        Plotly.newPlot('missingDataChart', missingData, missingLayout);
+
+        // Lifecycle Flow Diagram
+        const lifecycleData = [{
+            type: 'sankey',
+            orientation: 'h',
+            node: {
+                pad: 15,
+                thickness: 20,
+                line: {
+                    color: 'white',
+                    width: 0.5
+                },
+                label: ['Discovery', 'Data Prep', 'Model Planning', 'Model Building', 'Evaluation', 'Deployment'],
+                color: ['#667eea', '#764ba2', '#667eea', '#764ba2', '#667eea', '#764ba2']
+            },
+            link: {
+                source: [0, 1, 2, 3, 4],
+                target: [1, 2, 3, 4, 5],
+                value: [30, 30, 15, 15, 10]
+            }
+        }];
+
+        const lifecycleLayout = {
+            title: 'Analytics Lifecycle Flow (% of project time)',
+            font: { size: 10 },
+            height: 300
+        };
+
+        Plotly.newPlot('lifecycleFlow', lifecycleData, lifecycleLayout);
+    </script>
+
+</body>
+</html>

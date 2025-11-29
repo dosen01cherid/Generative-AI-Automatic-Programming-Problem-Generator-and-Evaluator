@@ -179,10 +179,10 @@ Option D: 4x4
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
-Step Expected: [[1,2],[3,4]] + [[5,6],[7,8]]
+Step Expression: `[[1,2],[3,4]] + [[5,6],[7,8]]`
+Step Expected: `[[1,2],[3,4]] + [[5,6],[7,8]]`
 
 #
 Step Type: true-false
@@ -191,10 +191,10 @@ Step Description: Dalam penjumlahan matriks, kita menjumlahkan elemen yang berse
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
-Step Expected: [[6,8],[10,12]]
+Step Expression: `[[1,2],[3,4]] + [[5,6],[7,8]]`
+Step Expected: `[[6,8],[10,12]]`
 
 
 ###Problem Title: Perkalian Matriks Sederhana 2x2
@@ -211,10 +211,10 @@ Option D: A dan B harus matriks persegi
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2
-Step Expected: 2
+Step Expression: `2`
+Step Expected: `2`
 
 #
 Step Type: fill-blank
@@ -222,34 +222,34 @@ Must Be Correct: true
 Step Description: Elemen baris 1 kolom 1 dari AB = A[1,1] times B[1,1] + A[1,2] times __
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*1 + 1*4
-Step Expected: 6
+Step Expression: `2*1 + 1*4`
+Step Expected: `6`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*2 + 1*0
-Step Expected: 4
+Step Expression: `2*2 + 1*0`
+Step Expected: `4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*1 + 3*4
-Step Expected: 12
+Step Expression: `0*1 + 3*4`
+Step Expected: `12`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*2 + 3*0
-Step Expected: 0
+Step Expression: `0*2 + 3*0`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[2,1],[0,3]] * [[1,2],[4,0]]
-Step Expected: [[6,4],[12,0]]
+Step Expression: `[[2,1],[0,3]] * [[1,2],[4,0]]`
+Step Expected: `[[6,4],[12,0]]`
 
 
 ###Problem Title: Penjumlahan Matriks 3x3
@@ -262,10 +262,10 @@ Step Description: Dua matriks hanya dapat dijumlahkan jika memiliki ukuran yang 
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,0,2],[3,1,4],[2,1,0]] + [[2,3,1],[1,2,3],[4,0,1]]
-Step Expected: [[3,3,3],[4,3,7],[6,1,1]]
+Step Expression: `[[1,0,2],[3,1,4],[2,1,0]] + [[2,3,1],[1,2,3],[4,0,1]]`
+Step Expected: `[[3,3,3],[4,3,7],[6,1,1]]`
 
 
 ###Problem Title: Pengurangan Matriks 2x2
@@ -282,47 +282,49 @@ Option D: Tergantung nilai elemennya
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[5,7],[2,9]] - [[3,4],[1,6]]
-Step Expected: [[5,7],[2,9]] - [[3,4],[1,6]]
+Step Expression: `[[5,7],[2,9]] - [[3,4],[1,6]]`
+Step Expected: `[[5,7],[2,9]] - [[3,4],[1,6]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[5,7],[2,9]] - [[3,4],[1,6]]
-Step Expected: [[2,3],[1,3]]
+Step Expression: `[[5,7],[2,9]] - [[3,4],[1,6]]`
+Step Expected: `[[2,3],[1,3]]`
 
 
 ###Problem Title: Pengurangan Matriks 3x2
 Problem Description: Diberikan A = [[8,5],[3,7],[6,2]] dan B = [[2,1],[1,3],[4,0]], cari A - B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[8,5],[3,7],[6,2]] - [[2,1],[1,3],[4,0]]
-Step Expected: [[6,4],[2,4],[2,2]]
+Step Expression: `[[8,5],[3,7],[6,2]] - [[2,1],[1,3],[4,0]]`
+Step Expected: `[[6,4],[2,4],[2,2]]`
 
 
 ###Problem Title: Perkalian Skalar 2x2
 Problem Description: Diberikan matriks A = [[2,3],[4,5]], cari 3A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Perkalian skalar k dengan matriks A dilakukan dengan mengalikan setiap __ matriks dengan k
+Step Description: Perkalian skalar k dengan matriks A dilakukan dengan mengalikan setiap ___ matriks dengan k?
+Step Expression: `k*A`
+Step Expected: `elemen`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*[[2,3],[4,5]]
-Step Expected: 3*[[2,3],[4,5]]
+Step Expression: `3*[[2,3],[4,5]]`
+Step Expected: `3*[[2,3],[4,5]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*[[2,3],[4,5]]
-Step Expected: [[6,9],[12,15]]
+Step Expression: `3*[[2,3],[4,5]]`
+Step Expected: `[[6,9],[12,15]]`
 
 
 ###Problem Title: Perkalian Skalar 3x3
@@ -335,10 +337,10 @@ Step Description: Ketika matriks dikalikan dengan skalar negatif, semua elemen b
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: -2*[[1,2,0],[3,-1,4],[2,1,-2]]
-Step Expected: [[-2,-4,0],[-6,2,-8],[-4,-2,4]]
+Step Expression: `-2*[[1,2,0],[3,-1,4],[2,1,-2]]`
+Step Expected: `[[-2,-4,0],[-6,2,-8],[-4,-2,4]]`
 
 
 ###Problem Title: Operasi Matriks Gabungan
@@ -355,31 +357,33 @@ Option D: Tidak ada yang benar
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*[[2,1],[3,4]]
-Step Expected: [[4,2],[6,8]]
+Step Expression: `2*[[2,1],[3,4]]`
+Step Expected: `[[4,2],[6,8]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*[[1,2],[2,1]]
-Step Expected: [[3,6],[6,3]]
+Step Expression: `3*[[1,2],[2,1]]`
+Step Expected: `[[3,6],[6,3]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[4,2],[6,8]] + [[3,6],[6,3]]
-Step Expected: [[7,8],[12,11]]
+Step Expression: `[[4,2],[6,8]] + [[3,6],[6,3]]`
+Step Expected: `[[7,8],[12,11]]`
 
 
 ###Problem Title: Perkalian Matriks 2x3 dan 3x2
 Problem Description: Diberikan A = [[1,2,3],[4,5,6]] dan B = [[1,4],[2,5],[3,6]], cari AB
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Jika A berukuran 2x3 dan B berukuran 3x2, maka AB berukuran __ x __
+Step Description: Jika A berukuran 2x3 dan B berukuran 3x2, maka ukuran AB adalah?
+Step Expression: `[[2,2]]`
+Step Expected: `2x2`
 
 #
 Step Type: multiple-choice-single
@@ -392,34 +396,34 @@ Option D: 6
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*1 + 2*2 + 3*3
-Step Expected: 14
+Step Expression: `1*1 + 2*2 + 3*3`
+Step Expected: `14`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*4 + 2*5 + 3*6
-Step Expected: 32
+Step Expression: `1*4 + 2*5 + 3*6`
+Step Expected: `32`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 4*1 + 5*2 + 6*3
-Step Expected: 32
+Step Expression: `4*1 + 5*2 + 6*3`
+Step Expected: `32`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 4*4 + 5*5 + 6*6
-Step Expected: 77
+Step Expression: `4*4 + 5*5 + 6*6`
+Step Expected: `77`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2,3],[4,5,6]] * [[1,4],[2,5],[3,6]]
-Step Expected: [[14,32],[32,77]]
+Step Expression: `[[1,2,3],[4,5,6]] * [[1,4],[2,5],[3,6]]`
+Step Expected: `[[14,32],[32,77]]`
 
 
 ###Problem Title: Kompatibilitas Perkalian Matriks
@@ -436,9 +440,11 @@ Option D: Ya, hasilnya 3x4
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Jumlah kolom C adalah __ dan jumlah baris D adalah __
+Step Description: Jumlah kolom C (2x3) dan jumlah baris D (2x4) berbeda, berapa selisihnya?
+Step Expression: `3 - 2`
+Step Expected: `1`
 
 #
 Step Type: true-false
@@ -461,64 +467,64 @@ Option D: Ya, jika A = B
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*2 + 2*1
-Step Expected: 4
+Step Expression: `1*2 + 2*1`
+Step Expected: `4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*0 + 2*3
-Step Expected: 6
+Step Expression: `1*0 + 2*3`
+Step Expected: `6`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*2 + 4*1
-Step Expected: 10
+Step Expression: `3*2 + 4*1`
+Step Expected: `10`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*0 + 4*3
-Step Expected: 12
+Step Expression: `3*0 + 4*3`
+Step Expected: `12`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] * [[2,0],[1,3]]
-Step Expected: [[4,6],[10,12]]
+Step Expression: `[[1,2],[3,4]] * [[2,0],[1,3]]`
+Step Expected: `[[4,6],[10,12]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*1 + 0*3
-Step Expected: 2
+Step Expression: `2*1 + 0*3`
+Step Expected: `2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*2 + 0*4
-Step Expected: 4
+Step Expression: `2*2 + 0*4`
+Step Expected: `4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*1 + 3*3
-Step Expected: 10
+Step Expression: `1*1 + 3*3`
+Step Expected: `10`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*2 + 3*4
-Step Expected: 14
+Step Expression: `1*2 + 3*4`
+Step Expected: `14`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[2,0],[1,3]] * [[1,2],[3,4]]
-Step Expected: [[2,4],[10,14]]
+Step Expression: `[[2,0],[1,3]] * [[1,2],[3,4]]`
+Step Expected: `[[2,4],[10,14]]`
 
 #
 Step Type: true-false
@@ -541,30 +547,34 @@ Option D: Menjumlahkan diagonal utama
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Jika A berukuran 2x2, maka A^T berukuran __ x __
+Step Description: Jika A berukuran 2x2, maka A^T berukuran?
+Step Expression: `[[2,2]]`
+Step Expected: `2x2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[1,2],[3,4]])
-Step Expected: [[1,3],[2,4]]
+Step Expression: `transpose([[1,2],[3,4]])`
+Step Expected: `[[1,3],[2,4]]`
 
 
 ###Problem Title: Transpose Matriks 3x2
 Problem Description: Diberikan A = [[1,2],[3,4],[5,6]], cari A^T
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Jika A berukuran 3x2, maka A^T berukuran __ x __
+Step Description: Jika A berukuran 3x2, maka A^T berukuran?
+Step Expression: `[[2,3]]`
+Step Expected: `2x3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[1,2],[3,4],[5,6]])
-Step Expected: [[1,3,5],[2,4,6]]
+Step Expression: `transpose([[1,2],[3,4],[5,6]])`
+Step Expected: `[[1,3,5],[2,4,6]]`
 
 
 ###Problem Title: Sifat Transpose
@@ -577,16 +587,16 @@ Step Description: Transpose dari transpose suatu matriks akan menghasilkan matri
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[2,3],[1,4]])
-Step Expected: [[2,1],[3,4]]
+Step Expression: `transpose([[2,3],[1,4]])`
+Step Expected: `[[2,1],[3,4]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[2,1],[3,4]])
-Step Expected: [[2,3],[1,4]]
+Step Expression: `transpose([[2,1],[3,4]])`
+Step Expected: `[[2,3],[1,4]]`
 
 
 ###Problem Title: Transpose dari Jumlah
@@ -603,43 +613,45 @@ Option D: Tergantung ukuran matriks
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
-Step Expected: [[6,8],[10,12]]
+Step Expression: `[[1,2],[3,4]] + [[5,6],[7,8]]`
+Step Expected: `[[6,8],[10,12]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[6,8],[10,12]])
-Step Expected: [[6,10],[8,12]]
+Step Expression: `transpose([[6,8],[10,12]])`
+Step Expected: `[[6,10],[8,12]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[1,2],[3,4]])
-Step Expected: [[1,3],[2,4]]
+Step Expression: `transpose([[1,2],[3,4]])`
+Step Expected: `[[1,3],[2,4]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[5,6],[7,8]])
-Step Expected: [[5,7],[6,8]]
+Step Expression: `transpose([[5,6],[7,8]])`
+Step Expected: `[[5,7],[6,8]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,3],[2,4]] + [[5,7],[6,8]]
-Step Expected: [[6,10],[8,12]]
+Step Expression: `[[1,3],[2,4]] + [[5,7],[6,8]]`
+Step Expected: `[[6,10],[8,12]]`
 
 
 ###Problem Title: Matriks Identitas 2x2
 Problem Description: Diberikan A = [[3,4],[5,6]], verifikasi AI = IA = A dengan I matriks identitas 2x2
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Matriks identitas 2x2 adalah I = [[__,0],[0,__]]
+Step Description: Matriks identitas 2x2 adalah I = ?
+Step Expression: `[[1,0],[0,1]]`
+Step Expected: `[[1,0],[0,1]]`
 
 #
 Step Type: true-false
@@ -648,34 +660,34 @@ Step Description: Untuk sembarang matriks persegi A, berlaku AI = IA = A. Benar 
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*1 + 4*0
-Step Expected: 3
+Step Expression: `3*1 + 4*0`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*0 + 4*1
-Step Expected: 4
+Step Expression: `3*0 + 4*1`
+Step Expected: `4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 5*1 + 6*0
-Step Expected: 5
+Step Expression: `5*1 + 6*0`
+Step Expected: `5`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 5*0 + 6*1
-Step Expected: 6
+Step Expression: `5*0 + 6*1`
+Step Expected: `6`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,4],[5,6]] * [[1,0],[0,1]]
-Step Expected: [[3,4],[5,6]]
+Step Expression: `[[3,4],[5,6]] * [[1,0],[0,1]]`
+Step Expected: `[[3,4],[5,6]]`
 
 
 ###Problem Title: Matriks Nol
@@ -692,10 +704,10 @@ Option D: Tidak ada padanan
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[2,3],[4,5]] + [[0,0],[0,0]]
-Step Expected: [[2,3],[4,5]]
+Step Expression: `[[2,3],[4,5]] + [[0,0],[0,0]]`
+Step Expected: `[[2,3],[4,5]]`
 
 
 ###Problem Title: Perkalian dengan Matriks Nol
@@ -708,10 +720,10 @@ Step Description: Perkalian sembarang matriks dengan matriks nol akan menghasilk
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] * [[0,0],[0,0]]
-Step Expected: [[0,0],[0,0]]
+Step Expression: `[[1,2],[3,4]] * [[0,0],[0,0]]`
+Step Expected: `[[0,0],[0,0]]`
 
 
 ###Problem Title: Matriks Diagonal
@@ -728,69 +740,71 @@ Option D: Transpose-nya sama dengan matriks asli
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Mengalikan matriks diagonal D dari kiri ke matriks A akan mengalikan setiap __ A dengan elemen diagonal D yang bersesuaian
+Step Description: Mengalikan matriks diagonal D dari kiri ke matriks A akan mengalikan setiap ___ dengan elemen diagonal D?
+Step Expression: `D*A`
+Step Expected: `baris`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*1 + 0*4 + 0*7
-Step Expected: 3
+Step Expression: `3*1 + 0*4 + 0*7`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*2 + 0*5 + 0*8
-Step Expected: 6
+Step Expression: `3*2 + 0*5 + 0*8`
+Step Expected: `6`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*3 + 0*6 + 0*9
-Step Expected: 9
+Step Expression: `3*3 + 0*6 + 0*9`
+Step Expected: `9`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*1 + 5*4 + 0*7
-Step Expected: 20
+Step Expression: `0*1 + 5*4 + 0*7`
+Step Expected: `20`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*2 + 5*5 + 0*8
-Step Expected: 25
+Step Expression: `0*2 + 5*5 + 0*8`
+Step Expected: `25`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*3 + 5*6 + 0*9
-Step Expected: 30
+Step Expression: `0*3 + 5*6 + 0*9`
+Step Expected: `30`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*1 + 0*4 + 2*7
-Step Expected: 14
+Step Expression: `0*1 + 0*4 + 2*7`
+Step Expected: `14`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*2 + 0*5 + 2*8
-Step Expected: 16
+Step Expression: `0*2 + 0*5 + 2*8`
+Step Expected: `16`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*3 + 0*6 + 2*9
-Step Expected: 18
+Step Expression: `0*3 + 0*6 + 2*9`
+Step Expected: `18`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,0,0],[0,5,0],[0,0,2]] * [[1,2,3],[4,5,6],[7,8,9]]
-Step Expected: [[3,6,9],[20,25,30],[14,16,18]]
+Step Expression: `[[3,0,0],[0,5,0],[0,0,2]] * [[1,2,3],[4,5,6],[7,8,9]]`
+Step Expected: `[[3,6,9],[20,25,30],[14,16,18]]`
 
 
 ###Problem Title: Matriks Simetris
@@ -813,10 +827,10 @@ Step Description: Matriks simetris harus berbentuk persegi. Benar atau Salah?
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[1,2,3],[2,4,5],[3,5,6]])
-Step Expected: [[1,2,3],[2,4,5],[3,5,6]]
+Step Expression: `transpose([[1,2,3],[2,4,5],[3,5,6]])`
+Step Expected: `[[1,2,3],[2,4,5],[3,5,6]]`
 
 #
 Step Type: true-false
@@ -829,39 +843,41 @@ Correct Answer: True
 Problem Description: Diberikan A = [[1,1],[0,1]], cari A^2
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: A^2 = A __ A
+Step Description: A^2 = A ___ A, operator yang digunakan adalah?
+Step Expression: `A*A`
+Step Expected: `*`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*1 + 1*0
-Step Expected: 1
+Step Expression: `1*1 + 1*0`
+Step Expected: `1`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*1 + 1*1
-Step Expected: 2
+Step Expression: `1*1 + 1*1`
+Step Expected: `2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*1 + 1*0
-Step Expected: 0
+Step Expression: `0*1 + 1*0`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 0*1 + 1*1
-Step Expected: 1
+Step Expression: `0*1 + 1*1`
+Step Expected: `1`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,1],[0,1]] * [[1,1],[0,1]]
-Step Expected: [[1,2],[0,1]]
+Step Expression: `[[1,1],[0,1]] * [[1,1],[0,1]]`
+Step Expected: `[[1,2],[0,1]]`
 
 
 ###Problem Title: Sifat Distributif
@@ -878,58 +894,58 @@ Option D: Tergantung ukurannya
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[2,1],[1,2]] + [[1,0],[0,1]]
-Step Expected: [[3,1],[1,3]]
+Step Expression: `[[2,1],[1,2]] + [[1,0],[0,1]]`
+Step Expected: `[[3,1],[1,3]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*3 + 2*1
-Step Expected: 5
+Step Expression: `1*3 + 2*1`
+Step Expected: `5`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*1 + 2*3
-Step Expected: 7
+Step Expression: `1*1 + 2*3`
+Step Expected: `7`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*3 + 4*1
-Step Expected: 13
+Step Expression: `3*3 + 4*1`
+Step Expected: `13`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*1 + 4*3
-Step Expected: 15
+Step Expression: `3*1 + 4*3`
+Step Expected: `15`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] * [[3,1],[1,3]]
-Step Expected: [[5,7],[13,15]]
+Step Expression: `[[1,2],[3,4]] * [[3,1],[1,3]]`
+Step Expected: `[[5,7],[13,15]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] * [[2,1],[1,2]]
-Step Expected: [[4,5],[10,11]]
+Step Expression: `[[1,2],[3,4]] * [[2,1],[1,2]]`
+Step Expected: `[[4,5],[10,11]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] * [[1,0],[0,1]]
-Step Expected: [[1,2],[3,4]]
+Step Expression: `[[1,2],[3,4]] * [[1,0],[0,1]]`
+Step Expected: `[[1,2],[3,4]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[4,5],[10,11]] + [[1,2],[3,4]]
-Step Expected: [[5,7],[13,15]]
+Step Expression: `[[4,5],[10,11]] + [[1,2],[3,4]]`
+Step Expected: `[[5,7],[13,15]]`
 
 
 ###Problem Title: Sifat Asosiatif Penjumlahan
@@ -942,28 +958,28 @@ Step Description: Penjumlahan matriks bersifat asosiatif. Benar atau Salah?
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] + [[2,3],[4,5]]
-Step Expected: [[3,5],[7,9]]
+Step Expression: `[[1,2],[3,4]] + [[2,3],[4,5]]`
+Step Expected: `[[3,5],[7,9]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,5],[7,9]] + [[1,1],[1,1]]
-Step Expected: [[4,6],[8,10]]
+Step Expression: `[[3,5],[7,9]] + [[1,1],[1,1]]`
+Step Expected: `[[4,6],[8,10]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[2,3],[4,5]] + [[1,1],[1,1]]
-Step Expected: [[3,4],[5,6]]
+Step Expression: `[[2,3],[4,5]] + [[1,1],[1,1]]`
+Step Expected: `[[3,4],[5,6]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] + [[3,4],[5,6]]
-Step Expected: [[4,6],[8,10]]
+Step Expression: `[[1,2],[3,4]] + [[3,4],[5,6]]`
+Step Expected: `[[4,6],[8,10]]`
 
 
 ###Problem Title: Transpose dari Hasil Kali
@@ -980,43 +996,45 @@ Option D: BA
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] * [[2,1],[0,3]]
-Step Expected: [[2,7],[6,15]]
+Step Expression: `[[1,2],[3,4]] * [[2,1],[0,3]]`
+Step Expected: `[[2,7],[6,15]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[2,7],[6,15]])
-Step Expected: [[2,6],[7,15]]
+Step Expression: `transpose([[2,7],[6,15]])`
+Step Expected: `[[2,6],[7,15]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[1,2],[3,4]])
-Step Expected: [[1,3],[2,4]]
+Step Expression: `transpose([[1,2],[3,4]])`
+Step Expected: `[[1,3],[2,4]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: transpose([[2,1],[0,3]])
-Step Expected: [[2,0],[1,3]]
+Step Expression: `transpose([[2,1],[0,3]])`
+Step Expected: `[[2,0],[1,3]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[2,0],[1,3]] * [[1,3],[2,4]]
-Step Expected: [[2,6],[7,15]]
+Step Expression: `[[2,0],[1,3]] * [[1,3],[2,4]]`
+Step Expected: `[[2,6],[7,15]]`
 
 
 ###Problem Title: Trace Matriks
 Problem Description: Cari trace (jumlah elemen diagonal) dari A = [[2,3,4],[1,5,6],[7,8,9]]
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Trace matriks adalah jumlah dari elemen-elemen pada __ utama
+Step Description: Trace matriks adalah jumlah dari elemen-elemen pada posisi apa?
+Step Expression: `diagonal`
+Step Expected: `diagonal`
 
 #
 Step Type: multiple-choice-single
@@ -1029,10 +1047,10 @@ Option D: Semua elemen kolom pertama
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2 + 5 + 9
-Step Expected: 16
+Step Expression: `2 + 5 + 9`
+Step Expected: `16`
 
 
 ###Problem Title: Sifat Trace
@@ -1045,34 +1063,34 @@ Step Description: Trace dari jumlah dua matriks sama dengan jumlah trace keduany
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1 + 4
-Step Expected: 5
+Step Expression: `1 + 4`
+Step Expected: `5`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 5 + 8
-Step Expected: 13
+Step Expression: `5 + 8`
+Step Expected: `13`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 5 + 13
-Step Expected: 18
+Step Expression: `5 + 13`
+Step Expected: `18`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[1,2],[3,4]] + [[5,6],[7,8]]
-Step Expected: [[6,8],[10,12]]
+Step Expression: `[[1,2],[3,4]] + [[5,6],[7,8]]`
+Step Expected: `[[6,8],[10,12]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 6 + 12
-Step Expected: 18
+Step Expression: `6 + 12`
+Step Expected: `18`
 
 
 ###Problem Title: Persamaan Matriks
@@ -1089,25 +1107,27 @@ Option D: Transpose kedua ruas
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[5,7],[8,10]] - [[1,2],[3,4]]
-Step Expected: [[4,5],[5,6]]
+Step Expression: `[[5,7],[8,10]] - [[1,2],[3,4]]`
+Step Expected: `[[4,5],[5,6]]`
 
 
 ###Problem Title: Persamaan Skalar
 Problem Description: Selesaikan k jika k * [[2,4],[6,8]] = [[6,12],[18,24]]
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Dari elemen (1,1): k times __ = 6
+Step Description: Dari elemen (1,1): k times ___ = 6, nilai elemen (1,1) adalah?
+Step Expression: `6/k`
+Step Expected: `2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 6/2
-Step Expected: 3
+Step Expression: `6/2`
+Step Expected: `3`
 
 #
 Step Type: true-false
@@ -1116,7 +1136,7 @@ Step Description: Untuk memverifikasi, kita harus memeriksa apakah k = 3 berlaku
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3 * 4
-Step Expected: 12
+Step Expression: `3 * 4`
+Step Expected: `12`

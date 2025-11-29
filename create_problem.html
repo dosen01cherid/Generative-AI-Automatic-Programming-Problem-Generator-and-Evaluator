@@ -787,7 +787,7 @@
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
-    /* Loading overlay */
+    /* Loading overlay - DISABLED
     #loadingOverlay {
       position: fixed;
       top: 0;
@@ -802,16 +802,9 @@
       justify-content: center;
       color: #fff;
     }
+    */
 
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 4px solid rgba(59, 130, 246, 0.3);
-      border-top-color: #3b82f6;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 20px;
-    }
+    /* DISABLED - .spinner { ... } */
 
     @keyframes spin {
       to {
@@ -836,6 +829,116 @@
       max-height: 200px;
       overflow: auto;
       width: 90%;
+    }
+
+    /* Import Progress Dialog */
+    #importProgressOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.95);
+      z-index: 10001;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    #importProgressOverlay.show {
+      display: flex;
+    }
+
+    .import-progress-content {
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .import-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .import-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #06b6d4);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .import-progress-text {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .import-progress-details {
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-top: 12px;
+
+    /* Export Progress Dialog */
+    #exportProgressOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.95);
+      z-index: 10001;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    #exportProgressOverlay.show {
+      display: flex;
+    }
+
+    .export-progress-content {
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .export-progress-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(30, 41, 59, 0.8);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .export-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .export-progress-text {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .export-progress-details {
+      font-size: 14px;
+      color: #cbd5e1;
+      margin-top: 12px;
+    }
     }
 
     /* Mobile responsiveness */
@@ -872,13 +975,42 @@
   </style>
 </head>
 <body>
-  <!-- Loading Overlay -->
+  <!-- Loading Overlay - DISABLED
   <div id="loadingOverlay">
     <div class="spinner"></div>
     <div class="loading-text">Initializing Problem Creator...</div>
     <div id="loadingStatus"><div>⏳ Starting up...</div></div>
   </div>
+  -->
 
+  <!-- Import Progress Overlay -->
+  <div id="importProgressOverlay">
+    <div class="import-progress-content">
+      <div class="spinner"></div>
+      <div class="import-progress-text">Importing Problems...</div>
+      <div class="import-progress-bar">
+        <div class="import-progress-fill" id="importProgressFill"></div>
+      </div>
+      <div class="import-progress-details" id="importProgressDetails">
+        Preparing import...
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Export Progress Overlay -->
+  <div id="exportProgressOverlay">
+    <div class="export-progress-content">
+      <div class="spinner"></div>
+      <div class="export-progress-text">Exporting Problem Set...</div>
+      <div class="export-progress-bar">
+        <div class="export-progress-fill" id="exportProgressFill"></div>
+      </div>
+      <div class="export-progress-details" id="exportProgressDetails">
+        Preparing export...
+      </div>
+    </div>
+  </div>
   <!-- Header -->
   <header>
     <h1>📝 Problem Set Creator</h1>
@@ -1003,6 +1135,13 @@
                 <div class="action-item-content">
                   <div class="action-item-label">Download JSON</div>
                   <div class="action-item-desc">Save as file</div>
+                </div>
+              </button>
+              <button class="action-item" onclick="toolbarActions.modifyInTextEditor()">
+                <div class="action-item-icon icon-orange">📝</div>
+                <div class="action-item-content">
+                  <div class="action-item-label">Modify in Text Editor</div>
+                  <div class="action-item-desc">Edit problems as formatted text</div>
                 </div>
               </button>
             </div>
@@ -1443,6 +1582,12 @@ window.searchManager = (function() {
       downloadJSON: function() {
         if (window.problem_creator && window.problem_creator.data_manager) {
           window.problem_creator.data_manager.download_json();
+        }
+        window.toggleToolbar();
+      },
+      modifyInTextEditor: function() {
+        if (window.problem_creator && window.problem_creator.data_manager) {
+          window.problem_creator.data_manager.modify_in_text_editor();
         }
         window.toggleToolbar();
       },
@@ -2475,7 +2620,7 @@ CIRC: "\\circ"
 
                 mathContainer.innerHTML = `
                     <div style='font-size:18px;text-align:left;'>
-                        $$${highlightedLatex}$$
+                        $$${{highlightedLatex}}$$
                     </div>
                     <div style='margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;'>
                         <div style='font-size:12px;color:#6b7280;font-family:monospace;word-break:break-all;'>
@@ -3203,7 +3348,7 @@ CIRC: "\\circ"
 class Step:
     """Represents a single step in a problem (animated feedback + structure checking + matrix ops support)"""
     
-    def __init__(self, container, step_index, math_parser, parent_problem, step_type="step-by-step"):  # ✅ ADDED step_type
+    def __init__(self, container, step_index, math_parser, parent_problem, step_type="math-expression"):  # ✅ ADDED step_type
         self.container = container
         self.step_index = step_index
         self.math_parser = math_parser
@@ -3217,6 +3362,10 @@ class Step:
         self.feedback_el = None
         self.parse_preview_el = None
         self.loaded_expected_structure = None
+        
+        # Store original asciimath for GIFT export
+        self.original_expr_text = None
+        self.original_expected_text = None
         
         # ✅ ADDED: Type-specific containers
         self.options = []
@@ -3237,7 +3386,7 @@ class Step:
             <strong>Step {self.step_index}</strong>
             <div style="display:flex; gap:8px; align-items:center;">
               <select class="stepTypeSelect" style="padding:4px 8px; font-size:12px; border:1px solid #dbe9ff; border-radius:6px;">
-                <option value="step-by-step">Expression & Answer</option>
+                <option value="math-expression">Expression & Answer</option>
                 <option value="multiple-choice-single">Multiple Choice (Single)</option>
                 <option value="multiple-choice-multiple">Multiple Choice (Multiple)</option>
                 <option value="multi-mc">Multiple Choice (Multi-Question)</option>
@@ -3374,7 +3523,7 @@ class Step:
                 window.console.error(f"Error serializing description: {e}")
         
         # Serialize type-specific content
-        if self.step_type == "step-by-step":
+        if self.step_type == "math-expression":
             # Get MathQuill field content
             if self.expr_mf:
                 data['expression'] = self.expr_mf.latex()
@@ -3500,7 +3649,7 @@ class Step:
         """Render UI based on step type"""
         self.type_content_el.innerHTML = ""
 
-        if self.step_type == "step-by-step":
+        if self.step_type == "math-expression":
             self._render_step_by_step_ui()
         elif self.step_type == "multiple-choice-single":
             self._render_mc_single_ui()
@@ -3557,7 +3706,7 @@ class Step:
         self._wire_step_by_step_buttons()
 
     def _wire_step_by_step_buttons(self):
-        """Wire up buttons for step-by-step type"""
+        """Wire up buttons for math-expression type"""
         generate_btn = self.type_content_el.querySelector(".generateAnswer")
         if generate_btn:
             generate_btn.addEventListener("click", create_proxy(self._generate_answer))
@@ -5147,7 +5296,7 @@ class Step:
             "description": serialize_quill_content(self.description_editor_id)
         }
 
-        if self.step_type == "step-by-step":
+        if self.step_type == "math-expression":
             expected_l = self.expected_mf.latex().strip() if self.expected_mf else ""
             expected_structure = None
 
@@ -5350,7 +5499,7 @@ class Step:
         print(f"📥 Step.load_data called for Step {self.step_index}")
         print(f"📊 Data keys: {list(data.keys()) if isinstance(data, dict) else 'Not a dict'}")
 
-        step_type = data.get("step_type", "step-by-step")
+        step_type = data.get("step_type", "math-expression")
         print(f"🔖 Step type from data: {step_type}, current type: {self.step_type}")
 
         # Debug for fill-blank
@@ -5376,6 +5525,12 @@ class Step:
             restore_quill_content(self.description_editor_id, data["description"])
             window.console.log(f"✓ Description loaded")
 
+        # Display correction comment if present
+        if data.get("correction_comment"):
+            desc_editor = self.dom_element.querySelector(f"#{self.description_editor_id}")
+            if desc_editor:
+                self._display_correction_comment(data["correction_comment"], desc_editor.parentElement)
+
         # ✅ NEW: Restore requireCorrect checkbox for applicable types
         if step_type in ["multiple-choice-single", "multiple-choice-multiple", "multi-mc", "true-false", "fill-blank"]:
             if "requireCorrect" in data:
@@ -5392,8 +5547,8 @@ class Step:
 
         # Type-specific loading
         window.console.log(f"🔀 About to check type-specific branches with step_type: '{step_type}' (type: {type(step_type)})")
-        if step_type == "step-by-step":
-            window.console.log(f"🔧 Loading step-by-step data for Step {self.step_index}")
+        if step_type == "math-expression":
+            window.console.log(f"🔧 Loading math-expression data for Step {self.step_index}")
             if hasattr(self, 'expr_mf') and self.expr_mf:
                 if data.get("expression"):
                     self._load_math_field(self.expr_mf, data["expression"], "expression")
@@ -5729,6 +5884,12 @@ class Step:
 
       content_str = str(content).strip()
 
+      # Store original content for GIFT export
+      if field_name == "expression":
+          self.original_expr_text = content if isinstance(content, str) else None
+      elif field_name == "expected":
+          self.original_expected_text = content if isinstance(content, str) else None
+      
       # Check if it's asciimath (enclosed in backticks)
       if content_str.startswith('`') and content_str.endswith('`'):
           # Extract asciimath content
@@ -5900,7 +6061,7 @@ class Problem:
                     window.console.warn(f"⚠️ Failed to restore description")
             
             # Restore type-specific content
-            if data['step_type'] == "step-by-step":
+            if data['step_type'] == "math-expression":
                 if data.get('expression') and step.expr_mf:
                     step.expr_mf.latex(data['expression'])
                     window.console.log(f"✓ Restored expression: {data['expression']}")
@@ -6090,10 +6251,10 @@ class Problem:
         if not self.skip_initial_steps:
             # Add initial step with default type instead of showing dialog
             # This ensures there's always at least one step when autosave runs
-            window.setTimeout(create_proxy(lambda: self.add_step("step-by-step")), 200)
+            window.setTimeout(create_proxy(lambda: self.add_step("math-expression")), 200)
 
             def finish_initialization():
-                self.add_step("step-by-step")
+                self.add_step("math-expression")
                 self.is_initializing = False  # ✅ Mark as initialized
                 # Now trigger autosave
                 if hasattr(window, 'problem_creator'):
@@ -6366,7 +6527,7 @@ class Problem:
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px;">
                     <!-- Expression & Answer -->
-                    <div class="step-type-card" data-type="step-by-step">
+                    <div class="step-type-card" data-type="math-expression">
                         <div class="step-type-icon">🧮</div>
                         <div class="step-type-title">Expression & Answer</div>
                         <div class="step-type-desc">
@@ -6475,6 +6636,46 @@ class Problem:
         # Execute the dialog
         window.eval(js_code)
 
+
+    def _display_correction_comment(self, comment_text, target_element):
+        """Display auto-correction comment above a description editor"""
+        if not comment_text or not target_element:
+            return
+
+        # Check if comment banner already exists
+        existing = target_element.previousElementSibling
+        if existing and existing.classList and existing.classList.contains("auto-correct-banner"):
+            existing.remove()
+
+        # Create correction comment banner
+        banner = document.createElement("div")
+        banner.className = "auto-correct-banner"
+        banner.style.cssText = """
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #78350f;
+            display: flex;
+            align-items: start;
+            gap: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        """
+
+        banner.innerHTML = f"""
+            <span style='font-size:16px;line-height:1;'>✨</span>
+            <div style='flex:1;'>
+                <strong style='color:#92400e;'>Auto-Correction Applied:</strong>
+                <div style='margin-top:4px;'>{comment_text}</div>
+            </div>
+        """
+
+        # Insert banner before the target element
+        target_element.parentNode.insertBefore(banner, target_element)
+
+
     def get_data(self):
         """Get problem data as dictionary"""
         return {
@@ -6527,7 +6728,7 @@ class Problem:
                     return
 
                 step_data = steps_data[current_index]
-                step_type = step_data.get("step_type", "step-by-step")
+                step_type = step_data.get("step_type", "math-expression")
 
                 window.console.log(f"📦 Step {current_index} data: step_type={step_type}")
 
@@ -6556,8 +6757,8 @@ class Problem:
                     is_ready = False
                     readiness_check = ""
 
-                    if step_type == "step-by-step":
-                        # For step-by-step, wait for math fields
+                    if step_type == "math-expression":
+                        # For math-expression, wait for math fields
                         is_ready = hasattr(step, 'expr_mf') and step.expr_mf is not None
                         readiness_check = "expr_mf"
                     elif step_type in ["multiple-choice-single", "multiple-choice-multiple"]:
@@ -6636,8 +6837,7 @@ class DataManager:
 
     def _get_math_only_example(self):
         """Return math-only example text"""
-        return """###
-    Problem Title: Derivative and Simplification
+        return """Problem Title: Derivative and Simplification
     Problem Description: Find the derivative of the function `f(x) = x^3 - 2x^2 + 5x - 1` and simplify the result in multiple steps. Use the power rule and basic algebraic manipulation.
     #
     Step Description: Find the derivative of the polynomial function
@@ -6648,30 +6848,30 @@ class DataManager:
     Step Expression: `3x^2-4x+5`
     Step Expected: `3x^2-4x+5`
     #
-    Step Description: Evaluate the derivative at x = 2
+    Step Description: Evaluate the derivative at `x = 2`
     Step Expression: `3(2)^2-4(2)+5`
     Step Expected: `9`
+
     ###
     Problem Title: Matrix Row Operations
-    Problem Description: Perform the following row operations on the given augmented matrix `[[2,1,3],[4,-1,7]]` to solve the system of equations.
+    Problem Description: Perform the following row operations on the given augmented matrix `[[2,1,3],[4,-1,7]]` to solve the system of equations: `2x+y=3` and `4x-y=7`.
     #
     Step Description: Start with the augmented matrix
     Step Expression: `[[2,1,3],[4,-1,7]]`
     Step Expected: `[[2,1,3],[4,-1,7]]`
     #
-    Step Description: Perform R_2 → R_2 - 2R_1 to eliminate the first element in row 2
+    Step Description: Perform `R_2 → R_2 - 2R_1` to eliminate the first element in row 2
     Step Expression: `[[2,1,3],[4,-1,7]]|R_2->R_2-2R_1`
     Step Expected: `[[2,1,3],[0,-3,1]]`
     #
-    Step Description: Scale row 2 by -1/3
+    Step Description: Scale row 2 by `-1/3`
     Step Expression: `[[2,1,3],[0,-3,1]]|R_2->(-1/3)R_2`
     Step Expected: `[[2,1,3],[0,1,-1/3]]`
-    ###"""
+    """
 
     def _get_assessment_only_example(self):
         """Return assessment-only example text"""
-        return """###
-    Problem Title: Calculus Concepts - Multiple Choice
+        return """Problem Title: Calculus Concepts - Multiple Choice
     Problem Description: Test your understanding of fundamental calculus concepts with these multiple choice questions.
     #
     Step Description: What is the derivative of a constant?
@@ -6699,20 +6899,40 @@ class DataManager:
     Must Be Correct: true
     Explanation: This statement is false. A limit can exist even when the function is not defined at that point, or when the function value differs from the limit (removable discontinuity).
     #
-    Step Description: What is the antiderivative of 2x?
-    Step Type: fill-blank
-    Answer Type: math
-    Correct Answer: `x^2+C`
-    Alternative Answer: `x^2`
+    Step Description: What is the antiderivative of `2x`?
+    Step Type: math-expression
+    Step Expression: `int(2x)dx`
+    Step Expected: `x^2+C`
     Must Be Correct: false
+    #
+    Step Description: Complete the sentence: The derivative measures {blank}, while the integral measures {blank}.
+    Step Type: multi-mc
+    Option A: rate of change
+    Option A: accumulated area
+    Option A: slope
+    Option B: accumulated area
+    Option B: rate of change
+    Option B: total change
+    Correct Answer A: rate of change
+    Correct Answer B: accumulated area
+    Must Be Correct: false
+    #
+    Step Description: Fill in the blanks: The derivative of `sin(x)` is {blank} and the derivative of `cos(x)` is {blank}.
+    Step Type: fill-blank
+    Correct Answer A: cos(x)
+    Alternative Answer A: cosx
+    Correct Answer B: -sin(x)
+    Alternative Answer B: -sinx
+    Must Be Correct: false
+
     ###
     Problem Title: Linear Algebra Fundamentals
     Problem Description: Answer questions about matrices, vectors, and linear transformations.
     #
     Step Description: Which property does matrix multiplication satisfy?
     Step Type: multiple-choice-single
-    Option A: Commutative property (AB = BA)
-    Option B: Associative property ((AB)C = A(BC))
+    Option A: Commutative property (`AB = BA`)
+    Option B: Associative property (`(AB)C = A(BC)`)
     Option C: Both commutative and associative
     Option D: Neither commutative nor associative
     Correct Answer: B
@@ -6734,16 +6954,27 @@ class DataManager:
     Must Be Correct: false
     #
     Step Description: What is the determinant of the 2×2 identity matrix?
-    Step Type: fill-blank
-    Answer Type: math
-    Correct Answer: `1`
+    Step Type: math-expression
+    Step Expression: `det([[1,0],[0,1]])`
+    Step Expected: `1`
     Must Be Correct: false
-    ###"""
+    #
+    Step Description: A matrix is in {blank} form when each leading entry is 1 and is the only non-zero entry in its column. To find this form, we use {blank} operations.
+    Step Type: multi-mc
+    Option A: reduced row echelon
+    Option A: row echelon
+    Option A: diagonal
+    Option B: elementary row
+    Option B: column
+    Option B: matrix multiplication
+    Correct Answer A: reduced row echelon
+    Correct Answer B: elementary row
+    Must Be Correct: false
+    """
 
     def _get_mixed_example(self):
         """Return mixed example text"""
-        return """###
-    Problem Title: Quadratic Function Analysis
+        return """Problem Title: Quadratic Function Analysis
     Problem Description: Explore the quadratic function `f(x) = x^2 - 4x + 3` through derivatives and critical point analysis.
     #
     Step Description: Find the derivative of the quadratic function
@@ -6763,14 +6994,14 @@ class DataManager:
     Step Expression: `2x-4`
     Step Expected: `0`
     #
-    Step Description: Solve for x
+    Step Description: Solve for `x`
     Step Expression: `2x-4=0`
     Step Expected: `2`
     #
-    Step Description: What is the x-coordinate of the vertex?
-    Step Type: fill-blank
-    Answer Type: math
-    Correct Answer: `2`
+    Step Description: What is the `x`-coordinate of the vertex?
+    Step Type: math-expression
+    Step Expression: `x`
+    Step Expected: `2`
     Must Be Correct: true
     #
     Step Description: The vertex of a parabola opening upward represents a minimum point.
@@ -6778,12 +7009,13 @@ class DataManager:
     Correct Answer: True
     Must Be Correct: false
     #
-    Step Description: Evaluate the function at x = 2 to find the y-coordinate of the vertex
+    Step Description: Evaluate the function at `x = 2` to find the `y`-coordinate of the vertex
     Step Expression: `(2)^2-4(2)+3`
     Step Expected: `-1`
+
     ###
     Problem Title: Systems of Linear Equations with Matrices
-    Problem Description: Solve the system of equations using matrix row operations: `2x + y = 5` and `3x - 2y = 4`. We'll use the augmented matrix `[[2,1,5],[3,-2,4]]`.
+    Problem Description: Solve the system of equations using matrix row operations: `{(2x+y=5),(3x-2y=4):}`. We'll use the augmented matrix `[[2,1,5],[3,-2,4]]`.
     #
     Step Description: Write the system as an augmented matrix
     Step Expression: `[[2,1,5],[3,-2,4]]`
@@ -6798,7 +7030,7 @@ class DataManager:
     Correct Answer: C
     Must Be Correct: false
     #
-    Step Description: Perform R_2 → R_2 - (3/2)R_1
+    Step Description: Perform `R_2 → R_2 - (3/2)R_1`
     Step Expression: `[[2,1,5],[3,-2,4]]|R_2->R_2-(3/2)R_1`
     Step Expected: `[[2,1,5],[0,-7/2,-7/2]]`
     #
@@ -6809,7 +7041,7 @@ class DataManager:
     Alternative Answer: one
     Must Be Correct: false
     #
-    Step Description: Scale R_2 by -2/7
+    Step Description: Scale `R_2` by `-2/7`
     Step Expression: `[[2,1,5],[0,-7/2,-7/2]]|R_2->(-2/7)R_2`
     Step Expected: `[[2,1,5],[0,1,1]]`
     #
@@ -6819,15 +7051,16 @@ class DataManager:
     Must Be Correct: true
     Explanation: A system can have zero, one, or infinitely many solutions, but never exactly two.
     #
-    Step Description: Perform R_1 → R_1 - R_2
+    Step Description: Perform `R_1 → R_1 - R_2`
     Step Expression: `[[2,1,5],[0,1,1]]|R_1->R_1-R_2`
     Step Expected: `[[2,0,4],[0,1,1]]`
     #
-    Step Description: What is the value of x?
-    Step Type: fill-blank
-    Answer Type: math
-    Correct Answer: `2`
+    Step Description: What is the value of `x`?
+    Step Type: math-expression
+    Step Expression: `x`
+    Step Expected: `2`
     Must Be Correct: false
+
     ###
     Problem Title: Product and Chain Rules Combined
     Problem Description: Apply multiple differentiation rules to find the derivative of `f(x) = x^2 * (2x + 1)^3`.
@@ -6858,11 +7091,33 @@ class DataManager:
     Step Expression: `2x*(2x+1)^2*(5x+1)`
     Step Expected: `2x*(2x+1)^2*(5x+1)`
     #
-    Step Description: The product rule states that (fg)' = f'g + fg'.
+    Step Description: The product rule states that `(fg)' = f'g + fg'`.
     Step Type: true-false
     Correct Answer: True
     Must Be Correct: false
-    ###"""
+    #
+    Step Description: Complete the calculus rule: The {blank} rule is used when finding the derivative of a composite function, while the {blank} rule is used for the derivative of a product of two functions.
+    Step Type: multi-mc
+    Option A: chain
+    Option A: product
+    Option A: quotient
+    Option B: product
+    Option B: chain
+    Option B: power
+    Correct Answer A: chain
+    Correct Answer B: product
+    Must Be Correct: false
+    #
+    Step Description: For the function `f(x) = x^2 * (2x + 1)^3`, `u = {blank}` and `v = {blank}` when applying the product rule.
+    Step Type: fill-blank
+    Correct Answer A: x^2
+    Alternative Answer A: x2
+    Alternative Answer A: x squared
+    Correct Answer B: (2x+1)^3
+    Alternative Answer B: (2x + 1)^3
+    Alternative Answer B: (2x+1)3
+    Must Be Correct: false
+    """
                               
     def __init__(self, problem_creator):
         self.problem_creator = problem_creator
@@ -6880,15 +7135,20 @@ class DataManager:
             desc_input = document.querySelector("#problemSetDescription")
             problem_set_description = desc_input.value.strip() if desc_input else ""
 
+            # ✅ Get problem set UUID
+            uuid_display = document.querySelector("#problemSetUuid")
+            problem_set_id = uuid_display.textContent.strip() if uuid_display else ""
+
             # ✅ Only save problems that are fully initialized
             problems = [
-                problem.get_data() 
-                for problem in self.problem_creator.problems 
+                problem.get_data()
+                for problem in self.problem_creator.problems
                 if not hasattr(problem, 'is_initializing') or not problem.is_initializing
             ]
 
             save_data = {
                 "problem_set_description": problem_set_description,
+                "problem_set_id": problem_set_id,
                 "problems": problems,
             }
 
@@ -6915,20 +7175,78 @@ class DataManager:
             window.console.error(traceback.format_exc())
 
     def load_from_storage(self):
-        """Load state from localStorage"""
+        """Load state from localStorage with validation"""
         try:
             stored = window.localStorage.getItem(self.STORAGE_KEY)
             if not stored:
+                window.console.log("📭 No autosaved data found")
                 return None
-            data = json.loads(brotli.decompress(base64.b64decode(stored)).decode("utf-8"))
+
+            window.console.log(f"📥 Loading from localStorage ({len(stored):,} bytes)")
+
+            # Decode and decompress
+            decoded = base64.b64decode(stored)
+            window.console.log(f"📥 Decoded: {len(decoded):,} bytes")
+
+            decompressed = brotli.decompress(decoded).decode("utf-8")
+            window.console.log(f"📥 Decompressed: {len(decompressed):,} bytes")
+
+            data = json.loads(decompressed)
+            window.console.log(f"📥 Parsed JSON successfully")
+
+            # Validate structure
+            if not isinstance(data, dict):
+                window.console.error(f"❌ Invalid data structure: expected dict, got {type(data)}")
+                return None
+
             desc_input = document.querySelector("#problemSetDescription")
             if desc_input and data.get("problem_set_description"):
                 desc_input.value = data["problem_set_description"]
-            return data.get("problems", data)
+
+            # ✅ Restore problem set UUID
+            uuid_display = document.querySelector("#problemSetUuid")
+            if uuid_display and data.get("problem_set_id"):
+                uuid_display.textContent = data["problem_set_id"]
+                window.console.log(f"✅ Restored problem set UUID: {data['problem_set_id']}")
+
+            problems = data.get("problems", data)
+
+            # Validate problems
+            if not isinstance(problems, list):
+                window.console.error(f"❌ Problems is not a list: {type(problems)}")
+                return None
+
+            window.console.log(f"✅ Loaded {len(problems)} problem(s) from localStorage")
+
+            # Validate each problem
+            for idx, prob in enumerate(problems, 1):
+                if not isinstance(prob, dict):
+                    window.console.error(f"❌ Problem {idx} is not a dict: {type(prob)}")
+                    continue
+
+                if "steps" not in prob:
+                    window.console.error(f"❌ Problem {idx} missing 'steps' field")
+                    continue
+
+                if not isinstance(prob["steps"], list):
+                    window.console.error(f"❌ Problem {idx} steps is not a list: {type(prob['steps'])}")
+                    continue
+
+                window.console.log(f"✓ Problem {idx}: {len(prob['steps'])} steps")
+
+            return problems
+
         except Exception as e:
-            window.console.error(f"Load autosave failed: {e}")
+            window.console.error(f"❌ Load autosave failed: {e}")
             import traceback
             window.console.error(traceback.format_exc())
+
+            # Try to provide more helpful error message
+            if "DecompressionError" in str(type(e)):
+                window.console.error("💡 Data may be corrupted. Try clearing autosave.")
+            elif "JSONDecodeError" in str(type(e)):
+                window.console.error("💡 JSON parsing failed. Data may be truncated.")
+
             return None
 
     def clear_autosave(self):
@@ -6942,9 +7260,41 @@ class DataManager:
     # -----------------------------------------------------
     # ✅ Export JSON (with validation + colored highlighting)
     # -----------------------------------------------------
+    def _update_export_progress(self, percentage, message):
+        """Update export progress dialog"""
+        js_code = f"""
+        (function() {{
+            const overlay = document.querySelector('#exportProgressOverlay');
+            const fill = document.querySelector('#exportProgressFill');
+            const details = document.querySelector('#exportProgressDetails');
+            
+            if (fill) fill.style.width = '{percentage}%';
+            if (details) details.textContent = '{message}';
+        }})();
+        """
+        window.eval(js_code)
+
+    def _show_export_progress(self):
+        """Show export progress dialog"""
+        overlay = document.querySelector("#exportProgressOverlay")
+        if overlay:
+            overlay.classList.add("show")
+        self._update_export_progress(0, "Starting export...")
+
+    def _hide_export_progress(self):
+        """Hide export progress dialog"""
+        def hide():
+            overlay = document.querySelector("#exportProgressOverlay")
+            if overlay:
+                overlay.classList.remove("show")
+        window.setTimeout(create_proxy(hide), 500)
+
     def export_json(self):
         """Export all problems with validation and structure rebuilding"""
         window.console.log("🚀 Export function called")
+        
+        # Show export progress dialog
+        self._show_export_progress()
         math_parser = self.problem_creator.math_parser
         problems = self.problem_creator.problems
         window.console.log(f"📊 Found {len(problems)} problem(s) to export")
@@ -6973,6 +7323,9 @@ class DataManager:
 
         # Validation loop with structure rebuilding
         for p_index, problem in enumerate(problems, start=1):
+            # Update progress for this problem
+            progress_pct = int((p_index / len(problems)) * 80)
+            self._update_export_progress(progress_pct, f"Validating problem {p_index} of {len(problems)}...")
             # Check if description has content (Quill-aware)
             desc_blocks = serialize_quill_content(problem.description_editor_id)
             if not desc_blocks or not isinstance(desc_blocks, list):
@@ -7011,8 +7364,8 @@ class DataManager:
                         step_desc_container.classList.add("input-empty")
 
                 # ✅ NEW: Handle validation based on step type
-                if step.step_type == "step-by-step":
-                    # Original validation logic for step-by-step questions
+                if step.step_type == "math-expression":
+                    # Original validation logic for math-expression questions
                     expr_tex = step.expr_mf.latex().strip() if step.expr_mf else ""
                     exp_tex = step.expected_mf.latex().strip() if step.expected_mf else ""
 
@@ -7242,6 +7595,7 @@ class DataManager:
                 + ("\n...and more." if len(invalid_entries) > 10 else "")
             )
             return
+            self._hide_export_progress()
 
         # Save to storage after structure rebuilds
         if structures_rebuilt > 0:
@@ -7260,6 +7614,9 @@ class DataManager:
             uuid_display.textContent = problem_set_uuid
             uuid_display.style.color = "#0369a1"
 
+        
+        # Update progress - validation complete, preparing export data
+        self._update_export_progress(80, "Preparing export data...")
         export_data = {
             "problem_set_id": problem_set_uuid,
             "problem_set_description": problem_set_description,
@@ -7290,14 +7647,18 @@ class DataManager:
                             "❌ Export Failed",
                             f"Problem {p_idx}, Step {s_idx} contains non-serializable data:\n{step_error}\n\nPlease use 'Analyze Structure' button to rebuild."
                         )
+                        self._hide_export_progress()
                         return
 
             # Generic error if we can't pinpoint it
             self._show_popup("❌ Export Failed", f"Data contains non-serializable objects:\n{e}")
+            self._hide_export_progress()
             return
 
+        self._update_export_progress(85, "Creating JSON...")
         json_str = json.dumps(export_data, indent=2)
         try:
+          self._update_export_progress(90, "Compressing data...")
           compressed = brotli.compress(json_str.encode("utf-8"))
           b64 = base64.b64encode(compressed).decode("utf-8")
         except Exception:
@@ -7306,12 +7667,16 @@ class DataManager:
         # Display & copy
         document.querySelector("#exportedJson").innerText = b64
         try:
+          self._update_export_progress(100, "Export complete!")
+          self._hide_export_progress()
           window.navigator.clipboard.writeText(b64)
           success_msg = f"📝 {problem_set_description}\n📊 {len(problems)} problem(s)\n🔑 UUID: {problem_set_uuid}"
           if structures_rebuilt > 0:
               success_msg += f"\n🔧 Rebuilt {structures_rebuilt} structure(s)"
           self._show_popup("✅ Export successful", success_msg)
         except:
+          self._update_export_progress(100, "Export complete!")
+          self._hide_export_progress()
           self._show_popup(
               "✅ Export successful (manual copy)",
               f"📝 {problem_set_description}\n📊 {len(problems)} problem(s)\n🔑 UUID: {problem_set_uuid}\n\nPlease copy the exported data manually."
@@ -7569,14 +7934,14 @@ class DataManager:
         def show_json_file_info(e):
             if json_file_input.files and json_file_input.files.length > 0:
                 file = json_file_input.files.item(0)
-                size_kb = (file.size / 1024).toFixed(1)
+                size_kb = round(file.size / 1024, 1)
                 json_file_info.innerHTML = f"✓ Selected: {file.name} ({size_kb} KB)"
                 json_file_info.style.color = "#16a34a"
 
         def show_text_file_info(e):
             if text_file_input.files and text_file_input.files.length > 0:
                 file = text_file_input.files.item(0)
-                size_kb = (file.size / 1024).toFixed(1)
+                size_kb = round(file.size / 1024, 1)
                 text_file_info.innerHTML = f"✓ Selected: {file.name} ({size_kb} KB)"
                 text_file_info.style.color = "#16a34a"
 
@@ -7678,19 +8043,36 @@ class DataManager:
           window.console.error(f"Import error: {e}")
           window.alert(f"Import failed: {e}")
 
-    def _process_file_import(self, file, close_modal):
+    def _process_file_import(self, file, close_modal, file_type='json'):
         from js import FileReader
         reader = FileReader.new()
 
         def on_load(event):
             try:
                 content = event.target.result
-                cleaned = self._extract_base64_from_text(content)
-                decompressed = brotli.decompress(base64.b64decode(cleaned)).decode("utf-8")
-                data = json.loads(decompressed)
+
+                if file_type == 'text':
+                    # Text format file - check if it's formatted text or base64
+                    if '###' in content and ('Problem Title:' in content or 'Step Expression:' in content):
+                        # It's the text format
+                        window.console.log("Detected text format import from file")
+                        data = self._parse_text_format(content)
+                    else:
+                        # It's base64 format (even though uploaded as .txt)
+                        window.console.log("Detected base64 format in text file")
+                        cleaned = self._extract_base64_from_text(content)
+                        decompressed = brotli.decompress(base64.b64decode(cleaned)).decode("utf-8")
+                        data = json.loads(decompressed)
+                else:
+                    # JSON file - should be base64 encoded
+                    cleaned = self._extract_base64_from_text(content)
+                    decompressed = brotli.decompress(base64.b64decode(cleaned)).decode("utf-8")
+                    data = json.loads(decompressed)
+
                 self._import_problem_data(data)
                 close_modal()
             except Exception as e:
+                window.console.error(f"Import error: {e}")
                 window.alert(f"Import failed: {e}")
 
         reader.onload = create_proxy(on_load)
@@ -7714,9 +8096,9 @@ class DataManager:
         Problem Description: <description with $$latex$$ or `asciimath` and \n>
         #
         Step Description: <description>
-        Step Type: <type> (optional, defaults to step-by-step)
-        Step Expression: <expression> (for step-by-step)
-        Step Expected: <expected> (for step-by-step)
+        Step Type: <type> (optional, defaults to math-expression)
+        Step Expression: <expression> (for math-expression)
+        Step Expected: <expected> (for math-expression)
         Option A: <content> (for multiple choice)
         Correct Answer: <answer> (for all assessment types)
         Must Be Correct: true/false (optional)
@@ -8037,12 +8419,14 @@ class DataManager:
                     filtered.append(line)
             return filtered, comments
 
-        def add_validation_comment(issue_type, message, line_number=None):
-            """Add a validation issue and comment"""
+        def add_validation_comment(issue_type, message, line_number=None, target_type='problem', target_index=None):
+            """Add a validation issue and comment with tracking"""
             self.validation_issues.append({
                 'type': issue_type,
                 'message': message,
-                'line': line_number
+                'line': line_number,
+                'target_type': target_type,  # 'problem' or 'step'
+                'target_index': target_index  # problem index or step index within problem
             })
             comment = f"// AUTO-FIX: {message}"
             self.fixed_text_lines.append(comment)
@@ -8072,6 +8456,9 @@ class DataManager:
                 # Filter out comments from problem lines
                 problem_lines_clean, problem_comments = filter_comments(problem_lines)
 
+                # Track corrections for this problem
+                problem_corrections = []
+
                 title = extract_field(problem_lines_clean, 'Problem Title:')
                 description_text = extract_field(problem_lines_clean, 'Problem Description:')
 
@@ -8081,12 +8468,14 @@ class DataManager:
 
                 if not title:
                     add_validation_comment('error', 'Missing Problem Title - adding default title')
+                    problem_corrections.append("Missing Problem Title - added default")
                     title = "Untitled Problem"
                     fixed_problem_section.append("// AUTO-FIX: Missing Problem Title - added default")
                     has_issues = True
 
                 if not description_text:
                     add_validation_comment('warning', 'Missing Problem Description - adding default')
+                    problem_corrections.append("Missing Problem Description - added default")
                     description_text = "Problem description not provided"
                     fixed_problem_section.append("// AUTO-FIX: Missing Problem Description - added default")
                     has_issues = True
@@ -8097,6 +8486,8 @@ class DataManager:
                 # Remaining parts are steps
                 steps = []
                 for step_index, step_section in enumerate(parts[1:]):
+                    # Track corrections for this step
+                    step_corrections = []
                     step_lines = step_section.split('\n')
 
                     # Filter out comments from step lines
@@ -8110,9 +8501,9 @@ class DataManager:
                         add_validation_comment('warning', f'Step {step_index + 1}: Missing Step Description - adding default')
                         step_desc = f"Step {step_index + 1}"
 
-                    # Default to step-by-step if no type specified
+                    # Default to math-expression if no type specified
                     if not step_type:
-                        step_type = "step-by-step"
+                        step_type = "math-expression"
                     else:
                         step_type = step_type.strip().lower()
 
@@ -8134,7 +8525,7 @@ class DataManager:
                     # ========================================
                     # STEP-BY-STEP (Expression & Answer)
                     # ========================================
-                    if step_type == "step-by-step":
+                    if step_type == "math-expression":
                         step_expr = extract_field(step_lines_clean, 'Step Expression:')
                         step_expected = extract_field(step_lines_clean, 'Step Expected:')
 
@@ -8449,6 +8840,10 @@ class DataManager:
                         window.console.warn(f"Unknown step type: {step_type}, skipping")
                         continue
 
+                    # Add correction comment if there were any fixes for this step
+                    if step_corrections:
+                        step_data["correction_comment"] = " • ".join(step_corrections)
+
                     steps.append(step_data)
 
                 problem_data = {
@@ -8456,6 +8851,10 @@ class DataManager:
                     "description": description_blocks,
                     "steps": steps
                 }
+
+                # Add correction comment if there were any fixes for this problem
+                if problem_corrections:
+                    problem_data["correction_comment"] = " • ".join(problem_corrections)
 
                 problems.append(problem_data)
 
@@ -8770,13 +9169,39 @@ class DataManager:
                                     token: "keyword.control.problemset",
                                     regex: "^###$|^#$"
                                 },
+                                // Problem-level keywords (blue)
+                                {
+                                    token: "entity.name.function.problemset",
+                                    regex: "(Problem Title|Problem Description):"
+                                },
+                                // Step metadata keywords (purple)
                                 {
                                     token: "support.function.problemset",
-                                    regex: "^(Problem Title|Problem Description|Step Description|Step Type|Step Expression|Step Expected|Option [A-H]|Option \\\\d+[A-H]|Correct Answer|Correct Answer [A-H]|Correct Answer \\\\d+|Must Be Correct|Answer Type|Alternative Answer|Sub-Question \\\\d+):"
+                                    regex: "(Step Description|Step Type):"
+                                },
+                                // Step math keywords (teal/cyan)
+                                {
+                                    token: "entity.name.class.problemset",
+                                    regex: "(Step Expression|Step Expected):"
+                                },
+                                // Option keywords (green)
+                                {
+                                    token: "entity.name.tag.problemset",
+                                    regex: "(Option [A-H]|Option \\d+[A-H]):"
+                                },
+                                // Answer/validation keywords (orange)
+                                {
+                                    token: "variable.parameter.problemset",
+                                    regex: "(Correct Answer|Correct Answer [A-H]|Correct Answer \\d+|Answer Type|Alternative Answer|Alternative Answer [A-H]|Explanation|Sub-Question \\d+):"
+                                },
+                                // Must Be Correct keyword (red/magenta)
+                                {
+                                    token: "keyword.other.problemset",
+                                    regex: "(Must Be Correct):"
                                 },
                                 {
                                     token: "variable.language.problemset",
-                                    regex: "\\\\b(step-by-step|multiple-choice-single|multiple-choice-multiple|multi-mc|true-false|fill-blank)\\\\b"
+                                    regex: "\\\\b(math-expression|multiple-choice-single|multiple-choice-multiple|multi-mc|true-false|fill-blank)\\\\b"
                                 },
                                 {
                                     token: "constant.language.boolean",
@@ -8785,6 +9210,11 @@ class DataManager:
                                 {
                                     token: "string.quoted.other.problemset",
                                     regex: "`[^`]*`"
+                                },
+                                // LaTeX expressions (same color as AsciiMath)
+                                {
+                                    token: "string.quoted.other.problemset",
+                                    regex: "\\$\\$[^\\$]*\\$\\$|\\$[^\\$]+\\$"
                                 },
                                 {
                                     token: "constant.numeric",
@@ -8805,6 +9235,63 @@ class DataManager:
 
                 // Set custom mode
                 editor.session.setMode("ace/mode/problemset");
+
+                // Add custom CSS for syntax highlighting colors
+                const styleElement = document.createElement('style');
+                styleElement.textContent = `
+                    /* Problem-level keywords - Blue */
+                    .ace_entity.ace_name.ace_function.ace_problemset {
+                        color: #66D9EF !important;
+                        font-weight: bold;
+                    }
+
+                    /* Step metadata keywords - Purple */
+                    .ace_support.ace_function.ace_problemset {
+                        color: #AE81FF !important;
+                        font-weight: bold;
+                    }
+
+                    /* Step math keywords - Teal/Cyan */
+                    .ace_entity.ace_name.ace_class.ace_problemset {
+                        color: #66D9EF !important;
+                        font-weight: bold;
+                    }
+
+                    /* Option keywords - Green */
+                    .ace_entity.ace_name.ace_tag.ace_problemset {
+                        color: #A6E22E !important;
+                        font-weight: bold;
+                    }
+
+                    /* Answer keywords - Orange */
+                    .ace_variable.ace_parameter.ace_problemset {
+                        color: #FD971F !important;
+                        font-weight: bold;
+                    }
+
+                    /* Must Be Correct - Red/Magenta */
+                    .ace_keyword.ace_other.ace_problemset {
+                        color: #F92672 !important;
+                        font-weight: bold;
+                    }
+
+                    /* Step types - Cyan */
+                    .ace_variable.ace_language.ace_problemset {
+                        color: #66D9EF !important;
+                    }
+
+                    /* Math expressions (backticks and LaTeX) - Yellow */
+                    .ace_string.ace_quoted.ace_other.ace_problemset {
+                        color: #E6DB74 !important;
+                    }
+
+                    /* Separators - Purple */
+                    .ace_keyword.ace_control.ace_problemset {
+                        color: #AE81FF !important;
+                        font-weight: bold;
+                    }
+                `;
+                document.head.appendChild(styleElement);
 
                 // Configure editor options
                 editor.setOptions({
@@ -8827,6 +9314,1220 @@ class DataManager:
         })
         """
         return window.eval(js_code)(container, initial_text)
+
+    def _is_default_problem_set(self):
+        """Check if the current problem set is a default/empty one"""
+        problems = self.problem_creator.problems
+
+        # Check if there's only one problem
+        if len(problems) != 1:
+            return False
+
+        # Get the single problem's data
+        problem = problems[0]
+        problem_data = problem.get_data()
+
+        # Check if title is empty
+        title = problem_data.get("title", "").strip()
+        if title:
+            return False
+
+        # Check if description is empty
+        description = problem_data.get("description", [])
+        # Description is empty if it's an empty list or contains only empty ops
+        desc_empty = not description or all(
+            not op.get("insert", "").strip()
+            for op in description
+            if isinstance(op, dict)
+        )
+        if not desc_empty:
+            return False
+
+        # Check if steps are empty (no steps or only one empty step)
+        steps = problem_data.get("steps", [])
+        if len(steps) == 0:
+            return True
+
+        if len(steps) == 1:
+            step = steps[0]
+            step_desc = step.get("description", [])
+            step_desc_empty = not step_desc or all(
+                not op.get("insert", "").strip()
+                for op in step_desc
+                if isinstance(op, dict)
+            )
+
+            # Check if step content is empty based on type
+            step_type = step.get("step_type", "math-expression")
+            if step_type == "math-expression":
+                expr = step.get("expression", "").strip()
+                expected = step.get("expected", "").strip()
+                if not expr and not expected and step_desc_empty:
+                    return True
+            elif step_type in ["multiple-choice-single", "multiple-choice-multiple", "multi-mc"]:
+                options = step.get("options", [])
+                if len(options) == 0 and step_desc_empty:
+                    return True
+            elif step_type == "true-false":
+                if step_desc_empty:
+                    return True
+            elif step_type == "fill-blank":
+                blanks = step.get("blanks", [])
+                if len(blanks) == 0 and step_desc_empty:
+                    return True
+
+        return False
+
+    def modify_in_text_editor(self):
+        """Open a modal with current problems in text format for editing"""
+        window.console.log("🔧 Opening text editor for modification")
+
+        # Get current problems
+        problems = self.problem_creator.problems
+
+        if len(problems) == 0:
+            window.alert("⚠️ No problems to edit. Please create at least one problem first.")
+            return
+
+        # Ensure Ace Editor is loaded
+        self._ensure_codemirror_loaded()
+
+        # Check if this is a default/empty problem set
+        is_default = self._is_default_problem_set()
+
+        # Convert problems to text format
+        if is_default:
+            # Show minimal placeholder text for default problem
+            window.console.log("📋 Default problem detected - showing placeholder text")
+            text_content = """// Start creating your problem set here!
+// Use the format below or import examples from the Import menu
+
+Problem Title:
+Problem Description:
+#
+Step Description:
+Step Type: math-expression
+Step Expression:
+Step Expected: """
+        else:
+            text_content = self._convert_problems_to_text_format(problems)
+
+        # Create modal
+        backdrop = document.createElement("div")
+        backdrop.style.cssText = (
+            "position:fixed;top:0;left:0;right:0;bottom:0;"
+            "background:rgba(0,0,0,0.6);z-index:1000;"
+            "display:flex;align-items:center;justify-content:center;"
+        )
+
+        modal = document.createElement("div")
+        modal.style.cssText = (
+            "background:#fff;border-radius:8px;padding:24px;"
+            "width:98vw;height:96vh;"
+            "display:flex;flex-direction:column;"
+            "box-shadow:0 20px 60px rgba(0,0,0,0.5);"
+        )
+
+        modal.innerHTML = """
+            <h3 style='margin-top:0;color:#0b6efd;display:flex;align-items:center;gap:8px;'>
+                📝 Modify Problems in Text Editor
+            </h3>
+
+            <!-- Validation Status -->
+            <div id='validationStatus' style='display:none;padding:10px;border-radius:6px;margin-bottom:12px;font-size:13px;'></div>
+
+            <!-- Editor Container -->
+            <div style='flex:1;display:flex;flex-direction:column;min-height:0;'>
+                <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>
+                    <div style='display:flex;gap:12px;align-items:center;'>
+                        <label style='font-weight:600;color:#4b5563;'>Format:</label>
+                        <select id='formatSelector' class='btn' style='padding:6px 12px;font-size:14px;'>
+                            <option value='text'>📝 Text Format</option>
+                            <option value='gift'>🎓 GIFT Format</option>
+                        </select>
+                    </div>
+                    <button id='validateBtn' class='btn ghost' style='padding:6px 12px;font-size:12px;'>
+                        🔍 Validate Format
+                    </button>
+                </div>
+                <div id='aceEditorContainer' style='
+                    flex:1;
+                    border:2px solid #e6eef8;
+                    border-radius:8px;
+                    overflow:hidden;
+                    min-height:400px;
+                '></div>
+            </div>
+
+            <div style='display:flex;gap:8px;justify-content:space-between;margin-top:16px;'>
+                <div style='display:flex;gap:8px;'>
+                    <button id='displayMathExampleBtn' class='btn ghost'>
+                        📐 Math Example
+                    </button>
+                    <button id='displayGeneralExampleBtn' class='btn ghost'>
+                        📝 General Example
+                    </button>
+                    <button id='downloadTextBtn' class='btn ghost'>
+                        📥 Download as .txt
+                    </button>
+                </div>
+                <div style='display:flex;gap:8px;'>
+                    <button id='textEditorCancelBtn' class='btn ghost'>Cancel</button>
+                    <button id='textEditorSaveReplaceBtn' class='btn' style='background:#ef4444;'>
+                        🔄 Save and Replace
+                    </button>
+                    <button id='textEditorSaveMergeBtn' class='btn' style='background:#10b981;'>
+                        ➕ Save and Merge
+                    </button>
+                </div>
+            </div>
+        """
+
+        backdrop.appendChild(modal)
+        document.body.appendChild(backdrop)
+
+        # Get references
+        ace_container = modal.querySelector("#aceEditorContainer")
+        validation_status = modal.querySelector("#validationStatus")
+        validate_btn = modal.querySelector("#validateBtn")
+
+        # Store reference for editor
+        editor_ref = {"editor": None}
+
+        # Track current format
+        current_format = {"value": "text"}  # 'text' or 'gift'
+        original_content = {"text": "", "gift": ""}  # Cache both formats
+
+        # Initialize Ace Editor
+        ace_container.innerHTML = """
+        <div style='padding:40px;text-align:center;color:#64748b;'>
+            <div style='font-size:18px;margin-bottom:8px;'>⏳ Loading editor...</div>
+            <div style='font-size:13px;'>Please wait while Ace Editor initializes</div>
+        </div>
+        """
+
+        def init_editor(attempt=0):
+            if attempt > 100:
+                ace_container.innerHTML = """
+                <div style='padding:40px;text-align:center;color:#dc2626;'>
+                    <div style='font-size:18px;margin-bottom:8px;'>❌ Failed to load editor</div>
+                    <div style='font-size:13px;'>Ace Editor could not be initialized. Try refreshing the page.</div>
+                </div>
+                """
+                return
+
+            # Check if Ace is ready
+            is_ready = window.eval("typeof ace !== 'undefined' && typeof ace.edit === 'function'")
+
+            if is_ready:
+                try:
+                    editor = self._init_codemirror_editor(ace_container, text_content)
+                    if editor:
+                        editor_ref["editor"] = editor
+                        window.console.log("✓ Ace Editor initialized in modify modal")
+                    else:
+                        window.console.error("Failed to initialize Ace editor")
+                except Exception as e:
+                    window.console.error(f"Error initializing editor: {e}")
+            else:
+                window.setTimeout(create_proxy(lambda: init_editor(attempt + 1)), 50)
+
+        # Start initialization
+        init_editor()
+
+        # Validation function
+        def validate_format():
+            if not editor_ref["editor"]:
+                window.alert("Editor not ready yet")
+                return False
+
+            current_text = editor_ref["editor"].getValue()
+            format_selector = modal.querySelector("#formatSelector")
+            current_fmt = format_selector.value if format_selector else "text"
+
+            if current_fmt == "gift":
+                # Validate GIFT format
+                try:
+                    result = self._validate_gift_format(current_text)
+                    if result["valid"]:
+                        validation_status.style.display = "block"
+                        validation_status.style.background = "#d1fae5"
+                        validation_status.style.borderLeft = "4px solid #10b981"
+                        validation_status.style.color = "#065f46"
+                        warnings_html = ""
+                        if result["warnings"]:
+                            warnings_html = "<br><small>" + "; ".join(result["warnings"]) + "</small>"
+                        validation_status.innerHTML = f"✅ <strong>GIFT Valid!</strong> {result['question_count']} question(s){warnings_html}"
+                        return True
+                    else:
+                        validation_status.style.display = "block"
+                        validation_status.style.background = "#fee2e2"
+                        validation_status.style.borderLeft = "4px solid #ef4444"
+                        validation_status.style.color = "#991b1b"
+                        errors_html = "<br>".join(result["errors"][:3])  # Show first 3 errors
+                        validation_status.innerHTML = f"❌ <strong>GIFT Errors:</strong><br>{errors_html}"
+                        return False
+                except Exception as e:
+                    validation_status.style.display = "block"
+                    validation_status.style.background = "#fee2e2"
+                    validation_status.style.borderLeft = "4px solid #ef4444"
+                    validation_status.style.color = "#991b1b"
+                    validation_status.innerHTML = f"❌ <strong>Error:</strong> {str(e)}"
+                    return False
+            else:
+                # Validate Text format
+                try:
+                    data = self._parse_text_format(current_text)
+                    if isinstance(data, dict) and "problems" in data and len(data["problems"]) > 0:
+                        validation_status.style.display = "block"
+                        validation_status.style.background = "#d1fae5"
+                        validation_status.style.borderLeft = "4px solid #10b981"
+                        validation_status.style.color = "#065f46"
+                        validation_status.innerHTML = f"✅ <strong>Valid format!</strong> Found {len(data['problems'])} problem(s)"
+                        return True
+                    else:
+                        validation_status.style.display = "block"
+                        validation_status.style.background = "#fef3c7"
+                        validation_status.style.borderLeft = "4px solid #f59e0b"
+                        validation_status.style.color = "#92400e"
+                        validation_status.innerHTML = "⚠️ <strong>Warning:</strong> No problems found in text"
+                        return False
+                except Exception as e:
+                    validation_status.style.display = "block"
+                    validation_status.style.background = "#fee2e2"
+                    validation_status.style.borderLeft = "4px solid #ef4444"
+                    validation_status.style.color = "#991b1b"
+                    error_msg = str(e).replace("<", "&lt;").replace(">", "&gt;")
+                    validation_status.innerHTML = f"❌ <strong>Validation Error:</strong> {error_msg}"
+                    return False
+
+        # Close modal handler
+        def close_modal():
+            backdrop.remove()
+
+        # Save and Replace handler
+        def save_and_replace():
+            if not editor_ref["editor"]:
+                window.alert("Editor not ready yet")
+                return
+
+            updated_text = editor_ref["editor"].getValue().strip()
+            if not updated_text:
+                window.alert("❌ Text area is empty. Cannot save.")
+                return
+
+            # Validate first
+            if not validate_format():
+                if not window.confirm("⚠️ Validation failed. Do you still want to try saving?"):
+                    return
+
+            # Confirm before saving
+            if not window.confirm("⚠️ This will REPLACE ALL current problems with the edited text.\n\nContinue?"):
+                return
+
+            try:
+                # Parse the updated text
+                data = self._parse_text_format(updated_text)
+
+                # Clear current problems
+                self.problem_creator.clear_all_problems()
+
+                # Import the new data
+                self._import_problem_data(data)
+
+                # Close modal
+                close_modal()
+
+                window.alert("✅ Problems replaced successfully from text editor!")
+
+            except Exception as e:
+                window.console.error(f"Error saving changes: {e}")
+                window.alert(f"❌ Error saving changes: {e}\n\nPlease check the text format and try again.")
+
+        # Save and Merge handler
+        def save_and_merge():
+            if not editor_ref["editor"]:
+                window.alert("Editor not ready yet")
+                return
+
+            updated_text = editor_ref["editor"].getValue().strip()
+            if not updated_text:
+                window.alert("❌ Text area is empty. Cannot save.")
+                return
+
+            # Validate first
+            if not validate_format():
+                if not window.confirm("⚠️ Validation failed. Do you still want to try saving?"):
+                    return
+
+            # Confirm before merging
+            if not window.confirm("➕ This will MERGE the edited problems with existing problems.\n\nContinue?"):
+                return
+
+            try:
+                # Parse the updated text
+                data = self._parse_text_format(updated_text)
+
+                # Do NOT clear current problems - just import new ones (merge)
+                self._import_problem_data(data)
+
+                # Close modal
+                close_modal()
+
+                window.alert("✅ Problems merged successfully from text editor!")
+
+            except Exception as e:
+                window.console.error(f"Error merging problems: {e}")
+                window.alert(f"❌ Error merging problems: {e}\n\nPlease check the text format and try again.")
+
+        # Download as .txt handler
+        def download_text():
+            if not editor_ref["editor"]:
+                window.alert("Editor not ready yet")
+                return
+
+            blob = window.Blob.new([editor_ref["editor"].getValue()], {"type": "text/plain"})
+            url = window.URL.createObjectURL(blob)
+            a = document.createElement("a")
+            a.href = url
+            a.download = "problems_text_format.txt"
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            window.setTimeout(create_proxy(lambda: window.URL.revokeObjectURL(url)), 1000)
+
+        # Display math example handler
+        def display_math_example():
+            if not editor_ref["editor"]:
+                window.alert("Editor not ready yet")
+                return
+
+            # Build math example text
+            examples_text = []
+            examples_text.append("// Math-Only Example")
+            examples_text.append("###")
+            examples_text.append(self._get_math_only_example())
+
+            math_example = "\n".join(examples_text)
+
+            # Set the text in the editor
+            editor_ref["editor"].setValue(math_example, -1)
+
+            window.console.log("Math example displayed in editor")
+
+        # Display general example handler (assessment-only and mixed)
+        def display_general_example():
+            if not editor_ref["editor"]:
+                window.alert("Editor not ready yet")
+                return
+
+            # Build general examples text with assessment and mixed
+            examples_text = []
+            examples_text.append("// Assessment-Only Example")
+            examples_text.append("###")
+            examples_text.append(self._get_assessment_only_example())
+            examples_text.append("")
+            examples_text.append("// Mixed Example")
+            examples_text.append("###")
+            examples_text.append(self._get_mixed_example())
+
+            general_examples = "\n".join(examples_text)
+
+            # Set the text in the editor
+            editor_ref["editor"].setValue(general_examples, -1)
+
+            window.console.log("General examples displayed in editor")
+
+        # Format change handler
+        def on_format_change():
+            if not editor_ref["editor"]:
+                return
+
+            format_selector = modal.querySelector("#formatSelector")
+            new_format = format_selector.value
+
+            if new_format == current_format["value"]:
+                return
+
+            current_content = editor_ref["editor"].getValue()
+            original_content[current_format["value"]] = current_content
+
+            if new_format == "gift":
+                try:
+                    # First, parse the current text content to get the latest problems
+                    current_text = editor_ref["editor"].getValue()
+
+                    # Parse text to problem data
+                    parsed_data = self._parse_text_format(current_text)
+
+                    # Convert parsed problems to GIFT format
+                    gift_content = self._convert_to_gift_format(parsed_data.get("problems", []))
+
+                    editor_ref["editor"].setValue(gift_content, -1)
+                    original_content["gift"] = gift_content
+                    validation_status.style.display = "block"
+                    validation_status.style.background = "#f0f9ff"
+                    validation_status.style.borderLeft = "4px solid #9333ea"
+                    validation_status.style.color = "#4c1d95"
+                    validation_status.innerHTML = "🎓 <strong>Switched to GIFT Format</strong> - Ready for Moodle import"
+                except Exception as e:
+                    window.console.error(f"Error converting to GIFT: {e}")
+                    import traceback
+                    window.console.error(traceback.format_exc())
+                    window.alert(f"Error converting to GIFT: {str(e)}")
+                    format_selector.value = current_format["value"]
+                    return
+            else:
+                if original_content["text"]:
+                    editor_ref["editor"].setValue(original_content["text"], -1)
+                else:
+                    text_content = self._convert_problems_to_text_format(self.problem_creator.problems)
+                    editor_ref["editor"].setValue(text_content, -1)
+                    original_content["text"] = text_content
+                validation_status.style.display = "block"
+                validation_status.style.background = "#f0f9ff"
+                validation_status.style.borderLeft = "4px solid #3b82f6"
+                validation_status.style.color = "#1e3a8a"
+                validation_status.innerHTML = "📝 <strong>Switched to Text Format</strong> - Use for editing"
+
+            current_format["value"] = new_format
+
+        # Attach event listeners
+        modal.querySelector("#textEditorCancelBtn").addEventListener("click", create_proxy(lambda e: close_modal()))
+        modal.querySelector("#textEditorSaveReplaceBtn").addEventListener("click", create_proxy(lambda e: save_and_replace()))
+        modal.querySelector("#textEditorSaveMergeBtn").addEventListener("click", create_proxy(lambda e: save_and_merge()))
+        modal.querySelector("#displayMathExampleBtn").addEventListener("click", create_proxy(lambda e: display_math_example()))
+        modal.querySelector("#displayGeneralExampleBtn").addEventListener("click", create_proxy(lambda e: display_general_example()))
+        modal.querySelector("#downloadTextBtn").addEventListener("click", create_proxy(lambda e: download_text()))
+        validate_btn.addEventListener("click", create_proxy(lambda e: validate_format()))
+        modal.querySelector("#formatSelector").addEventListener("change", create_proxy(lambda e: on_format_change()))
+        backdrop.addEventListener("click", create_proxy(lambda e: close_modal() if e.target == backdrop else None))
+
+
+    def _convert_problems_to_text_format(self, problems):
+        """Convert problem objects to text format string with ALL fields"""
+        lines = []
+
+        total_problems = len(problems)
+        window.console.log(f"📝 Converting {total_problems} problem(s) to text format...")
+
+        for prob_idx, problem in enumerate(problems, 1):
+            window.console.log(f"📝 Converting problem {prob_idx}/{total_problems}...")
+
+            # Safety check
+            if not problem:
+                window.console.error(f"❌ Problem {prob_idx} is None/empty, skipping")
+                continue
+
+            lines.append("###")
+
+            # Problem title
+            title = problem.title_el.value.strip() if hasattr(problem, 'title_el') and problem.title_el else "Untitled Problem"
+            lines.append(f"Problem Title: {title}")
+
+            # Problem description - get from Quill editor
+            desc_blocks = serialize_quill_content(problem.description_editor_id)
+            desc_text = self._blocks_to_text_format(desc_blocks)
+            lines.append(f"Problem Description: {desc_text}")
+
+            # Steps
+            if not hasattr(problem, 'steps') or not problem.steps:
+                window.console.warn(f"⚠️ Problem {prob_idx} has no steps")
+                continue
+
+            for step_idx, step in enumerate(problem.steps, 1):
+                window.console.log(f"  Converting step {step_idx}/{len(problem.steps)}...")
+                lines.append("#")
+
+                # Step description
+                step_desc_text = ""
+
+                # Try to get from Quill editor
+                if hasattr(step, 'description_editor_id'):
+                    step_desc_blocks = serialize_quill_content(step.description_editor_id)
+                    step_desc_text = self._blocks_to_text_format(step_desc_blocks)
+
+                # Fallback: try to get from DOM
+                if not step_desc_text and hasattr(step, 'description_el'):
+                    quill_editor = step.description_el.querySelector('.ql-editor')
+                    if quill_editor:
+                        step_desc_text = quill_editor.textContent.strip()
+
+                lines.append(f"Step Description: {step_desc_text}")
+                window.console.log(f"  Step description: '{step_desc_text[:50]}...' " if len(step_desc_text) > 50 else f"  Step description: '{step_desc_text}'")
+
+                # Step type
+                step_type = step.step_type if hasattr(step, 'step_type') else "math-expression"
+                lines.append(f"Step Type: {step_type}")
+                window.console.log(f"  Step type: {step_type}")
+
+                # Step type specific fields
+                if step_type == "math-expression":
+                    # Expression and expected
+                    expr = step.expr_mf.latex().strip() if hasattr(step, 'expr_mf') and step.expr_mf else ""
+                    expected = step.expected_mf.latex().strip() if hasattr(step, 'expected_mf') and step.expected_mf else ""
+
+                    if expr:
+                        lines.append(f"Step Expression: $${expr}$$")
+                    if expected:
+                        lines.append(f"Step Expected: $${expected}$$")
+
+                elif step_type in ["multiple-choice-single", "multiple-choice-multiple"]:
+                    # Multiple choice options
+                    try:
+                        if hasattr(step, 'options') and step.options:
+                            window.console.log(f"  Found {len(step.options)} options")
+                            for i, option in enumerate(step.options):
+                                label = chr(65 + i)  # A, B, C, etc.
+
+                                # Try multiple ways to get option text
+                                opt_text = ""
+
+                                # Method 1: From editor_id using serialize_quill_content
+                                if option.get('editor_id'):
+                                    opt_blocks = serialize_quill_content(option.get('editor_id'))
+                                    opt_text = self._blocks_to_text_format(opt_blocks)
+
+                                # Method 2: From text property
+                                if not opt_text and option.get('text'):
+                                    opt_text = option.get('text')
+
+                                # Method 3: Try to get from DOM element directly
+                                if not opt_text and hasattr(step, 'type_content_el') and step.type_content_el:
+                                    opt_div = step.type_content_el.querySelector(f".option-editor-{label}")
+                                    if opt_div:
+                                        opt_quill = opt_div.querySelector('.ql-editor')
+                                        if opt_quill:
+                                            opt_text = opt_quill.textContent.strip()
+
+                                window.console.log(f"    Option {label}: '{opt_text}'")
+                                lines.append(f"Option {label}: {opt_text}")
+
+                            # Correct answers
+                            if step_type == "multiple-choice-single":
+                                # Single correct answer from select
+                                if hasattr(step, 'type_content_el') and step.type_content_el:
+                                    select = step.type_content_el.querySelector(".correctAnswerSelect")
+                                    if select and select.value:
+                                        lines.append(f"Correct Answer: {select.value}")
+                                        window.console.log(f"  Correct answer: {select.value}")
+                                    else:
+                                        window.console.warn(f"  No correct answer selected for MC single")
+                                else:
+                                    window.console.warn(f"  No type_content_el for MC single")
+                            else:
+                                # Multiple correct answers from checkboxes
+                                correct_opts = []
+                                if hasattr(step, 'type_content_el') and step.type_content_el:
+                                    checkboxes = step.type_content_el.querySelectorAll(".correctAnswerCheckbox:checked")
+                                    for cb in checkboxes:
+                                        correct_opts.append(cb.value)
+                                    window.console.log(f"  Found {len(checkboxes)} checked boxes")
+                                if correct_opts:
+                                    lines.append(f"Correct Answer: {', '.join(correct_opts)}")
+                                    window.console.log(f"  Correct answers: {', '.join(correct_opts)}")
+                                else:
+                                    window.console.warn(f"  No correct answers selected for MC multiple")
+                        else:
+                            window.console.warn(f"  No options found for MC step")
+                    except Exception as e:
+                        window.console.error(f"  Error converting MC step: {e}")
+
+                elif step_type == "true-false":
+                    # True/false correct answer
+                    try:
+                        if hasattr(step, 'type_content_el') and step.type_content_el:
+                            tf_true = step.type_content_el.querySelector(".tfTrue")
+                            tf_false = step.type_content_el.querySelector(".tfFalse")
+
+                            if tf_true and tf_true.checked:
+                                lines.append(f"Correct Answer: true")
+                                window.console.log(f"  Correct answer: true")
+                            elif tf_false and tf_false.checked:
+                                lines.append(f"Correct Answer: false")
+                                window.console.log(f"  Correct answer: false")
+                            else:
+                                window.console.warn(f"  No T/F answer selected (neither True nor False checked)")
+                        else:
+                            window.console.warn(f"  No type_content_el for T/F step")
+                    except Exception as e:
+                        window.console.error(f"  Error converting T/F step: {e}")
+
+                elif step_type == "fill-blank":
+                    # Fill in the blank - check mode
+                    blank_mode = getattr(step, 'blank_mode', 'single')
+
+                    if blank_mode == "multi" and hasattr(step, 'type_content_el') and step.type_content_el:
+                        # Multi-blank mode - export each blank with alternatives
+                        try:
+                            sections = step.type_content_el.querySelectorAll('[data-blank-label]')
+                            window.console.log(f"  Found {len(sections)} blank sections")
+
+                            for section in sections:
+                                label = section.getAttribute('data-blank-label')
+
+                                # Get correct answer
+                                correct_input = section.querySelector('.blankCorrectAnswer')
+                                if correct_input and correct_input.value.strip():
+                                    lines.append(f"Correct Answer {label}: {correct_input.value.strip()}")
+
+                                # Get alternative answers
+                                alt_inputs = section.querySelectorAll('.altAnswer')
+                                for alt_input in alt_inputs:
+                                    if alt_input.value.strip():
+                                        lines.append(f"Alternative Answer {label}: {alt_input.value.strip()}")
+                        except Exception as e:
+                            window.console.error(f"  Error converting multi-blank: {e}")
+
+                    else:
+                        # Single blank mode - export correct answer and alternatives
+                        if hasattr(step, 'blanks') and step.blanks:
+                            # Get the first (and usually only) blank
+                            if len(step.blanks) > 0:
+                                blank = step.blanks[0]
+                                if blank.get('text_input'):
+                                    value = blank['text_input'].value.strip()
+                                    if value:
+                                        lines.append(f"Correct Answer: {value}")
+
+                                # Get alternatives from the blank's alt inputs
+                                if hasattr(step, 'type_content_el'):
+                                    alt_inputs = step.type_content_el.querySelectorAll('.altAnswer')
+                                    for alt_input in alt_inputs:
+                                        if alt_input.value.strip():
+                                            lines.append(f"Alternative Answer: {alt_input.value.strip()}")
+
+                # requireCorrect field - check for ALL step types
+                if hasattr(step, 'type_content_el'):
+                    require_checkbox = step.type_content_el.querySelector(".requireCorrectCheckbox")
+                    if require_checkbox and require_checkbox.checked:
+                        lines.append(f"Must Be Correct: true")
+
+            # Only add empty line if not the last problem
+            if prob_idx < total_problems:
+                lines.append("")
+
+            window.console.log(f"✅ Problem {prob_idx}/{total_problems} converted ({len(problem.steps)} steps)")
+
+        window.console.log(f"✅ All {total_problems} problems converted to text ({len(lines)} lines)")
+        result = "\n".join(lines)
+        window.console.log(f"✅ Final text: {len(result)} characters")
+        return result
+
+    def _blocks_to_text_format(self, blocks):
+        """Convert content blocks to text format with $$latex$$ notation"""
+        if not blocks:
+            return ""
+
+        result = []
+        for block in blocks:
+            if isinstance(block, dict):
+                block_type = block.get("type", "")
+                if block_type == "text":
+                    # Replace newlines with \\n
+                    text = block.get("value", "").replace("\n", "\\n")
+                    result.append(text)
+                elif block_type == "math":
+                    latex = block.get("latex", "")
+                    result.append(f"$${latex}$$")
+                elif block_type == "image":
+                    # Skip images for now
+                    pass
+
+        return "".join(result)
+
+
+    def _convert_to_gift_format(self, problems):
+        """Convert problem objects or dicts to Moodle GIFT format
+
+        GIFT format specification:
+        - Multiple choice: question {=correct ~wrong ~wrong}
+        - Multiple choice (multiple): question {~%50%A ~%50%B ~%0%C}
+        - True/False: question {T} or {F}
+        - Fill-in-blank: question {=answer =alt1 =alt2}
+        - Essay: question {}
+        - Description: just text (no answer)
+        """
+        lines = []
+
+        # Add GIFT format header
+        lines.append("// Moodle GIFT Format Export")
+        lines.append("// Generated from Problem Creator")
+        lines.append("// " + "=" * 50)
+        lines.append("")
+
+        for prob_idx, problem in enumerate(problems, 1):
+            # Handle both dict and object formats
+            if isinstance(problem, dict):
+                # Problem from parsed text (dict format)
+                title = problem.get("title", f"Problem {prob_idx}")
+                desc_blocks = problem.get("description", [])
+                steps = problem.get("steps", [])
+            else:
+                # Problem object
+                title = problem.title_el.value.strip() if hasattr(problem, 'title_el') and problem.title_el else f"Problem {prob_idx}"
+                desc_blocks = serialize_quill_content(problem.description_editor_id)
+                steps = problem.steps
+
+            lines.append(f"$CATEGORY: {title}")
+            lines.append("")
+
+            # Problem description as a description item
+            desc_text = self._blocks_to_gift_text(desc_blocks)
+            if desc_text:
+                lines.append(f"// Problem Description:")
+                lines.append(desc_text)
+                lines.append("")
+
+            # Convert each step to GIFT question
+            for step_idx, step in enumerate(steps, 1):
+                # Handle both dict and object formats for steps
+                if isinstance(step, dict):
+                    step_desc_blocks = step.get("description", [])
+                    step_type = step.get("step_type", "math-expression")
+                else:
+                    step_desc_blocks = serialize_quill_content(step.description_editor_id)
+                    step_type = step.step_type if hasattr(step, 'step_type') else "math-expression"
+
+                question_text = self._blocks_to_gift_text(step_desc_blocks)
+
+                if not question_text:
+                    question_text = f"Question {step_idx}"
+
+                # Convert based on type
+                if step_type == "multiple-choice-single":
+                    # Single answer multiple choice
+                    if isinstance(step, dict):
+                        # Dict format
+                        options = step.get("options", [])
+                        correct_answer = step.get("correct_answer", "")
+                    else:
+                        # Object format
+                        options = step.options if hasattr(step, 'options') else []
+                        correct_answer = ""
+                        if hasattr(step, 'type_content_el'):
+                            select = step.type_content_el.querySelector(".correctAnswerSelect")
+                            if select:
+                                correct_answer = select.value
+
+                    if options:
+                        choices = []
+                        for i, option in enumerate(options):
+                            label = chr(65 + i)  # A, B, C, etc.
+                            if isinstance(option, dict):
+                                # Dict format - content is already blocks
+                                opt_text = self._blocks_to_gift_text(option.get('content', []))
+                            else:
+                                # Object format
+                                opt_blocks = serialize_quill_content(option.get('editor_id', ''))
+                                opt_text = self._blocks_to_gift_text(opt_blocks)
+
+                            if label == correct_answer:
+                                choices.append(f"=  {opt_text}")
+                            else:
+                                choices.append(f"~  {opt_text}")
+
+                        lines.append(f"::{title} - Step {step_idx}::{question_text} {{")
+                        lines.extend(choices)
+                        lines.append("}")
+
+                elif step_type == "multiple-choice-multiple":
+                    # Multiple answer multiple choice (with percentages)
+                    if isinstance(step, dict):
+                        # Dict format
+                        options = step.get("options", [])
+                        correct_answers = step.get("correct_answers", [])
+                    else:
+                        # Object format
+                        options = step.options if hasattr(step, 'options') else []
+                        correct_answers = []
+                        if hasattr(step, 'type_content_el'):
+                            checkboxes = step.type_content_el.querySelectorAll(".correctAnswerCheckbox:checked")
+                            for cb in checkboxes:
+                                correct_answers.append(cb.value)
+
+                    if options:
+                        choices = []
+                        num_correct = len(correct_answers)
+                        percentage = int(100 / num_correct) if num_correct > 0 else 0
+
+                        for i, option in enumerate(options):
+                            label = chr(65 + i)
+                            if isinstance(option, dict):
+                                # Dict format
+                                opt_text = self._blocks_to_gift_text(option.get('content', []))
+                            else:
+                                # Object format
+                                opt_blocks = serialize_quill_content(option.get('editor_id', ''))
+                                opt_text = self._blocks_to_gift_text(opt_blocks)
+
+                            if label in correct_answers:
+                                choices.append(f"~%{percentage}%{opt_text}")
+                            else:
+                                choices.append(f"~%0%{opt_text}")
+
+                        lines.append(f"::{title} - Step {step_idx}::{question_text} {{")
+                        lines.extend(choices)
+                        lines.append("}")
+
+                elif step_type == "true-false":
+                    # True/False question
+                    if isinstance(step, dict):
+                        # Dict format
+                        correct = step.get("correct_answer", "True")
+                        answer = "T" if correct.lower() == "true" else "F"
+                    else:
+                        # Object format
+                        answer = "T"
+                        if hasattr(step, 'type_content_el'):
+                            tf_true = step.type_content_el.querySelector(".tfTrue")
+                            tf_false = step.type_content_el.querySelector(".tfFalse")
+
+                            if tf_false and tf_false.checked:
+                                answer = "F"
+
+                    lines.append(f"::{title} - Step {step_idx}::{question_text} {{{answer}}}")
+
+                elif step_type == "fill-blank":
+                    # Fill in the blank (short answer)
+                    answers = []
+
+                    if isinstance(step, dict):
+                        blank_mode = step.get("blank_config", {}).get("mode", "single")
+                    else:
+                        blank_mode = getattr(step, 'blank_mode', 'single')
+
+                    if blank_mode == "multi":
+                        if isinstance(step, dict):
+                            # Dict format - get from correct_answers dict
+                            correct_answers_dict = step.get("correct_answers", {})
+                            for label in sorted(correct_answers_dict.keys()):
+                                blank_data = correct_answers_dict[label]
+                                if isinstance(blank_data, list):
+                                    blank_answers = [f"={ans}" for ans in blank_data if ans]
+                                else:
+                                    blank_answers = [f"={blank_data}"] if blank_data else []
+
+                                if blank_answers:
+                                    lines.append(f"::{title} - Step {step_idx} - Blank {label}::{question_text} (Blank {label}) {{")
+                                    lines.extend(["  " + ans for ans in blank_answers])
+                                    lines.append("}")
+                        elif hasattr(step, 'type_content_el'):
+                            # Object format - Multi-blank - create separate question for each blank
+                            sections = step.type_content_el.querySelectorAll('[data-blank-label]')
+
+                            for section in sections:
+                                label = section.getAttribute('data-blank-label')
+                                blank_answers = []
+
+                                # Get correct answer
+                                correct_input = section.querySelector('.blankCorrectAnswer')
+                                if correct_input and correct_input.value.strip():
+                                    blank_answers.append(f"={correct_input.value.strip()}")
+
+                                # Get alternatives
+                                alt_inputs = section.querySelectorAll('.altAnswer')
+                            for alt_input in alt_inputs:
+                                if alt_input.value.strip():
+                                    blank_answers.append(f"={alt_input.value.strip()}")
+
+                            if blank_answers:
+                                lines.append(f"::{title} - Step {step_idx} - Blank {label}::{question_text} (Blank {label}) {{")
+                                lines.extend(["  " + ans for ans in blank_answers])
+                                lines.append("}")
+                    else:
+                        # Single blank
+                        if hasattr(step, 'blanks') and step.blanks and len(step.blanks) > 0:
+                            blank = step.blanks[0]
+                            if blank.get('text_input'):
+                                value = blank['text_input'].value.strip()
+                                if value:
+                                    answers.append(f"={value}")
+
+                            # Get alternatives
+                            if hasattr(step, 'type_content_el'):
+                                alt_inputs = step.type_content_el.querySelectorAll('.altAnswer')
+                                for alt_input in alt_inputs:
+                                    if alt_input.value.strip():
+                                        answers.append(f"={alt_input.value.strip()}")
+
+                            if answers:
+                                lines.append(f"::{title} - Step {step_idx}::{question_text} {{")
+                                lines.extend(["  " + ans for ans in answers])
+                                lines.append("}")
+
+                elif step_type == "math-expression":
+                    # Convert to fill-in-the-blank with multiple asciimath variations
+                    # Try to get original asciimath text, fallback to LaTeX if not available
+                    expected = ""
+
+                    if isinstance(step, dict):
+                        # Dict format from parsed text
+                        expected = step.get("expected", "")
+                        # Remove $$ markers if present
+                        if expected.startswith('$$') and expected.endswith('$$'):
+                            expected = expected[2:-2].strip()
+                        # Remove backticks if present
+                        elif expected.startswith('`') and expected.endswith('`'):
+                            expected = expected[1:-1].strip()
+                    else:
+                        # Object format
+                        # Check if we have the original asciimath text
+                        if hasattr(step, 'original_expected_text') and step.original_expected_text:
+                            expected_raw = step.original_expected_text.strip()
+                            # Remove backticks if present
+                            if expected_raw.startswith('`') and expected_raw.endswith('`'):
+                                expected = expected_raw[1:-1].strip()
+                            else:
+                                expected = expected_raw
+                        else:
+                            # Fallback to LaTeX
+                            expected = step.expected_mf.latex().strip() if hasattr(step, 'expected_mf') and step.expected_mf else ""
+
+                    if expected:
+                        # Generate simple and expected structures with credit percentages
+                        window.console.log(f"Generating structures for: {expected}")
+                        structures = self._generate_expression_variations(expected)
+
+                        if not structures:
+                            structures = [(expected, 100)]
+
+                        window.console.log(f"Found {len(structures)} structures: {structures}")
+
+                        lines.append(f"::{title} - Step {step_idx}::{question_text} {{")
+                        for answer, credit in structures:
+                            if credit == 100:
+                                lines.append(f"  ={answer}")
+                            else:
+                                lines.append(f"  ~%{credit}%{answer}")
+                        lines.append("}")
+                    else:
+                        # Essay question if no expected answer
+                        lines.append(f"::{title} - Step {step_idx}::{question_text} {{}}")
+
+                lines.append("")  # Empty line between questions
+
+        return "\n".join(lines)
+
+    def _blocks_to_gift_text(self, blocks):
+        """Convert content blocks to plain text for GIFT format (strip math to text)"""
+        if not blocks:
+            return ""
+
+        result = []
+        for block in blocks:
+            if isinstance(block, dict):
+                block_type = block.get("type", "")
+                if block_type == "text":
+                    text = block.get("value", "").replace("\n", " ")
+                    result.append(text)
+                elif block_type == "math":
+                    # Convert LaTeX to readable text (keep the LaTeX for now)
+                    latex = block.get("latex", "")
+                    result.append(f"[{latex}]")
+                elif block_type == "image":
+                    result.append("[IMAGE]")
+
+        return "".join(result).strip()
+
+    def _generate_expression_variations(self, expr_text):
+        """
+        Generate structure-based answers for fill-in-the-blank.
+        Returns list of tuples: [(structure_string, credit_percentage), ...]
+
+        - Simplified structure: 50% credit
+        - Expected structure: 100% credit
+        - If both structures are the same, return only one with 100% credit
+        """
+        if not expr_text or not expr_text.strip():
+            return []
+
+        try:
+            import sympy as sp
+            from sympy.parsing.sympy_parser import parse_expr
+            parsed_expr = None
+
+            # Remove $$ markers if present
+            clean_expr = expr_text
+            if clean_expr.startswith('$$') and clean_expr.endswith('$$'):
+                clean_expr = clean_expr[2:-2].strip()
+
+            # Check if this is a matrix expression (contains [[ or matrix operations)
+            is_matrix = '[[' in clean_expr or '|R_' in clean_expr or '\\' in clean_expr
+
+            if is_matrix:
+                # Use parse_latex for matrices (handles row operations)
+                window.console.log(f"Detected matrix expression, using parse_latex: {clean_expr}")
+                try:
+                    parsed_expr = self.problem_creator.math_parser.parse_latex(clean_expr)
+                except Exception as e:
+                    window.console.warn(f"Failed to parse matrix with parse_latex: {e}")
+                    return [(expr_text, 100)]  # Fallback to text
+            else:
+                # Try parsing as simple expression with sympy
+                sympy_text = clean_expr
+                import re
+                sympy_text = re.sub(r'\\(\w+)', r'\1', sympy_text)  # Remove backslashes
+                sympy_text = sympy_text.replace('^', '**')  # Power operator
+
+                try:
+                    parsed_expr = parse_expr(sympy_text, local_dict={'sp': sp})
+                    window.console.log(f"Parsed as simple expression: {parsed_expr}")
+                except Exception as e:
+                    window.console.warn(f"Failed to parse expression with parse_expr: {e}")
+                    # Try parse_latex as fallback
+                    try:
+                        parsed_expr = self.problem_creator.math_parser.parse_latex(clean_expr)
+                        window.console.log(f"Parsed with parse_latex fallback: {parsed_expr}")
+                    except:
+                        window.console.warn(f"All parsing methods failed for: {expr_text}")
+                        return [(expr_text, 100)]  # Fallback to text
+
+            if parsed_expr is None:
+                return [(expr_text, 100)]
+            if parsed_expr is None:
+                return [(expr_text, 100)]
+
+            # Extract structure of expected (original) expression
+            expected_structure = self.problem_creator.math_parser.extract_structure(parsed_expr)
+            expected_structure_str = self._structure_to_string(expected_structure)
+            window.console.log(f"Expected structure: {expected_structure_str}")
+
+            # Simplify and extract structure of simplified form
+            import sympy as sp
+            try:
+                simplified_expr = sp.simplify(parsed_expr)
+                simplified_structure = self.problem_creator.math_parser.extract_structure(simplified_expr)
+                simplified_structure_str = self._structure_to_string(simplified_structure)
+                window.console.log(f"Simplified structure: {simplified_structure_str}")
+            except:
+                # If simplification fails, use expected structure
+                simplified_structure_str = expected_structure_str
+
+            # Compare structures
+            if simplified_structure_str == expected_structure_str:
+                # Both structures are the same
+                window.console.log("Structures are identical, returning single answer with 100%")
+                return [(expected_structure_str, 100)]
+            else:
+                # Different structures
+                window.console.log("Structures differ, returning both with 50% and 100%")
+                return [
+                    (simplified_structure_str, 50),   # Simplified gets 50%
+                    (expected_structure_str, 100)     # Expected gets 100%
+                ]
+
+        except Exception as e:
+            window.console.error(f"Error generating structures: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+            # Fallback to original text
+            return [(expr_text, 100)]
+
+    def _structure_to_string(self, structure):
+        """
+        Convert structure dict to a standardized string representation.
+        Format: ops:{Add:2,Mul:1}|operands:{x:1,2:1,3:1}|total_ops:3|total_operands:3
+        """
+        import json
+
+        # Sort dictionaries for consistent output
+        ops_str = json.dumps(structure.get("operators", {}), sort_keys=True, separators=(',', ':'))
+        operands_str = json.dumps(structure.get("operands", {}), sort_keys=True, separators=(',', ':'))
+        matrix_ops_str = json.dumps(structure.get("matrix_ops", []), sort_keys=True, separators=(',', ':'))
+
+        parts = [
+            f"ops:{ops_str}",
+            f"operands:{operands_str}",
+            f"total_ops:{structure.get('total_ops', 0)}",
+            f"total_operands:{structure.get('total_operands', 0)}"
+        ]
+
+        # Add matrix operations if present
+        if structure.get("matrix_ops"):
+            parts.append(f"matrix_ops:{matrix_ops_str}")
+
+        return "|".join(parts)
+
+
+    def _sympy_to_asciimath(self, expr):
+        """Convert a SymPy expression to AsciiMath notation"""
+        try:
+            import sympy as sp
+            import re
+
+            # Convert to string
+            expr_str = str(expr)
+
+            # Convert ** to ^
+            expr_str = expr_str.replace('**', '^')
+
+            # Convert sqrt to proper format
+            expr_str = re.sub(r'sqrt\(([^)]+)\)', r'sqrt(\1)', expr_str)
+
+            # Remove unnecessary spaces
+            expr_str = expr_str.replace(' ', '')
+
+            return expr_str
+        except:
+            return str(expr)
+
+    def _validate_gift_format(self, gift_text):
+        """Validate Moodle GIFT format"""
+        import re
+        errors = []
+        warnings = []
+        lines_list = gift_text.split('\n')
+        in_answer_block = False
+        brace_count = 0
+        question_count = 0
+
+        for i, line in enumerate(lines_list, 1):
+            stripped = line.strip()
+            if not stripped or stripped.startswith('//'):
+                continue
+
+            if stripped.startswith('$CATEGORY:'):
+                if in_answer_block:
+                    errors.append(f"Line {i}: Category cannot be inside answer block")
+                continue
+
+            if '::' in stripped and not in_answer_block:
+                parts = stripped.split('::')
+                if len(parts) >= 3:
+                    question_count += 1
+                    in_answer_block = '{' in stripped
+                    if in_answer_block:
+                        brace_count += stripped.count('{') - stripped.count('}')
+                        if brace_count == 0:
+                            in_answer_block = False
+
+            elif in_answer_block:
+                brace_count += stripped.count('{') - stripped.count('}')
+                if '~%' in stripped:
+                    match = re.search(r'~%(\d+)%', stripped)
+                    if match:
+                        percentage = int(match.group(1))
+                        if percentage < 0 or percentage > 100:
+                            errors.append(f"Line {i}: Invalid percentage {percentage}")
+                if brace_count == 0:
+                    in_answer_block = False
+                if brace_count < 0:
+                    errors.append(f"Line {i}: Unmatched closing brace")
+                    brace_count = 0
+
+        if brace_count > 0:
+            errors.append("End of file: Unclosed answer block")
+        if question_count == 0:
+            warnings.append("No questions found")
+
+        return {
+            "valid": len(errors) == 0,
+            "errors": errors,
+            "warnings": warnings,
+            "question_count": question_count
+        }
+
 
     def _import_problem_data(self, data):
         if isinstance(data, dict) and "problems" in data:
@@ -8928,7 +10629,7 @@ class DataManager:
         window.eval(js_code)
 
     def _execute_import_choice(self, choice):
-        """Execute the import based on user choice"""
+        """Execute the import based on user choice with progress dialog"""
         if not hasattr(window, '_import_data'):
             window.alert("❌ No import data found.")
             return
@@ -8937,32 +10638,95 @@ class DataManager:
         problems = import_data['problems']
         description = import_data['description']
         uuid_str = import_data['uuid']
+        total_problems = len(problems)
         
-        if choice == 'replace':
-            # Update metadata and clear existing problems
-            desc_input = document.querySelector("#problemSetDescription")
-            if desc_input:
-                desc_input.value = description
-            uuid_display = document.querySelector("#problemSetUuid")
-            if uuid_display:
-                uuid_display.textContent = uuid_str
-            
-            self.problem_creator.clear_all_problems()
+        # Show progress overlay
+        overlay = document.querySelector("#importProgressOverlay")
+        progress_fill = document.querySelector("#importProgressFill")
+        progress_details = document.querySelector("#importProgressDetails")
         
-        # Add problems (for both replace and merge)
-        for prob in problems:
-            self.problem_creator.add_problem(skip_initial_steps=True)  # ✅ NEW: Skip initial steps when importing
-            self.problem_creator.problems[-1].load_data(prob)
-
-        self.save_to_storage()
+        if overlay:
+            overlay.classList.add("show")
         
-        if choice == 'replace':
-            window.alert("✅ Problem set replaced successfully!")
-        else:
-            window.alert(f"✅ Problems merged! Added {len(problems)} problem(s) to existing set.")
+        # Update initial status
+        if progress_details:
+            if choice == 'replace':
+                progress_details.textContent = f"Replacing existing problems with {total_problems} new problem(s)..."
+            else:
+                progress_details.textContent = f"Merging {total_problems} new problem(s) with existing set..."
         
-        # Cleanup
-        del window._import_data
+        # Helper function to update progress
+        def update_progress(current, total):
+            percentage = (current / total * 100) if total > 0 else 0
+            if progress_fill:
+                progress_fill.style.width = f"{percentage}%"
+            if progress_details:
+                progress_details.textContent = f"Loading problem {current} of {total}..."
+        
+        # Process import after a short delay to allow UI to render
+        def start_import():
+            try:
+                if choice == 'replace':
+                    # Update metadata and clear existing problems
+                    desc_input = document.querySelector("#problemSetDescription")
+                    if desc_input:
+                        desc_input.value = description
+                    uuid_display = document.querySelector("#problemSetUuid")
+                    if uuid_display:
+                        uuid_display.textContent = uuid_str
+                    
+                    self.problem_creator.clear_all_problems()
+                
+                # Process problems with progress updates
+                def process_problem(index):
+                    if index < len(problems):
+                        # Update progress
+                        update_progress(index + 1, total_problems)
+                        
+                        # Add and load problem
+                        prob = problems[index]
+                        self.problem_creator.add_problem(skip_initial_steps=True)
+                        self.problem_creator.problems[-1].load_data(prob)
+                        
+                        # Schedule next problem with a small delay for UI update
+                        def next_problem():
+                            process_problem(index + 1)
+                        window.setTimeout(create_proxy(next_problem), 50)
+                    else:
+                        # All problems loaded
+                        finish_import()
+                
+                def finish_import():
+                    # Save to storage
+                    self.save_to_storage()
+                    
+                    # Hide progress overlay
+                    if overlay:
+                        overlay.classList.remove("show")
+                    
+                    # Show success message
+                    if choice == 'replace':
+                        window.alert("✅ Problem set replaced successfully!")
+                    else:
+                        window.alert(f"✅ Problems merged! Added {total_problems} problem(s) to existing set.")
+                    
+                    # Cleanup
+                    del window._import_data
+                
+                # Start processing
+                process_problem(0)
+                
+            except Exception as e:
+                # Hide overlay on error
+                if overlay:
+                    overlay.classList.remove("show")
+                window.console.error(f"Import error: {e}")
+                import traceback
+                window.console.error(traceback.format_exc())
+                window.alert(f"❌ Import failed: {e}")
+        
+        # Start import after a brief delay to show the overlay
+        window.setTimeout(create_proxy(start_import), 100)
         
     # -----------------------------------------------------
     # ✅ Popup
@@ -9110,6 +10874,26 @@ class ProblemCreator:
         # ✅ CRITICAL: Disable autosave during restoration
         self.data_manager.is_restoring = True
 
+        # Show progress overlay
+        overlay = document.querySelector("#importProgressOverlay")
+        progress_fill = document.querySelector("#importProgressFill")
+        progress_details = document.querySelector("#importProgressDetails")
+
+        if overlay:
+            overlay.classList.add("show")
+
+        # Update initial status
+        if progress_details:
+            progress_details.textContent = f"Restoring {len(saved)} problem(s) from autosave..."
+
+        # Helper function to update progress
+        def update_restore_progress(current, total):
+            percentage = (current / total * 100) if total > 0 else 0
+            if progress_fill:
+                progress_fill.style.width = f"{percentage}%"
+            if progress_details:
+                progress_details.textContent = f"Restoring problem {current} of {total}..."
+
         try:
             window.console.log(f"🔄 Starting to restore {len(saved)} problem(s)")
             window.console.log("⏸️ Autosave disabled during restoration")
@@ -9135,6 +10919,10 @@ class ProblemCreator:
                         creator_ref.data_manager.is_restoring = False
                         creator_ref.data_manager.restore_complete = True
                         window.console.log("▶️ Autosave re-enabled after restoration")
+
+                        # Hide progress overlay
+                        if overlay:
+                            overlay.classList.remove("show")
                         # Trigger one final save with complete data
                         creator_ref.data_manager.save_to_storage()
 
@@ -9143,6 +10931,9 @@ class ProblemCreator:
 
                 prob_data = saved[index]
                 window.console.log(f"📝 Restoring problem {index + 1}/{len(saved)}")
+
+                # Update progress
+                update_restore_progress(index + 1, len(saved))
 
                 # Create empty problem
                 creator_ref.add_problem(skip_initial_steps=True)  # ✅ NEW: Skip initial steps when restoring
@@ -9165,13 +10956,24 @@ class ProblemCreator:
 
                         if is_ready:
                             window.console.log(f"✓ Problem {index + 1} UI ready, loading data...")
-                            try:
-                                last_problem.load_data(prob_data)
-                                window.console.log(f"✅ Problem {index + 1} data loaded")
-                            except Exception as e:
-                                window.console.error(f"❌ Problem {index + 1} load error: {e}")
-                                import traceback
-                                window.console.error(traceback.format_exc())
+
+                            # Validate problem data before loading
+                            if not isinstance(prob_data, dict):
+                                window.console.error(f"❌ Problem {index + 1} data is not a dict: {type(prob_data)}")
+                            elif "steps" not in prob_data:
+                                window.console.error(f"❌ Problem {index + 1} missing 'steps' field")
+                            elif not isinstance(prob_data.get("steps"), list):
+                                window.console.error(f"❌ Problem {index + 1} steps is not a list")
+                            else:
+                                # Data looks valid, proceed with loading
+                                try:
+                                    window.console.log(f"📝 Loading {len(prob_data.get('steps', []))} steps for problem {index + 1}")
+                                    last_problem.load_data(prob_data)
+                                    window.console.log(f"✅ Problem {index + 1} data loaded successfully")
+                                except Exception as e:
+                                    window.console.error(f"❌ Problem {index + 1} load error: {e}")
+                                    import traceback
+                                    window.console.error(traceback.format_exc())
 
                             # Schedule next problem
                             next_index = index + 1
@@ -10890,10 +12692,11 @@ def restore_quill_content(editor_id, blocks):
                               
 def hide_loading():
     """Hide loading overlay"""
-    overlay = document.querySelector("#loadingOverlay")
-    if overlay:
-        overlay.style.opacity = "0"
-        window.setTimeout(create_proxy(lambda: overlay.remove()), 400)
+    # Loading overlay removal - DISABLED (overlay removed from HTML)
+    # overlay = document.querySelector("#loadingOverlay")
+    # if overlay:
+    #     overlay.style.opacity = "0"
+    #     window.setTimeout(create_proxy(lambda: overlay.remove()), 400)
 
 
                               
@@ -11761,6 +13564,9 @@ function sendKeystrokesToMathQuill(mathField, keystrokes) {
                 mathField.typedText(k);
             }
         }
+        
+        // Blur the field to remove focus and hide cursor
+        mathField.blur();
         
         return true;
     } catch (error) {

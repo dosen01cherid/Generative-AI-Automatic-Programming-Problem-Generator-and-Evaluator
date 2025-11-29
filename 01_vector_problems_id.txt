@@ -58,10 +58,11 @@ Option D: Panjang vektor
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Dalam vektor [5,8,1], komponen kedua adalah {blank}
-Correct Answer: 8
+Step Description: Dalam vektor [5,8,1], komponen kedua adalah ___
+Step Expression: `x`
+Step Expected: `8`
 
 #
 Step Type: multiple-choice-single
@@ -174,10 +175,10 @@ Option D: Mengurangkan satu vektor dari vektor lain
 Correct Answer: A
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,5]] + [[2,-1]]
-Step Expected: [[3,5]] + [[2,-1]]
+Step Expression: `[[3,5]] + [[2,-1]]`
+Step Expected: `[[3,5]] + [[2,-1]]`
 
 #
 Step Type: true-false
@@ -186,31 +187,33 @@ Step Description: Apakah u + v = v + u untuk setiap vektor u dan v?
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,5]] + [[2,-1]]
-Step Expected: [[5,4]]
+Step Expression: `[[3,5]] + [[2,-1]]`
+Step Expected: `[[5,4]]`
 
 
 ###Problem Title: Pengurangan Vektor dan Sifat-Sifatnya
 Problem Description: Diberikan vektor a = [[7,3]] dan b = [[4,8]], cari a - b dan eksplorasi sifat-sifatnya
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk vektor a = (a_1, a_2) dan b = (b_1, b_2), pengurangan a - b = (__, __)
+Step Description: Untuk vektor a = (a_1, a_2) dan b = (b_1, b_2), pengurangan a - b = ?
+Step Expression: `[[a_1 - b_1, a_2 - b_2]]`
+Step Expected: `[[a_1 - b_1, a_2 - b_2]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[7,3]] - [[4,8]]
-Step Expected: [[7,3]] - [[4,8]]
+Step Expression: `[[7,3]] - [[4,8]]`
+Step Expected: `[[7,3]] - [[4,8]]`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[7,3]] - [[4,8]]
-Step Expected: [[3,-5]]
+Step Expression: `[[7,3]] - [[4,8]]`
+Step Expected: `[[3,-5]]`
 
 #
 Step Type: true-false
@@ -233,10 +236,10 @@ Option D: Vektor menjadi tegak lurus dengan vektor asli
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*[[2,-3,4]]
-Step Expected: 3*[[2,-3,4]]
+Step Expression: `3*[[2,-3,4]]`
+Step Expected: `3*[[2,-3,4]]`
 
 #
 Step Type: multiple-choice-multiple
@@ -249,25 +252,27 @@ Option D: Setiap komponen 3v adalah tiga kali komponen v yang bersesuaian
 Correct Answer: A, B, D
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*[[2,-3,4]]
-Step Expected: [[6,-9,12]]
+Step Expression: `3*[[2,-3,4]]`
+Step Expected: `[[6,-9,12]]`
 
 
 ###Problem Title: Hasil Kali Titik - Dari Konsep ke Perhitungan
 Problem Description: Diberikan vektor u = [[3,4]] dan v = [[2,5]], hitung dan pahami hasil kali titik
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk vektor u = (u_1, u_2) dan v = (v_1, v_2), hasil kali titik u cdot v = __ kali __ + __ kali __
+Step Description: Untuk vektor u = (u_1, u_2) dan v = (v_1, v_2), hasil kali titik u cdot v = ?
+Step Expression: `u_1*v_1 + u_2*v_2`
+Step Expected: `u_1*v_1 + u_2*v_2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*2 + 4*5
-Step Expected: 3*2 + 4*5
+Step Expression: `3*2 + 4*5`
+Step Expected: `3*2 + 4*5`
 
 #
 Step Type: multiple-choice-single
@@ -280,10 +285,10 @@ Option D: Gabungan besar keduanya
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*2 + 4*5
-Step Expected: 26
+Step Expression: `3*2 + 4*5`
+Step Expected: `26`
 
 #
 Step Type: true-false
@@ -306,27 +311,29 @@ Option D: Keduanya memiliki arah yang sama
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Dua vektor u dan v ortogonal jika dan hanya jika hasil kali titik u cdot v = __
+Step Description: Dua vektor u dan v ortogonal jika dan hanya jika hasil kali titik u cdot v = ?
+Step Expression: `u*v`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*(-6) + 3*4
-Step Expected: 2*(-6) + 3*4
+Step Expression: `2*(-6) + 3*4`
+Step Expected: `2*(-6) + 3*4`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*(-6) + 3*4
-Step Expected: 0
+Step Expression: `2*(-6) + 3*4`
+Step Expected: `0`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*(-6) + 3*4 == 0
-Step Expected: True
+Step Expression: `2*(-6) + 3*4 == 0`
+Step Expected: `True`
 
 #
 Step Type: true-false
@@ -349,15 +356,17 @@ Option D: Jumlah komponen-komponennya
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk vektor v = (x, y), besar ||v|| = sqrt(__^2 + __^2)
+Step Description: Untuk vektor v = (x, y), besar ||v|| = ?
+Step Expression: `sqrt(x^2 + y^2)`
+Step Expected: `sqrt(x^2 + y^2)`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: sqrt(3^2 + 4^2)
-Step Expected: sqrt(3^2 + 4^2)
+Step Expression: `sqrt(3^2 + 4^2)`
+Step Expected: `sqrt(3^2 + 4^2)`
 
 #
 Step Type: true-false
@@ -366,16 +375,16 @@ Step Description: Vektor [[3,4]] membentuk tripel Pythagoras dengan besar 5. Ben
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: sqrt(3^2 + 4^2)
-Step Expected: sqrt(25)
+Step Expression: `sqrt(3^2 + 4^2)`
+Step Expected: `sqrt(25)`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: sqrt(25)
-Step Expected: 5
+Step Expression: `sqrt(25)`
+Step Expected: `5`
 
 
 ###Problem Title: Vektor Satuan - Proses Normalisasi
@@ -392,21 +401,23 @@ Option D: Vektor nol
 Correct Answer: B
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk mencari vektor satuan u-topi dalam arah v, kita hitung u-topi = v / __
+Step Description: Untuk mencari vektor satuan u-topi dalam arah v, kita hitung u-topi = v / ?
+Step Expression: `v/||v||`
+Step Expected: `||v||`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: sqrt(3^2 + 4^2)
-Step Expected: 5
+Step Expression: `sqrt(3^2 + 4^2)`
+Step Expected: `5`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,4]]/5
-Step Expected: [[3/5, 4/5]]
+Step Expression: `[[3,4]]/5`
+Step Expected: `[[3/5, 4/5]]`
 
 #
 Step Type: true-false
@@ -429,33 +440,35 @@ Option D: a xx b = b xx a
 Correct Answer: A, C
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Untuk a = (a_1, a_2, a_3) dan b = (b_1, b_2, b_3), komponen i dari a xx b = __ kali __ - __ kali __
+Step Description: Untuk a = (a_1, a_2, a_3) dan b = (b_1, b_2, b_3), komponen i dari a xx b adalah:
+Step Expression: `a_2*b_3 - a_3*b_2`
+Step Expected: `a_2*b_3 - a_3*b_2`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*6 - 3*5
-Step Expected: -3
+Step Expression: `2*6 - 3*5`
+Step Expected: `-3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: -(1*6 - 3*4)
-Step Expected: 6
+Step Expression: `-(1*6 - 3*4)`
+Step Expected: `6`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1*5 - 2*4
-Step Expected: -3
+Step Expression: `1*5 - 2*4`
+Step Expected: `-3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[-3, 6, -3]]
-Step Expected: [[-3, 6, -3]]
+Step Expression: `[[-3, 6, -3]]`
+Step Expected: `[[-3, 6, -3]]`
 
 #
 Step Type: true-false
@@ -478,21 +491,23 @@ Option D: Jarak dari u ke v
 Correct Answer: A
 
 #
-Step Type: fill-blank
+Step Type: math-expression
 Must Be Correct: true
-Step Description: Proyeksi skalar dari u pada v = (u cdot v) / __
+Step Description: Proyeksi skalar dari u pada v = (u cdot v) / ?
+Step Expression: `(u*v)/||v||`
+Step Expected: `||v||`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*1 + 4*0
-Step Expected: 3
+Step Expression: `3*1 + 4*0`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 1^2 + 0^2
-Step Expected: 1
+Step Expression: `1^2 + 0^2`
+Step Expected: `1`
 
 #
 Step Type: multiple-choice-single
@@ -505,16 +520,16 @@ Option D: Mengambil kebalikannya
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3/1
-Step Expected: 3
+Step Expression: `3/1`
+Step Expected: `3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*[[1,0]]
-Step Expected: [[3,0]]
+Step Expression: `3*[[1,0]]`
+Step Expected: `[[3,0]]`
 
 
 ###Problem Title: Aplikasi - Gaya Resultan
@@ -531,10 +546,10 @@ Option D: Gaya terbesar yang bekerja
 Correct Answer: B
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: [[3,4]] + [[-1,5]]
-Step Expected: [[2,9]]
+Step Expression: `[[3,4]] + [[-1,5]]`
+Step Expected: `[[2,9]]`
 
 #
 Step Type: true-false
@@ -543,10 +558,10 @@ Step Description: Dalam fisika, arah gaya sama pentingnya dengan besarnya. Benar
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: sqrt(2^2 + 9^2)
-Step Expected: sqrt(85)
+Step Expression: `sqrt(2^2 + 9^2)`
+Step Expected: `sqrt(85)`
 
 #
 Step Type: multiple-choice-single
@@ -579,16 +594,16 @@ Step Description: Untuk mencari c_1 dan c_2, kita perlu menyusun sistem persamaa
 Correct Answer: True
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*c1 + c2
-Step Expected: 7
+Step Expression: `2*c1 + c2`
+Step Expected: `7`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: c1 - c2
-Step Expected: 1
+Step Expression: `c1 - c2`
+Step Expected: `1`
 
 #
 Step Type: fill-blank
@@ -596,28 +611,28 @@ Must Be Correct: true
 Step Description: Dari persamaan kedua c_1 - c_2 = 1, kita dapatkan c_1 = __ + 1
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 2*(c2 + 1) + c2
-Step Expected: 7
+Step Expression: `2*(c2 + 1) + c2`
+Step Expected: `7`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 3*c2 + 2
-Step Expected: 7
+Step Expression: `3*c2 + 2`
+Step Expected: `7`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: c2
-Step Expected: 5/3
+Step Expression: `c2`
+Step Expected: `5/3`
 
 #
-Step Type: step-by-step
+Step Type: math-expression
 Must Be Correct: true
-Step Expression: 5/3 + 1
-Step Expected: 8/3
+Step Expression: `5/3 + 1`
+Step Expected: `8/3`
 
 #
 Step Type: true-false
