@@ -41,9 +41,181 @@
   <!-- MathJax -->
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <!-- PyScript -->
-  <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-  <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+  <!-- Cache-First Pyodide Loading with Package Caching -->
+  <script>
+    const CACHE_VERSION = 'problem-creator-v2';
+    const PYODIDE_URL = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js';
+    const PYODIDE_INDEX_URL = 'https://cdn.jsdelivr.net/pyodide/v0.24.1/full/';
+
+    // Check if caching is available (not available on file:// protocol)
+    const CACHING_AVAILABLE = window.location.protocol !== 'file:' && 'caches' in window;
+
+    function updateLoadingStatus(msg) {
+      const el = document.getElementById('loadingStatus');
+      if (el) {
+        const div = document.createElement('div');
+        div.textContent = msg;
+        el.appendChild(div);
+      }
+      console.log(msg);
+    }
+
+    async function getCachedScript(url) {
+      if (!CACHING_AVAILABLE) {
+        updateLoadingStatus('Loading Pyodide from CDN...');
+        const response = await fetch(url);
+        return await response.text();
+      }
+
+      try {
+        const cache = await caches.open(CACHE_VERSION);
+        let response = await cache.match(url);
+
+        if (!response) {
+          updateLoadingStatus('Downloading Pyodide (first time)...');
+          response = await fetch(url);
+          await cache.put(url, response.clone());
+          updateLoadingStatus('Cached for next time!');
+        } else {
+          updateLoadingStatus('Loading Pyodide from cache...');
+        }
+
+        return await response.text();
+      } catch (e) {
+        updateLoadingStatus('Cache unavailable, using CDN...');
+        const response = await fetch(url);
+        return await response.text();
+      }
+    }
+
+    async function initPyodide() {
+      updateLoadingStatus('Loading Pyodide...');
+
+      const scriptText = await getCachedScript(PYODIDE_URL);
+      const script = document.createElement('script');
+      script.textContent = scriptText;
+      document.head.appendChild(script);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Check if packages are cached (only if caching available)
+      let cache = null;
+      let packagesCached = false;
+
+      if (CACHING_AVAILABLE) {
+        try {
+          cache = await caches.open(CACHE_VERSION);
+          packagesCached = await cache.match('packages-installed-flag');
+        } catch (e) {
+          console.log('Cache not available:', e);
+        }
+      }
+
+      window.pyodide = await loadPyodide({
+        indexURL: PYODIDE_INDEX_URL
+      });
+
+      updateLoadingStatus('Pyodide ready!');
+
+      if (packagesCached) {
+        updateLoadingStatus('Loading packages from cache...');
+      } else {
+        updateLoadingStatus('Loading packages...');
+      }
+
+      // Load Pyodide-native packages (these use HTTP caching automatically)
+      updateLoadingStatus('Loading sympy...');
+      await window.pyodide.loadPackage('sympy');
+
+      updateLoadingStatus('Loading brotli...');
+      await window.pyodide.loadPackage('brotli');
+
+      // Load lark via micropip (will use browser HTTP cache)
+      updateLoadingStatus('Loading lark...');
+      await window.pyodide.loadPackage('micropip');
+
+      await window.pyodide.runPythonAsync(`
+import micropip
+await micropip.install('lark')
+      `);
+
+      // Mark packages as cached (only if caching available)
+      if (CACHING_AVAILABLE && cache && !packagesCached) {
+        try {
+          await cache.put('packages-installed-flag', new Response('true'));
+          updateLoadingStatus('Packages cached for next time!');
+        } catch (e) {
+          console.log('Could not cache flag:', e);
+        }
+      }
+
+      updateLoadingStatus('All packages loaded!');
+      await setupPyScriptCompat();
+      await executePyScripts();
+    }
+
+    async function setupPyScriptCompat() {
+      updateLoadingStatus('Setting up pyscript compatibility...');
+
+      await window.pyodide.runPythonAsync(`
+import sys
+from types import ModuleType
+from pyodide.ffi import to_js, create_proxy
+
+pyscript = ModuleType('pyscript')
+import js as _js
+pyscript.document = _js.document
+pyscript.window = _js.window
+sys.modules['pyscript'] = pyscript
+
+print("pyscript module created and registered")
+      `);
+
+      updateLoadingStatus('pyscript compatibility ready!');
+    }
+
+    async function executePyScripts() {
+      updateLoadingStatus('Running Python code...');
+
+      const pyScripts = document.querySelectorAll('script[type="py"]');
+      console.log(`Found ${pyScripts.length} Python scripts`);
+
+      for (let i = 0; i < pyScripts.length; i++) {
+        const script = pyScripts[i];
+        const code = script.textContent;
+
+        updateLoadingStatus(`Executing Python script ${i + 1}/${pyScripts.length}...`);
+
+        try {
+          console.log('Executing Python code...');
+          await window.pyodide.runPythonAsync(code);
+          console.log('Python code executed successfully');
+        } catch (e) {
+          console.error('Python execution error:', e);
+          updateLoadingStatus('Python error: ' + e.message);
+          alert('Python Error:\n' + e.message);
+          throw e;
+        }
+      }
+
+      updateLoadingStatus('Python app ready!');
+
+      const overlay = document.getElementById('loadingOverlay');
+      if (overlay) {
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 400);
+      }
+    }
+
+    window.addEventListener('load', async () => {
+      try {
+        await initPyodide();
+      } catch (e) {
+        updateLoadingStatus('Error: ' + e.message);
+        console.error('Initialization error:', e);
+      }
+    });
+  </script>
 
   <style>
   /* Search highlight borders (non-destructive) */
@@ -787,24 +959,31 @@
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
 
-    /* Loading overlay - DISABLED
+    /* Loading overlay */
     #loadingOverlay {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(15, 23, 42, 0.95);
+      background: rgba(15, 23, 42, 0.97);
       z-index: 10000;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       color: #fff;
+      transition: opacity 0.4s ease;
     }
-    */
 
-    /* DISABLED - .spinner { ... } */
+    #loadingOverlay .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
 
     @keyframes spin {
       to {
@@ -813,9 +992,11 @@
     }
 
     .loading-text {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 600;
+      margin-top: 20px;
       margin-bottom: 8px;
+      color: #e2e8f0;
     }
 
     #loadingStatus {
@@ -825,10 +1006,15 @@
       border-radius: 8px;
       font-family: monospace;
       font-size: 13px;
-      color: #cbd5e1;
+      color: #94a3b8;
       max-height: 200px;
       overflow: auto;
-      width: 90%;
+      width: 320px;
+      max-width: 90%;
+    }
+
+    #loadingStatus div {
+      padding: 2px 0;
     }
 
     /* Import Progress Dialog */
@@ -884,6 +1070,7 @@
       font-size: 14px;
       color: #cbd5e1;
       margin-top: 12px;
+    }
 
     /* Export Progress Dialog */
     #exportProgressOverlay {
@@ -975,13 +1162,12 @@
   </style>
 </head>
 <body>
-  <!-- Loading Overlay - DISABLED
+  <!-- Loading Overlay -->
   <div id="loadingOverlay">
     <div class="spinner"></div>
     <div class="loading-text">Initializing Problem Creator...</div>
-    <div id="loadingStatus"><div>⏳ Starting up...</div></div>
+    <div id="loadingStatus"><div>Loading PyScript...</div></div>
   </div>
-  -->
 
   <!-- Import Progress Overlay -->
   <div id="importProgressOverlay">
@@ -1108,7 +1294,7 @@
             <div class="accordion-header-left">
               <div class="accordion-icon icon-green">📋</div>
               <div class="accordion-title">
-                <div class="accordion-label">Problem Management</div>
+                <div class="accordion-label">Problem Set Management</div>
                 <div class="accordion-desc">Import, export, and save</div>
               </div>
             </div>
@@ -1228,11 +1414,6 @@
   <!-- Include jQuery and MathQuill -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathquill/0.10.1/mathquill.min.js"></script>
-
-  <!-- PyScript Configuration -->
-  <py-config>
-    packages = ["sympy", "lark", "brotli"]
-  </py-config>
 
   <!-- Toolbar JavaScript -->
   <script>
@@ -7698,7 +7879,7 @@ class DataManager:
         window.setTimeout(create_proxy(lambda: window.URL.revokeObjectURL(url)), 1000)
 
     # -----------------------------------------------------
-    # ✅ Import Problem Sets
+    # Import Problem Sets
     # -----------------------------------------------------
     def import_problem(self):
         """Import problem set via pasted JSON or uploaded file with integrated examples"""
@@ -10846,9 +11027,6 @@ class ProblemCreator:
       # Delay restoration to ensure Quill and MathQuill are ready
       window.setTimeout(create_proxy(delayed_restore), 800)
 
-      # Hide loading overlay after everything is ready
-      window.setTimeout(create_proxy(hide_loading), 1200)
-
     def update_status(self, msg):
         """Update loading status"""
         self.math_parser.update_status(msg)
@@ -11031,14 +11209,6 @@ class ProblemCreator:
 # ============================================================================
 # HELPER FUNCTIONS
 # ============================================================================
-
-def update_status(msg):
-    """Update loading status (global function for initialization)"""
-    container = document.querySelector("#loadingStatus")
-    if container:
-        div = document.createElement("div")
-        div.appendChild(document.createTextNode(msg))
-        container.appendChild(div)
 
 def ensure_mq():
     """Ensure MathQuill is loaded"""
@@ -12690,16 +12860,6 @@ def restore_quill_content(editor_id, blocks):
     """
     window.eval(js_code)
                               
-def hide_loading():
-    """Hide loading overlay"""
-    # Loading overlay removal - DISABLED (overlay removed from HTML)
-    # overlay = document.querySelector("#loadingOverlay")
-    # if overlay:
-    #     overlay.style.opacity = "0"
-    #     window.setTimeout(create_proxy(lambda: overlay.remove()), 400)
-
-
-                              
 # ============================================================================
 # INITIALIZATION
 # ============================================================================
@@ -12708,16 +12868,13 @@ def hide_loading():
 MQ = None
 
 # Initialize the application
-update_status("✓ PyScript loaded")
-update_status("⏳ Importing libraries...")
-
-# 🧪 SIMPLE TEST: Verify PyScript is executing
 print("="*60)
-print("🧪 PYSCRIPT IS RUNNING - TEST MESSAGE")
+print("PYTHON CODE IS RUNNING")
 print("="*60)
 
 # Create and store the main app instance
 window.problem_creator = ProblemCreator()
+print("ProblemCreator initialized")
 
 </script>
 <script>

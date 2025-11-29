@@ -18,7 +18,7 @@ from pathlib import Path
 # =======================================================
 # 🔧 CONFIGURATION
 # =======================================================
-OLLAMA_URL = "https://shark-terrorist-achievements-lit.trycloudflare.com"
+OLLAMA_URL = "https://unpatented-saylor-nonirate.ngrok-free.dev"
 EMBED_MODEL = "llama3.1:8b"   # or "nomic-embed-text"
 GEN_MODEL = "llama3.1:8b"
 TIMEOUT = 600

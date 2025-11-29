@@ -28,7 +28,7 @@ if sys.platform == "win32":
 # =======================================================
 # 🔧 CONFIGURATION
 # =======================================================
-OLLAMA_URL = "https://soundtrack-birds-walk-likelihood.trycloudflare.com"
+OLLAMA_URL = "https://unpatented-saylor-nonirate.ngrok-free.dev"
 GEN_MODEL = "qwen2.5:14b"
 TIMEOUT = 600
 CONTEXT_FILE = "context_with_validation.txt"

@@ -13,7 +13,7 @@ from typing import Optional
 # =======================================================
 # 🔧 CONFIGURATION
 # =======================================================
-OLLAMA_URL = "https://visits-fine-deferred-predicted.trycloudflare.com"
+OLLAMA_URL = "https://unpatented-saylor-nonirate.ngrok-free.dev"
 GEN_MODEL = "deepseek-r1:7b"
 TIMEOUT = 600
 CONTEXT_FILE = "context.txt"

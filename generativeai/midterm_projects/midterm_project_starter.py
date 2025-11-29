@@ -29,7 +29,7 @@ if sys.platform == "win32":
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Configuration
-OLLAMA_URL = "https://null-server-reliability-integration.trycloudflare.com"
+OLLAMA_URL = "https://unpatented-saylor-nonirate.ngrok-free.dev"
 SMALL_MODEL = "qwen2.5:1.5b"
 LARGE_MODEL = "qwen2.5:14b"
 TIMEOUT = 300

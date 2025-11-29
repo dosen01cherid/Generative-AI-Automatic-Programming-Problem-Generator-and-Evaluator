@@ -27,7 +27,7 @@ if sys.platform == "win32":
     sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 # Configuration
-OLLAMA_URL = "https://flows-billion-angels-soonest.trycloudflare.com"
+OLLAMA_URL = "https://unpatented-saylor-nonirate.ngrok-free.dev"
 FAST_MODEL = "qwen2.5:1.5b"  # Fast code generation
 QUALITY_MODEL = "qwen2.5:14b"  # Validation and structuring
 TIMEOUT = 300
