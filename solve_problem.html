@@ -2165,6 +2165,9 @@ start: equation
    | eigenvectors_function
    | nullspace_function
    | columnspace_function
+   | adjugate_function
+   | cofactor_function
+   | minor_function
    | trig_function
    | log_function
    | limit
@@ -2239,6 +2242,12 @@ nullspace_function: "nullspace" "(" expr ")" -> nullspace_func
 
 columnspace_function: "columnspace" "(" expr ")" -> columnspace_func
 
+adjugate_function: "adjugate" "(" expr ")" -> adjugate_func
+
+cofactor_function: "cofactor" "(" expr "," expr "," expr ")" -> cofactor_func
+
+minor_function: "minor" "(" expr "," expr "," expr ")" -> minor_func
+
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
 abs_function: "\\left" "|" expr "\\right" "|"     -> abs_func
@@ -2280,7 +2289,7 @@ NUMBER: /[+-]?\d+(\.\d*)?|\.\d+/
 INT: /\d+/
 PI.2: "\\pi"
 INFTY.2: "\\infty"
-SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|trace|rank|rref|eigenvalues|eigenvectors|nullspace|columnspace|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
+SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|trace|rank|rref|eigenvalues|eigenvectors|nullspace|columnspace|adjugate|cofactor|minor|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
 CIRC: "\\circ"
 
 %import common.WS_INLINE
@@ -3819,6 +3828,24 @@ CIRC: "\\circ"
             def columnspace_func(self, matrix_expr):
                 """Handles columnspace(matrix) function - returns column space basis"""
                 return matrix_expr.columnspace()
+
+            def adjugate_func(self, matrix_expr):
+                """Handles adjugate(matrix) function - returns adjugate/classical adjoint matrix"""
+                return matrix_expr.adjugate()
+
+            def cofactor_func(self, matrix_expr, i, j):
+                """Handles cofactor(matrix, i, j) function - returns cofactor at position (i,j)"""
+                # Convert to 0-indexed for SymPy
+                i_val = int(i) - 1
+                j_val = int(j) - 1
+                return matrix_expr.cofactor(i_val, j_val)
+
+            def minor_func(self, matrix_expr, i, j):
+                """Handles minor(matrix, i, j) function - returns minor at position (i,j)"""
+                # Convert to 0-indexed for SymPy
+                i_val = int(i) - 1
+                j_val = int(j) - 1
+                return matrix_expr.minor_submatrix(i_val, j_val).det()
             def start(self, e):
                 return e
 
