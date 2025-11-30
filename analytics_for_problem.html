@@ -1,13 +1,20 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <!-- Offline Caching Enabled -->
+  <!--
+    ✅ MathJax is cached for offline use
+    ✅ After first load, works without internet
+    ✅ Faster subsequent loads
+  -->
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <!-- Cache busting to ensure browser loads latest version -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Analytics — Student Progress Analyzer</title>
+  <title>NoNet-NoSet-NoChat - Analytics Dashboard</title>
 
   <script>
 window.MathJax = {
@@ -19,7 +26,46 @@ window.MathJax = {
   svg: { fontCache: 'global' }
 };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<script id="mathjax-cache-loader">
+  // Cache-First MathJax Loading
+  const CACHE_VERSION = 'analytics-v1-with-mathjax';
+  const MATHJAX_URL = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+
+  async function loadCachedMathJax() {
+    try {
+      const cache = await caches.open(CACHE_VERSION);
+      let response = await cache.match(MATHJAX_URL);
+
+      if (!response) {
+        console.log('📥 Downloading MathJax (first time)...');
+        response = await fetch(MATHJAX_URL);
+        await cache.put(MATHJAX_URL, response.clone());
+        console.log('✅ MathJax cached for offline use');
+      } else {
+        console.log('⚡ Loading MathJax from cache');
+      }
+
+      const scriptText = await response.text();
+      const script = document.createElement('script');
+      script.textContent = scriptText;
+      document.head.appendChild(script);
+
+      console.log('✅ MathJax loaded successfully');
+    } catch (e) {
+      console.warn('Cache unavailable, loading from CDN:', e);
+      const script = document.createElement('script');
+      script.src = MATHJAX_URL;
+      document.head.appendChild(script);
+    }
+  }
+
+  // Load on page load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadCachedMathJax);
+  } else {
+    loadCachedMathJax();
+  }
+</script>
 
   <!-- Version indicator for cache verification -->
   <script>
@@ -419,8 +465,102 @@ button.detail-toggle:hover {
 }
 </style>
 
+
+  <!-- NoNet-NoSet-NoChat Branding Styles -->
+  <style id="nonet-step-branding">
+    .nonet-step-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #5568d3;
+    }
+
+    .nonet-step-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: bold;
+      text-decoration: none;
+      color: white;
+    }
+
+    .nonet-step-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .nonet-step-tagline {
+      font-size: 11px;
+      opacity: 0.9;
+      font-weight: normal;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .nonet-step-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nonet-step-badge::before {
+      content: "⚡";
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .nonet-step-header {
+        padding: 12px 15px;
+      }
+      .nonet-step-logo {
+        font-size: 20px;
+      }
+      .nonet-step-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
+
 </head>
 <body>
+  <!-- NoNet-NoSet-NoChat Branding Header -->
+  <div class="nonet-step-header">
+    <div class="nonet-step-logo">
+      <div class="nonet-step-icon">N-S</div>
+      <div>
+        <div>NoNet-NoSet-NoChat</div>
+        <div class="nonet-step-tagline">Learn Properly, Understand Fully</div>
+      </div>
+    </div>
+    <div class="nonet-step-badge">
+      Offline Ready
+    </div>
+  </div>
+
+
   <div id="loadingOverlay">
     <div class="spinner"></div>
     <div class="loading-text">Initializing Analytics...</div>
@@ -5744,6 +5884,37 @@ def start_init():
 
 window.setTimeout(create_proxy(start_init), 800)
   </script>
+
+
+  <!-- Open Source Attribution Footer -->
+  <div class="nonet-step-footer">
+    <p>
+      Made with ❤️ for education •
+      <a href="attributions.html" target="_blank">Open Source Attributions</a>
+    </p>
+  </div>
+
+  <style>
+    .nonet-step-footer {
+      background: #f5f5f5;
+      border-top: 1px solid #e0e0e0;
+      padding: 20px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+
+    .nonet-step-footer a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nonet-step-footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
 
 </body>
 </html>

@@ -304,49 +304,177 @@
       headerIds: true
     });
 
-    // Parse markdown and track element positions
+    // Parse markdown and track element positions - IMPROVED VERSION
     function parseMarkdownToElements(markdown) {
       const lines = markdown.split('\n');
       const elements = [];
-      let currentBlock = '';
-      let startLine = 0;
+      let i = 0;
 
-      for (let i = 0; i < lines.length; i++) {
+      while (i < lines.length) {
         const line = lines[i];
-        const isBlockStart = /^#{1,6}\s|^```|^-\s|^\d+\.\s|^>\s|^\|/.test(line);
-        const isEmptyLine = line.trim() === '';
+        const trimmedLine = line.trim();
 
-        if (isBlockStart && currentBlock) {
+        // Skip empty lines
+        if (trimmedLine === '') {
+          i++;
+          continue;
+        }
+
+        let blockContent = '';
+        let startLine = i;
+        let endLine = i;
+
+        // Headers (# ## ### etc)
+        if (/^#{1,6}\s/.test(trimmedLine)) {
+          blockContent = line;
+          endLine = i;
+          i++;
+        }
+        // Code blocks (```)
+        else if (trimmedLine.startsWith('```')) {
+          blockContent = line + '\n';
+          i++;
+          while (i < lines.length && !lines[i].trim().startsWith('```')) {
+            blockContent += lines[i] + '\n';
+            i++;
+          }
+          if (i < lines.length) {
+            blockContent += lines[i]; // closing ```
+            endLine = i;
+            i++;
+          }
+        }
+        // Horizontal rules (---, ***, ___)
+        else if (/^(---|\*\*\*|___)$/.test(trimmedLine)) {
+          blockContent = line;
+          endLine = i;
+          i++;
+        }
+        // Blockquotes (>)
+        else if (trimmedLine.startsWith('>')) {
+          blockContent = line + '\n';
+          i++;
+          while (i < lines.length && (lines[i].trim().startsWith('>') || lines[i].trim() === '')) {
+            blockContent += lines[i] + '\n';
+            if (lines[i].trim() !== '') {
+              endLine = i;
+            }
+            i++;
+            if (i < lines.length && lines[i].trim() === '' &&
+                (i + 1 >= lines.length || !lines[i + 1].trim().startsWith('>'))) {
+              break;
+            }
+          }
+        }
+        // Unordered lists (-, *, +)
+        else if (/^[-*+]\s/.test(trimmedLine)) {
+          blockContent = line + '\n';
+          i++;
+          while (i < lines.length) {
+            const nextLine = lines[i].trim();
+            // Continue if it's a list item or indented continuation
+            if (/^[-*+]\s/.test(nextLine) ||
+                (nextLine !== '' && (lines[i].startsWith('  ') || lines[i].startsWith('\t'))) ||
+                nextLine === '') {
+              blockContent += lines[i] + '\n';
+              if (nextLine !== '') {
+                endLine = i;
+              }
+              i++;
+              // Stop at double empty line or non-list content
+              if (nextLine === '' && i < lines.length && lines[i].trim() === '') {
+                break;
+              }
+            } else {
+              break;
+            }
+          }
+        }
+        // Ordered lists (1. 2. etc)
+        else if (/^\d+\.\s/.test(trimmedLine)) {
+          blockContent = line + '\n';
+          i++;
+          while (i < lines.length) {
+            const nextLine = lines[i].trim();
+            // Continue if it's a list item or indented continuation
+            if (/^\d+\.\s/.test(nextLine) ||
+                (nextLine !== '' && (lines[i].startsWith('  ') || lines[i].startsWith('\t'))) ||
+                nextLine === '') {
+              blockContent += lines[i] + '\n';
+              if (nextLine !== '') {
+                endLine = i;
+              }
+              i++;
+              // Stop at double empty line or non-list content
+              if (nextLine === '' && i < lines.length && lines[i].trim() === '') {
+                break;
+              }
+            } else {
+              break;
+            }
+          }
+        }
+        // Tables (|)
+        else if (trimmedLine.startsWith('|') || /\|.*\|/.test(trimmedLine)) {
+          blockContent = line + '\n';
+          i++;
+          while (i < lines.length && (lines[i].trim().startsWith('|') || /\|.*\|/.test(lines[i]))) {
+            blockContent += lines[i] + '\n';
+            endLine = i;
+            i++;
+          }
+        }
+        // Paragraphs (everything else)
+        else {
+          blockContent = line + '\n';
+          i++;
+          // Continue until empty line or special markdown syntax
+          while (i < lines.length) {
+            const nextLine = lines[i];
+            const nextTrimmed = nextLine.trim();
+
+            // Stop at empty line
+            if (nextTrimmed === '') {
+              break;
+            }
+
+            // Stop at start of special block
+            if (/^#{1,6}\s|^```|^[-*+]\s|^\d+\.\s|^>\s|^\||^---|^\*\*\*|^___/.test(nextTrimmed)) {
+              break;
+            }
+
+            blockContent += nextLine + '\n';
+            endLine = i;
+            i++;
+          }
+        }
+
+        // Add element if we captured content
+        if (blockContent.trim()) {
           elements.push({
-            content: currentBlock.trim(),
-            startLine,
-            endLine: i - 1
+            content: blockContent.trim(),
+            startLine: startLine,
+            endLine: endLine,
+            type: detectBlockType(blockContent.trim())
           });
-          currentBlock = line + '\n';
-          startLine = i;
-        } else if (isEmptyLine && currentBlock) {
-          currentBlock += line + '\n';
-          elements.push({
-            content: currentBlock.trim(),
-            startLine,
-            endLine: i
-          });
-          currentBlock = '';
-          startLine = i + 1;
-        } else {
-          currentBlock += line + '\n';
         }
       }
 
-      if (currentBlock.trim()) {
-        elements.push({
-          content: currentBlock.trim(),
-          startLine,
-          endLine: lines.length - 1
-        });
-      }
-
+      console.log('📝 Parsed', elements.length, 'markdown elements:', elements);
       return elements;
+    }
+
+    // Detect block type for debugging
+    function detectBlockType(content) {
+      const firstLine = content.split('\n')[0].trim();
+      if (/^#{1,6}\s/.test(firstLine)) return 'heading';
+      if (firstLine.startsWith('```')) return 'code';
+      if (firstLine.startsWith('>')) return 'blockquote';
+      if (/^[-*+]\s/.test(firstLine)) return 'ul';
+      if (/^\d+\.\s/.test(firstLine)) return 'ol';
+      if (firstLine.startsWith('|') || /\|.*\|/.test(firstLine)) return 'table';
+      if (/^(---|\*\*\*|___)$/.test(firstLine)) return 'hr';
+      return 'paragraph';
     }
 
     // Render markdown
@@ -377,6 +505,19 @@
     function editElement(element, index) {
       if (!isEditMode) return;
 
+      console.log('🖊️  Editing element:', {
+        index: index,
+        htmlTag: element.tagName,
+        totalElements: markdownElements.length
+      });
+
+      // Check if index is valid
+      if (!markdownElements[index]) {
+        console.error('❌ Invalid index:', index, '- Total elements:', markdownElements.length);
+        alert('Error: Cannot edit this element. Index mismatch.');
+        return;
+      }
+
       // Remove previous editing class
       if (currentEditingElement) {
         currentEditingElement.classList.remove('editing');
@@ -390,6 +531,13 @@
 
       // Set content in Ace editor
       const elementData = markdownElements[index];
+      console.log('📄 Element data:', {
+        type: elementData.type,
+        content: elementData.content.substring(0, 100) + '...',
+        startLine: elementData.startLine,
+        endLine: elementData.endLine
+      });
+
       aceEditor.setValue(elementData.content, -1);
       aceEditor.focus();
 
