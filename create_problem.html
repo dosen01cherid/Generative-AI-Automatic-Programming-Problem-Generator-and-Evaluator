@@ -1223,13 +1223,9 @@ print("pyscript module created and registered")
       gap: 6px;
     }
 
-    .teturuq-badge::before {
-      content: "⚡";
-      font-size: 14px;
-    }
 
     body {
-      padding-top: 70px;
+      padding-top: 85px;
     }
 
     @media (max-width: 768px) {
@@ -1254,16 +1250,50 @@ print("pyscript module created and registered")
   <div class="teturuq-header" id="teturuqHeader">
     <div class="teturuq-logo">
       <div>
-        <div style="font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 600;">teturu<span style="font-size: 24px; font-weight: 700;">Q</span></div>
+        <div style="font-family: 'Poppins', sans-serif; font-size: 34px; font-weight: 600; display: flex; align-items: flex-end;">teturu<svg width="50" height="58" viewBox="0 0 100 118" fill="currentColor" style="margin-left: -2px; margin-bottom: -8px;">
+            <!-- Basic Q: circle + diagonal tail -->
+            <circle cx="45" cy="42" r="30" stroke="currentColor" stroke-width="14" fill="none"/>
+            <!-- Q tail -->
+            <line x1="62" y1="60" x2="78" y2="85" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+            <!-- Male plug base rectangle -->
+            <rect x="61" y="81" width="33" height="8" rx="2" transform="rotate(-35 76 85)"/>
+            <!-- Two extruding tubes (male plug prongs) -->
+            <rect x="71" y="78" width="6" height="22" rx="3" transform="rotate(-35 74 89)"/>
+            <rect x="81" y="72" width="6" height="22" rx="3" transform="rotate(-35 84 83)"/>
+          </svg></div>
         <div class="teturuq-tagline" style="font-family: 'Poppins', sans-serif;">No Connection, No Installation, No Distraction—Just Real Education</div>
       </div>
     </div>
     <div class="teturuq-badge">
+      <svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="6"/>
+        <g transform="rotate(-45 50 50)">
+          <!-- Left plug (socket) -->
+          <path d="M20 45 L35 45 L35 38 L40 38 L40 62 L35 62 L35 55 L20 55 Q12 50 20 45 Z"/>
+          <line x1="12" y1="50" x2="20" y2="50" stroke="currentColor" stroke-width="4"/>
+          <!-- Right plug (prongs) -->
+          <path d="M80 45 L65 45 L65 38 L60 38 L60 62 L65 62 L65 55 L80 55 Q88 50 80 45 Z"/>
+          <rect x="52" y="42" width="8" height="4" rx="1"/>
+          <rect x="52" y="54" width="8" height="4" rx="1"/>
+          <line x1="80" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="4"/>
+        </g>
+      </svg>
       Offline Ready
     </div>
   </div>
   <!-- Loading Overlay -->
   <div id="loadingOverlay">
+    <div style="font-family: 'Poppins', sans-serif; font-size: 56px; font-weight: 600; display: flex; align-items: flex-end; margin-bottom: 24px; color: white;">teturu<svg width="86" height="100" viewBox="0 0 100 118" fill="currentColor" style="margin-left: -3px; margin-bottom: -14px;">
+        <!-- Basic Q: circle + diagonal tail -->
+        <circle cx="45" cy="42" r="30" stroke="currentColor" stroke-width="14" fill="none"/>
+        <!-- Q tail -->
+        <line x1="62" y1="60" x2="78" y2="85" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+        <!-- Male plug base rectangle -->
+        <rect x="61" y="81" width="33" height="8" rx="2" transform="rotate(-35 76 85)"/>
+        <!-- Two extruding tubes (male plug prongs) -->
+        <rect x="71" y="78" width="6" height="22" rx="3" transform="rotate(-35 74 89)"/>
+        <rect x="81" y="72" width="6" height="22" rx="3" transform="rotate(-35 84 83)"/>
+      </svg></div>
     <div class="spinner"></div>
     <div class="loading-text">Initializing Problem Creator...</div>
     <div id="loadingStatus"><div>Loading PyScript...</div></div>
@@ -2864,6 +2894,9 @@ CIRC: "\\circ"
         safe_at = at_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
         safe_after = after_error.replace("\\", "\\\\").replace("`", "'").replace('"', '\\"')
 
+        # Generate padding string in Python (fix for JavaScript padStart issue)
+        error_padding = " " * error_pos
+
         js_code = f"""
             (function(){{
                 let existing = document.querySelector('#enhancedParseErrorPopup');
@@ -2969,7 +3002,7 @@ CIRC: "\\circ"
                             {safe_latex}
                         </div>
                         <div style='margin-top:4px;font-size:11px;color:#ef4444;font-family:monospace;'>
-                            ${"".padStart(error_pos, " ")}↑ Error here (position {error_pos})
+                            {error_padding}↑ Error here (position {error_pos})
                         </div>
                     </div>
                 `;
@@ -3012,7 +3045,7 @@ CIRC: "\\circ"
                                 {safe_latex}
                             </div>
                             <div style='margin-top:4px;font-size:11px;color:#ef4444;font-family:monospace;'>
-                                ${"".padStart(error_pos, " ")}↑ Error at position {error_pos}
+                                {error_padding}↑ Error at position {error_pos}
                             </div>
                         `;
                     }});
@@ -7661,6 +7694,7 @@ class DataManager:
 
         # ✅ Handle empty problem set
         if len(problems) == 0:
+            self._hide_export_progress()
             self._show_popup(
                 "⚠️ No problems to export",
                 "Please create at least one problem before exporting."
@@ -7949,6 +7983,7 @@ class DataManager:
 
         # If invalid entries found
         if invalid_entries:
+            self._hide_export_progress()
             self._show_popup(
                 "⚠️ Export blocked",
                 "Some fields are empty or incorrect.\n\n🟧 Orange = Missing field\n🔴 Red = Incorrect answer\n\n"
@@ -7956,7 +7991,6 @@ class DataManager:
                 + ("\n...and more." if len(invalid_entries) > 10 else "")
             )
             return
-            self._hide_export_progress()
 
         # Save to storage after structure rebuilds
         if structures_rebuilt > 0:
@@ -9221,9 +9255,18 @@ class DataManager:
 
                 problems.append(problem_data)
 
-            # Show validation results if there were any issues
+            # Store validation info for later access (don't show editor automatically)
             if self.validation_issues:
-                self._show_validation_popup(text, problems)
+                # Store for potential later viewing via "Modify in Text Editor"
+                self.last_import_text = text
+                self.last_import_had_issues = True
+
+                # Show a subtle toast notification instead of the full editor
+                num_issues = len(self.validation_issues)
+                self._show_autofix_toast(num_issues)
+                window.console.log(f"✨ Import completed with {num_issues} auto-fix(es) applied")
+            else:
+                self.last_import_had_issues = False
 
             return {
                 "problems": problems,
@@ -9251,6 +9294,56 @@ class DataManager:
                 )
             else:
                 raise Exception(f"Failed to parse text format: {e}")
+
+    def _show_autofix_toast(self, num_issues):
+        """Show a subtle toast notification for auto-fixes applied during import"""
+        js_code = f"""
+        (function() {{
+            // Remove existing toast if any
+            var existing = document.querySelector('#autofixToast');
+            if (existing) existing.remove();
+
+            var toast = document.createElement('div');
+            toast.id = 'autofixToast';
+            toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:white;padding:12px 20px;border-radius:8px;font-size:14px;font-weight:500;box-shadow:0 4px 20px rgba(16,185,129,0.4);z-index:9999;display:flex;align-items:center;gap:8px;animation:slideUp 0.3s ease-out;';
+
+            var msgSpan = document.createElement('span');
+            msgSpan.textContent = 'Imported with {num_issues} auto-fix(es) applied';
+
+            var iconSpan = document.createElement('span');
+            iconSpan.style.fontSize = '18px';
+            iconSpan.textContent = '✨';
+
+            var closeBtn = document.createElement('button');
+            closeBtn.textContent = '✕';
+            closeBtn.style.cssText = 'background:rgba(255,255,255,0.2);border:none;color:white;padding:4px 8px;border-radius:4px;cursor:pointer;margin-left:8px;font-size:12px;';
+            closeBtn.onclick = function() {{ toast.remove(); }};
+
+            toast.appendChild(iconSpan);
+            toast.appendChild(msgSpan);
+            toast.appendChild(closeBtn);
+
+            // Add animation keyframes if not already added
+            if (!document.querySelector('#toastAnimationStyle')) {{
+                var style = document.createElement('style');
+                style.id = 'toastAnimationStyle';
+                style.textContent = '@keyframes slideUp {{ from {{ opacity:0;transform:translateX(-50%) translateY(20px); }} to {{ opacity:1;transform:translateX(-50%) translateY(0); }} }}';
+                document.head.appendChild(style);
+            }}
+
+            document.body.appendChild(toast);
+
+            // Auto-remove after 5 seconds
+            setTimeout(function() {{
+                if (toast.parentElement) {{
+                    toast.style.transition = 'opacity 0.3s ease-out';
+                    toast.style.opacity = '0';
+                    setTimeout(function() {{ toast.remove(); }}, 300);
+                }}
+            }}, 5000);
+        }})();
+        """
+        window.eval(js_code)
 
     def _show_validation_popup(self, original_text, parsed_problems):
         """Show validation results and formatted text with editable syntax highlighting"""
@@ -9660,9 +9753,7 @@ class DataManager:
                 editor.setOptions({
                     fontSize: "13px",
                     showPrintMargin: false,
-                    wrap: true,
-                    enableBasicAutocompletion: false,
-                    enableLiveAutocompletion: false
+                    wrap: true
                 });
 
                 // Set value
