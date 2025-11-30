@@ -2158,6 +2158,9 @@ start: equation
    | det_function
    | transpose_function
    | inverse_function
+   | trace_function
+   | rank_function
+   | rref_function
    | trig_function
    | log_function
    | limit
@@ -2218,6 +2221,12 @@ transpose_function: "transpose" "(" expr ")" -> transpose_func
 
 inverse_function: "inverse" "(" expr ")" -> inverse_func
 
+trace_function: "trace" "(" expr ")" -> trace_func
+
+rank_function: "rank" "(" expr ")" -> rank_func
+
+rref_function: "rref" "(" expr ")" -> rref_func
+
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
 abs_function: "\\left" "|" expr "\\right" "|"     -> abs_func
@@ -2259,7 +2268,7 @@ NUMBER: /[+-]?\d+(\.\d*)?|\.\d+/
 INT: /\d+/
 PI.2: "\\pi"
 INFTY.2: "\\infty"
-SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
+SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|trace|rank|rref|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
 CIRC: "\\circ"
 
 %import common.WS_INLINE
@@ -3763,6 +3772,19 @@ CIRC: "\\circ"
                     return matrix_expr.inv()
                 return matrix_expr**-1
 
+
+            def trace_func(self, matrix_expr):
+                """Handles trace(matrix) function - sum of diagonal elements"""
+                return matrix_expr.trace()
+
+            def rank_func(self, matrix_expr):
+                """Handles rank(matrix) function - matrix rank"""
+                return matrix_expr.rank()
+
+            def rref_func(self, matrix_expr):
+                """Handles rref(matrix) function - reduced row echelon form"""
+                rref_matrix, pivot_cols = matrix_expr.rref()
+                return rref_matrix
             def start(self, e):
                 return e
 
