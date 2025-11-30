@@ -1,6 +1,23 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <style>
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Poppins Regular'), local('Poppins-Regular'),
+           url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2) format('woff2');
+    }
+    @font-face {
+      font-family: 'Poppins';
+      font-style: normal;
+      font-weight: 600;
+      src: local('Poppins SemiBold'), local('Poppins-SemiBold'),
+           url(https://fonts.gstatic.com/s/poppins/v20/pxiByp8kv8JHgFVrLEj6Z1xlFQ.woff2) format('woff2');
+    }
+  </style>
+
   <!-- Offline Caching Enabled -->
   <!--
     ✅ MathJax is cached for offline use
@@ -14,7 +31,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>NoNet-NoSet-NoChat - Analytics Dashboard</title>
+  <title>teturuQ - Analytics Dashboard</title>
 
   <script>
 window.MathJax = {
@@ -69,12 +86,101 @@ window.MathJax = {
 
   <!-- Version indicator for cache verification -->
   <script>
-    console.log('%c🔧 Analytics App Version: 2024-11-14-013 (Extension Auto-Inject)', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
+    console.log('%c🔧 teturuQ Analytics App Version: 2024-11-30-001', 'background: #4CAF50; color: white; padding: 5px; font-weight: bold;');
     console.log('✅ Automatic version conflict detection and recovery enabled');
     console.log('✅ NEW: Browser Extension Auto-Inject - Real-time WhatsApp capture');
     console.log('✅ WhatsApp Integration - Manual import and extension support');
     console.log('✅ Auto-finalize MC/TF/fill-blank/multi-mc questions when answered');
   </script>
+
+<!-- teturuQ Branding Styles -->
+  <style id="teturuq-branding">
+    .nonet-step-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 11000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #5568d3;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nonet-step-header.hidden {
+      transform: translateY(-100%);
+    }
+
+    .nonet-step-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      text-decoration: none;
+      color: white;
+    }
+
+    
+
+    .nonet-step-tagline {
+      font-size: 11px;
+      opacity: 0.9;
+      font-weight: normal;
+      margin-top: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .nonet-step-badge {
+      background: rgba(255,255,255,0.2);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+
+    @media (max-width: 768px) {
+      .nonet-step-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 12px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 11000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #5568d3;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nonet-step-header.hidden {
+      transform: translateY(-100%);
+    }
+      .nonet-step-logo {
+        font-size: 20px;
+        padding-left: 60px;
+      }
+      .nonet-step-badge {
+        font-size: 10px;
+        padding: 4px 8px;
+      }
+    }
+  </style>
 
   <!-- PyScript core -->
   <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
@@ -228,7 +334,7 @@ window.MathJax = {
     color: #94a3b8;
 }
 
-body {
+body {font-family: 'Poppins', sans-serif;
     font-family: "Inter", "Segoe UI", Arial, sans-serif;
     background: #f3f4f6;
     color: #111827;
@@ -466,7 +572,7 @@ button.detail-toggle:hover {
 </style>
 
 
-  <!-- NoNet-NoSet-NoChat Branding Styles -->
+  <!-- teturuQ Branding Styles -->
   <style id="nonet-step-branding">
     .nonet-step-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -475,7 +581,7 @@ button.detail-toggle:hover {
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       position: sticky;
       top: 0;
-      z-index: 1000;
+      z-index: 11000;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -545,15 +651,45 @@ button.detail-toggle:hover {
   </style>
 
 </head>
-<body>
-  <!-- NoNet-NoSet-NoChat Branding Header -->
+<body style="padding-top: 95px;">
+<!-- teturuQ Branding Header -->
   <div class="nonet-step-header">
+
     <div class="nonet-step-logo">
-      <div class="nonet-step-icon">N-S</div>
       <div>
-        <div>NoNet-NoSet-NoChat</div>
-        <div class="nonet-step-tagline">Learn Properly, Understand Fully</div>
+        <div style="font-family: 'Poppins', sans-serif; font-size: 34px; font-weight: 600; display: flex; align-items: flex-end;">teturu<svg width="50" height="58" viewBox="0 0 100 118" fill="currentColor" style="margin-left: -2px; margin-bottom: -8px;">
+            <!-- Basic Q: circle + diagonal tail -->
+            <circle cx="45" cy="42" r="30" stroke="currentColor" stroke-width="14" fill="none"/>
+            <!-- Q tail -->
+            <line x1="62" y1="60" x2="78" y2="85" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+            <!-- Male plug base rectangle -->
+            <rect x="61" y="81" width="33" height="8" rx="2" transform="rotate(-35 76 85)"/>
+            <!-- Two extruding tubes (male plug prongs) -->
+            <rect x="71" y="78" width="6" height="22" rx="3" transform="rotate(-35 74 89)"/>
+            <rect x="81" y="72" width="6" height="22" rx="3" transform="rotate(-35 84 83)"/>
+          </svg></div>
+        <div class="nonet-step-tagline" style="font-family: 'Poppins', sans-serif;">No Connection, No Installation, No Distraction—Just Real Education</div>
       </div>
+    
+    </div>
+    <div class="nonet-step-badge">
+      <svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="6"/>
+        <g transform="rotate(-45 50 50)">
+          <!-- Left plug (socket) -->
+          <path d="M20 45 L35 45 L35 38 L40 38 L40 62 L35 62 L35 55 L20 55 Q12 50 20 45 Z"/>
+          <line x1="12" y1="50" x2="20" y2="50" stroke="currentColor" stroke-width="4"/>
+          <!-- Right plug (prongs) -->
+          <path d="M80 45 L65 45 L65 38 L60 38 L60 62 L65 62 L65 55 L80 55 Q88 50 80 45 Z"/>
+          <rect x="52" y="42" width="8" height="4" rx="1"/>
+          <rect x="52" y="54" width="8" height="4" rx="1"/>
+          <line x1="80" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="4"/>
+        </g>
+      </svg>
+      Offline Ready
+    </div>
+  </div>
+  
     </div>
     <div class="nonet-step-badge">
       Offline Ready
@@ -5915,6 +6051,39 @@ window.setTimeout(create_proxy(start_init), 800)
       text-decoration: underline;
     }
   </style>
+
+
+  <script>
+    // Auto-hide header on scroll down, show on scroll up
+    (function() {
+      let lastScrollTop = 0;
+      let ticking = false;
+      const header = document.querySelector('.nonet-step-header');
+
+      if (!header) return;
+
+      function updateHeaderVisibility(scrollTop) {
+        if (scrollTop > lastScrollTop && scrollTop > 100) {
+          // Scrolling down & past threshold
+          header.classList.add('hidden');
+        } else {
+          // Scrolling up
+          header.classList.remove('hidden');
+        }
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+      }
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            updateHeaderVisibility(window.pageYOffset || document.documentElement.scrollTop);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>
