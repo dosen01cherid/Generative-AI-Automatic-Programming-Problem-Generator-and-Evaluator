@@ -4261,7 +4261,7 @@ class Step:
             <strong>Step {self.step_index}</strong>
             <div style="display:flex; gap:8px; align-items:center;">
               <select class="stepTypeSelect" style="padding:4px 8px; font-size:12px; border:1px solid #dbe9ff; border-radius:6px;">
-                <option value="math-expression">Expression & Answer</option>
+                <option value="math-expression">Math Expression & Answer</option>
                 <option value="multiple-choice-single">Multiple Choice (Single)</option>
                 <option value="multiple-choice-multiple">Multiple Choice (Multiple)</option>
                 <option value="multi-mc">Multiple Choice (Multi-Question)</option>
@@ -7401,10 +7401,10 @@ class Problem:
                 </p>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 20px;">
-                    <!-- Expression & Answer -->
+                    <!-- Math Expression & Answer -->
                     <div class="step-type-card" data-type="math-expression">
                         <div class="step-type-icon">🧮</div>
-                        <div class="step-type-title">Expression & Answer</div>
+                        <div class="step-type-title">Math Expression & Answer</div>
                         <div class="step-type-desc">
                             Mathematical expression with expected answer and validation
                         </div>
@@ -9398,7 +9398,7 @@ class DataManager:
                         must_be_correct = must_be_correct_str.strip().lower() == 'true'
 
                     # ========================================
-                    # STEP-BY-STEP (Expression & Answer)
+                    # STEP-BY-STEP (Math Expression & Answer)
                     # ========================================
                     if step_type == "math-expression":
                         step_expr = extract_field(step_lines_clean, 'Step Expression:')

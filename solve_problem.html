@@ -5672,6 +5672,18 @@ class ProblemSolverApp:
       window.console.log(f"   Problem: {problem_idx}, Step: {step_idx}")
       window.console.log("=" * 60)
 
+      # ✅ Check if already in edit mode
+      if hasattr(self, 'is_editing') and self.is_editing:
+          self.show_notification("⚠️ Please save or cancel your current edit first", "warning")
+          window.console.warn("⚠️ Already in edit mode, blocking new edit")
+          return
+
+      # ✅ Set edit mode flag
+      self.is_editing = True
+      self.editing_problem_idx = problem_idx
+      self.editing_step_idx = step_idx
+      window.console.log(f"✅ Edit mode enabled for problem {problem_idx}, step {step_idx}")
+
       # ✅ FIX: Get original step data from problem set FIRST
       if problem_idx >= len(self.problem_set):
           window.console.error(f"❌ Invalid problem index: {problem_idx}")
@@ -5843,49 +5855,52 @@ class ProblemSolverApp:
         """Cancel editing and return to review section"""
         window.console.log(f"❌ Canceling edit, returning to review")
 
+        # ✅ Clear edit mode flag
+        self.is_editing = False
+        self.editing_problem_idx = None
+        self.editing_step_idx = None
+        window.console.log("✅ Edit mode disabled")
+
         # Show cancellation message if requested
         if show_cancel_message:
             self.show_notification("❌ Edit Cancelled", "warning")
 
-        if problem_idx not in self.solve_states:
-            window.console.error("❌ Problem state not found")
-            return
+        if problem_idx in self.solve_states:
+            solve_state = self.solve_states[problem_idx]
 
-        solve_state = self.solve_states[problem_idx]
-        
-        # ✅ Hide all step containers and remove edit wrappers
-        for i, step in enumerate(solve_state):
-            container = step.get("container")
-            if container:
-                # Remove edit wrapper
-                edit_wrapper = container.querySelector(".edit-mode-wrapper")
-                if edit_wrapper:
-                    edit_wrapper.remove()
-                
-                # Hide the step container
-                container.style.display = "none"
-                
-                # ✅ Remove the container from DOM to clean up
-                container.remove()
-        
-        # ✅ Clear the solve_state since we're done editing
-        del self.solve_states[problem_idx]
-        window.console.log(f"🗑️ Cleared solve_state for problem {problem_idx}")
-        
-        # ✅ Show the review section again
-        review_section = document.querySelector(f"#reviewSection_{problem_idx}")
-        if review_section:
-            review_section.style.display = "block"
-            window.console.log("✅ Review section shown")
-            
-            # Scroll to review section
-            review_section.scrollIntoView({'behavior': 'smooth', 'block': 'start'})
-        
-        # ✅ Show the completion banner again
-        completion_banner = document.querySelector(f"#completionBanner_{problem_idx}")
-        if completion_banner:
-            completion_banner.style.display = "block"
-            window.console.log("✅ Completion banner shown")
+            # ✅ Hide all step containers and remove edit wrappers
+            for i, step in enumerate(solve_state):
+                container = step.get("container")
+                if container:
+                    # Remove edit wrapper
+                    edit_wrapper = container.querySelector(".edit-mode-wrapper")
+                    if edit_wrapper:
+                        edit_wrapper.remove()
+
+                    # Hide the step container
+                    container.style.display = "none"
+
+                    # ✅ Remove the container from DOM to clean up
+                    container.remove()
+
+            # ✅ Clear the solve_state since we're done editing
+            del self.solve_states[problem_idx]
+            window.console.log(f"🗑️ Cleared solve_state for problem {problem_idx}")
+
+        # ✅ Clear the problem body (edit area including problem description)
+        problem_body = document.querySelector(f"#problemBody{problem_idx}")
+        if problem_body:
+            problem_body.innerHTML = ""
+            window.console.log(f"🗑️ Cleared problemBody{problem_idx}")
+
+        # ✅ Collapse the accordion
+        accordion = document.querySelector(f".accordion-problem[data-index='{problem_idx}']")
+        if accordion:
+            accordion.classList.remove("open")
+            window.console.log(f"✅ Collapsed accordion {problem_idx}")
+
+            # Scroll to the accordion header
+            accordion.scrollIntoView({'behavior': 'smooth', 'block': 'center'})
 
     def ensure_solve_state_for_edit(self, problem_idx):
         """Ensure solve_state exists for a completed problem before editing"""
@@ -6091,7 +6106,7 @@ class ProblemSolverApp:
         # ✅ Hide original Submit/Finalize buttons and feedback
         submit_btn = container.querySelector(f"#submitBtn{step_idx}")
         finalize_btn = container.querySelector(f"#finalizeBtn{step_idx}")
-        feedback_div = container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
+        feedback_div = container.querySelector(f"#stepFeedback{problem_idx}_{step_idx}")
 
         if submit_btn:
             submit_btn.style.display = "none"
@@ -8363,6 +8378,12 @@ This demonstrates the complete format for creating your own problem sets!
     
     def toggle_problem(self, index):
       """Toggle problem accordion open/close"""
+      # ✅ Block accordion toggle during edit mode
+      if hasattr(self, 'is_editing') and self.is_editing:
+          self.show_notification("⚠️ Please save or cancel your current edit first", "warning")
+          window.console.warn("⚠️ In edit mode, blocking accordion toggle")
+          return
+
       # Prevent recursive calls
       if hasattr(self, '_toggling') and self._toggling:
           window.console.warn("⚠️ Already toggling, skipping...")
