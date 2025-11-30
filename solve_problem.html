@@ -2154,6 +2154,10 @@ start: equation
 ?atom: NUMBER                    -> number
    | derivative_function
    | partial_derivative_function
+   | integral_function
+   | det_function
+   | transpose_function
+   | inverse_function
    | trig_function
    | log_function
    | limit
@@ -2205,6 +2209,15 @@ derivative_function: "__derivative" "(" SYMBOL "," expr ")" -> derivative_func
 
 partial_derivative_function: "__partial_derivative" "(" SYMBOL "," expr ")" -> partial_derivative_func
 
+integral_function: "__integral" "(" SYMBOL "," expr "," expr "," expr ")" -> integral_func_definite
+    | "__integral" "(" SYMBOL "," expr ")" -> integral_func
+
+det_function: "det" "(" expr ")" -> det_func
+
+transpose_function: "transpose" "(" expr ")" -> transpose_func
+
+inverse_function: "inverse" "(" expr ")" -> inverse_func
+
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
 abs_function: "\\left" "|" expr "\\right" "|"     -> abs_func
@@ -2246,7 +2259,7 @@ NUMBER: /[+-]?\d+(\.\d*)?|\.\d+/
 INT: /\d+/
 PI.2: "\\pi"
 INFTY.2: "\\infty"
-SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
+SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|frac|left|right|begin|end|pi|infty|lim|lvert|rvert|sqrt|sum|prod|int)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
 CIRC: "\\circ"
 
 %import common.WS_INLINE
@@ -2277,6 +2290,126 @@ CIRC: "\\circ"
         final_str = partial_derivative_pattern.sub(partial_replacement, processed_str)
 
         return final_str
+
+    def _preprocess_matrix_operations(self, latex_str):
+        """
+        Convert matrix operations to function calls.
+        Examples:
+          M^T or M^\top or M^\intercal -> transpose(M)
+          M^{-1} -> inverse(M)
+        """
+        import re
+
+        # Pattern 1: Matrix inverse M^{-1}
+        inverse_pattern = re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{-1\}')
+
+        def replace_inverse(match):
+            matrix_expr = match.group(1)
+            if matrix_expr is None:
+                return match.group(0)
+            return f'inverse({matrix_expr.strip()})'
+
+        # Pattern 2: Matrix transpose M^T or M^\top or M^\intercal
+        transpose_patterns = [
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{T\}'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^T(?![a-zA-Z])'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{\top\}'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{\intercal\}'), 'transpose'),
+        ]
+
+        def replace_transpose(match):
+            matrix_expr = match.group(1)
+            if matrix_expr is None:
+                return match.group(0)
+            return f'transpose({matrix_expr.strip()})'
+
+        # Apply inverse replacements first
+        processed = inverse_pattern.sub(replace_inverse, latex_str)
+
+        # Then apply transpose replacements
+        for pattern, _ in transpose_patterns:
+            processed = pattern.sub(replace_transpose, processed)
+
+        return processed
+
+    def _preprocess_determinants(self, latex_str):
+        """
+        Convert |matrix| notation to det(matrix) function call.
+        Examples:
+          |[[1,2],[3,4]]| -> det([[1,2],[3,4]])
+          \left|M\right| -> det(M)
+        """
+        import re
+
+        # Pattern 1: \left|matrix\right| format
+        left_right_pattern = re.compile(r'\left\|(.+?)\right\|')
+
+        def replace_left_right(match):
+            matrix_expr = match.group(1)
+            if matrix_expr is None:
+                return match.group(0)
+            return f'det({matrix_expr.strip()})'
+
+        # Pattern 2: Simple |matrix| format
+        simple_pattern = re.compile(r'\|(\[\[.+?\]\])\|')
+
+        def replace_simple(match):
+            matrix_expr = match.group(1)
+            if matrix_expr is None:
+                return match.group(0)
+            return f'det({matrix_expr.strip()})'
+
+        # Apply replacements
+        processed = left_right_pattern.sub(replace_left_right, latex_str)
+        processed = simple_pattern.sub(replace_simple, processed)
+
+        return processed
+
+    def _preprocess_integrals(self, latex_str):
+        """
+        Rewrites \int(expr) and \int_a^b(expr) patterns into unique function calls.
+        Auto-detects the integration variable from the expression.
+
+        Examples:
+          \int(2x) -> __integral(x, 2*x)
+          \int_0^1(2x) -> __integral(x, 2*x, 0, 1)
+        """
+        import re
+
+        def infer_variable(expr_str):
+            """Infer integration variable from expression by finding common variable names."""
+            for var in ['x', 'y', 'z', 't', 'u', 'v', 'w', 'r', 'theta', 'a', 'b', 'c']:
+                if re.search(r'' + var + r'', expr_str):
+                    return var
+            return 'x'
+
+        # Pattern 1: Definite integral with bounds: \int_{lower}^{upper}(expr)
+        definite_pattern = re.compile(r'\int_\{?([^}]+?)\}?\^\{?([^}]+?)\}?\(([^)]+)\)')
+
+        def replace_definite(match):
+            lower = match.group(1)
+            upper = match.group(2)
+            expr = match.group(3)
+            if None in (lower, upper, expr):
+                return match.group(0)
+            var = infer_variable(expr)
+            return f'__integral({var}, {expr.strip()}, {lower.strip()}, {upper.strip()})'
+
+        # Pattern 2: Indefinite integral: \int(expr)
+        indefinite_pattern = re.compile(r'\int(?:_\{\s*\})?(?:\^\{\s*\})?\(([^)]+)\)')
+
+        def replace_indefinite(match):
+            expr = match.group(1)
+            if expr is None:
+                return match.group(0)
+            var = infer_variable(expr)
+            return f'__integral({var}, {expr.strip()})'
+
+        # Apply replacements (definite first, then indefinite)
+        processed = definite_pattern.sub(replace_definite, latex_str)
+        processed = indefinite_pattern.sub(replace_indefinite, processed)
+
+        return processed
 
     def _show_error_popup(self, message):
         """Display error popup with close button - optimized for mobile"""
@@ -3049,6 +3182,18 @@ CIRC: "\\circ"
       clean = self._preprocess_derivatives(cleaned)
       window.console.log(f"🔍 [DEBUG 3] After preprocess_derivatives: {clean}")
 
+      # Preprocess integrals
+      clean = self._preprocess_integrals(clean)
+      window.console.log(f"🔍 [DEBUG 3.1] After preprocess_integrals: {clean}")
+
+      # Preprocess determinants
+      clean = self._preprocess_determinants(clean)
+      window.console.log(f"🔍 [DEBUG 3.2] After preprocess_determinants: {clean}")
+
+      # Preprocess matrix operations (transpose, inverse)
+      clean = self._preprocess_matrix_operations(clean)
+      window.console.log(f"🔍 [DEBUG 3.3] After preprocess_matrix_operations: {clean}")
+
       # ✅ FIX: Only preprocess row operations if they actually exist
       if self.expression_has_matrix_operations(clean):
           clean = self._preprocess_row_operations(clean)
@@ -3591,6 +3736,32 @@ CIRC: "\\circ"
             def partial_derivative_func(self, var, expr):
                 """Handles the preprocessed __partial_derivative(var, expr) call."""
                 return sp.Derivative(expr, sp.Symbol(str(var)))
+
+            # --- METHODS FOR PREPROCESSED INTEGRALS ---
+            def integral_func(self, var, expr):
+                """Handles indefinite integral: __integral(var, expr)"""
+                return sp.Integral(expr, sp.Symbol(str(var)))
+
+            def integral_func_definite(self, var, expr, lower, upper):
+                """Handles definite integral: __integral(var, expr, lower, upper)"""
+                return sp.Integral(expr, (sp.Symbol(str(var)), lower, upper))
+
+            # --- METHODS FOR MATRIX OPERATIONS ---
+            def det_func(self, matrix_expr):
+                """Handles det(matrix) function"""
+                return sp.det(matrix_expr)
+
+            def transpose_func(self, matrix_expr):
+                """Handles transpose(matrix) function"""
+                if hasattr(matrix_expr, 'T'):
+                    return matrix_expr.T
+                return matrix_expr.transpose()
+
+            def inverse_func(self, matrix_expr):
+                """Handles inverse(matrix) function"""
+                if hasattr(matrix_expr, 'inv'):
+                    return matrix_expr.inv()
+                return matrix_expr**-1
 
             def start(self, e):
                 return e
