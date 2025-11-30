@@ -1224,7 +1224,7 @@ print("pyscript module created and registered")
     }
 
     .teturuq-badge::before {
-      content: "✏️";
+      content: "⚡";
       font-size: 14px;
     }
 
@@ -1259,7 +1259,7 @@ print("pyscript module created and registered")
       </div>
     </div>
     <div class="teturuq-badge">
-      Problem Creator
+      Offline Ready
     </div>
   </div>
   <!-- Loading Overlay -->
@@ -2292,6 +2292,12 @@ CIRC: "\\circ"
             # 4) Negative fractions -\frac{...}R_ -> (-1/2)R_
             ops = re.sub(r'-\\frac\{([^{}]+)\}\{\(?([^{}]+?)\)?\}R_', r'(-\1/\2)R_', ops)
 
+            # 4.5) Negative fractions wrapped in parens: (-\frac{1}{3})R_ -> (-1/3)R_
+            ops = re.sub(r'\(-\\frac\{([^{}]+)\}\{([^{}]+)\}\)R_', r'(-\1/\2)R_', ops)
+
+            # 4.6) Positive fractions wrapped in parens: (\frac{1}{3})R_ -> (1/3)R_
+            ops = re.sub(r'\(\\frac\{([^{}]+)\}\{([^{}]+)\}\)R_', r'(\1/\2)R_', ops)
+
             # 5) Fix fractions in combines: R_2+\frac{1}{2}R_3 -> R_2+(1/2)R_3
             ops = re.sub(r'([+\-])\\frac\{([^{}]+)\}\{\(?([^{}]+?)\)?\}R_', r'\1(\2/\3)R_', ops)
 
@@ -2312,8 +2318,11 @@ CIRC: "\\circ"
             # Handles: R_2-R_1 -> R_2-1R_1 ; R_2+R_1 -> R_2+1R_1
             ops = re.sub(r'(R_\d+)\s*([+\-])\s*R_', r'\1\g<2>1R_', ops)
 
-            # 7c. Force spaces around + and - inside ops_part so lexer never fuses +5 into a single token
-            ops = re.sub(r'([+\-])', r' \1 ', ops)
+            # 7c. Force spaces around + and - ONLY when they're operators between row references
+            # Don't add spaces inside parentheses like (-1/3)
+            # Only add spaces when +/- is between R_ references or after R_ followed by a number
+            ops = re.sub(r'(R_\d+)\s*([+\-])\s*(\d)', r'\1 \2 \3', ops)
+            ops = re.sub(r'(R_\d+)\s*([+\-])\s*\(', r'\1 \2 (', ops)
 
             # 7d. Canonicalize multiple +/- combos: "--"->"+", "+-"|"-+"->"-"
             ops = re.sub(r'\+\s*\+', ' + ', ops)
@@ -2446,11 +2455,33 @@ CIRC: "\\circ"
 
       # 3. Fix mismatched brackets in matrices (curly/square)
       #    [[1,2,3},[4,5,6]] → [[1,2,3],[4,5,6]]
+      #    BUT: Preserve LaTeX command braces like \frac{1}{3}, \sqrt{x}, etc.
       before = s
+      # Only replace mismatched brackets that are NOT part of LaTeX commands
+      # First, temporarily protect LaTeX command braces by replacing them with placeholders
+      protected_patterns = []
+      placeholder_counter = [0]
+
+      def protect_latex_braces(match):
+          placeholder = f"__LATEX_BRACE_{placeholder_counter[0]}__"
+          protected_patterns.append((placeholder, match.group(0)))
+          placeholder_counter[0] += 1
+          return placeholder
+
+      # Protect common LaTeX commands that use braces: \frac{}{}, \sqrt{}, \text{}, etc.
+      temp_s = re.sub(r'\\(frac|sqrt|text|mathrm|mathbf|mathit|overline|underline|hat|bar|vec|dot|ddot|tilde|acute|grave|breve|check)\{[^{}]*\}(\{[^{}]*\})?', protect_latex_braces, s)
+
+      # Now do the mismatched bracket fix on the unprotected content
       # Replace } with ] if it appears after [ and before ]
-      s = re.sub(r'\[([^[\]]*)\}', r'[\1]', s)
+      temp_s = re.sub(r'\[([^[\]]*)\}', r'[\1]', temp_s)
       # Replace { with [ if it appears in matrix context
-      s = re.sub(r'\{([^[\]{}]*)\]', r'[\1]', s)
+      temp_s = re.sub(r'\{([^[\]{}]*)\]', r'[\1]', temp_s)
+
+      # Restore protected LaTeX braces
+      for placeholder, original in protected_patterns:
+          temp_s = temp_s.replace(placeholder, original)
+
+      s = temp_s
       if s != before:
           fixes_applied.append("Fixed mismatched brackets (changed {} to [])")
 
@@ -2515,6 +2546,13 @@ CIRC: "\\circ"
       s = re.sub(r'R(\d+)', r'R_\1', s)
       if s != before:
           fixes_applied.append("Added missing underscore in row notation (R1 → R_1)")
+
+      # 11.5. Fix operator stuck inside row subscript braces
+      #    R_{2-} → R_2-,  R_{1+} → R_1+,  R_{2-}2R_1 → R_2-2R_1
+      before = s
+      s = re.sub(r'R_\{(\d+)([+\-])\}', r'R_\1\2', s)
+      if s != before:
+          fixes_applied.append("Fixed operator inside row subscript (R_{2-} → R_2-)")
 
       # 12. Normalize arrow notation in row operations
       #    -> → \to,  <- → \leftarrow
@@ -5610,7 +5648,9 @@ class Step:
                 try:
                     parsed = self.math_parser.parse_latex(expected_l)
                     if parsed:
-                        expected_structure = self.math_parser.extract_structure(parsed)
+                        raw_structure = self.math_parser.extract_structure(parsed)
+                        # Convert to JSON-serializable format
+                        expected_structure = self.math_parser.structure_to_json_serializable(raw_structure)
                 except:
                     pass
 
@@ -7142,35 +7182,51 @@ class DataManager:
     def _get_math_only_example(self):
         """Return math-only example text"""
         return """Problem Title: Derivative and Simplification
-    Problem Description: Find the derivative of the function `f(x) = x^3 - 2x^2 + 5x - 1` and simplify the result in multiple steps. Use the power rule and basic algebraic manipulation.
+    Problem Description: Find the derivative of the function `f(x) = x^3 - 2x^2` and simplify the result. Use the power rule: `d/dx(x^n) = n * x^(n-1)`.
     #
     Step Description: Find the derivative of the polynomial function
-    Step Expression: `d/dx(x^3-2x^2+5x-1)`
-    Step Expected: `3x^2-4x+5`
+    Step Expression: `d/dx(x^3-2x^2)`
+    Step Expected: `3x^2-4x`
     #
-    Step Description: Factor out the common term from the derivative
-    Step Expression: `3x^2-4x+5`
-    Step Expected: `3x^2-4x+5`
-    #
-    Step Description: Evaluate the derivative at `x = 2`
-    Step Expression: `3(2)^2-4(2)+5`
-    Step Expected: `9`
+    Step Description: Factor out the common term `x` from the derivative `3x^2 - 4x`
+    Step Expression: `3x^2-4x`
+    Step Expected: `x(3x-4)`
 
     ###
-    Problem Title: Matrix Row Operations
-    Problem Description: Perform the following row operations on the given augmented matrix `[[2,1,3],[4,-1,7]]` to solve the system of equations: `2x+y=3` and `4x-y=7`.
+    Problem Title: Solving Linear System with Row Operations
+    Problem Description: Solve the following system of linear equations using Gauss-Jordan elimination: `{(2x+y=3),(4x-y=7):}`
     #
-    Step Description: Start with the augmented matrix
+    Step Description: Write the augmented matrix for the system of equations `{(2x+y=3),(4x-y=7):}`
     Step Expression: `[[2,1,3],[4,-1,7]]`
     Step Expected: `[[2,1,3],[4,-1,7]]`
     #
-    Step Description: Perform `R_2 → R_2 - 2R_1` to eliminate the first element in row 2
+    Step Description: Perform `R_2 -> R_2 - 2R_1` to eliminate the first element in row 2
     Step Expression: `[[2,1,3],[4,-1,7]]|R_2->R_2-2R_1`
     Step Expected: `[[2,1,3],[0,-3,1]]`
     #
-    Step Description: Scale row 2 by `-1/3`
+    Step Description: Write the matrix with the row operation to make the pivot in row 2 equal to 1
+    Step Expression: `[[2,1,3],[0,-3,1]]|R_2->(-1/3)R_2`
+    Step Expected: `[[2,1,3],[0,-3,1]]|R_2->(-1/3)R_2`
+    #
+    Step Description: Apply the row operation to scale row 2
     Step Expression: `[[2,1,3],[0,-3,1]]|R_2->(-1/3)R_2`
     Step Expected: `[[2,1,3],[0,1,-1/3]]`
+    #
+    Step Description: Perform `R_1 -> R_1 - R_2` to eliminate the second element in row 1
+    Step Expression: `[[2,1,3],[0,1,-1/3]]|R_1->R_1-R_2`
+    Step Expected: `[[2,0,10/3],[0,1,-1/3]]`
+    #
+    Step Description: Scale row 1 by `1/2` to get the reduced row echelon form
+    Step Expression: `[[2,0,10/3],[0,1,-1/3]]|R_1->(1/2)R_1`
+    Step Expected: `[[1,0,5/3],[0,1,-1/3]]`
+    #
+    Step Description: From the reduced row echelon form, what is the value of `x`?
+    Step Expression: `5/3`
+    Step Expected: `5/3`
+    #
+    Step Description: From the reduced row echelon form, what is the value of `y`?
+    Step Expression: `-1/3`
+    Step Expected: `-1/3`
     """
 
     def _get_assessment_only_example(self):
@@ -7715,7 +7771,8 @@ class DataManager:
                                             import traceback
                                             window.console.error(traceback.format_exc())
                                 elif not hasattr(step, 'loaded_expected_structure') or not step.loaded_expected_structure:
-                                    step.loaded_expected_structure = computed_structure
+                                    # Convert to JSON-serializable format
+                                    step.loaded_expected_structure = math_parser.structure_to_json_serializable(computed_structure)
                                     structure_rebuilt = True
                                     structures_rebuilt += 1
                         except Exception as e:
@@ -8861,7 +8918,8 @@ class DataManager:
                                     if not (temp_latex.startswith('`') and temp_latex.endswith('`')):
                                         parsed = self.problem_creator.math_parser.parse_latex(temp_latex)
                                         if parsed is not None:
-                                            expected_structure = self.problem_creator.math_parser.extract_structure(parsed)
+                                            raw_structure = self.problem_creator.math_parser.extract_structure(parsed)
+                                            expected_structure = self.problem_creator.math_parser.structure_to_json_serializable(raw_structure)
                                             window.console.log(f"✅ Computed expected_structure from asciimath")
                                     else:
                                         window.console.log(f"⚠️ Skipping structure computation, parser not available")
@@ -8876,7 +8934,8 @@ class DataManager:
                                     if not (step_expected_final.startswith('`') and step_expected_final.endswith('`')):
                                         parsed = self.problem_creator.math_parser.parse_latex(step_expected_final)
                                         if parsed is not None:
-                                            expected_structure = self.problem_creator.math_parser.extract_structure(parsed)
+                                            raw_structure = self.problem_creator.math_parser.extract_structure(parsed)
+                                            expected_structure = self.problem_creator.math_parser.structure_to_json_serializable(raw_structure)
                                             window.console.log(f"✅ Computed expected_structure from LaTeX")
                                     else:
                                         window.console.log(f"⚠️ Skipping structure computation, parser not available")
@@ -13136,24 +13195,28 @@ function parseSmartKeystrokes(text) {
             }
 
             // Handle negative fractions: -digit(s)/...
+            // Include the negative sign inside the numerator: -1/3 -> \frac{-1}{3}
             if (ch === '-' && j + 1 < content.length && /\d/.test(content[j + 1])) {
-                keystrokes.push('-');
-                j++;
-                
+                j++; // skip the minus sign for now
+
                 let num = '';
                 while (j < content.length && /\d/.test(content[j])) {
                     num += content[j++];
                 }
-                
+
                 if (j < content.length && content[j] === '/') {
+                    // It's a fraction - include minus in numerator
+                    keystrokes.push('-');
                     for (const c of num) keystrokes.push(c);
                     keystrokes.push('/');
                     j++;
-                    
+
                     // ✅ Use robust denominator processor
                     j = processDenominatorFromString(content, j, keystrokes);
                     keystrokes.push('{Right}');
                 } else {
+                    // Not a fraction - just negative number
+                    keystrokes.push('-');
                     for (const c of num) keystrokes.push(c);
                 }
                 continue;
