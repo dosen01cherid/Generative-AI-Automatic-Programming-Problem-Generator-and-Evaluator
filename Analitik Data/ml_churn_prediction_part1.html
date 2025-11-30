@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Hands-On Guide Part 1: Customer Churn Prediction</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-y: scroll;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+
+        .section ul, .section ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .copy-button:hover {
+            background: #764ba2;
+        }
+
+        .copy-button.copied {
+            background: #28a745;
+        }
+
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: #212529;
+            display: block;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .business-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .business-card h3 {
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .business-card ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .business-card li::before {
+            content: "✓ ";
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .formula {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Machine Learning Hands-On Guide</h1>
+            <h2>Customer Churn Prediction for Internet Service Provider</h2>
+            <p><strong>Part 1:</strong> Business Context, Dataset Generation & Exploratory Data Analysis</p>
+        </div>
+
+        <!-- Section 1: Business Context -->
+        <div class="section">
+            <h2>📊 1. Business Context & Problem Definition</h2>
+
+            <div class="business-card">
+                <h3>🌐 TeleConnect ISP - Company Profile</h3>
+                <ul>
+                    <li><strong>Industry:</strong> Internet Service Provider (ISP)</li>
+                    <li><strong>Services:</strong> Fiber optic internet, DSL, Cable internet</li>
+                    <li><strong>Customer Base:</strong> 50,000+ residential and business customers</li>
+                    <li><strong>Market:</strong> Highly competitive telecom market</li>
+                    <li><strong>Current Challenge:</strong> High customer churn rate (25% annually)</li>
+                </ul>
+            </div>
+
+            <h3>🎯 The Business Problem</h3>
+            <p>
+                TeleConnect ISP is facing a critical business challenge: <strong>customer churn</strong>. Approximately 25% of their customers
+                discontinue their service annually, which translates to significant revenue loss and increased customer acquisition costs.
+            </p>
+
+            <div class="highlight">
+                <h4>💰 Financial Impact</h4>
+                <p><strong>Cost to acquire new customer:</strong> $500 - $800 per customer (marketing, sales, installation)</p>
+                <p><strong>Cost to retain existing customer:</strong> $50 - $100 per customer (promotional offers, customer service)</p>
+                <p><strong>Annual revenue per customer:</strong> $1,200 (average)</p>
+            </div>
+
+            <p>
+                Losing a customer means not just losing their annual revenue ($1,200), but also the high acquisition cost ($500-$800)
+                becomes a sunk cost. Industry research shows that retaining customers is 5-25 times cheaper than acquiring new ones.
+            </p>
+
+            <h3>🤔 Why Machine Learning?</h3>
+            <p>Traditional approaches to churn management are reactive - the company only knows a customer has churned after they've left.
+            Machine Learning enables a <strong>proactive approach</strong>:</p>
+
+            <ol>
+                <li><strong>Predict Before They Leave:</strong> Identify customers likely to churn before they actually cancel</li>
+                <li><strong>Targeted Retention:</strong> Focus retention efforts on high-risk customers (better ROI)</li>
+                <li><strong>Personalized Interventions:</strong> Understand churn drivers for different customer segments</li>
+                <li><strong>Optimize Resources:</strong> Allocate retention budget efficiently</li>
+                <li><strong>Measure Impact:</strong> Track effectiveness of retention campaigns</li>
+            </ol>
+
+            <h3>🎯 Business Objectives</h3>
+            <p>The ML project aims to:</p>
+            <ul>
+                <li>Build a model to predict which customers are likely to churn in the next 3 months</li>
+                <li>Achieve at least 80% accuracy in identifying churners</li>
+                <li>Reduce churn rate from 25% to 18% (saving ~$4.2M annually)</li>
+                <li>Enable customer service team to proactively reach out to at-risk customers</li>
+            </ul>
+
+            <div class="formula">
+                <h4>Expected ROI Calculation</h4>
+                <p>
+                    \[
+                    \text{Annual Savings} = (\text{Customers Saved}) \times (\text{Annual Revenue} - \text{Retention Cost})
+                    \]
+                </p>
+                <p>
+                    \[
+                    = (50000 \times 0.07) \times (1200 - 100) = 3500 \times 1100 = \$3,850,000
+                    \]
+                </p>
+            </div>
+        </div>
+
+        <!-- Section 2: Understanding the Data -->
+        <div class="section">
+            <h2>📋 2. Understanding the Dataset</h2>
+
+            <h3>🔍 Data Features</h3>
+            <p>We will work with customer data containing the following information:</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>customer_id</td>
+                        <td>Unique customer identifier</td>
+                        <td>Categorical</td>
+                    </tr>
+                    <tr>
+                        <td>tenure</td>
+                        <td>Months as customer</td>
+                        <td>Numerical</td>
+                    </tr>
+                    <tr>
+                        <td>monthly_charges</td>
+                        <td>Monthly subscription fee</td>
+                        <td>Numerical</td>
+                    </tr>
+                    <tr>
+                        <td>total_charges</td>
+                        <td>Total amount charged</td>
+                        <td>Numerical</td>
+                    </tr>
+                    <tr>
+                        <td>contract_type</td>
+                        <td>Month-to-month, One year, Two year</td>
+                        <td>Categorical</td>
+                    </tr>
+                    <tr>
+                        <td>internet_service</td>
+                        <td>DSL, Fiber optic, Cable</td>
+                        <td>Categorical</td>
+                    </tr>
+                    <tr>
+                        <td>online_security</td>
+                        <td>Yes/No</td>
+                        <td>Binary</td>
+                    </tr>
+                    <tr>
+                        <td>tech_support</td>
+                        <td>Yes/No</td>
+                        <td>Binary</td>
+                    </tr>
+                    <tr>
+                        <td>payment_method</td>
+                        <td>Electronic check, Mailed check, Bank transfer, Credit card</td>
+                        <td>Categorical</td>
+                    </tr>
+                    <tr>
+                        <td>paperless_billing</td>
+                        <td>Yes/No</td>
+                        <td>Binary</td>
+                    </tr>
+                    <tr>
+                        <td>num_support_tickets</td>
+                        <td>Number of support tickets raised</td>
+                        <td>Numerical</td>
+                    </tr>
+                    <tr>
+                        <td>avg_speed_mbps</td>
+                        <td>Average internet speed</td>
+                        <td>Numerical</td>
+                    </tr>
+                    <tr>
+                        <td>churn</td>
+                        <td>Customer churned? (Target variable)</td>
+                        <td>Binary (0/1)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section 3: Dataset Generation -->
+        <div class="section">
+            <h2>🔨 3. Generate Synthetic Dataset</h2>
+
+            <p>
+                Since we're learning, we'll create a realistic synthetic dataset that mimics the characteristics of actual ISP customer data.
+                This dataset will include realistic patterns that you'd find in real-world churn scenarios.
+            </p>
+
+            <h3><span class="step-number">1</span>Dataset Generation Code</h3>
+            <p>Run this code to generate the dataset:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>import pandas as pd
+import numpy as np
+from datetime import datetime
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set random seed for reproducibility
+np.random.seed(42)
+
+# Number of customers
+n_customers = 5000
+
+# Generate customer IDs
+customer_ids = [f'CUST{str(i).zfill(6)}' for i in range(1, n_customers + 1)]
+
+# Generate tenure (months) - weighted towards newer and longer customers
+tenure = np.concatenate([
+    np.random.randint(1, 12, size=int(n_customers * 0.3)),    # 30% new customers
+    np.random.randint(12, 36, size=int(n_customers * 0.4)),   # 40% mid-tenure
+    np.random.randint(36, 72, size=int(n_customers * 0.3))    # 30% loyal customers
+])
+np.random.shuffle(tenure)
+
+# Contract types
+contract_types = np.random.choice(
+    ['Month-to-month', 'One year', 'Two year'],
+    size=n_customers,
+    p=[0.55, 0.25, 0.20]  # Month-to-month is most common
+)
+
+# Internet service types
+internet_services = np.random.choice(
+    ['DSL', 'Fiber optic', 'Cable'],
+    size=n_customers,
+    p=[0.30, 0.45, 0.25]  # Fiber optic is most popular
+)
+
+# Generate monthly charges based on internet service type
+monthly_charges = []
+for service in internet_services:
+    if service == 'DSL':
+        charge = np.random.uniform(40, 60)
+    elif service == 'Fiber optic':
+        charge = np.random.uniform(70, 110)
+    else:  # Cable
+        charge = np.random.uniform(55, 85)
+    monthly_charges.append(round(charge, 2))
+
+monthly_charges = np.array(monthly_charges)
+
+# Calculate total charges (tenure * monthly_charges with some variation)
+total_charges = []
+for i in range(n_customers):
+    # Add some variation for price changes over time
+    variation = np.random.uniform(0.95, 1.05)
+    total = tenure[i] * monthly_charges[i] * variation
+    total_charges.append(round(total, 2))
+
+total_charges = np.array(total_charges)
+
+# Add-on services (correlated with contract type)
+online_security = []
+tech_support = []
+for contract in contract_types:
+    if contract == 'Month-to-month':
+        online_security.append(np.random.choice(['Yes', 'No'], p=[0.2, 0.8]))
+        tech_support.append(np.random.choice(['Yes', 'No'], p=[0.25, 0.75]))
+    else:
+        online_security.append(np.random.choice(['Yes', 'No'], p=[0.6, 0.4]))
+        tech_support.append(np.random.choice(['Yes', 'No'], p=[0.65, 0.35]))
+
+# Payment methods
+payment_methods = np.random.choice(
+    ['Electronic check', 'Mailed check', 'Bank transfer', 'Credit card'],
+    size=n_customers,
+    p=[0.35, 0.20, 0.25, 0.20]
+)
+
+# Paperless billing
+paperless_billing = np.random.choice(['Yes', 'No'], size=n_customers, p=[0.6, 0.4])
+
+# Support tickets (more for churners)
+num_support_tickets = np.random.poisson(lam=2, size=n_customers)
+
+# Average internet speed
+avg_speed_mbps = []
+for service in internet_services:
+    if service == 'DSL':
+        speed = np.random.uniform(10, 25)
+    elif service == 'Fiber optic':
+        speed = np.random.uniform(100, 500)
+    else:  # Cable
+        speed = np.random.uniform(50, 150)
+    avg_speed_mbps.append(round(speed, 2))
+
+avg_speed_mbps = np.array(avg_speed_mbps)
+
+# Generate churn based on realistic patterns
+churn = []
+for i in range(n_customers):
+    churn_probability = 0.15  # Base churn rate
+
+    # Tenure effect (newer customers more likely to churn)
+    if tenure[i] < 6:
+        churn_probability += 0.25
+    elif tenure[i] < 12:
+        churn_probability += 0.15
+    elif tenure[i] > 36:
+        churn_probability -= 0.10
+
+    # Contract type effect
+    if contract_types[i] == 'Month-to-month':
+        churn_probability += 0.20
+    elif contract_types[i] == 'Two year':
+        churn_probability -= 0.15
+
+    # Payment method effect
+    if payment_methods[i] == 'Electronic check':
+        churn_probability += 0.10
+
+    # Support tickets effect
+    if num_support_tickets[i] > 4:
+        churn_probability += 0.15
+    elif num_support_tickets[i] > 2:
+        churn_probability += 0.08
+
+    # Price effect
+    if monthly_charges[i] > 85:
+        churn_probability += 0.08
+
+    # No add-on services
+    if online_security[i] == 'No' and tech_support[i] == 'No':
+        churn_probability += 0.10
+
+    # Cap probability between 0 and 1
+    churn_probability = max(0, min(1, churn_probability))
+
+    # Generate churn
+    churn.append(1 if np.random.random() < churn_probability else 0)
+
+# Create DataFrame
+df = pd.DataFrame({
+    'customer_id': customer_ids,
+    'tenure': tenure,
+    'monthly_charges': monthly_charges,
+    'total_charges': total_charges,
+    'contract_type': contract_types,
+    'internet_service': internet_services,
+    'online_security': online_security,
+    'tech_support': tech_support,
+    'payment_method': payment_methods,
+    'paperless_billing': paperless_billing,
+    'num_support_tickets': num_support_tickets,
+    'avg_speed_mbps': avg_speed_mbps,
+    'churn': churn
+})
+
+# Save to CSV
+df.to_csv('teleconnect_customer_data.csv', index=False)
+
+print("✅ Dataset created successfully!")
+print(f"📊 Total customers: {len(df)}")
+print(f"📉 Churn rate: {df['churn'].mean()*100:.2f}%")
+print(f"💾 File saved as: teleconnect_customer_data.csv")
+print("\nFirst few rows:")
+print(df.head(10))</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 4: Load and Explore Data -->
+        <div class="section">
+            <h2>🔎 4. Load and Explore the Dataset</h2>
+
+            <h3><span class="step-number">2</span>Load the Data</h3>
+            <p>First, let's load our generated dataset and examine its structure:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Set display options
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 1000)
+
+# Load the dataset
+df = pd.read_csv('teleconnect_customer_data.csv')
+
+# Display basic information
+print("=" * 80)
+print("DATASET OVERVIEW")
+print("=" * 80)
+print(f"\n📊 Dataset shape: {df.shape[0]} rows × {df.shape[1]} columns\n")
+
+print("\n" + "=" * 80)
+print("FIRST 10 ROWS")
+print("=" * 80)
+print(df.head(10))
+
+print("\n" + "=" * 80)
+print("DATA TYPES AND NON-NULL COUNTS")
+print("=" * 80)
+print(df.info())
+
+print("\n" + "=" * 80)
+print("STATISTICAL SUMMARY (NUMERICAL FEATURES)")
+print("=" * 80)
+print(df.describe())
+
+print("\n" + "=" * 80)
+print("STATISTICAL SUMMARY (CATEGORICAL FEATURES)")
+print("=" * 80)
+print(df.describe(include='object'))</code></pre>
+            </div>
+
+            <h3><span class="step-number">3</span>Check for Missing Values</h3>
+            <p>Data quality is crucial. Let's check for missing values:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Check for missing values
+print("=" * 80)
+print("MISSING VALUES ANALYSIS")
+print("=" * 80)
+
+missing_values = df.isnull().sum()
+missing_percentage = (missing_values / len(df)) * 100
+
+missing_df = pd.DataFrame({
+    'Column': missing_values.index,
+    'Missing_Count': missing_values.values,
+    'Percentage': missing_percentage.values
+})
+
+missing_df = missing_df[missing_df['Missing_Count'] > 0].sort_values('Missing_Count', ascending=False)
+
+if len(missing_df) == 0:
+    print("✅ No missing values found in the dataset!")
+else:
+    print(missing_df)
+
+# Check for duplicates
+duplicates = df.duplicated().sum()
+print(f"\n🔍 Duplicate rows: {duplicates}")
+
+if duplicates > 0:
+    print(f"⚠️  Found {duplicates} duplicate rows")
+else:
+    print("✅ No duplicate rows found!")</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 5: Exploratory Data Analysis -->
+        <div class="section">
+            <h2>📈 5. Exploratory Data Analysis (EDA)</h2>
+
+            <h3><span class="step-number">4</span>Target Variable Distribution</h3>
+            <p>Let's examine our target variable - churn:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Analyze churn distribution
+print("=" * 80)
+print("CHURN DISTRIBUTION")
+print("=" * 80)
+
+churn_counts = df['churn'].value_counts()
+churn_percentages = df['churn'].value_counts(normalize=True) * 100
+
+print("\nAbsolute Counts:")
+print(churn_counts)
+print("\nPercentages:")
+for label, pct in churn_percentages.items():
+    status = "Churned" if label == 1 else "Retained"
+    print(f"{status}: {pct:.2f}%")
+
+# Visualize churn distribution
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+# Bar plot
+axes[0].bar(['Retained (0)', 'Churned (1)'], churn_counts.values,
+            color=['#2ecc71', '#e74c3c'], alpha=0.7, edgecolor='black')
+axes[0].set_ylabel('Number of Customers', fontsize=12)
+axes[0].set_title('Churn Distribution (Counts)', fontsize=14, fontweight='bold')
+axes[0].grid(axis='y', alpha=0.3)
+
+for i, v in enumerate(churn_counts.values):
+    axes[0].text(i, v + 50, str(v), ha='center', fontweight='bold')
+
+# Pie chart
+colors = ['#2ecc71', '#e74c3c']
+explode = (0.05, 0.05)
+axes[1].pie(churn_counts.values, labels=['Retained', 'Churned'], autopct='%1.1f%%',
+            colors=colors, explode=explode, shadow=True, startangle=90)
+axes[1].set_title('Churn Distribution (Percentage)', fontsize=14, fontweight='bold')
+
+plt.tight_layout()
+plt.savefig('churn_distribution.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\n✅ Plot saved as 'churn_distribution.png'")</code></pre>
+            </div>
+
+            <h3><span class="step-number">5</span>Numerical Features Analysis</h3>
+            <p>Explore the distribution of numerical features and their relationship with churn:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Analyze numerical features
+numerical_features = ['tenure', 'monthly_charges', 'total_charges',
+                      'num_support_tickets', 'avg_speed_mbps']
+
+# Create subplots
+fig, axes = plt.subplots(3, 2, figsize=(16, 15))
+axes = axes.flatten()
+
+for idx, feature in enumerate(numerical_features):
+    # Histogram with churn overlay
+    axes[idx].hist(df[df['churn'] == 0][feature], bins=30, alpha=0.6,
+                   label='Retained', color='#2ecc71', edgecolor='black')
+    axes[idx].hist(df[df['churn'] == 1][feature], bins=30, alpha=0.6,
+                   label='Churned', color='#e74c3c', edgecolor='black')
+    axes[idx].set_xlabel(feature.replace('_', ' ').title(), fontsize=11)
+    axes[idx].set_ylabel('Frequency', fontsize=11)
+    axes[idx].set_title(f'Distribution of {feature.replace("_", " ").title()}',
+                       fontsize=12, fontweight='bold')
+    axes[idx].legend()
+    axes[idx].grid(alpha=0.3)
+
+# Remove extra subplot
+axes[-1].remove()
+
+plt.tight_layout()
+plt.savefig('numerical_features_distribution.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✅ Plot saved as 'numerical_features_distribution.png'")
+
+# Statistical comparison between churned and retained customers
+print("\n" + "=" * 80)
+print("NUMERICAL FEATURES: CHURNED vs RETAINED CUSTOMERS")
+print("=" * 80)
+
+for feature in numerical_features:
+    churned_mean = df[df['churn'] == 1][feature].mean()
+    retained_mean = df[df['churn'] == 0][feature].mean()
+
+    print(f"\n{feature.replace('_', ' ').title()}:")
+    print(f"  Churned customers:  {churned_mean:.2f}")
+    print(f"  Retained customers: {retained_mean:.2f}")
+    print(f"  Difference:         {churned_mean - retained_mean:.2f}")</code></pre>
+            </div>
+
+            <h3><span class="step-number">6</span>Categorical Features Analysis</h3>
+            <p>Examine categorical features and their impact on churn:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Analyze categorical features
+categorical_features = ['contract_type', 'internet_service', 'online_security',
+                        'tech_support', 'payment_method', 'paperless_billing']
+
+# Create subplots
+fig, axes = plt.subplots(3, 2, figsize=(16, 15))
+axes = axes.flatten()
+
+for idx, feature in enumerate(categorical_features):
+    # Calculate churn rate by category
+    churn_by_category = df.groupby(feature)['churn'].agg(['sum', 'count', 'mean'])
+    churn_by_category['churn_rate'] = churn_by_category['mean'] * 100
+
+    # Create bar plot
+    categories = churn_by_category.index
+    x_pos = np.arange(len(categories))
+
+    axes[idx].bar(x_pos, churn_by_category['churn_rate'],
+                  color='#e74c3c', alpha=0.7, edgecolor='black')
+    axes[idx].set_xticks(x_pos)
+    axes[idx].set_xticklabels(categories, rotation=45, ha='right')
+    axes[idx].set_ylabel('Churn Rate (%)', fontsize=11)
+    axes[idx].set_title(f'Churn Rate by {feature.replace("_", " ").title()}',
+                       fontsize=12, fontweight='bold')
+    axes[idx].grid(axis='y', alpha=0.3)
+
+    # Add value labels on bars
+    for i, v in enumerate(churn_by_category['churn_rate']):
+        axes[idx].text(i, v + 1, f'{v:.1f}%', ha='center', fontweight='bold', fontsize=9)
+
+plt.tight_layout()
+plt.savefig('categorical_features_churn_rate.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✅ Plot saved as 'categorical_features_churn_rate.png'")
+
+# Print detailed statistics
+print("\n" + "=" * 80)
+print("CATEGORICAL FEATURES: CHURN RATE BY CATEGORY")
+print("=" * 80)
+
+for feature in categorical_features:
+    print(f"\n{feature.replace('_', ' ').title()}:")
+    churn_by_category = df.groupby(feature)['churn'].agg(['sum', 'count', 'mean'])
+    churn_by_category.columns = ['Churned', 'Total', 'Churn_Rate']
+    churn_by_category['Churn_Rate'] = churn_by_category['Churn_Rate'] * 100
+    print(churn_by_category.to_string())</code></pre>
+            </div>
+
+            <h3><span class="step-number">7</span>Correlation Analysis</h3>
+            <p>Examine correlations between features:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Correlation analysis
+# First, create a copy with encoded categorical variables for correlation
+df_encoded = df.copy()
+
+# Encode categorical variables
+from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+categorical_cols = ['contract_type', 'internet_service', 'online_security',
+                   'tech_support', 'payment_method', 'paperless_billing']
+
+for col in categorical_cols:
+    df_encoded[col + '_encoded'] = le.fit_transform(df_encoded[col])
+
+# Select numerical and encoded columns
+correlation_cols = ['tenure', 'monthly_charges', 'total_charges',
+                   'num_support_tickets', 'avg_speed_mbps',
+                   'contract_type_encoded', 'internet_service_encoded',
+                   'online_security_encoded', 'tech_support_encoded',
+                   'payment_method_encoded', 'paperless_billing_encoded', 'churn']
+
+# Calculate correlation matrix
+correlation_matrix = df_encoded[correlation_cols].corr()
+
+# Plot correlation heatmap
+plt.figure(figsize=(14, 10))
+sns.heatmap(correlation_matrix, annot=True, fmt='.2f', cmap='coolwarm',
+            center=0, linewidths=1, linecolor='white',
+            cbar_kws={'label': 'Correlation Coefficient'})
+plt.title('Feature Correlation Heatmap', fontsize=16, fontweight='bold', pad=20)
+plt.xticks(rotation=45, ha='right')
+plt.yticks(rotation=0)
+plt.tight_layout()
+plt.savefig('correlation_heatmap.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✅ Plot saved as 'correlation_heatmap.png'")
+
+# Print top correlations with churn
+print("\n" + "=" * 80)
+print("TOP CORRELATIONS WITH CHURN")
+print("=" * 80)
+
+churn_correlations = correlation_matrix['churn'].sort_values(ascending=False)
+print("\nPositive correlations (features that increase churn):")
+print(churn_correlations[churn_correlations > 0][1:])  # Exclude churn itself
+
+print("\nNegative correlations (features that decrease churn):")
+print(churn_correlations[churn_correlations < 0])</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 6: Key Insights -->
+        <div class="section">
+            <h2>💡 6. Key Insights from EDA</h2>
+
+            <div class="highlight">
+                <h3>📊 Major Findings</h3>
+                <ol>
+                    <li><strong>Tenure Impact:</strong> Customers with shorter tenure (< 12 months) have significantly higher churn rates</li>
+                    <li><strong>Contract Type:</strong> Month-to-month contracts show the highest churn rates (~40%), while two-year contracts have the lowest (~10%)</li>
+                    <li><strong>Support Tickets:</strong> Customers with many support tickets (> 4) are much more likely to churn</li>
+                    <li><strong>Payment Method:</strong> Electronic check users have higher churn rates compared to automatic payment methods</li>
+                    <li><strong>Add-on Services:</strong> Customers without online security and tech support are more likely to churn</li>
+                    <li><strong>Price Sensitivity:</strong> Higher monthly charges correlate with increased churn probability</li>
+                </ol>
+            </div>
+
+            <h3>🎯 Business Implications</h3>
+            <ul>
+                <li>Focus retention efforts on new customers (< 12 months tenure)</li>
+                <li>Incentivize longer-term contracts with discounts</li>
+                <li>Improve technical support quality to reduce support tickets</li>
+                <li>Promote automatic payment methods</li>
+                <li>Bundle add-on services to increase customer stickiness</li>
+                <li>Review pricing strategy for high-value packages</li>
+            </ul>
+        </div>
+
+        <!-- Section 7: Next Steps -->
+        <div class="section">
+            <h2>➡️ 7. Next Steps</h2>
+
+            <p>Now that we've thoroughly explored our data and gained valuable insights, we're ready to proceed with building our machine learning model.</p>
+
+            <h3>In Part 2, we will cover:</h3>
+            <ol>
+                <li>Data preprocessing and feature engineering</li>
+                <li>Train-test split and handling class imbalance</li>
+                <li>Model selection and training (Logistic Regression, Random Forest, XGBoost)</li>
+                <li>Model evaluation and comparison</li>
+                <li>Feature importance analysis</li>
+                <li>Model deployment considerations</li>
+                <li>Business recommendations based on model results</li>
+            </ol>
+
+            <div class="highlight">
+                <h4>✅ Checklist - Part 1 Complete</h4>
+                <ul>
+                    <li>✓ Understood the business problem and why ML is needed</li>
+                    <li>✓ Generated realistic synthetic dataset</li>
+                    <li>✓ Performed comprehensive exploratory data analysis</li>
+                    <li>✓ Identified key features correlated with churn</li>
+                    <li>✓ Derived actionable business insights</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📚 Machine Learning Hands-On Guide - Part 1 of 2</p>
+            <p>Continue to Part 2 for Model Building & Deployment</p>
+            <p>Created with ❤️ for practical ML education</p>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                button.innerHTML = '❌ Failed';
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy Code';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Hands-On Guide Part 2: Model Building & Evaluation</title>
+
+    <!-- MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-y: scroll;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05em;
+        }
+
+        .section ul, .section ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        .section li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+            z-index: 10;
+        }
+
+        .copy-button:hover {
+            background: #764ba2;
+        }
+
+        .copy-button.copied {
+            background: #28a745;
+        }
+
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            color: #212529;
+            display: block;
+            white-space: pre;
+            line-height: 1.5;
+        }
+
+        .formula {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .metric-card h4 {
+            color: white;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Machine Learning Hands-On Guide</h1>
+            <h2>Customer Churn Prediction for Internet Service Provider</h2>
+            <p><strong>Part 2:</strong> Model Building, Evaluation & Optimization</p>
+        </div>
+
+        <!-- Section 1: Data Preprocessing -->
+        <div class="section">
+            <h2>🔧 1. Data Preprocessing & Feature Engineering</h2>
+
+            <p>Before building our model, we need to prepare our data. This involves encoding categorical variables, scaling features, and splitting data into training and testing sets.</p>
+
+            <h3><span class="step-number">1</span>Load Data and Prepare Features</h3>
+            <p>First, let's load our data and separate features from the target variable:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.metrics import (accuracy_score, precision_score, recall_score,
+                             f1_score, roc_auc_score, confusion_matrix,
+                             classification_report, roc_curve)
+import warnings
+warnings.filterwarnings('ignore')
+
+# Load the dataset
+df = pd.read_csv('teleconnect_customer_data.csv')
+
+print("=" * 80)
+print("DATA PREPROCESSING")
+print("=" * 80)
+print(f"\nOriginal dataset shape: {df.shape}")
+
+# Separate features and target
+X = df.drop(['customer_id', 'churn'], axis=1)
+y = df['churn']
+
+print(f"Features shape: {X.shape}")
+print(f"Target shape: {y.shape}")
+print(f"\nTarget distribution:")
+print(y.value_counts())
+print(f"\nChurn rate: {y.mean()*100:.2f}%")</code></pre>
+            </div>
+
+            <h3><span class="step-number">2</span>Encode Categorical Variables</h3>
+            <p>Machine learning algorithms require numerical input. Let's encode our categorical variables:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Identify categorical and numerical columns
+categorical_cols = X.select_dtypes(include=['object']).columns.tolist()
+numerical_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+
+print("\n" + "=" * 80)
+print("FEATURE ENCODING")
+print("=" * 80)
+print(f"\nCategorical features: {categorical_cols}")
+print(f"Numerical features: {numerical_cols}")
+
+# Create a copy for encoding
+X_encoded = X.copy()
+
+# One-hot encoding for categorical variables
+X_encoded = pd.get_dummies(X_encoded, columns=categorical_cols, drop_first=True)
+
+print(f"\nShape after encoding: {X_encoded.shape}")
+print(f"New features created: {X_encoded.shape[1] - len(numerical_cols)}")
+print("\nEncoded feature names:")
+print(list(X_encoded.columns))</code></pre>
+            </div>
+
+            <h3><span class="step-number">3</span>Train-Test Split</h3>
+            <p>Split the data into training (80%) and testing (20%) sets:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Split the data
+X_train, X_test, y_train, y_test = train_test_split(
+    X_encoded, y, test_size=0.2, random_state=42, stratify=y
+)
+
+print("\n" + "=" * 80)
+print("TRAIN-TEST SPLIT")
+print("=" * 80)
+print(f"\nTraining set size: {X_train.shape[0]} samples ({X_train.shape[0]/len(X_encoded)*100:.1f}%)")
+print(f"Testing set size: {X_test.shape[0]} samples ({X_test.shape[0]/len(X_encoded)*100:.1f}%)")
+
+print(f"\nTraining set churn distribution:")
+print(y_train.value_counts())
+print(f"Churn rate: {y_train.mean()*100:.2f}%")
+
+print(f"\nTesting set churn distribution:")
+print(y_test.value_counts())
+print(f"Churn rate: {y_test.mean()*100:.2f}%")</code></pre>
+            </div>
+
+            <h3><span class="step-number">4</span>Feature Scaling</h3>
+            <p>Scale numerical features to have similar ranges (important for models like Logistic Regression):</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Scale the features
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Convert back to DataFrame for readability
+X_train_scaled = pd.DataFrame(X_train_scaled, columns=X_train.columns, index=X_train.index)
+X_test_scaled = pd.DataFrame(X_test_scaled, columns=X_test.columns, index=X_test.index)
+
+print("\n" + "=" * 80)
+print("FEATURE SCALING")
+print("=" * 80)
+print("\nBefore scaling (first 5 rows, first 5 features):")
+print(X_train.iloc[:5, :5])
+
+print("\nAfter scaling (first 5 rows, first 5 features):")
+print(X_train_scaled.iloc[:5, :5])
+
+print("\n✅ Data preprocessing complete!")</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 2: Model Building -->
+        <div class="section">
+            <h2>🤖 2. Building Machine Learning Models</h2>
+
+            <p>We'll build and compare three different models: Logistic Regression, Random Forest, and XGBoost. Each has different strengths:</p>
+
+            <ul>
+                <li><strong>Logistic Regression:</strong> Simple, interpretable, fast - good baseline</li>
+                <li><strong>Random Forest:</strong> Handles non-linear relationships, robust to outliers</li>
+                <li><strong>XGBoost:</strong> State-of-the-art gradient boosting, often highest performance</li>
+            </ul>
+
+            <h3><span class="step-number">5</span>Model 1: Logistic Regression</h3>
+
+            <div class="info-box">
+                <h4>📚 Logistic Regression Theory</h4>
+                <p>Logistic regression models the probability of binary outcomes using the logistic function:</p>
+                <div class="formula">
+                    \[
+                    P(y=1|x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)}}
+                    \]
+                </div>
+                <p>Where \(\beta_i\) are the coefficients learned during training.</p>
+            </div>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>from sklearn.linear_model import LogisticRegression
+
+print("\n" + "=" * 80)
+print("MODEL 1: LOGISTIC REGRESSION")
+print("=" * 80)
+
+# Train Logistic Regression
+lr_model = LogisticRegression(random_state=42, max_iter=1000)
+lr_model.fit(X_train_scaled, y_train)
+
+# Make predictions
+y_pred_lr = lr_model.predict(X_test_scaled)
+y_pred_proba_lr = lr_model.predict_proba(X_test_scaled)[:, 1]
+
+# Evaluate
+lr_accuracy = accuracy_score(y_test, y_pred_lr)
+lr_precision = precision_score(y_test, y_pred_lr)
+lr_recall = recall_score(y_test, y_pred_lr)
+lr_f1 = f1_score(y_test, y_pred_lr)
+lr_auc = roc_auc_score(y_test, y_pred_proba_lr)
+
+print("\n📊 Logistic Regression Results:")
+print(f"Accuracy:  {lr_accuracy:.4f} ({lr_accuracy*100:.2f}%)")
+print(f"Precision: {lr_precision:.4f} ({lr_precision*100:.2f}%)")
+print(f"Recall:    {lr_recall:.4f} ({lr_recall*100:.2f}%)")
+print(f"F1-Score:  {lr_f1:.4f}")
+print(f"ROC-AUC:   {lr_auc:.4f}")
+
+print("\n📋 Classification Report:")
+print(classification_report(y_test, y_pred_lr, target_names=['Retained', 'Churned']))
+
+print("✅ Logistic Regression training complete!")</code></pre>
+            </div>
+
+            <h3><span class="step-number">6</span>Model 2: Random Forest</h3>
+
+            <div class="info-box">
+                <h4>📚 Random Forest Theory</h4>
+                <p>Random Forest is an ensemble method that builds multiple decision trees and combines their predictions. Each tree is trained on a random subset of the data and features, which reduces overfitting.</p>
+                <div class="formula">
+                    \[
+                    \hat{y} = \frac{1}{T} \sum_{t=1}^{T} h_t(x)
+                    \]
+                </div>
+                <p>Where \(T\) is the number of trees and \(h_t(x)\) is the prediction from tree \(t\).</p>
+            </div>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>from sklearn.ensemble import RandomForestClassifier
+
+print("\n" + "=" * 80)
+print("MODEL 2: RANDOM FOREST")
+print("=" * 80)
+
+# Train Random Forest (using unscaled data - tree-based models don't need scaling)
+rf_model = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    min_samples_split=10,
+    min_samples_leaf=5,
+    random_state=42,
+    n_jobs=-1
+)
+rf_model.fit(X_train, y_train)
+
+# Make predictions
+y_pred_rf = rf_model.predict(X_test)
+y_pred_proba_rf = rf_model.predict_proba(X_test)[:, 1]
+
+# Evaluate
+rf_accuracy = accuracy_score(y_test, y_pred_rf)
+rf_precision = precision_score(y_test, y_pred_rf)
+rf_recall = recall_score(y_test, y_pred_rf)
+rf_f1 = f1_score(y_test, y_pred_rf)
+rf_auc = roc_auc_score(y_test, y_pred_proba_rf)
+
+print("\n📊 Random Forest Results:")
+print(f"Accuracy:  {rf_accuracy:.4f} ({rf_accuracy*100:.2f}%)")
+print(f"Precision: {rf_precision:.4f} ({rf_precision*100:.2f}%)")
+print(f"Recall:    {rf_recall:.4f} ({rf_recall*100:.2f}%)")
+print(f"F1-Score:  {rf_f1:.4f}")
+print(f"ROC-AUC:   {rf_auc:.4f}")
+
+print("\n📋 Classification Report:")
+print(classification_report(y_test, y_pred_rf, target_names=['Retained', 'Churned']))
+
+print("✅ Random Forest training complete!")</code></pre>
+            </div>
+
+            <h3><span class="step-number">7</span>Model 3: XGBoost</h3>
+
+            <div class="info-box">
+                <h4>📚 XGBoost Theory</h4>
+                <p>XGBoost (Extreme Gradient Boosting) builds trees sequentially, where each new tree corrects errors made by previous trees. It uses gradient descent to minimize the loss function.</p>
+                <div class="formula">
+                    \[
+                    \hat{y}_i^{(t)} = \hat{y}_i^{(t-1)} + \eta \cdot f_t(x_i)
+                    \]
+                </div>
+                <p>Where \(\eta\) is the learning rate and \(f_t\) is the new tree added at iteration \(t\).</p>
+            </div>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>from xgboost import XGBClassifier
+
+print("\n" + "=" * 80)
+print("MODEL 3: XGBOOST")
+print("=" * 80)
+
+# Train XGBoost
+xgb_model = XGBClassifier(
+    n_estimators=100,
+    max_depth=6,
+    learning_rate=0.1,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42,
+    eval_metric='logloss'
+)
+xgb_model.fit(X_train, y_train)
+
+# Make predictions
+y_pred_xgb = xgb_model.predict(X_test)
+y_pred_proba_xgb = xgb_model.predict_proba(X_test)[:, 1]
+
+# Evaluate
+xgb_accuracy = accuracy_score(y_test, y_pred_xgb)
+xgb_precision = precision_score(y_test, y_pred_xgb)
+xgb_recall = recall_score(y_test, y_pred_xgb)
+xgb_f1 = f1_score(y_test, y_pred_xgb)
+xgb_auc = roc_auc_score(y_test, y_pred_proba_xgb)
+
+print("\n📊 XGBoost Results:")
+print(f"Accuracy:  {xgb_accuracy:.4f} ({xgb_accuracy*100:.2f}%)")
+print(f"Precision: {xgb_precision:.4f} ({xgb_precision*100:.2f}%)")
+print(f"Recall:    {xgb_recall:.4f} ({xgb_recall*100:.2f}%)")
+print(f"F1-Score:  {xgb_f1:.4f}")
+print(f"ROC-AUC:   {xgb_auc:.4f}")
+
+print("\n📋 Classification Report:")
+print(classification_report(y_test, y_pred_xgb, target_names=['Retained', 'Churned']))
+
+print("✅ XGBoost training complete!")</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 3: Model Comparison -->
+        <div class="section">
+            <h2>📊 3. Model Comparison & Evaluation</h2>
+
+            <h3><span class="step-number">8</span>Compare Model Performance</h3>
+            <p>Let's compare all three models side by side:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Create comparison DataFrame
+comparison_df = pd.DataFrame({
+    'Model': ['Logistic Regression', 'Random Forest', 'XGBoost'],
+    'Accuracy': [lr_accuracy, rf_accuracy, xgb_accuracy],
+    'Precision': [lr_precision, rf_precision, xgb_precision],
+    'Recall': [lr_recall, rf_recall, xgb_recall],
+    'F1-Score': [lr_f1, rf_f1, xgb_f1],
+    'ROC-AUC': [lr_auc, rf_auc, xgb_auc]
+})
+
+print("\n" + "=" * 80)
+print("MODEL COMPARISON")
+print("=" * 80)
+print("\n", comparison_df.to_string(index=False))
+
+# Visualize comparison
+fig, ax = plt.subplots(figsize=(14, 8))
+
+metrics = ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC']
+x = np.arange(len(metrics))
+width = 0.25
+
+bars1 = ax.bar(x - width, comparison_df.iloc[0, 1:].values, width,
+               label='Logistic Regression', color='#3498db', alpha=0.8)
+bars2 = ax.bar(x, comparison_df.iloc[1, 1:].values, width,
+               label='Random Forest', color='#2ecc71', alpha=0.8)
+bars3 = ax.bar(x + width, comparison_df.iloc[2, 1:].values, width,
+               label='XGBoost', color='#e74c3c', alpha=0.8)
+
+ax.set_xlabel('Metrics', fontsize=12, fontweight='bold')
+ax.set_ylabel('Score', fontsize=12, fontweight='bold')
+ax.set_title('Model Performance Comparison', fontsize=16, fontweight='bold', pad=20)
+ax.set_xticks(x)
+ax.set_xticklabels(metrics)
+ax.legend(fontsize=11)
+ax.grid(axis='y', alpha=0.3)
+ax.set_ylim([0, 1.1])
+
+# Add value labels on bars
+for bars in [bars1, bars2, bars3]:
+    for bar in bars:
+        height = bar.get_height()
+        ax.text(bar.get_x() + bar.get_width()/2., height + 0.02,
+                f'{height:.3f}', ha='center', va='bottom', fontsize=9)
+
+plt.tight_layout()
+plt.savefig('model_comparison.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\n✅ Plot saved as 'model_comparison.png'")
+
+# Identify best model
+best_model_idx = comparison_df['ROC-AUC'].idxmax()
+best_model_name = comparison_df.loc[best_model_idx, 'Model']
+print(f"\n🏆 Best Model (by ROC-AUC): {best_model_name}")</code></pre>
+            </div>
+
+            <h3><span class="step-number">9</span>Confusion Matrices</h3>
+            <p>Visualize the confusion matrices for all models:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Create confusion matrices
+fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+
+models = [
+    ('Logistic Regression', y_pred_lr),
+    ('Random Forest', y_pred_rf),
+    ('XGBoost', y_pred_xgb)
+]
+
+for idx, (name, predictions) in enumerate(models):
+    cm = confusion_matrix(y_test, predictions)
+
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[idx],
+                cbar_kws={'label': 'Count'},
+                xticklabels=['Retained', 'Churned'],
+                yticklabels=['Retained', 'Churned'])
+
+    axes[idx].set_title(f'{name}\nConfusion Matrix', fontsize=14, fontweight='bold')
+    axes[idx].set_ylabel('Actual', fontsize=12)
+    axes[idx].set_xlabel('Predicted', fontsize=12)
+
+plt.tight_layout()
+plt.savefig('confusion_matrices.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✅ Plot saved as 'confusion_matrices.png'")
+
+# Print confusion matrix interpretation
+print("\n" + "=" * 80)
+print("CONFUSION MATRIX INTERPRETATION")
+print("=" * 80)
+print("""
+True Negatives (TN):  Correctly predicted as Retained
+False Positives (FP): Incorrectly predicted as Churned (Type I Error)
+False Negatives (FN): Incorrectly predicted as Retained (Type II Error)
+True Positives (TP):  Correctly predicted as Churned
+""")</code></pre>
+            </div>
+
+            <h3><span class="step-number">10</span>ROC Curves</h3>
+            <p>Compare ROC curves to visualize the trade-off between true positive and false positive rates:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Calculate ROC curves
+fpr_lr, tpr_lr, _ = roc_curve(y_test, y_pred_proba_lr)
+fpr_rf, tpr_rf, _ = roc_curve(y_test, y_pred_proba_rf)
+fpr_xgb, tpr_xgb, _ = roc_curve(y_test, y_pred_proba_xgb)
+
+# Plot ROC curves
+plt.figure(figsize=(12, 8))
+
+plt.plot(fpr_lr, tpr_lr, label=f'Logistic Regression (AUC = {lr_auc:.3f})',
+         linewidth=2.5, color='#3498db')
+plt.plot(fpr_rf, tpr_rf, label=f'Random Forest (AUC = {rf_auc:.3f})',
+         linewidth=2.5, color='#2ecc71')
+plt.plot(fpr_xgb, tpr_xgb, label=f'XGBoost (AUC = {xgb_auc:.3f})',
+         linewidth=2.5, color='#e74c3c')
+plt.plot([0, 1], [0, 1], 'k--', label='Random Classifier (AUC = 0.500)',
+         linewidth=2)
+
+plt.xlabel('False Positive Rate', fontsize=13, fontweight='bold')
+plt.ylabel('True Positive Rate', fontsize=13, fontweight='bold')
+plt.title('ROC Curves - Model Comparison', fontsize=16, fontweight='bold', pad=20)
+plt.legend(fontsize=12, loc='lower right')
+plt.grid(alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('roc_curves.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✅ Plot saved as 'roc_curves.png'")</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 4: Feature Importance -->
+        <div class="section">
+            <h2>🎯 4. Feature Importance Analysis</h2>
+
+            <p>Understanding which features drive churn predictions is crucial for business insights and interventions.</p>
+
+            <h3><span class="step-number">11</span>Extract Feature Importance</h3>
+            <p>Let's examine feature importance from our tree-based models (Random Forest and XGBoost):</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Get feature importance from Random Forest
+rf_importance = pd.DataFrame({
+    'Feature': X_train.columns,
+    'Importance': rf_model.feature_importances_
+}).sort_values('Importance', ascending=False)
+
+# Get feature importance from XGBoost
+xgb_importance = pd.DataFrame({
+    'Feature': X_train.columns,
+    'Importance': xgb_model.feature_importances_
+}).sort_values('Importance', ascending=False)
+
+print("\n" + "=" * 80)
+print("FEATURE IMPORTANCE - RANDOM FOREST")
+print("=" * 80)
+print("\nTop 15 Most Important Features:")
+print(rf_importance.head(15).to_string(index=False))
+
+print("\n" + "=" * 80)
+print("FEATURE IMPORTANCE - XGBOOST")
+print("=" * 80)
+print("\nTop 15 Most Important Features:")
+print(xgb_importance.head(15).to_string(index=False))
+
+# Visualize feature importance
+fig, axes = plt.subplots(1, 2, figsize=(18, 8))
+
+# Random Forest
+top_features_rf = rf_importance.head(15)
+axes[0].barh(range(len(top_features_rf)), top_features_rf['Importance'].values,
+             color='#2ecc71', alpha=0.8, edgecolor='black')
+axes[0].set_yticks(range(len(top_features_rf)))
+axes[0].set_yticklabels(top_features_rf['Feature'].values)
+axes[0].set_xlabel('Importance', fontsize=12, fontweight='bold')
+axes[0].set_title('Top 15 Features - Random Forest', fontsize=14, fontweight='bold')
+axes[0].invert_yaxis()
+axes[0].grid(axis='x', alpha=0.3)
+
+# XGBoost
+top_features_xgb = xgb_importance.head(15)
+axes[1].barh(range(len(top_features_xgb)), top_features_xgb['Importance'].values,
+             color='#e74c3c', alpha=0.8, edgecolor='black')
+axes[1].set_yticks(range(len(top_features_xgb)))
+axes[1].set_yticklabels(top_features_xgb['Feature'].values)
+axes[1].set_xlabel('Importance', fontsize=12, fontweight='bold')
+axes[1].set_title('Top 15 Features - XGBoost', fontsize=14, fontweight='bold')
+axes[1].invert_yaxis()
+axes[1].grid(axis='x', alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('feature_importance.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\n✅ Plot saved as 'feature_importance.png'")</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 5: Model Saving -->
+        <div class="section">
+            <h2>💾 5. Save the Best Model</h2>
+
+            <p>After identifying the best model, we need to save it for production use.</p>
+
+            <h3><span class="step-number">12</span>Save Model and Preprocessing Objects</h3>
+            <p>Save the model, scaler, and feature names for deployment:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code>import pickle
+from datetime import datetime
+
+print("\n" + "=" * 80)
+print("SAVING MODEL ARTIFACTS")
+print("=" * 80)
+
+# Determine the best model (let's use XGBoost as it typically performs best)
+best_model = xgb_model
+model_name = 'XGBoost'
+
+# Save the model
+with open('churn_prediction_model.pkl', 'wb') as f:
+    pickle.dump(best_model, f)
+print("\n✅ Model saved as 'churn_prediction_model.pkl'")
+
+# Save the scaler (for logistic regression if needed)
+with open('feature_scaler.pkl', 'wb') as f:
+    pickle.dump(scaler, f)
+print("✅ Scaler saved as 'feature_scaler.pkl'")
+
+# Save feature names and metadata
+model_metadata = {
+    'model_name': model_name,
+    'training_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+    'feature_names': list(X_train.columns),
+    'performance_metrics': {
+        'accuracy': xgb_accuracy,
+        'precision': xgb_precision,
+        'recall': xgb_recall,
+        'f1_score': xgb_f1,
+        'roc_auc': xgb_auc
+    },
+    'training_samples': len(X_train),
+    'test_samples': len(X_test),
+    'churn_rate': y.mean()
+}
+
+with open('model_metadata.pkl', 'wb') as f:
+    pickle.dump(model_metadata, f)
+print("✅ Metadata saved as 'model_metadata.pkl'")
+
+print("\n📦 All model artifacts saved successfully!")
+print("\nFiles created:")
+print("  - churn_prediction_model.pkl")
+print("  - feature_scaler.pkl")
+print("  - model_metadata.pkl")</code></pre>
+            </div>
+
+            <h3><span class="step-number">13</span>Load and Test Saved Model</h3>
+            <p>Verify that the saved model works correctly:</p>
+
+            <div class="code-container">
+                <button class="copy-button" onclick="copyCode(this)">📋 Copy Code</button>
+                <pre><code># Load the saved model
+print("\n" + "=" * 80)
+print("TESTING SAVED MODEL")
+print("=" * 80)
+
+with open('churn_prediction_model.pkl', 'rb') as f:
+    loaded_model = pickle.load(f)
+
+with open('model_metadata.pkl', 'rb') as f:
+    loaded_metadata = pickle.load(f)
+
+print("\n📋 Loaded Model Information:")
+print(f"Model Name: {loaded_metadata['model_name']}")
+print(f"Training Date: {loaded_metadata['training_date']}")
+print(f"Number of Features: {len(loaded_metadata['feature_names'])}")
+print(f"\nPerformance Metrics:")
+for metric, value in loaded_metadata['performance_metrics'].items():
+    print(f"  {metric}: {value:.4f}")
+
+# Make predictions with loaded model
+test_predictions = loaded_model.predict(X_test)
+test_probabilities = loaded_model.predict_proba(X_test)[:, 1]
+
+# Verify predictions match
+print(f"\n✅ Loaded model predictions match original: {np.array_equal(test_predictions, y_pred_xgb)}")
+
+# Example: Predict for a single customer
+print("\n" + "=" * 80)
+print("SINGLE CUSTOMER PREDICTION EXAMPLE")
+print("=" * 80)
+
+sample_customer = X_test.iloc[0:1]
+sample_prediction = loaded_model.predict(sample_customer)[0]
+sample_probability = loaded_model.predict_proba(sample_customer)[0, 1]
+
+print("\nCustomer Features:")
+print(sample_customer.T)
+
+print(f"\n🎯 Prediction: {'WILL CHURN' if sample_prediction == 1 else 'WILL STAY'}")
+print(f"📊 Churn Probability: {sample_probability*100:.2f}%")
+
+if sample_probability > 0.7:
+    print("⚠️  HIGH RISK - Immediate intervention recommended!")
+elif sample_probability > 0.5:
+    print("⚠️  MEDIUM RISK - Monitor closely and consider retention offer")
+else:
+    print("✅ LOW RISK - Continue standard service")</code></pre>
+            </div>
+        </div>
+
+        <!-- Section 6: Business Insights -->
+        <div class="section">
+            <h2>💼 6. Business Insights & Recommendations</h2>
+
+            <div class="highlight">
+                <h3>🎯 Key Findings from ML Model</h3>
+                <ol>
+                    <li><strong>Top Churn Drivers (from feature importance):</strong>
+                        <ul>
+                            <li>Tenure (contract length)</li>
+                            <li>Contract type (month-to-month highest risk)</li>
+                            <li>Monthly charges</li>
+                            <li>Number of support tickets</li>
+                            <li>Payment method</li>
+                        </ul>
+                    </li>
+                    <li><strong>Model Performance:</strong> Achieved {best_model_name} with ~{xgb_auc*100:.1f}% ROC-AUC score</li>
+                    <li><strong>Prediction Capability:</strong> Can identify ~{xgb_recall*100:.1f}% of customers who will churn</li>
+                </ol>
+            </div>
+
+            <div class="success-box">
+                <h3>📈 Actionable Business Recommendations</h3>
+                <ol>
+                    <li><strong>Proactive Retention Program:</strong>
+                        <ul>
+                            <li>Run model weekly to identify high-risk customers (probability > 70%)</li>
+                            <li>Allocate $50-100 retention budget per high-risk customer</li>
+                            <li>Expected savings: $3-4M annually</li>
+                        </ul>
+                    </li>
+                    <li><strong>Contract Optimization:</strong>
+                        <ul>
+                            <li>Offer incentives for annual/2-year contracts (10-15% discount)</li>
+                            <li>Target month-to-month customers with upgrade promotions</li>
+                        </ul>
+                    </li>
+                    <li><strong>Service Quality Improvement:</strong>
+                        <ul>
+                            <li>Reduce support tickets through proactive maintenance</li>
+                            <li>Priority support for customers with >3 tickets in 3 months</li>
+                        </ul>
+                    </li>
+                    <li><strong>Payment Automation:</strong>
+                        <ul>
+                            <li>Incentivize automatic payments (credit card, bank transfer)</li>
+                            <li>Offer $5/month discount for autopay enrollment</li>
+                        </ul>
+                    </li>
+                    <li><strong>Value-Added Services:</strong>
+                        <ul>
+                            <li>Bundle online security and tech support</li>
+                            <li>Free trial period for add-ons (3 months)</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="metric-card">
+                <h3>💰 Expected ROI from ML Implementation</h3>
+                <div class="formula">
+                    <p><strong>Baseline Churn Rate:</strong> 25% (1,250 customers/year)</p>
+                    <p><strong>Target Churn Rate:</strong> 18% (900 customers/year)</p>
+                    <p><strong>Customers Saved:</strong> 350 per year</p>
+                    <p><strong>Revenue Saved:</strong> 350 × ($1,200 - $100) = <strong>$385,000/year</strong></p>
+                    <p><strong>Acquisition Costs Saved:</strong> 350 × $650 = <strong>$227,500/year</strong></p>
+                    <p style="margin-top: 15px; font-size: 1.3em;"><strong>Total Annual Benefit: $612,500</strong></p>
+                    <p><strong>ML Implementation Cost:</strong> ~$50,000 (one-time + annual maintenance)</p>
+                    <p style="margin-top: 15px; font-size: 1.3em;"><strong>ROI: 1,125% in Year 1</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 7: Next Steps -->
+        <div class="section">
+            <h2>➡️ 7. Next Steps: Production Deployment</h2>
+
+            <p>With our model trained and validated, we're ready for production deployment. The next phase involves:</p>
+
+            <ol>
+                <li><strong>Integration with Business Systems:</strong> Connect model to CRM and customer database</li>
+                <li><strong>Automated Scoring Pipeline:</strong> Schedule daily/weekly batch predictions</li>
+                <li><strong>Dashboard Development:</strong> Create monitoring dashboard for stakeholders</li>
+                <li><strong>A/B Testing:</strong> Test retention strategies on model-identified customers</li>
+                <li><strong>Model Monitoring:</strong> Track performance drift and retrain as needed</li>
+                <li><strong>Feedback Loop:</strong> Incorporate actual churn outcomes to improve model</li>
+            </ol>
+
+            <div class="highlight">
+                <h4>✅ Checklist - Part 2 Complete</h4>
+                <ul>
+                    <li>✓ Preprocessed data and encoded features</li>
+                    <li>✓ Built and trained three ML models</li>
+                    <li>✓ Compared model performance comprehensively</li>
+                    <li>✓ Analyzed feature importance for business insights</li>
+                    <li>✓ Saved model artifacts for production use</li>
+                    <li>✓ Developed actionable business recommendations</li>
+                    <li>✓ Calculated expected ROI</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <h4>📚 Continue to Part 3</h4>
+                <p>In Part 3, we'll cover:</p>
+                <ul>
+                    <li>Building a production-ready prediction API</li>
+                    <li>Creating automated batch scoring pipelines</li>
+                    <li>Developing business user dashboards</li>
+                    <li>Implementing model monitoring and retraining</li>
+                    <li>Real-world deployment scenarios and integration</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📚 Machine Learning Hands-On Guide - Part 2 of 3</p>
+            <p>Continue to Part 3 for Production Deployment & Business Integration</p>
+            <p>Created with ❤️ for practical ML education</p>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling.querySelector('code');
+            const text = codeBlock.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy code:', err);
+                button.innerHTML = '❌ Failed';
+                setTimeout(() => {
+                    button.innerHTML = '📋 Copy Code';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
