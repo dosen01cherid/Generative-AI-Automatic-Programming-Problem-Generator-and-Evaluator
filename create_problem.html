@@ -2025,6 +2025,10 @@ start: matrix_ops
    | trace_function
    | rank_function
    | rref_function
+   | eigenvalues_function
+   | eigenvectors_function
+   | nullspace_function
+   | columnspace_function
    | trig_function
    | log_function
    | limit
@@ -2065,6 +2069,14 @@ trace_function: "trace" "(" expr ")" -> trace_func
 rank_function: "rank" "(" expr ")" -> rank_func
 
 rref_function: "rref" "(" expr ")" -> rref_func
+
+eigenvalues_function: "eigenvalues" "(" expr ")" -> eigenvalues_func
+
+eigenvectors_function: "eigenvectors" "(" expr ")" -> eigenvectors_func
+
+nullspace_function: "nullspace" "(" expr ")" -> nullspace_func
+
+columnspace_function: "columnspace" "(" expr ")" -> columnspace_func
 
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
@@ -2113,7 +2125,7 @@ NUMBER: /\d+(\.\d*)?|\.\d+/
 INT: /\d+/
 PI.2: "\\pi"
 INFTY.2: "\\infty"
-SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|trace|rank|rref|frac|left|right|begin|end|pi|infty|lim|to|leftarrow|rightarrow|leftrightarrow|lvert|rvert)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
+SYMBOL: /\\?(?!(?:sin|cos|tan|cot|sec|csc|arcsin|arccos|arctan|log|ln|exp|det|transpose|inverse|trace|rank|rref|eigenvalues|eigenvectors|nullspace|columnspace|frac|left|right|begin|end|pi|infty|lim|to|leftarrow|rightarrow|leftrightarrow|lvert|rvert)(?![a-zA-Z0-9]))[a-zA-Z][a-zA-Z0-9]*/
 CIRC: "\\circ"
 
 %import common.WS_INLINE
@@ -3585,6 +3597,28 @@ CIRC: "\\circ"
               """Handles rref(matrix) function - reduced row echelon form"""
               rref_matrix, pivot_cols = matrix_expr.rref()
               return rref_matrix
+
+          def eigenvalues_func(self, matrix_expr):
+              """Handles eigenvalues(matrix) function - returns eigenvalues"""
+              return list(matrix_expr.eigenvals().keys())
+
+          def eigenvectors_func(self, matrix_expr):
+              """Handles eigenvectors(matrix) function - returns eigenvectors"""
+              # Returns list of (eigenval, multiplicity, [eigenvectors])
+              eigenvects = matrix_expr.eigenvects()
+              # Flatten to just return the eigenvectors as a list
+              result = []
+              for eigenval, mult, vects in eigenvects:
+                  result.extend(vects)
+              return result
+
+          def nullspace_func(self, matrix_expr):
+              """Handles nullspace(matrix) function - returns null space basis"""
+              return matrix_expr.nullspace()
+
+          def columnspace_func(self, matrix_expr):
+              """Handles columnspace(matrix) function - returns column space basis"""
+              return matrix_expr.columnspace()
           def start(self, e):
               return e
 
