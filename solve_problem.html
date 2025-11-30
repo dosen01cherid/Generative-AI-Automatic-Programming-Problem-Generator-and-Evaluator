@@ -485,12 +485,16 @@ print("✅ pyscript module created and registered")
 /* Global History Styles */
 .attempt-entry-wrapper {
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: hidden !important;
   max-width: 100%;
   -webkit-overflow-scrolling: touch;
   margin-bottom: 10px;
   padding: 10px;
   border-radius: 8px;
+}
+
+.attempt-entry-wrapper > div {
+  overflow-y: hidden !important;
 }
 
 .attempt-entry-wrapper::-webkit-scrollbar {
@@ -622,7 +626,7 @@ print("✅ pyscript module created and registered")
       background: #fff;
       box-shadow: 4px 0 12px rgba(0,0,0,0.1);
       padding: 16px;
-      padding-top: 85px;
+      padding-top: 95px;
       padding-bottom: 60px;
       overflow-y: auto;
       flex-shrink: 0;
@@ -1487,10 +1491,6 @@ print("✅ pyscript module created and registered")
       gap: 6px;
     }
 
-    .nonet-step-badge::before {
-      content: "⚡";
-      font-size: 14px;
-    }
 
     @media (max-width: 768px) {
       .nonet-step-header {
@@ -1525,16 +1525,39 @@ print("✅ pyscript module created and registered")
   </style>
 
 </head>
-  <body style="padding-top: 70px;">
+  <body style="padding-top: 95px;">
   <!-- teturuQ Branding Header -->
   <div class="nonet-step-header">
     <div class="nonet-step-logo">
       <div>
-        <div style="font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 600;">teturu<span style="font-size: 24px; font-weight: 700;">Q</span></div>
+        <div style="font-family: 'Poppins', sans-serif; font-size: 34px; font-weight: 600; display: flex; align-items: flex-end;">teturu<svg width="50" height="58" viewBox="0 0 100 118" fill="currentColor" style="margin-left: -2px; margin-bottom: -8px;">
+            <!-- Basic Q: circle + diagonal tail -->
+            <circle cx="45" cy="42" r="30" stroke="currentColor" stroke-width="14" fill="none"/>
+            <!-- Q tail -->
+            <line x1="62" y1="60" x2="78" y2="85" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+            <!-- Male plug base rectangle -->
+            <rect x="61" y="81" width="33" height="8" rx="2" transform="rotate(-35 76 85)"/>
+            <!-- Two extruding tubes (male plug prongs) -->
+            <rect x="71" y="78" width="6" height="22" rx="3" transform="rotate(-35 74 89)"/>
+            <rect x="81" y="72" width="6" height="22" rx="3" transform="rotate(-35 84 83)"/>
+          </svg></div>
         <div class="nonet-step-tagline" style="font-family: 'Poppins', sans-serif;">No Connection, No Installation, No Distraction—Just Real Education</div>
       </div>
     </div>
     <div class="nonet-step-badge">
+      <svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="6"/>
+        <g transform="rotate(-45 50 50)">
+          <!-- Left plug (socket) -->
+          <path d="M20 45 L35 45 L35 38 L40 38 L40 62 L35 62 L35 55 L20 55 Q12 50 20 45 Z"/>
+          <line x1="12" y1="50" x2="20" y2="50" stroke="currentColor" stroke-width="4"/>
+          <!-- Right plug (prongs) -->
+          <path d="M80 45 L65 45 L65 38 L60 38 L60 62 L65 62 L65 55 L80 55 Q88 50 80 45 Z"/>
+          <rect x="52" y="42" width="8" height="4" rx="1"/>
+          <rect x="52" y="54" width="8" height="4" rx="1"/>
+          <line x1="80" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="4"/>
+        </g>
+      </svg>
       Offline Ready
     </div>
   </div>
@@ -1542,10 +1565,21 @@ print("✅ pyscript module created and registered")
 
     <!-- Loading Overlay -->
     <div id="loadingOverlay">
+      <div style="font-family: 'Poppins', sans-serif; font-size: 56px; font-weight: 600; display: flex; align-items: flex-end; margin-bottom: 24px; color: white;">teturu<svg width="86" height="100" viewBox="0 0 100 118" fill="currentColor" style="margin-left: -3px; margin-bottom: -14px;">
+          <!-- Basic Q: circle + diagonal tail -->
+          <circle cx="45" cy="42" r="30" stroke="currentColor" stroke-width="14" fill="none"/>
+          <!-- Q tail -->
+          <line x1="62" y1="60" x2="78" y2="85" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
+          <!-- Male plug base rectangle -->
+          <rect x="61" y="81" width="33" height="8" rx="2" transform="rotate(-35 76 85)"/>
+          <!-- Two extruding tubes (male plug prongs) -->
+          <rect x="71" y="78" width="6" height="22" rx="3" transform="rotate(-35 74 89)"/>
+          <rect x="81" y="72" width="6" height="22" rx="3" transform="rotate(-35 84 83)"/>
+        </svg></div>
       <div class="spinner"></div>
-      <div class="loading-text">⚡ Loading Problem Solver...</div>
+      <div class="loading-text">Loading Problem Solver...</div>
       <div id="loadingStatus">
-        <div>⏳ Starting up...</div>
+        <div>Starting up...</div>
       </div>
     </div>
 
@@ -1844,7 +1878,7 @@ print("✅ pyscript module created and registered")
                     <button class="input-btn operator" data-action="\\arctan">atan</button>
                     <button class="input-btn symbol" data-action="\\pi"><span class="math-var">π</span></button>
                     <button class="input-btn operator" data-action="\\ln">ln</button>
-                    <button class="input-btn special" data-action="\\circ"><span style="font-size:13px;">deg°</span></button>
+                    <button class="input-btn special" data-action="SEQ:^,\\circ,{Tab}"><span style="font-size:13px;">deg<sup>°</sup></span></button>
                   </div>
                 </div>
               </div>
@@ -2710,6 +2744,12 @@ CIRC: "\\circ"
             # 4) Negative fractions -\frac{...}R_ -> (-1/2)R_
             ops = re.sub(r'-\\frac\{([^{}]+)\}\{\(?([^{}]+?)\)?\}R_', r'(-\1/\2)R_', ops)
 
+            # 4.5) Negative fractions wrapped in parens: (-\frac{1}{3})R_ -> (-1/3)R_
+            ops = re.sub(r'\(-\\frac\{([^{}]+)\}\{([^{}]+)\}\)R_', r'(-\1/\2)R_', ops)
+
+            # 4.6) Positive fractions wrapped in parens: (\frac{1}{3})R_ -> (1/3)R_
+            ops = re.sub(r'\(\\frac\{([^{}]+)\}\{([^{}]+)\}\)R_', r'(\1/\2)R_', ops)
+
             # 5) Fix fractions in combines: R_2+\frac{1}{2}R_3 -> R_2+(1/2)R_3
             ops = re.sub(r'([+\-])\\frac\{([^{}]+)\}\{\(?([^{}]+?)\)?\}R_', r'\1(\2/\3)R_', ops)
 
@@ -2730,8 +2770,11 @@ CIRC: "\\circ"
             # Handles: R_2-R_1 -> R_2-1R_1 ; R_2+R_1 -> R_2+1R_1
             ops = re.sub(r'(R_\d+)\s*([+\-])\s*R_', r'\1\g<2>1R_', ops)
 
-            # 7c. Force spaces around + and - inside ops_part so lexer never fuses +5 into a single token
-            ops = re.sub(r'([+\-])', r' \1 ', ops)
+            # 7c. Force spaces around + and - ONLY when they're operators between row references
+            # Don't add spaces inside parentheses like (-1/3)
+            # Only add spaces when +/- is between R_ references or after R_ followed by a number
+            ops = re.sub(r'(R_\d+)\s*([+\-])\s*(\d)', r'\1 \2 \3', ops)
+            ops = re.sub(r'(R_\d+)\s*([+\-])\s*\(', r'\1 \2 (', ops)
 
             # 7d. Canonicalize multiple +/- combos: "--"->"+", "+-"|"-+"->"-"
             ops = re.sub(r'\+\s*\+', ' + ', ops)
@@ -2866,11 +2909,33 @@ CIRC: "\\circ"
 
       # 3. Fix mismatched brackets in matrices (curly/square)
       #    [[1,2,3},[4,5,6]] → [[1,2,3],[4,5,6]]
+      #    BUT: Preserve LaTeX command braces like \frac{1}{3}, \sqrt{x}, etc.
       before = s
+      # Only replace mismatched brackets that are NOT part of LaTeX commands
+      # First, temporarily protect LaTeX command braces by replacing them with placeholders
+      protected_patterns = []
+      placeholder_counter = [0]
+
+      def protect_latex_braces(match):
+          placeholder = f"__LATEX_BRACE_{placeholder_counter[0]}__"
+          protected_patterns.append((placeholder, match.group(0)))
+          placeholder_counter[0] += 1
+          return placeholder
+
+      # Protect common LaTeX commands that use braces: \frac{}{}, \sqrt{}, \text{}, etc.
+      temp_s = re.sub(r'\\(frac|sqrt|text|mathrm|mathbf|mathit|overline|underline|hat|bar|vec|dot|ddot|tilde|acute|grave|breve|check)\{[^{}]*\}(\{[^{}]*\})?', protect_latex_braces, s)
+
+      # Now do the mismatched bracket fix on the unprotected content
       # Replace } with ] if it appears after [ and before ]
-      s = re.sub(r'\[([^[\]]*)\}', r'[\1]', s)
+      temp_s = re.sub(r'\[([^[\]]*)\}', r'[\1]', temp_s)
       # Replace { with [ if it appears in matrix context
-      s = re.sub(r'\{([^[\]{}]*)\]', r'[\1]', s)
+      temp_s = re.sub(r'\{([^[\]{}]*)\]', r'[\1]', temp_s)
+
+      # Restore protected LaTeX braces
+      for placeholder, original in protected_patterns:
+          temp_s = temp_s.replace(placeholder, original)
+
+      s = temp_s
       if s != before:
           fixes_applied.append("Fixed mismatched brackets (changed {} to [])")
 
@@ -2935,6 +3000,13 @@ CIRC: "\\circ"
       s = re.sub(r'R(\d+)', r'R_\1', s)
       if s != before:
           fixes_applied.append("Added missing underscore in row notation (R1 → R_1)")
+
+      # 11.5. Fix operator stuck inside row subscript braces
+      #    R_{2-} → R_2-,  R_{1+} → R_1+,  R_{2-}2R_1 → R_2-2R_1
+      before = s
+      s = re.sub(r'R_\{(\d+)([+\-])\}', r'R_\1\2', s)
+      if s != before:
+          fixes_applied.append("Fixed operator inside row subscript (R_{2-} → R_2-)")
 
       # 12. Normalize arrow notation in row operations
       #    -> → \to,  <- → \leftarrow
@@ -3112,7 +3184,8 @@ CIRC: "\\circ"
       t = re.sub(r'\)(\d)', r')*\1', t)
 
       # 3. Between closing paren and letter: )x -> )*x
-      t = re.sub(r'\)([a-zA-Z])', r')*\1', t)
+      # BUT NOT before R_ (row references like (1/2)R_1 must stay as implicit multiplication)
+      t = re.sub(r'\)([a-zA-Z])(?!_)', r')*\1', t)
 
       # 4. Between digit and opening paren: 2( -> 2*(
       # BUT NOT after integral bounds: \int_1^3( should stay as is
@@ -4851,31 +4924,28 @@ class ProblemSolverApp:
 
     def _format_answer_for_display(self, answer):
         """Format an answer for display with MathJax support"""
+        import re
         answer_str = str(answer)
 
         # Check if it looks like LaTeX or math notation
-        # Includes: backslashes, curly braces, or matrix notation (double square brackets)
-        is_latex = ('\\' in answer_str or
-                    ('{' in answer_str and '}' in answer_str) or
-                    '[[' in answer_str)
+        # Includes: backslashes, curly braces, matrix notation, exponents, variables, fractions
+        is_math = (
+            '\\' in answer_str or                          # LaTeX commands
+            ('{' in answer_str and '}' in answer_str) or   # LaTeX braces
+            '[[' in answer_str or                          # Matrix notation
+            '^' in answer_str or                           # Exponents (x^2)
+            re.search(r'[a-zA-Z]', answer_str) or          # Contains variables
+            '/' in answer_str or                           # Fractions
+            '*' in answer_str                              # Multiplication
+        )
 
-        if is_latex:
-            # Convert matrices from [[...]] format to proper LaTeX if needed
-            if '[[' in answer_str and '\\begin{' not in answer_str:
-                try:
-                    # Parse and convert to proper LaTeX
-                    parsed = self.math_parser.parse_latex(answer_str)
-                    latex_output = self._convert_latex_preserve_order(parsed)
-                    # Wrap in display delimiters for MathJax rendering
-                    return f"$$\\displaystyle {latex_output}$$"
-                except:
-                    # Fallback: just wrap as-is
-                    return f"\\({answer_str}\\)"
-            else:
-                # Already LaTeX, just wrap in delimiters for MathJax rendering
-                return f"\\({answer_str}\\)"
+        if is_math:
+            # Use _convert_for_display to properly handle matrices and row operations
+            converted = self._convert_for_display(answer_str)
+            # Wrap in display delimiters for MathJax rendering
+            return f"$$\\displaystyle {converted}$$"
         else:
-            # Plain text, return as is but escape HTML
+            # Plain text (just numbers), return as is but escape HTML
             import html
             return html.escape(answer_str)
 
@@ -6936,10 +7006,15 @@ class ProblemSolverApp:
               window.console.log("✅ MathQuill field initialized")
 
               # ✅ Build and insert minimal keyboard based on expected structure
+              # Always create the keyboard container, but show/hide based on keyboard mode
+              # - Keyboard ON (soft_keyboard_enabled=True): HIDE minimal keyboard (user types with physical keyboard)
+              # - Keyboard OFF (soft_keyboard_enabled=False): SHOW minimal keyboard (user uses on-screen buttons)
               expected_structure = original_step_data.get('expected_structure')
               buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure, original_step_data)
 
-              keyboard_html = '<div class="minimal-keyboard" style="margin-top:12px;"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
+              # Set display based on current keyboard mode (reversed logic)
+              keyboard_display = "none" if self.soft_keyboard_enabled else "block"
+              keyboard_html = f'<div class="minimal-keyboard" style="margin-top:12px;display:{keyboard_display};"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
               for btn in buttons_needed:
                   keyboard_html += self.create_keyboard_button_html(btn)
               keyboard_html += '</div></div>'
@@ -6961,7 +7036,27 @@ class ProblemSolverApp:
                           return handler
                       btn.addEventListener("click", create_proxy(make_handler(mq_instance, action)))
 
-              window.console.log(f"✅ Minimal keyboard created with {len(buttons_needed)} buttons")
+              # ✅ Add keyboard toggle button (visible when keyboard is ON, hidden when OFF)
+              toggle_display = "block" if self.soft_keyboard_enabled else "none"
+              toggle_btn_container = document.createElement("div")
+              toggle_btn_container.className = "keyboard-toggle-container"
+              toggle_btn_container.style.cssText = f"margin-top:12px;display:{toggle_display};"
+              toggle_btn_container.innerHTML = """
+                  <button class="keyboard-toggle-btn" style="padding:8px 16px;background:#6366f1;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;">
+                      ⌨️ Show On-Screen Keyboard
+                  </button>
+              """
+              input_container.appendChild(toggle_btn_container)
+
+              # Attach toggle handler
+              toggle_btn = toggle_btn_container.querySelector(".keyboard-toggle-btn")
+              if toggle_btn:
+                  def toggle_handler(e):
+                      e.preventDefault()
+                      self.toggle_soft_keyboard(e)
+                  toggle_btn.addEventListener("click", create_proxy(toggle_handler))
+
+              window.console.log(f"✅ Minimal keyboard created with {len(buttons_needed)} buttons (visible={not self.soft_keyboard_enabled})")
 
           except Exception as e:
               window.console.error(f"❌ Error initializing MathQuill: {e}")
@@ -7786,6 +7881,7 @@ class ProblemSolverApp:
             # ✅ Clear global attempt history for new problem set
             self.global_attempt_history = []
             self.problem_global_histories = {}
+            window.localStorage.removeItem("problem_solver_global_histories")
             window.console.log("✅ Global attempt history cleared for new problem set")
 
             # ✅ FULL RESET of score tracker when new problem set is loaded
@@ -8452,26 +8548,33 @@ This demonstrates the complete format for creating your own problem sets!
               if index in self.solve_states:
                   self.solve_state = self.solve_states[index]
                   window.console.log(f"✅ Restored solve_state with {len(self.solve_state)} steps")
+
+                  # Show first unfinished step
+                  first_unfinished = self.find_first_unfinished_step(index)
+                  if first_unfinished is not None:
+                      # Hide all steps
+                      for i, step in enumerate(self.solve_state):
+                          step["container"].style.display = "none"
+                          step["container"].classList.remove("active")
+
+                      # Show first unfinished
+                      self.solve_state[first_unfinished]["container"].style.display = "block"
+                      self.solve_state[first_unfinished]["container"].classList.add("active")
+
+                      window.console.log(f"✅ Reopened to step {first_unfinished}")
+
+                      # ✅ Start timer for the reopened step
+                      self.start_step_timer(index, first_unfinished, is_first_attempt=True)
+                      window.console.log(f"⏱️ Started timer for reopened step {first_unfinished}")
               else:
-                  window.console.warn(f"⚠️ No solve_state found, using current state")
-                
-              # Show first unfinished step
-              first_unfinished = self.find_first_unfinished_step(index)
-              if first_unfinished is not None and hasattr(self, 'solve_state'):
-                  # Hide all steps
-                  for i, step in enumerate(self.solve_state):
-                      step["container"].style.display = "none"
-                      step["container"].classList.remove("active")
+                  # ⚠️ No saved solve_state - need to reload the problem
+                  window.console.warn(f"⚠️ No solve_state found for problem {index}, reloading...")
+                  body.innerHTML = ""  # Clear old content
+                  self.load_problem(index, body)  # Reload the problem
+                  body.setAttribute("data-loaded", "true")
 
-                  # Show first unfinished
-                  self.solve_state[first_unfinished]["container"].style.display = "block"
-                  self.solve_state[first_unfinished]["container"].classList.add("active")
-
-                  window.console.log(f"✅ Reopened to step {first_unfinished}")
-
-                  # ✅ Start timer for the reopened step
-                  self.start_step_timer(index, first_unfinished, is_first_attempt=True)
-                  window.console.log(f"⏱️ Started timer for reopened step {first_unfinished}")
+              # ✅ Update problem progress display when switching problems
+              self.update_problem_progress(index)
 
           # Re-render MathJax when reopening
           def rerender_mathjax(retry_count=0):
@@ -8488,6 +8591,15 @@ This demonstrates the complete format for creating your own problem sets!
                   window.console.error(f"MathJax re-render error: {e}")
 
           window.setTimeout(create_proxy(lambda: rerender_mathjax(0)), 100)
+
+          # Scroll global history to the last line after problem is opened
+          def scroll_global_history():
+              global_history = document.querySelector(f"#globalHistory_{index}")
+              if global_history:
+                  global_history.scrollTop = global_history.scrollHeight
+                  window.console.log(f"📜 Scrolled global history to bottom for problem {index}")
+
+          window.setTimeout(create_proxy(scroll_global_history), 200)
 
       finally:
           # Clear the lock after a short delay
@@ -8516,6 +8628,9 @@ This demonstrates the complete format for creating your own problem sets!
           else:
               global_history.style.display = "none"
 
+          # Scroll to the last line
+          global_history.scrollTop = global_history.scrollHeight
+
           window.console.log(f"✅ Restored global history for problem {prob_idx}")
           return True
       except Exception as e:
@@ -8540,9 +8655,42 @@ This demonstrates the complete format for creating your own problem sets!
               "visible": is_visible
           }
 
+          # Also persist to localStorage
+          self._persist_global_histories_to_storage()
+
           window.console.log(f"✅ Saved global history for problem {prob_idx}")
       except Exception as e:
           window.console.error(f"❌ Failed to save global history: {e}")
+
+    def _persist_global_histories_to_storage(self):
+      """Persist all global histories to localStorage"""
+      try:
+          # Convert dict with int keys to string keys for JSON
+          histories_to_save = {}
+          for k, v in self.problem_global_histories.items():
+              histories_to_save[str(k)] = v
+
+          window.localStorage.setItem("problem_solver_global_histories", json.dumps(histories_to_save))
+          window.console.log(f"✅ Persisted {len(histories_to_save)} global histories to localStorage")
+      except Exception as e:
+          window.console.error(f"❌ Failed to persist global histories: {e}")
+
+    def _load_global_histories_from_storage(self):
+      """Load global histories from localStorage"""
+      try:
+          stored = window.localStorage.getItem("problem_solver_global_histories")
+          if stored:
+              histories = json.loads(stored)
+              # Convert string keys back to int
+              self.problem_global_histories = {}
+              for k, v in histories.items():
+                  self.problem_global_histories[int(k)] = v
+              window.console.log(f"✅ Loaded {len(self.problem_global_histories)} global histories from localStorage")
+              return True
+          return False
+      except Exception as e:
+          window.console.error(f"❌ Failed to load global histories: {e}")
+          return False
 
     
     def add_to_global_history(self, step_idx, latex, correct, time_taken, attempt_type):
@@ -8561,7 +8709,9 @@ This demonstrates the complete format for creating your own problem sets!
         global_history.style.display = "block"
 
         # Convert LaTeX for display (handle matrices and row operations)
+        window.console.log(f"🔄 Input latex for history: {latex}")
         display_latex = self._convert_for_display(latex)
+        window.console.log(f"🔄 Converted display_latex: {display_latex}")
 
         # ✅ Get actual elapsed time from tracking system if available
         prob_idx = self.current_problem_index
@@ -8599,7 +8749,7 @@ This demonstrates the complete format for creating your own problem sets!
         <div style='font-weight:700;font-size:15px;'>
             {step_label}: {status_text} ⏱️ {time_str}
         </div>
-        <div style='margin-top:6px;padding:8px;background:#fff;border-radius:6px;overflow-x:auto;'>
+        <div style='margin-top:6px;padding:8px;background:#fff;border-radius:6px;overflow-x:auto;overflow-y:hidden;'>
             $$\\displaystyle {display_latex}$$
         </div>
         """
@@ -8613,6 +8763,9 @@ This demonstrates the complete format for creating your own problem sets!
         global_history.scrollTop = global_history.scrollHeight
         window.console.log(f"✅ Added entry to global history")
 
+        # Persist to localStorage after adding entry
+        self.save_global_history_state(self.current_problem_index)
+
     def _convert_for_display(self, latex):
         """Convert LaTeX for display, handling matrices and row operations"""
         try:
@@ -8621,54 +8774,80 @@ This demonstrates the complete format for creating your own problem sets!
 
             # Check if this is a row operation
             is_row_op = (
-                '|R_' in latex or 
+                '|R_' in latex or
                 '|\\mathrm{R}_' in latex or
                 '\\left|R_' in latex or
                 '\\right|' in latex
             )
 
-            # Check if contains matrices
-            has_matrix = (
-                '[[' in latex or 
-                '\\left[\\left[' in latex or 
+            # Check if contains matrices in bracket format [[...]] or \left[\left[...]
+            has_bracket_matrix = '[[' in latex or '\\left[\\left[' in latex
+
+            # Check if already has proper LaTeX matrix format
+            has_latex_matrix = (
                 '\\begin{matrix}' in latex or
                 '\\begin{bmatrix}' in latex or
                 '\\begin{pmatrix}' in latex
             )
 
+            # Convert \left[\left[ format to [[ for easier processing
+            if '\\left[\\left[' in latex:
+                latex = latex.replace('\\left[', '[').replace('\\right]', ']')
+                window.console.log(f"Converted \\left[ format to [[ format: {latex}")
+
             # Handle row operations: convert matrix part, keep operation part
-            if is_row_op and has_matrix:
+            if is_row_op and has_bracket_matrix:
                 window.console.log(f"Converting row operation for display: {latex}")
 
-                # Split at the pipe: matrix part | operation part
+                # Try multiple patterns for splitting matrix and operation
+                # Pattern 1: \left|...\right|
                 match = re.match(r'(.+?)(\\left\|.*?\\right\|)', latex)
+
+                # Pattern 2: Simple |R_... (pipe followed by row reference)
+                if not match:
+                    match = re.match(r'(.+?)(\|R_.*)', latex)
+
+                # Pattern 3: |\\mathrm{R}_...
+                if not match:
+                    match = re.match(r'(.+?)(\|\\mathrm\{R\}_.*)', latex)
 
                 if match:
                     matrix_part = match.group(1)
                     operation_part = match.group(2)
 
-                    # Convert only the matrix part
-                    parsed_matrix = self.math_parser.parse_latex(matrix_part)
-                    converted_matrix = self._convert_latex_preserve_order(parsed_matrix)
+                    window.console.log(f"  Matrix part: {matrix_part}")
+                    window.console.log(f"  Operation part: {operation_part}")
 
-                    # Combine: converted matrix + original operation
-                    result = converted_matrix + operation_part
+                    # Convert matrix part using direct bracket-to-bmatrix conversion
+                    converted_matrix = self._convert_bracket_matrix_to_latex(matrix_part)
+
+                    # Format the operation part for better display
+                    formatted_op = operation_part
+                    # Convert -> to arrow
+                    formatted_op = formatted_op.replace('->', ' \\to ')
+                    formatted_op = formatted_op.replace('\\to', ' \\to ')
+                    # Add spacing around pipe
+                    formatted_op = re.sub(r'\|R_', r' \\;|\\; R_', formatted_op)
+                    formatted_op = re.sub(r'\|\\mathrm\{R\}_', r' \\;|\\; \\mathrm{R}_', formatted_op)
+
+                    # Combine: converted matrix + formatted operation
+                    result = converted_matrix + formatted_op
                     window.console.log(f"  ✅ Row operation converted: {result}")
                     return result
                 else:
-                    window.console.log("  Regex didn't match, using original")
+                    window.console.log("  No pattern matched for row operation, using original")
                     return latex
 
-            # Regular matrices (not row operations)
-            elif has_matrix and not is_row_op:
+            # Regular matrices (not row operations) with bracket format
+            elif has_bracket_matrix and not is_row_op:
                 window.console.log(f"Converting matrix for display: {latex}")
-
-                # Parse and convert
-                parsed = self.math_parser.parse_latex(latex)
-                result = self._convert_latex_preserve_order(parsed)
-
+                result = self._convert_bracket_matrix_to_latex(latex)
                 window.console.log(f"  ✅ Matrix converted: {result}")
                 return result
+
+            # Already has LaTeX matrix format, return as-is
+            elif has_latex_matrix:
+                return latex
 
             # No matrices, use original
             else:
@@ -8680,6 +8859,173 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.error(traceback.format_exc())
             # Fallback to original
             return latex
+
+    def _convert_html_matrices(self, html):
+        """Convert bracket matrices in HTML (within $$ blocks) to proper LaTeX"""
+        import re
+
+        try:
+            window.console.log(f"🔄 _convert_html_matrices called, html length: {len(html)}")
+
+            # Log a sample of the HTML to see what format matrices are in
+            if len(html) > 500:
+                # Find any occurrence of "left" or "[[" in the html
+                sample_start = html.find('left[')
+                if sample_start == -1:
+                    sample_start = html.find('[[')
+                if sample_start == -1:
+                    sample_start = html.find('displaystyle')
+                if sample_start > 0:
+                    window.console.log(f"HTML sample near matrix: ...{html[max(0,sample_start-20):sample_start+100]}...")
+
+            # Check if there are any bracket matrices (various formats)
+            # Note: in HTML, backslashes may be single or double
+            has_bracket_matrix = (
+                '[[' in html or
+                '\\left[\\left[' in html or
+                '\\\\left[\\\\left[' in html or
+                'left[left[' in html
+            )
+            if not has_bracket_matrix:
+                window.console.log("No bracket matrix found in HTML, returning as-is")
+                has_double_bracket = '[[' in html
+                has_left_pattern = 'left[' in html
+                window.console.log(f"Checking patterns: [[ = {has_double_bracket}, left[ = {has_left_pattern}")
+                return html
+
+            window.console.log(f"Found bracket matrix pattern in HTML")
+
+            # Find all $$ blocks and convert matrices within them
+            def convert_math_block(match):
+                math_content = match.group(1)
+                window.console.log(f"Found math block: {math_content[:100]}...")
+                # Check if it has bracket matrix format (various patterns)
+                has_matrix = '[[' in math_content or '\\left[\\left[' in math_content
+                if has_matrix:
+                    window.console.log(f"Converting matrix in math block")
+                    converted = self._convert_for_display(math_content)
+                    window.console.log(f"Converted to: {converted[:100]}...")
+                    return f"$${converted}$$"
+                return match.group(0)
+
+            # Match $$...$$  blocks
+            result = re.sub(r'\$\$(.+?)\$\$', convert_math_block, html, flags=re.DOTALL)
+            window.console.log(f"🔄 Conversion complete")
+            return result
+
+        except Exception as e:
+            window.console.error(f"Error converting HTML matrices: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+            return html
+
+    def _convert_bracket_matrix_to_latex(self, text):
+        """Convert [[a,b],[c,d]] format to LaTeX \\begin{bmatrix} format"""
+        import re
+
+        try:
+            window.console.log(f"_convert_bracket_matrix_to_latex input: {text}")
+
+            # Find the matrix by matching balanced brackets
+            # Start from [[ and find the matching ]]
+            start_idx = text.find('[[')
+            if start_idx == -1:
+                window.console.log("No [[ found in text")
+                return text
+
+            # Find the end by counting bracket depth
+            bracket_depth = 0
+            end_idx = start_idx
+            for i in range(start_idx, len(text)):
+                if text[i] == '[':
+                    bracket_depth += 1
+                elif text[i] == ']':
+                    bracket_depth -= 1
+                    if bracket_depth == 0:
+                        end_idx = i + 1
+                        break
+
+            matrix_content = text[start_idx:end_idx]
+            window.console.log(f"Matrix content found: {matrix_content}")
+
+            if not matrix_content or matrix_content == '[[':
+                return text
+
+            # Parse the matrix content
+            # Remove outer brackets: [[...]] -> [...]
+            inner = matrix_content[1:-1]  # Remove first [ and last ]
+            window.console.log(f"Inner content: {inner}")
+
+            # Now parse rows: [a,b,c],[d,e,f] -> [[a,b,c], [d,e,f]]
+            rows = []
+            current_row = []
+            current_element = ""
+            depth = 0
+
+            for char in inner:
+                if char == '[':
+                    depth += 1
+                    if depth == 1:
+                        # Starting a new row
+                        current_row = []
+                        current_element = ""
+                        continue
+                elif char == ']':
+                    depth -= 1
+                    if depth == 0:
+                        # Ending a row
+                        if current_element.strip():
+                            current_row.append(current_element.strip())
+                        if current_row:
+                            rows.append(current_row)
+                        current_element = ""
+                        continue
+                elif char == ',' and depth == 1:
+                    # Element separator within row
+                    if current_element.strip():
+                        current_row.append(current_element.strip())
+                    current_element = ""
+                    continue
+                elif char == ',' and depth == 0:
+                    # Row separator, skip
+                    continue
+
+                if depth >= 1:
+                    current_element += char
+
+            window.console.log(f"Parsed rows: {rows}")
+
+            if not rows:
+                window.console.log("No rows parsed")
+                return text
+
+            # Build LaTeX bmatrix
+            latex_rows = []
+            for row in rows:
+                latex_elements = []
+                for elem in row:
+                    # Convert fractions like -1/3 to \frac{-1}{3}
+                    if '/' in elem and '\\frac' not in elem:
+                        frac_match = re.match(r'^(-?\d+)/(\d+)$', elem.strip())
+                        if frac_match:
+                            num, den = frac_match.groups()
+                            elem = f"\\frac{{{num}}}{{{den}}}"
+                    latex_elements.append(elem)
+                latex_rows.append(" & ".join(latex_elements))
+
+            bmatrix = "\\begin{bmatrix} " + " \\\\ ".join(latex_rows) + " \\end{bmatrix}"
+            window.console.log(f"Built bmatrix: {bmatrix}")
+
+            # Replace the original matrix in text with bmatrix
+            result = text[:start_idx] + bmatrix + text[end_idx:]
+            window.console.log(f"Final result: {result}")
+            return result
+
+        except Exception as e:
+            window.console.error(f"Error converting bracket matrix: {e}")
+            import traceback
+            window.console.error(traceback.format_exc())
+            return text
     
     def find_first_incomplete_problem(self):
       """
@@ -8852,12 +9198,14 @@ This demonstrates the complete format for creating your own problem sets!
             window.localStorage.removeItem('score_edits')  # Score edits
             window.localStorage.removeItem('score_tracker_state')  # Score tracker
             window.localStorage.removeItem('credit_data')  # Credit data
+            window.localStorage.removeItem('problem_solver_global_histories')  # Global attempt histories
 
             window.console.log("✅ All localStorage data cleared")
 
             # Reset internal state
             self.problem_states = {}
             self.solve_states = {}
+            self.problem_global_histories = {}  # Clear global histories
             if hasattr(self, 'step_timers'):
                 self.step_timers = {}
 
@@ -8885,6 +9233,12 @@ This demonstrates the complete format for creating your own problem sets!
             # Remove from solve_states
             if current_prob_idx in self.solve_states:
                 del self.solve_states[current_prob_idx]
+
+            # Remove from problem_global_histories (attempt history)
+            if current_prob_idx in self.problem_global_histories:
+                del self.problem_global_histories[current_prob_idx]
+                self._persist_global_histories_to_storage()
+                window.console.log(f"✅ Cleared global history for problem {current_prob_idx}")
 
             # Save updated state
             self.save_to_storage()
@@ -9130,6 +9484,9 @@ This demonstrates the complete format for creating your own problem sets!
                     window.console.log(f"✅ Loaded credit data: {self.credit_balance} credits")
                 except Exception as e:
                     window.console.error(f"⚠️ Error loading credit data: {e}")
+
+            # Load global histories from localStorage
+            self._load_global_histories_from_storage()
 
             # ============================================
             # PART 4: Auto-open first incomplete problem
@@ -9616,13 +9973,19 @@ This demonstrates the complete format for creating your own problem sets!
 
       if index in self.problem_global_histories:
           saved_state = self.problem_global_histories[index]
-          global_history_div.innerHTML = saved_state.get("html", "<div style='font-weight:700;margin-bottom:10px;font-size:16px;'>📝 All Attempts History:</div>")
+          saved_html = saved_state.get("html", "<div style='font-weight:700;margin-bottom:10px;font-size:16px;'>📝 All Attempts History:</div>")
+          # Convert any bracket matrices in the saved HTML to proper LaTeX
+          saved_html = self._convert_html_matrices(saved_html)
+          global_history_div.innerHTML = saved_html
           if saved_state.get("visible", False):
               global_history_div.style.display = "block"
       else:
           global_history_div.innerHTML = "<div style='font-weight:700;margin-bottom:10px;font-size:16px;'>📝 All Attempts History:</div>"
 
       container.appendChild(global_history_div)
+
+      # Scroll global history to the last line after appending
+      global_history_div.scrollTop = global_history_div.scrollHeight
 
       self.global_attempt_history = []
       self.solve_state = []
@@ -9881,10 +10244,15 @@ This demonstrates the complete format for creating your own problem sets!
           self.disable_soft_keyboard(answer_field)
 
           # ✅ Build and insert minimal keyboard based on expected structure
+          # Always create the keyboard container, but show/hide based on keyboard mode
+          # - Keyboard ON (soft_keyboard_enabled=True): HIDE minimal keyboard (user types with physical keyboard)
+          # - Keyboard OFF (soft_keyboard_enabled=False): SHOW minimal keyboard (user uses on-screen buttons)
           expected_structure = step_data.get('expected_structure')
           buttons_needed = self.build_minimal_keyboard_from_structure(expected_structure, step_data)
 
-          keyboard_html = '<div class="minimal-keyboard" style="margin-top:12px;"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
+          # Set display based on current keyboard mode (reversed logic)
+          keyboard_display = "none" if self.soft_keyboard_enabled else "block"
+          keyboard_html = f'<div class="minimal-keyboard" style="margin-top:12px;display:{keyboard_display};"><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;">'
           for btn in buttons_needed:
               keyboard_html += self.create_keyboard_button_html(btn)
           keyboard_html += '</div></div>'
@@ -9907,7 +10275,27 @@ This demonstrates the complete format for creating your own problem sets!
                       return handler
                   btn.addEventListener("click", create_proxy(make_handler(answer_field, action)))
 
-          window.console.log(f"✅ Minimal keyboard created with {len(buttons_needed)} buttons")
+          # ✅ Add keyboard toggle button (visible when keyboard is ON, hidden when OFF)
+          toggle_display = "block" if self.soft_keyboard_enabled else "none"
+          toggle_btn_container = document.createElement("div")
+          toggle_btn_container.className = "keyboard-toggle-container"
+          toggle_btn_container.style.cssText = f"margin-top:12px;display:{toggle_display};"
+          toggle_btn_container.innerHTML = """
+              <button class="keyboard-toggle-btn" style="padding:8px 16px;background:#6366f1;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;gap:6px;">
+                  ⌨️ Show On-Screen Keyboard
+              </button>
+          """
+          answer_container.appendChild(toggle_btn_container)
+
+          # Attach toggle handler
+          toggle_btn = toggle_btn_container.querySelector(".keyboard-toggle-btn")
+          if toggle_btn:
+              def toggle_handler(e):
+                  e.preventDefault()
+                  self.toggle_soft_keyboard(e)
+              toggle_btn.addEventListener("click", create_proxy(toggle_handler))
+
+          window.console.log(f"✅ Minimal keyboard created with {len(buttons_needed)} buttons (visible={not self.soft_keyboard_enabled})")
       else:
           answer_field = None
 
@@ -9927,6 +10315,55 @@ This demonstrates the complete format for creating your own problem sets!
           def finalize_handler(e):
               self.finalize_math_expression(step_idx)
           finalize_btn.addEventListener("click", create_proxy(finalize_handler))
+
+      # ✅ Add edit handler to enable submit and disable finalize when MathQuill is edited
+      if answer_field and submit_btn and finalize_btn:
+          def on_mathquill_edit():
+              # Enable submit button
+              submit_btn.disabled = False
+              submit_btn.style.opacity = "1"
+              # Disable finalize button
+              finalize_btn.disabled = True
+              finalize_btn.style.opacity = "0.5"
+              # Remove the ENTER-to-finalize hint if it exists
+              hint = step_div.querySelector(".enter-finalize-hint")
+              if hint:
+                  hint.remove()
+              window.console.log(f"📝 MathQuill edited: submit enabled, finalize disabled for step {step_idx}")
+
+          # Use MathQuill's edit handler
+          answer_elem.addEventListener("input", create_proxy(lambda e: on_mathquill_edit()))
+          # Also listen for keyup events on the MathQuill textarea
+          mq_textarea = answer_elem.querySelector("textarea")
+          if mq_textarea:
+              mq_textarea.addEventListener("input", create_proxy(lambda e: on_mathquill_edit()))
+              mq_textarea.addEventListener("keyup", create_proxy(lambda e: on_mathquill_edit()))
+
+      # ✅ Add ENTER key handler to submit/finalize when keyboard is toggled on
+      if answer_field and submit_btn and finalize_btn:
+          def on_keydown(e):
+              # Check if ENTER key and keyboard is enabled (not in soft-keyboard-disabled mode)
+              if e.key == "Enter" and not e.shiftKey:
+                  # Check if keyboard is toggled on (textarea is not readonly)
+                  mq_textarea = answer_elem.querySelector("textarea")
+                  if mq_textarea and not mq_textarea.hasAttribute("readonly"):
+                      e.preventDefault()
+                      # If submit is enabled, submit the answer
+                      if not submit_btn.disabled:
+                          window.console.log(f"⌨️ ENTER pressed - submitting step {step_idx}")
+                          self.submit_math_expression(step_idx)
+                      # If finalize is enabled (answer already correct), finalize
+                      elif not finalize_btn.disabled:
+                          window.console.log(f"⌨️ ENTER pressed - finalizing step {step_idx}")
+                          # Remove the hint notification
+                          hint = step_div.querySelector(".enter-finalize-hint")
+                          if hint:
+                              hint.remove()
+                          self.finalize_math_expression(step_idx)
+
+          mq_textarea = answer_elem.querySelector("textarea")
+          if mq_textarea:
+              mq_textarea.addEventListener("keydown", create_proxy(on_keydown))
 
       # Next button
       next_btn = step_div.querySelector(".next-step")
@@ -10469,10 +10906,92 @@ This demonstrates the complete format for creating your own problem sets!
           step["finalize_attempts"] = 0
       step["finalize_attempts"] += 1
 
+      # Helper to normalize a value to float for comparison
+      def normalize_value(val):
+          """Convert any numeric representation to float for comparison"""
+          if val is None:
+              return None
+          val_str = str(val).strip()
+          # Handle fractions like -1/3
+          if '/' in val_str:
+              parts = val_str.split('/')
+              if len(parts) == 2:
+                  try:
+                      return float(parts[0]) / float(parts[1])
+                  except:
+                      pass
+          # Try direct float conversion
+          try:
+              return float(val_str)
+          except:
+              return val_str
+
+      def normalize_operands(operands):
+          """Normalize operand dict values to floats"""
+          result = {}
+          for k, v in operands.items():
+              norm_k = normalize_value(k)
+              # Use rounded float as key for consistency
+              if isinstance(norm_k, float):
+                  if norm_k == int(norm_k):
+                      result[str(int(norm_k))] = v
+                  else:
+                      result[str(round(norm_k, 10))] = v
+              else:
+                  result[str(k)] = v
+          return result
+
+      def normalize_matrix_ops_for_comparison(ops_list):
+          """Normalize matrix operations list for comparison"""
+          if not ops_list:
+              return []
+          result = []
+          for op in ops_list:
+              norm_op = {
+                  "type": op.get("type"),
+                  "operations": [],
+                  "original_shape": list(op.get("original_shape", [])) if op.get("original_shape") else []
+              }
+              for operation in op.get("operations", []):
+                  norm_operation = {
+                      "type": operation.get("type"),
+                      "details": normalize_details(operation.get("details", []))
+                  }
+                  norm_op["operations"].append(norm_operation)
+              result.append(norm_op)
+          return result
+
+      def normalize_details(details):
+          """Recursively normalize details list"""
+          if not details:
+              return []
+          result = []
+          for item in details:
+              if isinstance(item, (list, tuple)):
+                  result.append(normalize_details(item))
+              elif isinstance(item, str) and item in ['scale', 'swap', 'replace', 'combine']:
+                  result.append(item)
+              else:
+                  norm_val = normalize_value(item)
+                  if isinstance(norm_val, float):
+                      if norm_val == int(norm_val):
+                          result.append(int(norm_val))
+                      else:
+                          result.append(round(norm_val, 10))
+                  else:
+                      result.append(norm_val)
+          return result
+
+      # Normalize both structures for comparison
+      user_operands = normalize_operands(user_struct.get("operands", {}))
+      expected_operands = normalize_operands(expected_struct.get("operands", {}))
+      user_matrix_ops = normalize_matrix_ops_for_comparison(user_struct.get("matrix_ops", []))
+      expected_matrix_ops = normalize_matrix_ops_for_comparison(expected_struct.get("matrix_ops", []))
+
       # Compare structures
       same_operators = user_struct.get("operators", {}) == expected_struct.get("operators", {})
-      same_operands = user_struct.get("operands", {}) == expected_struct.get("operands", {})
-      same_matrix_ops = user_struct.get("matrix_ops", []) == expected_struct.get("matrix_ops", [])
+      same_operands = user_operands == expected_operands
+      same_matrix_ops = user_matrix_ops == expected_matrix_ops
 
       same_structure = same_operators and same_operands and same_matrix_ops
 
@@ -10549,37 +11068,14 @@ This demonstrates the complete format for creating your own problem sets!
               time_taken = time_summary.get("total_time", 0)
               window.console.log(f"⏱️ Step {step_idx} elapsed time so far (failed finalize): {time_taken:.1f}s")
 
-          # Build detailed feedback
-          msg_parts = [f"❌ Attempt {step['finalize_attempts']}: Structure mismatch.<br><br>"]
-
-          if not same_operators and not same_operands:
-              msg_parts.append(
-                  "<strong>Both operations and values differ.</strong><br>"
-                  f"<small>Expected: ops={expected_struct.get('operators', {})}, vals={expected_struct.get('operands', {})}</small><br>"
-                  f"<small>Yours: ops={user_struct.get('operators', {})}, vals={user_struct.get('operands', {})}</small><br><br>"
-              )
-          elif not same_operators:
-              msg_parts.append(
-                  "<strong>Same values, different method.</strong><br>"
-                  f"<small>Expected operators: {expected_struct.get('operators', {})}</small><br>"
-                  f"<small>Your operators: {user_struct.get('operators', {})}</small><br><br>"
-              )
-          elif not same_operands:
-              msg_parts.append(
-                  "<strong>Correct operations, different values.</strong><br>"
-                  f"<small>Expected values: {expected_struct.get('operands', {})}</small><br>"
-                  f"<small>Your values: {user_struct.get('operands', {})}</small><br><br>"
-              )
-
-          if not same_matrix_ops:
-              msg_parts.append(
-                  "<strong>🔢 Matrix operations differ:</strong><br>"
-                  f"<small>Expected: {expected_struct.get('matrix_ops', [])}</small><br>"
-                  f"<small>Yours: {user_struct.get('matrix_ops', [])}</small><br><br>"
-              )
-
-          msg_parts.append("<strong>💡 Try a different approach and click Finalize again.</strong>")
-          msg = "".join(msg_parts)
+          # Build detailed feedback with table comparison
+          msg = self._build_structure_mismatch_table(
+              step['finalize_attempts'],
+              expected_struct, user_struct,
+              expected_operands, user_operands,
+              expected_matrix_ops, user_matrix_ops,
+              same_operators, same_operands, same_matrix_ops
+          )
 
           self.show_feedback(step_idx, msg, "#dc2626")
 
@@ -10600,6 +11096,114 @@ This demonstrates the complete format for creating your own problem sets!
 
           # Save state (but don't mark as finished)
           self.save_to_storage()
+
+    def _build_structure_mismatch_table(self, attempt_num, expected_struct, user_struct,
+                                         expected_operands, user_operands,
+                                         expected_matrix_ops, user_matrix_ops,
+                                         same_operators, same_operands, same_matrix_ops):
+        """Build a table-based structure mismatch feedback message"""
+
+        # Determine the type of mismatch for the header
+        if not same_operators and not same_operands:
+            mismatch_type = "Both operations and values differ"
+        elif not same_operators:
+            mismatch_type = "Same values, different method"
+        elif not same_operands:
+            mismatch_type = "Correct operations, different values"
+        elif not same_matrix_ops:
+            mismatch_type = "Matrix operations differ"
+        else:
+            mismatch_type = "Structure mismatch"
+
+        # Start building the HTML
+        html = f"""
+        <div style='color:#dc2626;background:#fee2e2;padding:16px;border-radius:8px;'>
+            <div style='font-weight:700;font-size:16px;margin-bottom:12px;'>
+                ❌ Attempt {attempt_num}: {mismatch_type}
+            </div>
+
+            <table style='width:100%;border-collapse:collapse;margin-bottom:12px;background:white;border-radius:6px;overflow:hidden;font-size:13px;'>
+                <thead>
+                    <tr style='background:#fecaca;color:#7f1d1d;'>
+                        <th style='padding:10px;text-align:left;font-weight:600;border-bottom:2px solid #dc2626;'>Component</th>
+                        <th style='padding:10px;text-align:center;font-weight:600;border-bottom:2px solid #dc2626;'>Your Answer</th>
+                        <th style='padding:10px;text-align:center;font-weight:600;border-bottom:2px solid #dc2626;'>Expected</th>
+                        <th style='padding:10px;text-align:center;font-weight:600;border-bottom:2px solid #dc2626;'>Match</th>
+                    </tr>
+                </thead>
+                <tbody>
+        """
+
+        # Get operators
+        user_ops = user_struct.get('operators', {})
+        expected_ops = expected_struct.get('operators', {})
+
+        # Operators row
+        ops_match = same_operators
+        ops_row_style = 'background:white;' if ops_match else 'background:#fef3c7;'
+        ops_icon = '✅' if ops_match else '❌'
+        html += f"""
+                    <tr style='{ops_row_style}'>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;font-weight:600;'>Operators</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;font-family:monospace;font-size:12px;'>{user_ops}</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;font-family:monospace;font-size:12px;'>{expected_ops}</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;'>{ops_icon}</td>
+                    </tr>
+        """
+
+        # Operands row
+        operands_match = same_operands
+        operands_row_style = 'background:white;' if operands_match else 'background:#fef3c7;'
+        operands_icon = '✅' if operands_match else '❌'
+        html += f"""
+                    <tr style='{operands_row_style}'>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;font-weight:600;'>Values/Operands</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;font-family:monospace;font-size:12px;'>{user_operands}</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;font-family:monospace;font-size:12px;'>{expected_operands}</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;'>{operands_icon}</td>
+                    </tr>
+        """
+
+        # Matrix operations row (only if there are matrix ops)
+        if expected_matrix_ops or user_matrix_ops:
+            matrix_match = same_matrix_ops
+            matrix_row_style = 'background:white;' if matrix_match else 'background:#fef3c7;'
+            matrix_icon = '✅' if matrix_match else '❌'
+            html += f"""
+                    <tr style='{matrix_row_style}'>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;font-weight:600;'>Matrix Ops</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;font-family:monospace;font-size:11px;word-break:break-all;'>{user_matrix_ops}</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;font-family:monospace;font-size:11px;word-break:break-all;'>{expected_matrix_ops}</td>
+                        <td style='padding:8px;border-bottom:1px solid #e5e7eb;text-align:center;'>{matrix_icon}</td>
+                    </tr>
+            """
+
+        # Total ops row
+        user_total = user_struct.get('total_ops', 0)
+        expected_total = expected_struct.get('total_ops', 0)
+        total_match = user_total == expected_total
+        total_row_style = 'background:#f3f4f6;font-weight:600;' if total_match else 'background:#fef3c7;font-weight:600;'
+        total_icon = '✅' if total_match else '❌'
+        html += f"""
+                    <tr style='{total_row_style}border-top:2px solid #dc2626;'>
+                        <td style='padding:8px;'>Total Operations</td>
+                        <td style='padding:8px;text-align:center;'>{user_total}</td>
+                        <td style='padding:8px;text-align:center;'>{expected_total}</td>
+                        <td style='padding:8px;text-align:center;'>{total_icon}</td>
+                    </tr>
+        """
+
+        html += """
+                </tbody>
+            </table>
+
+            <div style='font-size:14px;color:#7f1d1d;font-weight:600;'>
+                💡 Try a different approach and click Finalize again.
+            </div>
+        </div>
+        """
+
+        return html
 
     def _mark_step_finished(self, step_idx):
       """Mark a step as finished and trigger all related updates"""
@@ -12597,6 +13201,27 @@ This demonstrates the complete format for creating your own problem sets!
 
         window.console.log(f"✅ Completion banner shown and problem area hidden for problem {prob_idx}")
 
+        # ✅ Auto-expand next problem if available (for keyboard-toggled-on scenario)
+        next_prob_idx = prob_idx + 1
+        if next_prob_idx < len(self.problem_set):
+            # Check if next problem is not complete
+            if not self.check_problem_completion(next_prob_idx):
+                def expand_next_problem():
+                    window.console.log(f"📂 Auto-expanding next problem {next_prob_idx}")
+                    self.toggle_problem(next_prob_idx)
+
+                    # Focus on first step's MathQuill after expansion
+                    def focus_first_step():
+                        if next_prob_idx in self.solve_states and len(self.solve_states[next_prob_idx]) > 0:
+                            first_step_container = self.solve_states[next_prob_idx][0].get("container")
+                            if first_step_container:
+                                self._focus_mathquill_if_keyboard_on(first_step_container)
+
+                    window.setTimeout(create_proxy(focus_first_step), 800)
+
+                # Delay to let user see the completion banner
+                window.setTimeout(create_proxy(expand_next_problem), 1500)
+
     def _animate_step_numbers(self):
       """Animate step numbers counting up when finalize button is clicked"""
       try:
@@ -13277,6 +13902,9 @@ This demonstrates the complete format for creating your own problem sets!
           if self.math_parser.last_corrected_latex and answer_mf:
               window.console.log(f"📝 Updating MathQuill with corrected LaTeX: {self.math_parser.last_corrected_latex}")
               answer_mf.latex(self.math_parser.last_corrected_latex)
+              # Use corrected latex as the submitted answer
+              user_latex = self.math_parser.last_corrected_latex
+              window.console.log(f"📝 Using corrected latex as submitted answer: {user_latex}")
 
           if user_expr is None:
               window.console.log("❌ Parser returned None, attempting recovery...")
@@ -13379,11 +14007,39 @@ This demonstrates the complete format for creating your own problem sets!
           if finalize_btn:
               finalize_btn.disabled = False
               finalize_btn.style.opacity = "1"
+              # Focus the finalize button
+              finalize_btn.focus()
 
           submit_btn = container.querySelector(".submit-step")
           if submit_btn:
               submit_btn.disabled = True
               submit_btn.style.opacity = "0.5"
+
+          # ✅ Show ENTER hint notification near MathQuill field (for keyboard-toggled-on scenario)
+          answer_elem = container.querySelector(".step-answer")
+          if answer_elem:
+              # Check if keyboard is toggled on
+              mq_textarea = answer_elem.querySelector("textarea")
+              is_keyboard_on = mq_textarea and not mq_textarea.hasAttribute("readonly")
+
+              if is_keyboard_on:
+                  # Remove any existing hint
+                  existing_hint = container.querySelector(".enter-finalize-hint")
+                  if existing_hint:
+                      existing_hint.remove()
+
+                  # Create hint notification
+                  hint_div = document.createElement("div")
+                  hint_div.className = "enter-finalize-hint"
+                  hint_div.style.cssText = "margin-top:8px;padding:8px 12px;background:#dcfce7;border:1px solid #86efac;border-radius:6px;color:#166534;font-size:14px;display:flex;align-items:center;gap:8px;"
+                  hint_div.innerHTML = "⌨️ <strong>Press ENTER</strong> to finalize"
+
+                  # Insert after the answer field container
+                  answer_container = answer_elem.parentElement
+                  if answer_container:
+                      answer_container.appendChild(hint_div)
+
+                  window.console.log("✅ Displayed ENTER-to-finalize hint")
 
           self.add_to_global_history(step_idx, user_latex, True, time_taken, "submit")
       else:
@@ -13987,7 +14643,35 @@ This demonstrates the complete format for creating your own problem sets!
       # Wait for slide-out animation to complete before showing next step
       window.setTimeout(create_proxy(complete_transition), 500)
 
+      # ✅ Focus on MathQuill field after transition (for keyboard-toggled-on scenario)
+      def focus_mathquill_after_transition():
+          self._focus_mathquill_if_keyboard_on(next_container)
+      window.setTimeout(create_proxy(focus_mathquill_after_transition), 1200)
+
       self.save_to_storage()
+
+    def _focus_mathquill_if_keyboard_on(self, container):
+      """Focus on MathQuill field if keyboard is toggled on"""
+      try:
+          # Find the MathQuill answer field
+          answer_elem = container.querySelector(".step-answer")
+          if not answer_elem:
+              return
+
+          # Check if keyboard is toggled on (textarea is not readonly)
+          mq_textarea = answer_elem.querySelector("textarea")
+          if mq_textarea and not mq_textarea.hasAttribute("readonly"):
+              # Focus the MathQuill field
+              mq_instance = getattr(answer_elem, "mathquill", None)
+              if mq_instance:
+                  mq_instance.focus()
+                  window.console.log("✅ Focused MathQuill field (keyboard is on)")
+              else:
+                  # Fallback: focus the textarea directly
+                  mq_textarea.focus()
+                  window.console.log("✅ Focused MathQuill textarea (keyboard is on)")
+      except Exception as e:
+          window.console.error(f"❌ Error focusing MathQuill: {e}")
     
     def export_progress(self, event):
         """Export progress"""
@@ -16795,6 +17479,28 @@ This demonstrates the complete format for creating your own problem sets!
                     else:
                         self.disable_soft_keyboard(field.mathquill)
 
+            # ✅ Show/hide all minimal keyboards based on new state
+            # Keyboard ON = hide minimal keyboard, Keyboard OFF = show minimal keyboard
+            minimal_keyboards = document.querySelectorAll('.minimal-keyboard')
+            for i in range(minimal_keyboards.length):
+                kb = minimal_keyboards[i]
+                if self.soft_keyboard_enabled:
+                    kb.style.display = "none"  # Keyboard ON: hide minimal buttons
+                else:
+                    kb.style.display = "block"  # Keyboard OFF: show minimal buttons
+            window.console.log(f"✅ Updated {minimal_keyboards.length} minimal keyboards (visible={not self.soft_keyboard_enabled})")
+
+            # ✅ Show/hide keyboard toggle buttons (opposite of minimal keyboard)
+            # Keyboard ON = show toggle button, Keyboard OFF = hide toggle button
+            toggle_containers = document.querySelectorAll('.keyboard-toggle-container')
+            for i in range(toggle_containers.length):
+                tc = toggle_containers[i]
+                if self.soft_keyboard_enabled:
+                    tc.style.display = "block"  # Keyboard ON: show toggle button
+                else:
+                    tc.style.display = "none"  # Keyboard OFF: hide toggle button
+            window.console.log(f"✅ Updated {toggle_containers.length} toggle buttons (visible={self.soft_keyboard_enabled})")
+
             # Also apply to freestyle fields if they exist
             if hasattr(self, 'freestyle_answer_mf') and self.freestyle_answer_mf:
                 if self.soft_keyboard_enabled:
@@ -16811,8 +17517,8 @@ This demonstrates the complete format for creating your own problem sets!
                 window.console.log("✅ Applied keyboard toggle to freestyle problem field")
 
             # Show notification
-            msg = "Soft keyboard enabled" if self.soft_keyboard_enabled else "Minimal keyboard mode"
-            window.alert(f"⌨️ {msg}")
+            msg = "Physical Keyboard ON" if self.soft_keyboard_enabled else "Physical Keyboard OFF - Use on-screen buttons"
+            self.show_notification(f"⌨️ {msg}", "info")
 
         except Exception as e:
             window.console.error(f"Error toggling keyboard: {e}")
@@ -16928,7 +17634,7 @@ This demonstrates the complete format for creating your own problem sets!
         has_trig = any(trig in str(operators) for trig in ['sin', 'cos', 'tan', 'sec', 'csc', 'cot'])
         if has_trig:
             # Add degree symbol for angle input
-            buttons.append('\\circ')
+            buttons.append('SEQ:^,\\circ,{Tab}')
             window.console.log("Added degree symbol (trig function detected)")
 
         # Add matrix brackets and comma if matrix detected
@@ -17029,9 +17735,9 @@ This demonstrates the complete format for creating your own problem sets!
         elif action == '\\infty':
             btn_class += ' operator'
             label = '∞'
-        elif action == '\\circ':
+        elif action == 'SEQ:^,\\circ,{Tab}':
             btn_class += ' special'
-            label = '<span style="font-size:13px;">deg°</span>'
+            label = '<span style="font-size:13px;">deg<sup>°</sup></span>'
         elif action == '\\to':
             btn_class += ' operator'
             label = '→'
