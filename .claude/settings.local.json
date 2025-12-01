@@ -54,7 +54,16 @@
       "Bash(cmd /c \"del /f fix_symbol_regex.py 2>nul\")",
       "Bash(cmd /c \"del /f update_all_preprocessing.py add_solve_problem_preprocessing.py insert_methods.py final_fix_solve.py update_symbol_solve.py 2>nul\")",
       "Bash(cmd /c \"del /f add_method_defs.py 2>nul\")",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(cmd /c \"del /f add_matrix_functions.py fix_duplicates.py add_to_atom_rule.py 2>nul\")",
+      "Bash(cmd /c \"del /f update_solve_problem_matrix_functions.py 2>nul\")",
+      "Bash(cmd /c \"del /f add_matrix_functions.py fix_duplicates.py add_to_atom_rule.py update_solve_problem_matrix_functions.py 2>nul\")",
+      "Bash(cmd /c \"del /f add_batch2_matrix_functions.py 2>nul\")",
+      "Bash(cmd /c \"del /f add_batch3_matrix_functions.py 2>nul\")",
+      "Bash(embed_offline.py)",
+      "Bash(embed_solve_offline.py)",
+      "Bash(cmd /c \"del /f embed_offline.py embed_solve_offline.py 2>nul\")",
+      "Bash(cmd /c \"dir /b ml_churn_prediction*.html\")"
     ],
     "deny": [],
     "ask": []
