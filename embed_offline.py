@@ -272,6 +272,30 @@ console.log('loadPyodide defined:', typeof loadPyodide);
     # Remove CDN Pyodide script tags
     html = re.sub(r'<script[^>]*src="[^"]*pyodide[^"]*\.js"[^>]*></script>', '', html)
 
+    # Replace micropip.install with direct wheel extraction for offline mode
+    offline_package_install = '''
+        // OFFLINE MODE: Extract wheels directly instead of using micropip
+        console.log('📦 Loading packages from embedded wheels (offline mode)...');
+
+        const larkBytes = getLarkWheelBytes();
+        await window.pyodide.unpackArchive(larkBytes, 'wheel');
+        console.log('  ✅ lark extracted');
+
+        const mpmathBytes = getMpmathWheelBytes();
+        await window.pyodide.unpackArchive(mpmathBytes, 'wheel');
+        console.log('  ✅ mpmath extracted');
+
+        const sympyBytes = getSymPyWheelBytes();
+        await window.pyodide.unpackArchive(sympyBytes, 'wheel');
+        console.log('  ✅ sympy extracted');
+
+        console.log('✅ All packages loaded from embedded wheels!');
+'''
+
+    # Find and replace the micropip installation block
+    micropip_pattern = r"await window\.pyodide\.loadPackage\(\['micropip'\]\);.*?await micropip\.install\(\[.*?\], keep_going=True\).*?`\);"
+    html = re.sub(micropip_pattern, offline_package_install, html, flags=re.DOTALL)
+
     # Write output
     output_path = os.path.join(BASE_DIR, 'create_problem_offline_embedded.html')
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -523,6 +547,30 @@ console.log('loadPyodide defined:', typeof loadPyodide);
 
     # Remove CDN Pyodide script tags
     html = re.sub(r'<script[^>]*src="[^"]*pyodide[^"]*\.js"[^>]*></script>', '', html)
+
+    # Replace micropip.install with direct wheel extraction for offline mode
+    offline_package_install = '''
+        // OFFLINE MODE: Extract wheels directly instead of using micropip
+        console.log('📦 Loading packages from embedded wheels (offline mode)...');
+
+        const larkBytes = getLarkWheelBytes();
+        await window.pyodide.unpackArchive(larkBytes, 'wheel');
+        console.log('  ✅ lark extracted');
+
+        const mpmathBytes = getMpmathWheelBytes();
+        await window.pyodide.unpackArchive(mpmathBytes, 'wheel');
+        console.log('  ✅ mpmath extracted');
+
+        const sympyBytes = getSymPyWheelBytes();
+        await window.pyodide.unpackArchive(sympyBytes, 'wheel');
+        console.log('  ✅ sympy extracted');
+
+        console.log('✅ All packages loaded from embedded wheels!');
+'''
+
+    # Find and replace the micropip installation block
+    micropip_pattern = r"await window\.pyodide\.loadPackage\(\['micropip'\]\);.*?await micropip\.install\(\[.*?\], keep_going=True\).*?`\);"
+    html = re.sub(micropip_pattern, offline_package_install, html, flags=re.DOTALL)
 
     # Write output
     output_path = os.path.join(BASE_DIR, 'solve_problem_offline_embedded.html')
