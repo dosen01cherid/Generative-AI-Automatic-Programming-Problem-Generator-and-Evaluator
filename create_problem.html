@@ -2036,9 +2036,9 @@ start: matrix_ops
    | diagonalize_function
    | rowspace_function
    | nullity_function
-   | LU_function
-   | QR_function
-   | SVD_function
+   | lu_function
+   | qr_function
+   | svd_function
    | ref_function
    | norm_function
    | dot_function
@@ -2108,11 +2108,11 @@ rowspace_function: "rowspace" "(" expr ")" -> rowspace_func
 
 nullity_function: "nullity" "(" expr ")" -> nullity_func
 
-LU_function: "LU" "(" expr ")" -> LU_func
+lu_function: "LU" "(" expr ")" -> lu_func
 
-QR_function: "QR" "(" expr ")" -> QR_func
+qr_function: "QR" "(" expr ")" -> qr_func
 
-SVD_function: "SVD" "(" expr ")" -> SVD_func
+svd_function: "SVD" "(" expr ")" -> svd_func
 
 ref_function: "ref" "(" expr ")" -> ref_func
 
@@ -3780,17 +3780,17 @@ CIRC: "\\circ"
               """Handles nullity(matrix) function - dimension of null space"""
               return len(matrix_expr.nullspace())
 
-          def LU_func(self, matrix_expr):
+          def lu_func(self, matrix_expr):
               """Handles LU(matrix) function - LU decomposition"""
               L, U, perm = matrix_expr.LUdecomposition()
               return (L, U)
 
-          def QR_func(self, matrix_expr):
+          def qr_func(self, matrix_expr):
               """Handles QR(matrix) function - QR decomposition"""
               Q, R = matrix_expr.QRdecomposition()
               return (Q, R)
 
-          def SVD_func(self, matrix_expr):
+          def svd_func(self, matrix_expr):
               """Handles SVD(matrix) function - Singular Value Decomposition"""
               # SymPy's singular_value_decomposition returns U, S, V
               U, S, V = matrix_expr.singular_value_decomposition()
