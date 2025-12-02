@@ -2168,6 +2168,19 @@ start: equation
    | adjugate_function
    | cofactor_function
    | minor_function
+   | charpoly_function
+   | diagonalize_function
+   | rowspace_function
+   | nullity_function
+   | LU_function
+   | QR_function
+   | SVD_function
+   | ref_function
+   | norm_function
+   | dot_function
+   | cross_function
+   | projection_function
+   | orthogonalize_function
    | trig_function
    | log_function
    | limit
@@ -2197,10 +2210,11 @@ log_function: "\\log" "_" "{" expr "}" expr     -> log_func_with_base
 
 limit: "\\lim" "_" "{" SYMBOL "\\to" expr "}" expr -> limit_expr
 
-integral: "\\int" "_" "{" expr "}" "^" "{" expr "}" expr -> integral_definite
-        | "\\int" "_" NUMBER "^" NUMBER expr             -> integral_definite_no_braces
-        | "\\int" "_" "{" "}" "^" "{" "}" expr           -> integral_indefinite
-        | "\\int" expr                                    -> integral_indefinite_simple
+integral: "\\int" "_" "{" expr "}" "^" "{" expr "}" product -> integral_definite
+        | "\\int" "_" NUMBER "^" NUMBER product             -> integral_definite_no_braces
+        | "\\int" "_" "{" "}" "^" "{" "}" product           -> integral_indefinite
+        | "\\int" "_" "{" "}" product                       -> integral_indefinite
+        | "\\int" product                                    -> integral_indefinite_simple
 
 summation: "\\sum" "_" "{" SYMBOL "=" expr "}" "^" "{" expr "}" expr -> sum_expr
          | "\\sum" "_" "{" SYMBOL "=" expr "}" "^" "{" expr "}"      -> sum_expr_no_body
@@ -2247,6 +2261,32 @@ adjugate_function: "adjugate" "(" expr ")" -> adjugate_func
 cofactor_function: "cofactor" "(" expr "," expr "," expr ")" -> cofactor_func
 
 minor_function: "minor" "(" expr "," expr "," expr ")" -> minor_func
+
+charpoly_function: "charpoly" "(" expr ")" -> charpoly_func
+
+diagonalize_function: "diagonalize" "(" expr ")" -> diagonalize_func
+
+rowspace_function: "rowspace" "(" expr ")" -> rowspace_func
+
+nullity_function: "nullity" "(" expr ")" -> nullity_func
+
+LU_function: "LU" "(" expr ")" -> LU_func
+
+QR_function: "QR" "(" expr ")" -> QR_func
+
+SVD_function: "SVD" "(" expr ")" -> SVD_func
+
+ref_function: "ref" "(" expr ")" -> ref_func
+
+norm_function: "norm" "(" expr ")" -> norm_func
+
+dot_function: "dot" "(" expr "," expr ")" -> dot_func
+
+cross_function: "cross" "(" expr "," expr ")" -> cross_func
+
+projection_function: "projection" "(" expr "," expr ")" -> projection_func
+
+orthogonalize_function: "orthogonalize" "(" expr ("," expr)* ")" -> orthogonalize_func
 
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
@@ -2343,8 +2383,8 @@ CIRC: "\\circ"
         transpose_patterns = [
             (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{T\}'), 'transpose'),
             (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^T(?![a-zA-Z])'), 'transpose'),
-            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{\top\}'), 'transpose'),
-            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{\intercal\}'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{\\top\}'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{\\intercal\}'), 'transpose'),
         ]
 
         def replace_transpose(match):
@@ -2372,7 +2412,7 @@ CIRC: "\\circ"
         import re
 
         # Pattern 1: \left|matrix\right| format
-        left_right_pattern = re.compile(r'\left\|(.+?)\right\|')
+        left_right_pattern = re.compile(r'\\left\|(.+?)\\right\|')
 
         def replace_left_right(match):
             matrix_expr = match.group(1)
@@ -2403,8 +2443,28 @@ CIRC: "\\circ"
         Examples:
           \int(2x) -> __integral(x, 2*x)
           \int_0^1(2x) -> __integral(x, 2*x, 0, 1)
+          \int _{ }^{ }2x -> \int_{}^{}2x (normalized)
         """
         import re
+
+        # Normalize spaces in integral notation
+        # Remove space between \int and _ (e.g., "\int _" -> "\int_")
+        # Use string replace to avoid regex escape issues with backslash
+        while r'\int ' in latex_str:
+            latex_str = latex_str.replace(r'\int ', r'\int')
+        # Normalize empty braces with spaces (e.g., "{ }" -> "{}")
+        latex_str = re.sub(r'\{\s*\}', '{}', latex_str)
+
+        # Convert \int_{} followed by expression (without parens) to \int_{}(expr)
+        # This ensures proper grouping of the integrand
+        # Match \int_{} or \int_{}^{} followed by non-paren expression
+        def wrap_integrand(match):
+            prefix = match.group(1)  # \int_{} or \int_{}^{}
+            expr = match.group(2)    # the expression after
+            return prefix + '(' + expr + ')'
+
+        # Pattern: \int_{}^{} or \int_{} followed by expression (not starting with paren)
+        latex_str = re.sub(r'(\\int_\{\}\^\{\}|\\int_\{\})([^(+\-=][^+\-=]*)', wrap_integrand, latex_str)
 
         def infer_variable(expr_str):
             """Infer integration variable from expression by finding common variable names."""
@@ -2414,7 +2474,7 @@ CIRC: "\\circ"
             return 'x'
 
         # Pattern 1: Definite integral with bounds: \int_{lower}^{upper}(expr)
-        definite_pattern = re.compile(r'\int_\{?([^}]+?)\}?\^\{?([^}]+?)\}?\(([^)]+)\)')
+        definite_pattern = re.compile(r'\\int_\{?([^}]+?)\}?\^\{?([^}]+?)\}?\(([^)]+)\)')
 
         def replace_definite(match):
             lower = match.group(1)
@@ -2426,7 +2486,7 @@ CIRC: "\\circ"
             return f'__integral({var}, {expr.strip()}, {lower.strip()}, {upper.strip()})'
 
         # Pattern 2: Indefinite integral: \int(expr)
-        indefinite_pattern = re.compile(r'\int(?:_\{\s*\})?(?:\^\{\s*\})?\(([^)]+)\)')
+        indefinite_pattern = re.compile(r'\\int(?:_\{\s*\})?(?:\^\{\s*\})?\(([^)]+)\)')
 
         def replace_indefinite(match):
             expr = match.group(1)
@@ -2761,7 +2821,7 @@ CIRC: "\\circ"
 
                 mathContainer.innerHTML = `
                     <div style='font-size:18px;text-align:left;'>
-                        $$${highlightedLatex}$$
+                        $$${{highlightedLatex}}$$
                     </div>
                     <div style='margin-top:12px;padding-top:12px;border-top:1px solid #e5e7eb;'>
                         <div style='font-size:12px;color:#6b7280;font-family:monospace;word-break:break-all;'>
@@ -3333,6 +3393,67 @@ CIRC: "\\circ"
       # Replace mathrm{d} with d
       t = t.replace("\\mathrm{d}", "d")
 
+      # Strip \text{} wrapper from function names (rref, rank, tr, adj, etc.)
+      t = re.sub(r'\\text\{(\w+)\}', r'\1', t)
+      # Also handle \operatorname{} and \mathrm{} for function names
+      t = re.sub(r'\\operatorname\{(\w+)\}', r'\1', t)
+      t = re.sub(r'\\mathrm\{(\w+)\}', r'\1', t)
+
+      # Map function name aliases to canonical names expected by grammar
+      t = re.sub(r'\btr\s*\(', 'trace(', t)      # tr -> trace
+      t = re.sub(r'\badj\s*\(', 'adjugate(', t)  # adj -> adjugate
+      t = re.sub(r'\bcof\s*\(', 'cofactor(', t)  # cof -> cofactor
+      t = re.sub(r'\bminor\s*\(', 'minor(', t)   # minor -> minor
+      # Eigenvalue/Eigenvector aliases
+      t = re.sub(r'\beigenvals\s*\(', 'eigenvalues(', t)
+      t = re.sub(r'\beigenvects\s*\(', 'eigenvectors(', t)
+      t = re.sub(r'\beig\s*\(', 'eigenvalues(', t)
+      # Subspace aliases
+      t = re.sub(r'\bnull\s*\(', 'nullspace(', t)
+      t = re.sub(r'\bker\s*\(', 'nullspace(', t)
+      t = re.sub(r'\bcolspace\s*\(', 'columnspace(', t)
+      t = re.sub(r'\brange\s*\(', 'columnspace(', t)
+      # Decomposition aliases
+      t = re.sub(r'\blu\s*\(', 'LU(', t)
+      t = re.sub(r'\bqr\s*\(', 'QR(', t)
+      t = re.sub(r'\bsvd\s*\(', 'SVD(', t)
+      # Other aliases
+      t = re.sub(r'\borth\s*\(', 'orthogonalize(', t)
+      t = re.sub(r'\bproj\s*\(', 'projection(', t)
+
+      # Convert LaTeX function commands to plain function names
+      t = re.sub(r'\\det\s*\(', 'det(', t)       # \det -> det
+      t = re.sub(r'\\rank\s*\(', 'rank(', t)     # \rank -> rank
+      t = re.sub(r'\\trace\s*\(', 'trace(', t)   # \trace -> trace
+      t = re.sub(r'\\rref\s*\(', 'rref(', t)     # \rref -> rref
+      t = re.sub(r'\\minor\s*\(', 'minor(', t)
+      t = re.sub(r'\\adj\s*\(', 'adjugate(', t)
+      t = re.sub(r'\\cof\s*\(', 'cofactor(', t)
+      # Eigenvalue/Eigenvector LaTeX commands
+      t = re.sub(r'\\eigenvalues\s*\(', 'eigenvalues(', t)
+      t = re.sub(r'\\eigenvectors\s*\(', 'eigenvectors(', t)
+      t = re.sub(r'\\eigenvals\s*\(', 'eigenvalues(', t)
+      t = re.sub(r'\\eigenvects\s*\(', 'eigenvectors(', t)
+      t = re.sub(r'\\charpoly\s*\(', 'charpoly(', t)
+      t = re.sub(r'\\diagonalize\s*\(', 'diagonalize(', t)
+      # Subspace LaTeX commands
+      t = re.sub(r'\\nullspace\s*\(', 'nullspace(', t)
+      t = re.sub(r'\\nullity\s*\(', 'nullity(', t)
+      t = re.sub(r'\\columnspace\s*\(', 'columnspace(', t)
+      t = re.sub(r'\\rowspace\s*\(', 'rowspace(', t)
+      t = re.sub(r'\\ker\s*\(', 'nullspace(', t)
+      # Decomposition LaTeX commands
+      t = re.sub(r'\\LU\s*\(', 'LU(', t)
+      t = re.sub(r'\\QR\s*\(', 'QR(', t)
+      t = re.sub(r'\\SVD\s*\(', 'SVD(', t)
+      # Other LaTeX commands
+      t = re.sub(r'\\ref\s*\(', 'ref(', t)
+      t = re.sub(r'\\norm\s*\(', 'norm(', t)
+      t = re.sub(r'\\dot\s*\(', 'dot(', t)
+      t = re.sub(r'\\cross\s*\(', 'cross(', t)
+      t = re.sub(r'\\proj\s*\(', 'projection(', t)
+      t = re.sub(r'\\orthogonalize\s*\(', 'orthogonalize(', t)
+
       # Remove spacing macros (but NOT backslash-space, which is handled by _preprocess_row_operations)
       t = re.sub(r"\\(?:,|;|:|!|quad|qquad)", "", t)
 
@@ -3846,6 +3967,86 @@ CIRC: "\\circ"
                 i_val = int(i) - 1
                 j_val = int(j) - 1
                 return matrix_expr.minor_submatrix(i_val, j_val).det()
+
+            def charpoly_func(self, matrix_expr):
+                """Handles charpoly(matrix) function - returns characteristic polynomial"""
+                x = sp.Symbol('lambda')
+                return matrix_expr.charpoly(x).as_expr()
+
+            def diagonalize_func(self, matrix_expr):
+                """Handles diagonalize(matrix) function - returns (P, D) where A = P*D*P^-1"""
+                try:
+                    P, D = matrix_expr.diagonalize()
+                    return (P, D)
+                except Exception as e:
+                    # Matrix may not be diagonalizable
+                    return None
+
+            def rowspace_func(self, matrix_expr):
+                """Handles rowspace(matrix) function - returns row space basis"""
+                return matrix_expr.rowspace()
+
+            def nullity_func(self, matrix_expr):
+                """Handles nullity(matrix) function - dimension of null space"""
+                return len(matrix_expr.nullspace())
+
+            def LU_func(self, matrix_expr):
+                """Handles LU(matrix) function - LU decomposition"""
+                L, U, perm = matrix_expr.LUdecomposition()
+                return (L, U)
+
+            def QR_func(self, matrix_expr):
+                """Handles QR(matrix) function - QR decomposition"""
+                Q, R = matrix_expr.QRdecomposition()
+                return (Q, R)
+
+            def SVD_func(self, matrix_expr):
+                """Handles SVD(matrix) function - Singular Value Decomposition"""
+                # SymPy's singular_value_decomposition returns U, S, V
+                U, S, V = matrix_expr.singular_value_decomposition()
+                return (U, S, V)
+
+            def ref_func(self, matrix_expr):
+                """Handles ref(matrix) function - row echelon form (not reduced)"""
+                return matrix_expr.echelon_form()
+
+            def norm_func(self, expr):
+                """Handles norm(vector/matrix) function - Frobenius norm for matrices, 2-norm for vectors"""
+                if hasattr(expr, 'norm'):
+                    return expr.norm()
+                return sp.sqrt(sum(x**2 for x in expr))
+
+            def dot_func(self, a, b):
+                """Handles dot(a, b) function - dot product of two vectors"""
+                if hasattr(a, 'dot'):
+                    return a.dot(b)
+                # Fallback for lists/tuples
+                return sum(x*y for x, y in zip(a, b))
+
+            def cross_func(self, a, b):
+                """Handles cross(a, b) function - cross product of two 3D vectors"""
+                if hasattr(a, 'cross'):
+                    return a.cross(b)
+                # Manual cross product for 3D vectors
+                return sp.Matrix([
+                    a[1]*b[2] - a[2]*b[1],
+                    a[2]*b[0] - a[0]*b[2],
+                    a[0]*b[1] - a[1]*b[0]
+                ])
+
+            def projection_func(self, a, b):
+                """Handles projection(a, b) function - projection of vector a onto vector b"""
+                dot_ab = a.dot(b) if hasattr(a, 'dot') else sum(x*y for x, y in zip(a, b))
+                dot_bb = b.dot(b) if hasattr(b, 'dot') else sum(x*x for x in b)
+                scalar = dot_ab / dot_bb
+                return scalar * b
+
+            def orthogonalize_func(self, *vectors):
+                """Handles orthogonalize(v1, v2, ...) function - Gram-Schmidt orthogonalization"""
+                from sympy.matrices import GramSchmidt
+                matrix_vectors = [v if isinstance(v, sp.Matrix) else sp.Matrix(v) for v in vectors]
+                return GramSchmidt(matrix_vectors)
+
             def start(self, e):
                 return e
 
@@ -15445,7 +15646,15 @@ This demonstrates the complete format for creating your own problem sets!
           # Should we convert?
           should_convert = has_matrix_in_latex or has_matrix_in_tree
 
-          if should_convert:
+          # Check if problem contains function calls that get evaluated (rref, det, etc.)
+          # In these cases, use original LaTeX to show the unevaluated form
+          has_function_call = any(fn in problem_latex.lower() for fn in ['rref', 'det', 'rank', 'trace', 'tr', 'adj', 'minor', 'cofactor', 'eigenvalue', 'eigenvector', 'nullspace', 'columnspace'])
+
+          if has_function_call:
+              # Use original LaTeX to preserve the function call in display
+              window.console.log("🔄 Problem contains function call, using original LaTeX")
+              problem_display.innerHTML = f"$$\\displaystyle {problem_latex}$$"
+          elif should_convert:
               try:
                   window.console.log("🔄 Attempting conversion...")
                   display_latex = self._convert_latex_preserve_order(parsed)
@@ -15547,6 +15756,11 @@ This demonstrates the complete format for creating your own problem sets!
                 expected_parsed = self.freestyle_problem["parsed"]
 
             # Normalize both for comparison
+            window.console.log(f"🔍 BEFORE NORMALIZE - expected_parsed: {expected_parsed}")
+            window.console.log(f"🔍 BEFORE NORMALIZE - expected_parsed type: {type(expected_parsed)}")
+            window.console.log(f"🔍 BEFORE NORMALIZE - parsed_answer: {parsed_answer}")
+            window.console.log(f"🔍 BEFORE NORMALIZE - parsed_answer type: {type(parsed_answer)}")
+
             expected_normalized = self.math_parser.normalize_expr(expected_parsed)
             answer_normalized = self.math_parser.normalize_expr(parsed_answer)
 

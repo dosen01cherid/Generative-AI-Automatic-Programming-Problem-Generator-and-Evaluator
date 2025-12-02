@@ -2032,6 +2032,19 @@ start: matrix_ops
    | adjugate_function
    | cofactor_function
    | minor_function
+   | charpoly_function
+   | diagonalize_function
+   | rowspace_function
+   | nullity_function
+   | LU_function
+   | QR_function
+   | SVD_function
+   | ref_function
+   | norm_function
+   | dot_function
+   | cross_function
+   | projection_function
+   | orthogonalize_function
    | trig_function
    | log_function
    | limit
@@ -2086,6 +2099,32 @@ adjugate_function: "adjugate" "(" expr ")" -> adjugate_func
 cofactor_function: "cofactor" "(" expr "," expr "," expr ")" -> cofactor_func
 
 minor_function: "minor" "(" expr "," expr "," expr ")" -> minor_func
+
+charpoly_function: "charpoly" "(" expr ")" -> charpoly_func
+
+diagonalize_function: "diagonalize" "(" expr ")" -> diagonalize_func
+
+rowspace_function: "rowspace" "(" expr ")" -> rowspace_func
+
+nullity_function: "nullity" "(" expr ")" -> nullity_func
+
+LU_function: "LU" "(" expr ")" -> LU_func
+
+QR_function: "QR" "(" expr ")" -> QR_func
+
+SVD_function: "SVD" "(" expr ")" -> SVD_func
+
+ref_function: "ref" "(" expr ")" -> ref_func
+
+norm_function: "norm" "(" expr ")" -> norm_func
+
+dot_function: "dot" "(" expr "," expr ")" -> dot_func
+
+cross_function: "cross" "(" expr "," expr ")" -> cross_func
+
+projection_function: "projection" "(" expr "," expr ")" -> projection_func
+
+orthogonalize_function: "orthogonalize" "(" expr ("," expr)* ")" -> orthogonalize_func
 
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
@@ -2468,8 +2507,8 @@ CIRC: "\\circ"
         transpose_patterns = [
             (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\{T\}'), 'transpose'),
             (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^T(?![a-zA-Z])'), 'transpose'),
-            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\\{\\top\}'), 'transpose'),
-            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\\{\\intercal\}'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\\{\\\\top\}'), 'transpose'),
+            (re.compile(r'([A-Z]|\[\[.+?\]\]|\([^)]+\))\^\\{\\\\intercal\}'), 'transpose'),
         ]
 
         def replace_transpose(match):
@@ -2534,6 +2573,18 @@ CIRC: "\\circ"
           \\int_0^1(2x) -> __integral(x, 2*x, 0, 1)
         """
         import re
+
+        # Step 1: Normalize spaces - remove spaces after \int and in empty braces
+        while r'\int ' in latex_str:
+            latex_str = latex_str.replace(r'\int ', r'\int')
+        latex_str = re.sub(r'\{\s*\}', '{}', latex_str)
+
+        # Step 2: Wrap integrands in parentheses for \int_{} or \int_{}^{} followed by expression
+        def wrap_integrand(match):
+            prefix = match.group(1)
+            expr = match.group(2)
+            return prefix + '(' + expr + ')'
+        latex_str = re.sub(r'(\\int_\{\}\^\{\}|\\int_\{\})([^(+\-=][^+\-=]*)', wrap_integrand, latex_str)
 
         def infer_variable(expr_str):
             """Infer integration variable from expression by finding common variable names."""
@@ -3291,6 +3342,66 @@ CIRC: "\\circ"
         # This pattern uses a positive lookbehind to ensure we have a digit before the letter
         t = re.sub(r'(\d)([a-zA-Z])(?!_)', r'\1*\2', t)
 
+        # ⭐ Function preprocessing: Strip \text{}, \operatorname{}, \mathrm{} wrappers
+        t = re.sub(r'\\text\{(\w+)\}', r'\1', t)
+        t = re.sub(r'\\operatorname\{(\w+)\}', r'\1', t)
+        t = re.sub(r'\\mathrm\{(\w+)\}', r'\1', t)
+
+        # ⭐ Function name aliases
+        t = re.sub(r'\btr\s*\(', 'trace(', t)
+        t = re.sub(r'\badj\s*\(', 'adjugate(', t)
+        t = re.sub(r'\bcof\s*\(', 'cofactor(', t)
+        t = re.sub(r'\bminor\s*\(', 'minor(', t)
+        # Eigenvalue/Eigenvector aliases
+        t = re.sub(r'\beigenvals\s*\(', 'eigenvalues(', t)
+        t = re.sub(r'\beigenvects\s*\(', 'eigenvectors(', t)
+        t = re.sub(r'\beig\s*\(', 'eigenvalues(', t)
+        # Subspace aliases
+        t = re.sub(r'\bnull\s*\(', 'nullspace(', t)
+        t = re.sub(r'\bker\s*\(', 'nullspace(', t)
+        t = re.sub(r'\bcolspace\s*\(', 'columnspace(', t)
+        t = re.sub(r'\brange\s*\(', 'columnspace(', t)
+        # Decomposition aliases
+        t = re.sub(r'\blu\s*\(', 'LU(', t)
+        t = re.sub(r'\bqr\s*\(', 'QR(', t)
+        t = re.sub(r'\bsvd\s*\(', 'SVD(', t)
+        # Other aliases
+        t = re.sub(r'\borth\s*\(', 'orthogonalize(', t)
+        t = re.sub(r'\bproj\s*\(', 'projection(', t)
+
+        # ⭐ LaTeX function command conversions
+        t = re.sub(r'\\det\s*\(', 'det(', t)
+        t = re.sub(r'\\rank\s*\(', 'rank(', t)
+        t = re.sub(r'\\trace\s*\(', 'trace(', t)
+        t = re.sub(r'\\rref\s*\(', 'rref(', t)
+        t = re.sub(r'\\minor\s*\(', 'minor(', t)
+        t = re.sub(r'\\adj\s*\(', 'adjugate(', t)
+        t = re.sub(r'\\cof\s*\(', 'cofactor(', t)
+        # Eigenvalue/Eigenvector LaTeX commands
+        t = re.sub(r'\\eigenvalues\s*\(', 'eigenvalues(', t)
+        t = re.sub(r'\\eigenvectors\s*\(', 'eigenvectors(', t)
+        t = re.sub(r'\\eigenvals\s*\(', 'eigenvalues(', t)
+        t = re.sub(r'\\eigenvects\s*\(', 'eigenvectors(', t)
+        t = re.sub(r'\\charpoly\s*\(', 'charpoly(', t)
+        t = re.sub(r'\\diagonalize\s*\(', 'diagonalize(', t)
+        # Subspace LaTeX commands
+        t = re.sub(r'\\nullspace\s*\(', 'nullspace(', t)
+        t = re.sub(r'\\nullity\s*\(', 'nullity(', t)
+        t = re.sub(r'\\columnspace\s*\(', 'columnspace(', t)
+        t = re.sub(r'\\rowspace\s*\(', 'rowspace(', t)
+        t = re.sub(r'\\ker\s*\(', 'nullspace(', t)
+        # Decomposition LaTeX commands
+        t = re.sub(r'\\LU\s*\(', 'LU(', t)
+        t = re.sub(r'\\QR\s*\(', 'QR(', t)
+        t = re.sub(r'\\SVD\s*\(', 'SVD(', t)
+        # Other LaTeX commands
+        t = re.sub(r'\\ref\s*\(', 'ref(', t)
+        t = re.sub(r'\\norm\s*\(', 'norm(', t)
+        t = re.sub(r'\\dot\s*\(', 'dot(', t)
+        t = re.sub(r'\\cross\s*\(', 'cross(', t)
+        t = re.sub(r'\\proj\s*\(', 'projection(', t)
+        t = re.sub(r'\\orthogonalize\s*\(', 'orthogonalize(', t)
+
         return t.strip()
 
 
@@ -3646,6 +3757,86 @@ CIRC: "\\circ"
               i_val = int(i) - 1
               j_val = int(j) - 1
               return matrix_expr.minor_submatrix(i_val, j_val).det()
+
+          def charpoly_func(self, matrix_expr):
+              """Handles charpoly(matrix) function - returns characteristic polynomial"""
+              x = sp.Symbol('lambda')
+              return matrix_expr.charpoly(x).as_expr()
+
+          def diagonalize_func(self, matrix_expr):
+              """Handles diagonalize(matrix) function - returns (P, D) where A = P*D*P^-1"""
+              try:
+                  P, D = matrix_expr.diagonalize()
+                  return (P, D)
+              except Exception as e:
+                  # Matrix may not be diagonalizable
+                  return None
+
+          def rowspace_func(self, matrix_expr):
+              """Handles rowspace(matrix) function - returns row space basis"""
+              return matrix_expr.rowspace()
+
+          def nullity_func(self, matrix_expr):
+              """Handles nullity(matrix) function - dimension of null space"""
+              return len(matrix_expr.nullspace())
+
+          def LU_func(self, matrix_expr):
+              """Handles LU(matrix) function - LU decomposition"""
+              L, U, perm = matrix_expr.LUdecomposition()
+              return (L, U)
+
+          def QR_func(self, matrix_expr):
+              """Handles QR(matrix) function - QR decomposition"""
+              Q, R = matrix_expr.QRdecomposition()
+              return (Q, R)
+
+          def SVD_func(self, matrix_expr):
+              """Handles SVD(matrix) function - Singular Value Decomposition"""
+              # SymPy's singular_value_decomposition returns U, S, V
+              U, S, V = matrix_expr.singular_value_decomposition()
+              return (U, S, V)
+
+          def ref_func(self, matrix_expr):
+              """Handles ref(matrix) function - row echelon form (not reduced)"""
+              return matrix_expr.echelon_form()
+
+          def norm_func(self, expr):
+              """Handles norm(vector/matrix) function - Frobenius norm for matrices, 2-norm for vectors"""
+              if hasattr(expr, 'norm'):
+                  return expr.norm()
+              return sp.sqrt(sum(x**2 for x in expr))
+
+          def dot_func(self, a, b):
+              """Handles dot(a, b) function - dot product of two vectors"""
+              if hasattr(a, 'dot'):
+                  return a.dot(b)
+              # Fallback for lists/tuples
+              return sum(x*y for x, y in zip(a, b))
+
+          def cross_func(self, a, b):
+              """Handles cross(a, b) function - cross product of two 3D vectors"""
+              if hasattr(a, 'cross'):
+                  return a.cross(b)
+              # Manual cross product for 3D vectors
+              return sp.Matrix([
+                  a[1]*b[2] - a[2]*b[1],
+                  a[2]*b[0] - a[0]*b[2],
+                  a[0]*b[1] - a[1]*b[0]
+              ])
+
+          def projection_func(self, a, b):
+              """Handles projection(a, b) function - projection of vector a onto vector b"""
+              dot_ab = a.dot(b) if hasattr(a, 'dot') else sum(x*y for x, y in zip(a, b))
+              dot_bb = b.dot(b) if hasattr(b, 'dot') else sum(x*x for x in b)
+              scalar = dot_ab / dot_bb
+              return scalar * b
+
+          def orthogonalize_func(self, *vectors):
+              """Handles orthogonalize(v1, v2, ...) function - Gram-Schmidt orthogonalization"""
+              from sympy.matrices import GramSchmidt
+              matrix_vectors = [v if isinstance(v, sp.Matrix) else sp.Matrix(v) for v in vectors]
+              return GramSchmidt(matrix_vectors)
+
           def start(self, e):
               return e
 
