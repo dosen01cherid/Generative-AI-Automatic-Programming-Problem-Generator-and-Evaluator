@@ -1,0 +1,14 @@
+{
+  "name": "whatsapp-analytics-launcher",
+  "version": "1.0.0",
+  "description": "Launch Chrome with WhatsApp Analytics extension using Puppeteer",
+  "main": "launch.js",
+  "scripts": {
+    "start": "node launch.js",
+    "whatsapp": "node launch.js --whatsapp-only",
+    "analytics": "node launch.js --analytics-only"
+  },
+  "dependencies": {
+    "puppeteer": "^24.15.0"
+  }
+}

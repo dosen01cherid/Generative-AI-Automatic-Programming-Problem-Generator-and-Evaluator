@@ -21,6 +21,7 @@
 9. [Troubleshooting](#troubleshooting)
 10. [Maintenance](#maintenance)
 11. [Performance Considerations](#performance-considerations)
+12. [Lark Parser Embedding](#lark-parser-embedding)
 
 ---
 
@@ -918,6 +919,277 @@ To add a new Python package:
 
 ---
 
+## Lark Parser Embedding
+
+### The Challenge
+
+The **Lark** parser library is used for parsing LaTeX expressions and mathematical notation. Embedding Lark for offline use presents unique challenges:
+
+1. **Dependency Chain**: Lark depends on the `regex` module (for advanced regex features), which in turn needs special handling in Pyodide
+2. **Grammar Files**: Lark uses grammar definition files that must be accessible at runtime
+3. **Version Compatibility**: Not all Lark versions are compatible with Pyodide's Python environment
+4. **Import Order**: Lark must be loaded after its dependencies are available
+
+### The Solution
+
+#### 1. Use a Compatible Lark Version
+
+**Tested working version:** `lark-1.1.9`
+
+```bash
+# Download the compatible wheel
+wget https://cdn.jsdelivr.net/pyodide/v0.24.1/full/lark-1.1.9-py3-none-any.whl \
+    -O offline_libs/pyodide/lark-1.1.9-py3-none-any.whl
+```
+
+**Why this version:**
+- Pure Python wheel (no C extensions)
+- Compatible with Pyodide's emscripten environment
+- Includes bundled grammar files
+- Works with Python 3.11 (Pyodide's Python version)
+
+#### 2. Handle the `regex` Dependency
+
+Lark can use either Python's built-in `re` module or the `regex` module for advanced features. For offline embedding:
+
+**Option A: Use built-in `re` (Recommended for offline)**
+
+Lark automatically falls back to `re` if `regex` is not available. This works for most LaTeX parsing needs.
+
+```python
+# In your Python code, Lark will automatically use `re`
+from lark import Lark
+parser = Lark(grammar, parser='lalr')  # Works without regex module
+```
+
+**Option B: Embed `regex` module (For advanced features)**
+
+If you need advanced regex features:
+
+```python
+# In embed_offline.py
+pkg_regex = read_binary(os.path.join(pyodide_dir, 'regex-2023.10.3-cp311-cp311-emscripten.whl'))
+
+# Add to EMBEDDED_B64
+'regex': "{pkg_regex}",
+
+# Add extraction before Lark
+const regexBytes = getRegexWheelBytes();
+await window.pyodide.unpackArchive(regexBytes, 'wheel');
+console.log('  ✅ regex extracted');
+
+// Then extract Lark
+const larkBytes = getLarkWheelBytes();
+await window.pyodide.unpackArchive(larkBytes, 'wheel');
+```
+
+#### 3. Correct Package Loading Order
+
+**Critical:** Lark must be loaded AFTER its dependencies. The correct order is:
+
+```javascript
+// OFFLINE MODE: Extract wheels in dependency order
+console.log('📦 Loading packages from embedded wheels (offline mode)...');
+
+// 1. First: Low-level dependencies
+const mpmathBytes = getMpmathWheelBytes();
+await window.pyodide.unpackArchive(mpmathBytes, 'wheel');
+console.log('  ✅ mpmath extracted');
+
+// 2. Second: Lark (uses built-in re, no regex needed)
+const larkBytes = getLarkWheelBytes();
+await window.pyodide.unpackArchive(larkBytes, 'wheel');
+console.log('  ✅ lark extracted');
+
+// 3. Third: SymPy (depends on mpmath)
+const sympyBytes = getSymPyWheelBytes();
+await window.pyodide.unpackArchive(sympyBytes, 'wheel');
+console.log('  ✅ sympy extracted');
+```
+
+#### 4. Verify Lark Installation
+
+After loading, verify Lark works:
+
+```javascript
+// Test Lark import
+await window.pyodide.runPythonAsync(`
+import lark
+print(f"Lark version: {lark.__version__}")
+
+# Test simple parsing
+from lark import Lark
+test_grammar = '''
+    start: NUMBER+
+    NUMBER: /[0-9]+/
+'''
+parser = Lark(test_grammar)
+result = parser.parse("123 456")
+print(f"Parse test: {result}")
+`);
+```
+
+### Common Lark Embedding Issues
+
+#### Issue 1: "No module named 'lark'"
+
+**Symptom:**
+```
+ModuleNotFoundError: No module named 'lark'
+```
+
+**Causes:**
+- Wheel not extracted
+- Wrong extraction order
+- Corrupted wheel file
+
+**Solution:**
+```javascript
+// Verify wheel is in EMBEDDED_B64
+console.log('Lark embedded:', 'lark' in EMBEDDED_B64);
+console.log('Lark data length:', EMBEDDED_B64['lark']?.length);
+
+// Check extraction
+const larkBytes = getLarkWheelBytes();
+console.log('Lark bytes:', larkBytes.length);
+await window.pyodide.unpackArchive(larkBytes, 'wheel');
+```
+
+#### Issue 2: "No module named 'lark.grammars'"
+
+**Symptom:**
+```
+ModuleNotFoundError: No module named 'lark.grammars'
+```
+
+**Cause:** Incomplete wheel extraction or wrong Lark version
+
+**Solution:** Use the Pyodide-specific Lark wheel:
+```bash
+# Use Pyodide's pre-built wheel, not PyPI version
+wget https://cdn.jsdelivr.net/pyodide/v0.24.1/full/lark-1.1.9-py3-none-any.whl
+```
+
+#### Issue 3: "regex module not found" warnings
+
+**Symptom:**
+```
+UserWarning: Regex module not found, using re instead
+```
+
+**This is OK!** Lark works fine with Python's built-in `re` module for most use cases. The warning can be ignored for LaTeX parsing.
+
+To suppress the warning:
+```python
+import warnings
+warnings.filterwarnings('ignore', message='.*[Rr]egex.*')
+import lark
+```
+
+#### Issue 4: Grammar parse errors
+
+**Symptom:**
+```
+lark.exceptions.GrammarError: ...
+```
+
+**Cause:** Grammar syntax incompatible with Lark version
+
+**Solution:** Ensure grammar uses Lark 1.x syntax:
+```python
+# Lark 1.x grammar example
+LATEX_GRAMMAR = r'''
+    start: expr
+    expr: term ((PLUS | MINUS) term)*
+    term: factor ((TIMES | DIVIDE) factor)*
+    factor: NUMBER | VARIABLE | "(" expr ")"
+
+    PLUS: "+"
+    MINUS: "-"
+    TIMES: "*"
+    DIVIDE: "/"
+    NUMBER: /[0-9]+(\.[0-9]+)?/
+    VARIABLE: /[a-zA-Z]/
+
+    %import common.WS
+    %ignore WS
+'''
+```
+
+### Lark Usage in the Application
+
+The application uses Lark to parse LaTeX mathematical expressions:
+
+```python
+from lark import Lark, Transformer
+
+# LaTeX expression grammar
+latex_grammar = r'''
+    start: expr
+    expr: frac | sqrt | power | term
+    frac: "\\frac" "{" expr "}" "{" expr "}"
+    sqrt: "\\sqrt" "{" expr "}"
+    power: base "^" "{" expr "}"
+    base: NUMBER | VARIABLE | "(" expr ")"
+    term: NUMBER | VARIABLE
+
+    NUMBER: /[0-9]+(\.[0-9]+)?/
+    VARIABLE: /[a-zA-Z]/
+
+    %import common.WS
+    %ignore WS
+'''
+
+class LatexTransformer(Transformer):
+    def frac(self, items):
+        num, den = items
+        return f"({num})/({den})"
+    # ... more transformations
+```
+
+### Testing Lark Offline
+
+After generating the offline embedded HTML, test Lark functionality:
+
+1. **Open the offline HTML file** (file:// protocol)
+2. **Open browser console** (F12)
+3. **Run test:**
+
+```javascript
+// In browser console after Pyodide loads
+await window.pyodide.runPythonAsync(`
+from lark import Lark
+
+# Simple test grammar
+g = Lark(r'''
+    start: item+
+    item: NUMBER | WORD
+    NUMBER: /[0-9]+/
+    WORD: /[a-z]+/
+    %import common.WS
+    %ignore WS
+''')
+
+result = g.parse("hello 123 world")
+print("Lark test passed!")
+print(result.pretty())
+`)
+```
+
+Expected output:
+```
+Lark test passed!
+start
+  item
+    hello
+  item
+    123
+  item
+    world
+```
+
+---
+
 ## Advanced Topics
 
 ### Custom Pyodide Configuration
@@ -1177,9 +1449,10 @@ python embed_offline.py && python embed_solve_offline.py
 |---------|------|---------|
 | 1.0 | 2025-11-30 | Initial implementation with Pyodide 0.24.1 |
 | 1.1 | 2025-12-01 | Added all matrix functions (trace, rank, rref, eigenvalues, etc.) |
+| 1.2 | 2025-12-02 | Added Lark Parser Embedding section with troubleshooting guide |
 
 ---
 
 **Document Maintained By:** Claude Code
-**Last Updated:** December 1, 2025
+**Last Updated:** December 2, 2025
 **Questions or Issues?** Check the troubleshooting section or create an issue on GitHub.

@@ -188,8 +188,85 @@ window.MathJax = {
 
   <style>
 /* =========================================
-   GLOBAL RESET
+   PROFESSIONAL UI - GLOBAL STYLES
    ========================================= */
+:root {
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-light: #eef2ff;
+    --success: #059669;
+    --success-hover: #047857;
+    --success-light: #ecfdf5;
+    --danger: #dc2626;
+    --danger-hover: #b91c1c;
+    --danger-light: #fef2f2;
+    --warning: #d97706;
+    --warning-light: #fffbeb;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    background-attachment: fixed;
+    color: var(--gray-800);
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* =========================================
+   HEADER STYLING
+   ========================================= */
+header {
+    background: white;
+    padding: 24px 32px;
+    margin: 0 auto 24px;
+    max-width: 1200px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--primary);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    letter-spacing: -0.025em;
+}
+
+header h1::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    margin-right: 12px;
+    vertical-align: middle;
+}
+
 /* =========================================
    STARTUP MODAL
    ========================================= */
@@ -199,35 +276,37 @@ window.MathJax = {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
     z-index: 10000;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: sans-serif;
+    font-family: inherit;
 }
 
 .startup-modal {
     background: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    max-width: 600px;
+    padding: 32px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,0.05);
+    max-width: 560px;
     width: 90%;
     max-height: 80vh;
     overflow-y: auto;
 }
 
 .startup-modal h2 {
-    margin: 0 0 20px 0;
-    color: #0f172a;
-    font-size: 24px;
+    margin: 0 0 8px 0;
+    color: var(--gray-900);
+    font-size: 1.5rem;
+    font-weight: 700;
 }
 
 .startup-modal p {
-    margin: 0 0 20px 0;
-    color: #64748b;
-    font-size: 14px;
+    margin: 0 0 24px 0;
+    color: var(--gray-500);
+    font-size: 0.925rem;
 }
 
 .saved-sessions-list {
@@ -237,36 +316,37 @@ window.MathJax = {
 }
 
 .session-item {
-    padding: 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    padding: 16px 20px;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--radius-sm);
     margin-bottom: 12px;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: #f8fafc;
+    background: var(--gray-50);
 }
 
 .session-item:hover {
-    border-color: #3b82f6;
-    background: #eff6ff;
+    border-color: var(--primary);
+    background: var(--primary-light);
     transform: translateX(4px);
 }
 
 .session-item.selected {
-    border-color: #3b82f6;
-    background: #dbeafe;
+    border-color: var(--primary);
+    background: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .session-name {
     font-weight: 600;
-    font-size: 16px;
-    color: #0f172a;
+    font-size: 1rem;
+    color: var(--gray-900);
     margin-bottom: 4px;
 }
 
 .session-info {
-    font-size: 13px;
-    color: #64748b;
+    font-size: 0.825rem;
+    color: var(--gray-500);
 }
 
 .modal-actions {
@@ -278,72 +358,67 @@ window.MathJax = {
 .modal-btn {
     flex: 1;
     padding: 12px 24px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     border: none;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 0.925rem;
     font-weight: 600;
     transition: all 0.2s ease;
 }
 
 .modal-btn-primary {
-    background: #3b82f6;
+    background: var(--primary);
     color: white;
 }
 
 .modal-btn-primary:hover {
-    background: #2563eb;
+    background: var(--primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
 }
 
 .modal-btn-primary:disabled {
-    background: #cbd5e1;
+    background: var(--gray-300);
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
 }
 
 .modal-btn-secondary {
-    background: #f1f5f9;
-    color: #475569;
+    background: var(--gray-100);
+    color: var(--gray-700);
 }
 
 .modal-btn-secondary:hover {
-    background: #e2e8f0;
+    background: var(--gray-200);
 }
 
 .empty-state {
     text-align: center;
-    padding: 40px 20px;
-    color: #94a3b8;
+    padding: 48px 24px;
+    color: var(--gray-400);
 }
 
 .empty-state-icon {
-    font-size: 48px;
+    font-size: 56px;
     margin-bottom: 16px;
+    opacity: 0.6;
 }
 
 .empty-state-text {
-    font-size: 16px;
+    font-size: 1rem;
     margin-bottom: 8px;
-    color: #64748b;
+    color: var(--gray-600);
+    font-weight: 500;
 }
 
 .empty-state-subtext {
-    font-size: 13px;
-    color: #94a3b8;
-}
-
-body {font-family: 'Poppins', sans-serif;
-    font-family: "Inter", "Segoe UI", Arial, sans-serif;
-    background: #f3f4f6;
-    color: #111827;
-    margin: 0;
-    padding: 0;
+    font-size: 0.875rem;
+    color: var(--gray-400);
 }
 
 #analyticsResults {
-    padding: 16px;
+    padding: 0 16px 32px;
     max-width: 1200px;
     margin: auto;
 }
@@ -352,16 +427,143 @@ body {font-family: 'Poppins', sans-serif;
    PANEL STYLING
    ========================================= */
 .panel {
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    padding: 16px 20px;
-    margin-bottom: 18px;
-    transition: box-shadow 0.2s ease;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px 28px;
+    margin: 0 auto 20px;
+    max-width: 1200px;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0,0,0,0.04);
 }
 
 .panel:hover {
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
+}
+
+.panel > label:first-child {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+}
+
+.panel .small {
+    font-size: 0.875rem;
+    color: var(--gray-500);
+    line-height: 1.5;
+}
+
+.panel code {
+    background: var(--gray-100);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.825rem;
+    color: var(--primary);
+}
+
+/* =========================================
+   BUTTON STYLES
+   ========================================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 600;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    background: var(--primary);
+    color: white;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn.success {
+    background: var(--success);
+}
+
+.btn.success:hover {
+    background: var(--success-hover);
+}
+
+.btn.danger {
+    background: var(--danger);
+}
+
+.btn.danger:hover {
+    background: var(--danger-hover);
+}
+
+.btn.ghost {
+    background: transparent;
+    color: var(--gray-600);
+    border: 1px solid var(--gray-300);
+}
+
+.btn.ghost:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-400);
+    color: var(--gray-800);
+    box-shadow: none;
+}
+
+.btn.secondary {
+    background: #7c3aed;
+}
+
+.btn.secondary:hover {
+    background: #6d28d9;
+}
+
+.btn.whatsapp {
+    background: #25D366;
+}
+
+.btn.whatsapp:hover {
+    background: #1da851;
+}
+
+/* =========================================
+   FORM ELEMENTS
+   ========================================= */
+textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--gray-200);
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.825rem;
+    line-height: 1.5;
+    resize: vertical;
+    transition: all 0.2s ease;
+    background: var(--gray-50);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+textarea::placeholder {
+    color: var(--gray-400);
 }
 
 /* =========================================
@@ -369,133 +571,177 @@ body {font-family: 'Poppins', sans-serif;
    ========================================= */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
-    margin-top: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
 }
 
 .stats-card {
     text-align: center;
-    border-radius: 10px;
-    padding: 10px 6px;
+    border-radius: var(--radius-sm);
+    padding: 20px 16px;
+    background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
+    border: 1px solid var(--gray-200);
+    transition: all 0.2s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
 .stats-number {
-    font-size: 1.3em;
-    font-weight: bold;
-    color: #111827;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.2;
 }
 
 .stats-label {
-    font-size: 0.8em;
-    color: #6b7280;
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    margin-top: 4px;
 }
 
 /* =========================================
    SCORE BADGES
    ========================================= */
 .score-badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 20px;
     font-weight: 600;
-    font-size: 12px;
+    font-size: 0.75rem;
     color: #fff;
 }
 
-.score-high { background-color: #16a34a; }           /* green */
-.score-medium { background-color: #facc15; color:#111827; } /* yellow */
-.score-low { background-color: #dc2626; }            /* red */
+.score-high {
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+}
+
+.score-medium {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    color: white;
+}
+
+.score-low {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+}
 
 /* =========================================
    TABLE STYLING
    ========================================= */
 table {
     width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.875rem;
 }
 
 th, td {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 8px;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 12px 16px;
     vertical-align: middle;
+    text-align: left;
 }
 
 th {
-    background: #f3f4f6;
-    text-align: left;
+    background: var(--gray-50);
     font-weight: 600;
+    color: var(--gray-700);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+th:first-child {
+    border-radius: var(--radius-sm) 0 0 0;
+}
+
+th:last-child {
+    border-radius: 0 var(--radius-sm) 0 0;
 }
 
 tr.detail-row td {
-    background: #f9fafb;
+    background: var(--gray-50);
 }
 
-/* zebra stripes for readability */
-tbody tr:nth-child(even):not(.detail-row) {
-    background: #fcfcfc;
+tbody tr:hover:not(.detail-row) {
+    background: var(--primary-light);
 }
 
 /* =========================================
    BUTTONS (Details Toggle)
    ========================================= */
 button.detail-toggle {
-    background: #e0f2fe;
-    border: 1px solid #bae6fd;
+    background: var(--primary-light);
+    border: 1px solid rgba(79, 70, 229, 0.2);
     border-radius: 6px;
-    color: #0369a1;
+    color: var(--primary);
     cursor: pointer;
-    font-size: 12px;
-    padding: 4px 8px;
-    transition: background 0.2s ease, color 0.2s ease;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
 }
 
 button.detail-toggle:hover {
-    background: #0369a1;
-    color: #ffffff;
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
 }
 
 /* =========================================
    PROBLEM CARD STYLING
    ========================================= */
 .problem-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    margin-bottom: 12px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s ease;
+}
+
+.problem-card:hover {
+    box-shadow: var(--shadow-md);
 }
 
 .problem-header {
-    background: #f9fafb;
+    background: linear-gradient(135deg, var(--gray-50) 0%, white 100%);
     cursor: pointer;
     font-weight: 600;
-    padding: 10px 12px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--gray-200);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .problem-header:hover {
-    background: #f3f4f6;
+    background: var(--primary-light);
 }
 
 .problem-body {
-    padding: 10px 12px;
-    background: #fcfcfc;
+    padding: 16px 18px;
+    background: white;
 }
 
 .badge {
-    background: #e0f2fe;
-    color: #0369a1;
-    border-radius: 8px;
-    padding: 2px 6px;
-    font-size: 11px;
-    font-weight: 500;
+    background: var(--primary-light);
+    color: var(--primary);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
 }
 
 /* =========================================
@@ -504,46 +750,47 @@ button.detail-toggle:hover {
 .problem-body .attempts-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 12px;
     align-items: flex-start;
     justify-content: flex-start;
 }
 
 .problem-body .attempt-box {
-    border: 1px solid #e5e7eb;
-    background: #ffffff;
-    border-radius: 6px;
-    padding: 8px 10px;
-    min-width: 120px;
+    border: 1px solid var(--gray-200);
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    min-width: 130px;
     text-align: center;
-    transition: box-shadow 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .problem-body .attempt-box:hover {
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 /* flag labels */
 .attempt-flag {
-    font-size: 12px;
-    margin-bottom: 4px;
-    font-weight: 500;
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+    font-weight: 600;
 }
 
-.flag-correct { color: #15803d; }         /* ✅ Correct */
-.flag-finalized { color: #166534; }       /* 🔒 Finalized */
-.flag-false { color: #991b1b; }           /* ❌ False */
-.flag-false-finalized { color: #b45309; } /* ⚠️ False Finalized */
+.flag-correct { color: var(--success); }
+.flag-finalized { color: #166534; }
+.flag-false { color: var(--danger); }
+.flag-false-finalized { color: var(--warning); }
 
 /* =========================================
    MATHJAX OUTPUT AREA
    ========================================= */
 .mathjax-latex {
     display: block;
-    font-size: 14px;
-    margin: 4px 0;
-    color: #111827;
-    line-height: 1.4;
+    font-size: 0.925rem;
+    margin: 6px 0;
+    color: var(--gray-800);
+    line-height: 1.5;
 }
 
 .mathjax-latex mjx-container {
@@ -552,21 +799,78 @@ button.detail-toggle:hover {
 }
 
 /* =========================================
-   RESPONSIVE TABLE
+   LOADING OVERLAY
+   ========================================= */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+#loadingOverlay .spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+#loadingOverlay .loading-text {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-top: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =========================================
+   RESPONSIVE STYLES
    ========================================= */
 @media (max-width: 768px) {
+    header {
+        margin: 0 12px 16px;
+        padding: 20px 24px;
+    }
+
+    header h1 {
+        font-size: 1.35rem;
+    }
+
+    .panel {
+        margin: 0 12px 16px;
+        padding: 20px;
+    }
+
     th, td {
-        padding: 6px;
-        font-size: 12px;
+        padding: 10px 12px;
+        font-size: 0.8rem;
     }
 
     .problem-body .attempt-box {
-        min-width: 90px;
-        padding: 6px;
+        min-width: 100px;
+        padding: 10px;
     }
 
     .stats-grid {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-size: 0.8rem;
     }
 }
 </style>
@@ -577,15 +881,22 @@ button.detail-toggle:hover {
     .nonet-step-header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 15px 20px;
+      padding: 12px 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 11000;
       display: flex;
       align-items: center;
       justify-content: space-between;
       border-bottom: 3px solid #5568d3;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .nonet-step-header.hidden {
+      transform: translateY(-100%);
     }
 
     .nonet-step-logo {
@@ -654,7 +965,6 @@ button.detail-toggle:hover {
 <body style="padding-top: 95px;">
 <!-- teturuQ Branding Header -->
   <div class="nonet-step-header">
-
     <div class="nonet-step-logo">
       <div>
         <div style="font-family: 'Poppins', sans-serif; font-size: 34px; font-weight: 600; display: flex; align-items: flex-end;">teturu<svg width="50" height="58" viewBox="0 0 100 118" fill="currentColor" style="margin-left: -2px; margin-bottom: -8px;">
@@ -670,7 +980,6 @@ button.detail-toggle:hover {
           </svg></div>
         <div class="nonet-step-tagline" style="font-family: 'Poppins', sans-serif;">No Connection, No Installation, No Distraction—Just Real Education</div>
       </div>
-    
     </div>
     <div class="nonet-step-badge">
       <svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor">
@@ -689,12 +998,6 @@ button.detail-toggle:hover {
       Offline Ready
     </div>
   </div>
-  
-    </div>
-    <div class="nonet-step-badge">
-      Offline Ready
-    </div>
-  </div>
 
 
   <div id="loadingOverlay">
@@ -704,7 +1007,7 @@ button.detail-toggle:hover {
   </div>
 
   <header>
-    <h1>📊 Analytics Dashboard (IndexedDB)</h1>
+    <h1>Analytics Dashboard</h1>
   </header>
 
   <div class="panel">
@@ -712,15 +1015,15 @@ button.detail-toggle:hover {
     <div class="small" style="margin-bottom:8px;">
       Paste WhatsApp messages containing student info. Format: <code>+62...</code> followed by name and registration number.
     </div>
-    <textarea id="pasteRosterData" style="width:100%; min-height:120px; padding:8px; border-radius:8px; border:1px solid #e6eef8; font-family:monospace; font-size:12px;" placeholder="Example:&#10;+628123456789: John Doe 12345&#10;[4/10 19.16] +62 858-9375-4880: Abima Ardiansah 41524110006"></textarea>
-    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+    <textarea id="pasteRosterData" style="min-height:120px;" placeholder="Example:&#10;+628123456789: John Doe 12345&#10;[4/10 19.16] +62 858-9375-4880: Abima Ardiansah 41524110006"></textarea>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
       <button id="parseRosterReplaceBtn" class="btn danger">Parse & Replace</button>
       <button id="parseRosterMergeBtn" class="btn success">Parse & Merge</button>
       <button id="clearRosterBtn" class="btn ghost">Clear Roster</button>
       <button id="viewRosterBtn" class="btn ghost">View Roster</button>
-      <button id="saveRosterBtn" class="btn" style="background:#10b981;">💾 Save Roster</button>
-      <button id="loadRosterBtn" class="btn" style="background:#3b82f6;">📂 Load Roster</button>
-      <button id="deleteRosterBtn" class="btn" style="background:#ef4444;">🗑️ Delete Rosters</button>
+      <button id="saveRosterBtn" class="btn success">Save Roster</button>
+      <button id="loadRosterBtn" class="btn">Load Roster</button>
+      <button id="deleteRosterBtn" class="btn danger">Delete Rosters</button>
     </div>
     <div id="rosterStatus" class="small" style="margin-top:8px; color:#059669;"></div>
   </div>
@@ -730,14 +1033,14 @@ button.detail-toggle:hover {
     <div class="small" style="margin-bottom:8px;">
       Paste one or multiple base64-encoded progress exports. <strong>✈️ Telegram multi-part messages supported!</strong>
     </div>
-    <textarea id="pasteProgressData" style="width:100%; min-height:200px; padding:8px; border-radius:8px; border:1px solid #e6eef8; font-family:monospace; font-size:12px;"></textarea>
-    <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+    <textarea id="pasteProgressData" style="min-height:200px;" placeholder="Paste base64-encoded progress data here..."></textarea>
+    <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
       <button id="analyzeBtn" class="btn">Analyze & Add Submissions</button>
       <button id="clearAnalyticsBtn" class="btn ghost">Clear All</button>
-      <button id="loadSavedBtn" class="btn" style="background:#3b82f6;">📂 Load Saved</button>
-      <button id="deleteSelectedBtn" class="btn" style="background:#ef4444;">🗑️ Delete Selected</button>
-      <button id="exportAnalyticsBtn" class="btn" style="background:#8b5cf6;">Export Analytics</button>
-      <button id="whatsappBtn" class="btn" style="background:#25D366;">💬 WhatsApp Integration</button>
+      <button id="loadSavedBtn" class="btn">Load Saved</button>
+      <button id="deleteSelectedBtn" class="btn danger">Delete Selected</button>
+      <button id="exportAnalyticsBtn" class="btn secondary">Export Analytics</button>
+      <button id="whatsappBtn" class="btn whatsapp">WhatsApp Integration</button>
     </div>
   </div>
 
