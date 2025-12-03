@@ -551,6 +551,10 @@ print("pyscript module created and registered")
     }
 
     .toolbar-panel.active #dataAccordion {
+      animation-delay: 0.15s;
+    }
+
+    .toolbar-panel.active #attributionAccordion {
       animation-delay: 0.1s;
     }
 
@@ -569,6 +573,10 @@ print("pyscript module created and registered")
 
     .toolbar-panel.closing #dataAccordion {
       animation-delay: 0.15s;
+    }
+
+    .toolbar-panel.closing #attributionAccordion {
+      animation-delay: 0.2s;
     }
 
     .accordion-section:hover {
@@ -663,7 +671,7 @@ print("pyscript module created and registered")
     }
 
     .accordion-section.active .accordion-body {
-      max-height: 1000px;
+      max-height: 2000px;
     }
 
     /* Immediately collapse all accordion bodies when closing */
@@ -1491,6 +1499,179 @@ print("pyscript module created and registered")
                   <div class="action-item-desc">Delete locally saved data</div>
                 </div>
               </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Open Source Attribution Accordion - Collapsed by default -->
+        <div class="accordion-section" id="attributionAccordion">
+          <div class="accordion-header" onclick="toggleAccordion('attributionAccordion')">
+            <div class="accordion-header-left">
+              <div class="accordion-icon icon-purple">📜</div>
+              <div class="accordion-title">
+                <div class="accordion-label">Open Source Attribution</div>
+                <div class="accordion-desc">View library credits</div>
+              </div>
+            </div>
+            <div class="accordion-arrow">▼</div>
+          </div>
+          <div class="accordion-body">
+            <div class="accordion-content">
+              <div style="padding: 8px 0; font-size: 13px; color: #64748b; line-height: 1.6;">
+                <strong style="color: #334155;">teturuQ</strong> is made possible by these open source projects:
+              </div>
+
+              <!-- Python Environment Section -->
+              <div style="font-size: 12px; font-weight: 600; color: #667eea; margin: 12px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0;">🐍 Python Environment</div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-blue">🐍</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">Pyodide</div>
+                    <div class="action-item-desc">Python in the browser via WebAssembly</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">Mozilla Public License 2.0</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-yellow">🐍</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">Python</div>
+                    <div class="action-item-desc">Programming language interpreter</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">PSF License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-green">🔢</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">SymPy</div>
+                    <div class="action-item-desc">Symbolic mathematics library</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">BSD 3-Clause License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-blue">📊</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">NumPy</div>
+                    <div class="action-item-desc">Numerical computing library</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">BSD 3-Clause License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-purple">🌳</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">Lark</div>
+                    <div class="action-item-desc">Parsing toolkit for Python</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">MIT License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-red">🗜️</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">Brotli</div>
+                    <div class="action-item-desc">Compression algorithm library</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">MIT License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-yellow">📦</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">micropip</div>
+                    <div class="action-item-desc">Package installer for Pyodide</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">Mozilla Public License 2.0</div>
+              </div>
+
+              <!-- Web Technologies Section -->
+              <div style="font-size: 12px; font-weight: 600; color: #667eea; margin: 16px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0;">🌐 Web Technologies</div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-green">📐</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">MathJax</div>
+                    <div class="action-item-desc">Beautiful math rendering for the web</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">Apache License 2.0</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-purple">✏️</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">MathQuill</div>
+                    <div class="action-item-desc">Interactive math input editor</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">Mozilla Public License 2.0</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-blue">📝</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">Quill.js</div>
+                    <div class="action-item-desc">Modern WYSIWYG rich text editor</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">BSD 3-Clause License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-yellow">⌨️</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">ACE Editor</div>
+                    <div class="action-item-desc">High-performance code editor</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">BSD 3-Clause License</div>
+              </div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-green">💲</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">jQuery</div>
+                    <div class="action-item-desc">Fast, feature-rich JavaScript library</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">MIT License</div>
+              </div>
+
+              <!-- Design Resources Section -->
+              <div style="font-size: 12px; font-weight: 600; color: #667eea; margin: 16px 0 8px 0; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0;">🎨 Design Resources</div>
+
+              <div class="action-item" style="cursor: default; flex-direction: column; align-items: flex-start; gap: 4px;">
+                <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                  <div class="action-item-icon icon-red">🔤</div>
+                  <div class="action-item-content">
+                    <div class="action-item-label">Google Fonts (Poppins)</div>
+                    <div class="action-item-desc">Beautiful, open source typography</div>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #16a34a; background: #f0fdf4; padding: 2px 8px; border-radius: 4px; margin-left: 40px;">Open Font License</div>
+              </div>
             </div>
           </div>
         </div>
