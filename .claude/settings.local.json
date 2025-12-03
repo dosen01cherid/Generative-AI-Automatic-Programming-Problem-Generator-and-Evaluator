@@ -63,7 +63,8 @@
       "Bash(embed_offline.py)",
       "Bash(embed_solve_offline.py)",
       "Bash(cmd /c \"del /f embed_offline.py embed_solve_offline.py 2>nul\")",
-      "Bash(cmd /c \"dir /b ml_churn_prediction*.html\")"
+      "Bash(cmd /c \"dir /b ml_churn_prediction*.html\")",
+      "Bash(cmd /c \"del /f fix_int_cmd.py 2>nul\")"
     ],
     "deny": [],
     "ask": []
