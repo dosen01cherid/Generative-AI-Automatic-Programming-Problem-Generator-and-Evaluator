@@ -1522,6 +1522,199 @@ print("✅ pyscript module created and registered")
         padding: 4px 8px;
       }
     }
+  
+    /* Attribution Modal */
+    .attribution-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .attribution-modal.active {
+      display: flex;
+    }
+
+    .attribution-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .attribution-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .attribution-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .attribution-header p {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .attribution-body {
+      padding: 30px;
+    }
+
+    .attribution-intro {
+      background: #f8f9ff;
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+      margin-bottom: 24px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .attribution-category {
+      font-size: 16px;
+      font-weight: 600;
+      color: #667eea;
+      margin: 24px 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .attribution-library {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .attribution-library-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .attribution-library-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .attribution-library-version {
+      background: #667eea;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .attribution-library-desc {
+      color: #4a5568;
+      line-height: 1.5;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .attribution-library-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .attribution-library-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #667eea;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .attribution-library-link:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .attribution-library-license {
+      display: inline-block;
+      background: #48bb78;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .attribution-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .attribution-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    @media (max-width: 768px) {
+      .attribution-header h2 {
+        font-size: 22px;
+      }
+
+      .attribution-body {
+        padding: 20px;
+      }
+
+      .attribution-library {
+        padding: 12px;
+      }
+    }
+
   </style>
 
 </head>
@@ -1640,9 +1833,7 @@ print("✅ pyscript module created and registered")
         </nav>
           <!-- Attribution at Bottom of Sidebar -->
     <div style="padding: 15px; border-top: 1px solid #e0e0e0; margin-top: auto; background: #f9f9f9; text-align: center; font-size: 12px; position: absolute; bottom: 0; left: 0; right: 0; width: 100%;">
-      <a href="attributions.html" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 500;">
-        📜 Open Source Attributions
-      </a>
+      <a href="javascript:void(0)" onclick="openAttributionModal()" style="color: #667eea; text-decoration: none; font-weight: 500; cursor: pointer;">📜 Open Source Attributions</a>
     </div>
   </aside>
 
@@ -18394,6 +18585,163 @@ print("✅ Problem Solver initialized with multi-type support")
         }
       });
     })();
+  </script>
+
+
+  <!-- Attribution Modal -->
+  <div class="attribution-modal" id="attributionModal">
+    <div class="attribution-content">
+      <div class="attribution-header">
+        <button class="attribution-close" onclick="closeAttributionModal()">&times;</button>
+        <h2>📜 Open Source Attributions</h2>
+        <p>This project is built with amazing open source libraries</p>
+      </div>
+      <div class="attribution-body">
+        <div class="attribution-intro">
+          <strong>teturuQ</strong> is made possible by the incredible work of open source developers worldwide.
+          We are deeply grateful to these projects and their contributors for making powerful tools freely available.
+        </div>
+
+        <div class="attribution-category">🧮 Mathematical & Scientific Computing</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Pyodide</div>
+            <div class="attribution-library-version">v0.24.1</div>
+          </div>
+          <div class="attribution-library-desc">
+            Python runtime for the browser powered by WebAssembly. Enables running Python code entirely in the browser without any server-side infrastructure.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://pyodide.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/pyodide/pyodide" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <span class="attribution-library-license">Mozilla Public License 2.0</span>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">MathJax</div>
+            <div class="attribution-library-version">v3</div>
+          </div>
+          <div class="attribution-library-desc">
+            Beautiful and accessible math rendering for the web. Displays mathematical notation written in LaTeX, MathML, or AsciiMath notation.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://www.mathjax.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/mathjax/MathJax" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <span class="attribution-library-license">Apache License 2.0</span>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">MathQuill</div>
+            <div class="attribution-library-version">v0.10.1</div>
+          </div>
+          <div class="attribution-library-desc">
+            Interactive mathematical input editor that makes typing mathematical expressions as easy as writing them on paper.
+          </div>
+          <div class="attribution-library-links">
+            <a href="http://mathquill.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/mathquill/mathquill" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <span class="attribution-library-license">Mozilla Public License 2.0</span>
+        </div>
+
+        <div class="attribution-category">✍️ Rich Text Editing</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Quill.js</div>
+            <div class="attribution-library-version">v1.3.7</div>
+          </div>
+          <div class="attribution-library-desc">
+            Modern WYSIWYG rich text editor built for the web. Provides a powerful and customizable editing experience.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://quilljs.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/quilljs/quill" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <span class="attribution-library-license">BSD 3-Clause License</span>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">ACE Editor</div>
+            <div class="attribution-library-version">v1.32.3</div>
+          </div>
+          <div class="attribution-library-desc">
+            High-performance code editor for the web. Used for advanced text editing with syntax highlighting and code completion.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://ace.c9.io/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/ajaxorg/ace" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <span class="attribution-library-license">BSD 3-Clause License</span>
+        </div>
+
+        <div class="attribution-category">🛠️ Utilities & Dependencies</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">jQuery</div>
+            <div class="attribution-library-version">v3.7.1</div>
+          </div>
+          <div class="attribution-library-desc">
+            Fast, small, and feature-rich JavaScript library. Simplifies HTML document traversal, event handling, and DOM manipulation.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://jquery.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/jquery/jquery" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <span class="attribution-library-license">MIT License</span>
+        </div>
+
+        <div class="attribution-category">🎨 Design Resources</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Google Fonts (Poppins)</div>
+            <div class="attribution-library-version">Latest</div>
+          </div>
+          <div class="attribution-library-desc">
+            Open source font library providing beautiful, high-quality typography. We use the Poppins font family for clean, modern design.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://fonts.google.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://fonts.google.com/specimen/Poppins" target="_blank" class="attribution-library-link">🔤 Poppins</a>
+          </div>
+          <span class="attribution-library-license">Open Font License</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openAttributionModal() {
+      document.getElementById('attributionModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAttributionModal() {
+      document.getElementById('attributionModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('attributionModal')?.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAttributionModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('attributionModal').classList.contains('active')) {
+        closeAttributionModal();
+      }
+    });
   </script>
 
 </body>
