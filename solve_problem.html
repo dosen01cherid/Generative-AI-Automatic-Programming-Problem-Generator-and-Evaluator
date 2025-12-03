@@ -1523,6 +1523,134 @@ print("✅ pyscript module created and registered")
       }
     }
   
+    
+    /* License Accordion Styles */
+    .attribution-license-accordion {
+      margin-top: 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .attribution-license-header {
+      background: #f7fafc;
+      padding: 10px 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s ease;
+      user-select: none;
+    }
+
+    .attribution-license-header:hover {
+      background: #edf2f7;
+    }
+
+    .attribution-license-header.active {
+      background: #e6f2ff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .attribution-license-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .attribution-license-icon {
+      font-size: 11px;
+      color: #667eea;
+      transition: transform 0.3s ease;
+    }
+
+    .attribution-license-header.active .attribution-license-icon {
+      transform: rotate(180deg);
+    }
+
+    .attribution-license-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: white;
+    }
+
+    .attribution-license-content.active {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .attribution-license-body {
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .attribution-license-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      margin: 12px 0 6px 0;
+    }
+
+    .attribution-license-body p {
+      margin: 6px 0;
+    }
+
+    .attribution-license-body ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .attribution-license-body li {
+      margin: 4px 0;
+    }
+
+    .license-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .license-badge.mpl {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .license-badge.apache {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .license-badge.bsd {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .license-badge.mit {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .license-badge.ofl {
+      background: #fce4ec;
+      color: #c2185b;
+    }
+
+    .license-badge.python {
+      background: #fff8e1;
+      color: #f57f17;
+    }
+
     /* Attribution Modal */
     .attribution-modal {
       position: fixed;
@@ -18616,7 +18744,31 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="https://pyodide.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://github.com/pyodide/pyodide" target="_blank" class="attribution-library-link">📦 GitHub</a>
           </div>
-          <span class="attribution-library-license">Mozilla Public License 2.0</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mpl">Mozilla Public License 2.0</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> MPL 2.0 is a copyleft license that is easy to comply with. You must make the source code for any of your changes available under MPL, but you can combine the MPL software with proprietary code.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Patent use</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>Disclose source</li><li>License and copyright notice</li><li>Same license (file-level)</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="attribution-library">
@@ -18631,7 +18783,31 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="https://www.mathjax.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://github.com/mathjax/MathJax" target="_blank" class="attribution-library-link">📦 GitHub</a>
           </div>
-          <span class="attribution-library-license">Apache License 2.0</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge apache">Apache License 2.0</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license that also provides an express grant of patent rights from contributors to users. Very business-friendly and widely used.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Patent use</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li><li>State changes</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Trademark use</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="attribution-library">
@@ -18646,7 +18822,31 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="http://mathquill.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://github.com/mathquill/mathquill" target="_blank" class="attribution-library-link">📦 GitHub</a>
           </div>
-          <span class="attribution-library-license">Mozilla Public License 2.0</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mpl">Mozilla Public License 2.0</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> MPL 2.0 is a copyleft license that is easy to comply with. You must make the source code for any of your changes available under MPL, but you can combine the MPL software with proprietary code.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Patent use</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>Disclose source</li><li>License and copyright notice</li><li>Same license (file-level)</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="attribution-category">✍️ Rich Text Editing</div>
@@ -18663,7 +18863,31 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="https://quilljs.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://github.com/quilljs/quill" target="_blank" class="attribution-library-link">📦 GitHub</a>
           </div>
-          <span class="attribution-library-license">BSD 3-Clause License</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge bsd">BSD 3-Clause License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license similar to the MIT License, but with a clause that prohibits others from using the name of the copyright holder to endorse derived products.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="attribution-library">
@@ -18678,7 +18902,31 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="https://ace.c9.io/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://github.com/ajaxorg/ace" target="_blank" class="attribution-library-link">📦 GitHub</a>
           </div>
-          <span class="attribution-library-license">BSD 3-Clause License</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge bsd">BSD 3-Clause License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license similar to the MIT License, but with a clause that prohibits others from using the name of the copyright holder to endorse derived products.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="attribution-category">🛠️ Utilities & Dependencies</div>
@@ -18695,7 +18943,31 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="https://jquery.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://github.com/jquery/jquery" target="_blank" class="attribution-library-link">📦 GitHub</a>
           </div>
-          <span class="attribution-library-license">MIT License</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mit">MIT License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works can be used commercially.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="attribution-category">🎨 Design Resources</div>
@@ -18712,13 +18984,202 @@ print("✅ Problem Solver initialized with multi-type support")
             <a href="https://fonts.google.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
             <a href="https://fonts.google.com/specimen/Poppins" target="_blank" class="attribution-library-link">🔤 Poppins</a>
           </div>
-          <span class="attribution-library-license">Open Font License</span>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge ofl">Open Font License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> The SIL Open Font License is a free, open source license specifically designed for fonts and related software. Fonts must be distributed under this same license.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li><li>Same license</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        
+        <div class="attribution-category">🐍 Python Environment (Pyodide)</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">SymPy</div>
+            <div class="attribution-library-version">v1.12</div>
+          </div>
+          <div class="attribution-library-desc">
+            Symbolic mathematics library for Python. Powers all mathematical computations, equation solving, calculus operations, linear algebra, and symbolic manipulation in teturuQ.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://www.sympy.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/sympy/sympy" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge bsd">BSD 3-Clause License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license similar to the MIT License, but with a clause that prohibits others from using the name of the copyright holder to endorse derived products.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">NumPy</div>
+            <div class="attribution-library-version">v1.26.0</div>
+          </div>
+          <div class="attribution-library-desc">
+            Fundamental package for scientific computing with Python. Provides powerful N-dimensional array objects and numerical computing tools.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://numpy.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/numpy/numpy" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge bsd">BSD 3-Clause License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license similar to the MIT License, but with a clause that prohibits others from using the name of the copyright holder to endorse derived products.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Lark Parser</div>
+            <div class="attribution-library-version">v1.1.7</div>
+          </div>
+          <div class="attribution-library-desc">
+            Modern parsing library for Python. Used to parse LaTeX mathematical expressions and convert them into executable Python/SymPy code.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://lark-parser.readthedocs.io/" target="_blank" class="attribution-library-link">🌐 Docs</a>
+            <a href="https://github.com/lark-parser/lark" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mit">MIT License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works can be used commercially.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Python Standard Library</div>
+            <div class="attribution-library-version">v3.11</div>
+          </div>
+          <div class="attribution-library-desc">
+            Python's comprehensive standard library. Provides essential modules for data structures, utilities, and core functionality.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://docs.python.org/3/library/" target="_blank" class="attribution-library-link">📚 Documentation</a>
+            <a href="https://www.python.org/" target="_blank" class="attribution-library-link">🌐 Python.org</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge python">Python Software Foundation License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A BSD-style permissive license for Python and related packages. GPL-compatible and allows commercial use.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       </div>
     </div>
   </div>
 
   <script>
+    
+    function toggleLicenseAccordion(header) {
+      header.classList.toggle('active');
+      const content = header.nextElementSibling;
+      content.classList.toggle('active');
+    }
+
     function openAttributionModal() {
       document.getElementById('attributionModal').classList.add('active');
       document.body.style.overflow = 'hidden';
