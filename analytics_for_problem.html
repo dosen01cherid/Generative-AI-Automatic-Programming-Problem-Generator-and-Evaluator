@@ -3347,7 +3347,7 @@ class ProgressAnalyzer:
 
             <div style="background:#eff6ff;border-radius:12px;padding:20px;margin-bottom:20px;border:2px solid #3b82f6;">
                 <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-                    <div style="font-size:32px;">📊</div>
+                    <div style="font-size:32px;"><i class='icon icon-chart'></i></div>
                     <div>
                         <h3 style="margin:0;font-size:18px;font-weight:700;color:#1e40af;">Real-Time Progress Update</h3>
                         <p style="margin:4px 0 0 0;color:#1e3a8a;font-size:13px;">Live dashboard of student submissions</p>
@@ -3664,7 +3664,7 @@ class ProgressAnalyzer:
 
         header.innerHTML = """
             <div>
-                <h2 style='margin:0;font-size:24px;font-weight:700;'>📊 Real-Time Progress Dashboard</h2>
+                <h2 style='margin:0;font-size:24px;font-weight:700;'><i class='icon icon-chart'></i> Real-Time Progress Dashboard</h2>
                 <p style='margin:4px 0 0 0;opacity:0.9;font-size:14px;'>Live tracking of student submissions</p>
             </div>
             <button id='closeDashboard' class='btn' style='background:rgba(255,255,255,0.2);color:white;border:1px solid white;padding:10px 20px;border-radius:8px;cursor:pointer;font-weight:600;'>
@@ -3705,7 +3705,7 @@ class ProgressAnalyzer:
                 <tbody id='realTimeTableBody'>
                     <tr>
                         <td colspan='7' style='padding:40px;text-align:center;color:#64748b;'>
-                            <div style='font-size:48px;margin-bottom:12px;'>📊</div>
+                            <div style='font-size:48px;margin-bottom:12px;'><i class='icon icon-chart'></i></div>
                             <div style='font-size:16px;'>Waiting for submissions...</div>
                             <div style='font-size:13px;margin-top:8px;'>Data will appear here as students submit their progress</div>
                         </td>
@@ -3831,14 +3831,14 @@ class ProgressAnalyzer:
                     </div>
                 </div>
                 <div style='display:flex;align-items:center;gap:8px;'>
-                    <div style='width:40px;height:40px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:20px;'>✅</div>
+                    <div style='width:40px;height:40px;border-radius:8px;background:#dcfce7;display:flex;align-items:center;justify-content:center;font-size:20px;color:#10b981;'><i class='icon icon-check-circle'></i></div>
                     <div>
                         <div style='font-size:24px;font-weight:700;color:#16a34a;'>{submitted_count}</div>
                         <div style='font-size:12px;color:#64748b;'>Submitted</div>
                     </div>
                 </div>
                 <div style='display:flex;align-items:center;gap:8px;'>
-                    <div style='width:40px;height:40px;border-radius:8px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:20px;'>📝</div>
+                    <div style='width:40px;height:40px;border-radius:8px;background:#fef3c7;display:flex;align-items:center;justify-content:center;font-size:20px;color:#d97706;'><i class='icon icon-edit'></i></div>
                     <div>
                         <div style='font-size:24px;font-weight:700;color:#ca8a04;'>{total_submissions}</div>
                         <div style='font-size:12px;color:#64748b;'>Total Submissions</div>
@@ -3867,10 +3867,10 @@ class ProgressAnalyzer:
 
             # Status
             if problems_count == 0:
-                status = "<span style='color:#ef4444;font-weight:600;'>⏳ Not Started</span>"
+                status = "<span style='color:#ef4444;font-weight:600;'><i class='icon icon-clock'></i> Not Started</span>"
                 row_bg = "#fef2f2"
             elif problems_count > 0:
-                status = "<span style='color:#10b981;font-weight:600;'>✅ Active</span>"
+                status = "<span style='color:#10b981;font-weight:600;'><i class='icon icon-check-circle'></i> Active</span>"
                 row_bg = "#f0fdf4"
 
             rows_html += f"""
@@ -4162,10 +4162,10 @@ class ProgressAnalyzer:
 
             # Status
             if student["total_submissions"] == 0:
-                status = "<span style='color:#ef4444;'>❌ No Submissions</span>"
+                status = "<span style='color:#ef4444;'><i class='icon icon-close'></i> No Submissions</span>"
             else:
                 accuracy = (student["correct_count"] / student["total_submissions"] * 100) if student["total_submissions"] > 0 else 0
-                status = f"<span style='color:#10b981;'>✅ {accuracy:.0f}% Accuracy</span>"
+                status = f"<span style='color:#10b981;'><i class='icon icon-check-circle'></i> {accuracy:.0f}% Accuracy</span>"
 
             # Last submission time
             last_sub_str = "-"
@@ -4536,6 +4536,12 @@ class ProgressAnalyzer:
         window.console.log("✅ Floating share button created with WhatsApp and Telegram support")
 
 class DisplayManager:
+    def __init__(self):
+        self.cheating_groups = []
+        self.invalid_list = []
+        self.ignored_list = []
+        self.app = None
+
     def display_cheating_panel(self, cheating_groups, results):
         """Display cheating detection results"""
         if not cheating_groups:
@@ -4547,7 +4553,7 @@ class DisplayManager:
         panel.style.border = "2px solid #dc2626"
 
         panel.innerHTML = f"""
-            <h3 style='margin-top:0;color:#dc2626;'>🚨 Cheating Detection Results</h3>
+            <h3 style='margin-top:0;color:#dc2626;'><i class='icon icon-error'></i> Cheating Detection Results</h3>
             <div style='margin-bottom:16px;color:#991b1b;font-weight:600;'>
                 Found {len(cheating_groups)} group(s) with identical submissions from different students:
             </div>
@@ -4689,7 +4695,7 @@ class DisplayManager:
             uuid_header.style.cssText = "background:#0369a1;color:white;padding:16px;cursor:pointer;user-select:none;border-radius:8px 8px 0 0;display:flex;justify-content:space-between;align-items:center;"
             uuid_header.innerHTML = f"""
                 <div>
-                    <h3 style='margin:0;'>📊 Problem Set #{uuid_idx}: {html.escape(problem_set_name)}</h3>
+                    <h3 style='margin:0;'><i class='icon icon-chart'></i> Problem Set #{uuid_idx}: {html.escape(problem_set_name)}</h3>
                     <div style='font-size:13px;opacity:0.9;margin-top:4px;'>UUID: {html.escape(uuid[:16])}... | {len(uuid_submissions)} submissions | {len(groups)} students</div>
                 </div>
                 <span id='uuid-toggle-{uuid_idx}' style='font-size:20px;'>▼</span>
@@ -4772,7 +4778,7 @@ class DisplayManager:
         ignored = len(self.ignored_list) if hasattr(self, "ignored_list") else 0
 
         panel.innerHTML = f"""
-            <h3 style='margin-top:0;'>📊 Summary</h3>
+            <h3 style='margin-top:0;'><i class='icon icon-chart'></i> Summary</h3>
             <div class='stats-grid'>
                 <div class='stats-card' style='background:#e0f2fe;'>
                     <div class='stats-number'>{total_students}</div>
@@ -4952,11 +4958,11 @@ class DisplayManager:
 
             # Status badge
             if finalized and structure_correct:
-                status = "<span style='color:#059669;font-weight:600;'>✅ Finalized</span>"
+                status = "<span style='color:#059669;font-weight:600;'><i class='icon icon-check-circle'></i> Finalized</span>"
             elif correct:
-                status = "<span style='color:#d97706;font-weight:600;'>⚠️ Correct but not finalized</span>"
+                status = "<span style='color:#d97706;font-weight:600;'><i class='icon icon-warning'></i> Correct but not finalized</span>"
             else:
-                status = "<span style='color:#dc2626;font-weight:600;'>❌ Incomplete</span>"
+                status = "<span style='color:#dc2626;font-weight:600;'><i class='icon icon-close'></i> Incomplete</span>"
 
             # Attempts display
             attempts_html = "<div style='display:flex;flex-wrap:wrap;gap:8px;align-items:center;'>"
@@ -4966,13 +4972,13 @@ class DisplayManager:
                 is_correct = att.get("correct", False)
 
                 if is_correct and finalized:
-                    flag_text, flag_color = "🔒 Finalized", "#166534"
+                    flag_text, flag_color = "<i class='icon icon-check-circle'></i> Finalized", "#166534"
                 elif is_correct and not finalized:
-                    flag_text, flag_color = "✅ Correct", "#15803d"
+                    flag_text, flag_color = "<i class='icon icon-check'></i> Correct", "#15803d"
                 elif not is_correct and finalized:
-                    flag_text, flag_color = "⚠️ False Finalized", "#b45309"
+                    flag_text, flag_color = "<i class='icon icon-warning'></i> False Finalized", "#b45309"
                 else:
-                    flag_text, flag_color = "❌ False", "#991b1b"
+                    flag_text, flag_color = "<i class='icon icon-close'></i> False", "#991b1b"
 
                 attempts_html += f"""
                     <div style='border:1px solid #e5e7eb;padding:6px 10px;border-radius:6px;background:#fff;
@@ -5016,7 +5022,7 @@ class DisplayManager:
             return ""
 
         panel.innerHTML = f"""
-            <h3 style='margin-top:0;'>📋 Submission Status (Extended)</h3>
+            <h3 style='margin-top:0;'><i class='icon icon-list'></i> Submission Status (Extended)</h3>
             <div style='overflow-x:auto;'>
             <table id='statusTable' style='width:100%;border-collapse:collapse;font-size:13px;'>
                 <thead>
@@ -5026,10 +5032,10 @@ class DisplayManager:
                         <th class='sortable-status-header' data-column='reg' style='cursor:pointer;user-select:none;' title='Click to sort'>Reg No {get_status_sort_indicator('reg')}</th>
                         <th>Phone</th>
                         <th class='sortable-status-header' data-column='status' style='cursor:pointer;user-select:none;' title='Click to sort'>Status {get_status_sort_indicator('status')}</th>
-                        <th>✅ Success</th>
-                        <th>🕓 Ignored</th>
-                        <th class='sortable-status-header' data-column='invalid' style='cursor:pointer;user-select:none;' title='Click to sort'>⚠️ Invalid {get_status_sort_indicator('invalid')}</th>
-                        <th>🚨 Cheating</th>
+                        <th><i class='icon icon-check-circle' style='color:#10b981;'></i> Success</th>
+                        <th><i class='icon icon-clock' style='color:#6b7280;'></i> Ignored</th>
+                        <th class='sortable-status-header' data-column='invalid' style='cursor:pointer;user-select:none;' title='Click to sort'><i class='icon icon-warning' style='color:#f59e0b;'></i> Invalid {get_status_sort_indicator('invalid')}</th>
+                        <th><i class='icon icon-error' style='color:#dc2626;'></i> Cheating</th>
                     </tr>
                 </thead>
                 <tbody id='statusTableBody'></tbody>
@@ -5042,23 +5048,26 @@ class DisplayManager:
         if self.app.student_roster:
             all_phones.update(self.app.student_roster.keys())
         all_phones.update(groups.keys())
-        for inv in self.invalid_list:
+        invalid_list = getattr(self, 'invalid_list', []) or []
+        for inv in invalid_list:
             all_phones.add(inv.get("student_phone", "unknown"))
-        for group in self.cheating_groups:
+        cheating_groups = getattr(self, 'cheating_groups', []) or []
+        for group in cheating_groups:
             for student in group["students"]:
                 all_phones.add(student["phone"])
 
         invalid_counts = defaultdict(int)
-        for inv in self.invalid_list:
+        for inv in invalid_list:
             invalid_counts[inv.get("student_phone", "unknown")] += 1
 
         plagiat_counts = defaultdict(int)
-        for group in self.cheating_groups:
+        for group in cheating_groups:
             for student in group["students"]:
                 plagiat_counts[student["phone"]] += 1
 
         ignored_counts = defaultdict(int)
-        for dup in self.ignored_list:
+        ignored_list = getattr(self, 'ignored_list', []) or []
+        for dup in ignored_list:
             ignored_counts[dup.get("student_phone", "unknown")] += 1
 
         student_status_data = []
@@ -5121,7 +5130,7 @@ class DisplayManager:
     def create_invalid_panel(self, invalid):
         panel = document.createElement("div")
         panel.className = "panel"
-        panel.innerHTML = "<h3 style='margin-top:0;'>⚠️ Invalid Entries (Details)</h3>"
+        panel.innerHTML = "<h3 style='margin-top:0;'><i class='icon icon-warning' style='color:#f59e0b;'></i> Invalid Entries (Details)</h3>"
         for item in invalid:
             phone = item.get("student_phone", "Unknown")
             name = self.app.student_roster.get(phone, {}).get("name", "Unknown") if self.app.student_roster else "Unknown"
@@ -5537,8 +5546,14 @@ class PersistenceManager:
 
             async def handle_delete(event):
                 event.stopPropagation()  # Don't trigger session selection
-                btn = event.currentTarget
+                btn = event.currentTarget or event.target.closest(".delete-session-btn")
+                if not btn:
+                    window.console.error("❌ Delete button not found")
+                    return
                 key_to_delete = btn.getAttribute("data-key")
+                if not key_to_delete:
+                    window.console.error("❌ No data-key attribute found")
+                    return
 
                 if window.confirm(f"Delete session '{key_to_delete}'?"):
                     try:
@@ -5662,7 +5677,7 @@ class PersistenceManager:
         """
 
         title = document.createElement("h3")
-        title.textContent = "💾 Save Analytics Data"
+        title.innerHTML = "<i class='icon icon-save'></i> Save Analytics Data"
         title.style.margin = "0 0 10px 0"
 
         label_new = document.createElement("label")
@@ -6000,7 +6015,7 @@ class PersistenceManager:
                         <input type="checkbox" class="session-checkbox" value="{self._escape(key)}"
                                style="margin-right: 12px; width: 18px; height: 18px; cursor: pointer;">
                         <div>
-                            <div class="session-name" style="font-weight: 600; color: #111827;">📊 {self._escape(key)}</div>
+                            <div class="session-name" style="font-weight: 600; color: #111827;"><i class='icon icon-chart'></i> {self._escape(key)}</div>
                             <div class="session-info" style="font-size: 12px; color: #6b7280;">Saved analytics session</div>
                         </div>
                     </label>
