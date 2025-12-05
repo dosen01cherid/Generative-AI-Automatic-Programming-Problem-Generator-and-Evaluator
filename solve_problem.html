@@ -1999,9 +1999,14 @@ print("✅ pyscript module created and registered")
             <div id="creditDisplay" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 16px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <div style="font-size: 14px; font-weight: 600; opacity: 0.9;">💎 Give-Up Credits</div>
-                <button id="showCreditHistory" class="btn ghost" style="padding: 4px 12px; font-size: 12px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
-                  View History
-                </button>
+                <div style="display: flex; gap: 8px;">
+                  <button id="showRewardRules" class="btn ghost" style="padding: 4px 12px; font-size: 12px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                    💎 Reward Rules
+                  </button>
+                  <button id="showCreditHistory" class="btn ghost" style="padding: 4px 12px; font-size: 12px; background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);">
+                    View History
+                  </button>
+                </div>
               </div>
               <div style="display: flex; align-items: baseline; gap: 12px;">
                 <div style="font-size: 32px; font-weight: 700;" id="creditBalance">0</div>
@@ -2015,7 +2020,130 @@ print("✅ pyscript module created and registered")
               </div>
             </div>
 
-            <!-- Credit History Modal (Hidden by default) -->
+            <!-- Diamond Reward Rules Modal (Hidden by default) -->
+            <div id="rewardRulesModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
+              <div style="background: white; border-radius: 12px; max-width: 700px; max-height: 85vh; overflow: hidden; display: flex; flex-direction: column; margin: 20px;">
+                <div style="padding: 20px; border-bottom: 2px solid #e5e7eb; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="margin: 0;">💎 Diamond Reward Rules</h3>
+                    <button id="closeRewardRules" style="background: none; border: none; font-size: 24px; cursor: pointer; color: white;">×</button>
+                  </div>
+                </div>
+                <div style="padding: 20px; overflow-y: auto; flex: 1;">
+
+                  <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+                    <strong>💡 How Diamonds Work</strong><br>
+                    Solve problems to earn diamonds. Use diamonds to reveal solutions when you're stuck!
+                  </div>
+
+                  <h4 style="margin-top: 0;">🎯 Duplicate Detection System</h4>
+                  <p style="margin-bottom: 16px;">We prevent farming by detecting two types of duplicates:</p>
+
+                  <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 12px; margin-bottom: 12px; border-radius: 4px;">
+                    <strong>🚫 Exact Duplicate (0% diamonds)</strong><br>
+                    Same problem structure AND same numbers<br>
+                    <em style="font-size: 13px; opacity: 0.8;">Example: Solving "2+3" twice → Second attempt gets 0 diamonds</em>
+                  </div>
+
+                  <div style="background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 20px; border-radius: 4px;">
+                    <strong>⚠️ Structure Duplicate (0-100% diamonds based on category)</strong><br>
+                    Same problem structure but different numbers<br>
+                    <em style="font-size: 13px; opacity: 0.8;">Example: Solving "2+3" then "5+7" → Depends on problem category</em>
+                  </div>
+
+                  <h4>📊 Reward Percentages by Category</h4>
+                  <p style="margin-bottom: 12px; font-size: 13px; opacity: 0.8;">When you solve a problem with the same structure but different numbers:</p>
+
+                  <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 20px;">
+                    <thead>
+                      <tr style="background: #f3f4f6;">
+                        <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Category</th>
+                        <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Structure Dup %</th>
+                        <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Example</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="background: #dcfce7;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><strong>All Matrix Operations</strong></td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #059669;">100%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">det([[1,2],[3,4]])</td>
+                      </tr>
+                      <tr style="background: #dcfce7;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><strong>Row Operations</strong></td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #059669;">100%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">R₁ → 2R₁</td>
+                      </tr>
+                      <tr style="background: #dcfce7;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><strong>Eigenvalues/Vectors</strong></td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #059669;">100%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">eigenvalues(M)</td>
+                      </tr>
+                      <tr style="background: #dcfce7;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;"><strong>LU/QR/SVD Decomposition</strong></td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #059669;">100%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">LU(M), QR(M), SVD(M)</td>
+                      </tr>
+                      <tr style="background: #fef3c7;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Integrals</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #d97706;">80%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">∫x² dx, ∫x³ dx</td>
+                      </tr>
+                      <tr style="background: #fef3c7;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Limits</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #d97706;">70%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">lim(sin(x)/x, x→0)</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Trig (complex)</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">50%</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">sin(x²+2x)</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Complex Numbers</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">50%</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">re(3+4i)</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Derivatives</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">30%</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">d/dx(x²), d/dx(x³)</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Hyperbolic Functions</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">30%</td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">sinh(x)</td>
+                      </tr>
+                      <tr style="background: #fee2e2;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Basic Algebra</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #dc2626;">0%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">2+3, 5+7</td>
+                      </tr>
+                      <tr style="background: #fee2e2;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Trig (simple)</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #dc2626;">0%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">sin(x), sin(y)</td>
+                      </tr>
+                      <tr style="background: #fee2e2;">
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">Logarithmic</td>
+                        <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;"><strong style="color: #dc2626;">0%</strong></td>
+                        <td style="padding: 8px; border-bottom: 1px solid #e5e7eb; font-size: 12px;">ln(5), ln(7)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div style="background: #dbeafe; border-left: 4px solid #3b82f6; padding: 12px; margin-top: 20px; border-radius: 4px;">
+                    <strong>💡 Pro Tips</strong><br>
+                    • Matrix operations always give full credit (100%) - they require real computation!<br>
+                    • Try different types of problems to maximize diamond earnings<br>
+                    • Higher difficulty problems = more diamonds<br>
+                    • Exact same problem = 0 diamonds (prevents cheating)
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+                        <!-- Credit History Modal (Hidden by default) -->
             <div id="creditHistoryModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 10000; align-items: center; justify-content: center;">
               <div style="background: white; border-radius: 12px; max-width: 600px; max-height: 80vh; overflow: hidden; display: flex; flex-direction: column; margin: 20px;">
                 <div style="padding: 20px; border-bottom: 2px solid #e5e7eb;">
@@ -2082,16 +2210,20 @@ print("✅ pyscript module created and registered")
                 </div>
 
                 <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px">
-                  <button id="freestyleSubmit" class="btn">Submit Attempt</button>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                    <button id="freestyleSubmit" class="btn" style="flex: 1; min-width: 120px">Submit</button>
+                    <button id="freestyleFinalize" class="btn ghost" disabled style="flex: 1; min-width: 120px">Finalize</button>
+                  </div>
+                  <div style="display: flex; gap: 8px; flex-wrap: wrap">
+                    <button id="freestyleGiveUp" class="btn ghost" style="background: #f59e0b; color: #fff; flex: 1; min-width: 120px">
+                      Give Up (Show Solution)
+                    </button>
+                    <button id="freestyleReset" class="btn ghost" style="background: #dc2626; color: #fff; flex: 1; min-width: 120px">
+                      Reset
+                    </button>
+                  </div>
                   <button id="getStructureString" class="btn ghost" style="background: #3b82f6; color: #fff" title="Get structure string for Moodle submission">
-                    📋 Get Structure String
-                  </button>
-                  <button id="freestyleGiveUp" class="btn ghost" style="background: #f59e0b; color: #fff">
-                    Give Up (Show Solution)
-                  </button>
-                  <button id="freestyleFinalize" class="btn ghost" disabled>Check Simplest Form</button>
-                  <button id="freestyleReset" class="btn ghost" style="background: #dc2626; color: #fff">
-                    Reset Problem
+                    Get Math for Moodle
                   </button>
                 </div>
 
@@ -8609,6 +8741,15 @@ class ProblemSolverApp:
         close_history_btn = document.querySelector("#closeCreditHistory")
         if close_history_btn:
             close_history_btn.addEventListener("click", create_proxy(lambda e: self.close_credit_history_modal(e)))
+
+        # Reward rules modal handlers
+        show_rules_btn = document.querySelector("#showRewardRules")
+        if show_rules_btn:
+            show_rules_btn.addEventListener("click", create_proxy(lambda e: self.show_reward_rules_modal(e)))
+
+        close_rules_btn = document.querySelector("#closeRewardRules")
+        if close_rules_btn:
+            close_rules_btn.addEventListener("click", create_proxy(lambda e: self.close_reward_rules_modal(e)))
 
     # ============================================
     # HELPER METHODS - Button Loading States
@@ -15974,7 +16115,7 @@ This demonstrates the complete format for creating your own problem sets!
 
         giveup_btn = document.querySelector("#freestyleGiveUp")
         if giveup_btn:
-            giveup_btn.textContent = f"Give Up (💎 {credits_needed} credit{'s' if credits_needed != 1 else ''})"
+            giveup_btn.textContent = f"Give Up (💎 {credits_needed})"
 
             if self.credit_balance >= credits_needed:
                 giveup_btn.disabled = False
@@ -16165,7 +16306,7 @@ This demonstrates the complete format for creating your own problem sets!
 
       giveup_btn = document.querySelector("#freestyleGiveUp")
       if giveup_btn:
-          giveup_btn.textContent = f"Give Up (💎 {credits_needed} credit{'s' if credits_needed != 1 else ''})"
+          giveup_btn.textContent = f"Give Up (💎 {credits_needed})"
 
           if self.credit_balance >= credits_needed:
               giveup_btn.disabled = False
@@ -16259,7 +16400,7 @@ This demonstrates the complete format for creating your own problem sets!
                 self.freestyle_correct = True
                 
                 if feedback_el:
-                  feedback_el.innerHTML = "<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;'>✅ Correct! Now click <strong>Check Simplest Form</strong> to verify it's simplified and earn credits.</div>"
+                  feedback_el.innerHTML = "<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;'>✅ Correct! Click <strong>Finalize</strong> button to verify it is simplified and earn diamonds.</div>"
                 # Enable finalize button
                 if finalize_btn:
                     finalize_btn.disabled = False
@@ -16408,11 +16549,88 @@ This demonstrates the complete format for creating your own problem sets!
               # Award credits if not already awarded
               if 'credits_awarded' not in self.freestyle_problem or not self.freestyle_problem['credits_awarded']:
                   difficulty = self.calculate_problem_difficulty(self.freestyle_problem["parsed"])
-                  self.award_credits(self.freestyle_problem["latex"], self.freestyle_problem["parsed"], difficulty)
+                  credits_awarded = self.award_credits(self.freestyle_problem["latex"], self.freestyle_problem["parsed"], difficulty)
                   self.freestyle_problem['credits_awarded'] = True
 
                   if feedback_el:
-                      feedback_el.innerHTML = f"<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>💎 <strong>+{difficulty} credit{'s' if difficulty != 1 else ''} earned!</strong></div>"
+                      # Get the last solved problem to check award details
+                      last_solved = self.freestyle_solved_problems[-1] if self.freestyle_solved_problems else None
+
+                      if credits_awarded > 0:
+                          if last_solved and last_solved.get('award_percentage', 1.0) < 1.0:
+                              # Partial credit awarded
+                              percentage = int(last_solved['award_percentage'] * 100)
+                              base_credits = last_solved.get('base_credits', difficulty)
+                              category_name = last_solved.get('category', 'unknown')
+                              duplicate_problem = last_solved.get('duplicate_of', '')
+
+                              # Build detailed explanation
+                              explanation = f"<strong>Category:</strong> {category_name}<br>"
+                              explanation += f"<strong>Partial credit:</strong> {percentage}% of {base_credits} diamonds<br>"
+
+                              if last_solved.get('is_structure_duplicate') and duplicate_problem:
+                                  explanation += f"<strong>Why partial?</strong> Similar problem structure already solved<br>"
+                                  explanation += f"<div style='background:#fff;padding:8px;margin-top:8px;border-radius:4px;border:1px solid #fbbf24;'>"
+                                  explanation += f"<strong>Previous problem:</strong><br>"
+                                  explanation += f"<div style='font-size:16px;color:#92400e;margin-top:4px;'>\({duplicate_problem}\)</div>"
+                                  explanation += f"</div>"
+
+                              feedback_el.innerHTML = f"<div style='color:#d97706;background:#fef3c7;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>💎 <strong>+{credits_awarded} earned</strong> ({percentage}% of {base_credits})<br><br>{explanation}</div>"
+
+                              # Trigger MathJax to render
+                              if window.MathJax:
+                                  window.MathJax.typesetPromise([feedback_el])
+                          else:
+                              # Full credit awarded
+                              category_name = last_solved.get('category', 'unknown') if last_solved else 'unknown'
+                              explanation = f"<strong>Category:</strong> {category_name}<br>"
+                              explanation += f"<strong>First time solving this type!</strong> 🎉"
+
+                              feedback_el.innerHTML = f"<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>💎 <strong>+{credits_awarded} earned!</strong><br><br>{explanation}</div>"
+                      else:
+                          # No credit awarded
+                          if last_solved:
+                              category_name = last_solved.get('category', 'unknown')
+                              duplicate_problem = last_solved.get('duplicate_of', '')
+
+                              if last_solved.get('is_exact_duplicate'):
+                                  explanation = f"<strong>Category:</strong> {category_name}<br>"
+                                  explanation += f"<strong>Why no diamonds?</strong> This is an EXACT duplicate<br>"
+                                  explanation += f"<em style='font-size:13px;'>Same problem structure AND same numbers</em><br>"
+
+                                  if duplicate_problem:
+                                      explanation += f"<div style='background:#fff;padding:8px;margin-top:8px;border-radius:4px;border:1px solid #dc2626;'>"
+                                      explanation += f"<strong>You already solved:</strong><br>"
+                                      explanation += f"<div style='font-size:16px;color:#991b1b;margin-top:4px;'>\({duplicate_problem}\)</div>"
+                                      explanation += f"</div>"
+
+                                  feedback_el.innerHTML = f"<div style='color:#dc2626;background:#fee2e2;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>⚠️ <strong>No diamonds earned</strong><br><br>{explanation}</div>"
+
+                                  # Trigger MathJax to render
+                                  if window.MathJax:
+                                      window.MathJax.typesetPromise([feedback_el])
+
+                              elif last_solved.get('is_structure_duplicate'):
+                                  explanation = f"<strong>Category:</strong> {category_name}<br>"
+                                  explanation += f"<strong>Why no diamonds?</strong> Similar problem already solved<br>"
+                                  explanation += f"<em style='font-size:13px;'>This category gives 0% for structure duplicates</em><br>"
+
+                                  if duplicate_problem:
+                                      explanation += f"<div style='background:#fff;padding:8px;margin-top:8px;border-radius:4px;border:1px solid #dc2626;'>"
+                                      explanation += f"<strong>Similar to:</strong><br>"
+                                      explanation += f"<div style='font-size:16px;color:#991b1b;margin-top:4px;'>\({duplicate_problem}\)</div>"
+                                      explanation += f"</div>"
+                                      explanation += f"<br><em style='font-size:12px;'>💡 Try a different type of problem to earn diamonds!</em>"
+
+                                  feedback_el.innerHTML = f"<div style='color:#dc2626;background:#fee2e2;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>⚠️ <strong>No diamonds earned</strong><br><br>{explanation}</div>"
+
+                                  # Trigger MathJax to render
+                                  if window.MathJax:
+                                      window.MathJax.typesetPromise([feedback_el])
+                              else:
+                                  feedback_el.innerHTML = "<div style='color:#dc2626;background:#fee2e2;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>⚠️ <strong>No diamonds earned</strong></div>"
+                          else:
+                              feedback_el.innerHTML = "<div style='color:#dc2626;background:#fee2e2;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.<br><br>⚠️ <strong>No diamonds earned</strong></div>"
               else:
                   if feedback_el:
                       feedback_el.innerHTML = "<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;'>✅ <strong>Simplified!</strong> Your answer is in simplest form.</div>"
@@ -17532,26 +17750,241 @@ This demonstrates the complete format for creating your own problem sets!
         
         return 1 + max(self._expr_depth(arg) for arg in expr.args)
 
-    def get_problem_canonical_form(self, parsed_expr):
-        """Get a canonical string representation of a problem for duplicate detection"""
+    def get_problem_category(self, expr):
+        """Detect the mathematical category of a problem for duplicate policy decisions.
+
+        Returns: (category_name, subcategory) tuple
+        """
         import sympy as sp
-        
+
         try:
-            # Normalize and simplify the expression
-            normalized = self.math_parser.normalize_expr(parsed_expr)
-            simplified = sp.simplify(normalized)
-            
-            # Convert to a canonical string representation
-            # Use srepr for structural representation
-            canonical = sp.srepr(simplified)
-            
-            window.console.log(f"Canonical form: {canonical}")
-            return canonical
-            
+            # Check if it's a matrix or contains matrix operations
+            if isinstance(expr, (sp.Matrix, sp.MutableDenseMatrix, sp.ImmutableDenseMatrix)):
+                return ("matrix_basic", "matrix")
+
+            # Check for matrix operations by traversing the expression tree
+            def contains_matrix_op(e):
+                if isinstance(e, (sp.Matrix, sp.MutableDenseMatrix, sp.ImmutableDenseMatrix)):
+                    return True
+                if hasattr(e, 'args'):
+                    for arg in e.args:
+                        if contains_matrix_op(arg):
+                            return True
+                return False
+
+            if contains_matrix_op(expr):
+                # Determine specific matrix category
+                expr_str = str(type(expr).__name__).lower()
+
+                # Check for eigenvalue/eigenvector operations
+                if 'eigenval' in expr_str or 'eigenvect' in expr_str:
+                    return ("matrix_eigen", "matrix")
+
+                # Check for decompositions (these would be tuples or special types)
+                if any(keyword in expr_str for keyword in ['lu', 'qr', 'svd']):
+                    return ("matrix_decomposition", "matrix")
+
+                # Check for vector space operations
+                if any(keyword in expr_str for keyword in ['nullspace', 'columnspace', 'rowspace']):
+                    return ("matrix_vectorspace", "matrix")
+
+                # Default to basic matrix operations
+                return ("matrix_basic", "matrix")
+
+            # Count different operation types for categorization
+            has_limit = False
+            has_integral = False
+            has_derivative = False
+            has_trig = False
+            has_hyperbolic = False
+            has_log = False
+            has_complex = False
+            has_factorial = False
+            operation_depth = 0
+
+            def analyze(e, depth=0):
+                nonlocal has_limit, has_integral, has_derivative, has_trig
+                nonlocal has_hyperbolic, has_log, has_complex, has_factorial, operation_depth
+
+                operation_depth = max(operation_depth, depth)
+                class_name = type(e).__name__
+
+                if isinstance(e, sp.Limit):
+                    has_limit = True
+                elif isinstance(e, sp.Integral):
+                    has_integral = True
+                elif isinstance(e, sp.Derivative):
+                    has_derivative = True
+                elif class_name in ['sin', 'cos', 'tan', 'cot', 'sec', 'csc',
+                                   'asin', 'acos', 'atan', 'acot', 'asec', 'acsc', 'atan2']:
+                    has_trig = True
+                elif class_name in ['sinh', 'cosh', 'tanh', 'coth', 'sech', 'csch',
+                                   'asinh', 'acosh', 'atanh', 'acoth', 'asech', 'acsch']:
+                    has_hyperbolic = True
+                elif class_name in ['log', 'ln']:
+                    has_log = True
+                elif class_name in ['re', 'im', 'conjugate', 'arg']:
+                    has_complex = True
+                elif class_name in ['factorial', 'factorial2', 'binomial']:
+                    has_factorial = True
+
+                if hasattr(e, 'args'):
+                    for arg in e.args:
+                        analyze(arg, depth + 1)
+
+            analyze(expr)
+
+            # Categorize based on what was found (priority order matters)
+            if has_limit:
+                return ("calculus_limit", "calculus")
+            elif has_integral:
+                return ("calculus_integral", "calculus")
+            elif has_derivative:
+                return ("calculus_derivative", "calculus")
+            elif has_hyperbolic:
+                return ("hyperbolic", "function")
+            elif has_complex:
+                return ("complex", "advanced")
+            elif has_trig:
+                # Determine if it's simple or complex trig
+                if operation_depth > 2:
+                    return ("trig_complex", "function")
+                else:
+                    return ("trig_simple", "function")
+            elif has_log:
+                return ("logarithmic", "function")
+            elif has_factorial:
+                return ("special_function", "basic")
+            else:
+                # Default to basic algebra
+                return ("algebra_basic", "basic")
+
         except Exception as e:
-            window.console.error(f"Error getting canonical form: {e}")
-            # Fallback to string representation
-            return str(parsed_expr)
+            window.console.error(f"Error detecting category: {e}")
+            return ("algebra_basic", "basic")
+
+    def get_problem_exact_signature(self, expr):
+        """Get exact problem signature preserving numbers for exact duplicate detection.
+
+        This is different from structural signature - it keeps the actual numbers.
+        Two problems with same numbers and structure will have the same exact signature.
+        """
+        import sympy as sp
+
+        try:
+            # Normalize the expression and convert to canonical string
+            normalized = self.math_parser.normalize_expr(expr)
+            # Use srepr which preserves the exact structure and numbers
+            exact_sig = sp.srepr(normalized)
+            return exact_sig
+        except Exception as e:
+            window.console.error(f"Error getting exact signature: {e}")
+            return str(expr)
+
+    def get_award_percentage(self, category, is_exact_duplicate, is_structure_duplicate):
+        """Get the percentage of diamonds to award based on category and duplicate type.
+
+        Args:
+            category: Category tuple (category_name, subcategory)
+            is_exact_duplicate: True if same structure AND same numbers
+            is_structure_duplicate: True if same structure but different numbers
+
+        Returns:
+            float: Percentage to award (0.0 to 1.0)
+        """
+        # Exact duplicates NEVER get credit (cheating)
+        if is_exact_duplicate:
+            return 0.0
+
+        # Not a duplicate at all - full credit
+        if not is_structure_duplicate:
+            return 1.0
+
+        # Structure duplicate - percentage depends on category
+        category_name, subcategory = category
+
+        # Matrix categories - always 100% for structure duplicates (requires full computation)
+        if subcategory == "matrix":
+            return 1.0  # 100%
+
+        # Calculus categories
+        if category_name == "calculus_limit":
+            return 0.7  # 70%
+        elif category_name == "calculus_integral":
+            return 0.8  # 80%
+        elif category_name == "calculus_derivative":
+            return 0.3  # 30%
+
+        # Function categories
+        elif category_name == "trig_complex":
+            return 0.5  # 50%
+        elif category_name == "trig_simple":
+            return 0.0  # 0%
+        elif category_name == "hyperbolic":
+            return 0.3  # 30%
+        elif category_name == "logarithmic":
+            return 0.0  # 0%
+
+        # Advanced categories
+        elif category_name == "complex":
+            return 0.5  # 50%
+
+        # Basic categories
+        elif category_name in ["algebra_basic", "special_function"]:
+            return 0.0  # 0%
+
+        # Default: no credit for structure duplicates
+        return 0.0
+
+    def get_problem_structural_signature(self, expr):
+        """Get structural signature of the PROBLEM (not solution) for duplicate detection.
+        This abstracts away specific numbers but preserves mathematical structure.
+
+        Examples:
+        - 1+1 and 2+5 both become: Add(Number, Number)
+        - (x+1)(x+2) and (x+3)(x+4) both become: Mul(Add(Symbol, Number), Add(Symbol, Number))
+        - sin(x) and sin(y) both become: sin(Symbol)
+        """
+        import sympy as sp
+
+        try:
+            # Recursively build structural signature
+            def get_signature(e):
+                # Base cases - classify by type, not value
+                if isinstance(e, sp.Integer) or isinstance(e, sp.Rational) or isinstance(e, sp.Float):
+                    return "Number"
+                elif isinstance(e, sp.Symbol):
+                    return "Symbol"
+                elif isinstance(e, sp.Number):
+                    # Catches other numeric types like pi, e, etc.
+                    return "Constant"
+                elif not e.args:
+                    # Atomic expression without arguments
+                    return type(e).__name__
+
+                # Recursive case - preserve operation structure
+                op_name = type(e).__name__
+                arg_signatures = [get_signature(arg) for arg in e.args]
+
+                # Sort arguments for commutative operations to ensure consistency
+                if isinstance(e, (sp.Add, sp.Mul)):
+                    arg_signatures.sort()
+
+                return f"{op_name}({', '.join(arg_signatures)})"
+
+            signature = get_signature(expr)
+            window.console.log(f"Structural signature: {signature}")
+            return signature
+
+        except Exception as e:
+            window.console.error(f"Error getting structural signature: {e}")
+            # Fallback to basic string representation
+            return str(type(expr).__name__)
+
+    def get_problem_canonical_form(self, parsed_expr):
+        """Wrapper for backward compatibility - uses structural signature"""
+        return self.get_problem_structural_signature(parsed_expr)
+
 
     def is_problem_solved_before(self, parsed_expr):
         """Check if this problem has been solved before"""
@@ -17573,43 +18006,106 @@ This demonstrates the complete format for creating your own problem sets!
             return False
 
     def award_credits(self, problem_latex, parsed_expr, difficulty):
-        """Award credits for solving a problem"""
-        # Award credits equal to difficulty
-        credits_earned = difficulty
-        
-        self.credit_balance += credits_earned
-        self.credit_earned_total += credits_earned
-        
-        # Record transaction
+        """Award credits for solving a problem with two-tier duplicate detection.
+
+        Two types of duplicates:
+        1. Exact duplicate: Same structure AND same numbers (0% credit - cheating)
+        2. Structure duplicate: Same structure, different numbers (0-100% based on category)
+        """
         import datetime
+
+        # Get both signatures
+        structural_signature = self.get_problem_canonical_form(parsed_expr)  # Abstract structure
+        exact_signature = self.get_problem_exact_signature(parsed_expr)      # Preserves numbers
+        category = self.get_problem_category(parsed_expr)
+
+        # Check for duplicates
+        is_exact_duplicate = False
+        is_structure_duplicate = False
+        duplicate_problem_info = None  # Store info about the duplicate
+
+        for solved_prob in self.freestyle_solved_problems:
+            # Check exact duplicate (same structure + same numbers)
+            if solved_prob.get("exact_signature") == exact_signature:
+                is_exact_duplicate = True
+                duplicate_problem_info = solved_prob.copy()  # Store the duplicate
+                window.console.log(f"⚠️ EXACT duplicate detected (same problem solved before)")
+                break
+
+            # Check structure duplicate (same structure, different numbers)
+            if solved_prob.get("canonical_form") == structural_signature:
+                is_structure_duplicate = True
+                if not duplicate_problem_info:  # Only store first match
+                    duplicate_problem_info = solved_prob.copy()
+                window.console.log(f"⚠️ STRUCTURE duplicate detected (similar problem solved before)")
+                # Don't break - keep checking for exact duplicates
+
+        # Get award percentage based on category and duplicate type
+        award_percentage = self.get_award_percentage(category, is_exact_duplicate, is_structure_duplicate)
+
+        # Calculate actual credits to award
+        base_credits = difficulty
+        credits_earned = int(base_credits * award_percentage)
+
+        window.console.log(f"Category: {category}, Award %: {award_percentage*100}%, Credits: {credits_earned}/{base_credits}")
+
+        # Record the problem attempt
         timestamp = datetime.datetime.now().isoformat()
-        
-        self.credit_history.append({
-            "type": "earned",
-            "amount": credits_earned,
-            "difficulty": difficulty,
-            "problem": problem_latex,
-            "timestamp": timestamp
-        })
-        
-        # Record solved problem
-        canonical_form = self.get_problem_canonical_form(parsed_expr)
+
+        # Update balance if credits were earned
+        if credits_earned > 0:
+            self.credit_balance += credits_earned
+            self.credit_earned_total += credits_earned
+
+            # Record transaction
+            self.credit_history.append({
+                "type": "earned",
+                "amount": credits_earned,
+                "difficulty": difficulty,
+                "problem": problem_latex,
+                "timestamp": timestamp,
+                "category": category[0],
+                "award_percentage": award_percentage
+            })
+
+        # Always record solved problem
         self.freestyle_solved_problems.append({
             "problem": problem_latex,
-            "canonical_form": canonical_form,
+            "canonical_form": structural_signature,
+            "exact_signature": exact_signature,
             "difficulty": difficulty,
             "credits_earned": credits_earned,
-            "timestamp": timestamp
+            "base_credits": base_credits,
+            "award_percentage": award_percentage,
+            "timestamp": timestamp,
+            "category": category[0],
+            "is_exact_duplicate": is_exact_duplicate,
+            "is_structure_duplicate": is_structure_duplicate,
+            "duplicate_of": duplicate_problem_info.get("problem") if duplicate_problem_info else None
         })
-        
+
         # Save and update display
         self.save_credit_data()
         self.update_credit_display()
-        
+
         # Show notification
-        self._show_credit_notification(f"+{credits_earned} credit{'s' if credits_earned != 1 else ''}", "#10b981")
-        
-        window.console.log(f"✅ Awarded {credits_earned} credits for difficulty {difficulty} problem")
+        if credits_earned > 0:
+            if award_percentage < 1.0:
+                # Partial credit
+                self._show_credit_notification(
+                    f"+{credits_earned} ({int(award_percentage*100)}% of {base_credits})",
+                    "#f59e0b"  # Orange for partial credit
+                )
+            else:
+                # Full credit
+                self._show_credit_notification(
+                    f"+{credits_earned}",
+                    "#10b981"  # Green for full credit
+                )
+
+        window.console.log(f"✅ Awarded {credits_earned} credits ({int(award_percentage*100)}% of {base_credits})")
+        return credits_earned
+
 
     def spend_credits(self, amount, problem_latex):
         """Spend credits to reveal solution"""
@@ -17825,6 +18321,18 @@ This demonstrates the complete format for creating your own problem sets!
     def close_credit_history_modal(self, event):
         """Close the credit history modal"""
         modal = document.querySelector("#creditHistoryModal")
+        if modal:
+            modal.style.display = "none"
+
+    def show_reward_rules_modal(self, event):
+        """Show the reward rules modal"""
+        modal = document.querySelector("#rewardRulesModal")
+        if modal:
+            modal.style.display = "flex"
+
+    def close_reward_rules_modal(self, event):
+        """Close the reward rules modal"""
+        modal = document.querySelector("#rewardRulesModal")
         if modal:
             modal.style.display = "none"
 
