@@ -1913,7 +1913,7 @@ window.searchManager = (function() {
         currentMatchIndex = -1;
 
         clearBtn.style.display = trimmedQuery ? 'block' : 'none';
-        
+
         // Remove all previous highlights
         document.querySelectorAll('.search-highlight-border').forEach(el => {
             el.classList.remove('search-highlight-border', 'search-highlight-border-current');
@@ -1982,10 +1982,21 @@ window.searchManager = (function() {
                 // Search in MathQuill fields (expression, expected, user)
                 const mathContainers = step.querySelectorAll('.math-input[data-mq="1"]');
                 mathContainers.forEach((mf, mathIndex) => {
-                    const latex = mf.textContent || '';
+                    // Get LaTeX from MathQuill instance
+                    let latex = '';
+                    try {
+                        if (window.MQ) {
+                            const mathField = window.MQ.MathField(mf);
+                            latex = mathField.latex() || '';
+                        }
+                    } catch (e) {
+                        // Fallback to textContent if MathQuill access fails
+                        latex = mf.textContent || '';
+                    }
+
                     if (isRegexMode ? searchPattern.test(latex) : latex.toLowerCase().includes(trimmedQuery.toLowerCase())) {
                         hasMatch = true;
-                        
+
                         // Determine which field this is
                         let fieldName = 'Math';
                         if (mf.classList.contains('step-expr')) {
@@ -1995,7 +2006,7 @@ window.searchManager = (function() {
                         } else if (mf.classList.contains('step-user')) {
                             fieldName = 'User Answer';
                         }
-                        
+
                         searchMatches.push({
                             type: 'math',
                             card: card,
