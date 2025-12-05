@@ -642,11 +642,14 @@ header h1::before {
 }
 
 .btn.whatsapp {
-    background: #25D366;
+    background: white;
+    color: #1e293b;
+    border: 2px solid #e2e8f0;
 }
 
 .btn.whatsapp:hover {
-    background: #1da851;
+    background: #f8fafc;
+    border-color: #cbd5e1;
 }
 
 /* =========================================
@@ -1149,7 +1152,7 @@ button.detail-toggle:hover {
   <div class="panel">
     <label><i class="icon icon-list"></i> Paste Student Progress Data</label>
     <div class="small" style="margin-bottom:8px;">
-      Paste one or multiple base64-encoded progress exports. <strong>✈️ Telegram multi-part messages supported!</strong>
+      Paste one or multiple base64-encoded progress exports. <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; display: inline-block;"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> Telegram/WhatsApp multi-part messages supported!</strong>
     </div>
     <textarea id="pasteProgressData" style="min-height:200px;" placeholder="Paste base64-encoded progress data here..."></textarea>
     <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
@@ -1158,8 +1161,15 @@ button.detail-toggle:hover {
       <button id="loadSavedBtn" class="btn"><i class="icon icon-folder"></i> Load Saved</button>
       <button id="deleteSelectedBtn" class="btn danger"><i class="icon icon-trash"></i> Delete Saved Analytics</button>
       <button id="exportAnalyticsBtn" class="btn secondary"><i class="icon icon-export"></i> Export Analytics</button>
-      <button id="whatsappBtn" class="btn whatsapp"><i class="icon icon-chat"></i> WhatsApp Integration</button>
-      <button id="testVisualizationBtn" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;"><i class="icon icon-chart"></i> 🧪 Test Visualizations</button>
+      <button id="whatsappBtn" class="btn whatsapp">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366" style="vertical-align: middle; margin-right: 4px;">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+        </svg>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#0088cc" style="vertical-align: middle; margin-right: 4px;">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+        </svg>
+        WhatsApp/Telegram
+      </button>
     </div>
   </div>
 
@@ -1534,7 +1544,7 @@ class IndexedDBManager:
             json_text = json.dumps(data)
             if self.fallback_mode:
                 window.localStorage.setItem(f"{store_name}_{key}", json_text)
-                window.console.log("💾 Saved to localStorage (fallback mode)")
+                window.console.log("Saved to localStorage (fallback mode)")
                 self._hide_progress()
                 return True
 
@@ -1862,7 +1872,7 @@ class RosterManager:
                     <td style='padding:6px;color:#6b7280;'>{i}</td>
                     <td style='padding:6px;font-weight:600;'>{self._escape(info['registration_number'])}</td>
                     <td style='padding:6px;'>{self._escape(info['name'])}</td>
-                    <td style='padding:6px;font-size:12px;'>📱 {self._escape(phone)}</td>
+                    <td style='padding:6px;font-size:12px;'><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; display: inline-block; margin-right: 2px;"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> {self._escape(phone)}</td>
                 </tr>
             """
         
@@ -1914,7 +1924,7 @@ class RosterManager:
 
         try:
             # Get list of saved rosters
-            self.app.persistence_manager.db_manager._show_progress("📋 Loading saved rosters...")
+            self.app.persistence_manager.db_manager._show_progress("Loading saved rosters...")
             saved_keys = await self.app.persistence_manager.list_saved_keys("rosters")
             self.app.persistence_manager.db_manager._hide_progress()
 
@@ -1927,7 +1937,7 @@ class RosterManager:
 
             if selected_roster:
                 # Load the selected roster
-                self.app.persistence_manager.db_manager._show_progress(f"📂 Loading roster: {selected_roster}...")
+                self.app.persistence_manager.db_manager._show_progress(f"Loading roster: {selected_roster}...")
                 roster_data = await self.app.persistence_manager.db_manager.load_data("rosters", selected_roster)
                 self.app.persistence_manager.db_manager._hide_progress()
 
@@ -2038,7 +2048,7 @@ class RosterManager:
 
         try:
             # Get list of saved rosters
-            self.app.persistence_manager.db_manager._show_progress("📋 Loading saved rosters...")
+            self.app.persistence_manager.db_manager._show_progress("Loading saved rosters...")
             saved_keys = await self.app.persistence_manager.list_saved_keys("rosters")
             self.app.persistence_manager.db_manager._hide_progress()
 
@@ -2158,13 +2168,13 @@ class RosterManager:
                     return
 
                 # Show loading indicator
-                self.app.persistence_manager.db_manager._show_progress(f"🗑️ Deleting {count} roster{'s' if count > 1 else ''}...")
+                self.app.persistence_manager.db_manager._show_progress(f"Deleting {count} roster{'s' if count > 1 else ''}...")
 
                 # Delete each selected roster
                 deleted_count = 0
                 for i, key in enumerate(selected_keys, 1):
                     try:
-                        self.app.persistence_manager.db_manager._show_progress(f"🗑️ Deleting roster {i}/{count}...")
+                        self.app.persistence_manager.db_manager._show_progress(f"Deleting roster {i}/{count}...")
                         await self.app.persistence_manager.db_manager.delete_data("rosters", key)
                         window.console.log(f"🗑️ Deleted roster: {key}")
                         deleted_count += 1
@@ -2388,7 +2398,6 @@ class ProgressAnalyzer:
             ("#deleteSelectedBtn", self.delete_selected_sessions),
             ("#exportAnalyticsBtn", self.export_analytics),
             ("#whatsappBtn", self.show_whatsapp_integration),
-            ("#testVisualizationBtn", self.test_visualizations),
         ]
         for selector, handler in bindings:
             element = document.querySelector(selector)
@@ -3388,9 +3397,17 @@ class ProgressAnalyzer:
 
         modal.innerHTML = """
             <div style="margin-bottom:20px;">
-                <h2 style="margin:0 0 16px 0;color:#0f172a;font-size:24px;">💬 WhatsApp Integration</h2>
+                <h2 style="margin:0 0 16px 0;color:#0f172a;font-size:24px;display:flex;align-items:center;gap:8px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#25D366" style="vertical-align: middle;">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="#0088cc" style="vertical-align: middle;">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
+                    </svg>
+                    WhatsApp/Telegram Integration
+                </h2>
                 <p style="color:#64748b;margin:0 0 20px 0;">
-                    Two ways to capture student progress reports from WhatsApp.
+                    Two ways to capture student progress reports from WhatsApp/Telegram.
                 </p>
             </div>
 
@@ -5724,7 +5741,7 @@ class PersistenceManager:
             old_modal.remove()
 
         # Get list of saved sessions
-        self.db_manager._show_progress("📋 Loading saved sessions...")
+        self.db_manager._show_progress("Loading saved sessions...")
         saved_keys = await self.list_saved_keys("analytics")
         self.db_manager._hide_progress()
         window.console.log(f"📋 Found {len(saved_keys)} saved sessions")
@@ -5743,6 +5760,27 @@ class PersistenceManager:
             # ✅ HAS SAVED SESSIONS
             sessions_html = '<div class="saved-sessions-list">'
             for key in saved_keys:
+                # Load session preview to get metadata
+                import json
+                session_info = "Saved analytics session"
+                try:
+                    data = await self.db_manager.load_data("analytics", key)
+                    if isinstance(data, str):
+                        data = json.loads(data)
+                    elif hasattr(data, "to_py"):
+                        data = json.loads(data.to_py())
+
+                    if isinstance(data, dict) and "problem_sets" in data:
+                        # New UUID-based format
+                        ps_count = len(data.get("problem_sets", {}))
+                        total_subs = data.get("total_submissions", 0)
+                        session_info = f"{ps_count} Problem Set{'s' if ps_count != 1 else ''} • {total_subs} Submissions"
+                    elif isinstance(data, list):
+                        # Old format
+                        session_info = f"{len(data)} Submissions (Legacy Format)"
+                except:
+                    pass
+
                 sessions_html += f'''
                     <div class="session-item" data-key="{self._escape(key)}">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -5752,7 +5790,7 @@ class PersistenceManager:
                                 </svg>
                                 <div>
                                     <div class="session-name">{self._escape(key)}</div>
-                                    <div class="session-info">Saved analytics session</div>
+                                    <div class="session-info">{session_info}</div>
                                 </div>
                             </div>
                             <button class="delete-session-btn" data-key="{self._escape(key)}"
@@ -5904,8 +5942,8 @@ class PersistenceManager:
         import json
 
         try:
-            self.db_manager._show_progress(f"📂 Loading session: {key}...")
-            window.console.log(f"📂 Loading session: {key}")
+            self.db_manager._show_progress(f"Loading session: {key}...")
+            window.console.log(f"Loading session: {key}")
             data = await self.load_analytics_data(key)
 
             if data and isinstance(data, list):
@@ -6199,9 +6237,21 @@ class PersistenceManager:
     # SAVE ANALYTICS (Interactive)
     # =========================================================
     async def save_analytics_data(self):
-        """Save analytics data with interactive prompt"""
+        """Save analytics data organized by problem set UUID"""
         from js import window
         import json
+
+        if not self.app.analytics_data:
+            window.alert("No analytics data to save.")
+            return
+
+        # Group submissions by problem_set_id
+        uuid_groups = {}
+        for submission in self.app.analytics_data:
+            uuid = submission.get("problem_set_id", "unknown")
+            if uuid not in uuid_groups:
+                uuid_groups[uuid] = []
+            uuid_groups[uuid].append(submission)
 
         # Show the existing save prompt
         chosen_key = await self.prompt_save_choice()
@@ -6210,15 +6260,41 @@ class PersistenceManager:
             return
 
         try:
-            safe_data = self.sanitize_for_storage(self.app.analytics_data)
-            json_text = json.dumps(safe_data)
+            # Prepare metadata with UUID info
+            save_package = {
+                "session_name": chosen_key,
+                "timestamp": window.Date.new().toISOString(),
+                "problem_sets": {},
+                "total_submissions": len(self.app.analytics_data)
+            }
+
+            # Save each problem set with its metadata
+            for uuid, submissions in uuid_groups.items():
+                # Get problem set name from first submission
+                set_name = "Unknown Problem Set"
+                if submissions and len(submissions) > 0:
+                    first_sub = submissions[0]
+                    if first_sub.get("problem", {}).get("set_name"):
+                        set_name = first_sub["problem"]["set_name"]
+
+                save_package["problem_sets"][uuid] = {
+                    "uuid": uuid,
+                    "name": set_name,
+                    "submissions": self.sanitize_for_storage(submissions),
+                    "submission_count": len(submissions)
+                }
+
+            json_text = json.dumps(save_package)
             js_text = window.String.new(json_text)
 
             await self.db_manager.save_data("analytics", chosen_key, js_text)
-            window.console.log(f"💾 Saved {len(safe_data)} entries under key '{chosen_key}'")
+            window.console.log(f"💾 Saved {len(uuid_groups)} problem set(s) with {len(self.app.analytics_data)} total submissions")
 
-            # Show success message
-            window.alert(f"✅ Analytics saved successfully!\n\nSession name: {chosen_key}")
+            # Show detailed success message
+            summary = f"✅ Analytics saved successfully!\n\nSession: {chosen_key}\n"
+            summary += f"Problem Sets: {len(uuid_groups)}\n"
+            summary += f"Total Submissions: {len(self.app.analytics_data)}"
+            window.alert(summary)
 
         except Exception as e:
             window.console.warn(f"⚠️ Could not save: {e}")
@@ -6227,6 +6303,7 @@ class PersistenceManager:
     # LOAD ANALYTICS
     # =========================================================
     async def load_analytics_data(self, key="analytics_data"):
+        """Load analytics data, handling both new UUID-based and old flat formats"""
         from js import window
         import json
         try:
@@ -6235,9 +6312,31 @@ class PersistenceManager:
                 data = json.loads(data)
             elif hasattr(data, "to_py"):
                 data = json.loads(data.to_py())
-            if data and isinstance(data, list):
-                window.console.log(f"📦 Restored {len(data)} entries from '{key}'")
+
+            if not data:
+                return []
+
+            # Check if it's the new UUID-based format
+            if isinstance(data, dict) and "problem_sets" in data:
+                window.console.log(f"📦 Loading UUID-based format from '{key}'")
+                window.console.log(f"   Session: {data.get('session_name', key)}")
+                window.console.log(f"   Problem Sets: {len(data.get('problem_sets', {}))}")
+
+                # Flatten all submissions from all problem sets
+                all_submissions = []
+                for uuid, ps_data in data["problem_sets"].items():
+                    submissions = ps_data.get("submissions", [])
+                    all_submissions.extend(submissions)
+                    window.console.log(f"   - {ps_data.get('name', 'Unknown')}: {len(submissions)} submissions")
+
+                window.console.log(f"📦 Restored {len(all_submissions)} total entries")
+                return all_submissions
+
+            # Old flat format (backwards compatibility)
+            elif isinstance(data, list):
+                window.console.log(f"📦 Loading legacy flat format: {len(data)} entries")
                 return data
+
         except Exception as e:
             window.console.warn(f"⚠️ Could not load: {e}")
         return []
@@ -6294,7 +6393,7 @@ class PersistenceManager:
         window.console.log("🗑️ Showing delete sessions modal...")
 
         # Get list of saved sessions
-        self.db_manager._show_progress("📋 Loading saved sessions...")
+        self.db_manager._show_progress("Loading saved sessions...")
         saved_keys = await self.list_saved_keys("analytics")
         self.db_manager._hide_progress()
 
@@ -6414,13 +6513,13 @@ class PersistenceManager:
                 return
 
             # Show loading indicator
-            self.db_manager._show_progress(f"🗑️ Deleting {count} session{'s' if count > 1 else ''}...")
+            self.db_manager._show_progress(f"Deleting {count} session{'s' if count > 1 else ''}...")
 
             # Delete each selected session
             deleted_count = 0
             for i, key in enumerate(selected_keys, 1):
                 try:
-                    self.db_manager._show_progress(f"🗑️ Deleting session {i}/{count}...")
+                    self.db_manager._show_progress(f"Deleting session {i}/{count}...")
                     await self.db_manager.delete_data("analytics", key)
                     window.console.log(f"🗑️ Deleted session: {key}")
                     deleted_count += 1
@@ -6785,8 +6884,8 @@ window.setTimeout(create_proxy(start_init), 800)
   <!-- Open Source Attribution Footer -->
   <div class="nonet-step-footer">
     <p>
-      Made with ❤️ for education •
-      <a href="javascript:void(0)" onclick="openAttributionModal()" style="cursor: pointer;">📜 Open Source Attributions</a>
+      Made with <svg width="14" height="14" viewBox="0 0 24 24" fill="#ef4444" style="vertical-align: middle; display: inline-block;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> for education •
+      <a href="javascript:void(0)" onclick="openAttributionModal()" style="cursor: pointer;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: middle; display: inline-block; margin-right: 4px;"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.5h8v1H8v-1zm0-2.5h8v1H8v-1zm0-2.5h5v1H8v-1z"/></svg>Open Source Attributions</a>
     </p>
   </div>
 
@@ -7174,7 +7273,7 @@ window.setTimeout(create_proxy(start_init), 800)
     <div class="attribution-content">
       <div class="attribution-header">
         <button class="attribution-close" onclick="closeAttributionModal()">&times;</button>
-        <h2>📜 Open Source Attributions</h2>
+        <h2><svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="vertical-align: middle; display: inline-block; margin-right: 8px;"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.5h8v1H8v-1zm0-2.5h8v1H8v-1zm0-2.5h5v1H8v-1z"/></svg>Open Source Attributions</h2>
         <p>This project is built with amazing open source libraries</p>
       </div>
       <div class="attribution-body">

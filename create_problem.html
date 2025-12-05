@@ -8785,8 +8785,9 @@ class DataManager:
         modal = document.createElement("div")
         modal.style.cssText = (
             "background:#fff;border-radius:12px;padding:20px;"
-            "max-width:900px;width:95%;max-height:85vh;overflow-y:auto;"
+            "max-width:900px;width:95%;max-height:85vh;"
             "box-shadow:0 20px 60px rgba(0,0,0,0.3);"
+            "display:flex;flex-direction:column;"
         )
 
         modal.innerHTML = """
@@ -8812,6 +8813,9 @@ class DataManager:
                     color:#64748b;cursor:pointer;font-weight:600;
                 '>💡 Examples</button>
             </div>
+
+            <!-- Scrollable Content Wrapper -->
+            <div style='flex:1;overflow-y:auto;margin-bottom:16px;'>
 
             <!-- Paste Tab -->
             <div id='pasteTab' class='import-content' style='display:block;'>
@@ -8906,8 +8910,11 @@ class DataManager:
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div style='display:flex;gap:8px;justify-content:flex-end; margin-top:16px;'>
+            </div>
+            <!-- End Scrollable Content Wrapper -->
+
+            <!-- Action Buttons (Fixed at Bottom) -->
+            <div style='display:flex;gap:8px;justify-content:flex-end;padding-top:12px;border-top:1px solid #e6eef8;'>
                 <button id='importCancelBtn' class='btn ghost'>Cancel</button>
                 <button id='importProcessBtn' class='btn'>Import</button>
             </div>
