@@ -1,11 +1,15 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const path = require('path');
+const fs = require('fs');
 
 // Paths
 const BASE_DIR = path.resolve(__dirname, '..');
 const EXTENSION_PATH = path.join(BASE_DIR, 'whatsapp-analytics-extension');
 const ANALYTICS_PATH = path.join(BASE_DIR, 'analytics_for_problem.html');
 const PROFILE_DIR = path.join(__dirname, 'chrome-profile');
+
+// Portable Chromium path - adjust this to your portable Chromium location
+const PORTABLE_CHROMIUM_PATH = process.env.CHROMIUM_PATH || path.join(__dirname, 'chrome-win', 'chrome.exe');
 
 // Parse command line args
 const args = process.argv.slice(2);
@@ -17,9 +21,22 @@ async function launch() {
     console.log('Extension:', EXTENSION_PATH);
     console.log('Analytics:', ANALYTICS_PATH);
     console.log('Profile:', PROFILE_DIR);
+    console.log('Chromium:', PORTABLE_CHROMIUM_PATH);
     console.log('');
 
+    // Check if portable Chromium exists
+    if (!fs.existsSync(PORTABLE_CHROMIUM_PATH)) {
+        console.error('ERROR: Portable Chromium not found at:', PORTABLE_CHROMIUM_PATH);
+        console.error('\nPlease either:');
+        console.error('1. Download portable Chromium and extract it to:', path.dirname(PORTABLE_CHROMIUM_PATH));
+        console.error('   Download from: https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html');
+        console.error('2. Or set the CHROMIUM_PATH environment variable to your Chromium executable');
+        console.error('   Example: set CHROMIUM_PATH=C:\\path\\to\\chrome.exe');
+        process.exit(1);
+    }
+
     const browser = await puppeteer.launch({
+        executablePath: PORTABLE_CHROMIUM_PATH,
         headless: false,
         args: [
             `--disable-extensions-except=${EXTENSION_PATH}`,
