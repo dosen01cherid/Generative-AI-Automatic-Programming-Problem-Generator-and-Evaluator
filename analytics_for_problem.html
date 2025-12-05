@@ -1071,6 +1071,9 @@ button.detail-toggle:hover {
     }
   </style>
 
+  <!-- Plotly.js for Data Visualization -->
+  <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+
 </head>
 <body style="padding-top: 95px;">
 <!-- teturuQ Branding Header -->
@@ -1156,6 +1159,7 @@ button.detail-toggle:hover {
       <button id="deleteSelectedBtn" class="btn danger"><i class="icon icon-trash"></i> Delete Saved Analytics</button>
       <button id="exportAnalyticsBtn" class="btn secondary"><i class="icon icon-export"></i> Export Analytics</button>
       <button id="whatsappBtn" class="btn whatsapp"><i class="icon icon-chat"></i> WhatsApp Integration</button>
+      <button id="testVisualizationBtn" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;"><i class="icon icon-chart"></i> 🧪 Test Visualizations</button>
     </div>
   </div>
 
@@ -2384,6 +2388,7 @@ class ProgressAnalyzer:
             ("#deleteSelectedBtn", self.delete_selected_sessions),
             ("#exportAnalyticsBtn", self.export_analytics),
             ("#whatsappBtn", self.show_whatsapp_integration),
+            ("#testVisualizationBtn", self.test_visualizations),
         ]
         for selector, handler in bindings:
             element = document.querySelector(selector)
@@ -3231,6 +3236,72 @@ class ProgressAnalyzer:
         if missing_phone:
             summary_msg += f"\n\n⚠️ {len(missing_phone)} submission(s) missing phone numbers"
         window.alert(summary_msg)
+
+    def test_visualizations(self, e=None):
+        """Generate sample data to demonstrate visualizations"""
+        from js import window
+        import random
+        import uuid
+
+        window.console.log("🧪 Generating test data for visualizations...")
+
+        # Generate sample student names
+        sample_names = [
+            "Alice Johnson", "Bob Smith", "Charlie Brown", "Diana Prince", "Eve Adams",
+            "Frank Castle", "Grace Lee", "Henry Ford", "Iris West", "Jack Ryan",
+            "Kate Bishop", "Liam Chen", "Maya Lopez", "Noah Kim", "Olivia Park",
+            "Peter Parker", "Quinn Taylor", "Rachel Green", "Steve Rogers", "Tony Stark"
+        ]
+
+        # Generate test submissions
+        test_submissions = []
+        problem_set_uuid = str(uuid.uuid4())
+
+        for i, name in enumerate(sample_names):
+            phone = f"+628{1000000000 + i}"
+            reg_no = f"TEST{10000 + i}"
+
+            # Generate 5 problems with varying scores
+            for prob_num in range(1, 6):
+                # Create realistic score distribution
+                if i < 5:  # Top performers
+                    base_score = random.randint(85, 100)
+                elif i < 10:  # Good performers
+                    base_score = random.randint(70, 85)
+                elif i < 15:  # Average performers
+                    base_score = random.randint(55, 70)
+                else:  # Struggling students
+                    base_score = random.randint(30, 55)
+
+                # Add some variation per problem
+                score = max(0, min(100, base_score + random.randint(-10, 10)))
+
+                submission = {
+                    "phone": phone,
+                    "name": name,
+                    "reg_no": reg_no,
+                    "export_id": f"test_export_{i}",
+                    "problem_set_id": problem_set_uuid,
+                    "timestamp": "2024-01-01T12:00:00Z",
+                    "problem": {
+                        "number": prob_num,
+                        "set_name": "Sample Problem Set for Testing",
+                        "title": f"Test Problem {prob_num}"
+                    },
+                    "score": score,
+                    "max_score": 100
+                }
+                test_submissions.append(submission)
+
+        # Store and display
+        self.analytics_data = test_submissions
+        self.app.analytics_data = test_submissions
+
+        window.console.log(f"✅ Generated {len(test_submissions)} test submissions")
+        window.alert(f"🧪 Test Data Generated!\n\n✅ {len(sample_names)} students\n📊 {len(test_submissions)} submissions\n\nScroll down to see the Visual Analytics Dashboard!")
+
+        # Display the analytics
+        self.app.display_manager.display_analytics(test_submissions, [])
 
     def clear_analytics(self, e=None):
         from js import document
@@ -4608,6 +4679,235 @@ class DisplayManager:
         pass
 
     # =====================================================
+    # VISUALIZATION PANEL
+    # =====================================================
+    def create_visualization_panel(self, groups, submissions):
+        """Create comprehensive analytics visualizations using Plotly"""
+        from js import document, window, Plotly
+        import json
+
+        panel = document.createElement("div")
+        panel.className = "panel"
+        panel.style.cssText = "background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 16px; padding: 20px;"
+
+        header = document.createElement("h3")
+        header.style.cssText = "margin: 0 0 16px 0; color: white; display: flex; align-items: center; gap: 8px;"
+        header.innerHTML = "<i class='icon icon-chart'></i> Visual Analytics Dashboard"
+        panel.appendChild(header)
+
+        # Container for all charts
+        charts_container = document.createElement("div")
+        charts_container.style.cssText = "background: white; border-radius: 12px; padding: 20px;"
+
+        # Prepare data
+        scores = []
+        problem_scores = {}  # problem_number -> list of scores
+        student_names = []
+        student_avg_scores = []
+        completion_counts = {"Completed": 0, "Partial": 0}
+
+        for phone, student_data in groups.items():
+            student_info = student_data.get("info", {})
+            name = student_info.get("name", "Unknown")
+
+            student_problems = student_data.get("problems", {})
+            if not student_problems:
+                continue
+
+            total_score = 0
+            problem_count = 0
+            has_any_submission = False
+
+            for prob_num, prob_data in student_problems.items():
+                if prob_data and isinstance(prob_data, dict):
+                    score = prob_data.get("score", 0)
+                    if score > 0:
+                        has_any_submission = True
+                        scores.append(score)
+                        total_score += score
+                        problem_count += 1
+
+                        # Track by problem
+                        if prob_num not in problem_scores:
+                            problem_scores[prob_num] = []
+                        problem_scores[prob_num].append(score)
+
+            if has_any_submission:
+                avg_score = total_score / problem_count if problem_count > 0 else 0
+                student_names.append(name)
+                student_avg_scores.append(round(avg_score, 1))
+
+                # Track completion
+                if problem_count >= len(student_problems) * 0.8:  # 80% completion threshold
+                    completion_counts["Completed"] += 1
+                else:
+                    completion_counts["Partial"] += 1
+
+        if not scores:
+            no_data = document.createElement("div")
+            no_data.style.cssText = "padding: 40px; text-align: center; color: #6b7280; background: #f9fafb; border-radius: 8px;"
+            no_data.innerHTML = "<div style='font-size: 18px; margin-bottom: 8px;'>📊</div><div>No score data available for visualization</div>"
+            charts_container.appendChild(no_data)
+            panel.appendChild(charts_container)
+            return panel
+
+        # Chart 1: Score Distribution (Histogram)
+        chart1_div = document.createElement("div")
+        chart1_div.id = f"score-dist-chart-{id(groups)}"
+        chart1_div.style.cssText = "margin-bottom: 24px;"
+        charts_container.appendChild(chart1_div)
+
+        trace1 = {
+            'x': scores,
+            'type': 'histogram',
+            'nbinsx': 20,
+            'marker': {'color': '#667eea', 'line': {'color': '#4f46e5', 'width': 1}},
+            'name': 'Score Distribution'
+        }
+
+        layout1 = {
+            'title': {'text': '📊 Score Distribution', 'font': {'size': 18, 'color': '#1f2937'}},
+            'xaxis': {'title': 'Score', 'gridcolor': '#e5e7eb'},
+            'yaxis': {'title': 'Number of Submissions', 'gridcolor': '#e5e7eb'},
+            'plot_bgcolor': '#f9fafb',
+            'paper_bgcolor': 'white',
+            'margin': {'l': 60, 'r': 40, 't': 60, 'b': 60}
+        }
+
+        Plotly.newPlot(chart1_div.id, [trace1], layout1, {'responsive': True})
+
+        # Chart 2: Completion Rate (Pie Chart)
+        if completion_counts["Completed"] + completion_counts["Partial"] > 0:
+            chart2_div = document.createElement("div")
+            chart2_div.id = f"completion-chart-{id(groups)}"
+            chart2_div.style.cssText = "margin-bottom: 24px;"
+            charts_container.appendChild(chart2_div)
+
+            trace2 = {
+                'labels': list(completion_counts.keys()),
+                'values': list(completion_counts.values()),
+                'type': 'pie',
+                'marker': {'colors': ['#10b981', '#f59e0b']},
+                'textinfo': 'label+percent',
+                'textfont': {'size': 14},
+                'hole': 0.4
+            }
+
+            layout2 = {
+                'title': {'text': '✅ Completion Rate', 'font': {'size': 18, 'color': '#1f2937'}},
+                'paper_bgcolor': 'white',
+                'margin': {'l': 40, 'r': 40, 't': 60, 'b': 40}
+            }
+
+            Plotly.newPlot(chart2_div.id, [trace2], layout2, {'responsive': True})
+
+        # Chart 3: Performance by Problem (Bar Chart)
+        if problem_scores:
+            chart3_div = document.createElement("div")
+            chart3_div.id = f"problem-perf-chart-{id(groups)}"
+            chart3_div.style.cssText = "margin-bottom: 24px;"
+            charts_container.appendChild(chart3_div)
+
+            problem_nums = sorted(problem_scores.keys())
+            avg_scores_by_problem = [
+                round(sum(problem_scores[p]) / len(problem_scores[p]), 1)
+                for p in problem_nums
+            ]
+
+            trace3 = {
+                'x': [f"Problem {p}" for p in problem_nums],
+                'y': avg_scores_by_problem,
+                'type': 'bar',
+                'marker': {'color': '#8b5cf6', 'line': {'color': '#7c3aed', 'width': 1.5}},
+                'text': avg_scores_by_problem,
+                'textposition': 'outside'
+            }
+
+            layout3 = {
+                'title': {'text': '📈 Average Score by Problem', 'font': {'size': 18, 'color': '#1f2937'}},
+                'xaxis': {'title': 'Problem Number', 'gridcolor': '#e5e7eb'},
+                'yaxis': {'title': 'Average Score', 'range': [0, 100], 'gridcolor': '#e5e7eb'},
+                'plot_bgcolor': '#f9fafb',
+                'paper_bgcolor': 'white',
+                'margin': {'l': 60, 'r': 40, 't': 60, 'b': 80}
+            }
+
+            Plotly.newPlot(chart3_div.id, [trace3], layout3, {'responsive': True})
+
+        # Chart 4: Top/Bottom Performers (Horizontal Bar)
+        if len(student_names) > 0:
+            chart4_div = document.createElement("div")
+            chart4_div.id = f"performers-chart-{id(groups)}"
+            chart4_div.style.cssText = "margin-bottom: 24px;"
+            charts_container.appendChild(chart4_div)
+
+            # Sort students by average score
+            sorted_students = sorted(zip(student_names, student_avg_scores), key=lambda x: x[1], reverse=True)
+
+            # Take top 10 and bottom 10 (or all if less than 20)
+            display_count = min(10, len(sorted_students))
+            top_students = sorted_students[:display_count]
+            bottom_students = sorted_students[-display_count:] if len(sorted_students) > display_count else []
+
+            # Combine for display
+            display_students = list(reversed(top_students))
+            if bottom_students and bottom_students != top_students:
+                display_students = list(reversed(bottom_students)) + [("---", 0)] + display_students
+
+            names = [s[0] for s in display_students]
+            scores_display = [s[1] for s in display_students]
+            colors = ['#ef4444' if s < 50 else '#f59e0b' if s < 70 else '#10b981' for s in scores_display]
+
+            trace4 = {
+                'y': names,
+                'x': scores_display,
+                'type': 'bar',
+                'orientation': 'h',
+                'marker': {'color': colors, 'line': {'color': '#1f2937', 'width': 0.5}},
+                'text': scores_display,
+                'textposition': 'outside'
+            }
+
+            layout4 = {
+                'title': {'text': '🏆 Student Performance Rankings', 'font': {'size': 18, 'color': '#1f2937'}},
+                'xaxis': {'title': 'Average Score', 'range': [0, 105], 'gridcolor': '#e5e7eb'},
+                'yaxis': {'title': '', 'automargin': True},
+                'plot_bgcolor': '#f9fafb',
+                'paper_bgcolor': 'white',
+                'margin': {'l': 150, 'r': 60, 't': 60, 'b': 60},
+                'height': max(400, len(names) * 25)
+            }
+
+            Plotly.newPlot(chart4_div.id, [trace4], layout4, {'responsive': True})
+
+        # Chart 5: Score Statistics (Box Plot)
+        if len(scores) > 3:
+            chart5_div = document.createElement("div")
+            chart5_div.id = f"stats-chart-{id(groups)}"
+            charts_container.appendChild(chart5_div)
+
+            trace5 = {
+                'y': scores,
+                'type': 'box',
+                'name': 'All Scores',
+                'marker': {'color': '#06b6d4'},
+                'boxmean': 'sd'
+            }
+
+            layout5 = {
+                'title': {'text': '📉 Score Statistics & Distribution', 'font': {'size': 18, 'color': '#1f2937'}},
+                'yaxis': {'title': 'Score', 'range': [0, 100], 'gridcolor': '#e5e7eb'},
+                'plot_bgcolor': '#f9fafb',
+                'paper_bgcolor': 'white',
+                'margin': {'l': 60, 'r': 40, 't': 60, 'b': 60}
+            }
+
+            Plotly.newPlot(chart5_div.id, [trace5], layout5, {'responsive': True})
+
+        panel.appendChild(charts_container)
+        return panel
+
+    # =====================================================
     # MAIN DISPLAY ENTRY
     # =====================================================
     def display_analytics(self, submissions, invalid):
@@ -4710,6 +5010,13 @@ class DisplayManager:
             # Use filtered_submissions for summary and tables
             summary_panel = self.create_summary_panel(groups, uuid_submissions)
             uuid_content.appendChild(summary_panel)
+
+            # Add visualization panel
+            try:
+                viz_panel = self.create_visualization_panel(groups, uuid_submissions)
+                uuid_content.appendChild(viz_panel)
+            except Exception as viz_error:
+                window.console.error(f"Visualization error: {viz_error}")
 
             if uuid_cheating_groups:
                 cheating_div = document.createElement("div")
@@ -6479,11 +6786,334 @@ window.setTimeout(create_proxy(start_init), 800)
   <div class="nonet-step-footer">
     <p>
       Made with ❤️ for education •
-      <a href="attributions.html" target="_blank">Open Source Attributions</a>
+      <a href="javascript:void(0)" onclick="openAttributionModal()" style="cursor: pointer;">📜 Open Source Attributions</a>
     </p>
   </div>
 
   <style>
+
+    /* ===== Attribution Modal Styles ===== */
+    /* License Accordion Styles */
+    .attribution-license-accordion {
+      margin-top: 8px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .attribution-license-header {
+      background: #f7fafc;
+      padding: 10px 14px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s ease;
+      user-select: none;
+    }
+
+    .attribution-license-header:hover {
+      background: #edf2f7;
+    }
+
+    .attribution-license-header.active {
+      background: #e6f2ff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .attribution-license-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .attribution-license-icon {
+      font-size: 11px;
+      color: #667eea;
+      transition: transform 0.3s ease;
+    }
+
+    .attribution-license-header.active .attribution-license-icon {
+      transform: rotate(180deg);
+    }
+
+    .attribution-license-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: white;
+    }
+
+    .attribution-license-content.active {
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .attribution-license-body {
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .attribution-license-body h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2d3748;
+      margin: 12px 0 6px 0;
+    }
+
+    .attribution-license-body p {
+      margin: 6px 0;
+    }
+
+    .attribution-license-body ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .attribution-license-body li {
+      margin: 4px 0;
+    }
+
+    .license-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .license-badge.mpl {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .license-badge.apache {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .license-badge.bsd {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    .license-badge.mit {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .license-badge.ofl {
+      background: #fce4ec;
+      color: #c2185b;
+    }
+
+    .license-badge.python {
+      background: #fff8e1;
+      color: #f57f17;
+    }
+
+    /* Attribution Modal */
+    .attribution-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .attribution-modal.active {
+      display: flex;
+    }
+
+    .attribution-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .attribution-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .attribution-header h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .attribution-header p {
+      font-size: 14px;
+      opacity: 0.95;
+    }
+
+    .attribution-body {
+      padding: 30px;
+    }
+
+    .attribution-intro {
+      background: #f8f9ff;
+      padding: 16px;
+      border-radius: 10px;
+      border-left: 4px solid #667eea;
+      margin-bottom: 24px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #4a5568;
+    }
+
+    .attribution-category {
+      font-size: 16px;
+      font-weight: 600;
+      color: #667eea;
+      margin: 24px 0 12px 0;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .attribution-library {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .attribution-library-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .attribution-library-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .attribution-library-version {
+      background: #667eea;
+      color: white;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .attribution-library-desc {
+      color: #4a5568;
+      line-height: 1.5;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    .attribution-library-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .attribution-library-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #667eea;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .attribution-library-link:hover {
+      background: #667eea;
+      color: white;
+    }
+
+    .attribution-library-license {
+      display: inline-block;
+      background: #48bb78;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-top: 6px;
+    }
+
+    .attribution-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 28px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .attribution-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    @media (max-width: 768px) {
+      .attribution-header h2 {
+        font-size: 22px;
+      }
+
+      .attribution-body {
+        padding: 20px;
+      }
+
+      .attribution-library {
+        padding: 12px;
+      }
+    }
+    /* ===== End Attribution Modal Styles ===== */
+
+  
     .nonet-step-footer {
       background: #f5f5f5;
       border-top: 1px solid #e0e0e0;
@@ -6536,6 +7166,363 @@ window.setTimeout(create_proxy(start_init), 800)
         }
       });
     })();
+  </script>
+
+
+  <!-- Attribution Modal -->
+  <div class="attribution-modal" id="attributionModal">
+    <div class="attribution-content">
+      <div class="attribution-header">
+        <button class="attribution-close" onclick="closeAttributionModal()">&times;</button>
+        <h2>📜 Open Source Attributions</h2>
+        <p>This project is built with amazing open source libraries</p>
+      </div>
+      <div class="attribution-body">
+        <div class="attribution-intro">
+          <strong><span class="teturuq-brand">teturu<span class="big-q">Q</span></span></strong> is made possible by the incredible work of open source developers worldwide.
+          We are deeply grateful to these projects and their contributors for making powerful tools freely available.
+        </div>
+
+        <div class="attribution-category">📱 This Project</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name"><span class="teturuq-brand">teturu<span class="big-q">Q</span></span></div>
+            <div class="attribution-library-version">v1.0</div>
+          </div>
+          <div class="attribution-library-desc">
+            <span class="teturuq-brand">teturu<span class="big-q">Q</span></span> is an open-source educational platform for creating and solving mathematical problems interactively.
+            Built with love for educators and students worldwide.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://github.com/dosen01cherid/Generative-AI-Automatic-Programming-Problem-Generator-and-Evaluator" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mit">MIT License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works can be used commercially.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li>
+                  <li>Distribution</li>
+                  <li>Modification</li>
+                  <li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li>
+                  <li>Warranty</li>
+                </ul>
+                <br>
+                <p><strong>Full License Text:</strong></p>
+                <p style="font-size: 11px; background: #f7fafc; padding: 12px; border-radius: 6px; line-height: 1.6;">
+                  MIT License<br><br>
+                  Copyright (c) 2024 <span class="teturuq-brand">teturu<span class="big-q">Q</span></span> Contributors<br><br>
+                  Permission is hereby granted, free of charge, to any person obtaining a copy
+                  of this software and associated documentation files (the "Software"), to deal
+                  in the Software without restriction, including without limitation the rights
+                  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+                  copies of the Software, and to permit persons to whom the Software is
+                  furnished to do so, subject to the following conditions:<br><br>
+                  The above copyright notice and this permission notice shall be included in all
+                  copies or substantial portions of the Software.<br><br>
+                  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+                  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+                  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+                  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+                  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+                  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+                  SOFTWARE.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-category">🧮 Mathematical & Scientific Computing</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">MathJax</div>
+            <div class="attribution-library-version">v3</div>
+          </div>
+          <div class="attribution-library-desc">
+            Beautiful and accessible math rendering for the web. Displays mathematical notation written in LaTeX, MathML, or AsciiMath notation.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://www.mathjax.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/mathjax/MathJax" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge apache">Apache License 2.0</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license that also provides an express grant of patent rights from contributors to users. Very business-friendly and widely used.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Patent use</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li><li>State changes</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Trademark use</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Plotly.js</div>
+            <div class="attribution-library-version">v2.27</div>
+          </div>
+          <div class="attribution-library-desc">
+            Open-source JavaScript charting library for creating interactive, publication-quality graphs. Used for data visualization and analytics dashboards.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://plotly.com/javascript/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/plotly/plotly.js" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mit">MIT License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A short and simple permissive license with conditions only requiring preservation of copyright and license notices. Licensed works can be used commercially.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-category">🐍 Python Environment</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Pyodide</div>
+            <div class="attribution-library-version">v0.24.1</div>
+          </div>
+          <div class="attribution-library-desc">
+            Python runtime for the browser powered by WebAssembly. Enables running Python code entirely in the browser without any server-side infrastructure.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://pyodide.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/pyodide/pyodide" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge mpl">Mozilla Public License 2.0</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> MPL 2.0 is a copyleft license that is easy to comply with. You must make the source code for any of your changes available under MPL, but you can combine the MPL software with proprietary code.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Patent use</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>Disclose source</li><li>License and copyright notice</li><li>Same license (file-level)</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">NumPy</div>
+            <div class="attribution-library-version">v1.26.0</div>
+          </div>
+          <div class="attribution-library-desc">
+            Fundamental package for scientific computing with Python. Provides powerful N-dimensional array objects and numerical computing tools.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://numpy.org/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://github.com/numpy/numpy" target="_blank" class="attribution-library-link">📦 GitHub</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge bsd">BSD 3-Clause License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A permissive license similar to the MIT License, but with a clause that prohibits others from using the name of the copyright holder to endorse derived products.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Python Standard Library</div>
+            <div class="attribution-library-version">v3.11</div>
+          </div>
+          <div class="attribution-library-desc">
+            Python's comprehensive standard library. Provides essential modules for data structures, utilities, and core functionality.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://docs.python.org/3/library/" target="_blank" class="attribution-library-link">📚 Documentation</a>
+            <a href="https://www.python.org/" target="_blank" class="attribution-library-link">🌐 Python.org</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge python">Python Software Foundation License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> A BSD-style permissive license for Python and related packages. GPL-compatible and allows commercial use.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="attribution-category">🎨 Design Resources</div>
+
+        <div class="attribution-library">
+          <div class="attribution-library-header">
+            <div class="attribution-library-name">Google Fonts (Poppins)</div>
+            <div class="attribution-library-version">Latest</div>
+          </div>
+          <div class="attribution-library-desc">
+            Open source font library providing beautiful, high-quality typography. We use the Poppins font family for clean, modern design.
+          </div>
+          <div class="attribution-library-links">
+            <a href="https://fonts.google.com/" target="_blank" class="attribution-library-link">🌐 Website</a>
+            <a href="https://fonts.google.com/specimen/Poppins" target="_blank" class="attribution-library-link">🔤 Poppins</a>
+          </div>
+          <div class="attribution-license-accordion">
+            <div class="attribution-license-header" onclick="toggleLicenseAccordion(this)">
+              <div class="attribution-license-title">
+                <span class="license-badge ofl">Open Font License</span>
+              </div>
+              <div class="attribution-license-icon">▼</div>
+            </div>
+            <div class="attribution-license-content">
+              <div class="attribution-license-body">
+                <p><strong>Summary:</strong> The SIL Open Font License is a free, open source license specifically designed for fonts and related software. Fonts must be distributed under this same license.</p>
+                <h4>✅ Permissions</h4>
+                <ul>
+                  <li>Commercial use</li><li>Distribution</li><li>Modification</li><li>Private use</li>
+                </ul>
+                <h4>📋 Conditions</h4>
+                <ul>
+                  <li>License and copyright notice</li><li>Same license</li>
+                </ul>
+                <h4>⚠️ Limitations</h4>
+                <ul>
+                  <li>Liability</li><li>Warranty</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    function toggleLicenseAccordion(header) {
+      header.classList.toggle('active');
+      const content = header.nextElementSibling;
+      content.classList.toggle('active');
+    }
+
+    function openAttributionModal() {
+      document.getElementById('attributionModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAttributionModal() {
+      document.getElementById('attributionModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('attributionModal')?.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAttributionModal();
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && document.getElementById('attributionModal').classList.contains('active')) {
+        closeAttributionModal();
+      }
+    });
   </script>
 
 </body>

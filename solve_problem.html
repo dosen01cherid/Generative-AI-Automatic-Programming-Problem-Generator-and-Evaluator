@@ -5441,7 +5441,7 @@ class ProblemSolverApp:
                 <div style="font-size: 14px; opacity: 0.9; margin-top: 4px;">You've completed all problems in this set</div>
             </div>
             <h2 style="margin: 0 0 8px 0; color: #1e293b; font-size: 24px;">
-                📊 Problem Set Review
+                📊 Review Your Answers
             </h2>
             <p style="color: #64748b; margin: 0; font-size: 14px;">
                 Review all your answers and edit if needed
@@ -5790,12 +5790,115 @@ class ProblemSolverApp:
         """
 
         if user_answers:
-            # Format answer for display with MathJax support
-            if len(user_answers) == 1:
-                answer_text = self._format_answer_for_display(user_answers[0])
+            # Check question type and format accordingly
+            is_multiple_choice = step_type in ["multiple-choice-single", "multiple-choice-multiple"]
+            is_fill_blank = step_type == "fill-blank"
+            is_multi_mc = step_type == "multi-mc"
+            is_true_false = step_type == "true-false"
+
+            if is_multiple_choice and prob_idx < len(self.problem_set):
+                # Get options from original problem data
+                problem = self.problem_set[prob_idx]
+                original_steps = problem.get("steps", [])
+                options = []
+                if step_idx < len(original_steps):
+                    options = original_steps[step_idx].get("options", [])
+
+                # Build option lookup dictionary (label -> full text with option letter)
+                option_lookup = {}
+                for opt in options:
+                    if isinstance(opt, dict):
+                        label = opt.get("label", "")
+                        content = opt.get("content", [])
+                        if content and isinstance(content, list):
+                            # Include the option letter in the display
+                            option_text = self.render_content_blocks(content)
+                            option_lookup[label] = f"<strong>{label}:</strong> {option_text}"
+                        else:
+                            option_lookup[label] = f"<strong>{label}</strong>"
+
+                # Format answers with full option text
+                formatted_answers = []
+                for ans in user_answers:
+                    ans_str = str(ans)
+                    if ans_str in option_lookup:
+                        formatted_answers.append(option_lookup[ans_str])
+                    else:
+                        # Fallback to showing the letter if option not found
+                        formatted_answers.append(f"<strong>{self._format_answer_for_display(ans)}</strong>")
+
+                # Display multiple selections as a list if more than one
+                if len(formatted_answers) > 1:
+                    answer_items = "".join([f"<li style='margin-bottom: 8px;'>{ans}</li>" for ans in formatted_answers])
+                    answer_text = f"<ul style='margin: 8px 0; padding-left: 24px;'>{answer_items}</ul>"
+                else:
+                    answer_text = formatted_answers[0] if formatted_answers else "None"
+
+            elif is_fill_blank and prob_idx < len(self.problem_set):
+                # Get blanks info from original data for multi-blank questions
+                problem = self.problem_set[prob_idx]
+                original_steps = problem.get("steps", [])
+                blanks = []
+                if step_idx < len(original_steps):
+                    blanks = original_steps[step_idx].get("blanks", [])
+
+                # Format fill-in-the-blank answers
+                if len(user_answers) == 1:
+                    # Single blank
+                    answer_text = f"<strong style='color: #1e40af;'>{user_answers[0]}</strong>"
+                elif len(blanks) > 0 and len(user_answers) == len(blanks):
+                    # Multi-blank with labels
+                    answer_items = []
+                    for i, ans in enumerate(user_answers):
+                        blank_label = blanks[i].get("label", f"Blank {i+1}") if isinstance(blanks[i], dict) else f"Blank {i+1}"
+                        answer_items.append(f"<li style='margin-bottom: 6px;'><strong>{blank_label}:</strong> <span style='color: #1e40af;'>{ans}</span></li>")
+                    answer_text = f"<ul style='margin: 8px 0; padding-left: 24px;'>{(''.join(answer_items))}</ul>"
+                else:
+                    # Multi-blank without labels
+                    answer_items = "".join([f"<li style='margin-bottom: 6px; color: #1e40af;'><strong>{ans}</strong></li>" for ans in user_answers])
+                    answer_text = f"<ul style='margin: 8px 0; padding-left: 24px;'>{answer_items}</ul>"
+
+            elif is_multi_mc and prob_idx < len(self.problem_set):
+                # Multi-MC: answers stored as dictionary {blank_label: selected_option}
+                problem = self.problem_set[prob_idx]
+                original_steps = problem.get("steps", [])
+                blanks = {}
+                if step_idx < len(original_steps):
+                    blanks = original_steps[step_idx].get("blanks", {})
+
+                # Check if user_answers is a dictionary (multi-mc format)
+                if isinstance(user_answers, dict):
+                    answer_items = []
+                    # Sort by blank label for consistent display
+                    for blank_label in sorted(user_answers.keys()):
+                        selected_option = user_answers[blank_label]
+                        # Try to get a friendly label from blanks data
+                        display_label = blank_label
+                        if blank_label in blanks:
+                            blank_data = blanks[blank_label]
+                            if isinstance(blank_data, dict) and "label" in blank_data:
+                                display_label = blank_data["label"]
+
+                        answer_items.append(f"<li style='margin-bottom: 6px;'><strong>{display_label}:</strong> <span style='color: #1e40af;'>{selected_option}</span></li>")
+                    answer_text = f"<ul style='margin: 8px 0; padding-left: 24px;'>{(''.join(answer_items))}</ul>"
+                elif isinstance(user_answers, list) and len(user_answers) > 0:
+                    # Fallback: if stored as list, display as simple list
+                    answer_items = "".join([f"<li style='margin-bottom: 6px; color: #1e40af;'><strong>{ans}</strong></li>" for ans in user_answers])
+                    answer_text = f"<ul style='margin: 8px 0; padding-left: 24px;'>{answer_items}</ul>"
+                else:
+                    answer_text = "<span style='color: #64748b; font-style: italic;'>No selections made</span>"
+
+            elif is_true_false:
+                # Format True/False answer
+                answer_text = f"<strong style='color: #1e40af; font-size: 15px;'>{user_answers[0]}</strong>"
+
             else:
-                formatted_answers = [self._format_answer_for_display(ans) for ans in user_answers]
-                answer_text = ", ".join(formatted_answers)
+                # Other types (math-expression, freestyle, etc.) - use existing formatting
+                if len(user_answers) == 1:
+                    answer_text = self._format_answer_for_display(user_answers[0])
+                else:
+                    formatted_answers = [self._format_answer_for_display(ans) for ans in user_answers]
+                    answer_text = ", ".join(formatted_answers)
 
             answer_div.innerHTML = f"""
                 <div style="font-weight: 600; color: #475569; margin-bottom: 4px;">Your Answer:</div>
