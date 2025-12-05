@@ -7933,8 +7933,8 @@ class DataManager:
     #
     Step Description: What is the antiderivative of `2x`?
     Step Type: math-expression
-    Step Expression: `int(2x)dx`
-    Step Expected: `x^2+C`
+    Step Expression: `int(2x)`
+    Step Expected: `x^2`
     Must Be Correct: false
     #
     Step Description: Complete the sentence: The derivative measures {blank}, while the integral measures {blank}.
@@ -14482,6 +14482,61 @@ function parseSmartKeystrokes(text) {
             
             keystrokes.push('{Tab}');
             continue;
+        }
+
+        // int(...) or int_<lower>^<upper>(...)  - Handle integral formats
+        if (text.substring(i, i + 3) === 'int') {
+            const nextChar = i + 3 < text.length ? text[i + 3] : '';
+
+            // Check if it's int( or int_<digit>
+            if (nextChar === '(' || (nextChar === '_' && i + 4 < text.length && /\d/.test(text[i + 4]))) {
+                for (const c of '\\int') keystrokes.push(c);
+                keystrokes.push('{Tab}');
+                i += 3;  // skip 'int'
+
+                // Handle int_<lower>^<upper>(expression) format
+                if (text[i] === '_') {
+                    i++;  // skip '_'
+
+                    // Get lower bound
+                    let lowerBound = '';
+                    while (i < text.length && /\d/.test(text[i])) {
+                        lowerBound += text[i++];
+                    }
+
+                    // Type lower bound
+                    for (const c of lowerBound) keystrokes.push(c);
+                    keystrokes.push('{Tab}');
+
+                    // Handle upper bound if exists
+                    if (i < text.length && text[i] === '^') {
+                        i++;  // skip '^'
+
+                        let upperBound = '';
+                        while (i < text.length && /\d/.test(text[i])) {
+                            upperBound += text[i++];
+                        }
+
+                        // Type upper bound
+                        for (const c of upperBound) keystrokes.push(c);
+                    }
+
+                    keystrokes.push('{Tab}');
+                } else {
+                    // No bounds: skip subscript and superscript fields
+                    keystrokes.push('{Tab}');  // Skip subscript
+                    keystrokes.push('{Tab}');  // Skip superscript
+                }
+
+                // Handle the integral expression in parentheses
+                if (i < text.length && text[i] === '(') {
+                    const { content, end } = extractParenContent(text, i + 1);
+                    processInlineContent(unwrapParentheses('(' + content + ')'), keystrokes);
+                    i = end;
+                }
+
+                continue;
+            }
         }
 
         // int_
