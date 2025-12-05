@@ -6107,11 +6107,14 @@ class ProblemSolverApp:
             window.console.log(f"   Answer changed: {answer_changed}")
 
             # ============================================
-            # PART 5: TRACK EDIT - For score recalculation
+            # PART 5: TRACK EDIT - For score recalculation (only if answer actually changed)
             # ============================================
 
-            self.score_tracker.add_edit(problem_idx, step_idx, new_answer)
-            window.console.log("✅ Edit tracked in score_tracker")
+            if answer_changed:
+                self.score_tracker.add_edit(problem_idx, step_idx, new_answer)
+                window.console.log("✅ Edit tracked in score_tracker")
+            else:
+                window.console.log("⏭️ Answer unchanged - not tracking as edit")
 
             # ============================================
             # PART 6: RECALCULATE SCORE - Always calculate, may not display yet
@@ -12493,7 +12496,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
             return
 
-        # Show feedback for non-requireCorrect questions
+        # Show feedback for non-requireCorrect questions (only show if correct)
         feedback_div = document.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}")
         window.console.log(f"🔍 MC-Single: Post-blocking feedback lookup, found: {feedback_div is not None}")
 
@@ -12505,11 +12508,8 @@ This demonstrates the complete format for creating your own problem sets!
                     </div>
                 """
             else:
-                feedback_div.innerHTML = f"""
-                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ❌ Incorrect. The correct answer was: {correct_answer}
-                    </div>
-                """
+                # Don't show incorrect feedback for non-required questions
+                feedback_div.innerHTML = ""
                 
                 # Remove flashing class after animation completes
                 def remove_flash_mc_single_normal():
@@ -12780,7 +12780,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
             return
 
-        # Show feedback - query within current problem container
+        # Show feedback - query within current problem container (only show if correct for non-required questions)
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
         feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
@@ -12791,12 +12791,8 @@ This demonstrates the complete format for creating your own problem sets!
                     </div>
                 """
             else:
-                correct_list = ", ".join(sorted(correct_answers))
-                feedback_div.innerHTML = f"""
-                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ❌ Incorrect. The correct answers were: {correct_list}
-                    </div>
-                """
+                # Don't show incorrect feedback for non-required questions
+                feedback_div.innerHTML = ""
                 
                 # Remove flashing class after animation completes
                 def remove_flash_mc_normal():
@@ -13185,7 +13181,7 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.log("🚫 RETURNING EARLY - User must submit correct answer to proceed")
             return
 
-        # Show feedback
+        # Show feedback (only show if correct for non-required questions)
         # Query within current problem container
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
         feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
@@ -13197,12 +13193,8 @@ This demonstrates the complete format for creating your own problem sets!
                     </div>
                 """
             else:
-                correct_display = "True" if correct_answer == "true" else "False"
-                feedback_div.innerHTML = f"""
-                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ❌ Incorrect. The correct answer was: {correct_display}
-                    </div>
-                """
+                # Don't show incorrect feedback for non-required questions
+                feedback_div.innerHTML = ""
                 
                 # Remove flashing class after animation completes
                 def remove_flash_tf_normal():
@@ -14859,11 +14851,10 @@ This demonstrates the complete format for creating your own problem sets!
 
                   window.console.log(f"✅ Updated problem_states: correct=False, score=0.0%, time={time_taken:.1f}s")
 
-          # ✅ Show different message for requireCorrect steps
+          # ✅ Show feedback only for requireCorrect steps
           if must_correct:
               self.show_feedback(step_idx, "❌ Incorrect. This step requires the correct answer. Please try again.", "#b91c1c")
-          else:
-              self.show_feedback(step_idx, "❌ Incorrect. Try again!", "#b91c1c")
+          # Don't show incorrect feedback for non-required questions
           self.add_to_global_history(step_idx, user_latex, False, time_taken, "submit")
 
       self.save_to_storage()

@@ -7943,10 +7943,34 @@ class DataManager:
     Explanation: This statement is false. A limit can exist even when the function is not defined at that point, or when the function value differs from the limit (removable discontinuity).
     #
     Step Description: What is the antiderivative of `2x`?
-    Step Type: math-expression
-    Step Expression: `int(2x)`
-    Step Expected: `x^2`
+    Step Type: multiple-choice-single
+    Option A: `x^2`
+    Option B: `x^3`
+    Option C: `2x^2`
+    Option D: `2`
+    Correct Answer: A
     Must Be Correct: false
+    Explanation: The antiderivative of 2x is x^2 (plus a constant of integration).
+    #
+    Step Description: Evaluate the definite integral `int_0^2(3x^2)`
+    Step Type: multiple-choice-single
+    Option A: `6`
+    Option B: `8`
+    Option C: `12`
+    Option D: `24`
+    Correct Answer: B
+    Must Be Correct: false
+    Explanation: The antiderivative of 3x^2 is x^3. Evaluating from 0 to 2: 2^3 - 0^3 = 8.
+    #
+    Step Description: Which of the following represents the integral notation for the area under a curve?
+    Step Type: multiple-choice-single
+    Option A: `d/dx f(x)`
+    Option B: `int f(x)`
+    Option C: `lim_(x->a) f(x)`
+    Option D: `sum_(i=1)^n f(i)`
+    Correct Answer: B
+    Must Be Correct: false
+    Explanation: The integral notation ∫f(x) represents the area under the curve of function f(x).
     #
     Step Description: Complete the sentence: The derivative measures {blank}, while the integral measures {blank}.
     Step Type: multi-mc
@@ -7996,11 +8020,15 @@ class DataManager:
     Correct Answer: False
     Must Be Correct: false
     #
-    Step Description: What is the determinant of the 2×2 identity matrix?
-    Step Type: math-expression
-    Step Expression: `det([[1,0],[0,1]])`
-    Step Expected: `1`
+    Step Description: What is the determinant of the 2×2 identity matrix `[[1,0],[0,1]]`?
+    Step Type: multiple-choice-single
+    Option A: `0`
+    Option B: `1`
+    Option C: `-1`
+    Option D: `2`
+    Correct Answer: B
     Must Be Correct: false
+    Explanation: The determinant of the identity matrix is always 1. For a 2×2 identity matrix, det = (1×1) - (0×0) = 1.
     #
     Step Description: A matrix is in {blank} form when each leading entry is 1 and is the only non-zero entry in its column. To find this form, we use {blank} operations.
     Step Type: multi-mc
@@ -8564,7 +8592,7 @@ class DataManager:
                             content = opt.get("content", [])
                             has_content = any(
                                 isinstance(block, dict) and
-                                block.get("type") in ["text", "math", "image"] and
+                                block.get("type") in ["text", "math", "mathstring", "image"] and
                                 (block.get("value", "").strip() if block.get("type") == "text" else True)
                                 for block in content
                             )
@@ -8591,7 +8619,7 @@ class DataManager:
                             content = opt.get("content", [])
                             has_content = any(
                                 isinstance(block, dict) and
-                                block.get("type") in ["text", "math", "image"] and
+                                block.get("type") in ["text", "math", "mathstring", "image"] and
                                 (block.get("value", "").strip() if block.get("type") == "text" else True)
                                 for block in content
                             )
