@@ -5525,6 +5525,69 @@ class ProblemSolverApp:
             """
             review_section.appendChild(score_display)
 
+        # Add collapse/expand all toggle button
+        toggle_btn_container = document.createElement("div")
+        toggle_btn_container.style.cssText = """
+            margin-bottom: 16px;
+            text-align: right;
+        """
+
+        toggle_btn = document.createElement("button")
+        toggle_btn.id = "toggleAllAccordionsBtn"
+        toggle_btn.innerHTML = "▼ Collapse All"
+        toggle_btn.style.cssText = """
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        """
+
+        # Hover effects
+        def btn_hover(e):
+            toggle_btn.style.background = "#2563eb"
+        def btn_leave(e):
+            toggle_btn.style.background = "#3b82f6"
+
+        toggle_btn.addEventListener("mouseenter", create_proxy(btn_hover))
+        toggle_btn.addEventListener("mouseleave", create_proxy(btn_leave))
+
+        # Toggle all accordions
+        all_expanded = [True]  # Track state
+
+        def toggle_all_accordions(e):
+            accordions = document.querySelectorAll(".problem-accordion-content")
+            icons = document.querySelectorAll(".accordion-icon")
+
+            if all_expanded[0]:
+                # Collapse all
+                for i in range(accordions.length):
+                    accordions[i].style.maxHeight = "0px"
+                    accordions[i].style.paddingTop = "0px"
+                    accordions[i].style.paddingBottom = "0px"
+                for i in range(icons.length):
+                    icons[i].style.transform = "rotate(-90deg)"
+                toggle_btn.innerHTML = "▶ Expand All"
+                all_expanded[0] = False
+            else:
+                # Expand all
+                for i in range(accordions.length):
+                    accordions[i].style.maxHeight = "5000px"
+                    accordions[i].style.paddingTop = "0px"
+                    accordions[i].style.paddingBottom = "20px"
+                for i in range(icons.length):
+                    icons[i].style.transform = "rotate(0deg)"
+                toggle_btn.innerHTML = "▼ Collapse All"
+                all_expanded[0] = True
+
+        toggle_btn.addEventListener("click", create_proxy(toggle_all_accordions))
+        toggle_btn_container.appendChild(toggle_btn)
+        review_section.appendChild(toggle_btn_container)
+
         # Add each problem's review
         for prob_idx in sorted(self.problem_states.keys()):
             score_info = problem_scores.get(prob_idx, {'score': 0, 'max_score': 0, 'percentage': 0})
@@ -5569,37 +5632,83 @@ class ProblemSolverApp:
 
 
     def _create_problem_review(self, prob_idx, score_data):
-        """Create review section for a single problem"""
+        """Create review section for a single problem with accordion"""
         problem_container = document.createElement("div")
         problem_container.className = "problem-review"
         problem_container.id = f"problemReview_{prob_idx}"
         problem_container.style.cssText = """
             border: 2px solid #e2e8f0;
             border-radius: 12px;
-            padding: 20px;
             margin-bottom: 16px;
             background: #f8fafc;
+            overflow: hidden;
         """
 
-        # Problem header (without score)
+        # Accordion header (clickable)
         header = document.createElement("div")
+        header.className = "problem-accordion-header"
         header.style.cssText = """
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #e2e8f0;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc;
+            transition: background 0.2s;
         """
-        header.innerHTML = f"""
-            <div>
-                <h3 style="margin: 0; color: #1e293b; font-size: 18px;">Problem {prob_idx + 1}</h3>
-            </div>
-        """
-        problem_container.appendChild(header)
+        # Get problem title
+        problem_title = "Problem"
+        if prob_idx < len(self.problem_set):
+            problem_title = self.problem_set[prob_idx].get("title", f"Problem {prob_idx + 1}")
 
-        # Add each step's review
+        header.innerHTML = f"""
+            <h3 style="margin: 0; color: #1e293b; font-size: 18px;">{problem_title}</h3>
+            <span class="accordion-icon" style="font-size: 20px; transition: transform 0.3s;">▼</span>
+        """
+
+        # Accordion content (collapsible)
+        content = document.createElement("div")
+        content.className = "problem-accordion-content"
+        content.style.cssText = """
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px 20px 20px;
+        """
+
+        # Add each step's review to content
         if prob_idx in self.problem_states:
             for step_idx, step_data in enumerate(self.problem_states[prob_idx]):
                 step_review = self._create_step_review(prob_idx, step_idx, step_data)
-                problem_container.appendChild(step_review)
+                content.appendChild(step_review)
+
+        # Toggle accordion on header click
+        def toggle_accordion(event):
+            icon = header.querySelector(".accordion-icon")
+            if content.style.maxHeight and content.style.maxHeight != "0px":
+                content.style.maxHeight = "0px"
+                content.style.paddingTop = "0px"
+                content.style.paddingBottom = "0px"
+                icon.style.transform = "rotate(-90deg)"
+            else:
+                content.style.maxHeight = "5000px"
+                content.style.paddingTop = "0px"
+                content.style.paddingBottom = "20px"
+                icon.style.transform = "rotate(0deg)"
+
+        header.addEventListener("click", create_proxy(toggle_accordion))
+
+        # Hover effect
+        def on_hover(event):
+            header.style.background = "#e2e8f0"
+        def on_leave(event):
+            header.style.background = "#f8fafc"
+
+        header.addEventListener("mouseenter", create_proxy(on_hover))
+        header.addEventListener("mouseleave", create_proxy(on_leave))
+
+        problem_container.appendChild(header)
+        problem_container.appendChild(content)
 
         return problem_container
 
@@ -12501,22 +12610,8 @@ This demonstrates the complete format for creating your own problem sets!
         window.console.log(f"🔍 MC-Single: Post-blocking feedback lookup, found: {feedback_div is not None}")
 
         if feedback_div:
-            if is_correct:
-                feedback_div.innerHTML = """
-                    <div style='background:#dcfce7;color:#16a34a;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
-                        ✅ Correct!
-                    </div>
-                """
-            else:
-                # Don't show incorrect feedback for non-required questions
-                feedback_div.innerHTML = ""
-                
-                # Remove flashing class after animation completes
-                def remove_flash_mc_single_normal():
-                    flash_div = feedback_div.querySelector(".flash-incorrect")
-                    if flash_div:
-                        flash_div.classList.remove("flash-incorrect")
-                window.setTimeout(create_proxy(remove_flash_mc_single_normal), 3000)
+            # Don't show any feedback (correct or incorrect) for non-required questions
+            feedback_div.innerHTML = ""
         else:
             window.console.warn(f"⚠️ MC-Single: Feedback div not found for non-blocking case")
 
@@ -12784,22 +12879,8 @@ This demonstrates the complete format for creating your own problem sets!
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
         feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
-            if is_correct:
-                feedback_div.innerHTML = """
-                    <div style='background:#dcfce7;color:#16a34a;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
-                        ✅ Correct!
-                    </div>
-                """
-            else:
-                # Don't show incorrect feedback for non-required questions
-                feedback_div.innerHTML = ""
-                
-                # Remove flashing class after animation completes
-                def remove_flash_mc_normal():
-                    flash_div = feedback_div.querySelector(".flash-incorrect")
-                    if flash_div:
-                        flash_div.classList.remove("flash-incorrect")
-                window.setTimeout(create_proxy(remove_flash_mc_normal), 3000)
+            # Don't show any feedback (correct or incorrect) for non-required questions
+            feedback_div.innerHTML = ""
 
         # Save and check completion
         self.save_to_storage()
@@ -13019,32 +13100,13 @@ This demonstrates the complete format for creating your own problem sets!
             window.console.log("🚫 RETURNING EARLY - User must submit correct answers to proceed")
             return
 
-        # Show feedback
+        # Show feedback - Don't show any feedback for non-required questions
         # Query within current problem container
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
         feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
-            if is_correct:
-                feedback_div.innerHTML = """
-                    <div style='background:#dcfce7;color:#16a34a;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
-                        ✅ All correct!
-                    </div>
-                """
-            else:
-                # Show which blanks were incorrect
-                incorrect_msg = f"Blank(s) {', '.join(incorrect_blanks)} incorrect"
-                feedback_div.innerHTML = f"""
-                    <div class='flash-incorrect' style='background:#fef2f2;color:#dc2626;padding:12px;border-radius:8px;margin-top:12px;'>
-                        ❌ {incorrect_msg}
-                    </div>
-                """
-                
-                # Remove flashing class after animation completes
-                def remove_flash_multi_mc_normal():
-                    flash_div = feedback_div.querySelector(".flash-incorrect")
-                    if flash_div:
-                        flash_div.classList.remove("flash-incorrect")
-                window.setTimeout(create_proxy(remove_flash_multi_mc_normal), 3000)
+            # Don't show any feedback (correct or incorrect) for non-required questions
+            feedback_div.innerHTML = ""
 
         # Save and check completion
         self.save_to_storage()
@@ -13186,22 +13248,8 @@ This demonstrates the complete format for creating your own problem sets!
         problem_container = document.querySelector(f".accordion-problem[data-index='{current_prob_idx}']")
         feedback_div = problem_container.querySelector(f"#stepFeedback{current_prob_idx}_{step_idx}") if problem_container else None
         if feedback_div:
-            if is_correct:
-                feedback_div.innerHTML = """
-                    <div style='background:#dcfce7;color:#16a34a;padding:12px;border-radius:8px;margin-top:12px;font-weight:600;'>
-                        ✅ Correct!
-                    </div>
-                """
-            else:
-                # Don't show incorrect feedback for non-required questions
-                feedback_div.innerHTML = ""
-                
-                # Remove flashing class after animation completes
-                def remove_flash_tf_normal():
-                    flash_div = feedback_div.querySelector(".flash-incorrect")
-                    if flash_div:
-                        flash_div.classList.remove("flash-incorrect")
-                window.setTimeout(create_proxy(remove_flash_tf_normal), 3000)
+            # Don't show any feedback (correct or incorrect) for non-required questions
+            feedback_div.innerHTML = ""
 
         # Save and check completion
         self.save_to_storage()
