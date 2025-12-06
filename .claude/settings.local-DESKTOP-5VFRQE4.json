@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c dir \"C:\\Users\\cheri\\llama-cpp-server\")",
+      "Bash(pip install:*)",
+      "Bash(npm install)",
+      "Bash(python -m pip install:*)",
+      "Bash(start analytics_for_problem.html)",
+      "Bash(start create_problem.html)",
+      "Bash(git pull:*)",
+      "Bash(findstr:*)",
+      "Bash(powershell -Command \"Select-String -Path ''C:\\Users\\cheri\\OneDrive - Jannah Fam\\Universitas Mercu Buana\\2025-2026 Ganjil\\githublaptop\\Generative-AI-Automatic-Programming-Problem-Generator-and-Evaluator\\create_problem.html'' -Pattern ''(?i)(example.*integer|sample.*json)'' | Select-Object -First 20\")",
+      "Bash(powershell -Command:*)",
+      "Bash(rm:*)",
+      "Bash(start:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nAdd support for simplified integral notation in MathQuill parser\n\nImplement preprocessing step to transform AsciiMath integral formats into proper MathQuill keystrokes. The parser now handles both simple integrals without bounds (int(2x)) and definite integrals with numeric bounds (int_1^5(2x)).\n\nChanges:\n- Add new handler in parseSmartKeystrokes to intercept \"int\" keyword before MathQuill insertion\n- Transform int(expression) to \\int with proper Tab navigation to skip empty bound fields\n- Transform int_<lower>^<upper>(expression) to \\int with populated lower and upper bounds\n- Update example problem to use simplified notation: int(2x) instead of int(2x)dx\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)",
+      "Bash(git commit:*)",
+      "Bash(python:*)",
+      "Bash(git checkout:*)",
+      "Bash(dir \"C:\\Users\\cheri\" /s /b)",
+      "Bash(cmd /c \"dir /s /b C:\\Users\\cheri | findstr /i apple\")",
+      "Bash(unzip:*)",
+      "Bash(dir \"C:\\Users\\cheri\\OneDrive - Jannah Fam\\Folder Ali Hadi\\Desktop\\Apple Win\" /b)",
+      "Bash(dir:*)",
+      "Bash(git clone:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm install:*)",
+      "Bash(node test_emulator.js:*)",
+      "Bash(node -e:*)",
+      "Bash(node load_and_run_disk.js:*)",
+      "Bash(cmd /c dir)",
+      "Bash(node -c:*)",
+      "Bash(del:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

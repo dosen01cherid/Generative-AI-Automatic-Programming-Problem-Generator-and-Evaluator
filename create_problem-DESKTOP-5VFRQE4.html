@@ -2184,11 +2184,8 @@ class MathParser:
     """Handles LaTeX parsing, structural comparison, and error popups"""
 
     GRAMMAR = r"""
-start: equation
-   | matrix_ops
+start: matrix_ops
    | expr
-
-?equation: expr "=" expr    -> equation
 
 ?expr: sum
 
@@ -2247,7 +2244,6 @@ start: equation
    | matrix
    | matrix_env
    | abs_function
-   | finiteset_function
    | "(" expr ")"              -> paren_expr
    | "{" expr "}"              -> braces_expr
    | PI                        -> pi_symbol
@@ -2325,8 +2321,6 @@ orthogonalize_function: "orthogonalize" "(" expr ("," expr)* ")" -> orthogonaliz
 fraction: "\\frac" "{" expr "}" "{" expr "}" -> frac
 
 abs_function: "\\left" "|" expr "\\right" "|"     -> abs_func
-
-finiteset_function: "__finiteset" "(" [expr ("," expr)*] ")" -> finiteset_func
 
 atom_degree: atom "^" degree_expr
 
@@ -2822,38 +2816,7 @@ CIRC: "\\circ"
 
         return processed
 
-    def _preprocess_sets(self, latex_str):
-        """Preprocess set notation {a, b, c} to FiniteSet format"""
-        import re
 
-        window.console.log(f"Before set preprocessing: {latex_str}")
-
-        # Pattern 1: Match \left\{...\right\}
-        left_right_pattern = r'\\left\\{([^}]+)\\right\\}'
-
-        # Pattern 2: Match \{...\} (LaTeX escaped braces)
-        escaped_pattern = r'\\{([^}\\]+)\\}'
-
-        # Pattern 3: Match plain {...} (unescaped - from direct typing)
-        # This is tricky because { } have special meaning in LaTeX
-        # We need to avoid matching LaTeX commands like \frac{}{}
-        plain_pattern = r'(?<!\\)\{([^}]+)\}(?!\{)'
-
-        def replace_set(match):
-            # Extract the content inside the braces
-            content = match.group(1).strip()
-            window.console.log(f"Set notation detected: {{{content}}}")
-
-            # Return special marker that will be converted to FiniteSet
-            return f'__finiteset({content})'
-
-        # Try all patterns (most specific first)
-        processed = re.sub(left_right_pattern, replace_set, latex_str)
-        processed = re.sub(escaped_pattern, replace_set, processed)
-        processed = re.sub(plain_pattern, replace_set, processed)
-
-        window.console.log(f"After set preprocessing: {processed}")
-        return processed
 
     def _preprocess_derivatives(self, latex_str):
         """
@@ -3091,11 +3054,6 @@ CIRC: "\\circ"
         # Preprocess row operations
         clean = self._preprocess_row_operations(clean)
         window.console.log(f"🔍 [DEBUG 4] After preprocess_row_operations: {clean}")
-
-        # Preprocess set notation
-        clean = self._preprocess_sets(clean)
-        window.console.log(f"🔍 [DEBUG 4.5] After preprocess_sets: {clean}")
-
         window.console.log(f"Cleaned LaTeX: {clean}")
 
         try:
@@ -3680,10 +3638,6 @@ CIRC: "\\circ"
           def braces_expr(self, expr):
               return expr
 
-          def equation(self, lhs, rhs):
-              """Handle equations like x=3 by returning an Eq object"""
-              return sp.Eq(lhs, rhs, evaluate=False)
-
           def number(self, tok):
               s = str(tok)
               return sp.Integer(s) if '.' not in s else sp.Float(s)
@@ -3704,14 +3658,6 @@ CIRC: "\\circ"
 
           def abs_func(self, expr):
               return sp.Abs(expr)
-
-          # --- METHODS FOR SET NOTATION ---
-          def finiteset_func(self, *elements):
-              """Handles set notation: __finiteset(a, b, c) -> {a, b, c}"""
-              window.console.log(f"Creating FiniteSet from elements: {elements}")
-              if len(elements) == 0:
-                  return sp.EmptySet
-              return sp.FiniteSet(*elements)
 
           def neg(self, v):
               return sp.Mul(-1, v, evaluate=False)
@@ -4253,11 +4199,6 @@ CIRC: "\\circ"
                 window.console.log(f"DEBUG: After doit: {expr}")
                 window.console.log(f"DEBUG: After doit (srepr): {sp.srepr(expr)}")
 
-            # Skip normalization for equations - just return as-is after doit
-            if isinstance(expr, sp.Equality):
-                window.console.log("⏭️ Skipping normalization for equation")
-                return expr
-
             if isinstance(expr, list):
                 expr = sp.Matrix(expr)
             if isinstance(expr, sp.Matrix):
@@ -4279,6 +4220,7 @@ CIRC: "\\circ"
                 window.console.log(f"🔧 NORMALIZE OUTPUT: {expr}")
                 window.console.log(f"🔧 NORMALIZE OUTPUT (srepr): {sp.srepr(expr)}")
 
+                # ✅ IMPROVED SANITY CHECK: Test multiple values
                 try:
                     free_syms = list(original_expr.free_symbols)
                     if free_syms:
@@ -4331,45 +4273,6 @@ CIRC: "\\circ"
         """Check equality for scalar or matrix expressions with multiple strategies"""
         import sympy as sp
         try:
-            # Handle FiniteSet comparisons
-            if isinstance(a, sp.FiniteSet) and isinstance(b, sp.FiniteSet):
-                return a == b
-            elif isinstance(a, sp.FiniteSet) and isinstance(b, sp.Equality):
-                # a is set, b is equation - solve equation and compare with set
-                try:
-                    var = list(b.free_symbols)[0] if b.free_symbols else None
-                    if var:
-                        solutions = sp.solve(b, var)
-                        solution_set = sp.FiniteSet(*solutions) if isinstance(solutions, list) else sp.FiniteSet(solutions)
-                        return a == solution_set
-                except:
-                    return False
-            elif isinstance(b, sp.FiniteSet) and isinstance(a, sp.Equality):
-                # b is set, a is equation - solve equation and compare with set
-                try:
-                    var = list(a.free_symbols)[0] if a.free_symbols else None
-                    if var:
-                        solutions = sp.solve(a, var)
-                        solution_set = sp.FiniteSet(*solutions) if isinstance(solutions, list) else sp.FiniteSet(solutions)
-                        return solution_set == b
-                except:
-                    return False
-
-            # Handle equation comparisons
-            if isinstance(a, sp.Equality) and isinstance(b, sp.Equality):
-                # Both are equations: compare both sides
-                lhs_eq = self.final_eq(a.lhs, b.lhs) and self.final_eq(a.rhs, b.rhs)
-                rhs_eq = self.final_eq(a.lhs, b.rhs) and self.final_eq(a.rhs, b.lhs)
-                return lhs_eq or rhs_eq
-            elif isinstance(a, sp.Equality) and not isinstance(b, sp.Equality):
-                # a is equation, b is plain expression
-                # Check if b matches either side of the equation
-                return self.final_eq(a.lhs, b) or self.final_eq(a.rhs, b)
-            elif isinstance(b, sp.Equality) and not isinstance(a, sp.Equality):
-                # b is equation, a is plain expression
-                # Check if a matches either side of the equation
-                return self.final_eq(a, b.lhs) or self.final_eq(a, b.rhs)
-
             # Handle matrix comparisons
             if isinstance(a, sp.MatrixBase) and isinstance(b, sp.MatrixBase):
                 if a.shape != b.shape:
@@ -6182,12 +6085,12 @@ class Step:
 
             window.console.log(f"Expression parsed: {expr_val}")
             window.console.log(f"Expression type: {type(expr_val)}")
-            if expr_val is not None:
+            if expr_val:
                 window.console.log(f"Expression srepr: {sp.srepr(expr_val)}")
 
             window.console.log(f"Expected parsed: {exp_val}")
             window.console.log(f"Expected type: {type(exp_val)}")
-            if exp_val is not None:
+            if exp_val:
                 window.console.log(f"Expected srepr: {sp.srepr(exp_val)}")
 
             if expr_val is None or exp_val is None:
