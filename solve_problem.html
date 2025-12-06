@@ -2591,9 +2591,15 @@ class MathParser:
     GRAMMAR = r"""
 start: equation
    | matrix_ops
-   | expr
+   | set_expr
 
-?equation: expr "=" expr    -> equation
+?equation: set_expr "=" set_expr    -> equation
+
+?set_expr: set_expr "\\cup" expr           -> set_union
+         | set_expr "\\cap" expr           -> set_intersection
+         | set_expr "\\setminus" expr      -> set_difference
+         | set_expr "\\triangle" expr      -> set_symmetric_diff
+         | expr
 
 ?expr: sum
 
@@ -4409,6 +4415,30 @@ CIRC: "\\circ"
                     return sp.EmptySet
                 return sp.FiniteSet(*elements)
 
+            # --- METHODS FOR SET OPERATIONS ---
+            def set_union(self, a, b):
+                """Handles set union: A ∪ B"""
+                window.console.log(f"Set union: {a} ∪ {b}")
+                return sp.Union(a, b)
+
+            def set_intersection(self, a, b):
+                """Handles set intersection: A ∩ B"""
+                window.console.log(f"Set intersection: {a} ∩ {b}")
+                return sp.Intersection(a, b)
+
+            def set_difference(self, a, b):
+                """Handles set difference: A \ B"""
+                window.console.log(f"Set difference: {a} \ {b}")
+                # For FiniteSet, use subtraction; otherwise use Complement
+                if isinstance(a, sp.FiniteSet) and isinstance(b, sp.FiniteSet):
+                    return sp.FiniteSet(*[x for x in a if x not in b])
+                return sp.Complement(a, b)
+
+            def set_symmetric_diff(self, a, b):
+                """Handles symmetric difference: A △ B"""
+                window.console.log(f"Set symmetric difference: {a} △ {b}")
+                return sp.SymmetricDifference(a, b)
+
             # --- METHODS FOR MATRIX OPERATIONS ---
             def det_func(self, matrix_expr):
                 """Handles det(matrix) function"""
@@ -4646,16 +4676,48 @@ CIRC: "\\circ"
             # Store original for comparison
             original_expr = expr
 
-            if hasattr(expr, "doit"):
-                window.console.log(f"DEBUG: Expression has doit, calling it...") 
-                expr = expr.doit()
-                window.console.log(f"DEBUG: After doit: {expr}")
-                window.console.log(f"DEBUG: After doit (srepr): {sp.srepr(expr)}")
-
-            # Skip normalization for equations - just return as-is after doit
+            # Skip normalization for equations and set operations BEFORE doit (to prevent errors)
             if isinstance(expr, sp.Equality):
                 window.console.log("⏭️ Skipping normalization for equation")
                 return expr
+
+            if isinstance(expr, (sp.Union, sp.Intersection, sp.Complement, sp.SymmetricDifference, sp.FiniteSet)):
+                window.console.log("⏭️ Skipping normalization for set operation/FiniteSet")
+                # For set operations, we still want to evaluate them, but carefully
+                try:
+                    if isinstance(expr, (sp.Union, sp.Intersection, sp.SymmetricDifference)):
+                        # Manually evaluate set operations for FiniteSets
+                        if all(isinstance(arg, sp.FiniteSet) for arg in expr.args):
+                            if isinstance(expr, sp.Union):
+                                result = sp.FiniteSet(*[item for arg in expr.args for item in arg])
+                            elif isinstance(expr, sp.Intersection):
+                                result = expr.args[0]
+                                for arg in expr.args[1:]:
+                                    result = sp.FiniteSet(*[item for item in result if item in arg])
+                            elif isinstance(expr, sp.SymmetricDifference):
+                                # A △ B = (A ∪ B) - (A ∩ B)
+                                a, b = expr.args[0], expr.args[1]
+                                union = sp.FiniteSet(*[item for arg in [a, b] for item in arg])
+                                intersection = sp.FiniteSet(*[item for item in a if item in b])
+                                result = sp.FiniteSet(*[item for item in union if item not in intersection])
+                            window.console.log(f"Set operation evaluated: {result}")
+                            return result
+                    elif isinstance(expr, sp.Complement):
+                        # Handle A \ B (set difference)
+                        if len(expr.args) == 2 and all(isinstance(arg, sp.FiniteSet) for arg in expr.args):
+                            a, b = expr.args[0], expr.args[1]
+                            result = sp.FiniteSet(*[item for item in a if item not in b])
+                            window.console.log(f"Set difference evaluated: {result}")
+                            return result
+                except Exception as e:
+                    window.console.error(f"Error evaluating set operation: {e}")
+                return expr
+
+            if hasattr(expr, "doit"):
+                window.console.log(f"DEBUG: Expression has doit, calling it...")
+                expr = expr.doit()
+                window.console.log(f"DEBUG: After doit: {expr}")
+                window.console.log(f"DEBUG: After doit (srepr): {sp.srepr(expr)}")
 
             if isinstance(expr, list):
                 expr = sp.Matrix(expr)
@@ -4730,6 +4792,18 @@ CIRC: "\\circ"
         """Check equality for scalar or matrix expressions with multiple strategies"""
         import sympy as sp
         try:
+            # Handle set operation comparisons (Union, Intersection, etc.)
+            if isinstance(a, (sp.Union, sp.Intersection, sp.Complement, sp.SymmetricDifference)) or \
+               isinstance(b, (sp.Union, sp.Intersection, sp.Complement, sp.SymmetricDifference)):
+                # Evaluate set operations to FiniteSet if possible
+                try:
+                    a_eval = a.doit() if hasattr(a, 'doit') else a
+                    b_eval = b.doit() if hasattr(b, 'doit') else b
+                    window.console.log(f"Set operation comparison: {a_eval} vs {b_eval}")
+                    return a_eval == b_eval
+                except:
+                    pass
+
             # Handle FiniteSet comparisons
             if isinstance(a, sp.FiniteSet) and isinstance(b, sp.FiniteSet):
                 return a == b
@@ -16193,7 +16267,7 @@ This demonstrates the complete format for creating your own problem sets!
 
         giveup_btn = document.querySelector("#freestyleGiveUp")
         if giveup_btn:
-            giveup_btn.textContent = f"Give Up (💎 {credits_needed})"
+            giveup_btn.textContent = f"Give Up ({credits_needed} 💎)"
 
             if self.credit_balance >= credits_needed:
                 giveup_btn.disabled = False
@@ -16411,7 +16485,7 @@ This demonstrates the complete format for creating your own problem sets!
 
       giveup_btn = document.querySelector("#freestyleGiveUp")
       if giveup_btn:
-          giveup_btn.textContent = f"Give Up (💎 {credits_needed})"
+          giveup_btn.textContent = f"Give Up ({credits_needed} 💎)"
 
           if self.credit_balance >= credits_needed:
               giveup_btn.disabled = False
