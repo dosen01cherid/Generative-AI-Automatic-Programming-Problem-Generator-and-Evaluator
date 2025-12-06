@@ -54,14 +54,14 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*1, 3*0]]
-Answer: [[2,0]]
+Step Expression: [[2*1, 3*0]]
+Step Expected: [[2,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*0, 3*1]]
-Answer: [[0,3]]
+Step Expression: [[2*0, 3*1]]
+Step Expected: [[0,3]]
 
 #
 Step Type: true-false
@@ -86,8 +86,8 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[3*2, 3*4]]
-Answer: [[6,12]]
+Step Expression: [[3*2, 3*4]]
+Step Expected: [[6,12]]
 
 #
 Step Type: true-false
@@ -174,32 +174,32 @@ Problem Description: Periksa apakah T(x,y) = (2x+y, x-y) memenuhi sifat aditivit
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,2]] + [[3,1]]
-Answer: [[4,3]]
+Step Expression: [[1,2]] + [[3,1]]
+Step Expected: [[4,3]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*4+3, 4-3]]
-Answer: [[11,1]]
+Step Expression: [[2*4+3, 4-3]]
+Step Expected: [[11,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*1+2, 1-2]]
-Answer: [[4,-1]]
+Step Expression: [[2*1+2, 1-2]]
+Step Expected: [[4,-1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*3+1, 3-1]]
-Answer: [[7,2]]
+Step Expression: [[2*3+1, 3-1]]
+Step Expected: [[7,2]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[4,-1]] + [[7,2]]
-Answer: [[11,1]]
+Step Expression: [[4,-1]] + [[7,2]]
+Step Expected: [[11,1]]
 
 #
 Step Type: true-false
@@ -214,26 +214,26 @@ Problem Description: Periksa apakah T(x,y) = (3x, 2y) memenuhi sifat homogenitas
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 4*[[2,5]]
-Answer: [[8,20]]
+Step Expression: 4*[[2,5]]
+Step Expected: [[8,20]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[3*8, 2*20]]
-Answer: [[24,40]]
+Step Expression: [[3*8, 2*20]]
+Step Expected: [[24,40]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[3*2, 2*5]]
-Answer: [[6,10]]
+Step Expression: [[3*2, 2*5]]
+Step Expected: [[6,10]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 4*[[6,10]]
-Answer: [[24,40]]
+Step Expression: 4*[[6,10]]
+Step Expected: [[24,40]]
 
 #
 Step Type: true-false
@@ -258,8 +258,8 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0+1, 2*0]]
-Answer: [[1,0]]
+Step Expression: [[0+1, 2*0]]
+Step Expected: [[1,0]]
 
 #
 Step Type: true-false
@@ -294,20 +294,20 @@ Problem Description: Cari matriks untuk T(x,y) = (2x, 3y)
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*1, 3*0]]
-Answer: [[2,0]]
+Step Expression: [[2*1, 3*0]]
+Step Expected: [[2,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*0, 3*1]]
-Answer: [[0,3]]
+Step Expression: [[2*0, 3*1]]
+Step Expected: [[0,3]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2,0],[0,3]]
-Answer: [[2,0],[0,3]]
+Step Expression: [[2,0],[0,3]]
+Step Expected: [[2,0],[0,3]]
 
 
 ###Problem Title: Mencari Matriks Transformasi Umum
@@ -316,20 +316,20 @@ Problem Description: Cari matriks A yang merepresentasikan T(x,y) = (2x-y, x+3y)
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*1-0, 1+3*0]]
-Answer: [[2,1]]
+Step Expression: [[2*1-0, 1+3*0]]
+Step Expected: [[2,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2*0-1, 0+3*1]]
-Answer: [[-1,3]]
+Step Expression: [[2*0-1, 0+3*1]]
+Step Expected: [[-1,3]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2,-1],[1,3]]
-Answer: [[2,-1],[1,3]]
+Step Expression: [[2,-1],[1,3]]
+Step Expected: [[2,-1],[1,3]]
 
 
 ###Problem Title: Menggunakan Matriks untuk Menghitung Transformasi
@@ -344,20 +344,20 @@ Correct Answer: True
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 3*2 + 1*5
-Answer: 11
+Step Expression: 3*2 + 1*5
+Step Expected: 11
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 2*2 + 4*5
-Answer: 24
+Step Expression: 2*2 + 4*5
+Step Expected: 24
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[3,1],[2,4]] * [[2],[5]]
-Answer: [[11],[24]]
+Step Expression: [[3,1],[2,4]] * [[2],[5]]
+Step Expected: [[11],[24]]
 
 
 ###Problem Title: Transformasi Penskalaan dengan Matriks
@@ -376,14 +376,14 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[3,0],[0,2]]
-Answer: [[3,0],[0,2]]
+Step Expression: [[3,0],[0,2]]
+Step Expected: [[3,0],[0,2]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[3,0],[0,2]] * [[4],[5]]
-Answer: [[12],[10]]
+Step Expression: [[3,0],[0,2]] * [[4],[5]]
+Step Expected: [[12],[10]]
 
 
 ###Problem Title: Transformasi Rotasi 90 Derajat
@@ -402,20 +402,20 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,1]]
-Answer: [[0,1]]
+Step Expression: [[0,1]]
+Step Expected: [[0,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[-1,0]]
-Answer: [[-1,0]]
+Step Expression: [[-1,0]]
+Step Expected: [[-1,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,-1],[1,0]]
-Answer: [[0,-1],[1,0]]
+Step Expression: [[0,-1],[1,0]]
+Step Expected: [[0,-1],[1,0]]
 
 
 ###Problem Title: Menerapkan Rotasi 90 Derajat
@@ -424,20 +424,20 @@ Problem Description: Rotasi vektor v = (3,2) sebesar 90° berlawanan arah jarum 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 0*3 + (-1)*2
-Answer: -2
+Step Expression: 0*3 + (-1)*2
+Step Expected: -2
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 1*3 + 0*2
-Answer: 3
+Step Expression: 1*3 + 0*2
+Step Expected: 3
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,-1],[1,0]] * [[3],[2]]
-Answer: [[-2],[3]]
+Step Expression: [[0,-1],[1,0]] * [[3],[2]]
+Step Expected: [[-2],[3]]
 
 #
 Step Type: true-false
@@ -462,8 +462,8 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[-1,0],[0,-1]]
-Answer: [[-1,0],[0,-1]]
+Step Expression: [[-1,0],[0,-1]]
+Step Expected: [[-1,0],[0,-1]]
 
 
 ###Problem Title: Refleksi Terhadap Sumbu-X
@@ -478,20 +478,20 @@ Correct Answer: True
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0]]
-Answer: [[1,0]]
+Step Expression: [[1,0]]
+Step Expected: [[1,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,-1]]
-Answer: [[0,-1]]
+Step Expression: [[0,-1]]
+Step Expected: [[0,-1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0],[0,-1]]
-Answer: [[1,0],[0,-1]]
+Step Expression: [[1,0],[0,-1]]
+Step Expected: [[1,0],[0,-1]]
 
 
 ###Problem Title: Menerapkan Refleksi Sumbu-X
@@ -500,8 +500,8 @@ Problem Description: Refleksikan v = (4,3) terhadap sumbu-x
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0],[0,-1]] * [[4],[3]]
-Answer: [[4],[-3]]
+Step Expression: [[1,0],[0,-1]] * [[4],[3]]
+Step Expected: [[4],[-3]]
 
 #
 Step Type: multiple-choice-single
@@ -530,8 +530,8 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[-1,0],[0,1]]
-Answer: [[-1,0],[0,1]]
+Step Expression: [[-1,0],[0,1]]
+Step Expected: [[-1,0],[0,1]]
 
 
 ###Problem Title: Refleksi Terhadap Garis y=x
@@ -546,20 +546,20 @@ Correct Answer: True
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,1]]
-Answer: [[0,1]]
+Step Expression: [[0,1]]
+Step Expected: [[0,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0]]
-Answer: [[1,0]]
+Step Expression: [[1,0]]
+Step Expected: [[1,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,1],[1,0]]
-Answer: [[0,1],[1,0]]
+Step Expression: [[0,1],[1,0]]
+Step Expected: [[0,1],[1,0]]
 
 
 ###Problem Title: Menerapkan Refleksi y=x
@@ -568,8 +568,8 @@ Problem Description: Refleksikan v = (3,7) terhadap y = x
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,1],[1,0]] * [[3],[7]]
-Answer: [[7],[3]]
+Step Expression: [[0,1],[1,0]] * [[3],[7]]
+Step Expected: [[7],[3]]
 
 #
 Step Type: true-false
@@ -594,20 +594,20 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0]]
-Answer: [[1,0]]
+Step Expression: [[1,0]]
+Step Expected: [[1,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[2,1]]
-Answer: [[2,1]]
+Step Expression: [[2,1]]
+Step Expected: [[2,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,2],[0,1]]
-Answer: [[1,2],[0,1]]
+Step Expression: [[1,2],[0,1]]
+Step Expected: [[1,2],[0,1]]
 
 
 ###Problem Title: Proyeksi ke Sumbu-X
@@ -622,20 +622,20 @@ Correct Answer: True
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0]]
-Answer: [[1,0]]
+Step Expression: [[1,0]]
+Step Expected: [[1,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,0]]
-Answer: [[0,0]]
+Step Expression: [[0,0]]
+Step Expected: [[0,0]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0],[0,0]]
-Answer: [[1,0],[0,0]]
+Step Expression: [[1,0],[0,0]]
+Step Expected: [[1,0],[0,0]]
 
 
 ###Problem Title: Proyeksi ke Sumbu-Y
@@ -644,8 +644,8 @@ Problem Description: Cari matriks untuk proyeksi ke sumbu-y
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,0],[0,1]]
-Answer: [[0,0],[0,1]]
+Step Expression: [[0,0],[0,1]]
+Step Expected: [[0,0],[0,1]]
 
 
 ###Problem Title: Komposisi Transformasi - Pengenalan
@@ -674,32 +674,32 @@ Problem Description: Gabungkan penskalaan S = [[2,0],[0,3]] dengan rotasi R = [[
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 0*2 + (-1)*0
-Answer: 0
+Step Expression: 0*2 + (-1)*0
+Step Expected: 0
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 0*0 + (-1)*3
-Answer: -3
+Step Expression: 0*0 + (-1)*3
+Step Expected: -3
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 1*2 + 0*0
-Answer: 2
+Step Expression: 1*2 + 0*0
+Step Expected: 2
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 1*0 + 0*3
-Answer: 0
+Step Expression: 1*0 + 0*3
+Step Expected: 0
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,-1],[1,0]] * [[2,0],[0,3]]
-Answer: [[0,-3],[2,0]]
+Step Expression: [[0,-1],[1,0]] * [[2,0],[0,3]]
+Step Expected: [[0,-3],[2,0]]
 
 
 ###Problem Title: Transformasi Identitas
@@ -718,8 +718,8 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,0],[0,1]]
-Answer: [[1,0],[0,1]]
+Step Expression: [[1,0],[0,1]]
+Step Expected: [[1,0],[0,1]]
 
 
 ###Problem Title: Transformasi Nol
@@ -728,8 +728,8 @@ Problem Description: Transformasi yang memetakan semua vektor ke nol
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0,0],[0,0]]
-Answer: [[0,0],[0,0]]
+Step Expression: [[0,0],[0,0]]
+Step Expected: [[0,0],[0,0]]
 
 #
 Step Type: true-false
@@ -754,26 +754,26 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1+0, 2*0, 1-0+0]]
-Answer: [[1,0,1]]
+Step Expression: [[1+0, 2*0, 1-0+0]]
+Step Expected: [[1,0,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0+1, 2*0, 0-1+0]]
-Answer: [[1,0,-1]]
+Step Expression: [[0+1, 2*0, 0-1+0]]
+Step Expected: [[1,0,-1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[0+0, 2*1, 0-0+1]]
-Answer: [[0,2,1]]
+Step Expression: [[0+0, 2*1, 0-0+1]]
+Step Expected: [[0,2,1]]
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1,1,0],[0,0,2],[1,-1,1]]
-Answer: [[1,1,0],[0,0,2],[1,-1,1]]
+Step Expression: [[1,1,0],[0,0,2],[1,-1,1]]
+Step Expected: [[1,1,0],[0,0,2],[1,-1,1]]
 
 
 ###Problem Title: Rotasi Umum dengan Sudut theta
@@ -792,20 +792,20 @@ Correct Answer: A
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 1/2
-Answer: 1/2
+Step Expression: 1/2
+Step Expected: 1/2
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: sqrt(3)/2
-Answer: sqrt(3)/2
+Step Expression: sqrt(3)/2
+Step Expected: sqrt(3)/2
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: [[1/2, -sqrt(3)/2],[sqrt(3)/2, 1/2]]
-Answer: [[1/2, -sqrt(3)/2],[sqrt(3)/2, 1/2]]
+Step Expression: [[1/2, -sqrt(3)/2],[sqrt(3)/2, 1/2]]
+Step Expected: [[1/2, -sqrt(3)/2],[sqrt(3)/2, 1/2]]
 
 
 ###Problem Title: Mencari Prabayang (Preimage)
@@ -830,41 +830,41 @@ Correct Answer: True
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 2*x + y
-Answer: 7
+Step Expression: 2*x + y
+Step Expected: 7
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: x + 3*y
-Answer: 10
+Step Expression: x + 3*y
+Step Expected: 10
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: y
-Answer: 7 - 2*x
+Step Expression: y
+Step Expected: 7 - 2*x
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: x + 3*(7 - 2*x)
-Answer: 10
+Step Expression: x + 3*(7 - 2*x)
+Step Expected: 10
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: -5*x + 21
-Answer: 10
+Step Expression: -5*x + 21
+Step Expected: 10
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: x
-Answer: 11/5
+Step Expression: x
+Step Expected: 11/5
 
 #
 Step Type: step-by-step
 Must Be Correct: true
-Expression: 7 - 2*(11/5)
-Answer: 13/5
+Step Expression: 7 - 2*(11/5)
+Step Expected: 13/5
