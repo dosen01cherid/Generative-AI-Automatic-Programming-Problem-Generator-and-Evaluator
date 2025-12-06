@@ -1854,7 +1854,133 @@ print("✅ pyscript module created and registered")
       }
     }
 
-  </style>
+  
+        /* Step-by-Step Solution Styles */
+        #stepByStepModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .step-modal-content {
+            background: white;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .step-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .step-modal-header h2 {
+            margin: 0;
+            color: #1e40af;
+            font-size: 24px;
+        }
+
+        .step-close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .step-close-btn:hover {
+            background: #dc2626;
+        }
+
+        .solution-step {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border-left: 4px solid #3b82f6;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .solution-step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-explanation {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .step-math {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 18px;
+            text-align: center;
+            border: 1px solid #93c5fd;
+            margin-top: 8px;
+        }
+
+        .step-math:empty {
+            display: none;
+        }
+
+        .solution-header-info {
+            background: #f0f9ff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #0ea5e9;
+        }
+
+        .topic-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .step-modal-content {
+                margin: 20px auto;
+                padding: 20px;
+            }
+
+            .step-modal-header h2 {
+                font-size: 20px;
+            }
+
+            .solution-step {
+                padding: 12px 15px;
+            }
+        }
+
+    </style>
 
 </head>
   <body style="padding-top: 95px;">
@@ -18005,6 +18131,642 @@ This demonstrates the complete format for creating your own problem sets!
             # If we can't check, assume it's new
             return False
 
+    
+    # ========================================================================
+    # STEP-BY-STEP SOLUTION SYSTEM
+    # Consolidated from 168+ Apple II Algebra Topics into 12 Major Categories
+    # ========================================================================
+
+    def detect_problem_topic(self, expr):
+        """
+        Detect which major topic category a problem belongs to.
+        Returns: (category_name, difficulty_level, description)
+
+        12 Major Topic Categories:
+        1. Basic Arithmetic (addition, subtraction, mixed)
+        2. Multiplication
+        3. Division
+        4. Exponentiation
+        5. Order of Operations
+        6. Substitution & Evaluation
+        7. Graphing Functions
+        8. Simplifying Expressions
+        9. Polynomial Operations
+        10. Factoring
+        11. Fractions
+        12. Solving Equations
+        """
+
+        try:
+            # Check for solving equations (has equals sign)
+            if isinstance(expr, sp.Equality):
+                return ('solving_equations', self._estimate_difficulty(expr), 'Solving Equations')
+
+            # Check for fractions (rational expressions)
+            if isinstance(expr, sp.Rational) or expr.has(sp.Rational):
+                return ('fractions', self._estimate_difficulty(expr), 'Working with Fractions')
+
+            # Check for factoring (product form)
+            if isinstance(expr, sp.Mul) and len(expr.args) >= 2:
+                if any(isinstance(f, (sp.Add, sp.Pow)) for f in expr.args):
+                    return ('factoring', self._estimate_difficulty(expr), 'Factoring')
+
+            # Check for polynomial operations
+            if expr.is_polynomial() and expr.has(sp.Symbol):
+                try:
+                    degree = sp.degree(expr)
+                    if degree >= 2:
+                        if isinstance(expr, sp.Mul):
+                            return ('polynomial_operations', self._estimate_difficulty(expr), 'Polynomial Multiplication')
+                        return ('simplifying_expressions', self._estimate_difficulty(expr), 'Simplifying Polynomials')
+                except:
+                    pass
+
+            # Check for simplifying expressions
+            if isinstance(expr, (sp.Add, sp.Mul)) and expr.has(sp.Symbol):
+                expanded = sp.expand(expr)
+                if expanded != expr or len(expr.args) > 2:
+                    return ('simplifying_expressions', self._estimate_difficulty(expr), 'Simplifying Expressions')
+
+            # Check for substitution/evaluation
+            if expr.has(sp.Symbol) and not isinstance(expr, sp.Equality):
+                symbols = expr.free_symbols
+                if len(symbols) >= 1:
+                    return ('substitution_evaluation', self._estimate_difficulty(expr), 'Expression Evaluation')
+
+            # Check for order of operations (3+ different operation types)
+            ops_count = {
+                'add': len([arg for arg in sp.preorder_traversal(expr) if isinstance(arg, sp.Add)]),
+                'mul': len([arg for arg in sp.preorder_traversal(expr) if isinstance(arg, sp.Mul)]),
+                'pow': len([arg for arg in sp.preorder_traversal(expr) if isinstance(arg, sp.Pow)]),
+            }
+            if sum(1 for v in ops_count.values() if v > 0) >= 3:
+                return ('order_of_operations', self._estimate_difficulty(expr), 'Order of Operations')
+
+            # Check for exponentiation
+            if expr.has(sp.Pow) or isinstance(expr, sp.Pow):
+                return ('exponentiation', self._estimate_difficulty(expr), 'Exponentiation')
+
+            # Check for division
+            if isinstance(expr, sp.Mul):
+                has_division = any(isinstance(arg, sp.Pow) and arg.exp < 0 for arg in expr.args)
+                if has_division:
+                    return ('division', self._estimate_difficulty(expr), 'Division')
+
+            # Check for multiplication
+            if isinstance(expr, sp.Mul) and not expr.has(sp.Pow):
+                return ('multiplication', self._estimate_difficulty(expr), 'Multiplication')
+
+            # Check for basic arithmetic
+            if isinstance(expr, sp.Add):
+                return ('basic_arithmetic', self._estimate_difficulty(expr), 'Addition/Subtraction')
+
+            # Default
+            return ('basic_arithmetic', 1, 'Basic Arithmetic')
+
+        except Exception as e:
+            console.log(f"Error detecting topic: {e}")
+            return ('basic_arithmetic', 1, 'Basic Arithmetic')
+
+    def _estimate_difficulty(self, expr):
+        """Estimate difficulty level 1-3 based on complexity"""
+        try:
+            ops = len(list(sp.preorder_traversal(expr)))
+            symbols_count = len(expr.free_symbols)
+
+            if ops <= 5 and symbols_count <= 1:
+                return 1  # Easy
+            elif ops <= 15 and symbols_count <= 2:
+                return 2  # Medium
+            else:
+                return 3  # Hard
+        except:
+            return 1
+
+    def generate_step_by_step_solution(self, expr_str, parsed_expr):
+        """
+        Generate detailed step-by-step solution with explanations.
+        Returns: list of {"explanation": str, "math": str} dictionaries
+        """
+
+        steps = []
+
+        # Detect topic
+        topic_info = self.detect_problem_topic(parsed_expr)
+        topic = topic_info[0]
+        difficulty = topic_info[1]
+        topic_name = topic_info[2]
+
+        try:
+            # Add topic header
+            steps.append({
+                "explanation": f"<strong>Topic:</strong> {topic_name} <span style='color:#666;font-size:0.9em;'>(Difficulty: {'⭐' * difficulty})</span>",
+                "math": ""
+            })
+
+            # Route to appropriate solution generator
+            if topic == 'basic_arithmetic':
+                steps.extend(self._solve_basic_arithmetic(parsed_expr))
+            elif topic == 'multiplication':
+                steps.extend(self._solve_multiplication(parsed_expr))
+            elif topic == 'division':
+                steps.extend(self._solve_division(parsed_expr))
+            elif topic == 'exponentiation':
+                steps.extend(self._solve_exponentiation(parsed_expr))
+            elif topic == 'order_of_operations':
+                steps.extend(self._solve_order_of_operations(parsed_expr))
+            elif topic == 'substitution_evaluation':
+                steps.extend(self._solve_substitution(parsed_expr))
+            elif topic == 'simplifying_expressions':
+                steps.extend(self._solve_simplifying(parsed_expr))
+            elif topic == 'polynomial_operations':
+                steps.extend(self._solve_polynomials(parsed_expr))
+            elif topic == 'factoring':
+                steps.extend(self._solve_factoring(parsed_expr))
+            elif topic == 'fractions':
+                steps.extend(self._solve_fractions(parsed_expr))
+            elif topic == 'solving_equations':
+                steps.extend(self._solve_equations(parsed_expr))
+            else:
+                steps.extend(self._solve_generic(parsed_expr))
+
+        except Exception as e:
+            console.log(f"Error generating solution: {e}")
+            import traceback
+            traceback.print_exc()
+            steps.append({
+                "explanation": "Unable to generate detailed steps for this problem.",
+                "math": sp.latex(parsed_expr)
+            })
+
+        return steps
+
+    def _solve_basic_arithmetic(self, expr):
+        """Generate steps for addition/subtraction"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Identify the problem",
+            "math": sp.latex(expr)
+        })
+
+        if isinstance(expr, sp.Add):
+            terms = list(expr.args)
+            positive_terms = [t for t in terms if t >= 0 or not isinstance(t, sp.Number)]
+            negative_terms = [abs(t) for t in terms if isinstance(t, sp.Number) and t < 0]
+
+            if len(positive_terms) > 0 and len(negative_terms) > 0:
+                steps.append({
+                    "explanation": "<strong>Step 2:</strong> Separate positive and negative terms",
+                    "math": "\text{Positive: } " + ", ".join([sp.latex(t) for t in positive_terms]) + "\quad \text{Negative: } " + ", ".join([sp.latex(t) for t in negative_terms])
+                })
+
+            if len(terms) == 2:
+                result = sp.simplify(expr)
+                steps.append({
+                    "explanation": "<strong>Step 3:</strong> Perform the operation",
+                    "math": sp.latex(result)
+                })
+            else:
+                current = terms[0]
+                for i, term in enumerate(terms[1:], 1):
+                    current = current + term
+                    simplified = sp.simplify(current)
+                    steps.append({
+                        "explanation": f"<strong>Step {i+2}:</strong> Add term {i+1}",
+                        "math": sp.latex(simplified)
+                    })
+
+        final = sp.simplify(expr)
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(final)
+        })
+
+        return steps
+
+    def _solve_multiplication(self, expr):
+        """Generate steps for multiplication"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Identify the factors",
+            "math": sp.latex(expr)
+        })
+
+        if isinstance(expr, sp.Mul):
+            factors = list(expr.args)
+            steps.append({
+                "explanation": f"<strong>Step 2:</strong> Multiply {len(factors)} factors together",
+                "math": " \times ".join([sp.latex(f) for f in factors])
+            })
+
+            if len(factors) == 2:
+                result = factors[0] * factors[1]
+                steps.append({
+                    "explanation": "<strong>Step 3:</strong> Calculate the product",
+                    "math": sp.latex(sp.simplify(result))
+                })
+            else:
+                current = factors[0]
+                for i, factor in enumerate(factors[1:], 1):
+                    current = current * factor
+                    steps.append({
+                        "explanation": f"<strong>Step {i+2}:</strong> After multiplying by factor {i+1}",
+                        "math": sp.latex(sp.simplify(current))
+                    })
+
+        final = sp.simplify(expr)
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(final)
+        })
+
+        return steps
+
+    def _solve_division(self, expr):
+        """Generate steps for division"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Write the division problem",
+            "math": sp.latex(expr)
+        })
+
+        steps.append({
+            "explanation": "<strong>Step 2:</strong> Express as a fraction",
+            "math": sp.latex(expr)
+        })
+
+        simplified = sp.simplify(expr)
+        if simplified != expr:
+            steps.append({
+                "explanation": "<strong>Step 3:</strong> Simplify the fraction",
+                "math": sp.latex(simplified)
+            })
+
+        if simplified.is_number:
+            result = simplified.evalf()
+            steps.append({
+                "explanation": "<strong>Step 4:</strong> Calculate the decimal value",
+                "math": sp.latex(result)
+            })
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(simplified)
+        })
+
+        return steps
+
+    def _solve_exponentiation(self, expr):
+        """Generate steps for exponentiation"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Identify base and exponent",
+            "math": sp.latex(expr)
+        })
+
+        if isinstance(expr, sp.Pow):
+            base = expr.args[0]
+            exp = expr.args[1]
+
+            steps.append({
+                "explanation": f"<strong>Step 2:</strong> Base = {sp.latex(base)}, Exponent = {sp.latex(exp)}",
+                "math": sp.latex(expr)
+            })
+
+            if exp.is_integer and 1 < exp <= 5:
+                expansion = " \times ".join([sp.latex(base)] * int(exp))
+                steps.append({
+                    "explanation": f"<strong>Step 3:</strong> Expand as repeated multiplication",
+                    "math": expansion
+                })
+
+        result = sp.simplify(expr)
+        steps.append({
+            "explanation": "<strong>Step 4:</strong> Calculate the result",
+            "math": sp.latex(result)
+        })
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(result)
+        })
+
+        return steps
+
+    def _solve_order_of_operations(self, expr):
+        """Generate steps following PEMDAS"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Original expression",
+            "math": sp.latex(expr)
+        })
+
+        steps.append({
+            "explanation": "<strong>Step 2:</strong> Apply PEMDAS order:<br>&nbsp;&nbsp;1. Parentheses<br>&nbsp;&nbsp;2. Exponents<br>&nbsp;&nbsp;3. Multiplication/Division (left to right)<br>&nbsp;&nbsp;4. Addition/Subtraction (left to right)",
+            "math": sp.latex(expr)
+        })
+
+        # Simplify step by step
+        if expr.has(sp.Pow):
+            steps.append({
+                "explanation": "<strong>Step 3:</strong> Evaluate exponents first",
+                "math": sp.latex(expr)
+            })
+
+        final = sp.simplify(expr)
+
+        if final != expr:
+            steps.append({
+                "explanation": "<strong>Step 4:</strong> Simplify completely",
+                "math": sp.latex(final)
+            })
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(final)
+        })
+
+        return steps
+
+    def _solve_substitution(self, expr):
+        """Generate steps for substitution and evaluation"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Identify the expression",
+            "math": sp.latex(expr)
+        })
+
+        symbols = list(expr.free_symbols)
+        if symbols:
+            symbols_str = ", ".join([sp.latex(s) for s in symbols])
+            steps.append({
+                "explanation": f"<strong>Step 2:</strong> This expression contains variable(s): {symbols_str}",
+                "math": sp.latex(expr)
+            })
+
+            steps.append({
+                "explanation": "<strong>Step 3:</strong> To evaluate, substitute values for variables",
+                "math": "\text{Example: } " + ", ".join([f"{sp.latex(s)} = 1" for s in symbols])
+            })
+
+            # Show example evaluation
+            substitutions = {s: 1 for s in symbols}
+            result = expr.subs(substitutions)
+            steps.append({
+                "explanation": f"<strong>Step 4:</strong> Substituting {', '.join([f'{sp.latex(s)}=1' for s in symbols])}:",
+                "math": sp.latex(result) + " = " + sp.latex(sp.simplify(result))
+            })
+
+        simplified = sp.simplify(expr)
+        steps.append({
+            "explanation": "<strong>✓ Simplified form:</strong>",
+            "math": sp.latex(simplified)
+        })
+
+        return steps
+
+    def _solve_simplifying(self, expr):
+        """Generate steps for simplifying expressions"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Original expression",
+            "math": sp.latex(expr)
+        })
+
+        # Expand
+        expanded = sp.expand(expr)
+        if expanded != expr:
+            steps.append({
+                "explanation": "<strong>Step 2:</strong> Apply distributive property",
+                "math": sp.latex(expanded)
+            })
+
+        # Collect like terms
+        if expanded.free_symbols:
+            collected = sp.collect(expanded, list(expanded.free_symbols))
+            if collected != expanded:
+                steps.append({
+                    "explanation": "<strong>Step 3:</strong> Combine like terms",
+                    "math": sp.latex(collected)
+                })
+            final = collected
+        else:
+            final = expanded
+
+        # Final simplification
+        final_simp = sp.simplify(final)
+        if final_simp != final:
+            steps.append({
+                "explanation": "<strong>Step 4:</strong> Simplify further",
+                "math": sp.latex(final_simp)
+            })
+            final = final_simp
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(final)
+        })
+
+        return steps
+
+    def _solve_polynomials(self, expr):
+        """Generate steps for polynomial operations"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Identify the polynomial expression",
+            "math": sp.latex(expr)
+        })
+
+        # Expand
+        expanded = sp.expand(expr)
+        steps.append({
+            "explanation": "<strong>Step 2:</strong> Multiply and expand",
+            "math": sp.latex(expanded)
+        })
+
+        # Collect terms
+        if expanded.free_symbols:
+            symbol = list(expanded.free_symbols)[0]
+            collected = sp.collect(expanded, symbol)
+
+            if collected != expanded:
+                steps.append({
+                    "explanation": f"<strong>Step 3:</strong> Collect terms by powers of {sp.latex(symbol)}",
+                    "math": sp.latex(collected)
+                })
+
+            # Show degree
+            try:
+                degree = sp.degree(collected, symbol)
+                steps.append({
+                    "explanation": f"<strong>Note:</strong> This is a degree {degree} polynomial",
+                    "math": ""
+                })
+            except:
+                pass
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(sp.simplify(expanded))
+        })
+
+        return steps
+
+    def _solve_factoring(self, expr):
+        """Generate steps for factoring"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Expression to factor",
+            "math": sp.latex(expr)
+        })
+
+        # Try to factor
+        factored = sp.factor(expr)
+
+        if factored != expr:
+            steps.append({
+                "explanation": "<strong>Step 2:</strong> Factor out common terms",
+                "math": sp.latex(factored)
+            })
+
+            if isinstance(factored, sp.Mul):
+                factors = list(factored.args)
+                steps.append({
+                    "explanation": f"<strong>Step 3:</strong> The expression has {len(factors)} factor(s)",
+                    "math": " \cdot ".join([f"({sp.latex(f)})" for f in factors])
+                })
+        else:
+            steps.append({
+                "explanation": "<strong>Step 2:</strong> This expression is already in simplest form (prime)",
+                "math": sp.latex(expr)
+            })
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(factored)
+        })
+
+        return steps
+
+    def _solve_fractions(self, expr):
+        """Generate steps for fraction operations"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Original fraction",
+            "math": sp.latex(expr)
+        })
+
+        # Simplify
+        simplified = sp.simplify(expr)
+
+        if simplified != expr:
+            steps.append({
+                "explanation": "<strong>Step 2:</strong> Cancel common factors",
+                "math": sp.latex(simplified)
+            })
+
+            if isinstance(simplified, sp.Rational):
+                steps.append({
+                    "explanation": "<strong>Step 3:</strong> Reduced to lowest terms",
+                    "math": sp.latex(simplified)
+                })
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(simplified)
+        })
+
+        return steps
+
+    def _solve_equations(self, expr):
+        """Generate steps for solving equations"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Original equation",
+            "math": sp.latex(expr)
+        })
+
+        if isinstance(expr, sp.Equality):
+            lhs = expr.lhs
+            rhs = expr.rhs
+            symbols = list(expr.free_symbols)
+
+            if symbols:
+                var = symbols[0]
+                steps.append({
+                    "explanation": f"<strong>Step 2:</strong> Solve for {sp.latex(var)}",
+                    "math": sp.latex(expr)
+                })
+
+                # Solve
+                try:
+                    solutions = sp.solve(expr, var)
+
+                    if solutions:
+                        steps.append({
+                            "explanation": "<strong>Step 3:</strong> Isolate the variable",
+                            "math": ""
+                        })
+
+                        for i, sol in enumerate(solutions):
+                            steps.append({
+                                "explanation": f"<strong>Solution {i+1}:</strong>" if len(solutions) > 1 else "<strong>Solution:</strong>",
+                                "math": f"{sp.latex(var)} = {sp.latex(sol)}"
+                            })
+
+                        steps.append({
+                            "explanation": "<strong>✓ Final Answer:</strong>",
+                            "math": f"{sp.latex(var)} = {sp.latex(solutions[0])}" if len(solutions) == 1 else "\text{Multiple solutions}"
+                        })
+                    else:
+                        steps.append({
+                            "explanation": "<strong>No solution exists</strong>",
+                            "math": "\emptyset"
+                        })
+                except Exception as e:
+                    steps.append({
+                        "explanation": "<strong>Cannot solve symbolically</strong>",
+                        "math": sp.latex(expr)
+                    })
+
+        return steps
+
+    def _solve_generic(self, expr):
+        """Generic fallback solution"""
+        steps = []
+
+        steps.append({
+            "explanation": "<strong>Step 1:</strong> Original problem",
+            "math": sp.latex(expr)
+        })
+
+        simplified = sp.simplify(expr)
+
+        if simplified != expr:
+            steps.append({
+                "explanation": "<strong>Step 2:</strong> Simplify",
+                "math": sp.latex(simplified)
+            })
+
+        steps.append({
+            "explanation": "<strong>✓ Final Answer:</strong>",
+            "math": sp.latex(simplified)
+        })
+
+        return steps
+
+
     def award_credits(self, problem_latex, parsed_expr, difficulty):
         """Award credits for solving a problem with two-tier duplicate detection.
 
@@ -18688,6 +19450,58 @@ This demonstrates the complete format for creating your own problem sets!
 
             # Reset button
             reset_btn = document.querySelector("#freestyleReset")
+
+        # Setup Give Up button handler
+        giveup_btn = document.querySelector('#freestyleGiveUp')
+        if giveup_btn:
+            def handle_give_up(event):
+                try:
+                    feedback_el = document.querySelector('#freestyleFeedback')
+                    if not feedback_el:
+                        return
+
+                    if not self.current_problem or not self.current_answer:
+                        feedback_el.innerHTML = "<div style='color:#dc2626;background:#fee2e2;padding:12px;border-radius:6px;'>⚠️ No problem to show solution for!</div>"
+                        return
+
+                    # Show the correct answer
+                    answer_latex = sp.latex(self.current_answer)
+                    feedback_el.innerHTML = f"<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;margin-bottom:16px;'><strong>✓ Correct Answer:</strong> \({answer_latex}\)</div>"
+
+                    # Generate and display step-by-step solution
+                    try:
+                        problem_expr = self.math_parser.normalize_expr(self.current_problem)
+                        steps = self.generate_step_by_step_solution(self.current_problem, problem_expr)
+
+                        # Format steps for display
+                        steps_html = ""
+                        for step in steps:
+                            steps_html += '<div class="solution-step">'
+                            steps_html += f'<div class="step-explanation">{step["explanation"]}</div>'
+                            if step.get("math") and step["math"].strip():
+                                steps_html += f'<div class="step-math">\({step["math"]}\)</div>'
+                            steps_html += '</div>'
+
+                        # Add to feedback
+                        feedback_el.innerHTML += f'<div style="margin-top:20px;padding:16px;background:#f0f9ff;border-radius:8px;border-left:4px solid#3b82f6;"><h3 style="margin:0 0 12px 0;color:#1e40af;">📚 Step-by-Step Solution</h3>{steps_html}</div>'
+
+                        # Render MathJax
+                        if window.MathJax:
+                            window.MathJax.typesetPromise([feedback_el])
+                    except Exception as e:
+                        console.log(f"Error showing step-by-step: {e}")
+                        import traceback
+                        traceback.print_exc()
+
+                except Exception as e:
+                    console.log(f"Error in give_up handler: {e}")
+                    import traceback
+                    traceback.print_exc()
+
+            giveup_btn.addEventListener('click', create_proxy(handle_give_up))
+            console.log('✓ Give Up button handler registered')
+
+
             if reset_btn and not hasattr(reset_btn, '_handler_attached'):
                 reset_btn.addEventListener("click", create_proxy(lambda e: self.freestyle_reset(e)))
                 reset_btn._handler_attached = True
@@ -19931,6 +20745,18 @@ print("✅ Problem Solver initialized with multi-type support")
       }
     });
   </script>
+
+
+    <!-- Step-by-Step Solution Modal -->
+    <div id="stepByStepModal">
+        <div class="step-modal-content">
+            <div class="step-modal-header">
+                <h2>📚 Step-by-Step Solution</h2>
+                <button class="step-close-btn" onclick="closeStepByStepModal()">✕ Close</button>
+            </div>
+            <div id="stepByStepContent"></div>
+        </div>
+    </div>
 
 </body>
 </html>
