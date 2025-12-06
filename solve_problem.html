@@ -16373,7 +16373,7 @@ This demonstrates the complete format for creating your own problem sets!
 
           # Check if it contains matrices
           has_matrix_in_latex = '[[' in problem_latex or '\\left[\\left[' in problem_latex
-          has_matrix_in_tree = contains_matrix(parsed) if parsed else False
+          has_matrix_in_tree = contains_matrix(parsed) if parsed is not None else False
 
           window.console.log(f"=== Display Problem Debug ===")
           window.console.log(f"Problem LaTeX: {problem_latex}")
@@ -17015,22 +17015,74 @@ This demonstrates the complete format for creating your own problem sets!
                 return
 
             # Get the solution by normalizing the problem
-            solution_expr = self.math_parser.normalize_expr(self.freestyle_problem["parsed"])
-            solution_latex = sp.latex(solution_expr)
+            parsed_expr = self.freestyle_problem["parsed"]
+
+            # Check if it's an equation to solve
+            if isinstance(parsed_expr, sp.Equality):
+                # Solve the equation
+                var = list(parsed_expr.free_symbols)[0] if parsed_expr.free_symbols else None
+                if var:
+                    solutions = sp.solve(parsed_expr, var)
+                    window.console.log(f"Solutions: {solutions}")
+                    solution_expr = solutions
+                else:
+                    solution_expr = parsed_expr
+            else:
+                # Not an equation - just normalize
+                solution_expr = self.math_parser.normalize_expr(parsed_expr)
+            # Build solution display
+            if isinstance(parsed_expr, sp.Equality) and isinstance(solution_expr, list):
+                var = list(parsed_expr.free_symbols)[0]
+                if len(solution_expr) == 1:
+                    solution_latex = f"{sp.latex(var)} = {sp.latex(solution_expr[0])}"
+                elif len(solution_expr) > 1:
+                    solution_parts = [f"{sp.latex(var)} = {sp.latex(sol)}" for sol in solution_expr]
+                    solution_latex = " \\text{ or } ".join(solution_parts)
+                else:
+                    solution_latex = "\\text{No solution}"
+            else:
+                solution_latex = sp.latex(solution_expr)
 
             window.console.log(f"Solution: {solution_expr}")
             window.console.log(f"Solution LaTeX: {solution_latex}")
 
+            # Generate step-by-step solution
+            problem_latex = self.freestyle_problem["latex"]
+            try:
+                steps = self.generate_step_by_step_solution(problem_latex, parsed_expr)
+                steps_html = ""
+                for step in steps:
+                    steps_html += '<div style="margin-bottom:12px;">'
+                    steps_html += f'<div style="margin-bottom:4px;">{step["explanation"]}</div>'
+                    if step.get("math") and step["math"].strip():
+                        steps_html += f'<div style="font-size:18px;margin:8px 0;">$$\\displaystyle {step["math"]}$$</div>'
+                    steps_html += '</div>'
+                window.console.log(f"Generated {len(steps)} solution steps")
+            except Exception as step_err:
+                window.console.error(f"Error generating steps: {step_err}")
+                import traceback
+                window.console.error(traceback.format_exc())
+                steps_html = ""
+
             # Display the solution
             feedback_el = document.querySelector("#freestyleFeedback")
             if feedback_el:
-                feedback_el.innerHTML = f"""
-                <div style='color:#6366f1;background:#e0e7ff;padding:16px;border-radius:8px;border-left:4px solid #6366f1;'>
+                solution_section = f"""
+                <div style='color:#6366f1;background:#e0e7ff;padding:16px;border-radius:8px;border-left:4px solid #6366f1;margin-bottom:16px;'>
                     <div style='font-weight:700;font-size:16px;margin-bottom:12px;'>💡 Solution:</div>
                     <div style='font-size:20px;margin-bottom:8px;'>$$\\displaystyle {solution_latex}$$</div>
-                    <div style='font-size:14px;color:#4338ca;margin-top:8px;'>You can study this solution and try a similar problem next time!</div>
                 </div>
                 """
+
+                if steps_html:
+                    feedback_el.innerHTML = solution_section + f"""
+                    <div style='background:#f0f9ff;padding:16px;border-radius:8px;border-left:4px solid #3b82f6;'>
+                        <div style='font-weight:700;font-size:16px;margin-bottom:12px;color:#1e40af;'>📚 Step-by-Step Solution:</div>
+                        {steps_html}
+                    </div>
+                    """
+                else:
+                    feedback_el.innerHTML = solution_section
 
                 # Re-render MathJax
                 if hasattr(window, 'MathJax') and hasattr(window.MathJax, 'typesetPromise'):
@@ -19451,55 +19503,6 @@ This demonstrates the complete format for creating your own problem sets!
             # Reset button
             reset_btn = document.querySelector("#freestyleReset")
 
-        # Setup Give Up button handler
-        giveup_btn = document.querySelector('#freestyleGiveUp')
-        if giveup_btn:
-            def handle_give_up(event):
-                try:
-                    feedback_el = document.querySelector('#freestyleFeedback')
-                    if not feedback_el:
-                        return
-
-                    if not self.current_problem or not self.current_answer:
-                        feedback_el.innerHTML = "<div style='color:#dc2626;background:#fee2e2;padding:12px;border-radius:6px;'>⚠️ No problem to show solution for!</div>"
-                        return
-
-                    # Show the correct answer
-                    answer_latex = sp.latex(self.current_answer)
-                    feedback_el.innerHTML = f"<div style='color:#059669;background:#d1fae5;padding:12px;border-radius:6px;margin-bottom:16px;'><strong>✓ Correct Answer:</strong> \({answer_latex}\)</div>"
-
-                    # Generate and display step-by-step solution
-                    try:
-                        problem_expr = self.math_parser.normalize_expr(self.current_problem)
-                        steps = self.generate_step_by_step_solution(self.current_problem, problem_expr)
-
-                        # Format steps for display
-                        steps_html = ""
-                        for step in steps:
-                            steps_html += '<div class="solution-step">'
-                            steps_html += f'<div class="step-explanation">{step["explanation"]}</div>'
-                            if step.get("math") and step["math"].strip():
-                                steps_html += f'<div class="step-math">\({step["math"]}\)</div>'
-                            steps_html += '</div>'
-
-                        # Add to feedback
-                        feedback_el.innerHTML += f'<div style="margin-top:20px;padding:16px;background:#f0f9ff;border-radius:8px;border-left:4px solid#3b82f6;"><h3 style="margin:0 0 12px 0;color:#1e40af;">📚 Step-by-Step Solution</h3>{steps_html}</div>'
-
-                        # Render MathJax
-                        if window.MathJax:
-                            window.MathJax.typesetPromise([feedback_el])
-                    except Exception as e:
-                        console.log(f"Error showing step-by-step: {e}")
-                        import traceback
-                        traceback.print_exc()
-
-                except Exception as e:
-                    console.log(f"Error in give_up handler: {e}")
-                    import traceback
-                    traceback.print_exc()
-
-            giveup_btn.addEventListener('click', create_proxy(handle_give_up))
-            console.log('✓ Give Up button handler registered')
 
 
             if reset_btn and not hasattr(reset_btn, '_handler_attached'):
