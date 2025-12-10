@@ -1,0 +1,567 @@
+SET SOAL SESI 01 - VEKTOR DAN OPERASI VEKTOR (ENHANCED WITH DETAILED STEPS)
+Aljabar Linear - Teknik Informatika
+Universitas Mercu Buana
+
+This enhanced version follows the detailed step-by-step approach of the OOP solver.
+
+
+###Problem Title: Penjumlahan Vektor 2D - Component-wise
+Problem Description: Diberikan `u = [[3,5]]` dan `v = [[2,-1]]`, hitung `u + v` dengan langkah detail menambahkan komponen bersesuaian
+
+#
+Step Type: multiple-choice-single
+Step Description: Penjumlahan vektor dilakukan dengan cara:
+Option A: Menjumlahkan komponen yang bersesuaian (component-wise)
+Option B: Mengalikan semua komponen
+Option C: Hanya menjumlahkan komponen pertama
+Option D: Menggunakan rumus khusus yang kompleks
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Type: true-false
+Step Description: Dua vektor hanya dapat dijumlahkan jika memiliki dimensi yang sama
+Correct Answer: True
+Must Be Correct: true
+
+#
+Step Description: Identifikasi komponen u: u₁ (komponen x) dan u₂ (komponen y)
+Step Type: fill-blank
+Step Description: Untuk u = [[3,5]], komponen u₁ = {blank} dan u₂ = {blank}
+Correct Answer: 3,5
+Must Be Correct: true
+
+#
+Step Description: Identifikasi komponen v: v₁ dan v₂
+Step Type: fill-blank
+Step Description: Untuk v = [[2,-1]], komponen v₁ = {blank} dan v₂ = {blank}
+Correct Answer: 2,-1
+Must Be Correct: true
+
+#
+Step Description: Hitung komponen x dari u + v: u₁ + v₁
+Step Expression: `3 + 2`
+Step Expected: `5`
+
+#
+Step Description: Hitung komponen y dari u + v: u₂ + v₂
+Step Expression: `5 + (-1)`
+Step Expected: `4`
+
+#
+Step Description: Bentuk vektor hasil penjumlahan u + v
+Step Expression: `[[5,4]]`
+Step Expected: `[[5,4]]`
+
+#
+Step Type: true-false
+Step Description: Penjumlahan vektor bersifat komutatif: u + v = v + u
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Verifikasi dengan penjumlahan vektor langsung
+Step Expression: `[[3,5]] + [[2,-1]]`
+Step Expected: `[[5,4]]`
+
+
+###Problem Title: Pengurangan Vektor - Detailed Steps
+Problem Description: Diberikan `u = [[7,4]]` dan `v = [[3,2]]`, hitung `u - v` dengan langkah detail
+
+#
+Step Type: multiple-choice-single
+Step Description: Pengurangan vektor u - v sama dengan:
+Option A: Menjumlahkan u dengan negatif v: u + (-v)
+Option B: Mengalikan u dengan v
+Option C: Membagi u dengan v
+Option D: Mencari jarak antara u dan v
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Hitung komponen x dari u - v: u₁ - v₁
+Step Expression: `7 - 3`
+Step Expected: `4`
+
+#
+Step Description: Hitung komponen y dari u - v: u₂ - v₂
+Step Expression: `4 - 2`
+Step Expected: `2`
+
+#
+Step Description: Bentuk vektor hasil pengurangan u - v
+Step Expression: `[[4,2]]`
+Step Expected: `[[4,2]]`
+
+#
+Step Type: true-false
+Step Description: Pengurangan vektor bersifat komutatif: u - v = v - u
+Correct Answer: False
+Must Be Correct: true
+
+#
+Step Description: Hitung v - u untuk menunjukkan non-komutatif. Komponen x:
+Step Expression: `3 - 7`
+Step Expected: `-4`
+
+#
+Step Description: Komponen y dari v - u:
+Step Expression: `2 - 4`
+Step Expected: `-2`
+
+#
+Step Description: Bentuk v - u
+Step Expression: `[[-4,-2]]`
+Step Expected: `[[-4,-2]]`
+
+#
+Step Type: multiple-choice-single
+Step Description: Hubungan antara u - v dan v - u adalah:
+Option A: v - u = -(u - v) (berkebalikan tanda)
+Option B: v - u = u - v
+Option C: Tidak ada hubungan
+Option D: v - u = 2(u - v)
+Correct Answer: A
+Must Be Correct: false
+
+
+###Problem Title: Perkalian Skalar dengan Vektor
+Problem Description: Diberikan vektor `v = [[2,-3,4]]` dan skalar `k = 3`, hitung `3v` dengan mengalikan setiap komponen
+
+#
+Step Type: multiple-choice-single
+Step Description: Perkalian skalar k dengan vektor v dilakukan dengan:
+Option A: Mengalikan setiap komponen vektor dengan k
+Option B: Hanya mengalikan komponen pertama
+Option C: Menambahkan k ke setiap komponen
+Option D: Mengalikan magnitude dengan k saja
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Kalikan komponen pertama (x) dengan skalar: k × v₁
+Step Expression: `3 * 2`
+Step Expected: `6`
+
+#
+Step Description: Kalikan komponen kedua (y) dengan skalar: k × v₂
+Step Expression: `3 * (-3)`
+Step Expected: `-9`
+
+#
+Step Description: Kalikan komponen ketiga (z) dengan skalar: k × v₃
+Step Expression: `3 * 4`
+Step Expected: `12`
+
+#
+Step Description: Bentuk vektor hasil perkalian skalar 3v
+Step Expression: `[[6,-9,12]]`
+Step Expected: `[[6,-9,12]]`
+
+#
+Step Type: true-false
+Step Description: Perkalian skalar mengubah magnitude vektor tetapi mempertahankan arah (jika k > 0)
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Type: multiple-choice-single
+Step Description: Jika k < 0 (skalar negatif), maka:
+Option A: Arah vektor berbalik (berlawanan)
+Option B: Arah tetap sama
+Option C: Vektor menjadi nol
+Option D: Magnitude berkurang
+Correct Answer: A
+Must Be Correct: false
+
+#
+Step Description: Verifikasi dengan operasi perkalian skalar langsung
+Step Expression: `3*[[2,-3,4]]`
+Step Expected: `[[6,-9,12]]`
+
+
+###Problem Title: Dot Product (Perkalian Titik) - Step by Step
+Problem Description: Hitung dot product dari vektor `u = [[4,3]]` dan `v = [[2,5]]` dengan rumus u · v = u₁v₁ + u₂v₂
+
+#
+Step Type: multiple-choice-single
+Step Description: Hasil dari dot product dua vektor adalah:
+Option A: Skalar (bilangan tunggal)
+Option B: Vektor baru
+Option C: Matriks
+Option D: Tidak terdefinisi
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Kalikan komponen x: u₁ × v₁
+Step Expression: `4 * 2`
+Step Expected: `8`
+
+#
+Step Description: Kalikan komponen y: u₂ × v₂
+Step Expression: `3 * 5`
+Step Expected: `15`
+
+#
+Step Description: Jumlahkan hasil perkalian untuk mendapatkan dot product
+Step Expression: `8 + 15`
+Step Expected: `23`
+
+#
+Step Type: true-false
+Step Description: Dot product bersifat komutatif: u · v = v · u
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Verifikasi dengan operasi dot product langsung
+Step Expression: `[[4,3]] . [[2,5]]`
+Step Expected: `23`
+
+#
+Step Type: multiple-choice-single
+Step Description: Jika u · v = 0, maka vektor u dan v adalah:
+Option A: Ortogonal (tegak lurus)
+Option B: Parallel (searah)
+Option C: Sama
+Option D: Berlawanan arah
+Correct Answer: A
+Must Be Correct: false
+
+
+###Problem Title: Magnitude (Panjang) Vektor
+Problem Description: Hitung magnitude (panjang) vektor `v = [[3,4]]` menggunakan rumus Pythagoras `||v|| = sqrt(x² + y²)`
+
+#
+Step Type: multiple-choice-single
+Step Description: Magnitude (norma) vektor adalah:
+Option A: Panjang atau jarak vektor dari titik asal
+Option B: Arah vektor
+Option C: Jumlah komponen vektor
+Option D: Komponen terbesar dari vektor
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Kuadratkan komponen x: v₁²
+Step Expression: `3^2`
+Step Expected: `9`
+
+#
+Step Description: Kuadratkan komponen y: v₂²
+Step Expression: `4^2`
+Step Expected: `16`
+
+#
+Step Description: Jumlahkan kuadrat komponen
+Step Expression: `9 + 16`
+Step Expected: `25`
+
+#
+Step Description: Ambil akar kuadrat untuk mendapatkan magnitude
+Step Expression: `sqrt(25)`
+Step Expected: `5`
+
+#
+Step Type: multiple-choice-single
+Step Description: Vektor [[3,4]] memiliki panjang 5. Ini merupakan contoh:
+Option A: Triple Pythagoras (3,4,5)
+Option B: Vektor satuan
+Option C: Vektor nol
+Option D: Vektor basis
+Correct Answer: A
+Must Be Correct: false
+
+#
+Step Description: Verifikasi dengan fungsi magnitude langsung
+Step Expression: `norm([[3,4]])`
+Step Expected: `5`
+
+
+###Problem Title: Vektor Satuan (Unit Vector)
+Problem Description: Normalisasi vektor `v = [[6,8]]` menjadi vektor satuan dengan membagi setiap komponen dengan magnitude
+
+#
+Step Type: multiple-choice-single
+Step Description: Vektor satuan adalah vektor yang:
+Option A: Memiliki magnitude (panjang) = 1
+Option B: Memiliki semua komponen = 1
+Option C: Hanya memiliki satu komponen
+Option D: Magnitude = 0
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Langkah 1: Hitung magnitude ||v||. Hitung v₁²
+Step Expression: `6^2`
+Step Expected: `36`
+
+#
+Step Description: Hitung v₂²
+Step Expression: `8^2`
+Step Expected: `64`
+
+#
+Step Description: Jumlahkan kuadrat
+Step Expression: `36 + 64`
+Step Expected: `100`
+
+#
+Step Description: Magnitude ||v||
+Step Expression: `sqrt(100)`
+Step Expected: `10`
+
+#
+Step Description: Langkah 2: Normalisasi komponen x. Bagi v₁ dengan ||v||
+Step Expression: `6 / 10`
+Step Expected: `0.6`
+
+#
+Step Description: Normalisasi komponen y. Bagi v₂ dengan ||v||
+Step Expression: `8 / 10`
+Step Expected: `0.8`
+
+#
+Step Description: Bentuk vektor satuan û = v/||v||
+Step Expression: `[[0.6,0.8]]`
+Step Expected: `[[0.6,0.8]]`
+
+#
+Step Type: true-false
+Step Description: Vektor satuan memiliki arah yang sama dengan vektor asli tetapi panjang = 1
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Verifikasi: Hitung magnitude vektor satuan (harus = 1)
+Step Expression: `sqrt(0.6^2 + 0.8^2)`
+Step Expected: `1`
+
+
+###Problem Title: Proyeksi Vektor pada Vektor Lain
+Problem Description: Hitung proyeksi vektor `u = [[3,4]]` pada vektor `v = [[1,0]]` menggunakan rumus proj_v(u) = ((u·v)/(v·v))v
+
+#
+Step Type: multiple-choice-single
+Step Description: Proyeksi vektor u pada v menghasilkan:
+Option A: Komponen u yang searah dengan v
+Option B: Komponen u yang tegak lurus dengan v
+Option C: Jumlah u dan v
+Option D: Selisih u dan v
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Langkah 1: Hitung dot product u · v. Komponen x:
+Step Expression: `3 * 1`
+Step Expected: `3`
+
+#
+Step Description: Komponen y:
+Step Expression: `4 * 0`
+Step Expected: `0`
+
+#
+Step Description: u · v
+Step Expression: `3 + 0`
+Step Expected: `3`
+
+#
+Step Description: Langkah 2: Hitung v · v (magnitude kuadrat dari v). Komponen x:
+Step Expression: `1 * 1`
+Step Expected: `1`
+
+#
+Step Description: Komponen y:
+Step Expression: `0 * 0`
+Step Expected: `0`
+
+#
+Step Description: v · v
+Step Expression: `1 + 0`
+Step Expected: `1`
+
+#
+Step Description: Langkah 3: Hitung skalar proyeksi (u·v)/(v·v)
+Step Expression: `3 / 1`
+Step Expected: `3`
+
+#
+Step Description: Langkah 4: Kalikan skalar dengan v. Komponen x:
+Step Expression: `3 * 1`
+Step Expected: `3`
+
+#
+Step Description: Komponen y:
+Step Expression: `3 * 0`
+Step Expected: `0`
+
+#
+Step Description: Proyeksi proj_v(u)
+Step Expression: `[[3,0]]`
+Step Expected: `[[3,0]]`
+
+#
+Step Type: true-false
+Step Description: Proyeksi u pada v=[[1,0]] (sumbu x) memberikan komponen horizontal dari u
+Correct Answer: True
+Must Be Correct: false
+
+
+###Problem Title: Cross Product 3D (Perkalian Silang)
+Problem Description: Hitung cross product `u × v` untuk `u = [[1,0,0]]` dan `v = [[0,1,0]]` menggunakan determinan
+
+#
+Step Type: multiple-choice-single
+Step Description: Cross product hanya terdefinisi untuk:
+Option A: Vektor dalam R³ (3 dimensi)
+Option B: Vektor dalam R² (2 dimensi)
+Option C: Sembarang dimensi
+Option D: Hanya vektor satuan
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Type: multiple-choice-single
+Step Description: Hasil dari cross product u × v adalah:
+Option A: Vektor yang tegak lurus terhadap u dan v
+Option B: Skalar
+Option C: Vektor yang parallel dengan u
+Option D: Vektor yang parallel dengan v
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Cross product menggunakan formula determinan. Komponen i (x): u_y*v_z - u_z*v_y
+Step Expression: `0*0 - 0*1`
+Step Expected: `0`
+
+#
+Step Description: Komponen j (y): -(u_x*v_z - u_z*v_x) [perhatikan tanda negatif]
+Step Expression: `-(1*0 - 0*0)`
+Step Expected: `0`
+
+#
+Step Description: Komponen k (z): u_x*v_y - u_y*v_x
+Step Expression: `1*1 - 0*0`
+Step Expected: `1`
+
+#
+Step Description: Bentuk vektor hasil cross product u × v
+Step Expression: `[[0,0,1]]`
+Step Expected: `[[0,0,1]]`
+
+#
+Step Type: true-false
+Step Description: Cross product bersifat anti-komutatif: u × v = -(v × u)
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Type: multiple-choice-single
+Step Description: Vektor [[0,0,1]] adalah vektor basis:
+Option A: Sumbu z (k̂)
+Option B: Sumbu x (î)
+Option C: Sumbu y (ĵ)
+Option D: Tidak ada
+Correct Answer: A
+Must Be Correct: false
+
+
+###Problem Title: Linear Combination (Kombinasi Linear)
+Problem Description: Nyatakan vektor `w = [[7,5]]` sebagai kombinasi linear dari `u = [[2,1]]` dan `v = [[1,2]]`: w = au + bv
+
+#
+Step Type: multiple-choice-single
+Step Description: Kombinasi linear dari vektor u dan v adalah:
+Option A: Ekspresi au + bv dengan a,b adalah skalar
+Option B: Perkalian u × v
+Option C: Dot product u · v
+Option D: Penjumlahan u + v saja
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Set up sistem persamaan. Untuk komponen x: 2a + 1b = 7
+Step Type: fill-blank
+Step Description: Persamaan komponen x: {blank}a + {blank}b = {blank}
+Correct Answer: 2,1,7
+Must Be Correct: true
+
+#
+Step Description: Untuk komponen y: 1a + 2b = 5
+Step Type: fill-blank
+Step Description: Persamaan komponen y: {blank}a + {blank}b = {blank}
+Correct Answer: 1,2,5
+Must Be Correct: true
+
+#
+Step Description: Selesaikan sistem. Dari persamaan 1: kalikan dengan 2
+Step Expression: `2*(2*a + 1*b)`
+Step Expected: `4*a + 2*b`
+
+#
+Step Description: Kurangkan persamaan 2 dari hasil di atas untuk eliminasi b: 4a - 1a
+Step Expression: `4 - 1`
+Step Expected: `3`
+
+#
+Step Description: Ruas kanan: 14 - 5
+Step Expression: `2*7 - 5`
+Step Expected: `9`
+
+#
+Step Description: Hitung nilai a dari 3a = 9
+Step Expression: `9 / 3`
+Step Expected: `3`
+
+#
+Step Description: Substitusi a = 3 ke persamaan pertama: 2(3) + b = 7. Hitung 2(3):
+Step Expression: `2 * 3`
+Step Expected: `6`
+
+#
+Step Description: Hitung b dari 6 + b = 7
+Step Expression: `7 - 6`
+Step Expected: `1`
+
+#
+Step Description: Verifikasi: Hitung 3u + 1v. Komponen x:
+Step Expression: `3*2 + 1*1`
+Step Expected: `7`
+
+#
+Step Description: Komponen y:
+Step Expression: `3*1 + 1*2`
+Step Expected: `5`
+
+#
+Step Type: multiple-choice-single
+Step Description: Solusi kombinasi linear adalah:
+Option A: w = 3u + 1v
+Option B: w = 1u + 3v
+Option C: w = 2u + 2v
+Option D: Tidak ada solusi
+Correct Answer: A
+Must Be Correct: false
+
+
+# DOKUMENTASI FORMAT
+
+Format standar sesuai create_problem.html:
+- Problem Title: Judul soal
+- Problem Description: Deskripsi soal dengan notasi `math`
+
+Step Types:
+1. math-expression (default): Step Expression dan Step Expected
+2. multiple-choice-single: Option A/B/C/D, Correct Answer
+3. true-false: Correct Answer
+4. fill-blank: Correct Answer
+
+Fokus pada:
+- Operasi vektor dasar (penjumlahan, pengurangan, perkalian skalar)
+- Dot product dan cross product dengan langkah detail
+- Magnitude dan normalisasi
+- Proyeksi vektor
+- Kombinasi linear

@@ -1,0 +1,561 @@
+SET SOAL SESI 05 - METODE GAUSS-JORDAN (ENHANCED WITH DETAILED STEPS)
+Aljabar Linear - Teknik Informatika
+Universitas Mercu Buana
+
+This enhanced version follows the detailed step-by-step approach of the OOP solver.
+
+
+###Problem Title: Operasi Baris Elementer - Perkalian Baris
+Problem Description: Lakukan operasi `R₁ → (1/2)R₁` pada matriks `[[2,4,6],[1,2,3]]` dengan langkah detail
+
+#
+Step Type: multiple-choice-single
+Step Description: Operasi baris elementer meliputi:
+Option A: Perkalian baris dengan skalar bukan nol, pertukaran baris, penjumlahan kelipatan satu baris ke baris lain
+Option B: Hanya perkalian matriks
+Option C: Hanya penjumlahan elemen
+Option D: Operasi pada kolom saja
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Kalikan elemen R₁ kolom 1 dengan 1/2
+Step Expression: `(1/2) * 2`
+Step Expected: `1`
+
+#
+Step Description: Kalikan elemen R₁ kolom 2 dengan 1/2
+Step Expression: `(1/2) * 4`
+Step Expected: `2`
+
+#
+Step Description: Kalikan elemen R₁ kolom 3 dengan 1/2
+Step Expression: `(1/2) * 6`
+Step Expected: `3`
+
+#
+Step Description: Baris 1 setelah operasi (1/2)R₁
+Step Expression: `[[1,2,3]]`
+Step Expected: `[[1,2,3]]`
+
+#
+Step Type: true-false
+Step Description: Baris 2 tidak berubah karena operasi hanya dilakukan pada baris 1
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Matriks hasil setelah operasi R₁ → (1/2)R₁
+Step Expression: `[[1,2,3],[1,2,3]]`
+Step Expected: `[[1,2,3],[1,2,3]]`
+
+
+###Problem Title: Eliminasi Gauss-Jordan 2×2 Lengkap
+Problem Description: Selesaikan sistem `[[2,4,10],[3,1,5]]` hingga bentuk eselon baris tereduksi (RREF) dengan langkah detail
+
+#
+Step Type: multiple-choice-single
+Step Description: Bentuk eselon baris tereduksi (RREF) memiliki ciri:
+Option A: Pivot = 1, elemen di atas dan di bawah pivot = 0, pivot pertama di setiap baris lebih kanan dari baris sebelumnya
+Option B: Hanya diagonal = 1
+Option C: Semua elemen = 0
+Option D: Matriks segitiga atas
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Langkah 1: Buat pivot pertama = 1 dengan R₁ → (1/2)R₁. Elemen (1,1):
+Step Expression: `(1/2) * 2`
+Step Expected: `1`
+
+#
+Step Description: Elemen (1,2):
+Step Expression: `(1/2) * 4`
+Step Expected: `2`
+
+#
+Step Description: Elemen (1,3):
+Step Expression: `(1/2) * 10`
+Step Expected: `5`
+
+#
+Step Description: Matriks setelah R₁ → (1/2)R₁
+Step Expression: `[[1,2,5],[3,1,5]]`
+Step Expected: `[[1,2,5],[3,1,5]]`
+
+#
+Step Description: Langkah 2: Eliminasi di bawah pivot pertama dengan R₂ → R₂ - 3R₁. Elemen (2,1):
+Step Expression: `3 - 3*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (2,2):
+Step Expression: `1 - 3*2`
+Step Expected: `-5`
+
+#
+Step Description: Elemen (2,3):
+Step Expression: `5 - 3*5`
+Step Expected: `-10`
+
+#
+Step Description: Matriks setelah R₂ - 3R₁
+Step Expression: `[[1,2,5],[0,-5,-10]]`
+Step Expected: `[[1,2,5],[0,-5,-10]]`
+
+#
+Step Description: Langkah 3: Buat pivot kedua = 1 dengan R₂ → (-1/5)R₂. Elemen (2,1):
+Step Expression: `(-1/5) * 0`
+Step Expected: `0`
+
+#
+Step Description: Elemen (2,2):
+Step Expression: `(-1/5) * (-5)`
+Step Expected: `1`
+
+#
+Step Description: Elemen (2,3):
+Step Expression: `(-1/5) * (-10)`
+Step Expected: `2`
+
+#
+Step Description: Matriks setelah R₂ → (-1/5)R₂
+Step Expression: `[[1,2,5],[0,1,2]]`
+Step Expected: `[[1,2,5],[0,1,2]]`
+
+#
+Step Description: Langkah 4 (Back substitution): Eliminasi di atas pivot kedua dengan R₁ → R₁ - 2R₂. Elemen (1,1):
+Step Expression: `1 - 2*0`
+Step Expected: `1`
+
+#
+Step Description: Elemen (1,2):
+Step Expression: `2 - 2*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (1,3):
+Step Expression: `5 - 2*2`
+Step Expected: `1`
+
+#
+Step Description: Matriks dalam bentuk RREF
+Step Expression: `[[1,0,1],[0,1,2]]`
+Step Expected: `[[1,0,1],[0,1,2]]`
+
+#
+Step Type: multiple-choice-single
+Step Description: Dari RREF [[1,0,1],[0,1,2]], solusi sistem adalah:
+Option A: x = 1, y = 2
+Option B: x = 2, y = 1
+Option C: x = 0, y = 0
+Option D: Tidak ada solusi
+Correct Answer: A
+Must Be Correct: false
+
+
+###Problem Title: Gauss-Jordan dengan Pertukaran Baris
+Problem Description: Selesaikan `[[0,2,4],[1,3,7]]` ke RREF (memerlukan pertukaran baris karena pivot pertama = 0)
+
+#
+Step Type: multiple-choice-single
+Step Description: Jika elemen pivot adalah nol, kita harus:
+Option A: Tukar dengan baris di bawahnya yang memiliki elemen bukan nol pada kolom yang sama
+Option B: Lewati kolom tersebut
+Option C: Set seluruh baris menjadi nol
+Option D: Hentikan proses
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Langkah 1: Pivot pertama (posisi 1,1) = 0. Tukar R₁ dengan R₂
+Step Expression: `[[1,3,7],[0,2,4]]`
+Step Expected: `[[1,3,7],[0,2,4]]`
+
+#
+Step Type: true-false
+Step Description: Setelah pertukaran, pivot pertama sudah = 1 (tidak perlu penskalaan lagi)
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Langkah 2: Pivot kedua (posisi 2,2) = 2. Buat pivot = 1 dengan R₂ → (1/2)R₂. Elemen (2,1):
+Step Expression: `(1/2) * 0`
+Step Expected: `0`
+
+#
+Step Description: Elemen (2,2):
+Step Expression: `(1/2) * 2`
+Step Expected: `1`
+
+#
+Step Description: Elemen (2,3):
+Step Expression: `(1/2) * 4`
+Step Expected: `2`
+
+#
+Step Description: Matriks setelah R₂ → (1/2)R₂
+Step Expression: `[[1,3,7],[0,1,2]]`
+Step Expected: `[[1,3,7],[0,1,2]]`
+
+#
+Step Description: Langkah 3: Eliminasi di atas pivot kedua dengan R₁ → R₁ - 3R₂. Elemen (1,1):
+Step Expression: `1 - 3*0`
+Step Expected: `1`
+
+#
+Step Description: Elemen (1,2):
+Step Expression: `3 - 3*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (1,3):
+Step Expression: `7 - 3*2`
+Step Expected: `1`
+
+#
+Step Description: Matriks RREF final
+Step Expression: `[[1,0,1],[0,1,2]]`
+Step Expected: `[[1,0,1],[0,1,2]]`
+
+
+###Problem Title: Sistem 3×3 - Gauss-Jordan Tahap Demi Tahap
+Problem Description: Selesaikan `[[1,2,1,8],[2,5,1,15],[1,1,2,11]]` ke RREF dengan dokumentasi setiap tahap
+
+#
+Step Type: multiple-choice-single
+Step Description: Untuk matriks 3×3, berapa pivot yang harus kita bentuk?
+Option A: 3 pivot (satu di setiap baris)
+Option B: 2 pivot
+Option C: 1 pivot
+Option D: 9 pivot
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Tahap 1A: Pivot pertama sudah = 1. Eliminasi di bawahnya. R₂ → R₂ - 2R₁. Elemen (2,1):
+Step Expression: `2 - 2*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (2,2):
+Step Expression: `5 - 2*2`
+Step Expected: `1`
+
+#
+Step Description: Elemen (2,3):
+Step Expression: `1 - 2*1`
+Step Expected: `-1`
+
+#
+Step Description: Elemen (2,4):
+Step Expression: `15 - 2*8`
+Step Expected: `-1`
+
+#
+Step Description: Baris 2 setelah R₂ - 2R₁
+Step Expression: `[[0,1,-1,-1]]`
+Step Expected: `[[0,1,-1,-1]]`
+
+#
+Step Description: Tahap 1B: R₃ → R₃ - R₁. Elemen (3,1):
+Step Expression: `1 - 1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (3,2):
+Step Expression: `1 - 2`
+Step Expected: `-1`
+
+#
+Step Description: Elemen (3,3):
+Step Expression: `2 - 1`
+Step Expected: `1`
+
+#
+Step Description: Elemen (3,4):
+Step Expression: `11 - 8`
+Step Expected: `3`
+
+#
+Step Description: Matriks setelah eliminasi kolom 1
+Step Expression: `[[1,2,1,8],[0,1,-1,-1],[0,-1,1,3]]`
+Step Expected: `[[1,2,1,8],[0,1,-1,-1],[0,-1,1,3]]`
+
+#
+Step Description: Tahap 2A: Pivot kedua sudah = 1. Eliminasi di bawahnya. R₃ → R₃ + R₂. Elemen (3,1):
+Step Expression: `0 + 0`
+Step Expected: `0`
+
+#
+Step Description: Elemen (3,2):
+Step Expression: `-1 + 1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (3,3):
+Step Expression: `1 + (-1)`
+Step Expected: `0`
+
+#
+Step Description: Elemen (3,4):
+Step Expression: `3 + (-1)`
+Step Expected: `2`
+
+#
+Step Type: multiple-choice-single
+Step Description: Baris 3 setelah operasi menjadi [0,0,0,2]. Ini berarti:
+Option A: Sistem tidak konsisten (0 = 2 adalah kontradiksi)
+Option B: Sistem memiliki solusi unik
+Option C: Sistem memiliki tak berhingga solusi
+Option D: Perlu operasi tambahan
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Type: true-false
+Step Description: Jika ada baris berbentuk [0,0,...,0,k] dengan k≠0, maka sistem tidak memiliki solusi
+Correct Answer: True
+Must Be Correct: false
+
+
+###Problem Title: Row Echelon Form (REF) vs RREF
+Problem Description: Bandingkan REF dan RREF untuk matriks `[[2,4,6],[1,3,5]]`
+
+#
+Step Type: multiple-choice-single
+Step Description: Perbedaan utama REF dan RREF adalah:
+Option A: RREF memiliki nol di ATAS dan di BAWAH pivot, REF hanya di bawah
+Option B: REF lebih lengkap dari RREF
+Option C: Tidak ada perbedaan
+Option D: RREF tidak memiliki pivot
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Bentuk REF (Row Echelon): Buat pivot pertama = 1. R₁ → (1/2)R₁
+Step Expression: `[[1,2,3],[1,3,5]]`
+Step Expected: `[[1,2,3],[1,3,5]]`
+
+#
+Step Description: Eliminasi di bawah pivot: R₂ → R₂ - R₁. Elemen (2,2):
+Step Expression: `3 - 2`
+Step Expected: `1`
+
+#
+Step Description: Elemen (2,3):
+Step Expression: `5 - 3`
+Step Expected: `2`
+
+#
+Step Description: Matriks dalam bentuk REF (pivot kedua sudah = 1, elemen di bawah pivot = 0)
+Step Expression: `[[1,2,3],[0,1,2]]`
+Step Expected: `[[1,2,3],[0,1,2]]`
+
+#
+Step Type: true-false
+Step Description: Bentuk REF sudah cukup untuk menyelesaikan sistem dengan back substitution
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Lanjutkan ke RREF: Eliminasi di ATAS pivot kedua. R₁ → R₁ - 2R₂. Elemen (1,2):
+Step Expression: `2 - 2*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (1,3):
+Step Expression: `3 - 2*2`
+Step Expected: `-1`
+
+#
+Step Description: Matriks dalam bentuk RREF (semua elemen di atas dan di bawah pivot = 0)
+Step Expression: `[[1,0,-1],[0,1,2]]`
+Step Expected: `[[1,0,-1],[0,1,2]]`
+
+#
+Step Type: multiple-choice-single
+Step Description: Keuntungan RREF dibanding REF:
+Option A: Solusi langsung terbaca dari kolom terakhir (tidak perlu back substitution)
+Option B: Lebih cepat dihitung
+Option C: Memerlukan lebih sedikit operasi
+Option D: Tidak ada keuntungan
+Correct Answer: A
+Must Be Correct: false
+
+
+###Problem Title: Gauss-Jordan untuk Mencari Invers Matriks
+Problem Description: Gunakan Gauss-Jordan untuk mencari invers dari `A = [[2,1],[5,3]]` dengan augmented matrix [A|I]
+
+#
+Step Type: multiple-choice-single
+Step Description: Untuk mencari A⁻¹ dengan Gauss-Jordan, kita augment A dengan:
+Option A: Matriks identitas [A|I] dan reduksi hingga [I|A⁻¹]
+Option B: Matriks nol
+Option C: Vektor konstanta
+Option D: Transpose A
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Bentuk augmented matrix [A|I] untuk A = [[2,1],[5,3]]
+Step Expression: `[[2,1,1,0],[5,3,0,1]]`
+Step Expected: `[[2,1,1,0],[5,3,0,1]]`
+
+#
+Step Description: R₁ → (1/2)R₁ untuk membuat pivot pertama = 1. Elemen (1,1):
+Step Expression: `(1/2) * 2`
+Step Expected: `1`
+
+#
+Step Description: Elemen (1,2):
+Step Expression: `(1/2) * 1`
+Step Expected: `0.5`
+
+#
+Step Description: Elemen (1,3) - bagian identitas:
+Step Expression: `(1/2) * 1`
+Step Expected: `0.5`
+
+#
+Step Description: Elemen (1,4):
+Step Expression: `(1/2) * 0`
+Step Expected: `0`
+
+#
+Step Description: Matriks setelah R₁ → (1/2)R₁
+Step Expression: `[[1,0.5,0.5,0],[5,3,0,1]]`
+Step Expected: `[[1,0.5,0.5,0],[5,3,0,1]]`
+
+#
+Step Description: R₂ → R₂ - 5R₁. Elemen (2,1):
+Step Expression: `5 - 5*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (2,2):
+Step Expression: `3 - 5*0.5`
+Step Expected: `0.5`
+
+#
+Step Description: Elemen (2,3):
+Step Expression: `0 - 5*0.5`
+Step Expected: `-2.5`
+
+#
+Step Description: Elemen (2,4):
+Step Expression: `1 - 5*0`
+Step Expected: `1`
+
+#
+Step Description: R₂ → 2R₂ untuk membuat pivot kedua = 1
+Step Expression: `[[0,1,-5,2]]`
+Step Expected: `[[0,1,-5,2]]`
+
+#
+Step Description: R₁ → R₁ - 0.5R₂. Elemen (1,2):
+Step Expression: `0.5 - 0.5*1`
+Step Expected: `0`
+
+#
+Step Description: Elemen (1,3):
+Step Expression: `0.5 - 0.5*(-5)`
+Step Expected: `3`
+
+#
+Step Description: Elemen (1,4):
+Step Expression: `0 - 0.5*2`
+Step Expected: `-1`
+
+#
+Step Description: Matriks RREF [I|A⁻¹]. Invers A adalah bagian kanan:
+Step Expression: `[[3,-1],[-5,2]]`
+Step Expected: `[[3,-1],[-5,2]]`
+
+#
+Step Type: true-false
+Step Description: Untuk verifikasi, AA⁻¹ harus menghasilkan matriks identitas
+Correct Answer: True
+Must Be Correct: false
+
+#
+Step Description: Verifikasi: Kalikan A dengan A⁻¹
+Step Expression: `[[2,1],[5,3]] * [[3,-1],[-5,2]]`
+Step Expected: `[[1,0],[0,1]]`
+
+
+###Problem Title: Sistem dengan Parameter - Free Variables
+Problem Description: Selesaikan sistem `[[1,2,3,6],[0,0,1,2]]` dan identifikasi variabel bebas (free variables)
+
+#
+Step Type: multiple-choice-single
+Step Description: Variabel bebas (free variable) adalah:
+Option A: Variabel yang tidak memiliki pivot di kolomnya - dapat bernilai apapun
+Option B: Variabel yang selalu = 0
+Option C: Variabel yang memiliki nilai unik
+Option D: Variabel yang tidak ada dalam sistem
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Matriks sudah dalam bentuk REF. Identifikasi kolom pivot
+Step Type: fill-blank
+Step Description: Kolom {blank} dan kolom {blank} memiliki pivot
+Correct Answer: 1,3
+Must Be Correct: true
+
+#
+Step Type: multiple-choice-single
+Step Description: Variabel x₂ (kolom 2) tidak memiliki pivot, sehingga:
+Option A: x₂ adalah variabel bebas (free variable)
+Option B: x₂ = 0
+Option C: x₂ tidak ada dalam solusi
+Option D: x₂ harus dihitung terlebih dahulu
+Correct Answer: A
+Must Be Correct: true
+
+#
+Step Description: Dari baris 2: x₃ = 2 (langsung terbaca)
+Step Expression: `2`
+Step Expected: `2`
+
+#
+Step Description: Dari baris 1: x₁ + 2x₂ + 3(2) = 6. Selesaikan untuk x₁
+Step Expression: `6 - 3*2`
+Step Expected: `0`
+
+#
+Step Description: Dari 0 + 2x₂ = 0, maka x₁ dalam bentuk x₂:
+Step Type: fill-blank
+Step Description: x₁ = {blank}
+Correct Answer: -2x₂
+Must Be Correct: false
+
+#
+Step Type: multiple-choice-single
+Step Description: Solusi umum sistem ini (dengan t = parameter untuk x₂):
+Option A: x₁ = -2t, x₂ = t, x₃ = 2
+Option B: x₁ = 0, x₂ = 0, x₃ = 2
+Option C: Tidak ada solusi
+Option D: Solusi unik
+Correct Answer: A
+Must Be Correct: false
+
+
+# DOKUMENTASI FORMAT
+
+Format standar sesuai create_problem.html:
+- Problem Title: Judul soal
+- Problem Description: Deskripsi soal
+
+Step Types:
+1. math-expression: Step Expression dan Step Expected
+2. multiple-choice-single: Option A/B/C/D, Correct Answer
+3. true-false: Correct Answer
+4. fill-blank: Correct Answer
+
+Fokus pada:
+- Operasi baris elementer detail (penskalaan, pertukaran, penjumlahan)
+- Langkah demi langkah menuju RREF
+- Identifikasi dan penanganan kasus khusus (pivot = 0, tidak konsisten, variabel bebas)
+- Aplikasi Gauss-Jordan untuk mencari invers matriks
