@@ -304,36 +304,49 @@
       headerIds: true
     });
 
-    // Parse markdown and track element positions - IMPROVED VERSION
+    /**
+     * Parse markdown and track element positions - IMPROVED VERSION
+     * 
+     * This function implements a pattern-based markdown parser that identifies
+     * different markdown block types using regular expressions. Each block is
+     * tracked with its content, line numbers, and semantic type.
+     * 
+     * @param {string} markdown - The complete markdown text to parse
+     * @returns {Array} Array of element objects with {content, startLine, endLine, type}
+     */
     function parseMarkdownToElements(markdown) {
       const lines = markdown.split('\n');
       const elements = [];
-      let i = 0;
+      let i = 0; // Current line index
 
       while (i < lines.length) {
         const line = lines[i];
         const trimmedLine = line.trim();
 
-        // Skip empty lines
+        // Skip empty lines - they serve as block separators
         if (trimmedLine === '') {
           i++;
           continue;
         }
 
+        // Initialize block capture variables
         let blockContent = '';
         let startLine = i;
         let endLine = i;
 
-        // Headers (# ## ### etc)
+        // PATTERN 1: Headers (# ## ### etc)
+        // Matches 1-6 hash symbols followed by space: /^#{1,6}\s/
         if (/^#{1,6}\s/.test(trimmedLine)) {
           blockContent = line;
           endLine = i;
           i++;
         }
-        // Code blocks (```)
+        // PATTERN 2: Code blocks (```)
+        // Multi-line blocks enclosed in triple backticks
         else if (trimmedLine.startsWith('```')) {
           blockContent = line + '\n';
           i++;
+          // Collect all lines until closing ```
           while (i < lines.length && !lines[i].trim().startsWith('```')) {
             blockContent += lines[i] + '\n';
             i++;
@@ -344,35 +357,40 @@
             i++;
           }
         }
-        // Horizontal rules (---, ***, ___)
+        // PATTERN 3: Horizontal rules (---, ***, ___)
+        // Matches exactly three or more separator characters
         else if (/^(---|\*\*\*|___)$/.test(trimmedLine)) {
           blockContent = line;
           endLine = i;
           i++;
         }
-        // Blockquotes (>)
+        // PATTERN 4: Blockquotes (>)
+        // Lines starting with > can span multiple lines
         else if (trimmedLine.startsWith('>')) {
           blockContent = line + '\n';
           i++;
+          // Continue collecting > lines and empty lines within the quote
           while (i < lines.length && (lines[i].trim().startsWith('>') || lines[i].trim() === '')) {
             blockContent += lines[i] + '\n';
             if (lines[i].trim() !== '') {
               endLine = i;
             }
             i++;
+            // Stop at double empty line (end of blockquote)
             if (i < lines.length && lines[i].trim() === '' &&
                 (i + 1 >= lines.length || !lines[i + 1].trim().startsWith('>'))) {
               break;
             }
           }
         }
-        // Unordered lists (-, *, +)
+        // PATTERN 5: Unordered lists (-, *, +)
+        // Supports nested items via indentation
         else if (/^[-*+]\s/.test(trimmedLine)) {
           blockContent = line + '\n';
           i++;
           while (i < lines.length) {
             const nextLine = lines[i].trim();
-            // Continue if it's a list item or indented continuation
+            // Continue if it's a list item OR indented continuation OR empty line
             if (/^[-*+]\s/.test(nextLine) ||
                 (nextLine !== '' && (lines[i].startsWith('  ') || lines[i].startsWith('\t'))) ||
                 nextLine === '') {
@@ -390,13 +408,14 @@
             }
           }
         }
-        // Ordered lists (1. 2. etc)
+        // PATTERN 6: Ordered lists (1. 2. etc)
+        // Supports nested items via indentation
         else if (/^\d+\.\s/.test(trimmedLine)) {
           blockContent = line + '\n';
           i++;
           while (i < lines.length) {
             const nextLine = lines[i].trim();
-            // Continue if it's a list item or indented continuation
+            // Continue if it's a list item OR indented continuation OR empty line
             if (/^\d+\.\s/.test(nextLine) ||
                 (nextLine !== '' && (lines[i].startsWith('  ') || lines[i].startsWith('\t'))) ||
                 nextLine === '') {
@@ -414,7 +433,8 @@
             }
           }
         }
-        // Tables (|)
+        // PATTERN 7: Tables (|)
+        // Lines containing pipe symbols for table structure
         else if (trimmedLine.startsWith('|') || /\|.*\|/.test(trimmedLine)) {
           blockContent = line + '\n';
           i++;
@@ -424,7 +444,8 @@
             i++;
           }
         }
-        // Paragraphs (everything else)
+        // PATTERN 8: Paragraphs (everything else)
+        // Default fallback for regular text
         else {
           blockContent = line + '\n';
           i++;
@@ -438,7 +459,7 @@
               break;
             }
 
-            // Stop at start of special block
+            // Stop at start of special block (headers, code, lists, etc.)
             if (/^#{1,6}\s|^```|^[-*+]\s|^\d+\.\s|^>\s|^\||^---|^\*\*\*|^___/.test(nextTrimmed)) {
               break;
             }
@@ -464,9 +485,19 @@
       return elements;
     }
 
-    // Detect block type for debugging
+    /**
+     * Detect block type for debugging and UI purposes
+     * 
+     * Analyzes the first line of a markdown block to determine its semantic type.
+     * Used for logging, debugging, and potential UI enhancements.
+     * 
+     * @param {string} content - The markdown content block
+     * @returns {string} The block type identifier
+     */
     function detectBlockType(content) {
       const firstLine = content.split('\n')[0].trim();
+      
+      // Check patterns in priority order
       if (/^#{1,6}\s/.test(firstLine)) return 'heading';
       if (firstLine.startsWith('```')) return 'code';
       if (firstLine.startsWith('>')) return 'blockquote';
@@ -474,10 +505,18 @@
       if (/^\d+\.\s/.test(firstLine)) return 'ol';
       if (firstLine.startsWith('|') || /\|.*\|/.test(firstLine)) return 'table';
       if (/^(---|\*\*\*|___)$/.test(firstLine)) return 'hr';
+      
       return 'paragraph';
     }
 
-    // Render markdown
+    /**
+     * Render markdown content and update the preview
+     * 
+     * Parses the markdown into elements, renders HTML using marked.js,
+     * and attaches edit listeners if in edit mode.
+     * 
+     * @param {string} markdown - The complete markdown text to render
+     */
     function renderMarkdown(markdown) {
       fullMarkdownContent = markdown;
       markdownElements = parseMarkdownToElements(markdown);
@@ -490,7 +529,12 @@
       }
     }
 
-    // Attach click listeners for edit mode
+    /**
+     * Attach click listeners for edit mode
+     * 
+     * Creates a mapping between rendered HTML elements and their
+     * corresponding markdown source blocks, enabling click-to-edit functionality.
+     */
     function attachEditListeners() {
       const children = Array.from(preview.children);
       children.forEach((child, index) => {
@@ -501,7 +545,15 @@
       });
     }
 
-    // Edit element
+    /**
+     * Edit a specific markdown element
+     * 
+     * Activates the Ace editor panel and loads the markdown source
+     * for the clicked element, allowing in-place editing.
+     * 
+     * @param {HTMLElement} element - The clicked HTML element
+     * @param {number} index - The index in markdownElements array
+     */
     function editElement(element, index) {
       if (!isEditMode) return;
 
