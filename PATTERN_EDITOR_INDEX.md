@@ -270,7 +270,7 @@ All patterns detected: YES ✓
 
 **Date:** December 16, 2025  
 **Reviewer:** GitHub Copilot  
-**Repository:** dosen01cherid/Generative-AI-Automatic-Programming-Problem-Generator-and-Evaluator  
+**Repository:** anis-cherid/Artificial-AI-for-Math-and-General-Problem-Solving  
 **Branch:** copilot/review-pattern-editor-code  
 
 **Status:** ✅ COMPLETE

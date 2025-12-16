@@ -4,7 +4,7 @@
 
 **Objective:** Review the pattern editor code in the repository
 
-**Repository:** dosen01cherid/Generative-AI-Automatic-Programming-Problem-Generator-and-Evaluator  
+**Repository:** anis-cherid/Artificial-AI-for-Math-and-General-Problem-Solving  
 **Date:** December 16, 2025  
 **Status:** ✅ COMPLETE
 
@@ -275,7 +275,7 @@ The pattern editor code in `md_editor.html` is **well-designed, fully functional
 
 **Review Completed:** December 16, 2025  
 **Reviewer:** GitHub Copilot  
-**Repository:** dosen01cherid/Generative-AI-Automatic-Programming-Problem-Generator-and-Evaluator  
+**Repository:** anis-cherid/Artificial-AI-for-Math-and-General-Problem-Solving  
 **Branch:** copilot/review-pattern-editor-code  
 
 ✅ **TASK COMPLETE**
