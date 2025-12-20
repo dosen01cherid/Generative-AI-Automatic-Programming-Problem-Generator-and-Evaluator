@@ -1,4 +1,18 @@
-generativeai/retrieved_context_*.txt
+*
+!.gitignore
+!/NLP
+!/NLP/*
+!/NLP/**
+!/Aljabar Linier/
+!/Aljabar Linier/*
+!/Aljabar Linier/**
+!/Analitik Data/
+!/Analitik Data/*
+!/Analitik Data/**
+!/Generative AI/
+!/Generative AI/*
+!/Generative AI/**
+!/teturuQ/
+!/teturuQ/*
+!/teturuQ/**
 
-# Backup files from problem text conversions
-*.backup

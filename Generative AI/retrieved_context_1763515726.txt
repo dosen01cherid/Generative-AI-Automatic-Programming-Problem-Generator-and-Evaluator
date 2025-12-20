@@ -1,0 +1,748 @@
+============================================================
+RETRIEVED CONTEXT FOR QUESTION
+============================================================
+
+Question: Create a fill-in-the-blank question about using vectors in C++
+
+============================================================
+CONTEXT SENT TO LLM
+============================================================
+
+HOW TO CREATE ACCURATE FILL-IN-THE-BLANK QUESTIONS
+============================================================
+
+STEP-BY-STEP INSTRUCTIONS:
+
+1. START WITH VALID C++ CODE
+   - The code MUST compile and run correctly
+   - Keep the code simple and focused
+   - Ensure the code demonstrates a clear concept
+
+2. IDENTIFY WHAT TO REPLACE
+   - Choose EXACTLY ONE keyword, operator, or symbol to replace
+   - Common targets: keywords (int, for, if, class, return, etc.)
+   - Operators: =, ==, <<, >>, ++, --, etc.
+   - Symbols: ; { } ( ) [ ] < >
+   - Method names: push_back, size, length, etc.
+   - Header files: iostream, vector, string, etc.
+
+3. CREATE THE BLANK
+   - Replace the chosen word/symbol with EXACTLY: _____
+   - Use exactly 5 underscores
+   - Do NOT change anything else in the code
+   - Keep all spacing, indentation, and formatting identical
+
+4. CREATE 4 MULTIPLE CHOICE OPTIONS
+   - Option 1: A plausible wrong answer (related keyword/operator)
+   - Option 2: THE CORRECT ANSWER (always position 2)
+   - Option 3: Another plausible wrong answer
+   - Option 4: Another plausible wrong answer
+
+   Wrong answers should be:
+   - Related to the concept (similar keywords, common mistakes)
+   - Syntactically plausible (could look correct to a beginner)
+   - Not obviously wrong (avoid nonsense options)
+
+5. ANSWER FORMAT
+   - Always provide the answer as a single number: 2
+   - The correct answer is ALWAYS in position 2
+
+6. STRUCTURE FORMAT
+   Must include these sections in this exact order:
+   ------------------
+   Fill-in-the-Blank Question Example [ID] ([Description])
+   ------------------
+   Code
+   ------------------
+   [Complete valid C++ code]
+   -------------------
+   Question
+   -------------------
+   [Same code with ONE _____ replacement]
+   -------------------
+   Options
+   -------------------
+   1. [wrong]  2. [CORRECT]  3. [wrong]  4. [wrong]
+   -----------------
+   Answer
+   -----------------
+   2
+
+EXAMPLES OF GOOD REPLACEMENTS:
+✓ int x = 10;        →  _____ x = 10;           (replace "int")
+✓ cout << "Hello";   →  _____ << "Hello";        (replace "cout")
+✓ for(int i = 0...)  →  _____(int i = 0...)     (replace "for")
+✓ if(x > 5)          →  if(x _____ 5)           (replace ">")
+✓ return 0;          →  _____ 0;                (replace "return")
+✓ int x = 10;        →  int x _____ 10;         (replace "=")
+✓ cout << x;         →  cout _____ x;           (replace "<<")
+
+EXAMPLES OF BAD REPLACEMENTS (AVOID THESE):
+
+1. MISMATCH: Blank and Answer Don't Match
+   ✗ Code: cout << "Hello" << endl;
+   ✗ Replace: _____ << "Hello" << endl;
+   ✗ Wrong Answer: "cout <<"
+   ✗ Problem: You removed "cout" but answer includes "<<"
+   ✓ Correct Answer: "cout" (only what was replaced)
+
+   ✗ Code: int x = 10;
+   ✗ Replace: int _____ = 10;
+   ✗ Wrong Answer: "x ="
+   ✗ Problem: You removed "x" but answer includes "="
+   ✓ Correct Answer: "x" (only what was replaced)
+
+   ✗ Code: for(int i = 0; i < 5; i++)
+   ✗ Replace: for(_____ i = 0; i < 5; i++)
+   ✗ Wrong Answer: "int i"
+   ✗ Problem: You removed "int" but answer includes "i"
+   ✓ Correct Answer: "int" (only what was replaced)
+
+   ✗ Code: if(x > 5)
+   ✗ Replace: if(_____ > 5)
+   ✗ Wrong Answer: "x >"
+   ✗ Problem: You removed "x" but answer includes ">"
+   ✓ Correct Answer: "x" (only what was replaced)
+
+   ✗ Code: return 0;
+   ✗ Replace: _____ 0;
+   ✗ Wrong Answer: "return 0"
+   ✗ Problem: You removed "return" but answer includes "0"
+   ✓ Correct Answer: "return" (only what was replaced)
+
+2. REPLACING MULTIPLE WORDS/SYMBOLS AT ONCE
+   ✗ Code: int x = 10;
+   ✗ Replace: _____ = 10;
+   ✗ Problem: Removed both "int" and "x" (two words)
+   ✓ Correct: Choose only one - either "int" or "x"
+
+   ✗ Code: cout << x << endl;
+   ✗ Replace: cout _____ endl;
+   ✗ Problem: Removed "<< x <<" (multiple parts)
+   ✓ Correct: Replace only one operator at a time
+
+3. REPLACING PARTS OF WORDS
+   ✗ Code: return 0;
+   ✗ Replace: _____ turn 0;
+   ✗ Problem: Replacing "re" from "return" (incomplete word)
+   ✓ Correct: Replace the entire word "return"
+
+   ✗ Code: #include <iostream>
+   ✗ Replace: #_____ clude <iostream>
+   ✗ Problem: Replacing "in" from "include" (partial word)
+   ✓ Correct: Replace the entire word "include"
+
+4. REPLACING VARIABLE NAMES OR VALUES
+   ✗ Code: int sum = 10;
+   ✗ Replace: int _____ = 10;
+   ✗ Problem: Replacing variable name "sum" (not educational)
+   ✓ Correct: Replace keywords, operators, or data types
+
+   ✗ Code: int x = 10;
+   ✗ Replace: int x = _____;
+   ✗ Problem: Replacing the value "10" (not a concept)
+   ✓ Correct: Replace "int" or "=" instead
+
+5. MAKING THE BLANK AMBIGUOUS
+   ✗ Code: int x = 10;
+   ✗ Replace: _____ = 10;
+   ✗ Problem: Could be "int x" or just "x" (ambiguous)
+   ✓ Correct: Make it clear what's missing
+
+6. CREATING OBVIOUSLY WRONG OPTIONS
+   ✗ Options for cout:
+      1. banana  2. cout  3. elephant  4. xyz
+   ✗ Problem: Options are nonsense, not educational
+   ✓ Correct: Use related keywords: print, cin, cerr, output
+
+   ✗ Options for int:
+      1. hello  2. int  3. world  4. 123
+   ✗ Problem: Not related to data types
+   ✓ Correct: Use related types: float, char, double, bool
+
+REMEMBER: The correct answer must be EXACTLY what you removed, nothing more, nothing less!
+
+EXAMPLE WORKFLOW:
+
+Original Code:
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+
+Step 1: Choose what to replace → "cout"
+Step 2: Replace with _____ → _____ << "Hello" << endl;
+Step 3: Create options:
+   1. print  2. cout  3. cin  4. output
+Step 4: Answer is 2 (cout is in position 2)
+
+Another example with the same code:
+
+Step 1: Choose what to replace → "<<"
+Step 2: Replace with _____ → cout _____ "Hello" << endl;
+Step 3: Create options:
+   1. >>  2. <<  3. <  4. <=
+Step 4: Answer is 2 (<< is in position 2)
+
+IMPORTANT RULES:
+- ONE blank per question
+- Correct answer ALWAYS in position 2
+- Keep code formatting identical
+- Use _____ (5 underscores) for blanks
+- Provide related but wrong distractors
+- Test that code compiles before and after replacement
+
+============================================================
+
+------------------
+Fill-in-the-Blank Question Example D3 (Vector Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. array  2. vector  3. list  4. container
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D30 (List Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> myList;
+   myList.push_back(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   list<int> myList;
+   myList.push_back(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. linkedlist  2. list  3. array  4. vector
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D4 (Vector Push Back)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   cout << v[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   v._____(10);
+   cout << v[0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. add  2. push_back  3. insert  4. append
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D5 (Vector Size Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   cout << "Size: " << v.size() << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   cout << "Size: " << v._____() << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. length  2. size  3. count  4. total
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D104 (size_t Type)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   size_t len = v.size();
+   cout << len << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   _____ len = v.size();
+   cout << len << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. int  2. size_t  3. unsigned  4. long
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D38 (Vector pop_back Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v.pop_back();
+   cout << v.size() << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v._____();
+   cout << v.size() << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. remove  2. pop_back  3. delete  4. removeLast
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D105 (Vector resize Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v.resize(5);
+   cout << v.size() << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 3};
+   v._____(5);
+   cout << v.size() << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. setSize  2. resize  3. changeSize  4. expand
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example S30 (Assignment Operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x _____ 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ==  2. =  3. :  4. !=
+-----------------
+Answer
+-----------------
+2
+
+============================================================
+ADDITIONAL FILL-IN-THE-BLANK EXAMPLES (FOR BETTER LEARNING)
+============================================================
+
+
+
+------------------
+Fill-in-the-Blank Question Example D59 (Deque Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <deque>
+using namespace std;
+int main(){
+   deque<int> dq;
+   dq.push_back(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   deque<int> dq;
+   dq.push_back(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. queue  2. deque  3. stack  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D118 (Vector insert Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 4};
+   v.insert(v.begin() + 2, 3);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 4};
+   v._____(v.begin() + 2, 3);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. add  2. insert  3. place  4. put
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example S22 (new Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = _____ int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. allocate  2. new  3. create  4. make
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example A7 (Array - Size)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int numbers[5] = {1, 2, 3, 4, 5};
+   cout << "First: " << numbers[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int numbers[_____] = {1, 2, 3, 4, 5};
+   cout << "First: " << numbers[0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. 3  2. 4  3. 5  4. 6
+-----------------
+Answer
+-----------------
+3
+
+
+
+------------------
+Fill-in-the-Blank Question Example D39 (Vector at Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {10, 20, 30};
+   cout << v.at(1) << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {10, 20, 30};
+   cout << v._____(1) << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. get  2. at  3. element  4. index
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D42 (Algorithm Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {3, 1, 2};
+   sort(v.begin(), v.end());
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {3, 1, 2};
+   sort(v.begin(), v.end());
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. sorting  2. algorithm  3. sort  4. utility
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example C39 (sizeof operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << "Size: " << sizeof(x) << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << "Size: " << _____(x) << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. length  2. sizeof  3. size  4. count
+-----------------
+Answer
+-----------------
+2
+
+
+
+============================================================
+Retrieved 15 examples:
+1. D3 - Vector Include
+2. D30 - List Include
+3. D4 - Vector Push Back
+4. D5 - Vector Size Method
+5. D104 - size_t Type
+6. D38 - Vector pop_back Method
+7. D105 - Vector resize Method
+8. S30 - Assignment Operator
+9. D59 - Deque Include
+10. D118 - Vector insert Method
+11. S22 - new Keyword
+12. A7 - Array - Size
+13. D39 - Vector at Method
+14. D42 - Algorithm Include
+15. C39 - sizeof operator

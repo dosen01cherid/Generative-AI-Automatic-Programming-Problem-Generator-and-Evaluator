@@ -1,0 +1,2801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesi 1: Vektor dan Operasi Vektor - Enhanced with CS Content</title>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .presentation-container {
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 60px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .slide h1 {
+            font-size: 3rem;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 4px solid #3498db;
+            padding-bottom: 20px;
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            color: #34495e;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .slide h3 {
+            font-size: 2rem;
+            color: #2980b9;
+            margin-bottom: 20px;
+        }
+
+        .slide p {
+            font-size: 1.4rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .slide ul {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-left: 40px;
+            margin-bottom: 25px;
+        }
+
+        .slide li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .slide li::marker {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .math-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+            margin: 25px 0;
+            text-align: center;
+            font-size: 1.3em;
+        }
+
+        .example-box {
+            background: #e8f6f3;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #16a085;
+            margin: 25px 0;
+        }
+
+        .example-box h4 {
+            color: #16a085;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .exercise-box {
+            background: #fdf2e9;
+            padding: 25px;
+            border-radius: 10px;
+            border: 2px solid #e67e22;
+            margin: 25px 0;
+        }
+
+        .exercise-box h4 {
+            color: #e67e22;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            z-index: 1000;
+            font-size: 0.9rem;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .app-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .app-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .formula-derivation {
+            background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #3498db;
+            margin: 25px 0;
+        }
+
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #2ecc71;
+        }
+
+        /* Enhanced styles for vector visualizations */
+        .vector-canvas {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            margin: 20px 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .vector-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .vector-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .basis-explanation {
+            background: linear-gradient(145deg, #e8f5e8, #f0f9f0);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #28a745;
+            margin: 25px 0;
+        }
+
+        .normalization-steps {
+            background: linear-gradient(145deg, #fff5f5, #ffebee);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #dc3545;
+            margin: 25px 0;
+        }
+
+        .direction-extract {
+            background: linear-gradient(145deg, #f3e5f5, #fce4ec);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #9c27b0;
+            margin: 25px 0;
+        }
+
+        .cs-application {
+            background: linear-gradient(145deg, #e3f2fd, #f1f8e9);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #2196f3;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                width: 95%;
+                padding: 30px 20px;
+            }
+            
+            .slide h1 {
+                font-size: 2.2rem;
+            }
+            
+            .slide h2 {
+                font-size: 1.8rem;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .applications-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vector-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="slide-counter">
+            Aljabar Linear & Matriks - Sesi 1: Vektor dan Operasi Vektor (Complete Enhanced)
+        </div>
+
+        <!-- Slide 1: Title -->
+        <div class="slide">
+            <h1>Aljabar Linear dan Matriks</h1>
+            <h2>Sesi 1: Vektor dan Operasi Vektor</h2>
+            <div style="text-align: center; margin-top: 50px;">
+                <p style="font-size: 1.6rem; color: #7f8c8d;">Membangun Fondasi Matematika untuk Computer Science</p>
+                <p style="font-size: 1.2rem; margin-top: 30px;">Durasi: 2.5 jam • Presentasi + Latihan</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Course Importance -->
+        <div class="slide">
+            <h2>Mengapa Aljabar Linear Penting?</h2>
+            <div class="applications-grid">
+                <div class="app-card">
+                    <h4>🤖 Machine Learning</h4>
+                    <p>Neural networks, PCA, feature transformation</p>
+                </div>
+                <div class="app-card">
+                    <h4>🎮 Computer Graphics</h4>
+                    <p>3D transformasi, rendering, animasi</p>
+                </div>
+                <div class="app-card">
+                    <h4>🖼️ Computer Vision</h4>
+                    <p>Image processing, object detection, filtering</p>
+                </div>
+                <div class="app-card">
+                    <h4>📊 Data Science</h4>
+                    <p>Dimensionality reduction, clustering, regression</p>
+                </div>
+            </div>
+            <div class="highlight">
+                <p><strong>Fakta:</strong> 90% algoritma modern dalam AI, graphics, dan data science menggunakan konsep aljabar linear sebagai fondasi utama!</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Real World Applications -->
+        <div class="slide">
+            <h2>Aplikasi di Industri Teknologi</h2>
+            <ul>
+                <li><strong>Google:</strong> PageRank menggunakan eigenvalues untuk ranking web pages</li>
+                <li><strong>Netflix:</strong> SVD dan matrix factorization untuk sistem rekomendasi</li>
+                <li><strong>Tesla:</strong> Transformasi koordinat untuk sensor fusion dalam autonomous driving</li>
+                <li><strong>Instagram:</strong> PCA untuk kompresi dan filter real-time</li>
+                <li><strong>OpenAI:</strong> Tensor operations dalam transformer architecture</li>
+            </ul>
+<div class="math-display">
+    <h4 style="color: #2c3e50; margin-bottom: 20px;">🎬 Netflix Recommendation Engine: Input → Process → Output</h4>
+    
+    <!-- INPUT-PROCESS-OUTPUT FLOW -->
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 25px 0;">
+        
+        <!-- INPUT SECTION -->
+        <div style="background: linear-gradient(145deg, #e3f2fd, #bbdefb); padding: 20px; border-radius: 12px; border: 2px solid #2196f3;">
+            <h5 style="color: #1565c0; text-align: center; margin-bottom: 15px;">📥 INPUT</h5>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                <p><strong>Raw User Data:</strong></p>
+                <ul style="font-size: 0.85rem; margin: 5px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 3px;">238 juta users</li>
+                    <li style="margin-bottom: 3px;">15,000+ movies/shows</li>
+                    <li style="margin-bottom: 3px;">Rating 1-5 stars</li>
+                    <li style="margin-bottom: 3px;">Watch time duration</li>
+                    <li style="margin-bottom: 3px;">Skip/pause patterns</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                <p><strong>Problem Scale:</strong></p>
+                <ul style="font-size: 0.85rem; margin: 5px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 3px;">Matrix: 238M × 15K cells</li>
+                    <li style="margin-bottom: 3px;">99.9% data missing</li>
+                    <li style="margin-bottom: 3px;">3.5 trillion potential ratings</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PROCESS SECTION -->
+        <div style="background: linear-gradient(145deg, #fff3e0, #ffcc80); padding: 20px; border-radius: 12px; border: 2px solid #ff9800;">
+            <h5 style="color: #e65100; text-align: center; margin-bottom: 15px;">⚙️ PROCESS</h5>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                <p><strong>Matrix Factorization:</strong></p>
+                <div style="font-size: 0.8rem; text-align: center; margin: 8px 0;">
+                    $$R \approx U \times V^T$$
+                </div>
+                <ul style="font-size: 0.85rem; margin: 5px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 3px;">Split ke 50 hidden factors</li>
+                    <li style="margin-bottom: 3px;">U: User preferences</li>
+                    <li style="margin-bottom: 3px;">V: Movie characteristics</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                <p><strong>Algorithm Steps:</strong></p>
+                <ol style="font-size: 0.85rem; margin: 5px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 3px;">Analyze viewing patterns</li>
+                    <li style="margin-bottom: 3px;">Extract hidden features</li>
+                    <li style="margin-bottom: 3px;">Predict missing ratings</li>
+                    <li style="margin-bottom: 3px;">Rank recommendations</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- OUTPUT SECTION -->
+        <div style="background: linear-gradient(145deg, #e8f5e8, #a5d6a7); padding: 20px; border-radius: 12px; border: 2px solid #4caf50;">
+            <h5 style="color: #1b5e20; text-align: center; margin-bottom: 15px;">📤 OUTPUT</h5>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                <p><strong>Personalized Results:</strong></p>
+                <ul style="font-size: 0.85rem; margin: 5px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 3px;">Custom homepage per user</li>
+                    <li style="margin-bottom: 3px;">Ranked movie suggestions</li>
+                    <li style="margin-bottom: 3px;">Genre recommendations</li>
+                    <li style="margin-bottom: 3px;">Similar users clustering</li>
+                </ul>
+            </div>
+            
+            <div style="background: white; padding: 12px; border-radius: 8px; margin: 8px 0;">
+                <p><strong>Business Impact:</strong></p>
+                <ul style="font-size: 0.85rem; margin: 5px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 3px;">$1B annual value</li>
+                    <li style="margin-bottom: 3px;">80% views from recommendations</li>
+                    <li style="margin-bottom: 3px;">93% user retention</li>
+                    <li style="margin-bottom: 3px;">25% increase viewing time</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONCRETE EXAMPLE -->
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #007bff;">
+        <h5 style="color: #007bff;">🔍 Contoh Konkret: Prediksi untuk User "Alice"</h5>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 15px 0;">
+            <div style="background: #e3f2fd; padding: 12px; border-radius: 8px;">
+                <strong>INPUT Alice:</strong>
+                <ul style="font-size: 0.85rem; margin: 8px 0; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 2px;">Stranger Things: ⭐⭐⭐⭐⭐</li>
+                    <li style="margin-bottom: 2px;">Squid Game: ⭐⭐⭐⭐⭐</li>
+                    <li style="margin-bottom: 2px;">The Office: ⭐⭐⭐</li>
+                    <li style="margin-bottom: 2px;">Breaking Bad: ?</li>
+                </ul>
+            </div>
+            
+            <div style="background: #fff3e0; padding: 12px; border-radius: 8px;">
+                <strong>PROCESS:</strong>
+                <p style="font-size: 0.85rem; margin: 8px 0;">Algorithm mendeteksi Alice suka:</p>
+                <ul style="font-size: 0.8rem; padding-left: 15px; list-style-position: inside;">
+                    <li style="margin-bottom: 2px;">Drama thriller (0.8)</li>
+                    <li style="margin-bottom: 2px;">Binge-worthy series (0.9)</li>
+                    <li style="margin-bottom: 2px;">Modern content (0.7)</li>
+                </ul>
+            </div>
+            
+            <div style="background: #e8f5e8; padding: 12px; border-radius: 8px;">
+                <strong>OUTPUT:</strong>
+                <p style="font-size: 0.85rem; margin: 8px 0;">Prediksi Breaking Bad: <strong>4.7⭐</strong></p>
+                <p style="font-size: 0.8rem;">Breaking Bad muncul di posisi #2 di homepage Alice</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MATHEMATICAL INSIGHT -->
+    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin: 20px 0;">
+        <h5 style="color: #856404;">🧮 Mengapa Matrix Factorization Works?</h5>
+        <div style="font-size: 0.9rem; margin: 10px 0;">
+            <p><strong>Kompresi Data Cerdas:</strong></p>
+            <ul style="margin: 8px 0; padding-left: 15px; list-style-position: inside;">
+                <li style="margin-bottom: 3px;"><strong>Sebelum:</strong> 3.5 trillion parameters (mostly empty)</li>
+                <li style="margin-bottom: 3px;"><strong>Sesudah:</strong> 12 billion parameters (100% filled)</li>
+                <li style="margin-bottom: 3px;"><strong>Compression ratio:</strong> 99.7% reduction in storage</li>
+                <li style="margin-bottom: 3px;"><strong>Accuracy:</strong> Tetap prediksi dengan 85%+ precision</li>
+            </ul>
+            
+            <p style="margin-top: 15px;"><strong>Key Insight:</strong> User preferences dan movie characteristics bisa direpresentasikan dengan hanya 50 "hidden factors" - ini adalah kekuatan aljabar linear untuk menemukan pola tersembunyi dalam data massive!</p>
+        </div>
+    </div>
+</div>
+
+        <!-- Slide 4: Learning Objectives -->
+        <div class="slide">
+            <h2>Tujuan Pembelajaran Sesi 1</h2>
+            <h3>Setelah sesi ini, mahasiswa mampu:</h3>
+            <ul>
+                <li>Memahami konsep vektor dalam berbagai representasi (geometrik, aljabar, komputasi)</li>
+                <li>Melakukan operasi dasar vektor (penjumlahan, pengurangan, perkalian skalar)</li>
+                <li>Menghitung dot product dan cross product serta interpretasinya</li>
+                <li>Mengaplikasikan konsep magnitude, unit vector, dan normalisasi</li>
+                <li>Menyelesaikan masalah praktis dalam computer graphics dan robotika</li>
+                <li>Menggunakan vektor untuk representasi data dalam machine learning</li>
+            </ul>
+        </div>
+
+        <!-- Slide 5: Vector Definition with Visual -->
+        <div class="slide">
+            <h2>Apa itu Vektor? - Definisi dan Visualisasi</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Definisi Matematis</h3>
+                    <p>Vektor adalah objek matematik yang memiliki <strong>magnitude</strong> (besaran) dan <strong>direction</strong> (arah).</p>
+                    
+                    <div class="math-display">
+                        <p>Notasi vektor dalam $\mathbb{R}^n$:</p>
+                        $$\vec{v} = \begin{pmatrix} v_1 \\ v_2 \\ \vdots \\ v_n \end{pmatrix}$$
+                    </div>
+                </div>
+                <div>
+                    <div class="vector-canvas">
+                        <h4>Representasi Visual: Vektor (3, 2)</h4>
+                        <svg width="280" height="200" viewBox="0 0 280 200">
+                            <!-- Grid -->
+                            <defs>
+                                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+                                </pattern>
+                                <marker id="arrowhead" markerWidth="6" markerHeight="4" 
+        refX="5" refY="2" orient="auto">
+    <polygon points="0 0, 6 2, 0 4" fill="#e74c3c" />
+</marker>
+                            </defs>
+                            <rect width="280" height="200" fill="url(#grid)" />
+                            
+                            <!-- Axes -->
+                            <line x1="40" y1="160" x2="240" y2="160" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            <line x1="40" y1="160" x2="40" y2="40" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- Axis labels -->
+                            <text x="245" y="165" font-size="14" fill="#333">x</text>
+                            <text x="45" y="35" font-size="14" fill="#333">y</text>
+                            <text x="25" y="175" font-size="14" fill="#333">O</text>
+                            
+                            <!-- Vector arrow (3, 2) scaled -->
+                            <line x1="40" y1="160" x2="100" y2="120" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrowhead)"/>
+                            
+                            <!-- Components -->
+                            <line x1="40" y1="160" x2="100" y2="160" stroke="#3498db" stroke-width="2" stroke-dasharray="5,5"/>
+                            <line x1="100" y1="160" x2="100" y2="120" stroke="#3498db" stroke-width="2" stroke-dasharray="5,5"/>
+                            
+                            <!-- Labels -->
+<foreignObject x="65" y="100" width="30" height="20">
+    <div style="font-size: 16px; color: #000000; font-weight: bold;">$\vec{v}$</div>
+</foreignObject>
+                            <text x="60" y="175" font-size="10" fill="#3498db">3</text>
+                            <text x="105" y="145" font-size="10" fill="#3498db">2</text>
+                        </svg>
+                        <p style="font-size: 0.9rem; margin-top: 10px; color: #666;">
+                            Vektor dimulai dari titik asal atau origin (0,0) dan berakhir di titik (3,2)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cs-application">
+                <h3>Interpretasi Komputasi</h3>
+                <p>Dalam programming, vektor adalah <strong>array/list</strong> yang menyimpan data numerik terstruktur.</p>
+                
+                <div class="example-box">
+                    <h4>Contoh Representasi:</h4>
+                    <p><strong>Python:</strong> [3, 4, 5]</p>
+                    <p><strong>MATLAB:</strong> [3; 4; 5]</p>
+                    <p><strong>JSON:</strong> {"x": 3, "y": 4, "z": 5}</p>
+                    <p><strong>C++:</strong> std::vector&lt;double&gt; v = {3, 4, 5};</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Vector Types -->
+        <div class="slide">
+            <h2>Jenis-jenis Vektor</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Berdasarkan Dimensi</h3>
+                    <ul>
+                        <li><strong>2D Vector:</strong> $\vec{v} = (x, y)$
+                            <br>Aplikasi: Computer graphics 2D</li>
+                        <li><strong>3D Vector:</strong> $\vec{v} = (x, y, z)$
+                            <br>Aplikasi: 3D modeling, robotika</li>
+                        <li><strong>n-D Vector:</strong> $\vec{v} = (v_1, v_2, \ldots, v_n)$
+                            <br>Aplikasi: Machine learning features</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Berdasarkan Aplikasi CS</h3>
+                    <ul>
+                        <li><strong>Position Vector:</strong> Lokasi titik dalam ruang</li>
+                        <li><strong>Velocity Vector:</strong> Kecepatan + arah</li>
+                        <li><strong>Force Vector:</strong> Gaya + arah</li>
+                        <li><strong>Feature Vector:</strong> Data atribut dalam ML</li>
+                        <li><strong>Color Vector:</strong> RGB values (255, 128, 64)</li>
+                        <li><strong>Gradient Vector:</strong> Arah perubahan maksimal</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Vector Representation -->
+        <div class="slide">
+            <h2>Representasi Vektor</h2>
+            <div class="example-box">
+                <h4>Contoh: Posisi robot dalam ruang 3D</h4>
+                <div class="math-display">
+                    $$\vec{\text{position}} = \begin{pmatrix} 5 \\ 3 \\ 2 \end{pmatrix} \text{ meter}$$
+                </div>
+                <p><strong>Interpretasi:</strong> Robot berada 5m di arah x, 3m di arah y, 2m di arah z dari origin</p>
+            </div>
+
+            <div class="two-column">
+                <div>
+                    <h3>Column Vector</h3>
+                    <div class="math-display">
+                    $$\vec{v} = \begin{pmatrix} v_1 \\ v_2 \\ v_3 \end{pmatrix}$$
+                    </div>
+                    </div>
+                <div>
+                    <h3>Row Vector</h3>
+                    <div class="math-display">
+                    $$\vec{v} = (v_1, v_2, v_3)$$
+                    </div>
+                </div>
+                Konten matematisnya sama, hanya orientation/arahnya yang berbeda 
+            </div>
+        </div>
+
+<!-- Slide 8: Basis Vectors - Enhanced -->
+<div class="slide">
+    <h2>Vektor Basis: Fondasi Sistem Koordinat</h2>
+    
+    <div class="basis-explanation">
+        <h3>Apa itu Vektor Basis?</h3>
+        <p><strong>Definisi:</strong> Vektor basis adalah kumpulan vektor "fundamental" yang berfungsi seperti <em>sistem koordinat</em> - setiap vektor lain dalam ruang dapat dibangun menggunakan kombinasi linear dari vektor basis ini.</p>
+        
+        <div class="highlight">
+            <p><strong>Analogi:</strong> Bayangkan vektor basis seperti bahan dasar memasak. Dengan garam, gula, dan tepung (basis), Anda bisa membuat berbagai makanan (vektor lain) dengan mencampurnya dalam proporsi yang berbeda.</p>
+        </div>
+
+        <h4>Syarat Vektor Basis:</h4>
+        <ul>
+            <li><strong>Linear Independent:</strong> Tidak ada vektor basis yang bisa dibuat dari kombinasi vektor basis lainnya</li>
+            <li><strong>Span seluruh ruang:</strong> Setiap vektor di ruang tersebut dapat dinyatakan sebagai kombinasi linear dari basis</li>
+            <li><strong>Minimal:</strong> Jumlahnya tepat sesuai dimensi ruang (3D → perlu 3 vektor basis)</li>
+        </ul>
+    </div>
+
+    <div class="basis-explanation">
+        <h3>Vektor Basis Standar dalam 3D</h3>
+        
+        <div class="vector-grid">
+            <div class="vector-demo">
+                <h4>Basis Vektor î (1,0,0)</h4>
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <defs>
+                        <marker id="arrow-i" markerWidth="5" markerHeight="3" refX="4" refY="1.5" orient="auto">
+                            <polygon points="0 0, 5 1.5, 0 3" fill="#e74c3c" />
+                        </marker>
+                    </defs>
+                    <!-- Axes -->
+                    <line x1="20" y1="130" x2="130" y2="130" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="75" y2="75" stroke="#ddd" stroke-width="1"/>
+                    
+                    <!-- X-axis vector -->
+                    <line x1="20" y1="130" x2="80" y2="130" stroke="#e74c3c" stroke-width="4" marker-end="url(#arrow-i)"/>
+                    
+                    <!-- Labels -->
+                    <text x="85" y="135" font-size="14" fill="#e74c3c" font-weight="bold">î</text>
+                    <text x="45" y="145" font-size="10" fill="#666">X-axis direction</text>
+                </svg>
+                <div class="math-display" style="margin: 10px 0;">
+                    $$\hat{i} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix}$$
+                </div>
+            </div>
+            
+            <div class="vector-demo">
+                <h4>Basis Vektor ĵ (0,1,0)</h4>
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <defs>
+                        <marker id="arrow-j" markerWidth="5" markerHeight="3" refX="4" refY="1.5" orient="auto">
+                            <polygon points="0 0, 5 1.5, 0 3" fill="#27ae60" />
+                        </marker>
+                    </defs>
+                    <!-- Axes -->
+                    <line x1="20" y1="130" x2="130" y2="130" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="75" y2="75" stroke="#ddd" stroke-width="1"/>
+                    
+                    <!-- Y-axis vector -->
+                    <line x1="20" y1="130" x2="20" y2="70" stroke="#27ae60" stroke-width="4" marker-end="url(#arrow-j)"/>
+                    
+                    <!-- Labels -->
+                    <text x="25" y="65" font-size="14" fill="#27ae60" font-weight="bold">ĵ</text>
+                    <text x="30" y="110" font-size="10" fill="#666">Y-axis direction</text>
+                </svg>
+                <div class="math-display" style="margin: 10px 0;">
+                    $$\hat{j} = \begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix}$$
+                </div>
+            </div>
+            
+            <div class="vector-demo">
+                <h4>Basis Vektor k̂ (0,0,1)</h4>
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <defs>
+                        <marker id="arrow-k" markerWidth="5" markerHeight="3" refX="4" refY="1.5" orient="auto">
+                            <polygon points="0 0, 5 1.5, 0 3" fill="#3498db" />
+                        </marker>
+                    </defs>
+                    <!-- Axes -->
+                    <line x1="20" y1="130" x2="130" y2="130" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="75" y2="75" stroke="#ddd" stroke-width="1"/>
+                    
+                    <!-- Z-axis vector (diagonal to show 3D) -->
+                    <line x1="20" y1="130" x2="75" y2="75" stroke="#3498db" stroke-width="4" marker-end="url(#arrow-k)"/>
+                    
+                    <!-- Labels -->
+                    <text x="80" y="70" font-size="14" fill="#3498db" font-weight="bold">k̂</text>
+                    <text x="35" y="90" font-size="10" fill="#666">Z-axis direction</text>
+                </svg>
+                <div class="math-display" style="margin: 10px 0;">
+                    $$\hat{k} = \begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}$$
+                </div>
+            </div>
+            
+            <div class="vector-demo">
+                <h4>Kombinasi Linear</h4>
+                <svg width="150" height="150" viewBox="0 0 150 150">
+                    <defs>
+                        <marker id="arrow-combo" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                            <polygon points="0 0, 5 2, 0 4" fill="#9b59b6" />
+                        </marker>
+                    </defs>
+                    <!-- Axes -->
+                    <line x1="20" y1="130" x2="130" y2="130" stroke="#ddd" stroke-width="1"/>
+                    <line x1="20" y1="130" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                    
+                    <!-- Combined vector (2,3) -->
+                    <line x1="20" y1="130" x2="60" y2="70" stroke="#9b59b6" stroke-width="4" marker-end="url(#arrow-combo)"/>
+                    
+                    <!-- Components -->
+                    <line x1="20" y1="130" x2="60" y2="130" stroke="#e74c3c" stroke-width="2" stroke-dasharray="3,3"/>
+                    <line x1="60" y1="130" x2="60" y2="70" stroke="#27ae60" stroke-width="2" stroke-dasharray="3,3"/>
+                    
+                    <!-- Labels -->
+<foreignObject x="15" y="75" width="40" height="30">
+    <div style="font-size: 20px; color: #000000; font-weight: bold;">$\vec{v}$</div>
+</foreignObject>
+                    <text x="35" y="145" font-size="10" fill="#e74c3c">2î</text>
+                    <text x="65" y="105" font-size="10" fill="#27ae60">3ĵ</text>
+                </svg>
+                <div class="math-display" style="margin: 10px 0;">
+                    $$\vec{v} = 2\hat{i} + 3\hat{j}$$
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight">
+        <h4>Mengapa Penting?</h4>
+        <p>Vektor basis memberikan <strong>"sistem alamat"</strong> untuk setiap titik dalam ruang. Dalam 3D, koordinat (x, y, z) sebenarnya artinya:</p>
+        <div class="math-display">
+            $$\text{Posisi} = x \cdot \hat{i} + y \cdot \hat{j} + z \cdot \hat{k}$$
+        </div>
+        <p>dimana î, ĵ, k̂ adalah vektor basis standar yang saling tegak lurus.</p>
+        
+        <p><strong>Konsep Kunci:</strong> Setiap vektor 3D dapat ditulis sebagai kombinasi linear dari vektor basis:</p>
+        <div class="math-display">
+            $$\vec{v} = v_x\hat{i} + v_y\hat{j} + v_z\hat{k} = v_x\begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + v_y\begin{pmatrix} 0 \\ 1 \\ 0 \end{pmatrix} + v_z\begin{pmatrix} 0 \\ 0 \\ 1 \end{pmatrix}$$
+        </div>
+    </div>
+</div>
+
+        <!-- Slide 9: Vector Operations with Arrows -->
+        <div class="slide">
+            <h2>Operasi Vektor dengan Visualisasi</h2>
+            
+            <div class="vector-grid">
+                <div class="vector-demo">
+                    <h4>Penjumlahan Vektor</h4>
+                    <svg width="250" height="200" viewBox="0 0 250 200">
+                        <defs>
+                            <marker id="arrow-add1" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+    <polygon points="0 0, 5 2, 0 4" fill="#e74c3c" />
+</marker>
+
+<marker id="arrow-add2" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+    <polygon points="0 0, 5 2, 0 4" fill="#3498db" />
+</marker>
+
+<marker id="arrow-sum" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+    <polygon points="0 0, 5 2, 0 4" fill="#27ae60" />
+</marker>
+                        </defs>
+                        
+                        <!-- Axes -->
+                        <line x1="20" y1="180" x2="230" y2="180" stroke="#ddd" stroke-width="1"/>
+                        <line x1="20" y1="180" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                        
+                 <!-- Vector u: (4, 1) - Red, mostly horizontal -->
+<line x1="20" y1="180" x2="100" y2="160" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-add1)"/>
+
+<!-- Vector v: (1, 3) - Blue, mostly vertical, starting from end of u -->
+<line x1="100" y1="160" x2="120" y2="100" stroke="#3498db" stroke-width="2" marker-end="url(#arrow-add2)"/>
+
+<!-- Resultant vector u+v: (5, 4) - Green, diagonal -->
+<line x1="20" y1="180" x2="120" y2="100" stroke="#27ae60" stroke-width="2"  marker-end="url(#arrow-sum)"/>
+                        
+                        <!-- Labels -->
+<!-- Replace the text elements with foreignObject containing MathJax -->
+<foreignObject x="55" y="165" width="30" height="20">
+    <div style="font-size: 14px; color: #e74c3c; font-weight: bold;">$\vec{u}$</div>
+</foreignObject>
+
+<foreignObject x="105" y="125" width="30" height="20">
+    <div style="font-size: 14px; color: #3498db; font-weight: bold;">$\vec{v}$</div>
+</foreignObject>
+
+<foreignObject x="20" y="125" width="60" height="20">
+    <div style="font-size: 14px; color: #27ae60; font-weight: bold;">$\vec{u} + \vec{v}$</div>
+</foreignObject>
+                    s</svg>
+                    <div class="math-display" >
+                        $$\vec{u} + \vec{v} = (4,1) + (1,3) = (5,4)$$
+                    </div>
+                </div>
+                
+<div class="vector-demo">
+    <h4>Pengurangan Vektor</h4>
+    <svg width="250" height="200" viewBox="0 0 250 200">
+        <defs>
+            <marker id="arrow-sub1" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                <polygon points="0 0, 5 2, 0 4" fill="#e74c3c" />
+            </marker>            
+            <marker id="arrow-sub2" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                <polygon points="0 0, 5 2, 0 4" fill="#3498db" />
+            </marker>
+            <marker id="arrow-diff" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                <polygon points="0 0, 5 2, 0 4" fill="#9b59b6" />
+            </marker>                        
+        </defs>
+        
+        <!-- Axes -->
+        <line x1="20" y1="180" x2="230" y2="180" stroke="#ddd" stroke-width="1"/>
+        <line x1="20" y1="180" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+        
+        <!-- Vector u: (4, 1) - Red, horizontal -->
+        <line x1="20" y1="180" x2="100" y2="160" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-sub1)"/>
+        
+        <!-- Vector v: (1, 3) - Blue, more vertical -->
+        <line x1="20" y1="180" x2="40" y2="120" stroke="#3498db" stroke-width="2" marker-end="url(#arrow-sub2)"/>
+        
+        <!-- Difference vector u-v: (3, -2) - Purple -->
+        <line x1="40" y1="120" x2="100" y2="160" stroke="#9b59b6" stroke-width="2" marker-end="url(#arrow-diff)"/>
+        
+        <!-- Labels using MathJax -->
+        <foreignObject x="55" y="165" width="30" height="20">
+            <div style="font-size: 14px; color: #e74c3c; font-weight: bold;">$\vec{u}$</div>
+        </foreignObject>
+        
+        <foreignObject x="25" y="145" width="30" height="20">
+            <div style="font-size: 14px; color: #3498db; font-weight: bold;">$\vec{v}$</div>
+        </foreignObject>
+        
+        <foreignObject x="60" y="120" width="60" height="20">
+            <div style="font-size: 14px; color: #9b59b6; font-weight: bold;">$\vec{u} - \vec{v}$</div>
+        </foreignObject>
+    </svg>
+    <div class="math-display">
+        $$\vec{u} - \vec{v} = (4,1) - (1,3) = (3,-2)$$
+    </div>
+</div>
+            </div>
+            <div class="example-box">
+                <h4>Aplikasi: Computer Vision - Object Tracking</h4>
+                <p>Menghitung vektor pergerakan objek antara dua frame:</p>
+                <div class="two-column">
+                    <div>
+                        <p><strong>Frame 1:</strong> $\vec{\text{pos}_1} = (120, 80)$ pixel</p>
+                        <p><strong>Frame 2:</strong> $\vec{\text{pos}_2} = (135, 75)$ pixel</p>
+                    </div>
+                    <div>
+                        <p><strong>Movement Vector:</strong></p>
+                        $$\vec{\text{movement}} = \vec{\text{pos}_2} - \vec{\text{pos}_1} = (15, -5)$$
+                        <p>Objek bergerak 15 pixel ke kanan, 5 pixel ke atas.
+                            Dalam sistem koordinat layar komputer, y yang bernilai kecil
+                            (misalnya y=0) berarti posisi pixel di bagian atas layar dan 
+                            y yang bernilai besar (misalnya y=768) berarti bahwa posisi pixel 
+                            berada di bagian bawah layar.
+                            Perubahan y yang bernilai negatif (dalam contoh -5) berarti 
+                            bahwa pixel bergerak dari bawah ke atas.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10: Scalar Multiplication -->
+        <div class="slide">
+            <h2>Perkalian Skalar</h2>
+            <div class="math-display">
+                $$c \cdot \vec{v} = c \begin{pmatrix} v_1 \\ v_2 \\ v_3 \end{pmatrix} = \begin{pmatrix} cv_1 \\ cv_2 \\ cv_3 \end{pmatrix}$$
+            </div>
+
+            <div class="highlight">
+                <p><strong>Interpretasi Geometrik:</strong></p>
+                <ul>
+                    <li>$c > 1$: Vektor diperbesar, arah sama</li>
+                    <li>$0 < c < 1$: Vektor diperkecil, arah sama</li>
+                    <li>$c < 0$: Vektor dibalik arah dan discale</li>
+                    <li>$c = 0$: Vektor nol</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h4>Aplikasi: Game Physics - Velocity Scaling</h4>
+                <p>Velocity awal: $\vec{v_0} = (10, 5, -2)$ m/s</p>
+                <p>Setelah accelerasi 2x: $\vec{v_1} = 2 \cdot \vec{v_0} = (20, 10, -4)$ m/s</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Vector Magnitude -->
+        <div class="slide">
+            <h2>Magnitude (Panjang) Vektor</h2>
+            <div class="formula-derivation">
+                <h3>Formula</h3>
+                <div class="math-display">
+                    $$\|\vec{v}\| = \sqrt{v_1^2 + v_2^2 + v_3^2}$$
+                </div>
+                <p>Untuk vektor n-dimensi:</p>
+                <div class="math-display">
+                    $$\|\vec{v}\| = \sqrt{\sum_{i=1}^{n} v_i^2}$$
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Contoh: Jarak Euclidean dalam AI</h4>
+                <p>Feature vector user A: $\vec{u_A} = (25, 1.75, 3)$ (umur, tinggi, rating)</p>
+                <p>Feature vector user B: $\vec{u_B} = (30, 1.80, 4)$</p>
+                
+                <div class="step">
+                    <strong>Distance:</strong> 
+                    <div class="math-display">
+                    $$d = \|\vec{u_A} - \vec{u_B}\| = \|(-5, -0.05, -1)\|$$
+                    $$= \sqrt{25 + 0.0025 + 1} = \sqrt{26.0025} \approx 5.1$$
+                </div>
+                    </div>
+            </div>
+        </div>
+
+        <!-- Slide 12: Normalization Process - Enhanced -->
+        <div class="slide">
+            <h2>Proses Normalisasi: Mengekstrak Arah dari Vektor</h2>
+            
+            <div class="direction-extract">
+                <h3>Mengapa Normalisasi Penting?</h3>
+                <p>Normalisasi memisahkan informasi <strong>magnitude</strong> dan <strong>direction</strong> dari sebuah vektor. Hasil normalisasi adalah <strong>unit vector</strong> yang hanya menyimpan informasi arah.</p>
+            </div>
+
+            <div class="normalization-steps">
+                <h3>Langkah-langkah Normalisasi</h3>
+                <div class="step">
+                    <strong>Step 1:</strong> Hitung magnitude (panjang) vektor
+                    $$\|\vec{v}\| = \sqrt{v_x^2 + v_y^2 + v_z^2}$$
+                </div>
+                <div class="step">
+                    <strong>Step 2:</strong> Bagi setiap komponen dengan magnitude
+                    $$\hat{v} = \frac{\vec{v}}{\|\vec{v}\|} = \frac{1}{\|\vec{v}\|}\begin{pmatrix} v_x \\ v_y \\ v_z \end{pmatrix}$$
+                </div>
+                <div class="step">
+                    <strong>Step 3:</strong> Verifikasi bahwa $\|\hat{v}\| = 1$
+                </div>
+            </div>
+
+            <div class="example-box">
+                <h4>Contoh Visualisasi: Normalisasi Vektor (4, 3)</h4>
+                <div class="two-column">
+                    <div>
+                        <div class="vector-canvas">
+                            <h5>Vektor Asli: (4, 3)</h5>
+                            <svg width="200" height="150" viewBox="0 0 200 150">
+                                <defs>
+                                    <marker id="arrow-orig" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                                        <polygon points="0 0, 8 3, 0 6" fill="#e74c3c" />
+                                    </marker>
+                                </defs>
+                                <!-- Grid and axes -->
+                                <line x1="20" y1="130" x2="180" y2="130" stroke="#ddd" stroke-width="1"/>
+                                <line x1="20" y1="130" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                                
+                                <!-- Original vector (4,3) scaled -->
+                                <line x1="20" y1="130" x2="100" y2="70" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-orig)"/>
+                                
+                                <!-- Components -->
+                                <line x1="20" y1="130" x2="100" y2="130" stroke="#3498db" stroke-width="2" stroke-dasharray="3,3"/>
+                                <line x1="100" y1="130" x2="100" y2="70" stroke="#3498db" stroke-width="2" stroke-dasharray="3,3"/>
+                                
+                                <!-- Labels -->
+                                <text x="105" y="65" font-size="14" fill="#e74c3c" font-weight="bold">(4, 3)</text>
+                                <text x="50" y="145" font-size="10" fill="#3498db">4</text>
+                                <text x="105" y="105" font-size="10" fill="#3498db">3</text>
+                                
+                                <!-- Magnitude label -->
+                                <text x="30" y="90" font-size="10" fill="#e74c3c">||v|| = 5</text>
+                            </svg>
+                            <p style="font-size: 0.9rem; margin-top: 10px;">
+                                Magnitude: $\sqrt{4^2 + 3^2} = \sqrt{16 + 9} = 5$
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="vector-canvas">
+                            <h5>Unit Vector: (0.8, 0.6)</h5>
+                            <svg width="200" height="150" viewBox="0 0 200 150">
+                                <defs>
+                                    <marker id="arrow-unit" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+                                        <polygon points="0 0, 8 3, 0 6" fill="#27ae60" />
+                                    </marker>
+                                </defs>
+                                <!-- Grid and axes -->
+                                <line x1="20" y1="130" x2="180" y2="130" stroke="#ddd" stroke-width="1"/>
+                                <line x1="20" y1="130" x2="20" y2="20" stroke="#ddd" stroke-width="1"/>
+                                
+                                <!-- Unit circle -->
+                                <circle cx="20" cy="130" r="40" fill="none" stroke="#f39c12" stroke-width="1" stroke-dasharray="2,2"/>
+                                
+                                <!-- Unit vector (0.8, 0.6) scaled by 40 for visibility -->
+                                <line x1="20" y1="130" x2="52" y2="106" stroke="#27ae60" stroke-width="2" marker-end="url(#arrow-unit)"/>
+                                
+                                <!-- Components -->
+                                <line x1="20" y1="130" x2="52" y2="130" stroke="#3498db" stroke-width="2" stroke-dasharray="3,3"/>
+                                <line x1="52" y1="130" x2="52" y2="106" stroke="#3498db" stroke-width="2" stroke-dasharray="3,3"/>
+                                
+                                <!-- Labels -->
+                                <text x="55" y="100" font-size="14" fill="#27ae60" font-weight="bold">(0.8, 0.6)</text>
+                                <text x="30" y="145" font-size="10" fill="#3498db">0.8</text>
+                                <text x="55" y="120" font-size="10" fill="#3498db">0.6</text>
+                                
+                                <!-- Unit circle label -->
+                                <text x="70" y="125" font-size="9" fill="#f39c12">Unit Circle</text>
+                                <text x="30" y="110" font-size="10" fill="#27ae60">||v̂|| = 1</text>
+                            </svg>
+                            <p style="font-size: 0.9rem; margin-top: 10px;">
+                                Direction: $\hat{v} = \frac{(4,3)}{5} = (0.8, 0.6)$
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <strong>Perhitungan:</strong>
+                    $$\vec{v} = (4, 3) \quad \rightarrow \quad \|\vec{v}\| = \sqrt{4^2 + 3^2} = 5$$
+                    $$\hat{v} = \frac{(4, 3)}{5} = (0.8, 0.6)$$
+                    $$\text{Verifikasi: } \|\hat{v}\| = \sqrt{0.8^2 + 0.6^2} = \sqrt{0.64 + 0.36} = \sqrt{1} = 1 \quad \checkmark$$
+                </div>
+            </div>
+
+            <div class="cs-application">
+                <h3>Aplikasi dalam Computer Graphics</h3>
+                <p><strong>3D Camera Direction:</strong> Camera looking direction: $\vec{d} = (3, 4, 0)$</p>
+                <p>Normalized: $\hat{d} = \frac{(3, 4, 0)}{\sqrt{9+16}} = \frac{(3, 4, 0)}{5} = (0.6, 0.8, 0)$</p>
+                <p><strong>Kegunaan:</strong> Unit vector digunakan untuk ray casting, lighting calculations, dan collision detection.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Dot Product -->
+        <div class="slide">
+            <h2>Dot Product (Perkalian Titik)</h2>
+            <div class="formula-derivation">
+                <h3>Definisi Aljabar</h3>
+                <div class="math-display">
+                    $$\vec{u} \cdot \vec{v} = u_1v_1 + u_2v_2 + u_3v_3 = \sum_{i=1}^{n} u_iv_i$$
+                </div>
+
+                <h3>Definisi Geometrik</h3>
+                <div class="math-display">
+                    $$\vec{u} \cdot \vec{v} = \|\vec{u}\| \|\vec{v}\| \cos\theta$$
+                </div>
+                <p>dimana $\theta$ adalah sudut antara $\vec{u}$ dan $\vec{v}$</p>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Interpretasi:</strong> Dot product mengukur seberapa "searah" dua vektor</p>
+                <ul>
+                    <li>$\vec{u} \cdot \vec{v} > 0$: Sudut akut (< 90°)</li>
+                    <li>$\vec{u} \cdot \vec{v} = 0$: Perpendicular (90°)</li>
+                    <li>$\vec{u} \cdot \vec{v} < 0$: Sudut tumpul (> 90°)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 14: Dot Product Applications -->
+        <div class="slide">
+            <h2>Aplikasi Dot Product</h2>
+            <div class="example-box">
+                <h4>1. Menghitung Sudut Antara Vektor</h4>
+                <div class="math-display">
+                    $$\cos\theta = \frac{\vec{u} \cdot \vec{v}}{\|\vec{u}\| \|\vec{v}\|}$$
+                </div>
+                <p><strong>Contoh:</strong> $\vec{u} = (3, 4, 0)$, $\vec{v} = (1, 0, 0)$</p>
+                <p>$\cos\theta = \frac{3 \cdot 1 + 4 \cdot 0 + 0 \cdot 0}{\sqrt{9+16} \cdot 1} = \frac{3}{5} = 0.6$</p>
+                <p>$\theta = \arccos(0.6) \approx 53.13°$</p>
+            </div>
+
+            <div class="example-box">
+                <h4>2. Proyeksi Vektor</h4>
+                <p>Proyeksi $\vec{u}$ pada $\vec{v}$:</p>
+                <div class="math-display">
+                    $$\text{proj}_{\vec{v}}\vec{u} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|^2} \vec{v}$$
+                </div>
+                <p><strong>Aplikasi:</strong> Shadow casting, force decomposition</p>
+            </div>
+
+            <div class="cs-application">
+                <h3>Aplikasi dalam Machine Learning</h3>
+                <p><strong>Cosine Similarity:</strong> Mengukur kesamaan antara dua feature vectors</p>
+                <div class="math-display">
+                    $$\text{similarity}(\vec{u}, \vec{v}) = \frac{\vec{u} \cdot \vec{v}}{\|\vec{u}\| \|\vec{v}\|}$$
+                </div>
+                <p>Nilai berkisar dari -1 (berlawanan) hingga 1 (identik). Digunakan dalam sistem rekomendasi dan text mining.</p>
+            </div>
+        </div>
+
+<!-- Slide 15: Cross Product -->
+<div class="slide">
+    <h2>Cross Product (Perkalian Silang)</h2>
+    
+    <div class="formula-derivation">
+        <h3>Definisi (untuk 3D vectors)</h3>
+        <div class="math-display">
+            $$\vec{u} \times \vec{v} = \begin{pmatrix} u_2v_3 - u_3v_2 \\ u_3v_1 - u_1v_3 \\ u_1v_2 - u_2v_1 \end{pmatrix}$$
+        </div>
+
+        <h3>Menggunakan Determinant</h3>
+        <div class="math-display">
+            $$\vec{u} \times \vec{v} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ u_1 & u_2 & u_3 \\ v_1 & v_2 & v_3 \end{vmatrix}$$
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Perhitungan Langkah demi Langkah</h4>
+        <p>Hitung $\vec{u} \times \vec{v}$ dimana $\vec{u} = (2, 1, 3)$ dan $\vec{v} = (1, 4, 2)$</p>
+        
+        <div class="step">
+            <strong>Metode 1: Formula Langsung</strong>
+            <div class="math-display">
+                $$\vec{u} \times \vec{v} = \begin{pmatrix} u_2v_3 - u_3v_2 \\ u_3v_1 - u_1v_3 \\ u_1v_2 - u_2v_1 \end{pmatrix}$$
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Substitusi nilai:</strong>
+            <div class="math-display">
+                $$\vec{u} \times \vec{v} = \begin{pmatrix} (1)(2) - (3)(4) \\ (3)(1) - (2)(2) \\ (2)(4) - (1)(1) \end{pmatrix} = \begin{pmatrix} 2 - 12 \\ 3 - 4 \\ 8 - 1 \end{pmatrix} = \begin{pmatrix} -10 \\ -1 \\ 7 \end{pmatrix}$$
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Metode 2: Determinant (lebih mudah diingat)</strong>
+            <div class="math-display">
+                $$\vec{u} \times \vec{v} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ 2 & 1 & 3 \\ 1 & 4 & 2 \end{vmatrix}$$
+                $$= \hat{i}(1 \cdot 2 - 3 \cdot 4) - \hat{j}(2 \cdot 2 - 3 \cdot 1) + \hat{k}(2 \cdot 4 - 1 \cdot 1)$$
+                $$= \hat{i}(-10) - \hat{j}(1) + \hat{k}(7) = (-10, -1, 7)$$
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight">
+        <p><strong>Sifat-sifat Penting Cross Product:</strong></p>
+        <ul>
+            <li><strong>Hasil tegak lurus:</strong> $(\vec{u} \times \vec{v}) \perp \vec{u}$ dan $(\vec{u} \times \vec{v}) \perp \vec{v}$</li>
+            <li><strong>Magnitude:</strong> $\|\vec{u} \times \vec{v}\| = \|\vec{u}\| \|\vec{v}\| \sin\theta$ (luas parallelogram)</li>
+            <li><strong>Arah:</strong> Right-hand rule (jari telunjuk = $\vec{u}$, jari tengah = $\vec{v}$, ibu jari = $\vec{u} \times \vec{v}$)</li>
+            <li><strong>Anti-komutatif:</strong> $\vec{u} \times \vec{v} = -(\vec{v} \times \vec{u})$</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <h4>Verifikasi Sifat Tegak Lurus</h4>
+        <p>Periksa bahwa hasil $(-10, -1, 7)$ tegak lurus terhadap kedua vektor input:</p>
+        
+        <div class="step">
+            <strong>Dengan $\vec{u} = (2, 1, 3)$:</strong>
+            <div class="math-display">
+                $$(\vec{u} \times \vec{v}) \cdot \vec{u} = (-10, -1, 7) \cdot (2, 1, 3) = -20 - 1 + 21 = 0 \quad \checkmark$$
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Dengan $\vec{v} = (1, 4, 2)$:</strong>
+            <div class="math-display">
+                $$(\vec{u} \times \vec{v}) \cdot \vec{v} = (-10, -1, 7) \cdot (1, 4, 2) = -10 - 4 + 14 = 0 \quad \checkmark$$
+            </div>
+        </div>
+    </div>
+
+    <div class="cs-application">
+        <h3>Interpretasi Geometrik</h3>
+        <div class="two-column">
+            <div>
+                <h4>Magnitude sebagai Luas</h4>
+                <p>$\|\vec{u} \times \vec{v}\| = \|(-10, -1, 7)\|$</p>
+                <div class="math-display">
+                    $$= \sqrt{100 + 1 + 49} = \sqrt{150} \approx 12.25$$
+                </div>
+                <p>Ini adalah luas parallelogram yang dibentuk oleh $\vec{u}$ dan $\vec{v}$</p>
+            </div>
+            <div>
+                <h4>Verifikasi dengan Formula</h4>
+                <p>$\|\vec{u}\| = \sqrt{4+1+9} = \sqrt{14}$</p>
+                <p>$\|\vec{v}\| = \sqrt{1+16+4} = \sqrt{21}$</p>
+                <div class="math-display">
+                    $$\|\vec{u}\| \|\vec{v}\| \sin\theta = \sqrt{14} \cdot \sqrt{21} \cdot \sin\theta$$
+                </div>
+                <p>dimana $\sin\theta$ dapat dihitung dari dot product</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Slide 16: Cross Product Applications -->
+<div class="slide">
+    <h2>Aplikasi Cross Product dalam Computer Science</h2>
+    
+    <div class="applications-grid">
+        <div class="app-card">
+            <h4>🎮 3D Graphics - Surface Normals</h4>
+            <p><strong>Tujuan:</strong> Menghitung arah tegak lurus permukaan untuk realistic lighting dan shading</p>
+            <div class="math-display" style="font-size: 0.9rem;">
+                $$\vec{n} = \vec{\text{edge}_1} \times \vec{\text{edge}_2}$$
+            </div>
+            <p><strong>Kegunaan:</strong> Phong shading, reflection mapping, bump mapping</p>
+        </div>
+        
+        <div class="app-card">
+            <h4>🚁 Robotics - Torque Calculation</h4>
+            <p><strong>Tujuan:</strong> Menghitung momen gaya untuk kontrol rotasi robot arm</p>
+            <div class="math-display" style="font-size: 0.9rem;">
+                $$\vec{\tau} = \vec{r} \times \vec{F}$$
+            </div>
+            <p><strong>Kegunaan:</strong> Joint control, balance control, manipulation planning</p>
+        </div>
+        
+        <div class="app-card">
+            <h4>🎯 Game Physics - Collision Detection</h4>
+            <p><strong>Tujuan:</strong> Menentukan apakah objek berada di sisi kiri atau kanan suatu garis</p>
+            <div class="math-display" style="font-size: 0.9rem;">
+                $$\text{side} = \text{sign}(\vec{v_1} \times \vec{v_2})$$
+            </div>
+            <p><strong>Kegunaan:</strong> Point-in-polygon tests, collision response</p>
+        </div>
+        
+        <div class="app-card">
+            <h4>📐 Computer Vision - Camera Calibration</h4>
+            <p><strong>Tujuan:</strong> Menghitung orientasi camera dari feature points</p>
+            <div class="math-display" style="font-size: 0.9rem;">
+                $$\vec{\text{camera-up}} = \vec{\text{forward}} \times \vec{\text{right}}$$
+            </div>
+            <p><strong>Kegunaan:</strong> SLAM, AR/VR, stereo vision</p>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Detail: Normal Vector untuk Triangle dalam Game Engine</h4>
+        <p><strong>Scenario:</strong> Kita memiliki triangle face dari 3D model dengan vertices:</p>
+        <ul>
+            <li>A(2, 0, 0) - vertex pertama</li>
+            <li>B(0, 2, 0) - vertex kedua</li>
+            <li>C(0, 0, 2) - vertex ketiga</li>
+        </ul>
+        
+        <div class="step">
+            <strong>Step 1: Hitung edge vectors</strong>
+            <div class="math-display">
+                $$\vec{AB} = B - A = (0, 2, 0) - (2, 0, 0) = (-2, 2, 0)$$
+                $$\vec{AC} = C - A = (0, 0, 2) - (2, 0, 0) = (-2, 0, 2)$$
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Step 2: Hitung cross product</strong>
+            <div class="math-display">
+                $$\vec{n} = \vec{AB} \times \vec{AC} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ -2 & 2 & 0 \\ -2 & 0 & 2 \end{vmatrix}$$
+                $$= \hat{i}(2 \cdot 2 - 0 \cdot 0) - \hat{j}((-2) \cdot 2 - 0 \cdot (-2)) + \hat{k}((-2) \cdot 0 - 2 \cdot (-2))$$
+                $$= \hat{i}(4) - \hat{j}(-4) + \hat{k}(4) = (4, 4, 4)$$
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Step 3: Normalisasi untuk unit normal</strong>
+            <div class="math-display">
+                $$\|\vec{n}\| = \sqrt{4^2 + 4^2 + 4^2} = \sqrt{48} = 4\sqrt{3}$$
+                $$\hat{n} = \frac{(4, 4, 4)}{4\sqrt{3}} = \left(\frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}\right)$$
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Step 4: Penggunaan dalam lighting</strong>
+            <p>Jika light source berada di $(1, 1, 1)$ (normalized), maka intensitas:</p>
+            <div class="math-display">
+                $$\text{intensity} = \hat{n} \cdot \hat{l} = \left(\frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}\right) \cdot \left(\frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}\right) = 1$$
+            </div>
+            <p>Intensitas = 1 berarti permukaan menghadap langsung ke light source (fully lit)</p>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Praktis: Robot Arm Torque Calculation</h4>
+        <p><strong>Scenario:</strong> Robot arm dengan panjang 0.5m menahan beban 10N</p>
+        
+        <div class="two-column">
+            <div>
+                <h5>Input Data:</h5>
+                <ul>
+                    <li>Position vector: $\vec{r} = (0.3, 0.4, 0)$ m</li>
+                    <li>Force vector: $\vec{F} = (0, 0, -10)$ N (gravity)</li>
+                    <li>Torque pada joint: $\vec{\tau} = \vec{r} \times \vec{F}$</li>
+                </ul>
+            </div>
+            <div>
+                <h5>Perhitungan:</h5>
+                <div class="math-display" style="font-size: 0.9rem;">
+                    $$\vec{\tau} = \begin{vmatrix} \hat{i} & \hat{j} & \hat{k} \\ 0.3 & 0.4 & 0 \\ 0 & 0 & -10 \end{vmatrix}$$
+                    $$= (0.4 \times (-10), -0.3 \times (-10), 0) = (-4, 3, 0) \text{ Nm}$$
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <strong>Interpretasi:</strong> Robot harus menghasilkan torque (-4, 3, 0) Nm pada joint untuk melawan gravitasi dan menjaga posisi arm.
+        </div>
+    </div>
+
+    <div class="cs-application">
+        <h3>Implementasi dalam Game Engine</h3>
+        <div class="highlight">
+            <p><strong>Pseudocode untuk Normal Calculation:</strong></p>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-size: 0.9rem;">
+function calculateTriangleNormal(vertex1, vertex2, vertex3) {
+    edge1 = vertex2 - vertex1
+    edge2 = vertex3 - vertex1
+    normal = crossProduct(edge1, edge2)
+    return normalize(normal)
+}
+
+function crossProduct(v1, v2) {
+    return Vector3(
+        v1.y * v2.z - v1.z * v2.y,
+        v1.z * v2.x - v1.x * v2.z,
+        v1.x * v2.y - v1.y * v2.x
+    )
+}
+            </pre>
+        </div>
+        
+        <div class="step">
+            <strong>Optimization Tip:</strong> Dalam game engines, normal vectors biasanya di-precompute saat loading 3D models untuk meningkatkan performance real-time rendering.
+        </div>
+    </div>
+
+    <div class="cs-application">
+        <h3>Pengaplikasian Tingkat Lanjut: Backface Culling</h3>
+        <p>Cross product juga digunakan untuk <strong>backface culling</strong> - teknik optimasi yang tidak me-render faces yang menghadap jauh dari camera:</p>
+        <div class="math-display">
+            $$\text{visible} = (\vec{n} \cdot \vec{\text{camera-dir}}) > 0$$
+        </div>
+        <p>Jika dot product positif, face menghadap camera dan perlu di-render. Jika negatif, face menghadap menjauh dan bisa di-skip untuk menghemat computational resources.</p>
+    </div>
+</div>
+        <!-- Slide 21.5: Vector Projection Theory and Method -->
+<div class="slide">
+    <h2>Proyeksi Vektor: Konsep dan Metode</h2>
+    
+    <div class="direction-extract">
+        <h3>Apa itu Proyeksi Vektor?</h3>
+        <p><strong>Definisi:</strong> Proyeksi vektor $\vec{u}$ pada vektor $\vec{v}$ adalah "bayangan" dari $\vec{u}$ yang jatuh pada garis yang searah dengan $\vec{v}$.</p>
+        
+        <div class="two-column">
+            <div>
+                <h4>Analogi Fisik</h4>
+                <p>Bayangkan sinar matahari (tegak lurus terhadap $\vec{v}$) menyinari vektor $\vec{u}$. Proyeksi adalah bayangan yang terbentuk pada garis $\vec{v}$.</p>
+            </div>
+            <div>
+                <div class="vector-canvas">
+                    <h5>Visualisasi Proyeksi</h5>
+                    <svg width="250" height="180" viewBox="0 0 250 180">
+                        <defs>
+                            <marker id="arrow-proj" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                                <polygon points="0 0, 5 2, 0 4" fill="#e74c3c" />
+                            </marker>
+                            <marker id="arrow-proj-v" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                                <polygon points="0 0, 5 2, 0 4" fill="#3498db" />
+                            </marker>
+                            <marker id="arrow-proj-result" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
+                                <polygon points="0 0, 5 2, 0 4" fill="#27ae60" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Base line (extended v direction) -->
+                        <line x1="20" y1="150" x2="230" y2="150" stroke="#ddd" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Vector v -->
+                        <line x1="20" y1="150" x2="120" y2="150" stroke="#3498db" stroke-width="4" marker-end="url(#arrow-proj-v)"/>
+                        
+                        <!-- Vector u -->
+                        <line x1="20" y1="150" x2="100" y2="80" stroke="#e74c3c" stroke-width="4" marker-end="url(#arrow-proj)"/>
+                        
+                        <!-- Projection of u onto v -->
+                        <line x1="20" y1="150" x2="80" y2="150" stroke="#27ae60" stroke-width="4" marker-end="url(#arrow-proj-result)"/>
+                        
+                        <!-- Perpendicular line (showing the "drop") -->
+                        <line x1="100" y1="80" x2="80" y2="150" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5"/>
+                        
+                        <!-- Labels -->
+                        <foreignObject x="85" y="65" width="30" height="20">
+                            <div style="font-size: 12px; color: #e74c3c; font-weight: bold;">$\vec{u}$</div>
+                        </foreignObject>
+                        <foreignObject x="60" y="160" width="30" height="20">
+                            <div style="font-size: 12px; color: #3498db; font-weight: bold;">$\vec{v}$</div>
+                        </foreignObject>
+                        <foreignObject x="25" y="127" width="60" height="20">
+                            <div style="font-size: 11px; color: #27ae60; font-weight: bold;">proj$_{\vec{v}}\vec{u}$</div>
+                        </foreignObject>
+                        <foreignObject x="85" y="110" width="30" height="20">
+                            <div style="font-size: 10px; color: #9b59b6;">$\perp$</div>
+                        </foreignObject>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-derivation">
+        <h3>Dua Jenis Proyeksi</h3>
+        
+        <div class="two-column">
+            <div>
+                <h4>1. Proyeksi Skalar (Scalar Projection)</h4>
+                <div class="math-display">
+                    $$\text{comp}_{\vec{v}}\vec{u} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|}$$
+                </div>
+                <p><strong>Hasil:</strong> Bilangan (bisa positif/negatif)</p>
+                <p><strong>Arti:</strong> Panjang proyeksi pada arah $\vec{v}$</p>
+                <ul>
+                    <li>Positif: $\vec{u}$ searah dengan $\vec{v}$</li>
+                    <li>Negatif: $\vec{u}$ berlawanan arah dengan $\vec{v}$</li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4>2. Proyeksi Vektor (Vector Projection)</h4>
+                <div class="math-display">
+                    $$\text{proj}_{\vec{v}}\vec{u} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|^2} \vec{v}$$
+                </div>
+                <p><strong>Hasil:</strong> Vektor</p>
+                <p><strong>Arti:</strong> Vektor yang searah dengan $\vec{v}$ dengan panjang sama dengan proyeksi skalar</p>
+                <p><strong>Alternatif formula:</strong></p>
+                <div class="math-display">
+                    $$\text{proj}_{\vec{v}}\vec{u} = \left(\frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|}\right) \frac{\vec{v}}{\|\vec{v}\|}$$
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="normalization-steps">
+        <h3>Langkah-langkah Penyelesaian Proyeksi Vektor</h3>
+        
+        <div class="step">
+            <strong>Step 1: Hitung Dot Product</strong>
+            <p>$\vec{u} \cdot \vec{v} = u_1v_1 + u_2v_2 + u_3v_3$</p>
+        </div>
+        
+        <div class="step">
+            <strong>Step 2: Hitung Magnitude dari $\vec{v}$</strong>
+            <p>$\|\vec{v}\| = \sqrt{v_1^2 + v_2^2 + v_3^2}$</p>
+        </div>
+        
+        <div class="step">
+            <strong>Step 3: Proyeksi Skalar (jika diminta)</strong>
+            <p>$\text{comp}_{\vec{v}}\vec{u} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|}$</p>
+        </div>
+        
+        <div class="step">
+            <strong>Step 4: Proyeksi Vektor</strong>
+            <p>$\text{proj}_{\vec{v}}\vec{u} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|^2} \vec{v}$</p>
+        </div>
+        
+        <div class="step">
+            <strong>Step 5: Komponen Tegak Lurus (jika diminta)</strong>
+            <p>$\vec{u}_{\perp} = \vec{u} - \text{proj}_{\vec{v}}\vec{u}$</p>
+        </div>
+        
+        <div class="step">
+            <strong>Step 6: Verifikasi (optional)</strong>
+            <p>Cek: $\vec{u}_{\perp} \cdot \vec{v} = 0$ (harus bernilai 0)</p>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Sederhana: Template Penyelesaian</h4>
+        <p>Misalkan $\vec{u} = (a_1, a_2, a_3)$ dan $\vec{v} = (b_1, b_2, b_3)$</p>
+        
+        <div class="step">
+            <strong>Template perhitungan:</strong>
+            <div class="math-display">
+                \begin{align}
+                \vec{u} \cdot \vec{v} &= a_1b_1 + a_2b_2 + a_3b_3 \\
+                \|\vec{v}\|^2 &= b_1^2 + b_2^2 + b_3^2 \\
+                \text{proj}_{\vec{v}}\vec{u} &= \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|^2} \vec{v} \\
+                &= \frac{a_1b_1 + a_2b_2 + a_3b_3}{b_1^2 + b_2^2 + b_3^2} (b_1, b_2, b_3)
+                \end{align}
+            </div>
+        </div>
+    </div>
+
+    <div class="cs-application">
+        <h3>Aplikasi dalam Computer Science</h3>
+        <div class="applications-grid">
+            <div class="app-card">
+                <h4>📐 Computer Graphics</h4>
+                <p><strong>Shadow mapping:</strong> Proyeksi objek 3D ke permukaan untuk membuat bayangan realistic</p>
+            </div>
+            <div class="app-card">
+                <h4>🎮 Game Physics</h4>
+                <p><strong>Collision response:</strong> Memisahkan gaya menjadi komponen normal dan tangensial pada permukaan</p>
+            </div>
+            <div class="app-card">
+                <h4>🤖 Machine Learning</h4>
+                <p><strong>PCA (Principal Component Analysis):</strong> Proyeksi data ke principal components untuk dimensionality reduction</p>
+            </div>
+            <div class="app-card">
+                <h4>📊 Data Science</h4>
+                <p><strong>Regression analysis:</strong> Proyeksi data points ke regression line untuk error calculation</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight">
+        <p><strong>Tips Penting:</strong></p>
+        <ul>
+            <li><strong>Urutan perhitungan:</strong> Selalu hitung dot product dan magnitude terlebih dahulu</li>
+            <li><strong>Satuan:</strong> Proyeksi skalar memiliki satuan panjang, proyeksi vektor memiliki dimensi yang sama dengan vektor input</li>
+            <li><strong>Geometri:</strong> Proyeksi vektor selalu searah atau berlawanan arah dengan $\vec{v}$</li>
+            <li><strong>Verifikasi:</strong> Komponen tegak lurus harus orthogonal dengan $\vec{v}$ (dot product = 0)</li>
+        </ul>
+    </div>
+</div>
+        <!-- Slide 17: Basic Vector Operations Exercise -->
+        <div class="slide">
+            <h2>Latihan Dasar: Operasi Vektor</h2>
+            <div class="exercise-box">
+                <h4>Soal 1: Operasi Dasar</h4>
+                <p>Diberikan vektor $\vec{a} = (3, 4, 2)$, $\vec{b} = (1, -2, 3)$, dan $\vec{c} = (-2, 1, 5)$</p>
+                
+                <div class="step">
+                    <p><strong>a) Hitung $\vec{a} + \vec{b}$:</strong></p>
+                    <div class="math-display">
+                        $\vec{a} + \vec{b} = (3, 4, 2) + (1, -2, 3) = (3+1, 4+(-2), 2+3) = (4, 2, 5)$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>b) Hitung $\vec{a} - \vec{c}$:</strong></p>
+                    <div class="math-display">
+                        $\vec{a} - \vec{c} = (3, 4, 2) - (-2, 1, 5) = (3-(-2), 4-1, 2-5) = (5, 3, -3)$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>c) Hitung $2\vec{b} + 3\vec{c}$:</strong></p>
+                    <div class="math-display">
+                        $2\vec{b} = 2(1, -2, 3) = (2, -4, 6)$
+                        $3\vec{c} = 3(-2, 1, 5) = (-6, 3, 15)$
+                        $2\vec{b} + 3\vec{c} = (2, -4, 6) + (-6, 3, 15) = (-4, -1, 21)$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Magnitude and Unit Vector Exercise -->
+        <div class="slide">
+            <h2>Latihan Dasar: Magnitude dan Unit Vector</h2>
+            <div class="exercise-box">
+                <h4>Soal 2: Magnitude dan Normalisasi</h4>
+                
+                <div class="step">
+                    <p><strong>a) Hitung $\|\vec{a}\|$ dimana $\vec{a} = (3, 4, 2)$:</strong></p>
+                    <div class="math-display">
+                        $\|\vec{a}\| = \sqrt{3^2 + 4^2 + 2^2} = \sqrt{9 + 16 + 4} = \sqrt{29} \approx 5.39$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>b) Hitung $\|\vec{b}\|$ dimana $\vec{b} = (1, -2, 3)$:</strong></p>
+                    <div class="math-display">
+                        $\|\vec{b}\| = \sqrt{1^2 + (-2)^2 + 3^2} = \sqrt{1 + 4 + 9} = \sqrt{14} \approx 3.74$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>c) Tentukan unit vector dari $\vec{a}$:</strong></p>
+                    <div class="math-display">
+                        $\hat{a} = \frac{\vec{a}}{\|\vec{a}\|} = \frac{(3, 4, 2)}{\sqrt{29}} = \left(\frac{3}{\sqrt{29}}, \frac{4}{\sqrt{29}}, \frac{2}{\sqrt{29}}\right)$
+                        $\hat{a} \approx (0.557, 0.743, 0.371)$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>d) Verifikasi bahwa $\|\hat{a}\| = 1$:</strong></p>
+                    <div class="math-display">
+                        $\|\hat{a}\| = \sqrt{\left(\frac{3}{\sqrt{29}}\right)^2 + \left(\frac{4}{\sqrt{29}}\right)^2 + \left(\frac{2}{\sqrt{29}}\right)^2}$
+                        $= \sqrt{\frac{9+16+4}{29}} = \sqrt{\frac{29}{29}} = \sqrt{1} = 1 \quad \checkmark$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19: Dot Product Exercise -->
+        <div class="slide">
+            <h2>Latihan Dasar: Dot Product</h2>
+            <div class="exercise-box">
+                <h4>Soal 3: Dot Product dan Sudut</h4>
+                <p>Gunakan vektor $\vec{a} = (3, 4, 2)$ dan $\vec{b} = (1, -2, 3)$</p>
+                
+                <div class="step">
+                    <p><strong>a) Hitung $\vec{a} \cdot \vec{b}$:</strong></p>
+                    <div class="math-display">
+                        $\vec{a} \cdot \vec{b} = 3 \times 1 + 4 \times (-2) + 2 \times 3 = 3 - 8 + 6 = 1$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>b) Hitung sudut antara $\vec{a}$ dan $\vec{b}$:</strong></p>
+                    <div class="math-display">
+                        $\cos\theta = \frac{\vec{a} \cdot \vec{b}}{\|\vec{a}\| \|\vec{b}\|} = \frac{1}{\sqrt{29} \times \sqrt{14}} = \frac{1}{\sqrt{406}} \approx 0.0496$
+                        $\theta = \arccos(0.0496) \approx 87.16° \text{ (hampir tegak lurus)}$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>c) Periksa apakah $\vec{u} = (2, 1, 0)$ dan $\vec{v} = (1, -2, 0)$ tegak lurus:</strong></p>
+                    <div class="math-display">
+                        $\vec{u} \cdot \vec{v} = 2 \times 1 + 1 \times (-2) + 0 \times 0 = 2 - 2 + 0 = 0$
+                    </div>
+                    <p>Karena $\vec{u} \cdot \vec{v} = 0$, maka $\vec{u} \perp \vec{v}$ (tegak lurus) $\checkmark$</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20: Cross Product Exercise -->
+        <div class="slide">
+            <h2>Latihan Dasar: Cross Product</h2>
+            <div class="exercise-box">
+                <h4>Soal 4: Cross Product</h4>
+                <p>Diberikan $\vec{p} = (2, 1, 3)$ dan $\vec{q} = (1, 0, 2)$</p>
+                
+                <div class="step">
+                    <p><strong>a) Hitung $\vec{p} \times \vec{q}$:</strong></p>
+                    <div class="math-display">
+                        $\vec{p} \times \vec{q} = \begin{pmatrix} p_2q_3 - p_3q_2 \\ p_3q_1 - p_1q_3 \\ p_1q_2 - p_2q_1 \end{pmatrix}$
+                        $= \begin{pmatrix} 1 \times 2 - 3 \times 0 \\ 3 \times 1 - 2 \times 2 \\ 2 \times 0 - 1 \times 1 \end{pmatrix} = \begin{pmatrix} 2 \\ -1 \\ -1 \end{pmatrix}$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>b) Verifikasi bahwa hasil tegak lurus terhadap kedua vektor:</strong></p>
+                    <div class="math-display">
+                        $(\vec{p} \times \vec{q}) \cdot \vec{p} = (2, -1, -1) \cdot (2, 1, 3) = 4 - 1 - 3 = 0 \quad \checkmark$
+                        $(\vec{p} \times \vec{q}) \cdot \vec{q} = (2, -1, -1) \cdot (1, 0, 2) = 2 + 0 - 2 = 0 \quad \checkmark$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>c) Hitung magnitude dari hasil cross product:</strong></p>
+                    <div class="math-display">
+                        $\|\vec{p} \times \vec{q}\| = \|(2, -1, -1)\| = \sqrt{2^2 + (-1)^2 + (-1)^2} = \sqrt{4 + 1 + 1} = \sqrt{6} \approx 2.45$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21: Comprehensive Exercise -->
+        <div class="slide">
+            <h2>Latihan Komprehensif: Kombinasi Operasi</h2>
+            <div class="exercise-box">
+                <h4>Soal 5: Aplikasi Kombinasi</h4>
+                <p>Robot bergerak dalam sistem koordinat 3D dengan vektor posisi dan kecepatan:</p>
+                <ul>
+                    <li>Posisi awal: $\vec{r_0} = (2, 3, 1)$ meter</li>
+                    <li>Kecepatan: $\vec{v} = (1, -1, 2)$ m/s</li>
+                    <li>Waktu: $t = 3$ detik</li>
+                </ul>
+                
+                <div class="step">
+                    <p><strong>a) Hitung posisi akhir setelah 3 detik:</strong></p>
+                    <div class="math-display">
+                        $\vec{r} = \vec{r_0} + t\vec{v} = (2, 3, 1) + 3(1, -1, 2)$
+                        $= (2, 3, 1) + (3, -3, 6) = (5, 0, 7)$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>b) Hitung jarak yang ditempuh:</strong></p>
+                    <div class="math-display">
+                        $\text{Jarak} = \|t\vec{v}\| = \|(3, -3, 6)\| = \sqrt{3^2 + (-3)^2 + 6^2}$
+                        $= \sqrt{9 + 9 + 36} = \sqrt{54} = 3\sqrt{6} \approx 7.35 \text{ meter}$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>c) Hitung vektor perpindahan total:</strong></p>
+                    <div class="math-display">
+                        $\vec{\Delta r} = \vec{r} - \vec{r_0} = (5, 0, 7) - (2, 3, 1) = (3, -3, 6) \text{ meter}$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>d) Verifikasi bahwa $\vec{\Delta r} = t\vec{v}$:</strong></p>
+                    <div class="math-display">
+                        $t\vec{v} = 3(1, -1, 2) = (3, -3, 6) = \vec{\Delta r} \quad \checkmark$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22: Vector Projection Exercise -->
+        <div class="slide">
+            <h2>Latihan Dasar: Proyeksi Vektor</h2>
+            <div class="exercise-box">
+                <h4>Soal 6: Proyeksi dan Komponen</h4>
+                <p>Diberikan $\vec{u} = (6, 2, 3)$ dan $\vec{v} = (2, 1, 0)$</p>
+                
+                <div class="step">
+                    <p><strong>a) Hitung proyeksi skalar $\vec{u}$ pada $\vec{v}$:</strong></p>
+                    <div class="math-display">
+                        $\text{Proyeksi skalar} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|}$
+                        $\vec{u} \cdot \vec{v} = 6 \times 2 + 2 \times 1 + 3 \times 0 = 12 + 2 + 0 = 14$
+                        $\|\vec{v}\| = \sqrt{2^2 + 1^2 + 0^2} = \sqrt{5}$
+                        $\text{Proyeksi skalar} = \frac{14}{\sqrt{5}} = \frac{14\sqrt{5}}{5} \approx 6.26$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>b) Hitung proyeksi vektor $\vec{u}$ pada $\vec{v}$:</strong></p>
+                    <div class="math-display">
+                        $\text{proj}_{\vec{v}}\vec{u} = \frac{\vec{u} \cdot \vec{v}}{\|\vec{v}\|^2} \vec{v} = \frac{14}{5}(2, 1, 0)$
+                        $= \left(\frac{28}{5}, \frac{14}{5}, 0\right) = (5.6, 2.8, 0)$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>c) Hitung komponen $\vec{u}$ yang tegak lurus terhadap $\vec{v}$:</strong></p>
+                    <div class="math-display">
+                        $\vec{u}_{\perp} = \vec{u} - \text{proj}_{\vec{v}}\vec{u}$
+                        $= (6, 2, 3) - (5.6, 2.8, 0) = (0.4, -0.8, 3)$
+                    </div>
+                </div>
+
+                <div class="step">
+                    <p><strong>d) Verifikasi bahwa $\vec{u}_{\perp} \perp \vec{v}$:</strong></p>
+                    <div class="math-display">
+                        $\vec{u}_{\perp} \cdot \vec{v} = (0.4, -0.8, 3) \cdot (2, 1, 0) = 0.8 - 0.8 + 0 = 0 \quad \checkmark$
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23: Written Exercises -->
+        <div class="slide">
+            <h2>Latihan Tertulis (30 menit)</h2>
+            <div class="exercise-box">
+                <h4>Soal 1: Computer Graphics (15 poin)</h4>
+                <p>Sebuah kamera 3D memiliki position $\vec{\text{pos}} = (0, 0, 5)$ dan menatap objek di $\vec{\text{target}} = (3, 4, 0)$. Vektor "up" kamera adalah $\vec{\text{up}} = (0, 1, 0)$.</p>
+                <p>Hitung:</p>
+                <ul>
+                    <li>a) Forward vector (arah pandang kamera)</li>
+                    <li>b) Right vector (menggunakan cross product)</li>
+                    <li>c) Jarak kamera ke objek</li>
+                    <li>d) Sudut pandang kamera relatif terhadap sumbu z</li>
+                </ul>
+            </div>
+
+            <div class="exercise-box">
+                <h4>Soal 2: Machine Learning (10 poin)</h4>
+                <p>Dataset berisi feature vectors pengguna:</p>
+                <ul>
+                    <li>User A: $(25, 2, 8, 1)$ (age, premium_years, purchases, satisfied)</li>
+                    <li>User B: $(30, 1, 12, 1)$</li>
+                    <li>User C: $(22, 3, 5, 0)$</li>
+                </ul>
+                <p>Tentukan user mana yang paling mirip dengan user baru: $(28, 1.5, 10, 1)$ menggunakan cosine similarity.</p>
+            </div>
+
+            <div class="exercise-box">
+                <h4>Soal 3: Robotics (5 poin)</h4>
+                <p>Robot arm dengan joint di origin memiliki force vector $\vec{F} = (10, 5, 0)$ N yang bekerja pada posisi $\vec{r} = (0.3, 0.2, 0.1)$ m. Hitung torque yang dihasilkan menggunakan cross product.</p>
+            </div>
+        </div>
+
+        <!-- Slide 24: Summary -->
+        <div class="slide">
+            <h2>Ringkasan Sesi 1 - Enhanced with CS</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Konsep Dasar</h3>
+                    <ul>
+                        <li>✅ Vektor sebagai magnitude + direction</li>
+                        <li>✅ Visualisasi dengan gambar anak panah</li>
+                        <li>✅ Basis vektor î, ĵ, k̂ sebagai fondasi</li>
+                        <li>✅ Normalisasi untuk ekstraksi arah</li>
+                        <li>✅ Operasi: +, -, scalar multiplication</li>
+                        <li>✅ Dot product dan cross product</li>
+                        <li>✅ Proyeksi vektor</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Aplikasi Computer Science</h3>
+                    <ul>
+                        <li>🎮 Computer graphics transformations</li>
+                        <li>🤖 Robotics navigation dan control</li>
+                        <li>🧠 Machine learning similarity</li>
+                        <li>📊 Data representation</li>
+                        <li>🖼️ Computer vision tracking</li>
+                        <li>⚡ Game physics simulation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight">
+                <p><strong>Key Takeaway:</strong> Dengan memahami basis vektor, normalisasi, dan operasi vektor, kita memiliki foundation yang kuat untuk algorithm development dalam AI, graphics, robotics, dan data science!</p>
+            </div>
+        </div>
+
+        <!-- Slide 25: Next Session Preview -->
+        <div class="slide">
+            <h2>Preview Sesi 2</h2>
+            <h3>Matriks dan Operasi pada Matriks</h3>
+            <div class="applications-grid">
+                <div class="app-card">
+                    <h4>🔢 Matrix Operations</h4>
+                    <p>Addition, multiplication, transpose, inverse</p>
+                </div>
+                <div class="app-card">
+                    <h4>📐 Linear Transformations</h4>
+                    <p>Rotation, scaling, shearing matrices</p>
+                </div>
+                <div class="app-card">
+                    <h4>🎨 Graphics Pipelines</h4>
+                    <p>Model-view-projection transformations</p>
+                </div>
+                <div class="app-card">
+                    <h4>🧮 Computational Efficiency</h4>
+                    <p>Matrix algorithms and optimization</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.4rem; color: #2c3e50;"><strong>Terima kasih!</strong></p>
+                <p style="font-size: 1.1rem; color: #7f8c8d;">Dengan visual dan pemahaman CS yang lengkap, mari lanjut ke matriks!</p>
+            </div>
+        </div>
+        
+        <!-- Slide: Netflix Case Study -->
+<div class="slide">
+    <h2>Studi Kasus: Netflix Recommendation Engine (Penjelasan Tambahan) </h2>
+    <h3>Bagaimana Matrix Factorization Menghasilkan $1 Miliar Value</h3>
+    
+    <div class="cs-application">
+        <h4>Business Challenge Netflix</h4>
+        <div class="two-column">
+            <div>
+                <h5>Scale Masalah:</h5>
+                <ul>
+                    <li><strong>238 juta</strong> active subscribers</li>
+                    <li><strong>15,000+</strong> movies & TV shows</li>
+                    <li><strong>1 miliar jam</strong> viewing per minggu</li>
+                    <li><strong>99.9% data kosong</strong> (user belum nonton hampir semua content)</li>
+                </ul>
+            </div>
+            <div>
+                <h5>Business Goals:</h5>
+                <ul>
+                    <li>Increase user engagement</li>
+                    <li>Reduce churn rate</li>
+                    <li>Maximize content ROI</li>
+                    <li>Personalisasi homepage setiap user</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Struktur Rating Matrix (R) - Simplified Example</h4>
+        <div style="background: white; padding: 20px; border-radius: 8px; margin: 15px 0;">
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 10px 0;">
+                <thead>
+                    <tr style="background: #e9ecef;">
+                        <th style="border: 1px solid #ddd; padding: 8px; text-align: left;">User</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center;">Stranger Things</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center;">Breaking Bad</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center;">The Office</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center;">Avengers</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center;">Squid Game</th>
+                        <th style="border: 1px solid #ddd; padding: 6px; text-align: center;">Friends</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; background: #f0f8ff;"><strong>Alice (Gen Z)</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e74c3c; font-weight: bold;">5.0</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #f39c12;">3.5</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e74c3c; font-weight: bold;">4.8</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; background: #f0f8ff;"><strong>Bob (Action Fan)</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e74c3c; font-weight: bold;">5.0</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #27ae60;">4.2</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e67e22;">2.1</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; background: #f0f8ff;"><strong>Carol (Comedy Lover)</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e74c3c; font-weight: bold;">4.9</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e74c3c; font-weight: bold;">4.7</td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid #ddd; padding: 8px; background: #f0f8ff;"><strong>David (Sci-Fi Fan)</strong></td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #27ae60;">3.8</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #e74c3c;">4.5</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #27ae60;">4.1</td>
+                        <td style="border: 1px solid #ddd; padding: 6px; text-align: center; color: #999;">—</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div style="margin: 15px 0; font-size: 0.8rem;">
+                <strong>Interpretasi Data:</strong> 
+                <span style="color: #e74c3c;">5.0 = Watched completely + rewatched</span> | 
+                <span style="color: #27ae60;">4.0+ = Watched completely</span> | 
+                <span style="color: #f39c12;">3.0+ = Watched partially</span> | 
+                <span style="color: #e67e22;">2.0+ = Started but stopped early</span> | 
+                <span style="color: #999;">— = Belum pernah clicked</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-derivation">
+        <h4>Solusi: Singular Value Decomposition (SVD)</h4>
+        <div class="math-display">
+            $$R_{238M \times 15K} \approx U_{238M \times k} \times \Sigma_{k \times k} \times V_{k \times 15K}^T$$
+        </div>
+        
+        <p>Untuk implementasi praktis, Netflix menggunakan <strong>k = 50 latent factors</strong></p>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 20px 0;">
+            <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; text-align: center;">
+                <h5>Matrix U (User Features)</h5>
+                <p><strong>238M × 50</strong></p>
+                <p style="font-size: 0.9rem;">Setiap user direpresentasikan dengan 50 "hidden preferences":</p>
+                <ul style="font-size: 0.8rem; text-align: left;">
+                    <li>Factor 1: Comedy preference</li>
+                    <li>Factor 2: Action preference</li>
+                    <li>Factor 3: Korean content</li>
+                    <li>Factor 4: Binge-watching tendency</li>
+                    <li>...dan 46 factors lainnya</li>
+                </ul>
+            </div>
+            
+            <div style="background: #f0e8f8; padding: 15px; border-radius: 8px; text-align: center;">
+                <h5>Matrix Σ (Importance)</h5>
+                <p><strong>50 × 50</strong></p>
+                <p style="font-size: 0.9rem;">Diagonal matrix yang menunjukkan seberapa penting setiap factor</p>
+                <div style="font-size: 0.8rem; text-align: left;">
+                    <p>σ₁ = 45.2 (Most important)</p>
+                    <p>σ₂ = 32.1</p>
+                    <p>σ₃ = 28.7</p>
+                    <p>...</p>
+                    <p>σ₅₀ = 2.1 (Least important)</p>
+                </div>
+            </div>
+            
+            <div style="background: #e8f8e8; padding: 15px; border-radius: 8px; text-align: center;">
+                <h5>Matrix V (Content Features)</h5>
+                <p><strong>50 × 15K</strong></p>
+                <p style="font-size: 0.9rem;">Setiap movie/show direpresentasikan dengan 50 attributes:</p>
+                <ul style="font-size: 0.8rem; text-align: left;">
+                    <li>Factor 1: How "comedy-like"</li>
+                    <li>Factor 2: How "action-packed"</li>
+                    <li>Factor 3: Korean drama elements</li>
+                    <li>Factor 4: Binge-worthiness</li>
+                    <li>...dan 46 attributes lainnya</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Prediksi Rating untuk User Baru</h4>
+        <p><strong>Scenario:</strong> Emma (user baru) baru saja sign up dan memberikan rating pada 3 content:</p>
+        
+        <div class="step">
+            <strong>Input ratings Emma:</strong>
+            <ul>
+                <li>Avengers: Endgame → 4.6 stars</li>
+                <li>Friends → 2.3 stars (tidak suka sitcom lama)</li>
+                <li>The Office → belum nonton</li>
+            </ul>
+        </div>
+        
+        <div class="step">
+            <strong>Algoritma menghitung user profile Emma:</strong>
+            <div class="math-display">
+                $$\vec{u}_{\text{Emma}} = \text{argmin} \sum_{\text{rated items}} (r_{\text{actual}} - \vec{u}_{\text{Emma}} \cdot \vec{v}_{\text{item}})^2$$
+            </div>
+            <p>Hasil: Emma memiliki high action preference, low comedy preference</p>
+        </div>
+        
+        <div class="step">
+            <strong>Prediksi untuk The Office:</strong>
+            <div class="math-display">
+                $$\hat{r}_{\text{Emma,Office}} = \vec{u}_{\text{Emma}} \cdot \vec{v}_{\text{Office}} = 2.8$$
+            </div>
+            <p><strong>Keputusan:</strong> Karena prediksi < 3.5, The Office tidak akan muncul di homepage Emma</p>
+        </div>
+    </div>
+
+    <div class="highlight">
+        <h4>Business Impact & ROI</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 15px 0;">
+            <div>
+                <h5>Metrics Improvement:</h5>
+                <ul style="font-size: 0.9rem;">
+                    <li><strong>80%</strong> content consumption dari recommendations</li>
+                    <li><strong>93%</strong> user retention setelah bulan pertama</li>
+                    <li><strong>+25%</strong> average viewing time per session</li>
+                    <li><strong>-15%</strong> customer churn rate</li>
+                    <li><strong>+30%</strong> user engagement dengan new releases</li>
+                </ul>
+            </div>
+            <div>
+                <h5>Financial Impact:</h5>
+                <ul style="font-size: 0.9rem;">
+                    <li><strong>$1 billion/year</strong> attributed value dari recommendation engine</li>
+                    <li><strong>$150 million</strong> cost savings dari reduced churn</li>
+                    <li><strong>$500 million</strong> increased revenue dari better content discovery</li>
+                    <li><strong>ROI: 2000%</strong> untuk ML infrastructure investment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="cs-application">
+        <h4>Technical Implementation Challenges</h4>
+        <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <h5>Computational Complexity:</h5>
+            <ul style="font-size: 0.9rem;">
+                <li><strong>Memory:</strong> Storing 238M × 50 + 50 × 15K = ~12 billion parameters</li>
+                <li><strong>Training time:</strong> Distributed computing across 1000+ GPUs</li>
+                <li><strong>Real-time inference:</strong> < 100ms response time untuk homepage generation</li>
+                <li><strong>Cold start:</strong> Handling new users dengan content-based filtering + demographic data</li>
+                <li><strong>Data freshness:</strong> Model retrained setiap 24 jam dengan streaming data</li>
+            </ul>
+        </div>
+        
+        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <h5>Beyond SVD: Netflix's Modern Approach</h5>
+            <p>Netflix sekarang menggunakan <strong>Deep Learning hybrid models</strong>:</p>
+            <ul style="font-size: 0.9rem;">
+                <li><strong>Neural Collaborative Filtering (NCF)</strong> untuk non-linear patterns</li>
+                <li><strong>Recurrent Neural Networks</strong> untuk sequential viewing behavior</li>
+                <li><strong>Convolutional Networks</strong> untuk analyzing movie thumbnails/posters</li>
+                <li><strong>Multi-armed bandits</strong> untuk A/B testing different recommendation strategies</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="highlight">
+        <p><strong>Key Takeaway:</strong> Matrix factorization bukan hanya mathematical concept - ini adalah foundation teknologi yang menghasilkan miliaran dollar value dan membentuk cara 238 juta orang mengkonsumsi entertainment di seluruh dunia.</p>
+    </div>
+</div>
+
+    </div><!-- Slide: Python Implementation - Basic Vector Operations -->
+<div class="slide">
+    <h2>Implementasi Python: Operasi Vektor Dasar</h2>
+    <h3>Menggunakan NumPy dan Matplotlib</h3>
+    
+    <div class="example-box">
+        <h4>Setup Environment</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.9rem;">
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
+# Membuat vektor
+u = np.array([3, 4, 2])
+v = np.array([1, -2, 3])
+print(f"Vektor u: {u}")
+print(f"Vektor v: {v}")
+            </pre>
+        </div>
+    </div>
+
+    <div class="two-column">
+        <div>
+            <div class="example-box">
+                <h4>Operasi Dasar</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+                    <pre style="margin: 0; font-size: 0.85rem;">
+# Penjumlahan vektor
+sum_vector = u + v
+print(f"u + v = {sum_vector}")
+
+# Pengurangan vektor
+diff_vector = u - v
+print(f"u - v = {diff_vector}")
+
+# Perkalian skalar
+scaled_vector = 2 * u
+print(f"2 * u = {scaled_vector}")
+
+# Magnitude vektor
+magnitude_u = np.linalg.norm(u)
+print(f"||u|| = {magnitude_u:.2f}")
+                    </pre>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <div class="example-box">
+                <h4>Output</h4>
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+                    <pre style="margin: 0; font-size: 0.85rem;">
+Vektor u: [3 4 2]
+Vektor v: [ 1 -2  3]
+
+u + v = [4 2 5]
+u - v = [ 2  6 -1]
+2 * u = [6 8 4]
+||u|| = 5.39
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Visualisasi 2D Vectors</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.85rem;">
+# Membuat plot 2D
+plt.figure(figsize=(10, 6))
+
+# Vektor 2D untuk visualisasi
+u_2d = np.array([4, 1])
+v_2d = np.array([1, 3])
+
+# Plot vectors
+plt.quiver(0, 0, u_2d[0], u_2d[1], angles='xy', scale_units='xy', scale=1, color='red', width=0.005, label='u')
+plt.quiver(0, 0, v_2d[0], v_2d[1], angles='xy', scale_units='xy', scale=1, color='blue', width=0.005, label='v')
+plt.quiver(0, 0, (u_2d+v_2d)[0], (u_2d+v_2d)[1], angles='xy', scale_units='xy', scale=1, 
+           color='green', width=0.005, linestyle='--', label='u+v')
+
+plt.xlim(-1, 6)
+plt.ylim(-1, 5)
+plt.grid(True, alpha=0.3)
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.title('Vector Addition Visualization')
+plt.legend()
+plt.axis('equal')
+plt.show()
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- Slide: Python Implementation - Dot and Cross Product -->
+<div class="slide">
+    <h2>Implementasi Python: Dot Product dan Cross Product</h2>
+    
+    <div class="two-column">
+        <div>
+            <div class="example-box">
+                <h4>Dot Product</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+                    <pre style="margin: 0; font-size: 0.8rem;">
+import numpy as np
+
+def vector_dot_product(u, v):
+    """Hitung dot product dua vektor"""
+    return np.dot(u, v)
+
+def vector_angle(u, v):
+    """Hitung sudut antara dua vektor"""
+    dot_prod = np.dot(u, v)
+    norms = np.linalg.norm(u) * np.linalg.norm(v)
+    cos_angle = dot_prod / norms
+    angle_rad = np.arccos(np.clip(cos_angle, -1, 1))
+    angle_deg = np.degrees(angle_rad)
+    return angle_deg
+
+# Contoh penggunaan
+u = np.array([3, 4, 2])
+v = np.array([1, -2, 3])
+
+dot_product = vector_dot_product(u, v)
+angle = vector_angle(u, v)
+
+print(f"u · v = {dot_product}")
+print(f"Sudut antara u dan v = {angle:.2f}°")
+
+# Cek perpendicular
+if abs(dot_product) < 1e-10:
+    print("Vektor tegak lurus!")
+                    </pre>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <div class="example-box">
+                <h4>Cross Product</h4>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+                    <pre style="margin: 0; font-size: 0.8rem;">
+def vector_cross_product(u, v):
+    """Hitung cross product dua vektor 3D"""
+    return np.cross(u, v)
+
+def verify_orthogonal(cross_result, u, v):
+    """Verifikasi cross product tegak lurus"""
+    dot_u = np.dot(cross_result, u)
+    dot_v = np.dot(cross_result, v)
+    return abs(dot_u) < 1e-10 and abs(dot_v) < 1e-10
+
+# Contoh penggunaan
+u = np.array([2, 1, 3])
+v = np.array([1, 4, 2])
+
+cross_product = vector_cross_product(u, v)
+is_orthogonal = verify_orthogonal(cross_product, u, v)
+
+print(f"u × v = {cross_product}")
+print(f"||u × v|| = {np.linalg.norm(cross_product):.2f}")
+print(f"Orthogonal check: {is_orthogonal}")
+
+# Hitung luas parallelogram
+area = np.linalg.norm(cross_product)
+print(f"Luas parallelogram = {area:.2f}")
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Aplikasi: Computer Vision - Calculating Normal Vector</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.85rem;">
+def calculate_triangle_normal(vertex1, vertex2, vertex3):
+    """Hitung normal vector untuk triangle dalam 3D graphics"""
+    # Hitung edge vectors
+    edge1 = vertex2 - vertex1
+    edge2 = vertex3 - vertex1
+    
+    # Cross product untuk mendapatkan normal
+    normal = np.cross(edge1, edge2)
+    
+    # Normalize untuk unit normal
+    unit_normal = normal / np.linalg.norm(normal)
+    
+    return normal, unit_normal
+
+# Contoh: Triangle vertices
+A = np.array([2, 0, 0])
+B = np.array([0, 2, 0])
+C = np.array([0, 0, 2])
+
+normal, unit_normal = calculate_triangle_normal(A, B, C)
+
+print(f"Triangle vertices:")
+print(f"A = {A}, B = {B}, C = {C}")
+print(f"Normal vector = {normal}")
+print(f"Unit normal = {unit_normal}")
+print(f"Normal magnitude = {np.linalg.norm(unit_normal):.6f}")  # Should be 1.0
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- Slide: Python Implementation - Vector Projection -->
+<div class="slide">
+    <h2>Implementasi Python: Proyeksi Vektor</h2>
+    
+    <div class="example-box">
+        <h4>Vector Projection Functions</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.85rem;">
+import numpy as np
+import matplotlib.pyplot as plt
+
+def scalar_projection(u, v):
+    """Hitung proyeksi skalar u pada v"""
+    return np.dot(u, v) / np.linalg.norm(v)
+
+def vector_projection(u, v):
+    """Hitung proyeksi vektor u pada v"""
+    return (np.dot(u, v) / np.dot(v, v)) * v
+
+def orthogonal_component(u, v):
+    """Hitung komponen u yang tegak lurus terhadap v"""
+    proj = vector_projection(u, v)
+    return u - proj
+
+def verify_orthogonal_decomposition(u, v):
+    """Verifikasi dekomposisi orthogonal"""
+    proj_v = vector_projection(u, v)
+    perp_v = orthogonal_component(u, v)
+    
+    # Cek apakah u = proj + perp
+    reconstructed = proj_v + perp_v
+    reconstruction_error = np.linalg.norm(u - reconstructed)
+    
+    # Cek apakah perp tegak lurus dengan v
+    orthogonality_check = abs(np.dot(perp_v, v))
+    
+    return {
+        'reconstruction_error': reconstruction_error,
+        'orthogonality_check': orthogonality_check,
+        'is_valid': reconstruction_error < 1e-10 and orthogonality_check < 1e-10
+    }
+            </pre>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Penggunaan dan Verifikasi</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.85rem;">
+# Definisi vektor
+u = np.array([6, 2, 3])
+v = np.array([2, 1, 0])
+
+# Hitung proyeksi
+scalar_proj = scalar_projection(u, v)
+vector_proj = vector_projection(u, v)
+orthogonal_comp = orthogonal_component(u, v)
+
+print("=== HASIL PROYEKSI ===")
+print(f"Vektor u = {u}")
+print(f"Vektor v = {v}")
+print(f"Proyeksi skalar = {scalar_proj:.4f}")
+print(f"Proyeksi vektor = {vector_proj}")
+print(f"Komponen orthogonal = {orthogonal_comp}")
+
+# Verifikasi
+verification = verify_orthogonal_decomposition(u, v)
+print("\n=== VERIFIKASI ===")
+print(f"Reconstruction error: {verification['reconstruction_error']:.2e}")
+print(f"Orthogonality check: {verification['orthogonality_check']:.2e}")
+print(f"Valid decomposition: {verification['is_valid']}")
+
+# Manual verification
+manual_check = np.dot(orthogonal_comp, v)
+print(f"Manual orthogonality check: {manual_check:.2e}")
+            </pre>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Visualisasi Proyeksi 2D</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.8rem;">
+def visualize_projection_2d(u, v):
+    """Visualisasi proyeksi vektor dalam 2D"""
+    proj = vector_projection(u, v)
+    perp = orthogonal_component(u, v)
+    
+    plt.figure(figsize=(10, 8))
+    
+    # Plot vectors
+    plt.quiver(0, 0, u[0], u[1], angles='xy', scale_units='xy', scale=1, 
+               color='red', width=0.006, label='u (original)')
+    plt.quiver(0, 0, v[0], v[1], angles='xy', scale_units='xy', scale=1, 
+               color='blue', width=0.006, label='v (target)')
+    plt.quiver(0, 0, proj[0], proj[1], angles='xy', scale_units='xy', scale=1, 
+               color='green', width=0.006, label='proj_v(u)')
+    plt.quiver(proj[0], proj[1], perp[0], perp[1], angles='xy', scale_units='xy', scale=1, 
+               color='orange', width=0.006, label='u_perp')
+    
+    # Plot projection line
+    plt.plot([proj[0], u[0]], [proj[1], u[1]], 'k--', alpha=0.5, linewidth=1)
+    
+    # Extend v line
+    v_extended = 3 * v
+    plt.plot([0, v_extended[0]], [0, v_extended[1]], 'b:', alpha=0.3, linewidth=2)
+    
+    plt.grid(True, alpha=0.3)
+    plt.axis('equal')
+    plt.legend()
+    plt.title('Vector Projection Visualization')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.show()
+
+# Contoh penggunaan untuk 2D
+u_2d = np.array([3, 4])
+v_2d = np.array([2, 1])
+visualize_projection_2d(u_2d, v_2d)
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- Slide: Python Implementation - ML Applications -->
+<div class="slide">
+    <h2>Implementasi Python: Aplikasi Machine Learning</h2>
+    
+    <div class="example-box">
+        <h4>Cosine Similarity untuk Recommendation System</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.85rem;">
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+
+def calculate_cosine_similarity(vector1, vector2):
+    """Hitung cosine similarity antara dua vektor"""
+    dot_product = np.dot(vector1, vector2)
+    norm1 = np.linalg.norm(vector1)
+    norm2 = np.linalg.norm(vector2)
+    return dot_product / (norm1 * norm2)
+
+def find_most_similar_user(new_user, user_database):
+    """Temukan user paling mirip dalam database"""
+    similarities = []
+    for i, user in enumerate(user_database):
+        similarity = calculate_cosine_similarity(new_user, user)
+        similarities.append((i, similarity))
+    
+    # Sort berdasarkan similarity (descending)
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    return similarities
+
+# Contoh: User feature vectors (age, premium_years, purchases, satisfied)
+user_database = np.array([
+    [25, 2, 8, 1],   # User A
+    [30, 1, 12, 1],  # User B  
+    [22, 3, 5, 0],   # User C
+    [35, 4, 15, 1],  # User D
+    [28, 1, 6, 0]    # User E
+])
+
+new_user = np.array([28, 1.5, 10, 1])
+
+print("=== USER SIMILARITY ANALYSIS ===")
+print(f"New user features: {new_user}")
+print("\nSimilarity rankings:")
+
+similarities = find_most_similar_user(new_user, user_database)
+user_labels = ['A', 'B', 'C', 'D', 'E']
+
+for rank, (user_idx, similarity) in enumerate(similarities, 1):
+    print(f"{rank}. User {user_labels[user_idx]}: {similarity:.4f}")
+            </pre>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>PCA Implementation untuk Dimensionality Reduction</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.8rem;">
+def simple_pca(data, n_components=2):
+    """Implementasi sederhana PCA menggunakan SVD"""
+    # Center data (subtract mean)
+    data_centered = data - np.mean(data, axis=0)
+    
+    # SVD decomposition
+    U, S, Vt = np.linalg.svd(data_centered, full_matrices=False)
+    
+    # Principal components (first n_components columns of Vt.T)
+    principal_components = Vt[:n_components].T
+    
+    # Transform data
+    transformed_data = data_centered @ principal_components
+    
+    # Explained variance ratio
+    explained_variance_ratio = (S[:n_components]**2) / np.sum(S**2)
+    
+    return {
+        'transformed_data': transformed_data,
+        'principal_components': principal_components,
+        'explained_variance_ratio': explained_variance_ratio,
+        'singular_values': S[:n_components]
+    }
+
+# Generate sample high-dimensional data
+np.random.seed(42)
+n_samples, n_features = 100, 5
+original_data = np.random.randn(n_samples, n_features)
+
+# Add correlation structure
+original_data[:, 1] = original_data[:, 0] + 0.5 * np.random.randn(n_samples)
+original_data[:, 2] = -original_data[:, 0] + 0.3 * np.random.randn(n_samples)
+
+# Apply PCA
+pca_result = simple_pca(original_data, n_components=2)
+
+print("=== PCA RESULTS ===")
+print(f"Original data shape: {original_data.shape}")
+print(f"Reduced data shape: {pca_result['transformed_data'].shape}")
+print(f"Explained variance ratio: {pca_result['explained_variance_ratio']}")
+print(f"Total variance explained: {sum(pca_result['explained_variance_ratio']):.3f}")
+            </pre>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Linear Regression menggunakan Normal Equation</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.8rem;">
+def linear_regression_normal_equation(X, y):
+    """Implementasi linear regression menggunakan normal equation"""
+    # Add bias term (intercept)
+    X_with_bias = np.column_stack([np.ones(X.shape[0]), X])
+    
+    # Normal equation: theta = (X^T X)^(-1) X^T y
+    XtX = X_with_bias.T @ X_with_bias
+    Xty = X_with_bias.T @ y
+    theta = np.linalg.solve(XtX, Xty)  # More stable than inv()
+    
+    return theta
+
+def predict(X, theta):
+    """Prediksi menggunakan model linear"""
+    X_with_bias = np.column_stack([np.ones(X.shape[0]), X])
+    return X_with_bias @ theta
+
+def calculate_r_squared(y_true, y_pred):
+    """Hitung R-squared score"""
+    ss_res = np.sum((y_true - y_pred)**2)
+    ss_tot = np.sum((y_true - np.mean(y_true))**2)
+    return 1 - (ss_res / ss_tot)
+
+# Generate sample data: house prices vs size
+np.random.seed(42)
+house_sizes = np.random.uniform(50, 200, 100)  # 50-200 m²
+house_prices = 2000 * house_sizes + 50000 + np.random.normal(0, 20000, 100)  # Price with noise
+
+# Reshape for matrix operations
+X = house_sizes.reshape(-1, 1)
+y = house_prices
+
+# Train model
+theta = linear_regression_normal_equation(X, y)
+y_pred = predict(X, theta)
+r2_score = calculate_r_squared(y, y_pred)
+
+print("=== LINEAR REGRESSION RESULTS ===")
+print(f"Model parameters: intercept = {theta[0]:.2f}, slope = {theta[1]:.2f}")
+print(f"R-squared score: {r2_score:.4f}")
+print(f"Example: 100m² house predicted price = ${predict(np.array([[100]]), theta)[0]:,.0f}")
+            </pre>
+        </div>
+    </div>
+</div>
+
+<!-- Slide: Python Implementation - Complete Project -->
+<div class="slide">
+    <h2>Project Lengkap: Netflix Recommendation System</h2>
+    
+    <div class="example-box">
+        <h4>Matrix Factorization Implementation</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.75rem;">
+import numpy as np
+import matplotlib.pyplot as plt
+
+class MatrixFactorization:
+    def __init__(self, n_factors=10, learning_rate=0.01, regularization=0.01, n_epochs=100):
+        self.n_factors = n_factors
+        self.learning_rate = learning_rate
+        self.regularization = regularization
+        self.n_epochs = n_epochs
+        
+    def fit(self, R):
+        """Train matrix factorization model"""
+        self.n_users, self.n_items = R.shape
+        
+        # Initialize factor matrices
+        self.U = np.random.normal(scale=1./self.n_factors, size=(self.n_users, self.n_factors))
+        self.V = np.random.normal(scale=1./self.n_factors, size=(self.n_items, self.n_factors))
+        
+        # Get non-zero entries for training
+        self.R_mask = (R > 0)
+        
+        # Training loop
+        self.train_errors = []
+        for epoch in range(self.n_epochs):
+            error = self._gradient_descent_step(R)
+            self.train_errors.append(error)
+            
+            if epoch % 20 == 0:
+                print(f"Epoch {epoch}, RMSE: {error:.4f}")
+    
+    def _gradient_descent_step(self, R):
+        """Single gradient descent step"""
+        total_error = 0
+        n_ratings = 0
+        
+        for i in range(self.n_users):
+            for j in range(self.n_items):
+                if self.R_mask[i, j]:
+                    # Prediction and error
+                    prediction = np.dot(self.U[i, :], self.V[j, :])
+                    error = R[i, j] - prediction
+                    total_error += error**2
+                    n_ratings += 1
+                    
+                    # Gradient updates
+                    U_i = self.U[i, :].copy()
+                    self.U[i, :] += self.learning_rate * (error * self.V[j, :] - self.regularization * self.U[i, :])
+                    self.V[j, :] += self.learning_rate * (error * U_i - self.regularization * self.V[j, :])
+        
+        return np.sqrt(total_error / n_ratings)
+    
+    def predict(self, user_id, item_id):
+        """Predict rating for user-item pair"""
+        return np.dot(self.U[user_id, :], self.V[item_id, :])
+    
+    def recommend_top_k(self, user_id, k=5, exclude_rated=True):
+        """Get top-k recommendations for a user"""
+        user_ratings = np.dot(self.U[user_id, :], self.V.T)
+        
+        if exclude_rated:
+            # Set rated items to -inf to exclude them
+            rated_items = np.where(self.R_mask[user_id, :])[0]
+            user_ratings[rated_items] = -np.inf
+        
+        # Get top-k items
+        top_items = np.argsort(user_ratings)[::-1][:k]
+        top_ratings = user_ratings[top_items]
+        
+        return list(zip(top_items, top_ratings))
+            </pre>
+        </div>
+    </div>
+
+    <div class="example-box">
+        <h4>Contoh Penggunaan dengan Data Simulasi</h4>
+        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Courier New', monospace;">
+            <pre style="margin: 0; font-size: 0.8rem;">
+# Generate sample rating matrix (users x movies)
+np.random.seed(42)
+n_users, n_movies = 100, 50
+density = 0.1  # 10% of ratings are available
+
+# Create sparse rating matrix
+R = np.zeros((n_users, n_movies))
+n_ratings = int(n_users * n_movies * density)
+
+for _ in range(n_ratings):
+    user = np.random.randint(0, n_users)
+    movie = np.random.randint(0, n_movies)
+    rating = np.random.randint(1, 6)  # 1-5 stars
+    R[user, movie] = rating
+
+print(f"Created rating matrix: {R.shape}")
+print(f"Density: {np.count_nonzero(R) / (n_users * n_movies):.1%}")
+print(f"Average rating: {R[R > 0].mean():.2f}")
+
+# Train model
+mf = MatrixFactorization(n_factors=10, learning_rate=0.01, n_epochs=100)
+mf.fit(R)
+
+# Get recommendations for user 0
+user_id = 0
+recommendations = mf.recommend_top_k(user_id, k=5)
+
+print(f"\nTop 5 recommendations for User {user_id}:")
+for rank, (movie_id, predicted_rating) in enumerate(recommendations, 1):
+    print(f"{rank}. Movie {movie_id}: {predicted_rating:.2f} stars")
+
+# Calculate reconstruction error
+R_reconstructed = mf.U @ mf.V.T
+mask = R > 0
+rmse = np.sqrt(np.mean((R[mask] - R_reconstructed[mask])**2))
+print(f"\nReconstruction RMSE: {rmse:.4f}")
+            </pre>
+        </div>
+    </div>
+
+    <div class="highlight">
+        <h4>Key Takeaways: Python Implementation</h4>
+        <ul style="font-size: 0.9rem; padding-left: 15px; list-style-position: inside;">
+            <li style="margin-bottom: 8px;"><strong>NumPy</strong> adalah foundation untuk semua operasi vektor dan matrix</li>
+            <li style="margin-bottom: 8px;"><strong>Vectorization</strong> dengan NumPy jauh lebih cepat daripada loop Python biasa</li>
+            <li style="margin-bottom: 8px;"><strong>Linear algebra functions</strong> seperti dot, cross, norm sudah built-in dan optimized</li>
+            <li style="margin-bottom: 8px;"><strong>Real applications</strong> sering menggunakan kombinasi konsep: dot product + projection + normalization</li>
+            <li style="margin-bottom: 8px;"><strong>Matrix factorization</strong> adalah contoh perfect bagaimana teori aljabar linear diterapkan untuk solve business problems</li>
+        </ul>
+        
+        <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <p><strong>Best Practices:</strong></p>
+            <ul style="font-size: 0.85rem; padding-left: 15px; list-style-position: inside;">
+                <li style="margin-bottom: 5px;">Selalu gunakan vectorized operations untuk performance</li>
+                <li style="margin-bottom: 5px;">Verify mathematical properties (orthogonality, normalization) dengan assertions</li>
+                <li style="margin-bottom: 5px;">Handle numerical precision dengan np.allclose() untuk comparisons</li>
+                <li style="margin-bottom: 5px;">Visualize vectors dan transformations untuk debugging dan understanding</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // Auto-refresh MathJax when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        });
+
+        // Smooth scrolling for any internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll-to-top functionality
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 100) {
+                if (!document.getElementById('scrollToTop')) {
+                    const scrollBtn = document.createElement('button');
+                    scrollBtn.id = 'scrollToTop';
+                    scrollBtn.innerHTML = '↑ Top';
+                    scrollBtn.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        padding: 10px 15px;
+                        background: #3498db;
+                        color: white;
+                        border: none;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        font-weight: bold;
+                        z-index: 1000;
+                        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+                        transition: all 0.3s ease;
+                    `;
+                    scrollBtn.addEventListener('click', function() {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    });
+                    scrollBtn.addEventListener('mouseenter', function() {
+                        this.style.background = '#2980b9';
+                        this.style.transform = 'translateY(-2px)';
+                    });
+                    scrollBtn.addEventListener('mouseleave', function() {
+                        this.style.background = '#3498db';
+                        this.style.transform = 'translateY(0)';
+                    });
+                    document.body.appendChild(scrollBtn);
+                }
+            } else {
+                const scrollBtn = document.getElementById('scrollToTop');
+                if (scrollBtn) {
+                    scrollBtn.remove();
+                }
+            }
+        });
+
+        // Add interactive hover effects for vectors
+        document.querySelectorAll('.vector-demo svg line[stroke="#e74c3c"], .vector-demo svg line[stroke="#3498db"], .vector-demo svg line[stroke="#27ae60"]').forEach(line => {
+            line.addEventListener('mouseenter', function() {
+                this.style.strokeWidth = '6';
+                this.style.opacity = '0.8';
+            });
+            line.addEventListener('mouseleave', function() {
+                this.style.strokeWidth = this.getAttribute('stroke-width') || '3';
+                this.style.opacity = '1';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,976 @@
+============================================================
+RETRIEVED CONTEXT FOR QUESTION
+============================================================
+
+Question: generate C++ code to insert first node of a link-list and create at least 5 fill-in-the-blank questions based on the generated code
+
+============================================================
+CONTEXT SENT TO LLM
+============================================================
+
+HOW TO CREATE ACCURATE FILL-IN-THE-BLANK QUESTIONS
+============================================================
+
+STEP-BY-STEP INSTRUCTIONS:
+
+1. START WITH VALID C++ CODE
+   - The code MUST compile and run correctly
+   - Keep the code simple and focused
+   - Ensure the code demonstrates a clear concept
+
+2. IDENTIFY WHAT TO REPLACE
+   - Choose EXACTLY ONE keyword, operator, or symbol to replace
+   - Common targets: keywords (int, for, if, class, return, etc.)
+   - Operators: =, ==, <<, >>, ++, --, etc.
+   - Symbols: ; { } ( ) [ ] < >
+   - Method names: push_back, size, length, etc.
+   - Header files: iostream, vector, string, etc.
+
+3. CREATE THE BLANK
+   - Replace the chosen word/symbol with EXACTLY: _____
+   - Use exactly 5 underscores
+   - Do NOT change anything else in the code
+   - Keep all spacing, indentation, and formatting identical
+
+4. CREATE 4 MULTIPLE CHOICE OPTIONS
+   - Option 1: A plausible wrong answer (related keyword/operator)
+   - Option 2: THE CORRECT ANSWER (always position 2)
+   - Option 3: Another plausible wrong answer
+   - Option 4: Another plausible wrong answer
+
+   Wrong answers should be:
+   - Related to the concept (similar keywords, common mistakes)
+   - Syntactically plausible (could look correct to a beginner)
+   - Not obviously wrong (avoid nonsense options)
+
+5. ANSWER FORMAT
+   - Always provide the answer as a single number: 2
+   - The correct answer is ALWAYS in position 2
+
+6. STRUCTURE FORMAT
+   Must include these sections in this exact order:
+   ------------------
+   Fill-in-the-Blank Question Example [ID] ([Description])
+   ------------------
+   Code
+   ------------------
+   [Complete valid C++ code]
+   -------------------
+   Question
+   -------------------
+   [Same code with ONE _____ replacement]
+   -------------------
+   Options
+   -------------------
+   1. [wrong]  2. [CORRECT]  3. [wrong]  4. [wrong]
+   -----------------
+   Answer
+   -----------------
+   2
+
+EXAMPLES OF GOOD REPLACEMENTS:
+✓ int x = 10;        →  _____ x = 10;           (replace "int")
+✓ cout << "Hello";   →  _____ << "Hello";        (replace "cout")
+✓ for(int i = 0...)  →  _____(int i = 0...)     (replace "for")
+✓ if(x > 5)          →  if(x _____ 5)           (replace ">")
+✓ return 0;          →  _____ 0;                (replace "return")
+✓ int x = 10;        →  int x _____ 10;         (replace "=")
+✓ cout << x;         →  cout _____ x;           (replace "<<")
+
+EXAMPLES OF BAD REPLACEMENTS (AVOID THESE):
+
+1. MISMATCH: Blank and Answer Don't Match
+   ✗ Code: cout << "Hello" << endl;
+   ✗ Replace: _____ << "Hello" << endl;
+   ✗ Wrong Answer: "cout <<"
+   ✗ Problem: You removed "cout" but answer includes "<<"
+   ✓ Correct Answer: "cout" (only what was replaced)
+
+   ✗ Code: int x = 10;
+   ✗ Replace: int _____ = 10;
+   ✗ Wrong Answer: "x ="
+   ✗ Problem: You removed "x" but answer includes "="
+   ✓ Correct Answer: "x" (only what was replaced)
+
+   ✗ Code: for(int i = 0; i < 5; i++)
+   ✗ Replace: for(_____ i = 0; i < 5; i++)
+   ✗ Wrong Answer: "int i"
+   ✗ Problem: You removed "int" but answer includes "i"
+   ✓ Correct Answer: "int" (only what was replaced)
+
+   ✗ Code: if(x > 5)
+   ✗ Replace: if(_____ > 5)
+   ✗ Wrong Answer: "x >"
+   ✗ Problem: You removed "x" but answer includes ">"
+   ✓ Correct Answer: "x" (only what was replaced)
+
+   ✗ Code: return 0;
+   ✗ Replace: _____ 0;
+   ✗ Wrong Answer: "return 0"
+   ✗ Problem: You removed "return" but answer includes "0"
+   ✓ Correct Answer: "return" (only what was replaced)
+
+2. REPLACING MULTIPLE WORDS/SYMBOLS AT ONCE
+   ✗ Code: int x = 10;
+   ✗ Replace: _____ = 10;
+   ✗ Problem: Removed both "int" and "x" (two words)
+   ✓ Correct: Choose only one - either "int" or "x"
+
+   ✗ Code: cout << x << endl;
+   ✗ Replace: cout _____ endl;
+   ✗ Problem: Removed "<< x <<" (multiple parts)
+   ✓ Correct: Replace only one operator at a time
+
+3. REPLACING PARTS OF WORDS
+   ✗ Code: return 0;
+   ✗ Replace: _____ turn 0;
+   ✗ Problem: Replacing "re" from "return" (incomplete word)
+   ✓ Correct: Replace the entire word "return"
+
+   ✗ Code: #include <iostream>
+   ✗ Replace: #_____ clude <iostream>
+   ✗ Problem: Replacing "in" from "include" (partial word)
+   ✓ Correct: Replace the entire word "include"
+
+4. REPLACING VARIABLE NAMES OR VALUES
+   ✗ Code: int sum = 10;
+   ✗ Replace: int _____ = 10;
+   ✗ Problem: Replacing variable name "sum" (not educational)
+   ✓ Correct: Replace keywords, operators, or data types
+
+   ✗ Code: int x = 10;
+   ✗ Replace: int x = _____;
+   ✗ Problem: Replacing the value "10" (not a concept)
+   ✓ Correct: Replace "int" or "=" instead
+
+5. MAKING THE BLANK AMBIGUOUS
+   ✗ Code: int x = 10;
+   ✗ Replace: _____ = 10;
+   ✗ Problem: Could be "int x" or just "x" (ambiguous)
+   ✓ Correct: Make it clear what's missing
+
+6. CREATING OBVIOUSLY WRONG OPTIONS
+   ✗ Options for cout:
+      1. banana  2. cout  3. elephant  4. xyz
+   ✗ Problem: Options are nonsense, not educational
+   ✓ Correct: Use related keywords: print, cin, cerr, output
+
+   ✗ Options for int:
+      1. hello  2. int  3. world  4. 123
+   ✗ Problem: Not related to data types
+   ✓ Correct: Use related types: float, char, double, bool
+
+REMEMBER: The correct answer must be EXACTLY what you removed, nothing more, nothing less!
+
+EXAMPLE WORKFLOW:
+
+Original Code:
+#include <iostream>
+using namespace std;
+int main(){
+   cout << "Hello" << endl;
+   return 0;
+}
+
+Step 1: Choose what to replace → "cout"
+Step 2: Replace with _____ → _____ << "Hello" << endl;
+Step 3: Create options:
+   1. print  2. cout  3. cin  4. output
+Step 4: Answer is 2 (cout is in position 2)
+
+Another example with the same code:
+
+Step 1: Choose what to replace → "<<"
+Step 2: Replace with _____ → cout _____ "Hello" << endl;
+Step 3: Create options:
+   1. >>  2. <<  3. <  4. <=
+Step 4: Answer is 2 (<< is in position 2)
+
+IMPORTANT RULES:
+- ONE blank per question
+- Correct answer ALWAYS in position 2
+- Keep code formatting identical
+- Use _____ (5 underscores) for blanks
+- Provide related but wrong distractors
+- Test that code compiles before and after replacement
+
+============================================================
+
+------------------
+Fill-in-the-Blank Question Example C49 (Linked List - Create New Node)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *newNode = new Node;
+   newNode->data = 10;
+   newNode->next = NULL;
+   cout << newNode->data << endl;
+   delete newNode;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *newNode = _____ Node;
+   newNode->data = 10;
+   newNode->next = NULL;
+   cout << newNode->data << endl;
+   delete newNode;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. allocate  2. new  3. create  4. make
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example S30 (Assignment Operator)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x = 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int x _____ 10;
+   cout << x << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ==  2. =  3. :  4. !=
+-----------------
+Answer
+-----------------
+2
+
+============================================================
+ADDITIONAL FILL-IN-THE-BLANK EXAMPLES (FOR BETTER LEARNING)
+============================================================
+
+
+
+------------------
+Fill-in-the-Blank Question Example B14 (Linked List - Node Structure Member)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node _____next;
+};
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   cout << "Data: " << head->data << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. &  2. *  3. ->  4. .
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example B15 (Linked List - Traversal Condition)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+void display(Node *head){
+   Node *temp = head;
+   while(temp != NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+}
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   display(head);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+struct Node{
+   int data;
+   Node *next;
+};
+void display(Node *head){
+   Node *temp = head;
+   while(temp _____ NULL){
+      cout << temp->data << " ";
+      temp = temp->next;
+   }
+}
+int main(){
+   Node *head = new Node;
+   head->data = 10;
+   head->next = NULL;
+   display(head);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. ==  2. !=  3. <  4. >
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D3 (Vector Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   vector<int> v;
+   v.push_back(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. array  2. vector  3. list  4. container
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D29 (Set Insert Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> numbers;
+   numbers.insert(10);
+   numbers.insert(20);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> numbers;
+   numbers._____(10);
+   numbers.insert(20);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. add  2. insert  3. push  4. put
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D51 (Queue Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. deque  2. queue  3. stack  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D53 (Queue push Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   q.push(20);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q._____(10);
+   q.push(20);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. enqueue  2. push  3. add  4. insert
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D56 (Stack Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <stack>
+using namespace std;
+int main(){
+   stack<int> s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   stack<int> s;
+   s.push(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. queue  2. stack  3. deque  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D59 (Deque Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <deque>
+using namespace std;
+int main(){
+   deque<int> dq;
+   dq.push_back(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   deque<int> dq;
+   dq.push_back(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. queue  2. deque  3. stack  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D118 (Vector insert Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 4};
+   v.insert(v.begin() + 2, 3);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+int main(){
+   vector<int> v = {1, 2, 4};
+   v._____(v.begin() + 2, 3);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. add  2. insert  3. place  4. put
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example S22 (new Keyword)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = new int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int *ptr = _____ int;
+   *ptr = 10;
+   delete ptr;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. allocate  2. new  3. create  4. make
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example S24 (Array Declaration)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   _____ arr[5] = {1, 2, 3, 4, 5};
+   cout << arr[0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. float  2. int  3. array  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example A7 (Array - Size)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int numbers[5] = {1, 2, 3, 4, 5};
+   cout << "First: " << numbers[0] << endl;
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int numbers[_____] = {1, 2, 3, 4, 5};
+   cout << "First: " << numbers[0] << endl;
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. 3  2. 4  3. 5  4. 6
+-----------------
+Answer
+-----------------
+3
+
+
+
+------------------
+Fill-in-the-Blank Question Example C33 (Logical OR)
+------------------
+Code
+------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 5;
+   int b = 0;
+   if(a > 0 || b > 0){
+      cout << "At least one positive" << endl;
+   }
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+using namespace std;
+int main(){
+   int a = 5;
+   int b = 0;
+   if(a > 0 _____ b > 0){
+      cout << "At least one positive" << endl;
+   }
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. &&  2. ||  3. |  4. or
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D28 (Set Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <set>
+using namespace std;
+int main(){
+   set<int> numbers;
+   numbers.insert(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   set<int> numbers;
+   numbers.insert(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. collection  2. set  3. hashset  4. unordered
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D30 (List Include)
+------------------
+Code
+------------------
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> myList;
+   myList.push_back(10);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <_____>
+using namespace std;
+int main(){
+   list<int> myList;
+   myList.push_back(10);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. linkedlist  2. list  3. array  4. vector
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D52 (Queue Declaration)
+------------------
+Code
+------------------
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   queue<int> q;
+   q.push(10);
+   q.push(20);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <queue>
+using namespace std;
+int main(){
+   _____<int> q;
+   q.push(10);
+   q.push(20);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. deque  2. queue  3. stack  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D57 (Stack Declaration)
+------------------
+Code
+------------------
+#include <iostream>
+#include <stack>
+using namespace std;
+int main(){
+   stack<int> s;
+   s.push(10);
+   s.push(20);
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <stack>
+using namespace std;
+int main(){
+   _____<int> s;
+   s.push(10);
+   s.push(20);
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. queue  2. stack  3. deque  4. list
+-----------------
+Answer
+-----------------
+2
+
+
+
+------------------
+Fill-in-the-Blank Question Example D112 (List pop_front Method)
+------------------
+Code
+------------------
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> l = {10, 20, 30};
+   l.pop_front();
+   return 0;
+}
+-------------------
+Question
+-------------------
+#include <iostream>
+#include <list>
+using namespace std;
+int main(){
+   list<int> l = {10, 20, 30};
+   l._____();
+   return 0;
+}
+-------------------
+Options
+-------------------
+1. removeFront  2. pop_front  3. deleteFront  4. removeFirst
+-----------------
+Answer
+-----------------
+2
+
+
+
+============================================================
+Retrieved 20 examples:
+1. C49 - Linked List - Create New Node
+2. S30 - Assignment Operator
+3. B14 - Linked List - Node Structure Member
+4. B15 - Linked List - Traversal Condition
+5. D3 - Vector Include
+6. D29 - Set Insert Method
+7. D51 - Queue Include
+8. D53 - Queue push Method
+9. D56 - Stack Include
+10. D59 - Deque Include
+11. D118 - Vector insert Method
+12. S22 - new Keyword
+13. S24 - Array Declaration
+14. A7 - Array - Size
+15. C33 - Logical OR
+16. D28 - Set Include
+17. D30 - List Include
+18. D52 - Queue Declaration
+19. D57 - Stack Declaration
+20. D112 - List pop_front Method
