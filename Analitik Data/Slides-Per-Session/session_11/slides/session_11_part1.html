@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 11 Part 1: Regresi</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { font-size: 3em; color: #667eea; margin-bottom: 30px; text-align: center; }
+        h2 { font-size: 2.2em; color: #764ba2; margin: 30px 0 20px 0; }
+        h3 { font-size: 1.8em; color: #667eea; margin: 25px 0 15px 0; }
+        p, li { font-size: 1.2em; line-height: 1.8; margin: 15px 0; }
+        .content { max-width: 1200px; width: 100%; }
+        .math-block {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        .code-container { position: relative; margin: 25px 0; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #764ba2; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            display: block;
+        }
+        code .line { display: block; min-height: 1.6em; }
+        .keyword { color: #ff79c6; }
+        .function { color: #50fa7b; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .example-box {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+        .definition-box {
+            background: #f3e5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #9c27b0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .plot-container { margin: 30px 0; width: 100%; }
+        ul, ol { margin-left: 30px; }
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title Slide -->
+    <div class="slide">
+        <div class="content">
+            <h1>Session 11: Modelling</h1>
+            <h2>Part 1: Analisis Regresi</h2>
+            <p style="text-align: center; font-size: 1.5em; margin-top: 40px;">
+                Data Analitik - Universitas Mercu Buana
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide">
+        <div class="content">
+            <h2>Capaian Pembelajaran</h2>
+            <div class="definition-box">
+                <h3>Sub-CPMK SC2.3</h3>
+                <p><strong>Mampu menjelaskan tahapan modelling (Regresi dan Klasifikasi) dan evaluasi model</strong></p>
+            </div>
+
+            <h3>Tujuan Pembelajaran Part 1:</h3>
+            <ul>
+                <li>Memahami konsep dan jenis-jenis analisis regresi</li>
+                <li>Mampu membedakan regresi linear sederhana dan berganda</li>
+                <li>Memahami asumsi-asumsi dalam analisis regresi</li>
+                <li>Mampu mengimplementasikan model regresi menggunakan Python</li>
+                <li>Mampu menginterpretasikan hasil regresi</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Apa itu Regresi? -->
+    <div class="slide">
+        <div class="content">
+            <h2>Apa itu Analisis Regresi?</h2>
+
+            <div class="definition-box">
+                <h3>Definisi</h3>
+                <p><strong>Analisis Regresi</strong> adalah teknik statistik untuk memodelkan dan menganalisis hubungan antara satu atau lebih variabel independen (prediktor) dengan variabel dependen (target).</p>
+            </div>
+
+            <h3>Tujuan Regresi:</h3>
+            <ul>
+                <li><strong>Prediksi:</strong> Memperkirakan nilai variabel dependen berdasarkan variabel independen</li>
+                <li><strong>Inferensi:</strong> Memahami hubungan dan pengaruh antar variabel</li>
+                <li><strong>Kontrol:</strong> Mengendalikan efek variabel tertentu</li>
+            </ul>
+
+            <div class="example-box">
+                <h3>Contoh Aplikasi:</h3>
+                <ul>
+                    <li>Prediksi harga rumah berdasarkan luas, lokasi, jumlah kamar</li>
+                    <li>Prediksi penjualan berdasarkan biaya iklan</li>
+                    <li>Prediksi nilai ujian berdasarkan jam belajar</li>
+                    <li>Prediksi suhu berdasarkan waktu dan musim</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Jenis-jenis Regresi -->
+    <div class="slide">
+        <div class="content">
+            <h2>Jenis-jenis Regresi</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Jenis Regresi</th>
+                        <th>Karakteristik</th>
+                        <th>Contoh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Regresi Linear Sederhana</strong></td>
+                        <td>1 variabel independen, hubungan linear</td>
+                        <td>Prediksi gaji berdasarkan pengalaman</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regresi Linear Berganda</strong></td>
+                        <td>Multiple variabel independen, hubungan linear</td>
+                        <td>Prediksi harga rumah berdasarkan luas, lokasi, umur</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regresi Polinomial</strong></td>
+                        <td>Hubungan non-linear (polynomial)</td>
+                        <td>Pertumbuhan populasi, kurva pembelajaran</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Regresi Logistik</strong></td>
+                        <td>Output kategorik (binary)</td>
+                        <td>Prediksi churn (ya/tidak)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ridge/Lasso Regression</strong></td>
+                        <td>Regularisasi untuk mencegah overfitting</td>
+                        <td>Dataset dengan banyak fitur</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 5: Regresi Linear Sederhana -->
+    <div class="slide">
+        <div class="content">
+            <h2>Regresi Linear Sederhana</h2>
+
+            <div class="math-block">
+                <h3>Formula</h3>
+                <p style="text-align: center; font-size: 1.5em;">
+                    \[ y = \beta_0 + \beta_1 x + \epsilon \]
+                </p>
+                <p><strong>Dimana:</strong></p>
+                <ul>
+                    <li>\( y \) = variabel dependen (target)</li>
+                    <li>\( x \) = variabel independen (prediktor)</li>
+                    <li>\( \beta_0 \) = intercept (konstanta)</li>
+                    <li>\( \beta_1 \) = slope (koefisien regresi)</li>
+                    <li>\( \epsilon \) = error/residual</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Interpretasi:</h3>
+                <ul>
+                    <li><strong>Intercept (\(\beta_0\)):</strong> Nilai y ketika x = 0</li>
+                    <li><strong>Slope (\(\beta_1\)):</strong> Perubahan y untuk setiap kenaikan 1 unit x</li>
+                </ul>
+                <p><strong>Contoh:</strong> Jika \( y = 50000 + 3000x \) (gaji vs pengalaman)</p>
+                <ul>
+                    <li>Gaji awal: Rp 50.000.000</li>
+                    <li>Setiap tahun pengalaman menambah Rp 3.000.000</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Metode Ordinary Least Squares (OLS) -->
+    <div class="slide">
+        <div class="content">
+            <h2>Metode Ordinary Least Squares (OLS)</h2>
+
+            <div class="definition-box">
+                <h3>Prinsip OLS</h3>
+                <p>Mencari garis regresi yang <strong>meminimalkan jumlah kuadrat residual</strong> (perbedaan antara nilai aktual dan prediksi)</p>
+            </div>
+
+            <div class="math-block">
+                <h3>Tujuan: Minimize Sum of Squared Errors (SSE)</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ SSE = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2 = \sum_{i=1}^{n} (y_i - (\beta_0 + \beta_1 x_i))^2 \]
+                </p>
+
+                <h3 style="margin-top: 30px;">Solusi OLS:</h3>
+                <p style="text-align: center; font-size: 1.3em;">
+                    \[ \beta_1 = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sum(x_i - \bar{x})^2} \]
+                </p>
+                <p style="text-align: center; font-size: 1.3em;">
+                    \[ \beta_0 = \bar{y} - \beta_1 \bar{x} \]
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Regresi Linear Berganda -->
+    <div class="slide">
+        <div class="content">
+            <h2>Regresi Linear Berganda</h2>
+
+            <div class="math-block">
+                <h3>Formula</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_p x_p + \epsilon \]
+                </p>
+                <p><strong>Dimana:</strong></p>
+                <ul>
+                    <li>\( y \) = variabel dependen</li>
+                    <li>\( x_1, x_2, ..., x_p \) = variabel independen (p prediktor)</li>
+                    <li>\( \beta_0 \) = intercept</li>
+                    <li>\( \beta_1, \beta_2, ..., \beta_p \) = koefisien regresi</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Contoh: Prediksi Harga Rumah</h3>
+                <p style="font-size: 1.3em;">
+                    \[ Harga = 50000000 + 5000000 \times Luas + 2000000 \times Kamar - 1000000 \times Umur \]
+                </p>
+                <p><strong>Interpretasi:</strong></p>
+                <ul>
+                    <li>Setiap tambahan 1m² luas → harga naik Rp 5 juta</li>
+                    <li>Setiap tambahan 1 kamar → harga naik Rp 2 juta</li>
+                    <li>Setiap tahun umur rumah → harga turun Rp 1 juta</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Asumsi Regresi Linear -->
+    <div class="slide">
+        <div class="content">
+            <h2>Asumsi Regresi Linear</h2>
+
+            <div class="warning-box">
+                <h3>Asumsi yang Harus Dipenuhi:</h3>
+                <ol>
+                    <li><strong>Linearitas:</strong> Hubungan antara X dan Y bersifat linear</li>
+                    <li><strong>Independence:</strong> Observasi saling independen</li>
+                    <li><strong>Homoscedasticity:</strong> Varians residual konstan</li>
+                    <li><strong>Normalitas:</strong> Residual terdistribusi normal</li>
+                    <li><strong>No Multicollinearity:</strong> Variabel independen tidak saling berkorelasi tinggi (untuk regresi berganda)</li>
+                </ol>
+            </div>
+
+            <h3>Konsekuensi Jika Asumsi Dilanggar:</h3>
+            <ul>
+                <li>Estimasi parameter tidak efisien</li>
+                <li>Standard error bias</li>
+                <li>Inferensi statistik tidak valid</li>
+                <li>Prediksi kurang akurat</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 9: Implementasi Regresi Linear Sederhana dengan Python -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Regresi Linear Sederhana</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+                <pre><code id="code1"><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span>
+<span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Contoh data: Pengalaman vs Gaji</span></span>
+<span class="line">data = {</span>
+<span class="line">    <span class="string">'Pengalaman'</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>],</span>
+<span class="line">    <span class="string">'Gaji'</span>: [<span class="number">45</span>, <span class="number">50</span>, <span class="number">60</span>, <span class="number">65</span>, <span class="number">70</span>, <span class="number">77</span>, <span class="number">80</span>, <span class="number">85</span>, <span class="number">90</span>, <span class="number">95</span>]  <span class="comment"># dalam juta</span></span>
+<span class="line">}</span>
+<span class="line">df = pd.DataFrame(data)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Pisahkan X dan y</span></span>
+<span class="line">X = df[[<span class="string">'Pengalaman'</span>]]</span>
+<span class="line">y = df[<span class="string">'Gaji'</span>]</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Split data</span></span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Buat dan latih model</span></span>
+<span class="line">model = LinearRegression()</span>
+<span class="line">model.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Prediksi</span></span>
+<span class="line">y_pred = model.predict(X_test)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Koefisien</span></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Intercept: {model.intercept_:.2f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Slope: {model.coef_[0]:.2f}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Implementasi Regresi Linear Berganda -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Regresi Linear Berganda</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code2')">Copy</button>
+                <pre><code id="code2"><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span>
+<span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Contoh data: Prediksi Harga Rumah</span></span>
+<span class="line">data = {</span>
+<span class="line">    <span class="string">'Luas'</span>: [<span class="number">50</span>, <span class="number">60</span>, <span class="number">70</span>, <span class="number">80</span>, <span class="number">90</span>, <span class="number">100</span>, <span class="number">110</span>, <span class="number">120</span>],</span>
+<span class="line">    <span class="string">'Kamar'</span>: [<span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>],</span>
+<span class="line">    <span class="string">'Umur'</span>: [<span class="number">5</span>, <span class="number">10</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">2</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">4</span>],</span>
+<span class="line">    <span class="string">'Harga'</span>: [<span class="number">500</span>, <span class="number">550</span>, <span class="number">650</span>, <span class="number">700</span>, <span class="number">800</span>, <span class="number">900</span>, <span class="number">1000</span>, <span class="number">1100</span>]  <span class="comment"># dalam juta</span></span>
+<span class="line">}</span>
+<span class="line">df = pd.DataFrame(data)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Pisahkan fitur dan target</span></span>
+<span class="line">X = df[[<span class="string">'Luas'</span>, <span class="string">'Kamar'</span>, <span class="string">'Umur'</span>]]</span>
+<span class="line">y = df[<span class="string">'Harga'</span>]</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Split data</span></span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.25</span>, random_state=<span class="number">42</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Buat dan latih model</span></span>
+<span class="line">model = LinearRegression()</span>
+<span class="line">model.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Tampilkan koefisien</span></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Intercept: {model.intercept_:.2f}"</span>)</span>
+<span class="line"><span class="keyword">for</span> i, col <span class="keyword">in</span> <span class="function">enumerate</span>(X.columns):</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"{col}: {model.coef_[i]:.2f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Prediksi rumah baru</span></span>
+<span class="line">rumah_baru = [[<span class="number">85</span>, <span class="number">3</span>, <span class="number">5</span>]]  <span class="comment"># Luas 85m2, 3 kamar, umur 5 tahun</span></span>
+<span class="line">prediksi = model.predict(rumah_baru)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Prediksi harga: Rp {prediksi[0]:.2f} juta"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Evaluasi Model Regresi -->
+    <div class="slide">
+        <div class="content">
+            <h2>Evaluasi Model Regresi</h2>
+
+            <div class="definition-box">
+                <h3>Metrik Evaluasi Utama:</h3>
+
+                <h4>1. R² (R-squared / Coefficient of Determination)</h4>
+                <p style="font-size: 1.2em;">\[ R^2 = 1 - \frac{SS_{res}}{SS_{tot}} = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2} \]</p>
+                <ul>
+                    <li>Rentang: 0 - 1 (semakin tinggi semakin baik)</li>
+                    <li>Interpretasi: Proporsi varians y yang dijelaskan oleh model</li>
+                    <li>Contoh: R² = 0.85 → 85% variasi data dijelaskan model</li>
+                </ul>
+
+                <h4 style="margin-top: 20px;">2. MSE (Mean Squared Error)</h4>
+                <p style="font-size: 1.2em;">\[ MSE = \frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2 \]</p>
+                <ul>
+                    <li>Sensitif terhadap outlier (karena dikuadratkan)</li>
+                    <li>Satuan: kuadrat dari satuan y</li>
+                </ul>
+
+                <h4 style="margin-top: 20px;">3. RMSE (Root Mean Squared Error)</h4>
+                <p style="font-size: 1.2em;">\[ RMSE = \sqrt{MSE} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2} \]</p>
+                <ul>
+                    <li>Satuan sama dengan y (lebih mudah diinterpretasikan)</li>
+                    <li>Semakin rendah semakin baik</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Implementasi Evaluasi -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi Evaluasi Model</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code3')">Copy</button>
+                <pre><code id="code3"><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score, mean_absolute_error</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Prediksi pada data test</span></span>
+<span class="line">y_pred = model.predict(X_test)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Hitung metrik evaluasi</span></span>
+<span class="line">mse = mean_squared_error(y_test, y_pred)</span>
+<span class="line">rmse = np.sqrt(mse)</span>
+<span class="line">mae = mean_absolute_error(y_test, y_pred)</span>
+<span class="line">r2 = r2_score(y_test, y_pred)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"=== Evaluasi Model Regresi ==="</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"R² Score: {r2:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"MSE: {mse:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"RMSE: {rmse:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"MAE: {mae:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Visualisasi prediksi vs aktual</span></span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"></span>
+<span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span>
+<span class="line">plt.scatter(y_test, y_pred, alpha=<span class="number">0.6</span>)</span>
+<span class="line">plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], <span class="string">'r--'</span>, lw=<span class="number">2</span>)</span>
+<span class="line">plt.xlabel(<span class="string">'Actual'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Predicted'</span>)</span>
+<span class="line">plt.title(<span class="string">'Actual vs Predicted Values'</span>)</span>
+<span class="line">plt.tight_layout()</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Analisis Residual</span></span>
+<span class="line">residuals = y_test - y_pred</span>
+<span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span>
+<span class="line">plt.scatter(y_pred, residuals, alpha=<span class="number">0.6</span>)</span>
+<span class="line">plt.axhline(y=<span class="number">0</span>, color=<span class="string">'r'</span>, linestyle=<span class="string">'--'</span>)</span>
+<span class="line">plt.xlabel(<span class="string">'Predicted Values'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Residuals'</span>)</span>
+<span class="line">plt.title(<span class="string">'Residual Plot'</span>)</span>
+<span class="line">plt.tight_layout()</span>
+<span class="line">plt.show()</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Regularisasi: Ridge dan Lasso -->
+    <div class="slide">
+        <div class="content">
+            <h2>Regularisasi: Ridge dan Lasso Regression</h2>
+
+            <div class="definition-box">
+                <h3>Mengapa Regularisasi?</h3>
+                <p>Mencegah <strong>overfitting</strong> dengan menambahkan penalty pada koefisien yang terlalu besar</p>
+            </div>
+
+            <h3>1. Ridge Regression (L2 Regularization)</h3>
+            <div class="math-block">
+                <p style="font-size: 1.3em;">
+                    \[ \text{Loss} = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 + \alpha \sum_{j=1}^{p}\beta_j^2 \]
+                </p>
+                <ul>
+                    <li>Menyusutkan koefisien mendekati nol (tapi tidak persis nol)</li>
+                    <li>Baik untuk multicollinearity</li>
+                </ul>
+            </div>
+
+            <h3>2. Lasso Regression (L1 Regularization)</h3>
+            <div class="math-block">
+                <p style="font-size: 1.3em;">
+                    \[ \text{Loss} = \sum_{i=1}^{n}(y_i - \hat{y}_i)^2 + \alpha \sum_{j=1}^{p}|\beta_j| \]
+                </p>
+                <ul>
+                    <li>Dapat membuat beberapa koefisien persis nol</li>
+                    <li>Melakukan <strong>feature selection</strong> otomatis</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Implementasi Ridge dan Lasso -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi Ridge dan Lasso</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code4')">Copy</button>
+                <pre><code id="code4"><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Ridge, Lasso</span>
+<span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Standarisasi fitur (penting untuk regularisasi)</span></span>
+<span class="line">scaler = StandardScaler()</span>
+<span class="line">X_train_scaled = scaler.fit_transform(X_train)</span>
+<span class="line">X_test_scaled = scaler.transform(X_test)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Ridge Regression</span></span>
+<span class="line">ridge = Ridge(alpha=<span class="number">1.0</span>)  <span class="comment"># alpha = strength of regularization</span></span>
+<span class="line">ridge.fit(X_train_scaled, y_train)</span>
+<span class="line">y_pred_ridge = ridge.predict(X_test_scaled)</span>
+<span class="line">r2_ridge = r2_score(y_test, y_pred_ridge)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"Ridge Regression:"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"R² Score: {r2_ridge:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Coefficients: {ridge.coef_}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Lasso Regression</span></span>
+<span class="line">lasso = Lasso(alpha=<span class="number">1.0</span>)</span>
+<span class="line">lasso.fit(X_train_scaled, y_train)</span>
+<span class="line">y_pred_lasso = lasso.predict(X_test_scaled)</span>
+<span class="line">r2_lasso = r2_score(y_test, y_pred_lasso)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"\nLasso Regression:"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"R² Score: {r2_lasso:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Coefficients: {lasso.coef_}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Fitur yang dipilih: {sum(lasso.coef_ != 0)}/{len(lasso.coef_)}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Summary -->
+    <div class="slide">
+        <div class="content">
+            <h2>Ringkasan Part 1: Analisis Regresi</h2>
+
+            <div class="example-box">
+                <h3>Poin-poin Penting:</h3>
+                <ul>
+                    <li><strong>Regresi</strong> digunakan untuk prediksi nilai kontinu</li>
+                    <li><strong>Linear Sederhana:</strong> 1 prediktor, Linear Berganda: multiple prediktor</li>
+                    <li><strong>OLS</strong> mencari garis yang meminimalkan sum of squared errors</li>
+                    <li><strong>Asumsi:</strong> Linearitas, Independence, Homoscedasticity, Normalitas</li>
+                    <li><strong>Evaluasi:</strong> R², MSE, RMSE, MAE</li>
+                    <li><strong>Regularisasi:</strong> Ridge (L2) dan Lasso (L1) untuk mencegah overfitting</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>Hal yang Perlu Diperhatikan:</h3>
+                <ul>
+                    <li>Selalu cek asumsi regresi sebelum interpretasi</li>
+                    <li>Perhatikan outlier dan multicollinearity</li>
+                    <li>Standarisasi fitur untuk regularisasi</li>
+                    <li>Interpretasi koefisien harus hati-hati (correlation ≠ causation)</li>
+                </ul>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 40px;">Next: Part 2 - Klasifikasi</h3>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                setTimeout(() => { btn.innerText = originalText; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

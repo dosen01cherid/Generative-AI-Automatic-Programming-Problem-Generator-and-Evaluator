@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 11: Modeling: Regresi & Klasifikasi</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #667eea; font-size: 2.5em; margin-bottom: 20px; }
+        h2 { color: #764ba2; margin: 30px 0 15px; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        h3 { color: #667eea; margin: 20px 0 10px; }
+        .lab-info, .objectives, .exercise { padding: 20px; border-radius: 10px; margin: 20px 0; }
+        .lab-info { background: #e3f2fd; border-left: 5px solid #2196F3; }
+        .objectives { background: #f3e5f5; border-left: 5px solid #9c27b0; }
+        .exercise { background: #fff3cd; border-left: 5px solid #ffc107; }
+        .code-block { position: relative; margin: 15px 0; }
+        .copy-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: #667eea; color: white; border: none;
+            padding: 8px 16px; border-radius: 5px; cursor: pointer; z-index: 10;
+        }
+        .copy-btn:hover { background: #764ba2; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 20px; border-radius: 10px; overflow-x: auto; }
+        code { font-family: 'Courier New', monospace; font-size: 0.95em; line-height: 1.6; }
+        ul, ol { margin-left: 30px; margin-top: 10px; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lab 11: Modeling: Regresi & Klasifikasi</h1>
+
+        <div class="lab-info">
+            <h3>Lab Information</h3>
+            <p><strong>Duration:</strong> 120 minutes</p>
+            <p><strong>Prerequisites:</strong> Python, pandas, numpy, scikit-learn</p>
+        </div>
+
+        
+        <h2>Part 1: Linear Regression</h2>
+        <div class="exercise">
+            <h3>Exercise 1: Build Regression Model</h3>
+        </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+            <pre><code id="code1">from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+
+# Load data
+# X, y = ...
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Train model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred = model.predict(X_test)
+print("R2 Score:", r2_score(y_test, y_pred))
+print("RMSE:", mean_squared_error(y_test, y_pred, squared=False))</code></pre>
+        </div>
+
+        <h2>Part 2: Classification</h2>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code2')">Copy</button>
+            <pre><code id="code2">from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Train classifier
+clf = RandomForestClassifier(n_estimators=100)
+clf.fit(X_train, y_train)
+
+# Evaluate
+y_pred = clf.predict(X_test)
+print(classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))</code></pre>
+        </div>
+        
+
+        <h2>Submission</h2>
+        <div class="exercise">
+            <h3>What to Submit:</h3>
+            <ul>
+                <li>Jupyter Notebook (.ipynb) with all code and outputs</li>
+                <li>Lab Report (PDF) with analysis and conclusions</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(id) {
+            navigator.clipboard.writeText(document.getElementById(id).innerText);
+            event.target.innerText = 'Copied!';
+            event.target.style.background = '#4caf50';
+            setTimeout(() => { event.target.innerText = 'Copy'; event.target.style.background = '#667eea'; }, 2000);
+        }
+    </script>
+</body>
+</html>

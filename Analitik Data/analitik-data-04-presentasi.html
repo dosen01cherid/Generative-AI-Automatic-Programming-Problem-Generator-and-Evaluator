@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sesi 4: Eksplorasi Data</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            position: relative;
+        }
+
+        .slide-content {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 1200px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin: 25px 0 15px 0;
+        }
+
+        p, li {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #667eea33 0%, #764ba233 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .plot-container {
+            margin: 30px 0;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .formula {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .progress-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #667eea;
+            transition: width 0.3s;
+            z-index: 1000;
+        }
+
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 10px;
+        }
+
+        .interactive-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-indicator" id="progress"></div>
+
+    <!-- Slide 1: Title -->
+    <div class="slide">
+        <div class="slide-content">
+            <h1>📊 EKSPLORASI DATA</h1>
+            <div style="text-align: center; margin: 30px 0;">
+                <h2 style="border: none;">Sesi 4 - Data Analytics</h2>
+                <p style="font-size: 1.3em; color: #667eea; margin-top: 20px;">
+                    Universitas Mercu Buana<br>
+                    Fakultas Ilmu Komputer<br>
+                    Program Studi Sistem Informasi
+                </p>
+            </div>
+            <div class="highlight" style="text-align: center;">
+                <p><strong>Sub-CPMK 1.4:</strong> Mampu menjelaskan definisi eksplorasi data & pentingnya memahami dataset</p>
+                <p><strong>Durasi:</strong> 1.5 Jam (90 menit)</p>
+            </div>
+        </div>
+        <div class="slide-number">1 / 12</div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🎯 Tujuan Pembelajaran</h2>
+            <div class="two-column">
+                <div class="card">
+                    <h3>Pengetahuan</h3>
+                    <ul>
+                        <li>Memahami konsep eksplorasi data</li>
+                        <li>Mengenal tujuan eksplorasi data</li>
+                        <li>Memahami aktivitas dalam eksplorasi data</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Keterampilan</h3>
+                    <ul>
+                        <li>Menganalisis karakteristik dataset</li>
+                        <li>Mengidentifikasi pola dan hubungan</li>
+                        <li>Menggunakan tools eksplorasi data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">2 / 12</div>
+    </div>
+
+    <!-- Slide 3: What is Data Exploration -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🔍 Apa itu Eksplorasi Data?</h2>
+            <div class="highlight">
+                <p><strong>Definisi:</strong> Eksplorasi data adalah proses awal dalam analisis data yang bertujuan untuk memahami karakteristik, pola, dan struktur dataset sebelum melakukan analisis lebih lanjut.</p>
+            </div>
+            <h3>Analogi Sederhana</h3>
+            <p style="font-size: 1.2em; padding: 20px; background: #f0f4ff; border-radius: 10px;">
+                🗺️ Seperti penjelajah yang memetakan wilayah baru, eksplorasi data membantu kita "memetakan" struktur dan karakteristik data kita.
+            </p>
+            <div class="two-column" style="margin-top: 30px;">
+                <div>
+                    <h3>Mengapa Penting?</h3>
+                    <ul>
+                        <li>Memahami kualitas data</li>
+                        <li>Mengidentifikasi anomali</li>
+                        <li>Menemukan pola tersembunyi</li>
+                        <li>Menentukan metode analisis yang tepat</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Kapan Dilakukan?</h3>
+                    <ul>
+                        <li>Sebelum analisis formal</li>
+                        <li>Setelah pengumpulan data</li>
+                        <li>Saat pembersihan data</li>
+                        <li>Sebelum pemodelan</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">3 / 12</div>
+    </div>
+
+    <!-- Slide 4: Objectives of Data Exploration -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🎯 Tujuan Eksplorasi Data</h2>
+            <div class="card">
+                <h3>1. Memahami Struktur Data</h3>
+                <p>Mengetahui jumlah variabel, tipe data, dan dimensi dataset</p>
+            </div>
+            <div class="card">
+                <h3>2. Mengidentifikasi Kualitas Data</h3>
+                <p>Menemukan missing values, outliers, dan inkonsistensi data</p>
+            </div>
+            <div class="card">
+                <h3>3. Menemukan Pola dan Hubungan</h3>
+                <p>Mengidentifikasi korelasi antar variabel dan tren dalam data</p>
+            </div>
+            <div class="card">
+                <h3>4. Menghasilkan Hipotesis</h3>
+                <p>Membentuk pertanyaan dan asumsi untuk analisis lebih lanjut</p>
+            </div>
+            <div class="card">
+                <h3>5. Memvalidasi Asumsi</h3>
+                <p>Memverifikasi asumsi tentang distribusi dan karakteristik data</p>
+            </div>
+        </div>
+        <div class="slide-number">4 / 12</div>
+    </div>
+
+    <!-- Slide 5: EDA Activities -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📋 Aktivitas dalam Eksplorasi Data</h2>
+            <h3>1. Descriptive Statistics</h3>
+            <div class="highlight">
+                <p>Menghitung ukuran statistik dasar untuk memahami distribusi data:</p>
+                <ul>
+                    <li><strong>Central Tendency:</strong> Mean, Median, Mode</li>
+                    <li><strong>Dispersion:</strong> Range, Variance, Standard Deviation</li>
+                    <li><strong>Distribution:</strong> Skewness, Kurtosis</li>
+                </ul>
+            </div>
+            <div class="formula">
+                <p>Mean: \( \mu = \frac{1}{n}\sum_{i=1}^{n}x_i \)</p>
+                <p>Standard Deviation: \( \sigma = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(x_i - \mu)^2} \)</p>
+            </div>
+        </div>
+        <div class="slide-number">5 / 12</div>
+    </div>
+
+    <!-- Slide 6: More Activities -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📋 Aktivitas Eksplorasi Data (Lanjutan)</h2>
+            <h3>2. Data Profiling</h3>
+            <div class="card">
+                <ul>
+                    <li>Mengecek tipe data setiap kolom</li>
+                    <li>Menghitung jumlah nilai unik</li>
+                    <li>Mengidentifikasi missing values</li>
+                    <li>Mendeteksi duplikasi data</li>
+                </ul>
+            </div>
+            <h3>3. Univariate Analysis</h3>
+            <div class="card">
+                <p>Analisis satu variabel pada satu waktu:</p>
+                <ul>
+                    <li>Histogram untuk distribusi</li>
+                    <li>Box plot untuk outliers</li>
+                    <li>Frequency tables</li>
+                </ul>
+            </div>
+            <h3>4. Bivariate & Multivariate Analysis</h3>
+            <div class="card">
+                <p>Menganalisis hubungan antar variabel:</p>
+                <ul>
+                    <li>Scatter plots</li>
+                    <li>Correlation matrix</li>
+                    <li>Cross-tabulation</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-number">6 / 12</div>
+    </div>
+
+    <!-- Slide 7: Understanding Datasets -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📊 Memahami Dataset</h2>
+            <h3>Karakteristik Dataset yang Perlu Dipahami:</h3>
+            <table>
+                <tr>
+                    <th>Aspek</th>
+                    <th>Pertanyaan Kunci</th>
+                    <th>Metode</th>
+                </tr>
+                <tr>
+                    <td><strong>Dimensi</strong></td>
+                    <td>Berapa banyak baris dan kolom?</td>
+                    <td>df.shape</td>
+                </tr>
+                <tr>
+                    <td><strong>Tipe Data</strong></td>
+                    <td>Apa tipe setiap variabel?</td>
+                    <td>df.dtypes, df.info()</td>
+                </tr>
+                <tr>
+                    <td><strong>Nilai Hilang</strong></td>
+                    <td>Ada berapa missing values?</td>
+                    <td>df.isnull().sum()</td>
+                </tr>
+                <tr>
+                    <td><strong>Statistik Deskriptif</strong></td>
+                    <td>Bagaimana distribusinya?</td>
+                    <td>df.describe()</td>
+                </tr>
+                <tr>
+                    <td><strong>Nilai Unik</strong></td>
+                    <td>Berapa nilai berbeda per kolom?</td>
+                    <td>df.nunique()</td>
+                </tr>
+            </table>
+        </div>
+        <div class="slide-number">7 / 12</div>
+    </div>
+
+    <!-- Slide 8: Types of Data -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📊 Tipe-tipe Data dalam Analytics</h2>
+            <div class="two-column">
+                <div>
+                    <h3>1. Data Kualitatif (Categorical)</h3>
+                    <div class="card">
+                        <p><strong>Nominal:</strong> Kategori tanpa urutan</p>
+                        <p>Contoh: Jenis Kelamin (Pria, Wanita), Warna (Merah, Biru, Hijau)</p>
+                    </div>
+                    <div class="card">
+                        <p><strong>Ordinal:</strong> Kategori dengan urutan</p>
+                        <p>Contoh: Tingkat Pendidikan (SD, SMP, SMA, S1), Rating (1-5 bintang)</p>
+                    </div>
+                </div>
+                <div>
+                    <h3>2. Data Kuantitatif (Numerical)</h3>
+                    <div class="card">
+                        <p><strong>Diskrit:</strong> Bilangan bulat/countable</p>
+                        <p>Contoh: Jumlah Pelanggan (50, 51, 52), Jumlah Produk (10, 15, 20)</p>
+                    </div>
+                    <div class="card">
+                        <p><strong>Kontinu:</strong> Dapat berupa desimal</p>
+                        <p>Contoh: Tinggi Badan (170.5 cm), Harga (Rp 15.500), Suhu (36.7°C)</p>
+                    </div>
+                </div>
+            </div>
+            <div id="dataTypesChart" class="plot-container"></div>
+        </div>
+        <div class="slide-number">8 / 20</div>
+    </div>
+
+    <!-- Slide 9: Measures of Central Tendency -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📍 Ukuran Pemusatan Data (Central Tendency)</h2>
+            <div class="highlight">
+                <p><strong>Contoh Dataset:</strong> Nilai ujian 10 mahasiswa</p>
+                <p style="font-size: 1.3em; text-align: center;">75, 82, 90, 68, 88, 92, 78, 85, 88, 74</p>
+            </div>
+            
+            <div class="card">
+                <h3>1. Mean (Rata-rata) = 82.0</h3>
+                <div class="formula">
+                    \( \text{Mean} = \frac{75+82+90+68+88+92+78+85+88+74}{10} = \frac{820}{10} = 82 \)
+                </div>
+                <p>✓ Cocok untuk data normal, ✗ Sensitif terhadap outlier</p>
+            </div>
+
+            <div class="card">
+                <h3>2. Median (Nilai Tengah) = 83.5</h3>
+                <p>Data terurut: 68, 74, 75, 78, 82, 85, 88, 88, 90, 92</p>
+                <div class="formula">
+                    \( \text{Median} = \frac{82 + 85}{2} = 83.5 \)
+                </div>
+                <p>✓ Robust terhadap outlier, ✓ Cocok untuk data skewed</p>
+            </div>
+
+            <div class="card">
+                <h3>3. Mode (Nilai Paling Sering) = 88</h3>
+                <p>Nilai 88 muncul 2 kali (paling sering)</p>
+                <p>✓ Cocok untuk data kategorikal, ✓ Bisa ada lebih dari satu mode</p>
+            </div>
+        </div>
+        <div class="slide-number">9 / 20</div>
+    </div>
+
+    <!-- Slide 10: Measures of Dispersion -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📏 Ukuran Penyebaran Data (Dispersion)</h2>
+            <div class="highlight">
+                <p><strong>Dataset yang sama:</strong> 75, 82, 90, 68, 88, 92, 78, 85, 88, 74 | Mean = 82</p>
+            </div>
+
+            <div class="card">
+                <h3>1. Range (Rentang)</h3>
+                <div class="formula">
+                    \( \text{Range} = \text{Max} - \text{Min} = 92 - 68 = 24 \)
+                </div>
+                <p>Menunjukkan perbedaan antara nilai tertinggi dan terendah</p>
+            </div>
+
+            <div class="card">
+                <h3>2. Variance (Varians)</h3>
+                <div class="formula">
+                    \( s^2 = \frac{\sum(x_i - \bar{x})^2}{n-1} = \frac{(75-82)^2 + (82-82)^2 + ... + (74-82)^2}{9} \approx 64.4 \)
+                </div>
+                <p>Rata-rata kuadrat deviasi dari mean</p>
+            </div>
+
+            <div class="card">
+                <h3>3. Standard Deviation (Simpangan Baku)</h3>
+                <div class="formula">
+                    \( s = \sqrt{s^2} = \sqrt{64.4} \approx 8.03 \)
+                </div>
+                <p>Dalam satuan yang sama dengan data asli - lebih mudah diinterpretasi</p>
+                <p><strong>Interpretasi:</strong> 68% data berada dalam ±8.03 dari mean (74-90)</p>
+            </div>
+        </div>
+        <div class="slide-number">10 / 20</div>
+    </div>
+
+    <!-- Slide 11: Distribution Visualization -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📈 Visualisasi: Distribusi Data</h2>
+            <p>Contoh distribusi data normal vs. skewed:</p>
+            <div id="distributionPlot" class="plot-container"></div>
+            <div class="highlight">
+                <p><strong>Insight:</strong> Memahami distribusi data membantu kita memilih metode analisis yang tepat. Data normal memungkinkan penggunaan metode parametrik, sementara data skewed mungkin memerlukan transformasi.</p>
+            </div>
+        </div>
+        <div class="slide-number">11 / 20</div>
+    </div>
+
+    <!-- Slide 12: Box Plot and Outliers -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📦 Box Plot dan Deteksi Outlier</h2>
+            <div class="two-column">
+                <div>
+                    <h3>Komponen Box Plot:</h3>
+                    <ul>
+                        <li><strong>Q1 (Kuartil 1):</strong> 25% data terkecil</li>
+                        <li><strong>Q2 (Median):</strong> 50% data</li>
+                        <li><strong>Q3 (Kuartil 3):</strong> 75% data</li>
+                        <li><strong>IQR:</strong> Q3 - Q1</li>
+                        <li><strong>Whiskers:</strong> 1.5 × IQR</li>
+                    </ul>
+                    <div class="formula">
+                        <p>Outlier jika:</p>
+                        <p>\( x < Q1 - 1.5 \times IQR \)</p>
+                        <p>\( x > Q3 + 1.5 \times IQR \)</p>
+                    </div>
+                </div>
+                <div>
+                    <div id="boxPlot" class="plot-container"></div>
+                </div>
+            </div>
+            <div class="highlight">
+                <p><strong>Contoh:</strong> Gaji karyawan: Q1=4 juta, Q3=8 juta, IQR=4 juta</p>
+                <p>Outlier jika gaji < -2 juta atau > 14 juta</p>
+            </div>
+        </div>
+        <div class="slide-number">12 / 20</div>
+    </div>
+
+    <!-- Slide 13: Data Quality Issues -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>⚠️ Masalah Kualitas Data</h2>
+            <h3>1. Missing Values (Nilai Hilang)</h3>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Usia</th>
+                    <th>Gaji</th>
+                    <th>Departemen</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Andi</td>
+                    <td>25</td>
+                    <td>5.000.000</td>
+                    <td>IT</td>
+                </tr>
+                <tr style="background: #ffebee;">
+                    <td>2</td>
+                    <td>Budi</td>
+                    <td style="color: red;">NULL</td>
+                    <td>6.000.000</td>
+                    <td>HR</td>
+                </tr>
+                <tr style="background: #ffebee;">
+                    <td>3</td>
+                    <td>Citra</td>
+                    <td>30</td>
+                    <td style="color: red;">NULL</td>
+                    <td>Finance</td>
+                </tr>
+            </table>
+            <div class="two-column" style="margin-top: 20px;">
+                <div class="card">
+                    <h3>Penanganan Missing Values:</h3>
+                    <ul>
+                        <li><strong>Deletion:</strong> Hapus baris/kolom</li>
+                        <li><strong>Imputation:</strong> Isi dengan mean/median/mode</li>
+                        <li><strong>Prediction:</strong> Gunakan model prediksi</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Contoh Imputation:</h3>
+                    <p>Usia Budi (NULL) → Mean = (25+30)/2 = 27.5</p>
+                    <p>Gaji Citra (NULL) → Median = 5.5 juta</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">13 / 20</div>
+    </div>
+
+    <!-- Slide 14: Outliers Deep Dive -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🎯 Outlier: Deteksi dan Penanganan</h2>
+            <div class="highlight">
+                <p><strong>Contoh Dataset Penjualan Harian (dalam juta):</strong></p>
+                <p style="font-size: 1.2em; text-align: center;">2.5, 2.8, 3.1, 2.9, 3.2, 2.7, 15.0, 3.0, 2.6, 3.3</p>
+            </div>
+
+            <div class="card">
+                <h3>Metode 1: Z-Score</h3>
+                <div class="formula">
+                    \( Z = \frac{x - \mu}{\sigma} \)
+                </div>
+                <p>Mean = 4.11 juta, SD = 3.74 juta</p>
+                <p>Z-score untuk 15.0 = (15.0 - 4.11) / 3.74 = 2.91</p>
+                <p><strong>Kesimpulan:</strong> |Z| > 2.5 → Outlier terdeteksi!</p>
+            </div>
+
+            <div class="card">
+                <h3>Metode 2: IQR Method</h3>
+                <p>Q1 = 2.7, Q3 = 3.2, IQR = 0.5</p>
+                <p>Batas bawah = 2.7 - 1.5(0.5) = 1.95</p>
+                <p>Batas atas = 3.2 + 1.5(0.5) = 3.95</p>
+                <p><strong>Kesimpulan:</strong> 15.0 > 3.95 → Outlier!</p>
+            </div>
+
+            <div class="card">
+                <h3>Penanganan Outlier:</h3>
+                <ul>
+                    <li><strong>Investigasi:</strong> Cek apakah error data atau fenomena nyata</li>
+                    <li><strong>Removal:</strong> Hapus jika terbukti error</li>
+                    <li><strong>Transformation:</strong> Log transform untuk mengurangi dampak</li>
+                    <li><strong>Capping:</strong> Ganti dengan nilai batas (winsorization)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="slide-number">14 / 20</div>
+    </div>
+
+    <!-- Slide 15: Correlation -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🔗 Korelasi Antar Variabel</h2>
+            <div class="highlight">
+                <p><strong>Contoh:</strong> Hubungan antara Jam Belajar dan Nilai Ujian (10 siswa)</p>
+            </div>
+            <table style="max-width: 600px; margin: 20px auto;">
+                <tr>
+                    <th>Siswa</th>
+                    <th>Jam Belajar (X)</th>
+                    <th>Nilai (Y)</th>
+                </tr>
+                <tr><td>1</td><td>2</td><td>65</td></tr>
+                <tr><td>2</td><td>3</td><td>70</td></tr>
+                <tr><td>3</td><td>5</td><td>80</td></tr>
+                <tr><td>4</td><td>4</td><td>75</td></tr>
+                <tr><td>5</td><td>6</td><td>85</td></tr>
+            </table>
+
+            <div class="formula">
+                <p>Pearson Correlation Coefficient:</p>
+                <p>\( r = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum(x_i - \bar{x})^2 \sum(y_i - \bar{y})^2}} \approx 0.97 \)</p>
+            </div>
+
+            <div class="two-column">
+                <div class="card">
+                    <h3>Interpretasi r:</h3>
+                    <ul>
+                        <li>0.9 - 1.0: Sangat kuat positif</li>
+                        <li>0.7 - 0.9: Kuat positif</li>
+                        <li>0.4 - 0.7: Moderat positif</li>
+                        <li>0.0 - 0.4: Lemah positif</li>
+                        <li>Negatif: Hubungan terbalik</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>⚠️ Korelasi ≠ Kausalitas!</h3>
+                    <p>Contoh: Penjualan es krim berkorelasi dengan kasus tenggelam</p>
+                    <p>Bukan berarti es krim menyebabkan tenggelam!</p>
+                    <p><strong>Faktor ketiga:</strong> Musim panas</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">15 / 20</div>
+    </div>
+
+    <!-- Slide 16: Correlation Matrix -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🔢 Correlation Matrix</h2>
+            <div class="highlight">
+                <p><strong>Dataset E-Commerce:</strong> Hubungan antar metrik bisnis</p>
+            </div>
+            <div id="correlationHeatmap" class="plot-container"></div>
+            <div class="two-column">
+                <div class="card">
+                    <h3>Insight dari Matrix:</h3>
+                    <ul>
+                        <li>Harga berkorelasi negatif (-0.7) dengan Jumlah Terjual</li>
+                        <li>Rating berkorelasi positif (0.85) dengan Repeat Purchase</li>
+                        <li>Waktu Pengiriman berkorelasi negatif (-0.6) dengan Rating</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Multicollinearity Warning:</h3>
+                    <p>Jika dua variabel independen sangat berkorelasi (>0.8), bisa menyebabkan masalah dalam regresi</p>
+                    <p><strong>Solusi:</strong> Hapus salah satu atau gunakan PCA</p>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">16 / 20</div>
+    </div>
+
+    <!-- Slide 17: Data Transformation -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🔄 Transformasi Data</h2>
+            <h3>Mengapa Transformasi?</h3>
+            <ul>
+                <li>Menormalkan distribusi skewed</li>
+                <li>Mengurangi pengaruh outlier</li>
+                <li>Memenuhi asumsi model statistik</li>
+            </ul>
+
+            <div class="card">
+                <h3>1. Log Transformation</h3>
+                <div class="formula">
+                    \( y = \log(x) \)
+                </div>
+                <p><strong>Contoh:</strong> Pendapatan → Log(Pendapatan)</p>
+                <p>Data: 1000, 10000, 100000 → Log: 3, 4, 5</p>
+            </div>
+
+            <div class="card">
+                <h3>2. Square Root Transformation</h3>
+                <div class="formula">
+                    \( y = \sqrt{x} \)
+                </div>
+                <p><strong>Contoh:</strong> Jumlah Kasus → √Kasus</p>
+                <p>Data: 4, 16, 64, 256 → √: 2, 4, 8, 16</p>
+            </div>
+
+            <div class="card">
+                <h3>3. Standardization (Z-score)</h3>
+                <div class="formula">
+                    \( z = \frac{x - \mu}{\sigma} \)
+                </div>
+                <p>Mengubah mean = 0, SD = 1</p>
+                <p>Data: 50, 60, 70 (μ=60, σ=10) → Z: -1, 0, 1</p>
+            </div>
+
+            <div class="card">
+                <h3>4. Min-Max Normalization</h3>
+                <div class="formula">
+                    \( x' = \frac{x - x_{min}}{x_{max} - x_{min}} \)
+                </div>
+                <p>Skala data ke rentang [0,1]</p>
+                <p>Data: 10, 50, 90 → Normalized: 0, 0.5, 1</p>
+            </div>
+        </div>
+        <div class="slide-number">17 / 20</div>
+    </div>
+
+    <!-- Slide 18: Transformation Visualization -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📊 Efek Transformasi Data</h2>
+            <div id="transformationPlot" class="plot-container"></div>
+            <div class="highlight">
+                <p><strong>Perhatikan:</strong> Data skewed kanan menjadi lebih simetris setelah log transformation</p>
+                <p>Mean sebelum: 50.2 | Mean setelah log: 1.56</p>
+                <p>Skewness sebelum: 2.1 | Skewness setelah log: 0.3</p>
+            </div>
+        </div>
+        <div class="slide-number">18 / 20</div>
+    </div>
+
+    <!-- Slide 19: Scatter Plot and Correlation -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🔗 Visualisasi: Hubungan Antar Variabel</h2>
+            <p>Scatter plot menunjukkan korelasi antara dua variabel:</p>
+            <div id="scatterPlot" class="plot-container"></div>
+            <div class="formula">
+                <p>Correlation Coefficient: \( r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^{n}(x_i - \bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i - \bar{y})^2}} \)</p>
+            </div>
+        </div>
+        <div class="slide-number">19 / 20</div>
+    </div>
+
+    <!-- Slide 10: Tools -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>🛠️ Tools untuk Eksplorasi Data</h2>
+            <div class="two-column">
+                <div class="card">
+                    <h3>📊 Microsoft Excel</h3>
+                    <p><span class="badge">Pemula</span></p>
+                    <ul>
+                        <li>Pivot tables</li>
+                        <li>Charts & graphs</li>
+                        <li>Descriptive statistics</li>
+                        <li>Data filtering</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🔬 RapidMiner</h3>
+                    <p><span class="badge">Visual</span></p>
+                    <ul>
+                        <li>Drag-and-drop interface</li>
+                        <li>Statistical analysis</li>
+                        <li>Data profiling</li>
+                        <li>Visualization tools</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>🐍 Python (Pandas/Matplotlib)</h3>
+                    <p><span class="badge">Advanced</span></p>
+                    <ul>
+                        <li>Flexible data manipulation</li>
+                        <li>Extensive libraries</li>
+                        <li>Custom visualizations</li>
+                        <li>Reproducible analysis</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>📊 Power BI / Tableau</h3>
+                    <p><span class="badge">Business</span></p>
+                    <ul>
+                        <li>Interactive dashboards</li>
+                        <li>Real-time analysis</li>
+                        <li>Business intelligence</li>
+                        <li>Data storytelling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="slide-number">20 / 22</div>
+    </div>
+
+    <!-- Slide 11: Best Practices -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>✅ Best Practices dalam Eksplorasi Data</h2>
+            <div class="card">
+                <h3>1. Mulai dengan Pertanyaan</h3>
+                <p>Tentukan apa yang ingin Anda ketahui dari data</p>
+            </div>
+            <div class="card">
+                <h3>2. Dokumentasikan Temuan</h3>
+                <p>Catat semua insight dan anomali yang ditemukan</p>
+            </div>
+            <div class="card">
+                <h3>3. Visualisasikan Secara Efektif</h3>
+                <p>Pilih jenis chart yang sesuai dengan tipe data dan tujuan analisis</p>
+            </div>
+            <div class="card">
+                <h3>4. Validasi dengan Domain Knowledge</h3>
+                <p>Konfirmasi temuan dengan pengetahuan bisnis/domain</p>
+            </div>
+            <div class="card">
+                <h3>5. Iterasi dan Refinement</h3>
+                <p>Eksplorasi adalah proses iteratif, terus perbaiki pemahaman Anda</p>
+            </div>
+        </div>
+        <div class="slide-number">21 / 22</div>
+    </div>
+
+    <!-- Slide 12: Summary & Exercise -->
+    <div class="slide">
+        <div class="slide-content">
+            <h2>📝 Ringkasan & Tugas</h2>
+            <div class="highlight">
+                <h3>Key Takeaways:</h3>
+                <ul>
+                    <li>Eksplorasi data adalah langkah kritis sebelum analisis formal</li>
+                    <li>Melibatkan statistik deskriptif, profiling, dan visualisasi</li>
+                    <li>Membantu memahami kualitas, pola, dan hubungan dalam data</li>
+                    <li>Tools yang tepat dapat mempermudah proses eksplorasi</li>
+                </ul>
+            </div>
+            <h3>💡 Tugas Praktik:</h3>
+            <div class="card">
+                <p><strong>Analisis Dataset</strong></p>
+                <ol>
+                    <li>Pilih dataset dari domain yang Anda minati</li>
+                    <li>Lakukan eksplorasi data menggunakan tool pilihan</li>
+                    <li>Identifikasi minimal 5 insight dari data</li>
+                    <li>Buat visualisasi yang menunjukkan hubungan antar variabel</li>
+                    <li>Dokumentasikan temuan Anda dalam laporan singkat</li>
+                </ol>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.3em; color: #667eea;"><strong>Terima kasih!</strong> 🎓</p>
+            </div>
+        </div>
+        <div class="slide-number">22 / 22</div>
+    </div>
+
+    <script>
+        // Progress indicator
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progress').style.width = scrolled + '%';
+        });
+
+        // Data Types Chart
+        const dataTypesTrace = {
+            x: ['Nominal', 'Ordinal', 'Diskrit', 'Kontinu'],
+            y: [35, 25, 20, 30],
+            type: 'bar',
+            marker: {
+                color: ['#667eea', '#764ba2', '#f093fb', '#4facfe']
+            },
+            text: ['35%', '25%', '20%', '30%'],
+            textposition: 'auto',
+        };
+
+        const dataTypesLayout = {
+            title: 'Distribusi Tipe Data dalam Dataset Contoh',
+            xaxis: { title: 'Tipe Data' },
+            yaxis: { title: 'Persentase (%)' }
+        };
+
+        Plotly.newPlot('dataTypesChart', [dataTypesTrace], dataTypesLayout);
+
+        // Box Plot for Outlier Detection
+        const salesData = [2.5, 2.8, 3.1, 2.9, 3.2, 2.7, 15.0, 3.0, 2.6, 3.3, 2.4, 3.4, 2.9, 3.1];
+        
+        const boxTrace = {
+            y: salesData,
+            type: 'box',
+            name: 'Penjualan Harian',
+            marker: { color: '#667eea' },
+            boxmean: 'sd'
+        };
+
+        const boxLayout = {
+            title: 'Box Plot: Deteksi Outlier dalam Data Penjualan',
+            yaxis: { title: 'Penjualan (Juta Rupiah)' }
+        };
+
+        Plotly.newPlot('boxPlot', [boxTrace], boxLayout);
+
+        // Correlation Heatmap
+        const correlationMatrix = [
+            [1.00, -0.70, 0.45, 0.20],
+            [-0.70, 1.00, -0.35, 0.85],
+            [0.45, -0.35, 1.00, -0.60],
+            [0.20, 0.85, -0.60, 1.00]
+        ];
+
+        const heatmapTrace = {
+            z: correlationMatrix,
+            x: ['Harga', 'Jumlah Terjual', 'Rating', 'Repeat Purchase'],
+            y: ['Harga', 'Jumlah Terjual', 'Rating', 'Repeat Purchase'],
+            type: 'heatmap',
+            colorscale: [
+                [0, '#d32f2f'],
+                [0.5, '#ffffff'],
+                [1, '#1976d2']
+            ],
+            zmin: -1,
+            zmax: 1,
+            text: correlationMatrix.map(row => row.map(val => val.toFixed(2))),
+            texttemplate: '%{text}',
+            textfont: { size: 12 },
+            showscale: true
+        };
+
+        const heatmapLayout = {
+            title: 'Correlation Matrix: Metrik E-Commerce',
+            xaxis: { side: 'bottom' },
+            yaxis: { autorange: 'reversed' }
+        };
+
+        Plotly.newPlot('correlationHeatmap', [heatmapTrace], heatmapLayout);
+
+        // Transformation Plot
+        const originalData = [];
+        for (let i = 0; i < 1000; i++) {
+            originalData.push(Math.pow(Math.random(), 2) * 100 + 10);
+        }
+
+        const logTransformed = originalData.map(x => Math.log10(x));
+
+        const trace1 = {
+            x: originalData,
+            type: 'histogram',
+            name: 'Data Asli (Skewed)',
+            marker: { color: '#667eea' },
+            opacity: 0.7,
+            xbins: { size: 5 }
+        };
+
+        const trace2 = {
+            x: logTransformed,
+            type: 'histogram',
+            name: 'Setelah Log Transform',
+            marker: { color: '#764ba2' },
+            opacity: 0.7,
+            xbins: { size: 0.1 }
+        };
+
+        const transformLayout = {
+            title: 'Efek Log Transformation pada Data Skewed',
+            xaxis: { title: 'Nilai' },
+            yaxis: { title: 'Frekuensi' },
+            barmode: 'overlay',
+            showlegend: true
+        };
+
+        Plotly.newPlot('transformationPlot', [trace1, trace2], transformLayout);
+
+        // Distribution Plot
+        const normalDist = Array.from({length: 1000}, () => {
+            const u = 1 - Math.random();
+            const v = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        });
+
+        const skewedDist = Array.from({length: 1000}, () => {
+            return Math.pow(Math.random(), 2) * 10;
+        });
+
+        const distTrace1 = {
+            x: normalDist,
+            type: 'histogram',
+            name: 'Normal Distribution',
+            marker: { color: '#667eea' },
+            opacity: 0.7
+        };
+
+        const distTrace2 = {
+            x: skewedDist,
+            type: 'histogram',
+            name: 'Skewed Distribution',
+            marker: { color: '#764ba2' },
+            opacity: 0.7
+        };
+
+        const distLayout = {
+            title: 'Perbandingan Distribusi Data',
+            xaxis: { title: 'Nilai' },
+            yaxis: { title: 'Frekuensi' },
+            barmode: 'overlay'
+        };
+
+        Plotly.newPlot('distributionPlot', [distTrace1, distTrace2], distLayout);
+
+        // Scatter Plot
+        const x = Array.from({length: 100}, () => Math.random() * 100);
+        const y = x.map(val => val * 2 + (Math.random() - 0.5) * 40);
+
+        const scatterTrace = {
+            x: x,
+            y: y,
+            mode: 'markers',
+            type: 'scatter',
+            name: 'Data Points',
+            marker: {
+                size: 8,
+                color: x,
+                colorscale: 'Viridis',
+                showscale: true
+            }
+        };
+
+        // Add trend line
+        const coefficients = linearRegression(x, y);
+        const trendX = [Math.min(...x), Math.max(...x)];
+        const trendY = trendX.map(val => coefficients.slope * val + coefficients.intercept);
+
+        const trendTrace = {
+            x: trendX,
+            y: trendY,
+            mode: 'lines',
+            name: 'Trend Line',
+            line: { color: '#e74c3c', width: 3 }
+        };
+
+        const scatterLayout = {
+            title: 'Hubungan Antar Variabel (r ≈ 0.85)',
+            xaxis: { title: 'Variabel X' },
+            yaxis: { title: 'Variabel Y' }
+        };
+
+        Plotly.newPlot('scatterPlot', [scatterTrace, trendTrace], scatterLayout);
+
+        function linearRegression(x, y) {
+            const n = x.length;
+            const sumX = x.reduce((a, b) => a + b, 0);
+            const sumY = y.reduce((a, b) => a + b, 0);
+            const sumXY = x.reduce((sum, xi, i) => sum + xi * y[i], 0);
+            const sumX2 = x.reduce((sum, xi) => sum + xi * xi, 0);
+            
+            const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+            const intercept = (sumY - slope * sumX) / n;
+            
+            return { slope, intercept };
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

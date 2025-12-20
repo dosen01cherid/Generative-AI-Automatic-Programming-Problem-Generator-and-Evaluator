@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 7: Visualisasi Multivariat - Hands-on Practice</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        h3 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        .lab-info {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #2196F3;
+        }
+        .objectives {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #9c27b0;
+        }
+        .exercise {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .code-block {
+            position: relative;
+            margin: 15px 0;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #764ba2; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 0;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+        }
+        .note {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4caf50;
+        }
+        .warning {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff9800;
+        }
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 10px;
+            line-height: 1.8;
+        }
+        li { margin: 8px 0; }
+        .expected-output {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Lab 7: Visualisasi Multivariat</h1>
+        <p style="color: #666; margin-bottom: 20px;">Hands-on Practice with Python</p>
+
+        <div class="lab-info">
+            <h3>📋 Lab Information</h3>
+            <p><strong>Duration:</strong> 120 minutes</p>
+            <p><strong>Prerequisites:</strong> Python 3.x, pandas, numpy, matplotlib, seaborn, plotly</p>
+            <p><strong>Dataset:</strong> Sample datasets (built-in from seaborn)</p>
+        </div>
+
+        <div class="objectives">
+            <h3>🎯 Learning Objectives</h3>
+            <ul>
+                <li>Create various types of multivariate visualizations</li>
+                <li>Interpret correlation matrices and heatmaps</li>
+                <li>Use scatter plot matrices for exploratory analysis</li>
+                <li>Create interactive visualizations with Plotly</li>
+                <li>Apply best practices in data visualization</li>
+            </ul>
+        </div>
+
+        <h2>Part 1: Setup dan Import Libraries</h2>
+
+        <div class="exercise">
+            <h3>Exercise 1.1: Environment Setup</h3>
+            <p>Install required libraries if not already installed:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+            <pre><code id="code1"># Run in terminal/command prompt (only if not installed)
+# pip install pandas numpy matplotlib seaborn plotly</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 1.2: Import Libraries</h3>
+            <p>Import all necessary libraries for visualization:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code2')">Copy</button>
+            <pre><code id="code2">import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+# Set style for better looking plots
+sns.set_style("whitegrid")
+plt.rcParams['figure.figsize'] = (10, 6)
+
+# Display settings for better output
+import warnings
+warnings.filterwarnings('ignore')
+
+print("✓ All libraries imported successfully!")
+print(f"Pandas version: {pd.__version__}")
+print(f"Seaborn version: {sns.__version__}")</code></pre>
+        </div>
+
+        <h2>Part 2: Load dan Explore Dataset</h2>
+
+        <div class="exercise">
+            <h3>Exercise 2.1: Load Sample Dataset</h3>
+            <p>We'll use the famous Iris and Tips datasets from seaborn:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code3')">Copy</button>
+            <pre><code id="code3"># Load Iris dataset
+iris = sns.load_dataset('iris')
+print("Iris Dataset:")
+print(iris.head())
+print(f"\nShape: {iris.shape}")
+print(f"\nInfo:")
+print(iris.info())
+
+# Load Tips dataset
+tips = sns.load_dataset('tips')
+print("\n" + "="*50)
+print("Tips Dataset:")
+print(tips.head())
+print(f"\nShape: {tips.shape}")</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 2.2: Basic Data Exploration</h3>
+            <p>Explore basic statistics:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code4')">Copy</button>
+            <pre><code id="code4"># Statistical summary
+print("Iris Dataset Statistics:")
+print(iris.describe())
+
+# Check for missing values
+print("\nMissing Values:")
+print(iris.isnull().sum())
+
+# Check data types
+print("\nData Types:")
+print(iris.dtypes)</code></pre>
+        </div>
+
+        <h2>Part 3: Correlation Analysis</h2>
+
+        <div class="exercise">
+            <h3>Exercise 3.1: Calculate Correlation Matrix</h3>
+            <p>Calculate correlation between numerical variables:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code5')">Copy</button>
+            <pre><code id="code5"># Select only numerical columns
+numerical_cols = iris.select_dtypes(include=[np.number]).columns
+print("Numerical columns:", numerical_cols.tolist())
+
+# Calculate correlation matrix
+correlation_matrix = iris[numerical_cols].corr()
+print("\nCorrelation Matrix:")
+print(correlation_matrix)
+
+# Find highly correlated pairs (|correlation| > 0.8)
+high_corr = correlation_matrix.abs() > 0.8
+print("\nHighly Correlated Pairs:")
+for i in range(len(correlation_matrix.columns)):
+    for j in range(i+1, len(correlation_matrix.columns)):
+        if high_corr.iloc[i, j]:
+            print(f"{correlation_matrix.columns[i]} - {correlation_matrix.columns[j]}: {correlation_matrix.iloc[i, j]:.3f}")</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 3.2: Visualize Correlation with Heatmap</h3>
+            <p>Create an annotated heatmap:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code6')">Copy</button>
+            <pre><code id="code6"># Create correlation heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix,
+            annot=True,  # Show correlation values
+            cmap='coolwarm',  # Color scheme
+            center=0,  # Center colormap at 0
+            square=True,  # Square cells
+            linewidths=1,  # Add gridlines
+            cbar_kws={"shrink": 0.8},  # Colorbar size
+            fmt='.2f')  # Format numbers to 2 decimal places
+
+plt.title('Correlation Heatmap - Iris Dataset', fontsize=16, fontweight='bold')
+plt.tight_layout()
+plt.savefig('correlation_heatmap.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✓ Heatmap saved as 'correlation_heatmap.png'")</code></pre>
+        </div>
+
+        <div class="note">
+            <strong>💡 Interpretation Tips:</strong>
+            <ul>
+                <li>Red colors indicate positive correlation</li>
+                <li>Blue colors indicate negative correlation</li>
+                <li>Diagonal is always 1.0 (perfect correlation with itself)</li>
+                <li>Values close to 1 or -1 indicate strong correlation</li>
+            </ul>
+        </div>
+
+        <h2>Part 4: Scatter Plot Matrix (Pairplot)</h2>
+
+        <div class="exercise">
+            <h3>Exercise 4.1: Create Basic Pairplot</h3>
+            <p>Visualize relationships between all numerical variables:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code7')">Copy</button>
+            <pre><code id="code7"># Create pairplot
+pairplot = sns.pairplot(iris,
+                        hue='species',  # Color by species
+                        diag_kind='kde',  # KDE plots on diagonal
+                        plot_kws={'alpha': 0.6, 's': 80},  # Point transparency and size
+                        palette='Set2')  # Color palette
+
+pairplot.fig.suptitle('Pairplot - Iris Dataset', y=1.02, fontsize=16, fontweight='bold')
+plt.savefig('pairplot_iris.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("✓ Pairplot saved as 'pairplot_iris.png'")</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 4.2: Enhanced Pairplot with Regression Lines</h3>
+            <p>Add regression lines to scatter plots:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code8')">Copy</button>
+            <pre><code id="code8"># Pairplot with regression lines
+pairplot_reg = sns.pairplot(iris,
+                            hue='species',
+                            kind='reg',  # Add regression lines
+                            diag_kind='hist',  # Histograms on diagonal
+                            palette='husl',
+                            plot_kws={'scatter_kws': {'alpha': 0.5}})
+
+pairplot_reg.fig.suptitle('Pairplot with Regression Lines', y=1.02, fontsize=16)
+plt.show()</code></pre>
+        </div>
+
+        <h2>Part 5: Advanced Scatter Plots</h2>
+
+        <div class="exercise">
+            <h3>Exercise 5.1: Scatter Plot with Multiple Dimensions</h3>
+            <p>Use color, size, and style to encode multiple variables:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code9')">Copy</button>
+            <pre><code id="code9"># Using tips dataset
+plt.figure(figsize=(12, 7))
+scatter = plt.scatter(tips['total_bill'],
+                     tips['tip'],
+                     c=tips['size'],  # Color by party size
+                     s=tips['total_bill']*10,  # Size by total bill
+                     alpha=0.6,
+                     cmap='viridis',
+                     edgecolors='black',
+                     linewidth=0.5)
+
+plt.colorbar(scatter, label='Party Size')
+plt.xlabel('Total Bill ($)', fontsize=12)
+plt.ylabel('Tip ($)', fontsize=12)
+plt.title('Tips Analysis: Bill vs Tip (sized by bill amount, colored by party size)',
+          fontsize=14, fontweight='bold')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 5.2: Categorical Scatter Plot</h3>
+            <p>Compare distributions across categories:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code10')">Copy</button>
+            <pre><code id="code10"># Create figure with subplots
+fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+
+# Scatter plot by day
+sns.scatterplot(data=tips, x='total_bill', y='tip', hue='day',
+                style='time', s=100, alpha=0.7, ax=axes[0])
+axes[0].set_title('Tips by Day and Time', fontsize=14, fontweight='bold')
+axes[0].grid(True, alpha=0.3)
+
+# Scatter plot by sex and smoker status
+sns.scatterplot(data=tips, x='total_bill', y='tip', hue='sex',
+                style='smoker', s=100, alpha=0.7, ax=axes[1])
+axes[1].set_title('Tips by Gender and Smoker Status', fontsize=14, fontweight='bold')
+axes[1].grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()</code></pre>
+        </div>
+
+        <h2>Part 6: Boxplots and Violin Plots</h2>
+
+        <div class="exercise">
+            <h3>Exercise 6.1: Boxplot for Outlier Detection</h3>
+            <p>Visualize distribution and identify outliers:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code11')">Copy</button>
+            <pre><code id="code11"># Create boxplots for Iris dataset
+fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+features = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+
+for idx, feature in enumerate(features):
+    ax = axes[idx // 2, idx % 2]
+    sns.boxplot(data=iris, x='species', y=feature, palette='Set3', ax=ax)
+    ax.set_title(f'Distribution of {feature.replace("_", " ").title()}',
+                 fontsize=12, fontweight='bold')
+    ax.set_xlabel('Species', fontsize=10)
+    ax.set_ylabel(feature.replace('_', ' ').title(), fontsize=10)
+    ax.grid(True, alpha=0.3, axis='y')
+
+plt.suptitle('Boxplots - Iris Features by Species', fontsize=16, fontweight='bold')
+plt.tight_layout()
+plt.show()</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 6.2: Violin Plots for Distribution Visualization</h3>
+            <p>Show full distribution with violin plots:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code12')">Copy</button>
+            <pre><code id="code12"># Violin plots
+fig, axes = plt.subplots(1, 2, figsize=(15, 6))
+
+# Violin plot 1
+sns.violinplot(data=iris, x='species', y='petal_length',
+               palette='muted', inner='quartile', ax=axes[0])
+axes[0].set_title('Petal Length Distribution by Species', fontsize=14, fontweight='bold')
+axes[0].grid(True, alpha=0.3, axis='y')
+
+# Violin plot 2 - Split by category
+sns.violinplot(data=tips, x='day', y='total_bill', hue='sex',
+               split=True, palette='Set2', ax=axes[1])
+axes[1].set_title('Total Bill Distribution by Day and Gender', fontsize=14, fontweight='bold')
+axes[1].grid(True, alpha=0.3, axis='y')
+axes[1].legend(title='Gender')
+
+plt.tight_layout()
+plt.show()</code></pre>
+        </div>
+
+        <h2>Part 7: Interactive Visualizations with Plotly</h2>
+
+        <div class="exercise">
+            <h3>Exercise 7.1: Interactive Scatter Plot</h3>
+            <p>Create interactive scatter plot with hover information:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code13')">Copy</button>
+            <pre><code id="code13"># Interactive scatter plot
+fig = px.scatter(iris,
+                 x='sepal_length',
+                 y='sepal_width',
+                 color='species',
+                 size='petal_length',
+                 hover_data=['petal_width'],
+                 title='Interactive Iris Dataset Visualization',
+                 labels={'sepal_length': 'Sepal Length (cm)',
+                        'sepal_width': 'Sepal Width (cm)',
+                        'species': 'Species'},
+                 color_discrete_sequence=px.colors.qualitative.Set2)
+
+fig.update_layout(
+    hovermode='closest',
+    template='plotly_white',
+    height=600
+)
+
+fig.show()
+# To save: fig.write_html('interactive_scatter.html')</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 7.2: Interactive 3D Scatter Plot</h3>
+            <p>Visualize data in 3D space:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code14')">Copy</button>
+            <pre><code id="code14"># 3D scatter plot
+fig_3d = px.scatter_3d(iris,
+                       x='sepal_length',
+                       y='sepal_width',
+                       z='petal_length',
+                       color='species',
+                       size='petal_width',
+                       hover_name='species',
+                       title='3D Visualization of Iris Dataset',
+                       labels={'sepal_length': 'Sepal Length',
+                              'sepal_width': 'Sepal Width',
+                              'petal_length': 'Petal Length'},
+                       color_discrete_sequence=px.colors.qualitative.Vivid)
+
+fig_3d.update_layout(
+    scene=dict(
+        xaxis_title='Sepal Length (cm)',
+        yaxis_title='Sepal Width (cm)',
+        zaxis_title='Petal Length (cm)'
+    ),
+    height=700
+)
+
+fig_3d.show()</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>Exercise 7.3: Interactive Correlation Heatmap</h3>
+            <p>Create interactive heatmap with Plotly:</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code15')">Copy</button>
+            <pre><code id="code15"># Interactive heatmap
+corr_matrix = iris[numerical_cols].corr()
+
+fig_heatmap = go.Figure(data=go.Heatmap(
+    z=corr_matrix.values,
+    x=corr_matrix.columns,
+    y=corr_matrix.columns,
+    colorscale='RdBu',
+    zmid=0,
+    text=corr_matrix.values.round(2),
+    texttemplate='%{text}',
+    textfont={"size": 12},
+    colorbar=dict(title="Correlation")
+))
+
+fig_heatmap.update_layout(
+    title='Interactive Correlation Heatmap - Iris Dataset',
+    xaxis_title='Features',
+    yaxis_title='Features',
+    height=600,
+    template='plotly_white'
+)
+
+fig_heatmap.show()</code></pre>
+        </div>
+
+        <h2>Part 8: Challenge Exercises</h2>
+
+        <div class="exercise">
+            <h3>🏆 Challenge 1: Complete Exploratory Analysis</h3>
+            <p>Perform a complete multivariate analysis on the 'tips' dataset:</p>
+            <ol>
+                <li>Calculate and visualize the correlation matrix</li>
+                <li>Create a pairplot to explore relationships</li>
+                <li>Identify which factors most influence tip amount</li>
+                <li>Create at least 3 different types of visualizations</li>
+                <li>Write conclusions based on your findings</li>
+            </ol>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code16')">Copy</button>
+            <pre><code id="code16"># Your code here for Challenge 1
+
+# Step 1: Load and explore
+tips = sns.load_dataset('tips')
+
+# Step 2: Correlation analysis
+
+
+# Step 3: Pairplot
+
+
+# Step 4: Additional visualizations
+
+
+# Step 5: Statistical analysis
+</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>🏆 Challenge 2: Create a Dashboard</h3>
+            <p>Create a comprehensive dashboard with subplots showing:</p>
+            <ol>
+                <li>Distribution plots for all numerical variables</li>
+                <li>Correlation heatmap</li>
+                <li>Scatter plots for key relationships</li>
+                <li>Box plots for outlier detection</li>
+            </ol>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode('code17')">Copy</button>
+            <pre><code id="code17"># Your code here for Challenge 2
+
+# Create a 2x2 subplot dashboard
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
+
+# Subplot 1: Distributions
+
+
+# Subplot 2: Correlation heatmap
+
+
+# Subplot 3: Scatter plot
+
+
+# Subplot 4: Box plots
+
+
+plt.tight_layout()
+plt.show()
+</code></pre>
+        </div>
+
+        <div class="exercise">
+            <h3>🏆 Challenge 3: Interactive Dashboard with Plotly</h3>
+            <p>Create an interactive dashboard using Plotly subplots that includes:</p>
+            <ol>
+                <li>Interactive scatter plot with dropdown to select variables</li>
+                <li>Interactive histogram with slider for bin size</li>
+                <li>Animated scatter plot showing changes over a categorical variable</li>
+            </ol>
+        </div>
+
+        <h2>📝 Lab Submission Requirements</h2>
+
+        <div class="warning">
+            <h3>What to Submit:</h3>
+            <ol>
+                <li><strong>Jupyter Notebook (.ipynb)</strong> with all code and outputs</li>
+                <li><strong>Saved visualizations</strong> (PNG format, minimum 5 plots)</li>
+                <li><strong>Lab Report (PDF)</strong> containing:
+                    <ul>
+                        <li>Introduction and dataset description</li>
+                        <li>Methodology (what analyses you performed)</li>
+                        <li>Results (screenshots of visualizations)</li>
+                        <li>Interpretation and insights from each visualization</li>
+                        <li>Conclusions and recommendations</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <h2>📚 Additional Resources</h2>
+        <ul>
+            <li><a href="https://seaborn.pydata.org/tutorial.html" target="_blank">Seaborn Tutorial</a></li>
+            <li><a href="https://matplotlib.org/stable/gallery/index.html" target="_blank">Matplotlib Gallery</a></li>
+            <li><a href="https://plotly.com/python/" target="_blank">Plotly Python Documentation</a></li>
+            <li><a href="https://pandas.pydata.org/docs/user_guide/visualization.html" target="_blank">Pandas Visualization</a></li>
+        </ul>
+
+        <div class="note" style="margin-top: 30px;">
+            <h3>✅ Checklist Before Submission:</h3>
+            <ul style="list-style: none;">
+                <li>☐ All code runs without errors</li>
+                <li>☐ All visualizations are properly labeled</li>
+                <li>☐ Interpretations are included for each visualization</li>
+                <li>☐ Code is well-commented</li>
+                <li>☐ Challenge exercises completed</li>
+                <li>☐ Lab report is comprehensive and well-formatted</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                btn.style.background = '#4caf50';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

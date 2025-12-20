@@ -1,0 +1,582 @@
+SET SOAL MACHINE LEARNING - Customer Churn Prediction for ISP Business
+
+Set soal ini dirancang untuk menguji pemahaman tentang penerapan machine learning
+dalam konteks bisnis nyata, khususnya prediksi churn pelanggan untuk Internet Service Provider.
+
+
+###Problem Title: Business Problem Understanding
+Problem Description: Memahami konteks bisnis dan alasan menggunakan machine learning untuk prediksi churn
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Customer churn dalam konteks Internet Service Provider (ISP) berarti:
+Option A: Pelanggan membatalkan layanan dan berhenti berlangganan
+Option B: Pelanggan meningkatkan paket langganan mereka
+Option C: Pelanggan membayar tagihan tepat waktu
+Option D: Pelanggan menambah layanan tambahan
+Correct Answer: A
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Biaya untuk mempertahankan pelanggan existing ($50-$100) jauh lebih murah dibandingkan biaya akuisisi pelanggan baru ($500-$800). Perbandingan ini menunjukkan:
+Option A: Retention lebih cost-effective 5-25 kali lipat dibanding akuisisi
+Option B: Akuisisi lebih penting daripada retention
+Option C: Biaya retention dan akuisisi sama pentingnya
+Option D: Pelanggan baru lebih menguntungkan
+Correct Answer: A
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Pilih semua manfaat menggunakan ML untuk prediksi churn:
+Option A: Prediksi sebelum pelanggan benar-benar churn (proactive)
+Option B: Targeting retention yang lebih efisien (fokus pada high-risk)
+Option C: Menghilangkan churn sepenuhnya (100% accuracy)
+Option D: Memahami faktor-faktor penyebab churn
+Correct Answer: A, B, D
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Model ML churn prediction dapat mencapai 100% akurasi sehingga bisa menghilangkan churn sepenuhnya
+Correct Answer: False
+
+
+###Problem Title: Data Understanding & Exploratory Data Analysis
+Problem Description: Memahami dataset pelanggan dan analisis eksploratori
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Dataset pelanggan TeleConnect ISP berisi 5000 pelanggan dengan berbagai fitur. Fitur mana yang merupakan target variable (yang akan diprediksi)?
+Option A: churn (apakah pelanggan akan berhenti berlangganan)
+Option B: customer_id (ID unik pelanggan)
+Option C: tenure (lama berlangganan dalam bulan)
+Option D: monthly_charges (biaya bulanan)
+Correct Answer: A
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Dalam dataset, variabel seperti contract_type, internet_service, payment_method disebut variabel {blank}
+Correct Answer: categorical
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Dari EDA, pelanggan dengan contract type "Month-to-month" memiliki churn rate tertinggi (~40%). Ini menunjukkan:
+Option A: Contract jangka pendek memiliki risiko churn lebih tinggi
+Option B: Contract jangka pendek lebih menguntungkan
+Option C: Semua contract type memiliki risiko sama
+Option D: Contract type tidak mempengaruhi churn
+Correct Answer: A
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Berdasarkan feature importance analysis, pilih fitur-fitur yang paling berpengaruh terhadap churn:
+Option A: Tenure (lama berlangganan)
+Option B: Contract type (jenis kontrak)
+Option C: Warna logo perusahaan
+Option D: Number of support tickets (jumlah keluhan)
+Correct Answer: A, B, D
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Pelanggan dengan banyak support tickets (>4) cenderung memiliki churn probability yang lebih tinggi
+Correct Answer: True
+
+
+###Problem Title: Data Preprocessing & Feature Engineering
+Problem Description: Memahami tahap preprocessing data sebelum training model
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Mengapa kita perlu melakukan one-hot encoding pada variabel categorical seperti contract_type?
+Option A: Machine learning model memerlukan input numerik
+Option B: Untuk membuat data lebih besar
+Option C: Agar data lebih mudah dibaca manusia
+Option D: Tidak perlu dilakukan encoding
+Correct Answer: A
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Dataset dibagi menjadi training set (80%) dan testing set (20%). Apa fungsi testing set?
+Option A: Mengevaluasi performa model pada data yang belum pernah dilihat
+Option B: Melatih model agar lebih akurat
+Option C: Memperbesar ukuran dataset
+Option D: Menghemat waktu komputasi
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Feature scaling (StandardScaler) penting untuk model seperti Logistic Regression, tetapi tidak diperlukan untuk tree-based models seperti Random Forest
+Correct Answer: True
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Proses mengubah variabel categorical menjadi beberapa kolom binary (0/1) disebut {blank} encoding
+Correct Answer: one-hot
+
+
+###Problem Title: Model Selection & Training
+Problem Description: Memahami berbagai algoritma ML dan proses training
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Dari tiga model yang dilatih (Logistic Regression, Random Forest, XGBoost), mana yang biasanya memberikan performa terbaik untuk prediksi churn?
+Option A: XGBoost (state-of-the-art gradient boosting)
+Option B: Selalu Logistic Regression
+Option C: Tidak ada perbedaan sama sekali
+Option D: Model sederhana selalu lebih baik
+Correct Answer: A
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Pilih karakteristik yang benar tentang Random Forest:
+Option A: Ensemble method yang menggabungkan banyak decision trees
+Option B: Robust terhadap outliers
+Option C: Bisa menangani non-linear relationships
+Option D: Hanya bisa digunakan untuk regression
+Correct Answer: A, B, C
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Logistic Regression memodelkan probabilitas dengan menggunakan fungsi sigmoid yang menghasilkan output antara 0 dan 1
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: XGBoost membangun trees secara sequential di mana setiap tree baru memperbaiki error dari tree sebelumnya. Teknik ini disebut:
+Option A: Gradient Boosting
+Option B: Random Selection
+Option C: Linear Regression
+Option D: K-Means Clustering
+Correct Answer: A
+
+
+###Problem Title: Model Evaluation Metrics
+Problem Description: Memahami metrik evaluasi untuk classification models
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Accuracy mengukur:
+Option A: Persentase prediksi yang benar dari total prediksi
+Option B: Hanya mengukur true positives
+Option C: Hanya mengukur false positives
+Option D: Waktu training model
+Correct Answer: A
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Precision mengukur: dari semua yang diprediksi akan churn, berapa persen yang benar-benar churn. Recall mengukur:
+Option A: Dari semua yang benar-benar churn, berapa persen yang berhasil diprediksi
+Option B: Sama persis dengan precision
+Option C: Kecepatan model membuat prediksi
+Option D: Ukuran model dalam megabytes
+Correct Answer: A
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: ROC-AUC score mengukur kemampuan model membedakan antara kelas positif dan negatif, dengan nilai berkisar dari 0 sampai {blank}
+Correct Answer: 1
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Confusion matrix menampilkan True Positives, False Positives, True Negatives, dan False Negatives untuk membantu memahami jenis error yang dibuat model
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Jika model memiliki Precision=0.85 dan Recall=0.75, F1-Score berguna untuk:
+Option A: Memberikan single metric yang menyeimbangkan precision dan recall
+Option B: Menggantikan keduanya karena tidak berguna
+Option C: Hanya mengukur precision
+Option D: Hanya mengukur recall
+Correct Answer: A
+
+
+###Problem Title: Feature Importance & Interpretation
+Problem Description: Memahami fitur mana yang paling berpengaruh dalam prediksi
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Feature importance dari tree-based models (Random Forest, XGBoost) membantu mengidentifikasi faktor bisnis yang paling mempengaruhi churn
+Correct Answer: True
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Berdasarkan feature importance analysis, rekomendasi bisnis yang tepat adalah:
+Option A: Tawarkan insentif untuk kontrak jangka panjang (annual/2-year)
+Option B: Tingkatkan kualitas tech support untuk mengurangi tickets
+Option C: Abaikan pelanggan baru karena mereka tidak penting
+Option D: Promosikan automatic payment methods
+Correct Answer: A, B, D
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Jika tenure (lama berlangganan) memiliki feature importance tertinggi, ini berarti:
+Option A: Tenure adalah faktor paling penting dalam memprediksi churn
+Option B: Tenure tidak relevan untuk prediksi
+Option C: Model mengabaikan tenure
+Option D: Tenure harus dihapus dari model
+Correct Answer: A
+
+
+###Problem Title: Model Deployment - Prediction API
+Problem Description: Memahami deployment model sebagai REST API menggunakan Flask
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Flask API endpoint "/predict" menerima data pelanggan dan mengembalikan:
+Option A: Prediksi churn, probability, risk level, dan rekomendasi
+Option B: Hanya customer_id
+Option C: Tidak mengembalikan apa-apa
+Option D: Source code model
+Correct Answer: A
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Model dan artifacts disimpan menggunakan library Python bernama {blank} dalam format .pkl
+Correct Answer: pickle
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Jika customer memiliki churn_probability >= 0.7, risk level diklasifikasikan sebagai:
+Option A: HIGH (immediate action required)
+Option B: LOW (standard service)
+Option C: MEDIUM (monitor closely)
+Option D: UNKNOWN
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Endpoint "/health" digunakan untuk memeriksa apakah API berjalan dengan baik dan model sudah loaded
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Batch prediction endpoint "/predict/batch" berguna untuk:
+Option A: Memproses banyak pelanggan sekaligus secara efisien
+Option B: Hanya bisa memproses satu pelanggan
+Option C: Menghapus data pelanggan
+Option D: Melatih ulang model
+Correct Answer: A
+
+
+###Problem Title: Batch Scoring Pipeline
+Problem Description: Memahami automated batch scoring untuk scoring rutin semua pelanggan
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Batch scoring pipeline TeleConnect dijalankan seminggu sekali untuk:
+Option A: Score semua 50,000 pelanggan dan identifikasi high-risk customers
+Option B: Menghapus pelanggan dari database
+Option C: Hanya scoring 10 pelanggan
+Option D: Melatih model baru
+Correct Answer: A
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Output dari batch scoring pipeline mencakup:
+Option A: File CSV berisi semua predictions dengan risk levels
+Option B: High-risk customer list terpisah untuk retention team
+Option C: Summary statistics (jumlah high/medium/low risk)
+Option D: Penghapusan data pelanggan
+Correct Answer: A, B, C
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Batch scoring dapat di-schedule menggunakan cron (Linux/Mac) atau Task Scheduler (Windows) untuk otomasi
+Correct Answer: True
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Hasil batch scoring biasanya disimpan dengan timestamp dalam nama file, misalnya churn_predictions_{blank}.csv
+Correct Answer: 20250101_120000
+
+
+###Problem Title: Business Dashboard & Visualization
+Problem Description: Memahami dashboard untuk business users menggunakan Streamlit
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Streamlit dashboard TeleConnect menampilkan:
+Option A: Summary metrics, risk distribution charts, dan high-risk customer table
+Option B: Hanya source code
+Option C: Tidak menampilkan apa-apa
+Option D: Hanya customer_id
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Dashboard menyediakan fitur customer lookup untuk mencari prediksi churn individual customer berdasarkan customer_id
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Visualisasi risk distribution menggunakan pie chart dan histogram untuk membantu:
+Option A: Business users memahami distribusi risiko pelanggan secara visual
+Option B: Melatih model baru
+Option C: Menghapus data
+Option D: Mengenkripsi data
+Correct Answer: A
+
+
+###Problem Title: Model Monitoring & Performance Tracking
+Problem Description: Memahami pentingnya monitoring performa model di production
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Mengapa model monitoring penting di production?
+Option A: Performa model bisa menurun over time (model drift/concept drift)
+Option B: Model tidak pernah berubah performanya
+Option C: Monitoring tidak diperlukan
+Option D: Model akan improve sendiri tanpa monitoring
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Concept drift terjadi ketika pola perilaku pelanggan berubah seiring waktu, menyebabkan model menjadi kurang akurat
+Correct Answer: True
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Untuk monitoring model performance, kita perlu:
+Option A: Membandingkan predictions dengan actual churn outcomes
+Option B: Track metrics (accuracy, precision, recall, ROC-AUC) over time
+Option C: Set threshold alerts ketika performance turun
+Option D: Tidak perlu melakukan apa-apa
+Correct Answer: A, B, C
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Jika accuracy turun di bawah threshold (misalnya <75%), rekomendasi adalah {blank} model dengan data terbaru
+Correct Answer: retrain
+
+
+###Problem Title: Business Impact & ROI Calculation
+Problem Description: Memahami cara mengukur nilai bisnis dari ML system
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Jika retention campaign berhasil save 350 customers/year, dengan annual revenue $1200 dan retention cost $100 per customer, revenue saved adalah:
+Option A: 350 x ($1200 - $100) = $385,000
+Option B: 350 x $100 = $35,000
+Option C: 350 x $1200 = $420,000
+Option D: $0 karena tidak ada benefit
+Correct Answer: A
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: ROI (Return on Investment) dihitung sebagai:
+Option A: ((Total Benefit - Total Cost) / Total Cost) x 100%
+Option B: Total Benefit / Total Cost
+Option C: Total Cost - Total Benefit
+Option D: Tidak bisa dihitung
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Acquisition costs avoided (karena tidak perlu acquire replacement customers) merupakan komponen penting dalam ROI calculation
+Correct Answer: True
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Jika ML system cost $50,000 dan total benefit $612,500, maka ROI adalah {blank}%
+Correct Answer: 1125
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Komponen benefit dalam ROI calculation meliputi:
+Option A: Revenue saved from retained customers
+Option B: Acquisition costs avoided
+Option C: ML system development cost (ini adalah cost, bukan benefit)
+Option D: Improved customer satisfaction (indirect benefit)
+Correct Answer: A, B, D
+
+
+###Problem Title: Production Best Practices
+Problem Description: Memahami best practices untuk ML system di production
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Security best practices untuk ML system meliputi:
+Option A: Encrypt customer data in transit dan at rest
+Option B: Implement role-based access control
+Option C: Share passwords in plain text
+Option D: Audit logging untuk track access
+Correct Answer: A, B, D
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Training-serving skew terjadi ketika preprocessing di training berbeda dengan di production, menyebabkan prediction errors
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Recommended retraining frequency untuk churn prediction model adalah:
+Option A: Quarterly (setiap 3 bulan) dengan data 12 bulan terakhir
+Option B: Tidak pernah retrain
+Option C: Setiap jam
+Option D: Sekali saja waktu development
+Correct Answer: A
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: A/B testing dalam ML deployment berguna untuk:
+Option A: Test model baru sebelum full deployment
+Option B: Compare performance antara model lama dan baru
+Option C: Ensure model improvement benar-benar menguntungkan
+Option D: Menghapus semua data
+Correct Answer: A, B, C
+
+
+###Problem Title: Integration with Business Processes
+Problem Description: Memahami bagaimana ML system terintegrasi dengan business processes
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: High-risk customers (probability >= 0.7) dari model seharusnya:
+Option A: Dikontak oleh retention team dengan special offers/incentives
+Option B: Diabaikan karena mereka akan churn
+Option C: Dikenakan biaya tambahan
+Option D: Dihapus dari database
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: ML predictions harus diintegrasikan dengan CRM system agar customer service team dapat melihat risk level saat interaksi dengan pelanggan
+Correct Answer: True
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Actionable interventions berdasarkan churn predictions:
+Option A: Offer discount atau upgrade untuk long-term contract
+Option B: Proactive outreach dari customer success team
+Option C: Priority technical support untuk customers dengan banyak tickets
+Option D: Ignore semua predictions
+Correct Answer: A, B, C
+
+#
+Step Type: fill-blank
+Must Be Correct: true
+Step Description: Feedback loop penting untuk improve model: hasil actual churn digunakan untuk {blank} model performance dan retrain
+Correct Answer: evaluate
+
+
+###Problem Title: Real-World Deployment Scenarios
+Problem Description: Memahami skenario deployment dalam dunia nyata
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Untuk handle 50,000 customers, optimal approach adalah:
+Option A: Batch scoring mingguan + real-time API untuk cases tertentu
+Option B: Hanya real-time prediction untuk semua
+Option C: Hanya manual analysis
+Option D: Tidak perlu prediction sama sekali
+Correct Answer: A
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Caching predictions dapat meningkatkan performance dengan mengurangi redundant computations untuk customer yang sama
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Error handling yang baik di production API harus:
+Option A: Gracefully handle missing data, log errors, return informative messages
+Option B: Crash application saat ada error
+Option C: Ignore all errors
+Option D: Delete customer data saat error
+Correct Answer: A
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Scalability considerations untuk production ML system:
+Option A: Load balancing across multiple servers
+Option B: Async processing dengan message queues
+Option C: Database indexing untuk fast lookups
+Option D: Single server tanpa backup
+Correct Answer: A, B, C
+
+
+###Problem Title: Future Enhancements & Advanced Topics
+Problem Description: Memahami potential improvements untuk churn prediction system
+
+#
+Step Type: multiple-choice-multiple
+Must Be Correct: true
+Step Description: Potential future enhancements untuk churn prediction system:
+Option A: Add customer sentiment analysis from support call transcripts
+Option B: Deep learning models (neural networks)
+Option C: Personalized retention offers based on customer preferences
+Option D: Remove all features to simplify model
+Correct Answer: A, B, C
+
+#
+Step Type: true-false
+Must Be Correct: true
+Step Description: Combining churn prediction dengan Customer Lifetime Value (CLV) prediction dapat membantu prioritize retention efforts pada high-value customers
+Correct Answer: True
+
+#
+Step Type: multiple-choice-single
+Must Be Correct: true
+Step Description: Real-time churn trigger detection (misalnya sudden spike in support tickets) dapat:
+Option A: Enable immediate intervention before customer decides to churn
+Option B: Hanya berguna untuk historical analysis
+Option C: Tidak ada manfaatnya
+Option D: Menggantikan batch scoring sepenuhnya
+Correct Answer: A

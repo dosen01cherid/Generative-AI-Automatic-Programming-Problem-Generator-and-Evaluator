@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 11 Part 3: Evaluasi Model</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { font-size: 3em; color: #667eea; margin-bottom: 30px; text-align: center; }
+        h2 { font-size: 2.2em; color: #764ba2; margin: 30px 0 20px 0; }
+        h3 { font-size: 1.8em; color: #667eea; margin: 25px 0 15px 0; }
+        h4 { font-size: 1.4em; color: #764ba2; margin: 20px 0 10px 0; }
+        p, li { font-size: 1.2em; line-height: 1.8; margin: 15px 0; }
+        .content { max-width: 1200px; width: 100%; }
+        .math-block {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        .code-container { position: relative; margin: 25px 0; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #764ba2; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            display: block;
+        }
+        code .line { display: block; min-height: 1.6em; }
+        .keyword { color: #ff79c6; }
+        .function { color: #50fa7b; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .example-box {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+        .definition-box {
+            background: #f3e5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #9c27b0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .success-box {
+            background: #d4edda;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #28a745;
+        }
+        .info-box {
+            background: #d1ecf1;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #17a2b8;
+        }
+        .plot-container { margin: 30px 0; width: 100%; }
+        ul, ol { margin-left: 30px; }
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1.1em;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .confusion-matrix {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            gap: 2px;
+            background: #ddd;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        .confusion-matrix > div {
+            background: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .confusion-matrix .header {
+            background: #667eea;
+            color: white;
+        }
+        .confusion-matrix .label {
+            background: #764ba2;
+            color: white;
+        }
+        .confusion-matrix .tp { background: #d4edda; }
+        .confusion-matrix .tn { background: #d4edda; }
+        .confusion-matrix .fp { background: #f8d7da; }
+        .confusion-matrix .fn { background: #f8d7da; }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title Slide -->
+    <div class="slide">
+        <div class="content">
+            <h1>Session 11: Modelling</h1>
+            <h2>Part 3: Evaluasi Model</h2>
+            <p style="text-align: center; font-size: 1.5em; margin-top: 40px;">
+                Data Analitik - Universitas Mercu Buana
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide">
+        <div class="content">
+            <h2>Tujuan Pembelajaran Part 3</h2>
+
+            <div class="definition-box">
+                <h3>Sub-CPMK SC2.3 (Lanjutan)</h3>
+                <p><strong>Mampu mengevaluasi model regresi dan klasifikasi dengan metrik yang tepat</strong></p>
+            </div>
+
+            <h3>Tujuan Pembelajaran:</h3>
+            <ul>
+                <li>Memahami pentingnya evaluasi model</li>
+                <li>Mengenal metrik evaluasi untuk klasifikasi</li>
+                <li>Memahami Confusion Matrix dan interpretasinya</li>
+                <li>Memahami Accuracy, Precision, Recall, dan F1-Score</li>
+                <li>Memahami ROC Curve dan AUC</li>
+                <li>Memahami Cross-Validation</li>
+                <li>Mampu memilih metrik yang tepat untuk berbagai kasus</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Mengapa Evaluasi Model Penting? -->
+    <div class="slide">
+        <div class="content">
+            <h2>Mengapa Evaluasi Model Penting?</h2>
+
+            <div class="warning-box">
+                <h3>Tanpa evaluasi yang tepat:</h3>
+                <ul>
+                    <li>Tidak tahu apakah model benar-benar akurat</li>
+                    <li>Tidak bisa membandingkan berbagai model</li>
+                    <li>Risiko overfitting atau underfitting</li>
+                    <li>Model bias terhadap kelas tertentu</li>
+                    <li>Keputusan bisnis berdasarkan prediksi yang salah</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>Dengan evaluasi yang tepat:</h3>
+                <ul>
+                    <li>Memahami performa model secara objektif</li>
+                    <li>Mengidentifikasi kelemahan model</li>
+                    <li>Memilih model terbaik untuk deployment</li>
+                    <li>Mengetahui trade-off antara metrik berbeda</li>
+                    <li>Membuat keputusan data-driven yang reliable</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Confusion Matrix -->
+    <div class="slide">
+        <div class="content">
+            <h2>Confusion Matrix</h2>
+
+            <div class="definition-box">
+                <h3>Definisi</h3>
+                <p><strong>Confusion Matrix</strong> adalah tabel yang menampilkan performa model klasifikasi dengan membandingkan prediksi dengan nilai aktual.</p>
+            </div>
+
+            <h3>Struktur Confusion Matrix (Binary Classification):</h3>
+            <div class="confusion-matrix">
+                <div></div>
+                <div class="header">Predicted: Negative (0)</div>
+                <div class="header">Predicted: Positive (1)</div>
+
+                <div class="label">Actual: Negative (0)</div>
+                <div class="tn">True Negative (TN)<br>Correct!</div>
+                <div class="fp">False Positive (FP)<br>Type I Error</div>
+
+                <div class="label">Actual: Positive (1)</div>
+                <div class="fn">False Negative (FN)<br>Type II Error</div>
+                <div class="tp">True Positive (TP)<br>Correct!</div>
+            </div>
+
+            <div class="example-box">
+                <h3>Contoh: Medical Test</h3>
+                <ul>
+                    <li><strong>TP:</strong> Pasien sakit, diprediksi sakit ✓</li>
+                    <li><strong>TN:</strong> Pasien sehat, diprediksi sehat ✓</li>
+                    <li><strong>FP:</strong> Pasien sehat, diprediksi sakit ✗ (False Alarm)</li>
+                    <li><strong>FN:</strong> Pasien sakit, diprediksi sehat ✗ (Missed Detection)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Metrik Dasar dari Confusion Matrix -->
+    <div class="slide">
+        <div class="content">
+            <h2>Metrik Evaluasi Klasifikasi</h2>
+
+            <div class="math-block">
+                <h3>1. Accuracy (Akurasi)</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ Accuracy = \frac{TP + TN}{TP + TN + FP + FN} \]
+                </p>
+                <p><strong>Interpretasi:</strong> Proporsi prediksi yang benar dari keseluruhan prediksi</p>
+                <ul>
+                    <li><strong>Kapan digunakan:</strong> Dataset balanced</li>
+                    <li><strong>Kelemahan:</strong> Misleading pada imbalanced data</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">2. Precision (Presisi)</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ Precision = \frac{TP}{TP + FP} \]
+                </p>
+                <p><strong>Interpretasi:</strong> Dari semua yang diprediksi positif, berapa yang benar-benar positif?</p>
+                <ul>
+                    <li><strong>Kapan digunakan:</strong> Cost of False Positive tinggi</li>
+                    <li><strong>Contoh:</strong> Spam detection (jangan blokir email penting)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Recall dan F1-Score -->
+    <div class="slide">
+        <div class="content">
+            <h2>Recall dan F1-Score</h2>
+
+            <div class="math-block">
+                <h3>3. Recall / Sensitivity / True Positive Rate (TPR)</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ Recall = \frac{TP}{TP + FN} \]
+                </p>
+                <p><strong>Interpretasi:</strong> Dari semua yang sebenarnya positif, berapa yang berhasil terdeteksi?</p>
+                <ul>
+                    <li><strong>Kapan digunakan:</strong> Cost of False Negative tinggi</li>
+                    <li><strong>Contoh:</strong> Cancer detection (jangan miss pasien sakit)</li>
+                </ul>
+
+                <h3 style="margin-top: 30px;">4. F1-Score (Harmonic Mean of Precision & Recall)</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall} \]
+                </p>
+                <p><strong>Interpretasi:</strong> Balance antara Precision dan Recall</p>
+                <ul>
+                    <li><strong>Kapan digunakan:</strong> Butuh balance, imbalanced data</li>
+                    <li><strong>Range:</strong> 0 - 1 (semakin tinggi semakin baik)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Trade-off Precision vs Recall -->
+    <div class="slide">
+        <div class="content">
+            <h2>Trade-off: Precision vs Recall</h2>
+
+            <div class="info-box">
+                <h3>Precision vs Recall Trade-off</h3>
+                <p>Meningkatkan satu metrik sering menurunkan metrik lainnya</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Skenario</th>
+                        <th>Prioritas</th>
+                        <th>Metrik Utama</th>
+                        <th>Alasan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Medical Diagnosis</strong></td>
+                        <td>Jangan miss pasien sakit</td>
+                        <td>Recall ↑</td>
+                        <td>False Negative berbahaya (pasien sakit tidak terdeteksi)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Spam Detection</strong></td>
+                        <td>Jangan blokir email penting</td>
+                        <td>Precision ↑</td>
+                        <td>False Positive mengganggu (email penting di spam)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fraud Detection</strong></td>
+                        <td>Deteksi semua fraud</td>
+                        <td>Recall ↑</td>
+                        <td>Miss fraud = kerugian finansial besar</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Recommendation System</strong></td>
+                        <td>Rekomendasi harus akurat</td>
+                        <td>Precision ↑</td>
+                        <td>Rekomendasi buruk = user experience jelek</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Balanced Case</strong></td>
+                        <td>Balance keduanya</td>
+                        <td>F1-Score ↑</td>
+                        <td>Tidak ada prioritas jelas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 8: Implementasi Confusion Matrix & Metrics -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Confusion Matrix & Metrics</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+                <pre><code id="code1"><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> (confusion_matrix, accuracy_score, </span>
+<span class="line">                             precision_score, recall_score, f1_score,</span>
+<span class="line">                             classification_report)</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Assuming we have y_test and y_pred from previous model</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 1. Confusion Matrix</span></span>
+<span class="line">cm = confusion_matrix(y_test, y_pred)</span>
+<span class="line"><span class="function">print</span>(<span class="string">"Confusion Matrix:"</span>)</span>
+<span class="line"><span class="function">print</span>(cm)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Visualize Confusion Matrix</span></span>
+<span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span>
+<span class="line">sns.heatmap(cm, annot=<span class="keyword">True</span>, fmt=<span class="string">'d'</span>, cmap=<span class="string">'Blues'</span>, </span>
+<span class="line">            xticklabels=[<span class="string">'Negative'</span>, <span class="string">'Positive'</span>],</span>
+<span class="line">            yticklabels=[<span class="string">'Negative'</span>, <span class="string">'Positive'</span>])</span>
+<span class="line">plt.ylabel(<span class="string">'Actual'</span>)</span>
+<span class="line">plt.xlabel(<span class="string">'Predicted'</span>)</span>
+<span class="line">plt.title(<span class="string">'Confusion Matrix'</span>)</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 2. Calculate Metrics</span></span>
+<span class="line">accuracy = accuracy_score(y_test, y_pred)</span>
+<span class="line">precision = precision_score(y_test, y_pred)</span>
+<span class="line">recall = recall_score(y_test, y_pred)</span>
+<span class="line">f1 = f1_score(y_test, y_pred)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"\nAccuracy:  {accuracy:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Precision: {precision:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Recall:    {recall:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"F1-Score:  {f1:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># 3. Classification Report (all metrics at once)</span></span>
+<span class="line"><span class="function">print</span>(<span class="string">"\n=== Classification Report ==="</span>)</span>
+<span class="line"><span class="function">print</span>(classification_report(y_test, y_pred))</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: ROC Curve dan AUC -->
+    <div class="slide">
+        <div class="content">
+            <h2>ROC Curve dan AUC</h2>
+
+            <div class="definition-box">
+                <h3>ROC (Receiver Operating Characteristic) Curve</h3>
+                <p>Grafik yang menampilkan trade-off antara <strong>True Positive Rate (TPR)</strong> dan <strong>False Positive Rate (FPR)</strong> pada berbagai threshold.</p>
+            </div>
+
+            <div class="math-block">
+                <h3>Komponen ROC:</h3>
+                <p style="font-size: 1.3em;">
+                    \[ TPR = Recall = \frac{TP}{TP + FN} \]
+                </p>
+                <p style="font-size: 1.3em;">
+                    \[ FPR = \frac{FP}{FP + TN} \]
+                </p>
+                <p><strong>ROC Curve:</strong> Plot TPR (y-axis) vs FPR (x-axis)</p>
+            </div>
+
+            <div class="info-box">
+                <h3>AUC (Area Under the Curve)</h3>
+                <ul>
+                    <li><strong>AUC = 1.0:</strong> Perfect classifier</li>
+                    <li><strong>AUC = 0.9 - 1.0:</strong> Excellent</li>
+                    <li><strong>AUC = 0.8 - 0.9:</strong> Good</li>
+                    <li><strong>AUC = 0.7 - 0.8:</strong> Fair</li>
+                    <li><strong>AUC = 0.5:</strong> Random guessing (no better than coin flip)</li>
+                    <li><strong>AUC < 0.5:</strong> Worse than random (model predicts opposite!)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Implementasi ROC & AUC -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: ROC Curve & AUC</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code2')">Copy</button>
+                <pre><code id="code2"><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> roc_curve, roc_auc_score, auc</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Get probability predictions (not just class labels)</span></span>
+<span class="line">y_pred_proba = model.predict_proba(X_test)[:, <span class="number">1</span>]  <span class="comment"># Probability of class 1</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Calculate ROC curve</span></span>
+<span class="line">fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Calculate AUC</span></span>
+<span class="line">roc_auc = roc_auc_score(y_test, y_pred_proba)</span>
+<span class="line"><span class="comment"># Alternative: auc_score = auc(fpr, tpr)</span></span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"AUC Score: {roc_auc:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Plot ROC Curve</span></span>
+<span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span>
+<span class="line">plt.plot(fpr, tpr, color=<span class="string">'darkorange'</span>, lw=<span class="number">2</span>, </span>
+<span class="line">         label=<span class="string">f'ROC curve (AUC = {roc_auc:.2f})'</span>)</span>
+<span class="line">plt.plot([<span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">1</span>], color=<span class="string">'navy'</span>, lw=<span class="number">2</span>, linestyle=<span class="string">'--'</span>,</span>
+<span class="line">         label=<span class="string">'Random Classifier (AUC = 0.50)'</span>)</span>
+<span class="line">plt.xlim([<span class="number">0.0</span>, <span class="number">1.0</span>])</span>
+<span class="line">plt.ylim([<span class="number">0.0</span>, <span class="number">1.05</span>])</span>
+<span class="line">plt.xlabel(<span class="string">'False Positive Rate'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'True Positive Rate'</span>)</span>
+<span class="line">plt.title(<span class="string">'Receiver Operating Characteristic (ROC) Curve'</span>)</span>
+<span class="line">plt.legend(loc=<span class="string">"lower right"</span>)</span>
+<span class="line">plt.grid(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Find optimal threshold</span></span>
+<span class="line">optimal_idx = np.argmax(tpr - fpr)</span>
+<span class="line">optimal_threshold = thresholds[optimal_idx]</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Optimal Threshold: {optimal_threshold:.4f}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Precision-Recall Curve -->
+    <div class="slide">
+        <div class="content">
+            <h2>Precision-Recall Curve</h2>
+
+            <div class="definition-box">
+                <h3>Kapan menggunakan PR Curve vs ROC Curve?</h3>
+                <ul>
+                    <li><strong>ROC Curve:</strong> Baik untuk balanced dataset</li>
+                    <li><strong>Precision-Recall Curve:</strong> Lebih baik untuk <strong>imbalanced dataset</strong></li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>Contoh Imbalanced Data:</h3>
+                <p>Fraud Detection: 99% legitimate, 1% fraud</p>
+                <ul>
+                    <li>ROC Curve bisa misleading (AUC tinggi meski model buruk)</li>
+                    <li>PR Curve lebih informatif untuk kasus minority class</li>
+                </ul>
+            </div>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code3')">Copy</button>
+                <pre><code id="code3"><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> precision_recall_curve, average_precision_score</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Calculate Precision-Recall curve</span></span>
+<span class="line">precision, recall, thresholds = precision_recall_curve(y_test, y_pred_proba)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Calculate Average Precision (AP)</span></span>
+<span class="line">ap_score = average_precision_score(y_test, y_pred_proba)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Average Precision Score: {ap_score:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Plot PR Curve</span></span>
+<span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span>
+<span class="line">plt.plot(recall, precision, color=<span class="string">'blue'</span>, lw=<span class="number">2</span>,</span>
+<span class="line">         label=<span class="string">f'PR curve (AP = {ap_score:.2f})'</span>)</span>
+<span class="line">plt.xlabel(<span class="string">'Recall'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Precision'</span>)</span>
+<span class="line">plt.title(<span class="string">'Precision-Recall Curve'</span>)</span>
+<span class="line">plt.legend(loc=<span class="string">"lower left"</span>)</span>
+<span class="line">plt.grid(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)</span>
+<span class="line">plt.show()</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Cross-Validation -->
+    <div class="slide">
+        <div class="content">
+            <h2>Cross-Validation</h2>
+
+            <div class="definition-box">
+                <h3>Apa itu Cross-Validation?</h3>
+                <p>Teknik untuk mengevaluasi model dengan membagi data menjadi multiple folds, melatih dan menguji model pada kombinasi berbeda.</p>
+            </div>
+
+            <h3>K-Fold Cross-Validation:</h3>
+            <ol>
+                <li>Bagi data menjadi K bagian (folds)</li>
+                <li>Untuk setiap fold:
+                    <ul>
+                        <li>Gunakan 1 fold sebagai test set</li>
+                        <li>Gunakan K-1 fold lainnya sebagai training set</li>
+                        <li>Train model dan evaluasi</li>
+                    </ul>
+                </li>
+                <li>Rata-rata hasil dari K iterasi</li>
+            </ol>
+
+            <div class="success-box">
+                <h3>Keuntungan Cross-Validation:</h3>
+                <ul>
+                    <li>Semua data digunakan untuk training dan testing</li>
+                    <li>Evaluasi lebih reliable (mengurangi variance)</li>
+                    <li>Mendeteksi overfitting</li>
+                    <li>Lebih baik untuk dataset kecil</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h3>Kekurangan:</h3>
+                <ul>
+                    <li>Lebih lambat (train model K kali)</li>
+                    <li>Tidak cocok untuk time-series data (gunakan TimeSeriesSplit)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Implementasi Cross-Validation -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Cross-Validation</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code4')">Copy</button>
+                <pre><code id="code4"><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> cross_val_score, cross_validate</span>
+<span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Create model</span></span>
+<span class="line">model = RandomForestClassifier(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Method 1: Simple cross-validation with single metric</span></span>
+<span class="line">cv_scores = cross_val_score(model, X, y, cv=<span class="number">5</span>, scoring=<span class="string">'accuracy'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"Cross-Validation Scores:"</span>, cv_scores)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Mean Accuracy: {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Method 2: Cross-validation with multiple metrics</span></span>
+<span class="line">scoring = [<span class="string">'accuracy'</span>, <span class="string">'precision'</span>, <span class="string">'recall'</span>, <span class="string">'f1'</span>, <span class="string">'roc_auc'</span>]</span>
+<span class="line">cv_results = cross_validate(model, X, y, cv=<span class="number">5</span>, scoring=scoring)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"\n=== Cross-Validation Results (5-Fold) ==="</span>)</span>
+<span class="line"><span class="keyword">for</span> metric <span class="keyword">in</span> scoring:</span>
+<span class="line">    scores = cv_results[<span class="string">f'test_{metric}'</span>]</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"{metric.capitalize():12s}: {scores.mean():.4f} (+/- {scores.std():.4f})"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Method 3: Stratified K-Fold (maintains class distribution)</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> StratifiedKFold</span>
+<span class="line"></span>
+<span class="line">skf = StratifiedKFold(n_splits=<span class="number">5</span>, shuffle=<span class="keyword">True</span>, random_state=<span class="number">42</span>)</span>
+<span class="line">cv_scores_strat = cross_val_score(model, X, y, cv=skf, scoring=<span class="string">'f1'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"\nStratified CV F1-Score: {cv_scores_strat.mean():.4f}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Multiclass Classification Metrics -->
+    <div class="slide">
+        <div class="content">
+            <h2>Evaluasi Multiclass Classification</h2>
+
+            <div class="definition-box">
+                <h3>Averaging Methods untuk Multiclass:</h3>
+                <p>Ketika ada > 2 kelas, metrik seperti precision/recall perlu di-aggregate</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Deskripsi</th>
+                        <th>Kapan Digunakan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>macro</strong></td>
+                        <td>Hitung metrik per kelas, lalu rata-rata (semua kelas equal weight)</td>
+                        <td>Semua kelas sama penting</td>
+                    </tr>
+                    <tr>
+                        <td><strong>weighted</strong></td>
+                        <td>Rata-rata berbobot berdasarkan jumlah sampel per kelas</td>
+                        <td>Imbalanced data, kelas besar lebih penting</td>
+                    </tr>
+                    <tr>
+                        <td><strong>micro</strong></td>
+                        <td>Aggregate kontribusi semua kelas untuk hitung metrik</td>
+                        <td>Dataset sangat imbalanced</td>
+                    </tr>
+                    <tr>
+                        <td><strong>samples</strong></td>
+                        <td>Hitung metrik untuk setiap instance</td>
+                        <td>Multilabel classification</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code5')">Copy</button>
+                <pre><code id="code5"><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> precision_recall_fscore_support</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Calculate metrics for multiclass</span></span>
+<span class="line">precision_macro = precision_score(y_test, y_pred, average=<span class="string">'macro'</span>)</span>
+<span class="line">recall_macro = recall_score(y_test, y_pred, average=<span class="string">'macro'</span>)</span>
+<span class="line">f1_macro = f1_score(y_test, y_pred, average=<span class="string">'macro'</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"Macro-averaged Metrics:"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"  Precision: {precision_macro:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"  Recall:    {recall_macro:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"  F1-Score:  {f1_macro:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Per-class metrics</span></span>
+<span class="line">precision, recall, f1, support = precision_recall_fscore_support(y_test, y_pred)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"\nPer-Class Metrics:"</span>)</span>
+<span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">len</span>(precision)):</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"Class {i}: P={precision[i]:.3f}, R={recall[i]:.3f}, F1={f1[i]:.3f}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Memilih Metrik yang Tepat -->
+    <div class="slide">
+        <div class="content">
+            <h2>Panduan Memilih Metrik Evaluasi</h2>
+
+            <table style="font-size: 1em;">
+                <thead>
+                    <tr>
+                        <th>Kondisi</th>
+                        <th>Metrik yang Direkomendasikan</th>
+                        <th>Alasan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Balanced Dataset</strong></td>
+                        <td>Accuracy, F1-Score</td>
+                        <td>Semua kelas terwakili dengan baik</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Imbalanced Dataset</strong></td>
+                        <td>F1-Score, Precision-Recall AUC</td>
+                        <td>Accuracy bisa misleading</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost of FP tinggi</strong></td>
+                        <td>Precision</td>
+                        <td>Fokus mengurangi false positive</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cost of FN tinggi</strong></td>
+                        <td>Recall</td>
+                        <td>Fokus mengurangi false negative</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Need probabilistic output</strong></td>
+                        <td>ROC-AUC, Log Loss</td>
+                        <td>Evaluasi confidence prediksi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Multiclass balanced</strong></td>
+                        <td>Macro F1-Score</td>
+                        <td>Treat semua kelas equally</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Multiclass imbalanced</strong></td>
+                        <td>Weighted F1-Score</td>
+                        <td>Consider class distribution</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ranking/Ordering important</strong></td>
+                        <td>ROC-AUC, NDCG</td>
+                        <td>Measure ranking quality</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 16: Complete Evaluation Pipeline -->
+    <div class="slide">
+        <div class="content">
+            <h2>Complete Model Evaluation Pipeline</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code6')">Copy</button>
+                <pre><code id="code6"><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split, cross_val_score</span>
+<span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span>
+<span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> *</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">def</span> <span class="function">evaluate_model</span>(model, X_train, X_test, y_train, y_test):</span>
+<span class="line">    <span class="string">"""Comprehensive model evaluation"""</span></span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># Train model</span></span>
+<span class="line">    model.fit(X_train, y_train)</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># Predictions</span></span>
+<span class="line">    y_pred = model.predict(X_test)</span>
+<span class="line">    y_pred_proba = model.predict_proba(X_test)[:, <span class="number">1</span>]</span>
+<span class="line">    </span>
+<span class="line">    <span class="function">print</span>(<span class="string">"="</span>*<span class="number">60</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">"MODEL EVALUATION REPORT"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">"="</span>*<span class="number">60</span>)</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># 1. Basic Metrics</span></span>
+<span class="line">    <span class="function">print</span>(<span class="string">"\n1. BASIC METRICS"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   Accuracy:  {accuracy_score(y_test, y_pred):.4f}"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   Precision: {precision_score(y_test, y_pred):.4f}"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   Recall:    {recall_score(y_test, y_pred):.4f}"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   F1-Score:  {f1_score(y_test, y_pred):.4f}"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   ROC-AUC:   {roc_auc_score(y_test, y_pred_proba):.4f}"</span>)</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># 2. Confusion Matrix</span></span>
+<span class="line">    <span class="function">print</span>(<span class="string">"\n2. CONFUSION MATRIX"</span>)</span>
+<span class="line">    <span class="function">print</span>(confusion_matrix(y_test, y_pred))</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># 3. Classification Report</span></span>
+<span class="line">    <span class="function">print</span>(<span class="string">"\n3. CLASSIFICATION REPORT"</span>)</span>
+<span class="line">    <span class="function">print</span>(classification_report(y_test, y_pred))</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># 4. Cross-Validation</span></span>
+<span class="line">    cv_scores = cross_val_score(model, X_train, y_train, cv=<span class="number">5</span>, </span>
+<span class="line">                                scoring=<span class="string">'f1'</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"\n4. CROSS-VALIDATION (5-Fold)"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   F1 Scores: {cv_scores}"</span>)</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"   Mean F1:   {cv_scores.mean():.4f} (+/- {cv_scores.std():.4f})"</span>)</span>
+<span class="line">    </span>
+<span class="line">    <span class="function">print</span>(<span class="string">"="</span>*<span class="number">60</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Usage</span></span>
+<span class="line">rf_model = RandomForestClassifier(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>)</span>
+<span class="line">evaluate_model(rf_model, X_train, X_test, y_train, y_test)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17: Common Pitfalls -->
+    <div class="slide">
+        <div class="content">
+            <h2>Common Pitfalls dalam Evaluasi Model</h2>
+
+            <div class="warning-box">
+                <h3>❌ Kesalahan yang Sering Terjadi:</h3>
+                <ol>
+                    <li><strong>Data Leakage:</strong> Informasi test set bocor ke training
+                        <ul>
+                            <li>Solusi: Strict train-test split, gunakan pipelines</li>
+                        </ul>
+                    </li>
+                    <li><strong>Hanya lihat Accuracy:</strong> Terutama pada imbalanced data
+                        <ul>
+                            <li>Solusi: Lihat multiple metrics (Precision, Recall, F1)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Overfitting to validation set:</strong> Tune berulang kali pada val set yang sama
+                        <ul>
+                            <li>Solusi: Gunakan cross-validation, hold-out test set terpisah</li>
+                        </ul>
+                    </li>
+                    <li><strong>Tidak mempertimbangkan business context:</strong> Metrik tidak align dengan tujuan bisnis
+                        <ul>
+                            <li>Solusi: Pahami cost of errors, pilih metrik sesuai domain</li>
+                        </ul>
+                    </li>
+                    <li><strong>Ignore class distribution:</strong> Model bias ke majority class
+                        <ul>
+                            <li>Solusi: Stratified sampling, class weights, SMOTE</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 18: Summary -->
+    <div class="slide">
+        <div class="content">
+            <h2>Ringkasan: Evaluasi Model</h2>
+
+            <div class="example-box">
+                <h3>Poin-poin Penting:</h3>
+                <ul>
+                    <li><strong>Confusion Matrix</strong> adalah dasar untuk semua metrik klasifikasi</li>
+                    <li><strong>Accuracy</strong> baik untuk balanced data, misleading untuk imbalanced</li>
+                    <li><strong>Precision:</strong> Fokus pada mengurangi False Positive</li>
+                    <li><strong>Recall:</strong> Fokus pada mengurangi False Negative</li>
+                    <li><strong>F1-Score:</strong> Balance antara Precision dan Recall</li>
+                    <li><strong>ROC-AUC:</strong> Evaluasi overall performance across thresholds</li>
+                    <li><strong>Cross-Validation:</strong> Evaluasi lebih robust, deteksi overfitting</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>Best Practices:</h3>
+                <ul>
+                    <li>Gunakan <strong>multiple metrics</strong> untuk evaluasi komprehensif</li>
+                    <li>Pilih metrik sesuai <strong>business objective</strong> dan <strong>class distribution</strong></li>
+                    <li>Gunakan <strong>cross-validation</strong> untuk dataset kecil/medium</li>
+                    <li>Visualisasi hasil: Confusion Matrix, ROC Curve, PR Curve</li>
+                    <li>Pertimbangkan <strong>cost of errors</strong> dalam domain problem</li>
+                    <li>Monitor model performance di production (tidak hanya development)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 19: Next Steps -->
+    <div class="slide">
+        <div class="content">
+            <h2>Session 11: Complete! 🎉</h2>
+
+            <div class="info-box">
+                <h3>Yang Telah Dipelajari:</h3>
+                <ul>
+                    <li>✅ <strong>Part 1:</strong> Regresi (Linear, Multiple, Ridge, Lasso)</li>
+                    <li>✅ <strong>Part 2:</strong> Klasifikasi (Logistic Regression, Decision Tree, Random Forest)</li>
+                    <li>✅ <strong>Part 3:</strong> Evaluasi Model (Confusion Matrix, Metrics, ROC, Cross-Validation)</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>Praktik Selanjutnya:</h3>
+                <ol>
+                    <li>Implementasikan model pada dataset nyata</li>
+                    <li>Bandingkan performa berbagai algoritma</li>
+                    <li>Lakukan hyperparameter tuning</li>
+                    <li>Deploy model terbaik</li>
+                    <li>Monitor dan update model secara berkala</li>
+                </ol>
+            </div>
+
+            <div class="definition-box">
+                <h3>Resources untuk Belajar Lebih Lanjut:</h3>
+                <ul>
+                    <li>Scikit-learn Documentation: <a href="https://scikit-learn.org">scikit-learn.org</a></li>
+                    <li>Kaggle Competitions & Datasets</li>
+                    <li>Books: "Hands-On Machine Learning" by Aurélien Géron</li>
+                    <li>Praktik dengan real-world datasets!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                setTimeout(() => { btn.innerText = originalText; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

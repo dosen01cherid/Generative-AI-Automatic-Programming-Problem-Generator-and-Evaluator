@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session 11 Part 2: Klasifikasi</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .slide {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 40px;
+            background: white;
+            margin: 20px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { font-size: 3em; color: #667eea; margin-bottom: 30px; text-align: center; }
+        h2 { font-size: 2.2em; color: #764ba2; margin: 30px 0 20px 0; }
+        h3 { font-size: 1.8em; color: #667eea; margin: 25px 0 15px 0; }
+        h4 { font-size: 1.4em; color: #764ba2; margin: 20px 0 10px 0; }
+        p, li { font-size: 1.2em; line-height: 1.8; margin: 15px 0; }
+        .content { max-width: 1200px; width: 100%; }
+        .math-block {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #667eea;
+        }
+        .code-container { position: relative; margin: 25px 0; }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #764ba2; }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 25px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            display: block;
+        }
+        code .line { display: block; min-height: 1.6em; }
+        .keyword { color: #ff79c6; }
+        .function { color: #50fa7b; }
+        .string { color: #f1fa8c; }
+        .comment { color: #6272a4; }
+        .number { color: #bd93f9; }
+        .example-box {
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #2196F3;
+        }
+        .definition-box {
+            background: #f3e5f5;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #9c27b0;
+        }
+        .warning-box {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #ffc107;
+        }
+        .success-box {
+            background: #d4edda;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #28a745;
+        }
+        .plot-container { margin: 30px 0; width: 100%; }
+        ul, ol { margin-left: 30px; }
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #667eea;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .comparison-table td:first-child {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <!-- Slide 1: Title Slide -->
+    <div class="slide">
+        <div class="content">
+            <h1>Session 11: Modelling</h1>
+            <h2>Part 2: Klasifikasi</h2>
+            <p style="text-align: center; font-size: 1.5em; margin-top: 40px;">
+                Data Analitik - Universitas Mercu Buana
+            </p>
+        </div>
+    </div>
+
+    <!-- Slide 2: Learning Objectives -->
+    <div class="slide">
+        <div class="content">
+            <h2>Tujuan Pembelajaran Part 2</h2>
+
+            <div class="definition-box">
+                <h3>Sub-CPMK SC2.3 (Lanjutan)</h3>
+                <p><strong>Mampu menjelaskan tahapan modelling Klasifikasi dan evaluasi model</strong></p>
+            </div>
+
+            <h3>Tujuan Pembelajaran:</h3>
+            <ul>
+                <li>Memahami konsep klasifikasi dan perbedaannya dengan regresi</li>
+                <li>Mengenal berbagai algoritma klasifikasi</li>
+                <li>Memahami Logistic Regression untuk klasifikasi binary</li>
+                <li>Memahami Decision Tree dan Random Forest</li>
+                <li>Mampu mengimplementasikan model klasifikasi dengan Python</li>
+                <li>Memahami metrik evaluasi untuk klasifikasi</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Apa itu Klasifikasi? -->
+    <div class="slide">
+        <div class="content">
+            <h2>Apa itu Klasifikasi?</h2>
+
+            <div class="definition-box">
+                <h3>Definisi</h3>
+                <p><strong>Klasifikasi</strong> adalah teknik supervised learning untuk memprediksi kategori/kelas dari suatu observasi berdasarkan fitur-fiturnya.</p>
+            </div>
+
+            <h3>Perbedaan Regresi vs Klasifikasi:</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Aspek</th>
+                        <th>Regresi</th>
+                        <th>Klasifikasi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Output</td>
+                        <td>Nilai kontinu (angka)</td>
+                        <td>Kategori/Label diskrit</td>
+                    </tr>
+                    <tr>
+                        <td>Contoh</td>
+                        <td>Prediksi harga, suhu, gaji</td>
+                        <td>Spam/Not Spam, Penyakit, Kategori produk</td>
+                    </tr>
+                    <tr>
+                        <td>Algoritma</td>
+                        <td>Linear Regression, Ridge, Lasso</td>
+                        <td>Logistic Regression, Decision Tree, SVM</td>
+                    </tr>
+                    <tr>
+                        <td>Evaluasi</td>
+                        <td>R², MSE, RMSE, MAE</td>
+                        <td>Accuracy, Precision, Recall, F1-Score</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 4: Jenis Klasifikasi -->
+    <div class="slide">
+        <div class="content">
+            <h2>Jenis-jenis Klasifikasi</h2>
+
+            <div class="example-box">
+                <h3>1. Binary Classification (2 Kelas)</h3>
+                <p>Klasifikasi dengan dua kategori output</p>
+                <ul>
+                    <li>Email: Spam / Not Spam</li>
+                    <li>Transaksi: Fraud / Legitimate</li>
+                    <li>Medical: Positive / Negative</li>
+                    <li>Customer: Churn / Retain</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>2. Multiclass Classification (> 2 Kelas)</h3>
+                <p>Klasifikasi dengan lebih dari dua kategori</p>
+                <ul>
+                    <li>Digit Recognition: 0, 1, 2, ..., 9</li>
+                    <li>Sentiment Analysis: Positive, Neutral, Negative</li>
+                    <li>Product Category: Electronics, Clothing, Food, ...</li>
+                    <li>Iris Species: Setosa, Versicolor, Virginica</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h3>3. Multilabel Classification</h3>
+                <p>Satu sampel dapat memiliki multiple labels</p>
+                <ul>
+                    <li>Movie Tags: Action, Comedy, Drama (bisa lebih dari 1)</li>
+                    <li>Article Topics: Politics, Sports, Technology</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Algoritma Klasifikasi Populer -->
+    <div class="slide">
+        <div class="content">
+            <h2>Algoritma Klasifikasi Populer</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Algoritma</th>
+                        <th>Karakteristik</th>
+                        <th>Kelebihan</th>
+                        <th>Kekurangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Logistic Regression</strong></td>
+                        <td>Linear classifier, probabilistic</td>
+                        <td>Cepat, interpretable</td>
+                        <td>Hanya linear boundary</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Decision Tree</strong></td>
+                        <td>Tree-based, rule-based</td>
+                        <td>Interpretable, handle non-linear</td>
+                        <td>Prone to overfitting</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Random Forest</strong></td>
+                        <td>Ensemble of trees</td>
+                        <td>Robust, accurate</td>
+                        <td>Less interpretable, slower</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SVM</strong></td>
+                        <td>Maximum margin classifier</td>
+                        <td>Effective in high dimensions</td>
+                        <td>Slow for large datasets</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Naive Bayes</strong></td>
+                        <td>Probabilistic, based on Bayes</td>
+                        <td>Fast, works well with small data</td>
+                        <td>Assumes feature independence</td>
+                    </tr>
+                    <tr>
+                        <td><strong>k-NN</strong></td>
+                        <td>Instance-based learning</td>
+                        <td>Simple, no training</td>
+                        <td>Slow prediction, sensitive to k</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Slide 6: Logistic Regression -->
+    <div class="slide">
+        <div class="content">
+            <h2>Logistic Regression</h2>
+
+            <div class="definition-box">
+                <h3>Konsep</h3>
+                <p>Meskipun namanya "regression", Logistic Regression adalah algoritma <strong>klasifikasi</strong> yang menggunakan fungsi sigmoid untuk memetakan output ke probabilitas (0-1).</p>
+            </div>
+
+            <div class="math-block">
+                <h3>Formula</h3>
+                <p style="text-align: center; font-size: 1.4em;">
+                    \[ P(y=1|x) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + ... + \beta_p x_p)}} \]
+                </p>
+                <p style="text-align: center; font-size: 1.3em;">
+                    \[ \text{atau: } \sigma(z) = \frac{1}{1 + e^{-z}} \]
+                </p>
+                <p><strong>Dimana:</strong></p>
+                <ul>
+                    <li>\( P(y=1|x) \) = probabilitas kelas 1 given input x</li>
+                    <li>\( z = \beta_0 + \beta_1 x_1 + ... + \beta_p x_p \) = linear combination</li>
+                    <li>\( \sigma(z) \) = sigmoid function</li>
+                </ul>
+            </div>
+
+            <h3>Decision Boundary:</h3>
+            <ul>
+                <li>Jika \( P(y=1|x) \geq 0.5 \) → prediksi kelas 1</li>
+                <li>Jika \( P(y=1|x) < 0.5 \) → prediksi kelas 0</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 7: Implementasi Logistic Regression -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Logistic Regression</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code1')">Copy</button>
+                <pre><code id="code1"><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span>
+<span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span>
+<span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span>
+<span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span>
+<span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, classification_report, confusion_matrix</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Load dataset (contoh: prediksi churn)</span></span>
+<span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_classification</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Generate sample data</span></span>
+<span class="line">X, y = make_classification(n_samples=<span class="number">1000</span>, n_features=<span class="number">10</span>, n_classes=<span class="number">2</span>, </span>
+<span class="line">                           random_state=<span class="number">42</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Split data</span></span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, </span>
+<span class="line">                                                    random_state=<span class="number">42</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Create and train model</span></span>
+<span class="line">log_reg = LogisticRegression(random_state=<span class="number">42</span>, max_iter=<span class="number">1000</span>)</span>
+<span class="line">log_reg.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Predict</span></span>
+<span class="line">y_pred = log_reg.predict(X_test)</span>
+<span class="line">y_pred_proba = log_reg.predict_proba(X_test)  <span class="comment"># Probabilities</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Evaluate</span></span>
+<span class="line">accuracy = accuracy_score(y_test, y_pred)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Accuracy: {accuracy:.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">"\nClassification Report:"</span>)</span>
+<span class="line"><span class="function">print</span>(classification_report(y_test, y_pred))</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Decision Tree -->
+    <div class="slide">
+        <div class="content">
+            <h2>Decision Tree</h2>
+
+            <div class="definition-box">
+                <h3>Konsep</h3>
+                <p><strong>Decision Tree</strong> membuat keputusan dengan membagi data secara berulang berdasarkan fitur yang paling informatif, membentuk struktur pohon.</p>
+            </div>
+
+            <h3>Cara Kerja:</h3>
+            <ol>
+                <li>Pilih fitur terbaik untuk split (berdasarkan Gini/Entropy)</li>
+                <li>Bagi data berdasarkan threshold fitur tersebut</li>
+                <li>Ulangi secara rekursif untuk setiap subset</li>
+                <li>Stop ketika kriteria tercapai (max_depth, min_samples, dll)</li>
+            </ol>
+
+            <div class="math-block">
+                <h3>Gini Impurity</h3>
+                <p style="text-align: center; font-size: 1.3em;">
+                    \[ Gini = 1 - \sum_{i=1}^{C} p_i^2 \]
+                </p>
+                <p>Dimana \( p_i \) = proporsi kelas i, C = jumlah kelas</p>
+                <ul>
+                    <li>Gini = 0 → Pure (semua sampel satu kelas)</li>
+                    <li>Gini tinggi → Impure (campuran kelas)</li>
+                </ul>
+
+                <h3 style="margin-top: 20px;">Information Gain (Entropy)</h3>
+                <p style="text-align: center; font-size: 1.3em;">
+                    \[ Entropy = -\sum_{i=1}^{C} p_i \log_2(p_i) \]
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Implementasi Decision Tree -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Decision Tree</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code2')">Copy</button>
+                <pre><code id="code2"><span class="line"><span class="keyword">from</span> sklearn.tree <span class="keyword">import</span> DecisionTreeClassifier</span>
+<span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> tree</span>
+<span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Create Decision Tree model</span></span>
+<span class="line">dt_classifier = DecisionTreeClassifier(</span>
+<span class="line">    max_depth=<span class="number">5</span>,           <span class="comment"># Maksimal kedalaman pohon</span></span>
+<span class="line">    min_samples_split=<span class="number">10</span>, <span class="comment"># Min sampel untuk split</span></span>
+<span class="line">    min_samples_leaf=<span class="number">5</span>,   <span class="comment"># Min sampel di leaf node</span></span>
+<span class="line">    criterion=<span class="string">'gini'</span>,     <span class="comment"># 'gini' atau 'entropy'</span></span>
+<span class="line">    random_state=<span class="number">42</span></span>
+<span class="line">)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Train model</span></span>
+<span class="line">dt_classifier.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Predict</span></span>
+<span class="line">y_pred_dt = dt_classifier.predict(X_test)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Evaluate</span></span>
+<span class="line">accuracy_dt = accuracy_score(y_test, y_pred_dt)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Decision Tree Accuracy: {accuracy_dt:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Visualize tree (optional)</span></span>
+<span class="line">plt.figure(figsize=(<span class="number">20</span>, <span class="number">10</span>))</span>
+<span class="line">tree.plot_tree(dt_classifier, filled=<span class="keyword">True</span>, fontsize=<span class="number">10</span>)</span>
+<span class="line">plt.title(<span class="string">'Decision Tree Visualization'</span>)</span>
+<span class="line">plt.show()</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Feature importance</span></span>
+<span class="line">importances = dt_classifier.feature_importances_</span>
+<span class="line"><span class="function">print</span>(<span class="string">"\nFeature Importances:"</span>)</span>
+<span class="line"><span class="keyword">for</span> i, imp <span class="keyword">in</span> <span class="function">enumerate</span>(importances):</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"Feature {i}: {imp:.4f}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Random Forest -->
+    <div class="slide">
+        <div class="content">
+            <h2>Random Forest</h2>
+
+            <div class="definition-box">
+                <h3>Konsep</h3>
+                <p><strong>Random Forest</strong> adalah ensemble method yang menggabungkan banyak decision trees untuk meningkatkan akurasi dan mengurangi overfitting.</p>
+            </div>
+
+            <h3>Cara Kerja:</h3>
+            <ol>
+                <li><strong>Bootstrap Aggregating (Bagging):</strong> Buat N subset data dengan random sampling dengan replacement</li>
+                <li><strong>Random Feature Selection:</strong> Setiap tree hanya menggunakan subset random fitur</li>
+                <li><strong>Build Multiple Trees:</strong> Buat N decision trees independen</li>
+                <li><strong>Voting/Averaging:</strong>
+                    <ul>
+                        <li>Klasifikasi: Majority voting</li>
+                        <li>Regresi: Average prediksi</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="success-box">
+                <h3>Kelebihan Random Forest:</h3>
+                <ul>
+                    <li>Mengurangi overfitting dibanding single tree</li>
+                    <li>Robust terhadap outlier dan noise</li>
+                    <li>Dapat handle missing values</li>
+                    <li>Memberikan feature importance</li>
+                    <li>Tidak perlu feature scaling</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Implementasi Random Forest -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Random Forest</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code3')">Copy</button>
+                <pre><code id="code3"><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Create Random Forest model</span></span>
+<span class="line">rf_classifier = RandomForestClassifier(</span>
+<span class="line">    n_estimators=<span class="number">100</span>,      <span class="comment"># Jumlah trees</span></span>
+<span class="line">    max_depth=<span class="number">10</span>,         <span class="comment"># Max depth per tree</span></span>
+<span class="line">    min_samples_split=<span class="number">10</span>,</span>
+<span class="line">    min_samples_leaf=<span class="number">4</span>,</span>
+<span class="line">    max_features=<span class="string">'sqrt'</span>,  <span class="comment"># Number of features to consider: 'sqrt', 'log2', or int</span></span>
+<span class="line">    random_state=<span class="number">42</span>,</span>
+<span class="line">    n_jobs=-<span class="number">1</span>             <span class="comment"># Use all CPU cores</span></span>
+<span class="line">)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Train model</span></span>
+<span class="line">rf_classifier.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Predict</span></span>
+<span class="line">y_pred_rf = rf_classifier.predict(X_test)</span>
+<span class="line">y_pred_proba_rf = rf_classifier.predict_proba(X_test)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Evaluate</span></span>
+<span class="line">accuracy_rf = accuracy_score(y_test, y_pred_rf)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Random Forest Accuracy: {accuracy_rf:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Feature importance</span></span>
+<span class="line">importances_rf = rf_classifier.feature_importances_</span>
+<span class="line">indices = np.argsort(importances_rf)[::-<span class="number">1</span>]</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"\nTop 5 Most Important Features:"</span>)</span>
+<span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="function">min</span>(<span class="number">5</span>, <span class="function">len</span>(indices))):</span>
+<span class="line">    <span class="function">print</span>(<span class="string">f"Feature {indices[i]}: {importances_rf[indices[i]]:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Plot feature importance</span></span>
+<span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span>
+<span class="line">plt.bar(<span class="function">range</span>(<span class="function">len</span>(importances_rf)), importances_rf[indices])</span>
+<span class="line">plt.xlabel(<span class="string">'Feature Index'</span>)</span>
+<span class="line">plt.ylabel(<span class="string">'Importance'</span>)</span>
+<span class="line">plt.title(<span class="string">'Feature Importances - Random Forest'</span>)</span>
+<span class="line">plt.show()</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Perbandingan Model -->
+    <div class="slide">
+        <div class="content">
+            <h2>Perbandingan Model Klasifikasi</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code4')">Copy</button>
+                <pre><code id="code4"><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_score, recall_score, f1_score</span>
+<span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Train multiple models</span></span>
+<span class="line">models = {</span>
+<span class="line">    <span class="string">'Logistic Regression'</span>: LogisticRegression(random_state=<span class="number">42</span>, max_iter=<span class="number">1000</span>),</span>
+<span class="line">    <span class="string">'Decision Tree'</span>: DecisionTreeClassifier(max_depth=<span class="number">5</span>, random_state=<span class="number">42</span>),</span>
+<span class="line">    <span class="string">'Random Forest'</span>: RandomForestClassifier(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>)</span>
+<span class="line">}</span>
+<span class="line"></span>
+<span class="line">results = []</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> name, model <span class="keyword">in</span> models.items():</span>
+<span class="line">    <span class="comment"># Train</span></span>
+<span class="line">    model.fit(X_train, y_train)</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># Predict</span></span>
+<span class="line">    y_pred = model.predict(X_test)</span>
+<span class="line">    </span>
+<span class="line">    <span class="comment"># Calculate metrics</span></span>
+<span class="line">    accuracy = accuracy_score(y_test, y_pred)</span>
+<span class="line">    precision = precision_score(y_test, y_pred, average=<span class="string">'weighted'</span>)</span>
+<span class="line">    recall = recall_score(y_test, y_pred, average=<span class="string">'weighted'</span>)</span>
+<span class="line">    f1 = f1_score(y_test, y_pred, average=<span class="string">'weighted'</span>)</span>
+<span class="line">    </span>
+<span class="line">    results.append({</span>
+<span class="line">        <span class="string">'Model'</span>: name,</span>
+<span class="line">        <span class="string">'Accuracy'</span>: accuracy,</span>
+<span class="line">        <span class="string">'Precision'</span>: precision,</span>
+<span class="line">        <span class="string">'Recall'</span>: recall,</span>
+<span class="line">        <span class="string">'F1-Score'</span>: f1</span>
+<span class="line">    })</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Display results</span></span>
+<span class="line">results_df = pd.DataFrame(results)</span>
+<span class="line"><span class="function">print</span>(results_df.to_string(index=<span class="keyword">False</span>))</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Handling Imbalanced Data -->
+    <div class="slide">
+        <div class="content">
+            <h2>Menangani Imbalanced Data</h2>
+
+            <div class="warning-box">
+                <h3>Masalah Imbalanced Data</h3>
+                <p>Ketika satu kelas jauh lebih banyak dari kelas lain (contoh: 95% kelas 0, 5% kelas 1), model cenderung bias ke kelas mayoritas.</p>
+            </div>
+
+            <h3>Teknik Menangani Imbalanced Data:</h3>
+
+            <div class="example-box">
+                <h4>1. Resampling</h4>
+                <ul>
+                    <li><strong>Oversampling:</strong> Tambah sampel kelas minoritas (SMOTE)</li>
+                    <li><strong>Undersampling:</strong> Kurangi sampel kelas mayoritas</li>
+                </ul>
+            </div>
+
+            <div class="example-box">
+                <h4>2. Class Weights</h4>
+                <p>Berikan weight lebih tinggi pada kelas minoritas</p>
+            </div>
+
+            <div class="example-box">
+                <h4>3. Ensemble Methods</h4>
+                <p>BalancedRandomForest, EasyEnsemble, RUSBoost</p>
+            </div>
+
+            <div class="example-box">
+                <h4>4. Ubah Metrik Evaluasi</h4>
+                <p>Gunakan Precision, Recall, F1-Score, AUC-ROC instead of Accuracy</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Implementasi Class Weights -->
+    <div class="slide">
+        <div class="content">
+            <h2>Implementasi: Class Weights & SMOTE</h2>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code5')">Copy</button>
+                <pre><code id="code5"><span class="line"><span class="keyword">from</span> sklearn.utils.class_weight <span class="keyword">import</span> compute_class_weight</span>
+<span class="line"><span class="keyword">from</span> imblearn.over_sampling <span class="keyword">import</span> SMOTE</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Method 1: Class Weights</span></span>
+<span class="line">rf_balanced = RandomForestClassifier(</span>
+<span class="line">    n_estimators=<span class="number">100</span>,</span>
+<span class="line">    class_weight=<span class="string">'balanced'</span>,  <span class="comment"># Auto-adjust weights</span></span>
+<span class="line">    random_state=<span class="number">42</span></span>
+<span class="line">)</span>
+<span class="line">rf_balanced.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Method 2: SMOTE (Synthetic Minority Over-sampling)</span></span>
+<span class="line">smote = SMOTE(random_state=<span class="number">42</span>)</span>
+<span class="line">X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Original dataset: {<span class="function">len</span>(y_train)}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"After SMOTE: {<span class="function">len</span>(y_train_smote)}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Class distribution before: {np.bincount(y_train)}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Class distribution after: {np.bincount(y_train_smote)}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Train on SMOTE data</span></span>
+<span class="line">rf_smote = RandomForestClassifier(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>)</span>
+<span class="line">rf_smote.fit(X_train_smote, y_train_smote)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Evaluate</span></span>
+<span class="line">y_pred_balanced = rf_balanced.predict(X_test)</span>
+<span class="line">y_pred_smote = rf_smote.predict(X_test)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">f"\nBalanced RF F1-Score: {f1_score(y_test, y_pred_balanced, average='weighted'):.4f}"</span>)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"SMOTE RF F1-Score: {f1_score(y_test, y_pred_smote, average='weighted'):.4f}"</span>)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Hyperparameter Tuning -->
+    <div class="slide">
+        <div class="content">
+            <h2>Hyperparameter Tuning</h2>
+
+            <div class="definition-box">
+                <h3>Apa itu Hyperparameter?</h3>
+                <p>Parameter yang diset sebelum training (tidak dipelajari dari data), contoh: max_depth, n_estimators, learning_rate</p>
+            </div>
+
+            <h3>Metode Tuning:</h3>
+            <ul>
+                <li><strong>Grid Search:</strong> Coba semua kombinasi parameter</li>
+                <li><strong>Random Search:</strong> Coba kombinasi random</li>
+                <li><strong>Bayesian Optimization:</strong> Metode lebih canggih</li>
+            </ul>
+
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode('code6')">Copy</button>
+                <pre><code id="code6"><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Define parameter grid</span></span>
+<span class="line">param_grid = {</span>
+<span class="line">    <span class="string">'n_estimators'</span>: [<span class="number">50</span>, <span class="number">100</span>, <span class="number">200</span>],</span>
+<span class="line">    <span class="string">'max_depth'</span>: [<span class="number">5</span>, <span class="number">10</span>, <span class="number">15</span>, <span class="keyword">None</span>],</span>
+<span class="line">    <span class="string">'min_samples_split'</span>: [<span class="number">2</span>, <span class="number">5</span>, <span class="number">10</span>],</span>
+<span class="line">    <span class="string">'min_samples_leaf'</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>]</span>
+<span class="line">}</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Grid Search with Cross-Validation</span></span>
+<span class="line">grid_search = GridSearchCV(</span>
+<span class="line">    RandomForestClassifier(random_state=<span class="number">42</span>),</span>
+<span class="line">    param_grid,</span>
+<span class="line">    cv=<span class="number">5</span>,                  <span class="comment"># 5-fold cross-validation</span></span>
+<span class="line">    scoring=<span class="string">'f1_weighted'</span>,</span>
+<span class="line">    n_jobs=-<span class="number">1</span>,</span>
+<span class="line">    verbose=<span class="number">2</span></span>
+<span class="line">)</span>
+<span class="line"></span>
+<span class="line">grid_search.fit(X_train, y_train)</span>
+<span class="line"></span>
+<span class="line"><span class="function">print</span>(<span class="string">"Best parameters:"</span>, grid_search.best_params_)</span>
+<span class="line"><span class="function">print</span>(<span class="string">f"Best F1 score: {grid_search.best_score_:.4f}"</span>)</span>
+<span class="line"></span>
+<span class="line"><span class="comment"># Use best model</span></span>
+<span class="line">best_rf = grid_search.best_estimator_</span>
+<span class="line">y_pred_best = best_rf.predict(X_test)</span></code></pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 16: Summary -->
+    <div class="slide">
+        <div class="content">
+            <h2>Ringkasan Part 2: Klasifikasi</h2>
+
+            <div class="example-box">
+                <h3>Poin-poin Penting:</h3>
+                <ul>
+                    <li><strong>Klasifikasi</strong> untuk prediksi kategori/label diskrit</li>
+                    <li><strong>Logistic Regression:</strong> Cepat, interpretable, linear boundary</li>
+                    <li><strong>Decision Tree:</strong> Interpretable, handle non-linear, prone to overfitting</li>
+                    <li><strong>Random Forest:</strong> Ensemble of trees, robust, accurate</li>
+                    <li><strong>Imbalanced Data:</strong> Gunakan class weights, SMOTE, atau metrik yang tepat</li>
+                    <li><strong>Hyperparameter Tuning:</strong> Grid/Random Search untuk optimasi</li>
+                </ul>
+            </div>
+
+            <div class="success-box">
+                <h3>Best Practices:</h3>
+                <ul>
+                    <li>Mulai dengan model sederhana (Logistic Regression)</li>
+                    <li>Coba model kompleks jika perlu (Random Forest, XGBoost)</li>
+                    <li>Perhatikan imbalanced data</li>
+                    <li>Gunakan cross-validation untuk evaluasi</li>
+                    <li>Tune hyperparameter untuk hasil optimal</li>
+                    <li>Interpretasi feature importance</li>
+                </ul>
+            </div>
+
+            <h3 style="text-align: center; margin-top: 40px;">Next: Part 3 - Evaluasi Model Klasifikasi</h3>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerText;
+                btn.innerText = 'Copied!';
+                setTimeout(() => { btn.innerText = originalText; }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
